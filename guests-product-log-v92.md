@@ -1,4 +1,4 @@
-# Guests product log — v93
+# Guests product log — v94
 
 - Keep existing validated seating-plan work unchanged unless QA finds a regression.
 - Guests supports two intake paths: create/send RSVP inside the app, or import an existing list.
@@ -11,11 +11,14 @@
 - Catering menu totals exclude guests explicitly marked as not requiring a meal.
 - RSVP must include date, celebration time and venue/location so the invitee can decide attendance and transport.
 - Transport is a couple-level configuration: if transport is not offered, transport must disappear from the RSVP and from operational transport outputs.
-- v93 fixes the core RSVP architecture: invitee responses are no longer stored only in the invitee browser. Public submissions are written to Supabase through the `weddly-rsvp` Edge Function.
-- New backend tables: `guest_rsvp_forms` and `guest_rsvp_submissions`, both RLS-enabled with browser access mediated by the Edge Function.
-- Public RSVP links use a high-entropy public form capability token. Owner/manager reads and form configuration changes require the existing authorised wedding-member token.
-- Public submission flow is idempotent by `client_submission_id`, disables the send button while posting, shows a real success state only after backend confirmation, and shows a retry message on failure.
-- v93 keeps WhatsApp sending, contact management and manual RSVP entry, and adds remote-response sync when the couple opens RSVP management.
-- Current Guests QA entry remains `guests-v081-integrated.html?v=93`.
-- Current RSVP implementation is `guests-rsvp-v93.html`; the old `guests-rsvp-v92.html` redirects to v93 preserving its query string.
-- Next QA priority: send a real RSVP from a second device, verify the success confirmation, then open `Envíos y respuestas` on the owner device and verify the reply appears against the intended guest.
+- Public RSVP submissions are written to Supabase through the `weddly-rsvp` Edge Function; success is shown only after server confirmation.
+- Diagnostic on v93: RSVP GET requests reached the backend, but the failed mobile send produced no POST request at all. The fault was therefore in the client-side send path, not in the database insert.
+- v94 replaces the public submit handler with an explicit DOM event path and retains retry feedback if the POST fails.
+- Shared contact management is now part of the architecture. New tables: `guest_rsvp_contacts` and `guest_rsvp_delivery`, RLS-enabled and mediated through `weddly-rsvp`.
+- Contacts and delivery state can therefore be contributed by either authorised member of the couple and retrieved on the other device.
+- On supported mobile browsers, Contact Picker API is used to let the member choose a contact from the phone agenda and share only the selected name/phone/email. Manual entry remains the fallback where the browser does not support the API.
+- Contact picker must always require a user gesture and must never read the address book silently.
+- Current RSVP implementation: `guests-rsvp-v94.html`.
+- `guests-rsvp-v93.html` redirects to v94 preserving query string/hash; `guests-rsvp-v92.html` already redirects through v93, so old RSVP links continue forward to the current build.
+- Current Guests QA entry remains `guests-v081-integrated.html?v=94`.
+- Next QA priority: from a received RSVP on a second device, press Enviar respuesta and verify the server-confirmed Gracias state; then open Envíos y respuestas on the owner device and verify the response appears. Also test Elegir de mi agenda on Android Chrome and verify the contact is visible from the partner device after sync.
