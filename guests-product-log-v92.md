@@ -1,15 +1,21 @@
-# Guests product log — v92
+# Guests product log — v93
 
 - Keep existing validated seating-plan work unchanged unless QA finds a regression.
 - Guests supports two intake paths: create/send RSVP inside the app, or import an existing list.
 - Import is merge-not-replace and must ignore report rows such as TOTAL and Mesa X - RESUMEN.
-- Import fields supported in v92: name, phone, email, age, table, RSVP, meal.
+- Import fields supported: name, phone, email, age, table, RSVP, meal.
 - Successful import must show a clear non-blocking confirmation with added and recognized counts.
 - RSVP send management tracks contact, send state and response state.
 - Manual RSVP entry is required for replies received by phone, in person or through another person.
 - Child age is operational data. Seat requirement and meal requirement are separate.
-- v92 adds age plus explicit meal-required state. A guest can occupy a seat while requiring no meal.
 - Catering menu totals exclude guests explicitly marked as not requiring a meal.
-- Current integrated QA URL: guests-v081-integrated.html?v=92
-- Current RSVP QA URL: guests-rsvp-v92.html?v=92
-- Next session: QA v92 first; do not restart seating-plan design.
+- RSVP must include date, celebration time and venue/location so the invitee can decide attendance and transport.
+- Transport is a couple-level configuration: if transport is not offered, transport must disappear from the RSVP and from operational transport outputs.
+- v93 fixes the core RSVP architecture: invitee responses are no longer stored only in the invitee browser. Public submissions are written to Supabase through the `weddly-rsvp` Edge Function.
+- New backend tables: `guest_rsvp_forms` and `guest_rsvp_submissions`, both RLS-enabled with browser access mediated by the Edge Function.
+- Public RSVP links use a high-entropy public form capability token. Owner/manager reads and form configuration changes require the existing authorised wedding-member token.
+- Public submission flow is idempotent by `client_submission_id`, disables the send button while posting, shows a real success state only after backend confirmation, and shows a retry message on failure.
+- v93 keeps WhatsApp sending, contact management and manual RSVP entry, and adds remote-response sync when the couple opens RSVP management.
+- Current Guests QA entry remains `guests-v081-integrated.html?v=93`.
+- Current RSVP implementation is `guests-rsvp-v93.html`; the old `guests-rsvp-v92.html` redirects to v93 preserving its query string.
+- Next QA priority: send a real RSVP from a second device, verify the success confirmation, then open `Envíos y respuestas` on the owner device and verify the reply appears against the intended guest.
