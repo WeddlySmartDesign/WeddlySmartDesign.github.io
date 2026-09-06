@@ -1,4 +1,4 @@
-# Guests product log — v94
+# Guests product log — v95
 
 - Keep existing validated seating-plan work unchanged unless QA finds a regression.
 - Guests supports two intake paths: create/send RSVP inside the app, or import an existing list.
@@ -12,13 +12,14 @@
 - RSVP must include date, celebration time and venue/location so the invitee can decide attendance and transport.
 - Transport is a couple-level configuration: if transport is not offered, transport must disappear from the RSVP and from operational transport outputs.
 - Public RSVP submissions are written to Supabase through the `weddly-rsvp` Edge Function; success is shown only after server confirmation.
-- Diagnostic on v93: RSVP GET requests reached the backend, but the failed mobile send produced no POST request at all. The fault was therefore in the client-side send path, not in the database insert.
-- v94 replaces the public submit handler with an explicit DOM event path and retains retry feedback if the POST fails.
-- Shared contact management is now part of the architecture. New tables: `guest_rsvp_contacts` and `guest_rsvp_delivery`, RLS-enabled and mediated through `weddly-rsvp`.
-- Contacts and delivery state can therefore be contributed by either authorised member of the couple and retrieved on the other device.
-- On supported mobile browsers, Contact Picker API is used to let the member choose a contact from the phone agenda and share only the selected name/phone/email. Manual entry remains the fallback where the browser does not support the API.
-- Contact picker must always require a user gesture and must never read the address book silently.
-- Current RSVP implementation: `guests-rsvp-v94.html`.
-- `guests-rsvp-v93.html` redirects to v94 preserving query string/hash; `guests-rsvp-v92.html` already redirects through v93, so old RSVP links continue forward to the current build.
-- Current Guests QA entry remains `guests-v081-integrated.html?v=94`.
-- Next QA priority: from a received RSVP on a second device, press Enviar respuesta and verify the server-confirmed Gracias state; then open Envíos y respuestas on the owner device and verify the response appears. Also test Elegir de mi agenda on Android Chrome and verify the contact is visible from the partner device after sync.
+- v94 diagnosis corrected on 2026-09-06: a real RSVP submission was present in `guest_rsvp_submissions`. Therefore the remaining failure was not invitee -> server, but server -> Guests incorporation.
+- v95 adds a real RSVP inbox inside Guests. Remote submissions are fetched with the authorised wedding-member token and shown as pending responses in Invitados.
+- Incorporating an RSVP now updates the matching guest by `guest_key` first, then exact normalized name as fallback; it records attendance, age, meal/no-meal, allergy, transport and +1 data.
+- RSVP submissions now have `applied_at`. Marking a response as incorporated is persisted server-side, so the same response should not reappear as pending on the partner device.
+- v95 introduces the first shared operational structure for relationships: `guest_person_meta` and `guest_units`, both RLS-enabled and accessed only through the `weddly-guests-structure` Edge Function with the existing authorised member token.
+- Product model: Group = classification/origin (e.g. Familia novia, Familia novio, Amigos, Trabajo, custom). Unit = relationship/household/invitation context (e.g. Familia Martín, Ana + Luis). Relation role is explicit human data (Pareja, Hijo/a, Acompañante/+1, Otro). No relationship is inferred automatically.
+- Unit membership never implies that guests must sit together. Seating restrictions remain explicit and independent.
+- Group/unit metadata is shared between the two authorised members of the couple. Saving it also mirrors group/unit/relation fields into the local QA guest record so future seating/RSVP integration can consume them.
+- Current v95 QA entry: `guests-v095-integrated.html?v=95`.
+- v95 deliberately wraps the accepted integrated v92/v67 path rather than replacing it, preserving import, seating-plan and previously validated work while adding the new RSVP inbox and relationship layer.
+- Next QA: open Invitados in v95 and verify the already-received RSVP appears as pending; press Incorporar and confirm the guest updates. Then create one unit (e.g. Familia Martín), assign two adults + a child, add groups, reload and verify persistence. Partner-device verification should follow.
