@@ -3,15 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Weddly Smart Design · Guests consolidated</title>
+<title>Weddly Smart Design · Guests v124</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#f5f1ea;color:#2c2a26;font-family:system-ui,-apple-system,Segoe UI,sans-serif}body{padding-bottom:90px}.wrap{max-width:680px;margin:auto;padding:22px}.brand,.sectiontag{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#77716b}.brand{color:#2c2a26}h1{font:500 46px Georgia,serif;margin:14px 0 28px}h2{font-size:31px;margin:18px 0}.card{background:#fff;border:1px solid #ddd5c8;border-radius:20px;padding:20px;margin:14px 0}.alert{border-left:5px solid #a9744d}.small{font-size:14px;color:#706b65;line-height:1.45}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:#fff;border:1px solid #ddd5c8;border-radius:18px;padding:18px}.num{font-size:36px;font-weight:700}.btn{border:0;border-radius:13px;padding:13px 15px;background:#2c2a26;color:#fff;font-weight:750;font-size:15px}.btn.soft{background:#eee8df;color:#2c2a26}.btn.line{background:#fff;color:#2c2a26;border:1px solid #d7d0c6}.btn.full{width:100%}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.actions.one{grid-template-columns:1fr}.minor{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.minor .btn{padding:10px 12px}.view{display:none}.view.on{display:block}.nav{position:fixed;z-index:50;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid #ddd5c8;padding:8px 6px calc(8px + env(safe-area-inset-bottom))}.nav button{border:0;background:transparent;padding:12px 2px;font-size:15px;font-weight:700}.nav button.on{background:#eee8df;border-radius:13px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #eee}.row:last-child{border:0}.pill{display:inline-block;font-size:13px;padding:6px 9px;border-radius:999px;background:#eee8df;margin:2px 4px 2px 0}.pill.bad{background:#f6e8e4;color:#8a4035}.status{color:#526b4d;font-weight:800}.sheet{display:none;position:fixed;z-index:80;inset:0;background:#0005;align-items:flex-end}.sheet.on{display:flex}.panel{width:100%;max-width:680px;margin:auto;background:#fff;border-radius:25px 25px 0 0;padding:22px 22px calc(24px + env(safe-area-inset-bottom));max-height:86vh;overflow:auto}.field{width:100%;padding:14px;border:1px solid #ccc5bb;border-radius:13px;font-size:17px;margin:6px 0 13px;background:#fff;color:#2c2a26}.choice{display:block;width:100%;text-align:left;border:1px solid #ddd5c8;background:#fff;border-radius:14px;padding:14px;margin:7px 0;font-size:16px}.choice.sel{outline:2px solid #2c2a26}.table{padding:0;overflow:hidden}.thead{display:flex;justify-content:space-between;gap:12px;padding:17px 18px;background:#faf8f4;border-bottom:1px solid #eee}.seat{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid #eee}.seat:last-child{border-bottom:0}.flow{display:grid;gap:14px}.step{background:#fff;border:1px solid #ddd5c8;border-radius:20px;padding:19px}.stepHead{display:flex;gap:12px;align-items:flex-start}.stepNum{width:30px;height:30px;border-radius:50%;background:#2c2a26;color:#fff;display:grid;place-items:center;font-weight:800;flex:0 0 auto}.step h3{margin:0 0 4px;font-size:20px}.helper{background:#faf8f4;border:1px solid #e4ddd3;border-radius:14px;padding:11px 12px;margin-top:12px;color:#655f59;font-size:14px;line-height:1.4}.plan{display:none;position:fixed;z-index:100;inset:0;background:#f5f1ea}.plan.on{display:flex;flex-direction:column}.planBar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:#fff;border-bottom:1px solid #ddd5c8;min-height:58px}.planBar b{font-size:16px}.planFrame{flex:1;width:100%;border:0;background:#f5f1ea}.importDrop{border:1px dashed #bbb2a7;border-radius:14px;padding:16px;background:#faf8f4}.hidden{display:none!important}@media(max-width:520px){h1{font-size:40px}.wrap{padding:18px}.actions{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.planBar{padding-top:calc(10px + env(safe-area-inset-top))}}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#f5f1ea;color:#2c2a26;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+body{padding-bottom:90px}.wrap{max-width:680px;margin:auto;padding:22px}
+.brand,.sectiontag{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#77716b}.brand{color:#2c2a26}
+h1{font:500 46px Georgia,serif;margin:12px 0 4px}h2{font-size:31px;margin:18px 0}.weddingMeta{display:flex;align-items:center;gap:10px;margin:0 0 28px;color:#706b65}.metaBtn{border:0;background:transparent;text-decoration:underline;text-underline-offset:3px;color:#655f59;font-weight:700;padding:4px}
+.card{background:#fff;border:1px solid #ddd5c8;border-radius:20px;padding:20px;margin:14px 0}.alert{border-left:5px solid #a9744d}
+.small{font-size:14px;color:#706b65;line-height:1.45}.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:#fff;border:1px solid #ddd5c8;border-radius:18px;padding:18px}.num{font-size:36px;font-weight:700}
+.btn{border:0;border-radius:13px;padding:13px 15px;background:#2c2a26;color:#fff;font-weight:750;font-size:15px}.btn.soft{background:#eee8df;color:#2c2a26}.btn.line{background:#fff;color:#2c2a26;border:1px solid #d7d0c6}.btn.full{width:100%}.btn:disabled,.choice:disabled{opacity:.42}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.actions.one{grid-template-columns:1fr}.actions.three{grid-template-columns:auto 1fr 1fr}.minor{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.minor .btn{padding:10px 12px}
+.view{display:none}.view.on{display:block}.nav{position:fixed;z-index:50;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid #ddd5c8;padding:8px 6px calc(8px + env(safe-area-inset-bottom))}.nav button{border:0;background:transparent;padding:12px 2px;font-size:15px;font-weight:700}.nav button.on{background:#eee8df;border-radius:13px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid #eee}.row:last-child{border:0}.pill{display:inline-block;font-size:13px;padding:6px 9px;border-radius:999px;background:#eee8df;margin:2px 4px 2px 0}.pill.bad{background:#f6e8e4;color:#8a4035}.status{color:#526b4d;font-weight:800}
+.sheet{display:none;position:fixed;z-index:80;inset:0;background:#0005;align-items:flex-end}.sheet.on{display:flex}.panel{width:100%;max-width:680px;margin:auto;background:#fff;border-radius:25px 25px 0 0;padding:22px 22px calc(24px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}.field{width:100%;padding:14px;border:1px solid #ccc5bb;border-radius:13px;font-size:17px;margin:6px 0 13px;background:#fff;color:#2c2a26}.choice{display:block;width:100%;text-align:left;border:1px solid #ddd5c8;background:#fff;border-radius:14px;padding:14px;margin:7px 0;font-size:16px}.choice.sel{outline:2px solid #2c2a26}.choice .muted{display:block;color:#706b65;font-size:13px;margin-top:3px}
+.table{padding:0;overflow:hidden}.thead{display:flex;justify-content:space-between;gap:12px;padding:17px 18px;background:#faf8f4;border-bottom:1px solid #eee}.seat{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:13px 18px;border-bottom:1px solid #eee}.seat:last-child{border-bottom:0}
+.flow{display:grid;gap:14px}.step{background:#fff;border:1px solid #ddd5c8;border-radius:20px;padding:19px}.stepHead{display:flex;gap:12px;align-items:flex-start}.stepNum{width:30px;height:30px;border-radius:50%;background:#2c2a26;color:#fff;display:grid;place-items:center;font-weight:800;flex:0 0 auto}.step h3{margin:0 0 4px;font-size:20px}.helper{background:#faf8f4;border:1px solid #e4ddd3;border-radius:14px;padding:11px 12px;margin-top:12px;color:#655f59;font-size:14px;line-height:1.4}
+.plan{display:none;position:fixed;z-index:100;inset:0;background:#f5f1ea}.plan.on{display:flex;flex-direction:column}.planBar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:10px 12px;background:#fff;border-bottom:1px solid #ddd5c8;min-height:68px}.planTitle{text-align:center}.planTitle b{font-size:16px;display:block}.planTitle small{display:block;color:#706b65;font-size:12px;line-height:1.2;margin-top:2px}.planSpacer{width:88px}.planFrame{flex:1;width:100%;border:0;background:#f5f1ea}.importDrop{border:1px dashed #bbb2a7;border-radius:14px;padding:16px;background:#faf8f4}.bulkNames{background:#faf8f4;border-radius:14px;padding:12px;margin:8px 0 14px}.bulkNames b{display:block;margin-bottom:4px}.divider{border:0;border-top:1px solid #eee7de;margin:18px 0}.error{color:#9a4537;font-size:13px;margin-top:-7px;margin-bottom:10px}.toast{position:fixed;z-index:130;top:18px;left:18px;right:18px;max-width:644px;margin:auto;background:#2c2a26;color:#fff;border-radius:16px;padding:14px 16px;box-shadow:0 8px 30px #0002}.hidden{display:none!important}
+@media(max-width:520px){h1{font-size:40px}.wrap{padding:18px}.actions,.actions.three{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.planBar{padding-top:calc(10px + env(safe-area-inset-top));grid-template-columns:auto 1fr}.planSpacer{display:none}.planTitle{text-align:left}.planTitle small{font-size:11px}}
 </style>
 </head>
 <body>
 <main class="wrap">
   <div class="brand">Weddly Smart Design · Guests</div>
   <h1 id="coupleTitle">Guests</h1>
+  <div id="weddingMeta" class="weddingMeta"></div>
   <section id="hoy" class="view on"></section>
   <section id="invitados" class="view"></section>
   <section id="mesas" class="view"></section>
@@ -25,59 +41,241 @@
 </nav>
 <div id="sheet" class="sheet"><div id="panel" class="panel"></div></div>
 <div id="plan" class="plan">
-  <div class="planBar"><button id="planBack" class="btn soft">← Volver</button><b>Plano de mesas</b><span style="width:88px"></span></div>
+  <div class="planBar">
+    <button id="planBack" class="btn soft">← Volver</button>
+    <div class="planTitle"><b>Plano de mesas</b><small>Toca uno o varios invitados para seleccionarlos</small></div>
+    <span class="planSpacer"></span>
+  </div>
   <iframe id="planFrame" class="planFrame" title="Plano visual"></iframe>
 </div>
 <input id="fileInput" class="hidden" type="file" accept=".csv,.txt,.tsv,text/csv,text/plain">
 <script>
 (() => {
 const KEY='weddly_guests_qa_v67';
-const PLAN_URL='guests-v081-visual-seating.html?v=123-consolidated';
-const RSVP_URL='guests-rsvp-v105.html?v=123-consolidated';
+const PLAN_URL='guests-v081-visual-seating.html?v=124-consolidated';
+const RSVP_URL='guests-rsvp-v105.html?v=124-consolidated';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const initial={guests:{},tables:{t1:{name:'Mesa 1',cap:8}},sent:null,prepared:null,preparedV:1,sentV:1,activity:null,meta:{couple:['Daniela','Sergio']}};
-let S=load();
-let current='hoy';
-function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x&&typeof x==='object'){x.guests=x.guests||{};x.tables=x.tables||{};x.meta=x.meta||{};return x}}catch{}return structuredClone(initial)}
+const initial={guests:{},tables:{t1:{name:'Mesa 1',cap:8}},sent:null,prepared:null,preparedV:1,sentV:1,activity:null,meta:{}};
+let S=load(), current='hoy';
+
+function load(){
+  try{
+    const x=JSON.parse(localStorage.getItem(KEY));
+    if(x&&typeof x==='object'){x.guests=x.guests||{};x.tables=x.tables||{};x.meta=x.meta||{};return x}
+  }catch{}
+  return structuredClone(initial)
+}
 function save(){localStorage.setItem(KEY,JSON.stringify(S))}
-function couple(){const m=S.meta?.couple;if(Array.isArray(m)&&m.length>=2&&m[0]&&m[1])return[m[0],m[1]];return['Persona A','Persona B']}
-function groupChoices(){const [a,b]=couple();const base=[`Familia ${a}`,`Familia ${b}`,`Amigos ${a}`,`Amigos ${b}`,'Trabajo','Otros'];const custom=Object.values(S.guests).map(g=>g.group).filter(Boolean).filter(x=>!/(novia|novio)/i.test(x));return[...new Set([...base,...custom])]}
-function active(g){return g&&g.rsvp!=='declined'}
-function confirmed(g){return g&&g.rsvp==='confirmed'}
-function guests(){return Object.entries(S.guests)}
-function tables(){return Object.entries(S.tables)}
+function unique(xs){return [...new Set(xs.filter(Boolean))]}
+function inferCoupleFromGroups(){
+  const names=[];
+  Object.values(S.guests||{}).forEach(g=>{
+    const m=String(g?.group||'').match(/^(?:Familia|Amigos)\s+(.+)$/i);
+    if(m&&!/^(A|B|1|2|novia|novio)$/i.test(m[1].trim()))names.push(m[1].trim())
+  });
+  const u=unique(names); return u.length>=2?[u[0],u[1]]:null
+}
+function scanStoredProfile(){
+  let pair=null,date='';
+  const pairKeys=[['partner1','partner2'],['name1','name2'],['person1','person2']];
+  for(let i=0;i<localStorage.length;i++){
+    let o; try{o=JSON.parse(localStorage.getItem(localStorage.key(i)))}catch{continue}
+    const stack=[o]; let guard=0;
+    while(stack.length&&guard++<250){
+      const x=stack.pop(); if(!x||typeof x!=='object')continue;
+      if(!pair){
+        for(const [k1,k2] of pairKeys)if(typeof x[k1]==='string'&&typeof x[k2]==='string'&&x[k1].trim()&&x[k2].trim())pair=[x[k1].trim(),x[k2].trim()];
+        for(const k of ['couple','partners','coupleNames','partnerNames'])if(!pair&&Array.isArray(x[k])&&x[k].length>=2&&x[k][0]&&x[k][1])pair=[String(x[k][0]).trim(),String(x[k][1]).trim()]
+      }
+      if(!date)for(const k of ['weddingDate','wedding_date','eventDate'])if(typeof x[k]==='string'&&/^\d{4}-\d{2}-\d{2}/.test(x[k])){date=x[k].slice(0,10);break}
+      Object.values(x).forEach(v=>{if(v&&typeof v==='object')stack.push(v)})
+    }
+    if(pair&&date)break
+  }
+  return{pair,date}
+}
+function ensureMeta(){
+  S.meta=S.meta||{};
+  let pair=Array.isArray(S.meta.couple)&&S.meta.couple.length>=2&&S.meta.couple[0]&&S.meta.couple[1]?S.meta.couple:null;
+  if(!pair)pair=inferCoupleFromGroups();
+  const ext=scanStoredProfile();
+  if(!pair&&ext.pair)pair=ext.pair;
+  if(pair)S.meta.couple=pair;
+  if(!S.meta.weddingDate){
+    const d=S.weddingDate||S.date||S.meta.date||ext.date;
+    if(typeof d==='string'&&/^\d{4}-\d{2}-\d{2}/.test(d))S.meta.weddingDate=d.slice(0,10)
+  }
+}
+function couple(){ensureMeta();const m=S.meta?.couple;return Array.isArray(m)&&m.length>=2&&m[0]&&m[1]?[m[0],m[1]]:['Persona A','Persona B']}
+function formatDate(d){if(!d)return'';const x=new Date(d+'T12:00:00');return Number.isNaN(x.getTime())?'':x.toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'})}
+function renderHeader(){
+  const [a,b]=couple(),has=a!=='Persona A';
+  $('#coupleTitle').textContent=has?`${a} & ${b}`:'Guests';
+  const d=formatDate(S.meta?.weddingDate);
+  $('#weddingMeta').innerHTML=`<span>${d?esc(d):'Fecha de boda pendiente'}</span><button class="metaBtn" id="editWedding">Editar</button>`;
+  $('#editWedding').onclick=openWeddingSettings
+}
+function openWeddingSettings(){
+  const [a,b]=couple(),safeA=a==='Persona A'?'':a,safeB=b==='Persona B'?'':b;
+  openSheet(`<div class="sectiontag">PERSONALIZACIÓN</div><h2>Vuestra boda</h2><label>Persona 1</label><input id="p1" class="field" value="${esc(safeA)}" placeholder="Nombre"><label>Persona 2</label><input id="p2" class="field" value="${esc(safeB)}" placeholder="Nombre"><label>Fecha de boda</label><input id="wDate" class="field" type="date" value="${esc(S.meta?.weddingDate||'')}"><div class="actions"><button class="btn soft" id="pCancel">Cancelar</button><button class="btn" id="pSave">Guardar</button></div>`);
+  $('#pCancel').onclick=closeSheet;
+  $('#pSave').onclick=()=>{
+    const p1=$('#p1').value.trim(),p2=$('#p2').value.trim(),d=$('#wDate').value;
+    if(!p1||!p2)return;
+    const old=couple(); S.meta.couple=[p1,p2]; S.meta.weddingDate=d||'';
+    Object.values(S.guests).forEach(g=>{
+      if(!g.group)return;
+      g.group=String(g.group).replace(new RegExp(`^(Familia|Amigos) ${escapeReg(old[0])}$`,'i'),(_,k)=>`${k} ${p1}`).replace(new RegExp(`^(Familia|Amigos) ${escapeReg(old[1])}$`,'i'),(_,k)=>`${k} ${p2}`)
+    });
+    save();closeSheet();render()
+  }
+}
+function escapeReg(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+function groupChoices(){const [a,b]=couple();const base=[`Familia ${a}`,`Familia ${b}`,`Amigos ${a}`,`Amigos ${b}`,'Trabajo','Otros'];const custom=Object.values(S.guests).map(g=>g.group).filter(Boolean).filter(x=>!/(novia|novio)/i.test(x));return unique([...base,...custom])}
+function active(g){return g&&g.rsvp!=='declined'} function confirmed(g){return g&&g.rsvp==='confirmed'}
+function guests(){return Object.entries(S.guests)} function tables(){return Object.entries(S.tables)}
 function occupied(name){return guests().filter(([,g])=>active(g)&&g.table===name).length}
 function counts(){const all=guests(),activeG=all.filter(([,g])=>active(g)),confirmedG=all.filter(([,g])=>confirmed(g)),pending=all.filter(([,g])=>g.rsvp==='pending'),declined=all.filter(([,g])=>g.rsvp==='declined'),assigned=activeG.filter(([,g])=>g.table);return{all:all.length,active:activeG.length,confirmed:confirmedG.length,pending:pending.length,declined:declined.length,assigned:assigned.length,unseated:activeG.length-assigned.length}}
-function render(){const [a,b]=couple();$('#coupleTitle').textContent=a==='Persona A'?'Guests':`${a} & ${b}`;renderHoy();renderGuests();renderTables();renderLists();save()}
-function renderHoy(){const c=counts();const mealIssues=guests().filter(([,g])=>confirmed(g)&&g.mealRequired!==false&&!g.meal);const over=tables().filter(([,t])=>occupied(t.name)>(+t.cap||0));let alerts='';mealIssues.slice(0,3).forEach(([id,g])=>alerts+=`<div class="card alert"><b>${esc(g.name)} necesita menú</b><p class="small">Está confirmado y aún no tiene menú.</p><button class="btn" data-edit="${esc(id)}">Resolver</button></div>`);over.slice(0,2).forEach(([id,t])=>alerts+=`<div class="card alert"><b>${esc(t.name)} supera su capacidad</b><p class="small">${occupied(t.name)} personas para ${+t.cap||0} plazas.</p><button class="btn soft" data-open-tables>Resolver</button></div>`);const n=mealIssues.length+over.length;$('#hoy').innerHTML=`<div class="stats"><div class="stat"><div class="num">${c.confirmed}</div><div>Confirmados</div></div><div class="stat"><div class="num">${c.pending}</div><div>Pendientes</div></div></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:26px"><div class="sectiontag">Necesita tu atención</div><span class="pill">${n}</span></div>${n?alerts:`<div class="card"><b class="status">Todo al día</b><p class="small">No hay acciones pendientes en este momento.</p></div>`}`;$('#hoy').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editGuest(b.dataset.edit));$('#hoy').querySelectorAll('[data-open-tables]').forEach(b=>b.onclick=()=>go('mesas'))}
-function renderGuests(){const c=counts();$('#invitados').innerHTML=`<h2>Invitados</h2><div class="flow"><div class="step"><div class="stepHead"><span class="stepNum">1</span><div><h3>Prepara tu lista</h3><p class="small">Importa lo que ya tienes o crea personas por grupos y círculos.</p></div></div><div style="margin-top:10px"><span class="pill">${c.all} invitados iniciales</span><span class="pill">${c.active} en gestión</span>${c.declined?`<span class="pill">${c.declined} no asisten</span>`:''}</div><div class="actions"><button class="btn soft" id="importBtn">Importar lista</button><button class="btn" id="createBtn">Crear mi lista</button></div><div class="minor"><button class="btn line" id="peopleBtn">Ver personas</button></div></div><div class="step"><div class="stepHead"><span class="stepNum">2</span><div><h3>Envía y recoge RSVP</h3><p class="small">Las respuestas deben actualizar esta misma lista.</p></div></div><div style="margin-top:10px"><span class="pill">${c.confirmed} confirmados</span><span class="pill">${c.pending} pendientes</span></div><div class="actions one"><button class="btn" id="rsvpBtn">Gestionar RSVP</button></div></div><div class="step"><div class="stepHead"><span class="stepNum">3</span><div><h3>Ajusta las mesas</h3><p class="small">Puedes empezar de forma provisional antes de tener todos los RSVP.</p></div></div><div style="margin-top:10px"><span class="pill">${c.assigned} con mesa</span><span class="pill">${c.unseated} sin mesa</span></div><div class="actions one"><button class="btn" id="planBtnGuest">Abrir plano visual</button></div></div></div>`;$('#importBtn').onclick=openImport;$('#createBtn').onclick=openCreate;$('#peopleBtn').onclick=openPeople;$('#rsvpBtn').onclick=()=>location.href=RSVP_URL;$('#planBtnGuest').onclick=openPlan}
-function tableCard(id,t){const ps=guests().filter(([,g])=>active(g)&&g.table===t.name),free=(+t.cap||0)-ps.length;return`<div class="card table"><div class="thead"><div><b>${esc(t.name)}</b><div class="small">${ps.length} de ${+t.cap||0} plazas</div></div><div><span class="pill ${free<0?'bad':''}">${free<0?'Exceso '+Math.abs(free):free===0?'Llena':free+' libres'}</span><br><button class="btn soft" style="margin-top:8px;padding:9px 11px" data-edittable="${esc(id)}">Editar</button></div></div>${ps.map(([gid,g])=>`<div class="seat"><div><b>${esc(g.name)}</b><div class="small">${g.rsvp==='pending'?'Pendiente RSVP':'Confirmado'}</div></div><button class="btn soft" style="padding:9px 11px" data-move="${esc(gid)}">Mover</button></div>`).join('')||'<div class="small" style="padding:17px 18px">Sin invitados asignados</div>'}</div>`}
-function renderTables(){const c=counts(),cap=tables().reduce((n,[,t])=>n+(+t.cap||0),0),un=guests().filter(([,g])=>active(g)&&!g.table);$('#mesas').innerHTML=`<h2>Mesas</h2><div style="margin-bottom:10px"><span class="pill">${c.assigned} con mesa</span><span class="pill">${c.unseated} sin mesa</span><span class="pill">${Math.max(0,cap-c.assigned)} plazas libres</span></div><div class="actions"><button class="btn soft" id="addTable">+ Añadir mesa</button><button class="btn" id="planBtn">Abrir plano visual</button></div>${tables().map(([id,t])=>tableCard(id,t)).join('')}${un.length?`<div class="card"><b>Sin mesa</b>${un.map(([id,g])=>`<div class="row"><span>${esc(g.name)}</span><button class="btn soft" data-move="${esc(id)}">Asignar</button></div>`).join('')}</div>`:''}`;$('#addTable').onclick=newTable;$('#planBtn').onclick=openPlan;$('#mesas').querySelectorAll('[data-move]').forEach(b=>b.onclick=()=>moveGuest(b.dataset.move));$('#mesas').querySelectorAll('[data-edittable]').forEach(b=>b.onclick=()=>editTable(b.dataset.edittable))}
-function renderLists(){const transport=guests().filter(([,g])=>active(g)&&g.transport),meal=guests().filter(([,g])=>confirmed(g)&&g.mealRequired!==false);$('#listados').innerHTML=`<h2>Listados</h2><div class="card"><b>Mesas · Boda principal</b><p class="small">${counts().assigned} invitados asignados. El plano y el resumen usan la misma información.</p><button class="btn" id="listPlan">Abrir plano</button></div><div class="card"><b>Catering · Boda principal</b><p class="small">${meal.length} menús requeridos. Los invitados marcados “Sin menú” no se cuentan.</p><button class="btn soft" id="cateringCsv">Descargar CSV</button></div><div class="card"><b>Transporte · Boda principal</b><p class="small">${transport.length} personas usan transporte.</p><button class="btn soft" id="transportCsv">Descargar CSV</button></div>`;$('#listPlan').onclick=openPlan;$('#cateringCsv').onclick=downloadCatering;$('#transportCsv').onclick=downloadTransport}
+function toast(title,detail=''){document.querySelector('.toast')?.remove();const t=document.createElement('div');t.className='toast';t.innerHTML=`<b>${esc(title)}</b>${detail?`<div class="small" style="color:#ddd5c8;margin-top:4px">${esc(detail)}</div>`:''}`;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+
+function render(){renderHeader();renderHoy();renderGuests();renderTables();renderLists();save()}
+function renderHoy(){
+  const c=counts(),mealIssues=guests().filter(([,g])=>confirmed(g)&&g.mealRequired!==false&&!g.meal),over=tables().filter(([,t])=>occupied(t.name)>(+t.cap||0));let alerts='';
+  mealIssues.slice(0,3).forEach(([id,g])=>alerts+=`<div class="card alert"><b>${esc(g.name)} necesita menú</b><p class="small">Está confirmado y aún no tiene menú.</p><button class="btn" data-edit="${esc(id)}">Resolver</button></div>`);
+  over.slice(0,2).forEach(([,t])=>alerts+=`<div class="card alert"><b>${esc(t.name)} supera su capacidad</b><p class="small">${occupied(t.name)} personas para ${+t.cap||0} plazas.</p><button class="btn soft" data-open-tables>Resolver</button></div>`);
+  const n=mealIssues.length+over.length;
+  $('#hoy').innerHTML=`<div class="stats"><div class="stat"><div class="num">${c.confirmed}</div><div>Confirmados</div></div><div class="stat"><div class="num">${c.pending}</div><div>Pendientes</div></div></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:26px"><div class="sectiontag">Necesita tu atención</div><span class="pill">${n}</span></div>${n?alerts:`<div class="card"><b class="status">Todo al día</b><p class="small">No hay acciones pendientes en este momento.</p></div>`}`;
+  $('#hoy').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editGuest(b.dataset.edit));$('#hoy').querySelectorAll('[data-open-tables]').forEach(b=>b.onclick=()=>go('mesas'))
+}
+function renderGuests(){
+  const c=counts();
+  $('#invitados').innerHTML=`<h2>Invitados</h2><div class="flow">
+  <div class="step"><div class="stepHead"><span class="stepNum">1</span><div><h3>Prepara tu lista</h3><p class="small">Importa lo que ya tienes o crea personas por grupos y subgrupos.</p></div></div><div style="margin-top:10px"><span class="pill">${c.all} invitados iniciales</span><span class="pill">${c.active} en gestión</span>${c.declined?`<span class="pill">${c.declined} no asisten</span>`:''}</div><div class="actions"><button class="btn soft" id="importBtn">Importar lista</button><button class="btn" id="createBtn">Crear mi lista</button></div><div class="minor"><button class="btn line" id="peopleBtn">Ver personas</button></div></div>
+  <div class="step"><div class="stepHead"><span class="stepNum">2</span><div><h3>Envía y recoge RSVP</h3><p class="small">Las respuestas actualizan esta misma lista.</p></div></div><div style="margin-top:10px"><span class="pill">${c.confirmed} confirmados</span><span class="pill">${c.pending} pendientes</span></div><div class="actions one"><button class="btn" id="rsvpBtn">Gestionar RSVP</button></div></div>
+  <div class="step"><div class="stepHead"><span class="stepNum">3</span><div><h3>Ajusta las mesas</h3><p class="small">Puedes empezar de forma provisional antes de tener todos los RSVP.</p></div></div><div style="margin-top:10px"><span class="pill">${c.assigned} con mesa</span><span class="pill">${c.unseated} sin mesa</span></div><div class="actions one"><button class="btn" id="planBtnGuest">Abrir plano visual</button></div></div></div>`;
+  $('#importBtn').onclick=openImport;$('#createBtn').onclick=openCreate;$('#peopleBtn').onclick=openPeople;$('#rsvpBtn').onclick=()=>location.href=RSVP_URL;$('#planBtnGuest').onclick=openPlan
+}
+function tableCard(id,t){
+  const ps=guests().filter(([,g])=>active(g)&&g.table===t.name),free=(+t.cap||0)-ps.length;
+  return`<div class="card table"><div class="thead"><div><b>${esc(t.name)}</b><div class="small">${ps.length} de ${+t.cap||0} plazas</div></div><div><span class="pill ${free<0?'bad':''}">${free<0?'Exceso '+Math.abs(free):free===0?'Llena':free+' libres'}</span><br><button class="btn soft" style="margin-top:8px;padding:9px 11px" data-edittable="${esc(id)}">Editar</button></div></div>${ps.map(([gid,g])=>`<div class="seat"><div><b>${esc(g.name)}</b><div class="small">${g.rsvp==='pending'?'Pendiente RSVP':'Confirmado'}</div></div><button class="btn soft" style="padding:9px 11px" data-move="${esc(gid)}">Mover</button></div>`).join('')||'<div class="small" style="padding:17px 18px">Sin invitados asignados</div>'}</div>`
+}
+function renderTables(){
+  const c=counts(),cap=tables().reduce((n,[,t])=>n+(+t.cap||0),0),un=guests().filter(([,g])=>active(g)&&!g.table);
+  $('#mesas').innerHTML=`<h2>Mesas</h2><div style="margin-bottom:10px"><span class="pill">${c.assigned} con mesa</span><span class="pill">${c.unseated} sin mesa</span><span class="pill">${Math.max(0,cap-c.assigned)} plazas libres</span></div><div class="actions"><button class="btn soft" id="addTable">+ Añadir mesa</button><button class="btn" id="planBtn">Abrir plano visual</button></div>${tables().map(([id,t])=>tableCard(id,t)).join('')}${un.length?`<div class="card"><b>Sin mesa</b>${un.map(([id,g])=>`<div class="row"><span>${esc(g.name)}</span><button class="btn soft" data-move="${esc(id)}">Asignar</button></div>`).join('')}</div>`:''}`;
+  $('#addTable').onclick=()=>newTable();$('#planBtn').onclick=openPlan;$('#mesas').querySelectorAll('[data-move]').forEach(b=>b.onclick=()=>moveGuest(b.dataset.move));$('#mesas').querySelectorAll('[data-edittable]').forEach(b=>b.onclick=()=>editTable(b.dataset.edittable))
+}
+function renderLists(){
+  const transport=guests().filter(([,g])=>active(g)&&g.transport),meal=guests().filter(([,g])=>confirmed(g)&&g.mealRequired!==false);
+  $('#listados').innerHTML=`<h2>Listados</h2><div class="card"><b>Mesas · Boda principal</b><p class="small">${counts().assigned} invitados asignados. El plano y el resumen usan la misma información.</p><button class="btn" id="listPlan">Abrir plano</button></div><div class="card"><b>Catering · Boda principal</b><p class="small">${meal.length} menús requeridos. Los invitados marcados “Sin menú” no se cuentan.</p><button class="btn soft" id="cateringCsv">Descargar CSV</button></div><div class="card"><b>Transporte · Boda principal</b><p class="small">${transport.length} personas usan transporte.</p><button class="btn soft" id="transportCsv">Descargar CSV</button></div>`;
+  $('#listPlan').onclick=openPlan;$('#cateringCsv').onclick=downloadCatering;$('#transportCsv').onclick=downloadTransport
+}
 function go(id){current=id;$$('.view').forEach(v=>v.classList.toggle('on',v.id===id));$$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));render();window.scrollTo({top:0,behavior:'auto'})}
 function openSheet(html){$('#panel').innerHTML=html;$('#sheet').classList.add('on');$('#sheet').onclick=e=>{if(e.target===$('#sheet'))closeSheet()};$('#panel').onclick=e=>e.stopPropagation()}
 function closeSheet(){$('#sheet').classList.remove('on');$('#panel').innerHTML=''}
-function openPeople(){const list=guests().filter(([,g])=>active(g));openSheet(`<div class="sectiontag">PERSONAS</div><h2>Invitados en gestión</h2><p class="small">Los “No asisten” se conservan fuera de la planificación activa.</p><div>${list.map(([id,g])=>`<div class="row"><div><b>${esc(g.name||'Sin nombre')}</b><div class="small">${g.rsvp==='confirmed'?'Confirmado':'Pendiente'}${g.group?' · '+esc(g.group):''}${g.table?' · '+esc(g.table):' · Sin mesa'}</div></div><button class="btn soft" data-pedit="${esc(id)}">Editar</button></div>`).join('')||'<p class="small">No hay personas activas.</p>'}</div><div class="actions one"><button class="btn soft" id="peopleClose">Hecho</button></div>`);$('#peopleClose').onclick=closeSheet;$('#panel').querySelectorAll('[data-pedit]').forEach(b=>b.onclick=()=>{closeSheet();editGuest(b.dataset.pedit)})}
-function openCreate(){let group='',circle='';const step1=()=>{openSheet(`<div class="sectiontag">CREAR MI LISTA</div><h2>1 · ¿De qué parte vienen?</h2><p class="small">Elige un grupo grande o crea uno nuevo.</p><div id="groups">${groupChoices().map(g=>`<button class="choice" data-g="${esc(g)}">${esc(g)}</button>`).join('')}</div><label>Grupo nuevo</label><input id="newGroup" class="field" placeholder="Ej. Vecinos"><div class="actions"><button class="btn soft" id="cancelCreate">Cerrar</button><button class="btn" id="next1">Siguiente</button></div>`);$('#cancelCreate').onclick=closeSheet;$('#panel').querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{group=b.dataset.g;$('#panel').querySelectorAll('[data-g]').forEach(x=>x.classList.toggle('sel',x===b));$('#newGroup').value=''});$('#next1').onclick=()=>{const n=$('#newGroup').value.trim();if(n)group=n;if(group)step2()}};const step2=()=>{openSheet(`<div class="sectiontag">${esc(group)}</div><h2>2 · ¿Qué círculo es?</h2><p class="small">Por ejemplo Universidad o Familia de Canarias. Puede quedar vacío.</p><input id="circle" class="field" placeholder="Ej. Universidad" value="${esc(circle)}"><div class="actions"><button class="btn soft" id="back1">Volver</button><button class="btn" id="next2">Siguiente</button></div>`);$('#back1').onclick=step1;$('#next2').onclick=()=>{circle=$('#circle').value.trim();step3()}};const step3=()=>{openSheet(`<div class="sectiontag">${esc(group)}${circle?' · '+esc(circle):''}</div><h2>3 · Añade las personas</h2><p class="small">Un nombre por línea.</p><textarea id="names" class="field" style="min-height:160px" placeholder="Ana López\nMaría López\nJuan Pérez"></textarea><div class="actions"><button class="btn soft" id="back2">Volver</button><button class="btn" id="savePeople">Crear y sentar</button></div>`);$('#back2').onclick=step2;$('#savePeople').onclick=()=>{const names=$('#names').value.split(/\n+/).map(x=>x.trim()).filter(Boolean);if(!names.length)return;for(const name of names){const id='g_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7);S.guests[id]={name,rsvp:'pending',meal:'',mealRequired:true,table:'',transport:false,group,unitId:circle||''}}save();closeSheet();render();openPlan()}};step1()}
-function editGuest(id){const g=S.guests[id];if(!g)return;openSheet(`<div class="sectiontag">${esc(g.name)}</div><h2>Editar invitado</h2><label>RSVP</label><select id="eRsvp" class="field"><option value="pending">Pendiente</option><option value="confirmed">Confirmado</option><option value="declined">No asiste</option></select><label>Menú</label><select id="eMeal" class="field"><option value="">Pendiente</option><option>Estándar</option><option>Vegetariano</option><option>Vegano</option><option>Celíaco</option><option>Sin lactosa</option><option>Infantil</option><option value="__none__">Sin menú</option></select><label>Transporte</label><select id="eTransport" class="field"><option value="no">No</option><option value="yes">Sí</option></select><div class="actions"><button class="btn soft" id="editClose">Cancelar</button><button class="btn" id="editSave">Guardar</button></div>`);$('#eRsvp').value=g.rsvp||'pending';$('#eMeal').value=g.mealRequired===false?'__none__':(g.meal||'');$('#eTransport').value=g.transport?'yes':'no';$('#editClose').onclick=closeSheet;$('#editSave').onclick=()=>{g.rsvp=$('#eRsvp').value;const m=$('#eMeal').value;if(m==='__none__'){g.meal='';g.mealRequired=false}else{g.meal=m;g.mealRequired=true}g.transport=$('#eTransport').value==='yes';if(g.rsvp==='declined')g.table='';save();closeSheet();render()}}
-function moveGuest(id){const g=S.guests[id];if(!g)return;openSheet(`<div class="sectiontag">${esc(g.name)}</div><h2>Asignar mesa</h2><button class="choice ${!g.table?'sel':''}" data-table="">Sin mesa</button>${tables().map(([,t])=>`<button class="choice ${g.table===t.name?'sel':''}" data-table="${esc(t.name)}">${esc(t.name)} · ${occupied(t.name)}/${+t.cap||0}</button>`).join('')}<div class="actions one"><button class="btn soft" id="moveClose">Cerrar</button></div>`);$('#panel').querySelectorAll('[data-table]').forEach(b=>b.onclick=()=>{g.table=b.dataset.table;save();closeSheet();render()});$('#moveClose').onclick=closeSheet}
-function newTable(){openSheet(`<div class="sectiontag">NUEVA MESA</div><h2>Añadir mesa</h2><label>Nombre</label><input id="tName" class="field" placeholder="Mesa 5"><label>Capacidad</label><input id="tCap" class="field" type="number" min="1" value="8"><div class="actions"><button class="btn soft" id="tCancel">Cancelar</button><button class="btn" id="tSave">Añadir</button></div>`);$('#tCancel').onclick=closeSheet;$('#tSave').onclick=()=>{const name=$('#tName').value.trim(),cap=Math.max(1,+$('#tCap').value||8);if(!name)return;const id='t_'+Date.now().toString(36);S.tables[id]={name,cap};save();closeSheet();render()}}
-function editTable(id){const t=S.tables[id];if(!t)return;openSheet(`<div class="sectiontag">MESA</div><h2>${esc(t.name)}</h2><label>Nombre</label><input id="etName" class="field" value="${esc(t.name)}"><label>Capacidad</label><input id="etCap" class="field" type="number" min="1" value="${+t.cap||8}"><div class="actions"><button class="btn soft" id="etClose">Cancelar</button><button class="btn" id="etSave">Guardar</button></div>`);$('#etClose').onclick=closeSheet;$('#etSave').onclick=()=>{const old=t.name,name=$('#etName').value.trim(),cap=Math.max(1,+$('#etCap').value||8);if(!name)return;t.name=name;t.cap=cap;if(old!==name)guests().forEach(([,g])=>{if(g.table===old)g.table=name});save();closeSheet();render()}}
-function openPlan(){const plan=$('#plan'),frame=$('#planFrame');plan.classList.add('on');document.body.style.overflow='hidden';if(!frame.getAttribute('src'))frame.src=PLAN_URL;frame.onload=()=>{try{const d=frame.contentDocument;if(!d)return;const st=d.createElement('style');st.textContent='#backGuests{display:none!important}';d.head.appendChild(st);const old=d.getElementById('backGuests');if(old){old.replaceWith(old.cloneNode(true))}}catch{}}}
+
+function openPeople(){
+  const list=guests().filter(([,g])=>active(g));
+  openSheet(`<div class="sectiontag">PERSONAS</div><h2>Invitados en gestión</h2><p class="small">Los “No asisten” se conservan fuera de la planificación activa.</p><div>${list.map(([id,g])=>`<div class="row"><div><b>${esc(g.name||'Sin nombre')}</b><div class="small">${g.rsvp==='confirmed'?'Confirmado':'Pendiente'}${g.group?' · '+esc(g.group):''}${g.unitId?' · '+esc(g.unitId):''}${g.table?' · '+esc(g.table):' · Sin mesa'}</div></div><button class="btn soft" data-pedit="${esc(id)}">Editar</button></div>`).join('')||'<p class="small">No hay personas activas.</p>'}</div><div class="actions one"><button class="btn soft" id="peopleClose">Hecho</button></div>`);
+  $('#peopleClose').onclick=closeSheet;$('#panel').querySelectorAll('[data-pedit]').forEach(b=>b.onclick=()=>{closeSheet();editGuest(b.dataset.pedit)})
+}
+function createPeople(names,group,subgroup){
+  const ids=[];
+  for(const name of names){const id='g_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7);ids.push(id);S.guests[id]={name,rsvp:'pending',meal:'',mealRequired:true,table:'',transport:false,group,unitId:subgroup||''}}
+  save();return ids
+}
+function openCreate(){
+  let group='',subgroup='';
+  const step1=()=>{
+    openSheet(`<div class="sectiontag">CREAR MI LISTA</div><h2>1 · ¿De qué parte vienen?</h2><p class="small">Elige un grupo grande o crea uno nuevo.</p><div id="groups">${groupChoices().map(g=>`<button class="choice" data-g="${esc(g)}">${esc(g)}</button>`).join('')}</div><label>Grupo nuevo</label><input id="newGroup" class="field" placeholder="Ej. Vecinos"><div class="actions"><button class="btn soft" id="cancelCreate">Cerrar</button><button class="btn" id="next1">Siguiente</button></div>`);
+    $('#cancelCreate').onclick=closeSheet;$('#panel').querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{group=b.dataset.g;$('#panel').querySelectorAll('[data-g]').forEach(x=>x.classList.toggle('sel',x===b));$('#newGroup').value=''});$('#next1').onclick=()=>{const n=$('#newGroup').value.trim();if(n)group=n;if(group)step2()}
+  };
+  const step2=()=>{
+    openSheet(`<div class="sectiontag">${esc(group)}</div><h2>2 · ¿Quieres un subgrupo?</h2><p class="small">Úsalo solo si te ayuda a ordenar: Universidad, Familia de Canarias, Trabajo… Puedes dejarlo vacío.</p><input id="subgroup" class="field" placeholder="Ej. Universidad" value="${esc(subgroup)}"><div class="actions"><button class="btn soft" id="back1">Volver</button><button class="btn" id="next2">Siguiente</button></div>`);
+    $('#back1').onclick=step1;$('#next2').onclick=()=>{subgroup=$('#subgroup').value.trim();step3()}
+  };
+  const step3=()=>{
+    openSheet(`<div class="sectiontag">${esc(group)}${subgroup?' · '+esc(subgroup):''}</div><h2>3 · Añade las personas</h2><p class="small">Un nombre por línea. Puedes simplemente añadirlas o sentarlas juntas ahora.</p><textarea id="names" class="field" style="min-height:160px" placeholder="Ana López\nMaría López\nJuan Pérez"></textarea><div class="actions three"><button class="btn soft" id="back2">Volver</button><button class="btn line" id="saveOnly">Solo añadir</button><button class="btn" id="saveSeat">Añadir y sentar</button></div>`);
+    $('#back2').onclick=step2;
+    const read=()=>$('#names').value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+    $('#saveOnly').onclick=()=>{const names=read();if(!names.length)return;createPeople(names,group,subgroup);closeSheet();render();toast(`${names.length} invitado${names.length===1?'':'s'} añadido${names.length===1?'':'s'}`,subgroup?`${group} · ${subgroup}`:group)};
+    $('#saveSeat').onclick=()=>{const names=read();if(!names.length)return;const ids=createPeople(names,group,subgroup);bulkSeat(ids)}
+  };
+  step1()
+}
+function nextTableName(){
+  const nums=tables().map(([,t])=>{const m=String(t.name||'').match(/Mesa\s+(\d+)/i);return m?+m[1]:0});return'Mesa '+(Math.max(0,...nums)+1)
+}
+function bulkSeat(ids){
+  const list=ids.map(id=>S.guests[id]).filter(Boolean),n=list.length,names=list.map(g=>g.name).join(' · ');
+  const choices=tables().map(([,t])=>{const used=occupied(t.name),cap=+t.cap||0,free=cap-used,ok=free>=n;return`<button class="choice" data-bulk-table="${esc(t.name)}" ${ok?'':'disabled'}><b>${esc(t.name)} · ${used}/${cap}</b><span class="muted">${ok?`Caben los ${n}`:`Faltan ${n-free} plazas`}</span></button>`}).join('');
+  openSheet(`<div class="sectiontag">SENTAR GRUPO</div><h2>Sentar ${n} invitado${n===1?'':'s'}</h2><div class="bulkNames"><b>Seleccionados</b><span class="small">${esc(names)}</span></div><p class="small">Elige una mesa con sitio suficiente para todos.</p>${choices||'<p class="small">Aún no hay mesas.</p>'}<hr class="divider"><h3 style="margin:0 0 8px">O crea una mesa ahora</h3><label>Nombre</label><input id="bulkTName" class="field" value="${esc(nextTableName())}"><label>Capacidad</label><input id="bulkTCap" class="field" type="number" min="${n}" value="${Math.max(8,n)}"><div id="bulkErr" class="error"></div><button class="btn full" id="bulkCreate">Crear mesa y asignar</button><div class="actions one"><button class="btn soft" id="bulkLater">Dejar sin mesa por ahora</button></div>`);
+  $('#panel').querySelectorAll('[data-bulk-table]').forEach(b=>b.onclick=()=>assignBulk(ids,b.dataset.bulkTable));
+  $('#bulkLater').onclick=()=>{closeSheet();render();toast(`${n} invitado${n===1?'':'s'} añadido${n===1?'':'s'}`,'Los puedes sentar más tarde')};
+  $('#bulkCreate').onclick=()=>{
+    const name=$('#bulkTName').value.trim(),cap=Math.max(n,+$('#bulkTCap').value||Math.max(8,n));$('#bulkErr').textContent='';
+    if(!name){$('#bulkErr').textContent='Pon un nombre a la mesa.';return}
+    if(tables().some(([,t])=>String(t.name).toLowerCase()===name.toLowerCase())){$('#bulkErr').textContent='Ya existe una mesa con ese nombre.';return}
+    const id='t_'+Date.now().toString(36);S.tables[id]={name,cap};assignBulk(ids,name)
+  }
+}
+function assignBulk(ids,tableName){
+  ids.forEach(id=>{if(S.guests[id])S.guests[id].table=tableName});save();closeSheet();render();go('mesas');toast(`${ids.length} invitado${ids.length===1?'':'s'} sentado${ids.length===1?'':'s'}`,tableName)
+}
+function editGuest(id){
+  const g=S.guests[id];if(!g)return;
+  openSheet(`<div class="sectiontag">${esc(g.name)}</div><h2>Editar invitado</h2><label>RSVP</label><select id="eRsvp" class="field"><option value="pending">Pendiente</option><option value="confirmed">Confirmado</option><option value="declined">No asiste</option></select><label>Menú</label><select id="eMeal" class="field"><option value="">Pendiente</option><option>Estándar</option><option>Vegetariano</option><option>Vegano</option><option>Celíaco</option><option>Sin lactosa</option><option>Infantil</option><option value="__none__">Sin menú</option></select><label>Transporte</label><select id="eTransport" class="field"><option value="no">No</option><option value="yes">Sí</option></select><div class="actions"><button class="btn soft" id="editClose">Cancelar</button><button class="btn" id="editSave">Guardar</button></div>`);
+  $('#eRsvp').value=g.rsvp||'pending';$('#eMeal').value=g.mealRequired===false?'__none__':(g.meal||'');$('#eTransport').value=g.transport?'yes':'no';$('#editClose').onclick=closeSheet;$('#editSave').onclick=()=>{g.rsvp=$('#eRsvp').value;const m=$('#eMeal').value;if(m==='__none__'){g.meal='';g.mealRequired=false}else{g.meal=m;g.mealRequired=true}g.transport=$('#eTransport').value==='yes';if(g.rsvp==='declined')g.table='';save();closeSheet();render()}
+}
+function moveGuest(id){
+  const g=S.guests[id];if(!g)return;
+  openSheet(`<div class="sectiontag">${esc(g.name)}</div><h2>Asignar mesa</h2><button class="choice ${!g.table?'sel':''}" data-table="">Sin mesa</button>${tables().map(([,t])=>`<button class="choice ${g.table===t.name?'sel':''}" data-table="${esc(t.name)}">${esc(t.name)} · ${occupied(t.name)}/${+t.cap||0}</button>`).join('')}<button class="choice" id="moveNew">+ Crear mesa</button><div class="actions one"><button class="btn soft" id="moveClose">Cerrar</button></div>`);
+  $('#panel').querySelectorAll('[data-table]').forEach(b=>b.onclick=()=>{g.table=b.dataset.table;save();closeSheet();render()});$('#moveNew').onclick=()=>newTable(id);$('#moveClose').onclick=closeSheet
+}
+function newTable(assignGuestId=null){
+  openSheet(`<div class="sectiontag">NUEVA MESA</div><h2>Añadir mesa</h2><label>Nombre</label><input id="tName" class="field" value="${esc(nextTableName())}"><label>Capacidad</label><input id="tCap" class="field" type="number" min="1" value="8"><div id="tErr" class="error"></div><div class="actions"><button class="btn soft" id="tCancel">Cancelar</button><button class="btn" id="tSave">${assignGuestId?'Crear y asignar':'Añadir'}</button></div>`);
+  $('#tCancel').onclick=closeSheet;$('#tSave').onclick=()=>{const name=$('#tName').value.trim(),cap=Math.max(1,+$('#tCap').value||8);$('#tErr').textContent='';if(!name)return;if(tables().some(([,t])=>String(t.name).toLowerCase()===name.toLowerCase())){$('#tErr').textContent='Ya existe una mesa con ese nombre.';return}const id='t_'+Date.now().toString(36);S.tables[id]={name,cap};if(assignGuestId&&S.guests[assignGuestId])S.guests[assignGuestId].table=name;save();closeSheet();render()}
+}
+function editTable(id){
+  const t=S.tables[id];if(!t)return;
+  openSheet(`<div class="sectiontag">MESA</div><h2>${esc(t.name)}</h2><label>Nombre</label><input id="etName" class="field" value="${esc(t.name)}"><label>Capacidad</label><input id="etCap" class="field" type="number" min="1" value="${+t.cap||8}"><div class="actions"><button class="btn soft" id="etClose">Cancelar</button><button class="btn" id="etSave">Guardar</button></div>`);
+  $('#etClose').onclick=closeSheet;$('#etSave').onclick=()=>{const old=t.name,name=$('#etName').value.trim(),cap=Math.max(1,+$('#etCap').value||8);if(!name)return;t.name=name;t.cap=cap;if(old!==name)guests().forEach(([,g])=>{if(g.table===old)g.table=name});save();closeSheet();render()}
+}
+function enhancePlanFrame(){
+  try{
+    const d=$('#planFrame').contentDocument;if(!d)return;
+    const old=d.getElementById('backGuests');if(old)old.style.display='none';
+    if(!d.getElementById('v124tip')){
+      const un=d.getElementById('unseated');
+      if(un){const tip=d.createElement('div');tip.id='v124tip';tip.textContent='Toca un invitado para seleccionarlo. Puedes tocar varios y moverlos juntos.';tip.style.cssText='margin:0 0 12px;padding:11px 13px;border:1px solid #ddd5c8;border-radius:12px;background:#faf8f4;color:#655f59;font-size:14px;line-height:1.35';un.parentNode?.insertBefore(tip,un)}
+    }
+  }catch{}
+}
+function openPlan(){const plan=$('#plan'),frame=$('#planFrame');plan.classList.add('on');document.body.style.overflow='hidden';if(!frame.getAttribute('src'))frame.src=PLAN_URL;frame.onload=enhancePlanFrame;setTimeout(enhancePlanFrame,300)}
 function closePlan(){$('#plan').classList.remove('on');document.body.style.overflow='';render()}
-function openImport(){openSheet(`<div class="sectiontag">IMPORTAR</div><h2>Trae tu lista</h2><p class="small">CSV, TXT o TSV. Reconozco Nombre/Name/Guest, RSVP/Estado/Asistencia, Mesa/Table, Menú/Meal, Edad/Age, Teléfono/Phone y Email.</p><div class="importDrop"><button class="btn full" id="pickFile">Subir archivo</button></div><p class="small">O pega directamente desde Excel/Google Sheets:</p><textarea id="paste" class="field" style="min-height:140px" placeholder="Nombre\tRSVP\tMenú\tMesa"></textarea><div class="actions"><button class="btn soft" id="importClose">Cancelar</button><button class="btn" id="importPaste">Importar pegado</button></div>`);$('#pickFile').onclick=()=>$('#fileInput').click();$('#importClose').onclick=closeSheet;$('#importPaste').onclick=()=>importText($('#paste').value)}
-function parseDelimited(text){text=String(text||'').replace(/^\uFEFF/,'').trim();if(!text)return[];text=text.replace(/^sep=.\r?\n/i,'');const first=text.split(/\r?\n/)[0]||'';const delim=first.includes('\t')?'\t':(first.split(';').length>first.split(',').length?';':',');const rows=[];let row=[],cell='',q=false;for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(q&&text[i+1]==='"'){cell+='"';i++}else q=!q}else if(c===delim&&!q){row.push(cell);cell=''}else if((c==='\n'||c==='\r')&&!q){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cell);rows.push(row);row=[];cell=''}else cell+=c}row.push(cell);if(row.some(x=>String(x).trim()))rows.push(row);return rows}
-function importText(text){const rows=parseDelimited(text);if(rows.length<2)return;const h=rows[0].map(x=>String(x).trim().toLowerCase());const idx=(...names)=>h.findIndex(x=>names.some(n=>x.includes(n)));const ni=idx('nombre','name','guest'),ri=idx('rsvp','estado','asistencia','attendance'),mi=idx('menú','menu','meal'),ti=idx('mesa','table'),ai=idx('edad','age'),pi=idx('teléfono','telefono','phone'),ei=idx('email','correo');let added=0,updated=0;for(const r of rows.slice(1)){const name=String(r[ni>=0?ni:0]||'').trim();if(!name||/^(total|resumen|summary)$/i.test(name)||/\bpersonas?\b/i.test(name))continue;let entry=guests().find(([,g])=>String(g.name||'').trim().toLowerCase()===name.toLowerCase());let id,g;if(entry){[id,g]=entry;updated++}else{id='g_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7);g=S.guests[id]={name,rsvp:'pending',meal:'',mealRequired:true,table:'',transport:false};added++}if(ri>=0){const v=String(r[ri]||'').toLowerCase();if(/no asiste|declin|no viene/.test(v))g.rsvp='declined';else if(/confirm|sí|si|attend/.test(v))g.rsvp='confirmed';else if(v)g.rsvp='pending'}if(mi>=0&&r[mi]){g.meal=String(r[mi]).trim();g.mealRequired=!/^sin men[uú]$/i.test(g.meal);if(!g.mealRequired)g.meal=''}if(ti>=0&&r[ti])g.table=String(r[ti]).trim();if(ai>=0&&r[ai])g.age=String(r[ai]).trim();if(pi>=0&&r[pi])g.phone=String(r[pi]).trim();if(ei>=0&&r[ei])g.email=String(r[ei]).trim()}save();closeSheet();render();openSheet(`<div class="sectiontag">IMPORTACIÓN</div><h2>Lista incorporada</h2><p>${added} nuevos · ${updated} actualizados.</p><p class="small">No he convertido ausencias del archivo en “No asiste” salvo que el estado lo indique explícitamente.</p><div class="actions one"><button class="btn" id="importDone">Hecho</button></div>`);$('#importDone').onclick=closeSheet}
-function csvDownload(name,rows){const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
-function downloadCatering(){const rows=[['Mesa','Nombre','Menú'],...guests().filter(([,g])=>confirmed(g)&&g.mealRequired!==false).map(([,g])=>[g.table||'Sin mesa',g.name,g.meal||'Pendiente'])];csvDownload('weddly-catering.csv',rows)}
-function downloadTransport(){const rows=[['Nombre','Mesa','Transporte'],...guests().filter(([,g])=>active(g)&&g.transport).map(([,g])=>[g.name,g.table||'', 'Sí'])];csvDownload('weddly-transporte.csv',rows)}
+function openImport(){
+  openSheet(`<div class="sectiontag">IMPORTAR</div><h2>Trae tu lista</h2><p class="small">CSV, TXT o TSV. Reconozco Nombre/Name/Guest, RSVP/Estado/Asistencia, Mesa/Table, Menú/Meal, Edad/Age, Teléfono/Phone y Email.</p><div class="importDrop"><button class="btn full" id="pickFile">Subir archivo</button></div><p class="small">O pega directamente desde Excel/Google Sheets:</p><textarea id="paste" class="field" style="min-height:140px" placeholder="Nombre\tRSVP\tMenú\tMesa"></textarea><div class="actions"><button class="btn soft" id="importClose">Cancelar</button><button class="btn" id="importPaste">Importar pegado</button></div>`);
+  $('#pickFile').onclick=()=>$('#fileInput').click();$('#importClose').onclick=closeSheet;$('#importPaste').onclick=()=>importText($('#paste').value)
+}
+function parseDelimited(text){
+  text=String(text||'').replace(/^\uFEFF/,'').trim();if(!text)return[];text=text.replace(/^sep=.\r?\n/i,'');const first=text.split(/\r?\n/)[0]||'',delim=first.includes('\t')?'\t':(first.split(';').length>first.split(',').length?';':',');const rows=[];let row=[],cell='',q=false;
+  for(let i=0;i<text.length;i++){const c=text[i];if(c==='"'){if(q&&text[i+1]==='"'){cell+='"';i++}else q=!q}else if(c===delim&&!q){row.push(cell);cell=''}else if((c==='\n'||c==='\r')&&!q){if(c==='\r'&&text[i+1]==='\n')i++;row.push(cell);rows.push(row);row=[];cell=''}else cell+=c}row.push(cell);if(row.some(x=>String(x).trim()))rows.push(row);return rows
+}
+function importText(text){
+  const rows=parseDelimited(text);if(rows.length<2)return;const h=rows[0].map(x=>String(x).trim().toLowerCase()),idx=(...names)=>h.findIndex(x=>names.some(n=>x.includes(n)));const ni=idx('nombre','name','guest'),ri=idx('rsvp','estado','asistencia','attendance'),mi=idx('menú','menu','meal'),ti=idx('mesa','table'),ai=idx('edad','age'),pi=idx('teléfono','telefono','phone'),ei=idx('email','correo');let added=0,updated=0;
+  for(const r of rows.slice(1)){const name=String(r[ni>=0?ni:0]||'').trim();if(!name||/^(total|resumen|summary)$/i.test(name)||/\bpersonas?\b/i.test(name))continue;let entry=guests().find(([,g])=>String(g.name||'').trim().toLowerCase()===name.toLowerCase()),id,g;if(entry){[id,g]=entry;updated++}else{id='g_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7);g=S.guests[id]={name,rsvp:'pending',meal:'',mealRequired:true,table:'',transport:false};added++}if(ri>=0){const v=String(r[ri]||'').toLowerCase();if(/no asiste|declin|no viene/.test(v))g.rsvp='declined';else if(/confirm|sí|si|attend/.test(v))g.rsvp='confirmed';else if(v)g.rsvp='pending'}if(mi>=0&&r[mi]){g.meal=String(r[mi]).trim();g.mealRequired=!/^sin men[uú]$/i.test(g.meal);if(!g.mealRequired)g.meal=''}if(ti>=0&&r[ti])g.table=String(r[ti]).trim();if(ai>=0&&r[ai])g.age=String(r[ai]).trim();if(pi>=0&&r[pi])g.phone=String(r[pi]).trim();if(ei>=0&&r[ei])g.email=String(r[ei]).trim()}
+  save();closeSheet();render();openSheet(`<div class="sectiontag">IMPORTACIÓN</div><h2>Lista incorporada</h2><p>${added} nuevos · ${updated} actualizados.</p><p class="small">No he convertido ausencias del archivo en “No asiste” salvo que el estado lo indique explícitamente.</p><div class="actions one"><button class="btn" id="importDone">Hecho</button></div>`);$('#importDone').onclick=closeSheet
+}
+function csvDownload(name,rows){const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n'),blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function downloadCatering(){csvDownload('weddly-catering.csv',[['Mesa','Nombre','Menú'],...guests().filter(([,g])=>confirmed(g)&&g.mealRequired!==false).map(([,g])=>[g.table||'Sin mesa',g.name,g.meal||'Pendiente'])])}
+function downloadTransport(){csvDownload('weddly-transporte.csv',[['Nombre','Mesa','Transporte'],...guests().filter(([,g])=>active(g)&&g.transport).map(([,g])=>[g.name,g.table||'','Sí'])])}
+
 $('#nav').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go)});
 $('#sheet').addEventListener('click',e=>{if(e.target===$('#sheet'))closeSheet()});
 $('#planBack').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();closePlan()},{capture:true});
-$('#fileInput').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;const text=await f.text();importText(text);e.target.value=''});
+$('#fileInput').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;importText(await f.text());e.target.value=''});
 window.addEventListener('pageshow',()=>render());
-render();
+ensureMeta();render();
 })();
 </script>
 </body>
