@@ -16,7 +16,8 @@
 <script>
 (()=>{
   const q=new URLSearchParams(location.search),publicMode=q.get('guest')==='1'||q.has('t'),desktop=matchMedia('(hover:hover) and (pointer:fine)').matches;
-  if(publicMode||!desktop){location.replace('guests-rsvp-v105-mobile.html'+location.search+location.hash);return}
+  if(publicMode){location.replace('guests-rsvp-personalized-v2.html'+location.search+location.hash);return}
+  if(!desktop){location.replace('guests-rsvp-v105-mobile.html'+location.search+location.hash);return}
   const shell=document.getElementById('desktopShell'),frame=document.getElementById('frame'),GKEY='weddly_guests_qa_v67',TOKEN_KEY='weddly_shared_wedding_token',FALLBACK='guests-v114-integrated.html?v=131#invitados';
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   shell.classList.add('on');
