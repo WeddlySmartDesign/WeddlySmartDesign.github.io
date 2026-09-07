@@ -1,0 +1,32 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Weddly Smart Design · RSVP Studio v7</title></head><body><script>
+(async()=>{
+  const r=await fetch('rsvp-design-studio-v6.html?src=v7',{cache:'no-store'});
+  let h=await r.text();
+  h=h.replace(/Studio v6/g,'Studio v7');
+  const oldFlower=/const flower=`[\s\S]*?<\/svg>`;/;
+  const botanicalArt='https://upload.wikimedia.org/wikipedia/commons/1/14/A_rose%2C_anemone%2C_mignonette_and_daisies.jpg';
+  h=h.replace(oldFlower,`const flower=\`<img class="botanicalArt" src="${botanicalArt}" alt="Ilustración botánica acuarela">\`;`);
+  h=h.replace('</style>',`
+/* v7 — botanical artwork + mobile type QA */
+.botanical .wash{display:none!important}
+.botanical .flower{width:255px!important;height:330px!important;right:-72px!important;top:-16px!important;opacity:.82!important;overflow:hidden;mix-blend-mode:multiply;transform:rotate(7deg)}
+.botanical .flower2{width:230px!important;height:300px!important;left:-82px!important;bottom:-72px!important;opacity:.72!important;overflow:hidden;mix-blend-mode:multiply;transform:rotate(188deg)!important}
+.botanical .botanicalArt{width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.78) contrast(.9) brightness(1.06);border-radius:48% 48% 44% 44%}
+.botanical .hero:before{content:'';position:absolute;width:240px;height:240px;right:-82px;top:55px;border-radius:50%;background:#e8cfd0;opacity:.28;filter:blur(34px)}
+.botanical .hero:after{content:'';position:absolute;width:180px;height:180px;left:-70px;bottom:32px;border-radius:50%;background:#dbe4d4;opacity:.48;filter:blur(30px)}
+.botanical .hero>div{position:relative;z-index:2}.botanical .flower,.botanical .flower2{z-index:1!important}
+.editorial .line>div:last-child,.modern .itin>div:last-child{min-width:0}
+.editorial .line b,.modern .itin b{display:block;line-height:1.04}
+.editorial .line small,.modern .itin small{display:block!important;margin-top:5px;line-height:1.35;font-size:12px}
+.modern .itin{grid-template-columns:58px minmax(0,1fr)!important;gap:18px!important}
+.modern .itin b{font-size:22px!important}
+.modern .sectionTitle{max-width:360px}
+@media(max-width:420px){
+ .botanical .hero{min-height:690px;padding:32px 24px 32px}.botanical .names{font-size:55px}.botanical .flower{width:220px!important;height:285px!important;right:-72px!important}.botanical .flower2{width:195px!important;height:250px!important;left:-80px!important}.botanical .timeline{padding-left:24px;padding-right:22px}.botanical .mom{grid-template-columns:54px minmax(0,1fr);gap:14px}.botanical .mom b{font-size:22px;line-height:1.06}.botanical .mom small{font-size:12px;line-height:1.35}
+ .editorial .line{grid-template-columns:74px minmax(0,1fr);gap:14px}.editorial .line b{font-size:21px}.editorial .schedule{padding-left:24px;padding-right:24px}
+ .modern .itinerary{padding-left:24px;padding-right:22px}.modern .itin{grid-template-columns:52px minmax(0,1fr)!important;gap:15px!important}.modern .itin b{font-size:21px!important}.modern .itin small{font-size:11px}.modern .place{padding:22px}.modern .sectionTitle{font-size:42px}
+}
+</style>`);
+  document.open();document.write(h);document.close();
+})().catch(e=>{document.body.innerHTML='<p style="font-family:sans-serif;padding:24px">No se pudo cargar el estudio v7.</p>';console.error(e)});
+</script></body></html>
