@@ -6,7 +6,7 @@
 (function(){
   const q=new URLSearchParams(location.search);
   const publicMode=q.get('guest')==='1'||q.has('t');
-  const target=publicMode?'guests-rsvp-essential-paper-v1.html':'guests-rsvp-essential-admin-v2.html';
+  const target=publicMode?'guests-rsvp-essential-fixed-v1.html':'guests-rsvp-essential-admin-v2.html';
   location.replace(target+location.search+location.hash);
 })();
 </script>
