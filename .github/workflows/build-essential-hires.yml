@@ -30,6 +30,7 @@ jobs:
           parts = [root / f'full-{i:03d}.b64' for i in range(8)]
           b64 = ''.join(p.read_text(encoding='utf-8') for p in parts)
           b64 = ''.join(b64.split())
+          b64 += '=' * (-len(b64) % 4)
           raw = base64.b64decode(b64)
           im = Image.open(io.BytesIO(raw)).convert('RGB')
           if im.size != (587, 1672):
