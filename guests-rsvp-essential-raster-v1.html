@@ -27,14 +27,15 @@
 <div class="hint" id="hint">Abriendo…</div>
 <script>
 (()=>{
- const ART='assets/essential-approved-raster.jpg?v=r2';
+ const ART='assets/essential-approved-raster.jpg?v=r3';
  const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp';
  const DEF='sP3vW6aT-B_5-ctfsY06D3rHOkwM0gXUs5i0aGfiH-8';
- const q=new URLSearchParams(location.search),token=q.get('t')||DEF,g=q.get('g')||'';
+ const q=new URLSearchParams(location.search),token=q.get('t')||DEF,g=q.get('g')||'',previewMode=q.get('preview')==='1';
  let cfg={title:'Alba & Leo',date:'12 septiembre 2027',time:'18:00',venue:'Finca Los Olivos',intro:''};
  async function loadArt(){const img=document.getElementById('art');try{const r=await fetch(ART,{cache:'no-store'});const ct=(r.headers.get('content-type')||'').toLowerCase();if(ct.startsWith('image/')){img.src=ART;return}const txt=(await r.text()).trim();if(txt.startsWith('/9j/')||txt.startsWith('iVBOR')){img.src='data:image/jpeg;base64,'+txt;return}img.src=ART}catch{img.src=ART}}
- function apply(){const title=(cfg.title||'Alba & Leo').replace(/\s*&\s*|\s+y\s+/i,' y ');document.getElementById('couple').textContent=title;document.getElementById('dateText').textContent=(cfg.date||'12 septiembre 2027').toUpperCase();document.getElementById('timeText').textContent=(cfg.time||'18:00')+' H';document.getElementById('venueText').textContent=cfg.venue||'Finca Los Olivos';document.getElementById('agendaVenue').textContent=cfg.venue||'Finca Los Olivos';document.getElementById('placeVenue').textContent=cfg.venue||'Finca Los Olivos'}
- async function loadCfg(){try{const r=await fetch(API+'?token='+encodeURIComponent(token),{cache:'no-store'}),x=await r.json();if(r.ok&&x?.form?.config)cfg={...cfg,...x.form.config}}catch{}apply()}
+ function apply(){if(previewMode)return;const title=(cfg.title||'Alba & Leo').replace(/\s*&\s*|\s+y\s+/i,' y ');document.getElementById('couple').textContent=title;document.getElementById('dateText').textContent=(cfg.date||'12 septiembre 2027').toUpperCase();document.getElementById('timeText').textContent=(cfg.time||'18:00')+' H';document.getElementById('venueText').textContent=cfg.venue||'Finca Los Olivos';document.getElementById('agendaVenue').textContent=cfg.venue||'Finca Los Olivos';document.getElementById('placeVenue').textContent=cfg.venue||'Finca Los Olivos'}
+ async function loadCfg(){if(previewMode)return;try{const r=await fetch(API+'?token='+encodeURIComponent(token),{cache:'no-store'}),x=await r.json();if(r.ok&&x?.form?.config)cfg={...cfg,...x.form.config}}catch{}apply()}
+ if(previewMode)document.querySelectorAll('.personal').forEach(n=>n.style.display='none');
  const sheet=document.getElementById('sheet'),frame=document.getElementById('rsvpFrame');
  function openForm(){frame.src='guests-rsvp-v105-mobile.html?guest=1&t='+encodeURIComponent(token)+(g?'&g='+encodeURIComponent(g):'')+'&embed=1&r='+Date.now();sheet.classList.add('on');document.body.style.overflow='hidden'}
  function closeForm(){sheet.classList.remove('on');document.body.style.overflow='';setTimeout(()=>frame.src='about:blank',180)}
