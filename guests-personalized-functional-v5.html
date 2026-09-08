@@ -7,31 +7,19 @@
 <style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f5f1ea}#shell{width:100%;height:100%;border:0;display:block}</style>
 </head>
 <body>
-<iframe id="shell" src="guests-personalized-functional-v4.html?v=5-essential-raster2" title="Guests"></iframe>
+<iframe id="shell" src="guests-personalized-functional-v4.html?v=5-essential-paper5" title="Guests"></iframe>
 <script>
 (function(){
-  const shell=document.getElementById('shell');
-  const target='guests-rsvp-essential-admin-v3.html?v=raster2';
-  function connect(){
-    try{
-      const outerDoc=shell.contentDocument;
-      const app=outerDoc && outerDoc.getElementById('app');
-      if(!app)return;
-      function bindInner(){
-        try{
-          const innerDoc=app.contentDocument;
-          if(!innerDoc)return;
-          const button=innerDoc.getElementById('rsvpBtn');
-          if(button && !button.dataset.essentialRaster2){
-            button.dataset.essentialRaster2='1';
-            button.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();window.location.href=target},true);
-          }
-        }catch(_e){}
-      }
-      app.addEventListener('load',bindInner);bindInner();
-    }catch(_e){}
-  }
-  shell.addEventListener('load',function(){connect();setTimeout(connect,300)});
+ const shell=document.getElementById('shell');
+ const target='guests-rsvp-essential-paper-v1.html?v=paper5';
+ function connect(){
+  try{
+   const outerDoc=shell.contentDocument,app=outerDoc&&outerDoc.getElementById('app');if(!app)return;
+   function bind(){try{const d=app.contentDocument;if(!d)return;const b=d.getElementById('rsvpBtn');if(b&&!b.dataset.paper5){b.dataset.paper5='1';b.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();ev.stopImmediatePropagation();location.href=target},true)}}catch(_e){}}
+   app.addEventListener('load',bind);bind();
+  }catch(_e){}
+ }
+ shell.addEventListener('load',()=>{connect();setTimeout(connect,250);setTimeout(connect,800)});
 })();
 </script>
 </body>
