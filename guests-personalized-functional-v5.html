@@ -7,19 +7,40 @@
 <style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f5f1ea}#shell{width:100%;height:100%;border:0;display:block}</style>
 </head>
 <body>
-<iframe id="shell" src="guests-personalized-functional-v4.html?v=5-essential-readable1" title="Guests"></iframe>
+<iframe id="shell" src="guests-personalized-functional-v4.html?v=5-essential-clean2" title="Guests"></iframe>
 <script>
 (function(){
  const shell=document.getElementById('shell');
- const target='guests-rsvp-essential-readable-v1.html?v=readable1';
+ const target='guests-rsvp-essential-clean-v2.html?v=clean2';
+ let observer=null;
+ function patchButton(app){
+  try{
+   const d=app.contentDocument;if(!d)return;
+   const old=d.getElementById('rsvpBtn');
+   if(old){
+    old.id='rsvpBtnEssentialClean';
+    old.dataset.clean2='1';
+    old.onclick=null;
+    old.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();ev.stopImmediatePropagation();location.href=target},true);
+   }
+   const b=d.getElementById('rsvpBtnEssentialClean');
+   if(b&&!b.dataset.cleanBound){
+    b.dataset.cleanBound='1';
+    b.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();ev.stopImmediatePropagation();location.href=target},true);
+   }
+   if(!observer&&d.body){observer=new MutationObserver(()=>patchButton(app));observer.observe(d.body,{childList:true,subtree:true,attributes:true,attributeFilter:['id']})}
+  }catch(_e){}
+ }
  function connect(){
   try{
    const outerDoc=shell.contentDocument,app=outerDoc&&outerDoc.getElementById('app');if(!app)return;
-   function bind(){try{const d=app.contentDocument;if(!d)return;const b=d.getElementById('rsvpBtn');if(b&&!b.dataset.readable1){b.dataset.readable1='1';b.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();ev.stopImmediatePropagation();location.href=target},true)}}catch(_e){}}
-   app.addEventListener('load',bind);bind();
+   app.addEventListener('load',()=>{patchButton(app);setTimeout(()=>patchButton(app),80);setTimeout(()=>patchButton(app),300);setTimeout(()=>patchButton(app),900)});
+   patchButton(app);
+   setTimeout(()=>patchButton(app),80);setTimeout(()=>patchButton(app),300);setTimeout(()=>patchButton(app),900);
   }catch(_e){}
  }
- shell.addEventListener('load',()=>{connect();setTimeout(connect,250);setTimeout(connect,800)});
+ shell.addEventListener('load',()=>{connect();setTimeout(connect,200);setTimeout(connect,700);setTimeout(connect,1600)});
+ connect();
 })();
 </script>
 </body>
