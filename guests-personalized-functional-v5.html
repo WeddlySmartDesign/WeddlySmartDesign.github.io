@@ -7,11 +7,11 @@
 <style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f5f1ea}#shell{width:100%;height:100%;border:0;display:block}</style>
 </head>
 <body>
-<iframe id="shell" src="guests-personalized-functional-v4.html?v=5-essential-raster1" title="Guests"></iframe>
+<iframe id="shell" src="guests-personalized-functional-v4.html?v=5-essential-raster2" title="Guests"></iframe>
 <script>
 (function(){
   const shell=document.getElementById('shell');
-  const target='guests-rsvp-essential-admin-v2.html?v=raster1';
+  const target='guests-rsvp-essential-admin-v3.html?v=raster2';
   function connect(){
     try{
       const outerDoc=shell.contentDocument;
@@ -22,8 +22,8 @@
           const innerDoc=app.contentDocument;
           if(!innerDoc)return;
           const button=innerDoc.getElementById('rsvpBtn');
-          if(button && !button.dataset.essentialRaster){
-            button.dataset.essentialRaster='1';
+          if(button && !button.dataset.essentialRaster2){
+            button.dataset.essentialRaster2='1';
             button.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();window.location.href=target},true);
           }
         }catch(_e){}
