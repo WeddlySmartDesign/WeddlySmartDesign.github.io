@@ -13,7 +13,7 @@
 <main class="page">
   <section class="designCard">
     <div class="designHead">
-      <div><div class="ey">DISEÑO ESSENTIAL ACTIVO</div><h2>Papelería romántica</h2><p>La invitación visual es independiente del formulario. Aquí ves el diseño real que recibirá el invitado; las preguntas y respuestas siguen siendo las de Guests.</p></div>
+      <div><div class="ey">DISEÑO ESSENTIAL ACTIVO</div><h2>Papelería romántica</h2><p>La invitación visual es una lámina cerrada. El formulario, preguntas, envíos y respuestas siguen siendo los de Guests.</p></div>
       <div class="actions"><button id="openPreview" class="btn primary">Ver como invitado</button></div>
     </div>
     <div class="previewShell"><div class="previewViewport"><iframe id="designPreview" title="Vista previa de la invitación"></iframe></div></div>
@@ -23,13 +23,13 @@
 <script>
 (()=>{
   const PT='sP3vW6aT-B_5-ctfsY06D3rHOkwM0gXUs5i0aGfiH-8';
-  const publicUrl=()=>`guests-rsvp-essential-fixed-v1.html?guest=1&t=${encodeURIComponent(PT)}&preview=1&v=fixed1`;
+  const publicUrl=()=>`guests-rsvp-essential-raster-v1.html?guest=1&t=${encodeURIComponent(PT)}&preview=1&v=raster1`;
   const preview=document.getElementById('designPreview'),form=document.getElementById('formFrame');
   preview.src=publicUrl();
-  form.src='guests-rsvp-v105-mobile.html?v=essential-admin-fixed1';
+  form.src='guests-rsvp-v105-mobile.html?v=essential-admin-raster1';
   document.getElementById('openPreview').onclick=()=>{window.open(publicUrl().replace('&preview=1',''),'_blank','noopener')};
   document.getElementById('back').onclick=()=>{if(history.length>1)history.back();else location.href='guests-personalized-functional-v5.html#invitados'};
-  function patchForm(){try{const d=form.contentDocument;if(!d)return;const back=d.querySelector('.back'),brand=d.querySelector('.brand'),h1=d.querySelector('h1');if(back)back.style.display='none';if(brand)brand.style.display='none';if(h1)h1.style.display='none';const wrap=d.querySelector('.wrap');if(wrap){wrap.style.maxWidth='none';wrap.style.padding='0 0 70px'}const prev=d.getElementById('preview');if(prev&&!prev.dataset.paper){prev.dataset.paper='1';prev.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();window.open(publicUrl().replace('&preview=1',''),'_blank','noopener')},true)}const save=d.getElementById('saveConfig');if(save&&!save.dataset.paper){save.dataset.paper='1';save.addEventListener('click',()=>setTimeout(()=>{preview.src=publicUrl()+'&r='+Date.now()},1000))}const ro=new ResizeObserver(()=>{try{form.style.height=Math.max(900,d.documentElement.scrollHeight,d.body.scrollHeight)+'px'}catch{}});ro.observe(d.body);form.style.height=Math.max(900,d.documentElement.scrollHeight,d.body.scrollHeight)+'px'}catch(e){console.warn(e)}}
+  function patchForm(){try{const d=form.contentDocument;if(!d)return;const back=d.querySelector('.back'),brand=d.querySelector('.brand'),h1=d.querySelector('h1');if(back)back.style.display='none';if(brand)brand.style.display='none';if(h1)h1.style.display='none';const wrap=d.querySelector('.wrap');if(wrap){wrap.style.maxWidth='none';wrap.style.padding='0 0 70px'}const prev=d.getElementById('preview');if(prev&&!prev.dataset.paper){prev.dataset.paper='1';prev.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();window.open(publicUrl().replace('&preview=1',''),'_blank','noopener')},true)}const ro=new ResizeObserver(()=>{try{form.style.height=Math.max(900,d.documentElement.scrollHeight,d.body.scrollHeight)+'px'}catch{}});ro.observe(d.body);form.style.height=Math.max(900,d.documentElement.scrollHeight,d.body.scrollHeight)+'px'}catch(e){console.warn(e)}}
   form.addEventListener('load',()=>{patchForm();setTimeout(patchForm,120);setTimeout(patchForm,600)});
 })();
 </script>
