@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Weddly Smart Design · Guests · Essential</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#ece7de;color:#2c2a26;font-family:DM Sans,system-ui,-apple-system,Segoe UI,sans-serif}button,input{font:inherit}
+#public,#admin{display:none}.public #public{display:block}.admin #admin{display:block}
+.invite{width:min(100%,620px);margin:0 auto;background:#f4efe6;min-height:100vh}.artWrap{position:relative;width:100%;background:#f4efe6;container-type:inline-size}.art{display:block;width:100%;height:auto}.hotspots,.sharp{position:absolute;inset:0}.hotspots{pointer-events:none;z-index:5}.sharp{pointer-events:none;z-index:4}.hotspot{position:absolute;border:0;background:transparent;padding:0;margin:0;pointer-events:auto;cursor:pointer;border-radius:12px}.hotspot:focus-visible{outline:3px solid #9a7438;outline-offset:2px}
+/* El raster aprobado permanece intacto. Estas capas solo sustituyen la microtipografía borrosa. */
+.paperText{position:absolute;color:#4f4435;background:rgba(246,243,235,.93);box-shadow:0 0 1.15cqw .55cqw rgba(246,243,235,.93);border-radius:.35cqw;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.25}
+.sans{font-family:DM Sans,system-ui,sans-serif}.serif{font-family:Cormorant Garamond,Georgia,serif}.caps{text-transform:uppercase;letter-spacing:.15em;font-weight:600;color:#856127}.gold{color:#8f6728}.left{text-align:left;justify-content:flex-start}.wrapText{white-space:normal}.tiny{font-size:1.72cqw}.small{font-size:1.96cqw}.body{font-size:2.22cqw}.strong{font-weight:700}
+/* cabecera y portada */
+#brandSharp{left:3.1%;top:.85%;width:48%;height:1.55%;justify-content:flex-start;font-size:1.72cqw;letter-spacing:.14em}
+#tierSharp{left:70%;top:.65%;width:17.5%;height:2.05%;font:500 2.45cqw/1 Cormorant Garamond,serif;letter-spacing:0;text-transform:none;color:#7b6038;border:1px solid rgba(165,130,69,.7);border-radius:99px;background:rgba(247,244,236,.94);box-shadow:none}
+#heroSubSharp{left:11.5%;top:6.35%;width:77%;height:2.95%;font-size:1.95cqw;line-height:1.35;letter-spacing:.16em}
+#dateSharp{left:13.5%;top:27.1%;width:23.5%;height:3.55%;font-size:1.82cqw;line-height:1.45}
+#timeSharp{left:38.9%;top:27.1%;width:21.8%;height:3.55%;font-size:1.9cqw}
+#venueSharp{left:62.2%;top:27.1%;width:25.2%;height:3.75%;font-size:1.77cqw;line-height:1.38}
+#waitSharp{left:28%;top:31.05%;width:44%;height:1.65%;font-size:1.72cqw;letter-spacing:.2em}
+#citySharp{left:37%;top:32.7%;width:26%;height:1.4%;font:500 1.95cqw/1 Cormorant Garamond,serif;color:#665742;background:rgba(246,243,235,.82);box-shadow:0 0 .8cqw .35cqw rgba(246,243,235,.82)}
+/* historia */
+#storyLabelSharp{left:31%;top:34.35%;width:38%;height:1.45%;font-size:1.68cqw}
+#storyCopySharp{left:6.4%;top:39.0%;width:42.5%;height:7.55%;padding:.35cqw 1cqw;font:500 2.34cqw/1.37 Cormorant Garamond,serif;color:#574a39;text-align:left;justify-content:flex-start;align-items:flex-start;background:rgba(246,243,235,.9);box-shadow:0 0 1.3cqw .65cqw rgba(246,243,235,.9)}
+/* agenda: respetamos iconos y títulos manuscritos del artwork, solo sustituimos datos pequeños */
+.agTime{top:55.9%;width:17%;height:1.8%;font-size:2.12cqw;font-weight:700;color:#765522}.agPlace{top:59.45%;width:20.2%;height:2.25%;font-size:1.55cqw;line-height:1.25;letter-spacing:.06em;text-transform:uppercase;color:#615646}
+#a1t{left:5.5%}#a2t{left:28.3%}#a3t{left:52.2%}#a4t{left:76.3%}
+#a1p{left:3.8%}#a2p{left:26.7%}#a3p{left:50.5%}#a4p{left:74.3%;height:2.85%;top:59.1%;text-transform:none;letter-spacing:0;font:600 1.67cqw/1.22 Cormorant Garamond,serif}
+/* dónde */
+#whereLabelSharp{left:38%;top:62.1%;width:24%;height:1.45%;font-size:1.66cqw}
+#place1Sharp,#place2Sharp{top:69.25%;width:35%;height:3.25%;font-size:1.58cqw;line-height:1.35;letter-spacing:.07em;text-transform:uppercase;color:#655743}
+#place1Sharp{left:11.5%}#place2Sharp{left:53.2%}
+.locButtonSharp{top:73.9%;width:29%;height:1.95%;border-radius:99px;background:#a9803d;color:#fff;box-shadow:0 0 .9cqw .3cqw rgba(246,243,235,.86);font-size:1.68cqw;font-weight:600;letter-spacing:.01em}
+#loc1Sharp{left:14.4%}#loc2Sharp{left:56.3%}
+/* confirmación visual: sigue siendo una lámina; al tocar se abre el formulario real de Guests */
+#confirmLabelSharp{left:35%;top:76.15%;width:30%;height:1.45%;font-size:1.66cqw}
+#confirmLeadSharp{left:12%;top:80.05%;width:76%;height:2.2%;font:500 2.03cqw/1.25 Cormorant Garamond,serif;color:#5a4d3a}
+#fakeForm{position:absolute;left:11.1%;top:82.6%;width:77.7%;height:4.65%;background:rgba(246,243,235,.94);box-shadow:0 0 1.2cqw .55cqw rgba(246,243,235,.94);padding:.35cqw;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:.4cqw}
+.fakeField{border:1px solid rgba(153,127,85,.34);background:rgba(250,248,243,.78);display:flex;align-items:center;padding:0 1.15cqw;color:#766a59;font:500 1.65cqw Cormorant Garamond,serif}.fakeField.wide{grid-column:1/3}
+#confirmBtnSharp{left:29%;top:87.15%;width:42%;height:2.05%;border-radius:99px;background:#aa813c;color:#fff;box-shadow:0 0 .85cqw .3cqw rgba(246,243,235,.9);font:600 1.85cqw DM Sans,sans-serif}
+/* contacto */
+#contactLabelSharp{left:38.5%;top:89.35%;width:23%;height:1.45%;font-size:1.62cqw}
+#contactLeadSharp{left:10%;top:92.55%;width:80%;height:2.05%;font:500 1.98cqw/1.25 Cormorant Garamond,serif;color:#594d3d}
+#phoneSharp{left:30%;top:94.65%;width:40%;height:1.65%;font:600 1.85cqw DM Sans,sans-serif;color:#765522}
+#contactBtnSharp{left:34.5%;top:96.55%;width:31%;height:2.05%;border:1px solid #a9803d;border-radius:99px;background:rgba(249,247,241,.96);color:#765522;box-shadow:0 0 .8cqw .3cqw rgba(246,243,235,.9);font-size:1.68cqw;font-weight:600}
+#footerSharp{left:24%;top:98.55%;width:52%;height:1.15%;font-size:1.35cqw;letter-spacing:.18em}
+/* hotspots calculados sobre la lámina aprobada completa 587×1672 */
+#locCeremony{left:14%;top:72.9%;width:30%;height:3.4%}#locParty{left:55.5%;top:72.9%;width:30%;height:3.4%}#confirmHotspot{left:10%;top:75.8%;width:80%;height:13.8%}#contactHotspot{left:24%;top:89.1%;width:52%;height:8.3%}
+.loading,.fatal{padding:40px 24px;text-align:center;color:#6f675e}.fatal button{margin-top:12px;border:0;border-radius:999px;padding:12px 18px;background:#2c2a26;color:#fff;font-weight:700}
+.modal{position:fixed;inset:0;z-index:100;background:#0008;display:none;align-items:flex-end}.modal.on{display:flex}.modalPanel{width:min(100%,620px);height:min(92vh,860px);margin:0 auto;background:#f5f1ea;border-radius:24px 24px 0 0;overflow:hidden;box-shadow:0 -18px 50px #0004}.modalHead{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#fff;border-bottom:1px solid #ddd5c8;font-weight:800}.modalHead button{border:0;width:40px;height:40px;border-radius:50%;background:#eee8df;font-size:22px}.modal iframe{width:100%;height:calc(100% - 60px);border:0;background:#f5f1ea}
+.adminTop{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #ddd5c8;padding:11px 14px;display:flex;gap:12px;align-items:center}.adminTop button{border:0;border-radius:15px;background:#eee8df;padding:11px 14px;font-weight:800}.adminTop b{display:block;font-size:18px}.adminTop small{display:block;color:#726d67;margin-top:2px}.adminPage{width:min(100%,760px);margin:auto;padding:16px 12px 60px}.card{background:#fff;border:1px solid #dbd1c2;border-radius:24px;padding:16px;margin-bottom:18px}.cardHead{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}.cardHead h2{margin:0;font:500 30px Georgia,serif}.cardHead p{margin:4px 0 0;color:#716c65;font-size:13px}.cardHead button{border:0;border-radius:14px;background:#2c2a26;color:#fff;padding:12px 14px;font-weight:800}.previewViewport{height:560px;border-radius:18px;overflow:hidden;background:#eee8df;border:1px solid #ddd1bf}.previewViewport iframe{width:100%;height:100%;border:0;display:block;pointer-events:none;background:#f4efe6}.editorCard{background:#fff;border:1px solid #dbd1c2;border-radius:24px;overflow:hidden}.editorCard iframe{width:100%;min-height:1350px;border:0;display:block;background:#f5f1ea}@media(max-width:520px){.adminPage{padding:14px 10px 55px}.cardHead{display:block}.cardHead button{width:100%;margin-top:12px}.previewViewport{height:500px}.body{font-size:2.42cqw}.small{font-size:2.08cqw}}
+</style>
+</head>
+<body>
+<div id="public"><main class="invite"><div id="mount" class="loading">Cargando invitación…</div></main></div>
+<div id="admin">
+ <header class="adminTop"><button id="back">← Volver</button><div><b>RSVP</b><small>Essential · diseño cerrado</small></div></header>
+ <main class="adminPage">
+  <section class="card"><div class="cardHead"><div><h2>Essential</h2><p>Arte aprobado intacto + microtipografía nítida. El RSVP sigue siendo el de Guests.</p></div><button id="openPreview">Ver como invitado</button></div><div class="previewViewport"><iframe id="previewFrame" title="Vista previa Essential"></iframe></div></section>
+  <section class="editorCard"><iframe id="adminFrame" title="Configuración RSVP"></iframe></section>
+ </main>
+</div>
+<div class="modal" id="modal"><div class="modalPanel"><div class="modalHead"><span>Confirmación de asistencia</span><button id="closeModal" aria-label="Cerrar">×</button></div><iframe id="rsvpFrame" title="Formulario RSVP"></iframe></div></div>
+<script>
+(()=>{
+ const q=new URLSearchParams(location.search), IS_PUBLIC=q.get('guest')==='1'||q.get('preview')==='1';
+ const TOKEN=q.get('t')||'sP3vW6aT-B_5-ctfsY06D3rHOkwM0gXUs5i0aGfiH-8';
+ const PARTS=['full-000.b64','full-001.b64','full-002.b64','full-003.b64','full-004.b64','full-005.b64','full-006.b64','full-007.b64'].map(n=>'assets/essential-exact-v3/'+n+'?v=readable1');
+ let artwork='';
+ async function loadArtwork(){const rs=await Promise.all(PARTS.map(u=>fetch(u,{cache:'no-store'})));if(rs.some(r=>!r.ok))throw new Error('art');const txt=await Promise.all(rs.map(r=>r.text()));const b64=txt.join('').replace(/\s+/g,'');artwork='data:image/jpeg;base64,'+b64;await new Promise((ok,fail)=>{const im=new Image();im.onload=()=>im.naturalWidth===587&&im.naturalHeight===1672?ok():fail();im.onerror=fail;im.src=artwork})}
+ function overlays(){return `<div class="sharp" aria-hidden="true">
+  <div id="brandSharp" class="paperText caps">WEDdLY SMART DESIGN · GUESTS</div><div id="tierSharp" class="paperText">Essential</div>
+  <div id="heroSubSharp" class="paperText caps wrapText">Y NOS GUSTARÍA INVITARTE A NUESTRA BODA<br>¿TE APUNTAS?</div>
+  <div id="dateSharp" class="paperText caps wrapText">12 SEPTIEMBRE<br>2027</div><div id="timeSharp" class="paperText caps">18:00 H</div><div id="venueSharp" class="paperText caps wrapText">FINCA LOS OLIVOS</div><div id="waitSharp" class="paperText caps">¡TE ESPERAMOS!</div><div id="citySharp" class="paperText">Murcia</div>
+  <div id="storyLabelSharp" class="paperText caps">NUESTRA HISTORIA</div><div id="storyCopySharp" class="paperText">Hemos preparado este espacio para que tengas toda la información del día, sin perder el carácter de una invitación diseñada para nosotros.</div>
+  <div id="a1t" class="paperText agTime">18:00</div><div id="a2t" class="paperText agTime">19:00</div><div id="a3t" class="paperText agTime">21:00</div><div id="a4t" class="paperText agTime">00:00</div>
+  <div id="a1p" class="paperText agPlace">FINCA LOS OLIVOS</div><div id="a2p" class="paperText agPlace">JARDÍN NORTE</div><div id="a3p" class="paperText agPlace">SALÓN PRINCIPAL</div><div id="a4p" class="paperText agPlace">Hasta que el cuerpo<br>aguante</div>
+  <div id="whereLabelSharp" class="paperText caps">DÓNDE</div><div id="place1Sharp" class="paperText wrapText">18:00 · FINCA LOS OLIVOS</div><div id="place2Sharp" class="paperText wrapText">19:00 · JARDÍN NORTE</div><div id="loc1Sharp" class="paperText locButtonSharp">⌖ &nbsp; Ver ubicación</div><div id="loc2Sharp" class="paperText locButtonSharp">⌖ &nbsp; Ver ubicación</div>
+  <div id="confirmLabelSharp" class="paperText caps">CONFIRMACIÓN</div><div id="confirmLeadSharp" class="paperText">Nos hará mucha ilusión que formes parte de este día tan especial.</div>
+  <div id="fakeForm"><div class="fakeField">Nombre</div><div class="fakeField">Acompañante (opcional)</div><div class="fakeField wide">Alergias o necesidades (opcional)</div></div><div id="confirmBtnSharp" class="paperText">Confirmar</div>
+  <div id="contactLabelSharp" class="paperText caps">CONTACTO</div><div id="contactLeadSharp" class="paperText">Puedes escribirnos o llamarnos. ¡Estaremos encantados de ayudarte!</div><div id="phoneSharp" class="paperText">☎ &nbsp; Ana · 600 123 123</div><div id="contactBtnSharp" class="paperText">↗ &nbsp; Escríbenos</div><div id="footerSharp" class="paperText caps">GRACIAS POR SER PARTE DE NUESTRA HISTORIA</div>
+ </div>`}
+ function guestUrl(){const u=new URL('guests-rsvp-essential-readable-v1.html',location.href);u.searchParams.set('guest','1');u.searchParams.set('t',TOKEN);u.searchParams.set('v','readable1');return u.toString()}
+ function openRSVP(){const g=q.get('g')||'';document.getElementById('rsvpFrame').src='guests-rsvp-v105-mobile.html?guest=1&t='+encodeURIComponent(TOKEN)+(g?'&g='+encodeURIComponent(g):'')+'&embed=1&v=readable1-'+Date.now();document.getElementById('modal').classList.add('on');document.body.style.overflow='hidden'}
+ function closeRSVP(){document.getElementById('modal').classList.remove('on');document.body.style.overflow='';setTimeout(()=>document.getElementById('rsvpFrame').src='about:blank',150)}
+ function maps(which){const s=which==='ceremony'?'Finca Los Olivos, Murcia':'Jardín Norte, Murcia';window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s),'_blank','noopener')}
+ function mountPublic(){const m=document.getElementById('mount');m.className='';m.innerHTML=`<div class="artWrap"><img class="art" src="${artwork}" alt="Invitación Essential">${overlays()}<div class="hotspots"><button id="locCeremony" class="hotspot" aria-label="Ver ubicación ceremonia"></button><button id="locParty" class="hotspot" aria-label="Ver ubicación celebración"></button><button id="confirmHotspot" class="hotspot" aria-label="Confirmar asistencia"></button><button id="contactHotspot" class="hotspot" aria-label="Contactar"></button></div></div>`;document.getElementById('locCeremony').onclick=()=>maps('ceremony');document.getElementById('locParty').onclick=()=>maps('party');document.getElementById('confirmHotspot').onclick=openRSVP;document.getElementById('contactHotspot').onclick=()=>location.href='tel:600123123'}
+ function fatal(){const m=document.getElementById('mount');m.className='fatal';m.innerHTML='No se ha podido cargar la invitación aprobada.<br><button id="retry">Reintentar</button>';document.getElementById('retry').onclick=()=>location.reload()}
+ function patchEmbeddedRSVP(){const f=document.getElementById('rsvpFrame');try{const d=f.contentDocument;if(!d||f.src==='about:blank')return;let s=d.getElementById('essentialEmbed');if(!s){s=d.createElement('style');s.id='essentialEmbed';d.head.appendChild(s)}s.textContent='.back,.brand,.hero,#admin{display:none!important}html,body,.wrap{background:#f5f1ea!important}.wrap{max-width:none!important;padding:14px 16px 70px!important}#public{display:block!important}.card{box-shadow:none!important}'}catch{}}
+ function patchAdminFrame(){const f=document.getElementById('adminFrame');try{const d=f.contentDocument;if(!d)return;d.querySelector('.back')?.style.setProperty('display','none','important');d.querySelector('.brand')?.style.setProperty('display','none','important');const h=d.querySelector('h1');if(h)h.style.display='none';const w=d.querySelector('.wrap');if(w){w.style.maxWidth='none';w.style.padding='16px 16px 70px'}const ro=new ResizeObserver(()=>{try{f.style.height=Math.max(1350,d.documentElement.scrollHeight,d.body.scrollHeight)+'px'}catch{}});ro.observe(d.body);f.style.height=Math.max(1350,d.documentElement.scrollHeight,d.body.scrollHeight)+'px'}catch{}}
+ async function renderPublic(){document.body.className='public';try{await loadArtwork();mountPublic()}catch{fatal()}}
+ function renderAdmin(){document.body.className='admin';const pf=document.getElementById('previewFrame'),af=document.getElementById('adminFrame');pf.src=guestUrl()+'&preview=1';af.src='guests-rsvp-v105-mobile.html?v=readable1';document.getElementById('openPreview').onclick=()=>window.open(guestUrl(),'_blank','noopener');document.getElementById('back').onclick=()=>history.length>1?history.back():location.href='guests-personalized-functional-v5.html#invitados';af.addEventListener('load',()=>{patchAdminFrame();setTimeout(patchAdminFrame,250);setTimeout(patchAdminFrame,800)})}
+ document.getElementById('closeModal').onclick=closeRSVP;document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')closeRSVP()};document.getElementById('rsvpFrame').addEventListener('load',()=>{patchEmbeddedRSVP();setTimeout(patchEmbeddedRSVP,200)});
+ IS_PUBLIC?renderPublic():renderAdmin();
+})();
+</script>
+</body>
+</html>
