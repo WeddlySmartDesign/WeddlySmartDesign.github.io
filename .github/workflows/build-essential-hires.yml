@@ -24,7 +24,8 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import base64, io
-          from PIL import Image, ImageFilter
+          from PIL import Image, ImageFilter, ImageFile
+          ImageFile.LOAD_TRUNCATED_IMAGES = True
 
           root = Path('assets/essential-exact-v3')
           parts = [root / f'full-{i:03d}.b64' for i in range(8)]
@@ -39,7 +40,7 @@ jobs:
           def build(scale, name):
               w, h = im.size
               out = im.resize((w*scale, h*scale), Image.Resampling.LANCZOS)
-              out = out.filter(ImageFilter.UnsharpMask(radius=1.15*scale, percent=135, threshold=2))
+              out = out.filter(ImageFilter.UnsharpMask(radius=1.0*scale, percent=145, threshold=2))
               out.save(name, 'WEBP', lossless=True, method=6)
 
           build(2, 'assets/essential-approved-hires-2x.webp')
