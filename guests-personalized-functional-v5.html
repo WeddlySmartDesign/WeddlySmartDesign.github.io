@@ -7,23 +7,20 @@
 <style>html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f5f1ea}#shell{width:100%;height:100%;border:0;display:block}</style>
 </head>
 <body>
-<iframe id="shell" src="guests-personalized-functional-v4.html?v=5-essential-engine1" title="Guests"></iframe>
+<iframe id="shell" src="guests-personalized-functional-v4.html?v=5-essential-base1" title="Guests"></iframe>
 <script>
 (function(){
  const shell=document.getElementById('shell');
- const target='guests-rsvp-essential-template-v1.html?v=engine1';
+ const target='guests-rsvp-essential-base-engine-v1.html?v=base1';
  let observer=null;
  function patchButton(app){
   try{
    const d=app.contentDocument;if(!d)return;
    const old=d.getElementById('rsvpBtn');
-   if(old){
-    old.id='rsvpBtnEssentialTemplate';
-    old.onclick=null;
-   }
-   const b=d.getElementById('rsvpBtnEssentialTemplate');
-   if(b&&!b.dataset.templateBound){
-    b.dataset.templateBound='1';
+   if(old){old.id='rsvpBtnEssentialBase';old.onclick=null}
+   const b=d.getElementById('rsvpBtnEssentialBase');
+   if(b&&!b.dataset.baseBound){
+    b.dataset.baseBound='1';
     b.addEventListener('click',function(ev){ev.preventDefault();ev.stopPropagation();ev.stopImmediatePropagation();location.href=target},true);
    }
    if(!observer&&d.body){observer=new MutationObserver(()=>patchButton(app));observer.observe(d.body,{childList:true,subtree:true,attributes:true,attributeFilter:['id']})}
@@ -33,8 +30,7 @@
   try{
    const outerDoc=shell.contentDocument,app=outerDoc&&outerDoc.getElementById('app');if(!app)return;
    app.addEventListener('load',()=>{patchButton(app);setTimeout(()=>patchButton(app),80);setTimeout(()=>patchButton(app),300);setTimeout(()=>patchButton(app),900)});
-   patchButton(app);
-   setTimeout(()=>patchButton(app),80);setTimeout(()=>patchButton(app),300);setTimeout(()=>patchButton(app),900);
+   patchButton(app);setTimeout(()=>patchButton(app),80);setTimeout(()=>patchButton(app),300);setTimeout(()=>patchButton(app),900);
   }catch(_e){}
  }
  shell.addEventListener('load',()=>{connect();setTimeout(connect,200);setTimeout(connect,700);setTimeout(connect,1600)});
