@@ -1,1 +1,14 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Weddly Smart Design · RSVP</title><script>location.replace('guests-rsvp-essential-paper-v1.html'+location.search+location.hash)</script></head><body></body></html>
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Weddly Smart Design · RSVP</title></head>
+<body>
+<script>
+(function(){
+  const q=new URLSearchParams(location.search);
+  const publicMode=q.get('guest')==='1'||q.has('t');
+  const target=publicMode?'guests-rsvp-essential-paper-v1.html':'guests-rsvp-essential-admin-v2.html';
+  location.replace(target+location.search+location.hash);
+})();
+</script>
+</body>
+</html>
