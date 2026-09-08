@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Weddly Smart Design · Essential</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#eee9df;color:#2c2a26;font-family:system-ui,-apple-system,Segoe UI,sans-serif}.page{width:min(100%,420px);aspect-ratio:420/1196;margin:0 auto;position:relative;background:#f5f1ea;overflow:hidden}.art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}.loading{position:absolute;inset:0;display:grid;place-items:center;font-size:14px;color:#7b756d;background:#f5f1ea;z-index:2}.hot{position:absolute;z-index:4;border:0;background:transparent;cursor:pointer}.loc1{left:8.5%;top:65.8%;width:39%;height:8.7%}.loc2{left:52%;top:65.8%;width:39%;height:8.7%}.rsvp{left:9%;top:78.5%;width:82%;height:10.6%}.contact{left:23%;top:91%;width:54%;height:6%}.sheet{position:fixed;z-index:100;inset:0;background:#0008;display:none;align-items:flex-end}.sheet.on{display:flex}.panel{width:min(100%,620px);height:min(88vh,820px);margin:auto;background:#f5f1ea;border-radius:24px 24px 0 0;overflow:hidden;box-shadow:0 -14px 45px #0003}.sheetHead{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#fff;border-bottom:1px solid #ded6ca;font-weight:800}.close{border:0;background:#eee8df;border-radius:999px;width:38px;height:38px;font-size:22px}.panel iframe{width:100%;height:calc(100% - 58px);border:0;background:#f5f1ea}.hint{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:20;background:#2c2a26;color:#fff;border-radius:999px;padding:10px 16px;font-size:12px;font-weight:700;box-shadow:0 8px 24px #0003;opacity:0;pointer-events:none;transition:.2s}.hint.on{opacity:1}@media(min-width:421px){body{padding:20px 0}.page{box-shadow:0 0 36px #6d5b3b20}}
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="loading" id="loading">Cargando invitación…</div>
+  <img class="art" id="art" alt="Invitación Essential">
+  <button class="hot loc1" data-location="1" aria-label="Ver ubicación de la ceremonia"></button>
+  <button class="hot loc2" data-location="2" aria-label="Ver ubicación de la celebración"></button>
+  <button class="hot rsvp" id="openRsvp" aria-label="Confirmar asistencia"></button>
+  <button class="hot contact" id="contact" aria-label="Contacto"></button>
+</main>
+<div class="sheet" id="sheet"><div class="panel"><div class="sheetHead"><span>Confirmación de asistencia</span><button class="close" id="close" aria-label="Cerrar">×</button></div><iframe id="rsvpFrame" title="Formulario RSVP"></iframe></div></div>
+<div class="hint" id="hint"></div>
+<script>
+(()=>{
+ const ASSET='assets/essential-approved-420-q60.webp.b64.txt?v=2';
+ const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp';
+ const DEF='sP3vW6aT-B_5-ctfsY06D3rHOkwM0gXUs5i0aGfiH-8';
+ const q=new URLSearchParams(location.search),token=q.get('t')||DEF,g=q.get('g')||'';
+ let cfg={venue:'Finca Los Olivos'};
+ async function loadArt(){
+   const img=document.getElementById('art'),loading=document.getElementById('loading');
+   try{
+     const r=await fetch(ASSET,{cache:'no-store'});if(!r.ok)throw new Error('asset');
+     const txt=(await r.text()).replace(/\s+/g,'');
+     if(txt.length<1000)throw new Error('asset_short');
+     img.onload=()=>loading.remove();
+     img.onerror=()=>{loading.textContent='No se ha podido cargar la invitación.'};
+     img.src='data:image/webp;base64,'+txt;
+   }catch(e){loading.textContent='No se ha podido cargar la invitación.'}
+ }
+ async function loadCfg(){try{const r=await fetch(API+'?token='+encodeURIComponent(token),{cache:'no-store'}),x=await r.json();if(r.ok&&x?.form?.config)cfg={...cfg,...x.form.config}}catch{}}
+ const sheet=document.getElementById('sheet'),frame=document.getElementById('rsvpFrame');
+ function openForm(){frame.src='guests-rsvp-v105-mobile.html?guest=1&t='+encodeURIComponent(token)+(g?'&g='+encodeURIComponent(g):'')+'&embed=1&r='+Date.now();sheet.classList.add('on');document.body.style.overflow='hidden'}
+ function closeForm(){sheet.classList.remove('on');document.body.style.overflow='';setTimeout(()=>frame.src='about:blank',180)}
+ document.getElementById('openRsvp').onclick=openForm;document.getElementById('close').onclick=closeForm;sheet.onclick=e=>{if(e.target===sheet)closeForm()};
+ frame.addEventListener('load',()=>{try{const d=frame.contentDocument;if(!d||frame.src==='about:blank')return;const admin=d.getElementById('admin');if(admin)admin.style.display='none';const pub=d.getElementById('public');if(pub){const brand=pub.querySelector('.brand'),hero=pub.querySelector('.hero');if(brand)brand.style.display='none';if(hero)hero.style.display='none'}const wrap=d.querySelector('.wrap');if(wrap){wrap.style.maxWidth='none';wrap.style.padding='18px 18px 70px'}d.body.style.background='#f5f1ea'}catch{}});
+ document.querySelectorAll('[data-location]').forEach(b=>b.onclick=()=>{const query=(b.dataset.location==='1'?(cfg.venue||'Finca Los Olivos'):'Jardín Norte')+' Murcia';window.open('https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(query),'_blank','noopener')});
+ document.getElementById('contact').onclick=()=>{const h=document.getElementById('hint');h.textContent='Contacto: Ana · 600 123 123';h.classList.add('on');setTimeout(()=>h.classList.remove('on'),2200)};
+ loadArt();loadCfg();
+})();
+</script>
+</body>
+</html>
