@@ -1,0 +1,54 @@
+name: Build Essential Hi-Res Artwork
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/build-essential-hires.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Pillow
+        run: python -m pip install --upgrade pillow
+      - name: Rebuild approved artwork at retina resolution
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import base64, io
+          from PIL import Image, ImageFilter
+
+          root = Path('assets/essential-exact-v3')
+          parts = [root / f'full-{i:03d}.b64' for i in range(8)]
+          b64 = ''.join(p.read_text(encoding='utf-8') for p in parts)
+          b64 = ''.join(b64.split())
+          raw = base64.b64decode(b64)
+          im = Image.open(io.BytesIO(raw)).convert('RGB')
+          if im.size != (587, 1672):
+              raise SystemExit(f'Unexpected source size: {im.size}')
+
+          def build(scale, name):
+              w, h = im.size
+              out = im.resize((w*scale, h*scale), Image.Resampling.LANCZOS)
+              out = out.filter(ImageFilter.UnsharpMask(radius=1.15*scale, percent=135, threshold=2))
+              out.save(name, 'WEBP', lossless=True, method=6)
+
+          build(2, 'assets/essential-approved-hires-2x.webp')
+          build(3, 'assets/essential-approved-hires-3x.webp')
+          PY
+      - name: Commit generated assets
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/essential-approved-hires-2x.webp assets/essential-approved-hires-3x.webp
+          git diff --cached --quiet && exit 0
+          git commit -m 'Generate retina Essential artwork'
+          git push
