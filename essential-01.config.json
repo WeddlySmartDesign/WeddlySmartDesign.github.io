@@ -1,0 +1,42 @@
+{
+  "id": "essential-01",
+  "version": 1,
+  "status": "asset-required",
+  "canvas": {
+    "width": 1090,
+    "height": 1536
+  },
+  "base": {
+    "src": "assets/essential-01-base.png",
+    "mode": "single-intact-image",
+    "allowLegacyFallback": false
+  },
+  "integration": {
+    "rsvpEngine": "guests-rsvp-v105-mobile.html",
+    "preserveGuestKey": true
+  },
+  "slots": {
+    "brand": {"x": 5.2, "y": 3.45, "w": 51, "h": 3.2, "role": "static", "value": "WEDDLY SMART DESIGN · GUESTS"},
+    "tier": {"x": 75.1, "y": 2.55, "w": 19.5, "h": 4.25, "role": "static", "value": "Essential"},
+    "heroTitle": {"x": 8, "y": 8.3, "w": 84, "h": 7.4, "role": "static", "value": "¡Nos casamos!"},
+    "heroSub": {"x": 11, "y": 16.15, "w": 78, "h": 5, "role": "static", "value": "Y NOS GUSTARÍA INVITARTE A NUESTRA BODA\n¿TE APUNTAS?"},
+    "photo": {"x": 23, "y": 22.4, "w": 54, "h": 31, "role": "photoUrl", "shape": "heart", "optional": true},
+    "names": {"x": 7, "y": 55.1, "w": 86, "h": 7, "role": "title"},
+    "date": {"x": 10, "y": 64.2, "w": 26.67, "h": 10.5, "role": "date"},
+    "time": {"x": 36.67, "y": 64.2, "w": 26.67, "h": 10.5, "role": "time"},
+    "venue": {"x": 63.34, "y": 64.2, "w": 26.66, "h": 10.5, "role": "venue"},
+    "wait": {"x": 22, "y": 74.6, "w": 56, "h": 2.7, "role": "static", "value": "¡TE ESPERAMOS!"},
+    "city": {"x": 32, "y": 77.45, "w": 36, "h": 2.7, "role": "city"},
+    "agendaLabel": {"x": 8, "y": 81.3, "w": 24, "h": 2.2, "role": "static", "value": "AGENDA"},
+    "agendaTitle": {"x": 8, "y": 83.1, "w": 84, "h": 4.8, "role": "static", "value": "Así será el día."},
+    "message": {"x": 8, "y": 87.0, "w": 84, "h": 3.2, "role": "intro", "optional": true},
+    "rsvpCaption": {"x": 19, "y": 93.7, "w": 62, "h": 2.2, "role": "static", "value": "CONFIRMACIÓN"}
+  },
+  "hotspots": {
+    "rsvp": {"x": 28, "y": 96.05, "w": 44, "h": 2.9, "action": "open-guests-rsvp"}
+  },
+  "notes": {
+    "alignmentSource": "Recovered from the latest Essential base-engine checkpoint; visual alignment must be verified against the exact user PNG before activation.",
+    "invariant": "The base PNG is never cropped, stretched, reconstructed or replaced by legacy artwork."
+  }
+}
