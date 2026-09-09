@@ -1,27 +1,63 @@
 {
-  "id":"essential-01",
-  "version":2,
-  "status":"active",
-  "canvas":{"width":1090,"height":1536},
-  "base":{"mode":"single-intact-image","mime":"image/jpeg","chunks":["assets/essential-01-base/part0.b64","assets/essential-01-base/part1.b64","assets/essential-01-base/part2.b64"],"allowLegacyFallback":false},
-  "integration":{"rsvpEngine":"guests-rsvp-v105-mobile.html","preserveGuestKey":true},
-  "slots":{
-    "brand":{"x":5.2,"y":3.45,"w":51,"h":3.2,"role":"static","value":"WEDDLY SMART DESIGN · GUESTS"},
-    "tier":{"x":75.1,"y":2.55,"w":19.5,"h":4.25,"role":"static","value":"Essential"},
-    "heroTitle":{"x":8,"y":8.3,"w":84,"h":7.4,"role":"static","value":"¡Nos casamos!"},
-    "heroSub":{"x":11,"y":16.15,"w":78,"h":5,"role":"static","value":"Y NOS GUSTARÍA INVITARTE A NUESTRA BODA\n¿TE APUNTAS?"},
-    "photo":{"x":23,"y":22.4,"w":54,"h":31,"role":"photoUrl","shape":"heart","optional":true},
-    "names":{"x":7,"y":55.1,"w":86,"h":7,"role":"title"},
-    "date":{"x":10,"y":64.2,"w":26.67,"h":10.5,"role":"date"},
-    "time":{"x":36.67,"y":64.2,"w":26.67,"h":10.5,"role":"time"},
-    "venue":{"x":63.34,"y":64.2,"w":26.66,"h":10.5,"role":"venue"},
-    "wait":{"x":22,"y":74.6,"w":56,"h":2.7,"role":"static","value":"¡TE ESPERAMOS!"},
-    "city":{"x":32,"y":77.45,"w":36,"h":2.7,"role":"city"},
-    "agendaLabel":{"x":8,"y":81.3,"w":24,"h":2.2,"role":"static","value":"AGENDA"},
-    "agendaTitle":{"x":8,"y":83.1,"w":84,"h":4.8,"role":"static","value":"Así será el día."},
-    "message":{"x":8,"y":87,"w":84,"h":3.2,"role":"intro","optional":true},
-    "rsvpCaption":{"x":19,"y":93.7,"w":62,"h":2.2,"role":"static","value":"CONFIRMACIÓN"}
+  "id": "essential-01",
+  "version": 3,
+  "status": "active",
+  "canvas": {"width": 1090, "height": 1536},
+  "base": {
+    "mode": "single-intact-image",
+    "mime": "image/jpeg",
+    "chunks": [
+      "assets/essential-01-base/part0.b64",
+      "assets/essential-01-base/part1.b64",
+      "assets/essential-01-base/part2.b64"
+    ],
+    "allowLegacyFallback": false
   },
-  "hotspots":{"rsvp":{"x":28,"y":96.05,"w":44,"h":2.9,"action":"open-guests-rsvp"}},
-  "notes":{"invariant":"The uploaded template is reconstructed byte-for-byte from its chunks and is never replaced by legacy artwork."}
+  "palette": {
+    "gold": "#927c31",
+    "green": "#405d48",
+    "softGreen": "#607160",
+    "paper": "#fbfaf7",
+    "line": "#b7a36a"
+  },
+  "copy": {
+    "brand": "WEDDLY SMART DESIGN · GUESTS",
+    "tier": "Essential",
+    "heroTitle": "¡Nos casamos!",
+    "heroSub": "Y NOS GUSTARÍA INVITARTE A NUESTRA BODA\n¿TE APUNTAS?",
+    "wait": "¡TE ESPERAMOS!",
+    "agendaLabel": "AGENDA",
+    "agendaTitle": "Así será el día.",
+    "confirmation": "CONFIRMACIÓN",
+    "button": "Confirmar asistencia"
+  },
+  "layout": {
+    "brand": {"x": 4.5, "y": 3.0, "w": 36, "h": 2.3},
+    "tier": {"x": 87.8, "y": 2.1, "w": 9.4, "h": 2.8},
+    "heroTitle": {"x": 22, "y": 16.8, "w": 56, "h": 7.0},
+    "heroSub": {"x": 17, "y": 25.9, "w": 66, "h": 4.8},
+    "photo": {"x": 34.1, "y": 31.0, "w": 31.8, "h": 17.3},
+    "names": {"x": 22, "y": 47.2, "w": 56, "h": 7.6},
+    "facts": {"x": 16.0, "y": 56.0, "w": 68.0, "h": 6.4},
+    "wait": {"x": 24, "y": 64.1, "w": 52, "h": 2.7},
+    "city": {"x": 35, "y": 67.4, "w": 30, "h": 2.1},
+    "agendaLabel": {"x": 39, "y": 70.2, "w": 22, "h": 2.0},
+    "agendaTitle": {"x": 30, "y": 71.7, "w": 40, "h": 4.2},
+    "agenda": {"x": 15, "y": 76.0, "w": 70, "h": 9.5},
+    "confirmation": {"x": 34, "y": 87.1, "w": 32, "h": 1.8},
+    "rsvp": {"x": 35.3, "y": 89.1, "w": 29.4, "h": 3.9}
+  },
+  "agenda": [
+    {"key": "ceremony", "offsetHours": 0, "title": "Ceremonia", "place": "venue", "icon": "rings"},
+    {"key": "cocktail", "offsetHours": 1, "title": "Cóctel", "place": "Jardín", "icon": "toast"},
+    {"key": "dinner", "offsetHours": 3, "title": "Cena", "place": "Salón principal", "icon": "dish"},
+    {"key": "party", "time": "00:00", "title": "Fiesta", "place": "Hasta que el cuerpo aguante", "icon": "music"}
+  ],
+  "integration": {
+    "rsvpEngine": "guests-rsvp-v105-mobile.html",
+    "preserveGuestKey": true
+  },
+  "notes": {
+    "invariant": "The botanical base is reconstructed only from the exact Essential 1 chunks and is never replaced by legacy artwork."
+  }
 }
