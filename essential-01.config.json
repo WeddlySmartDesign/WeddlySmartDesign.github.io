@@ -1,15 +1,13 @@
 {
   "id": "essential-01",
-  "version": 3,
+  "version": 4,
   "status": "active",
   "canvas": {"width": 1090, "height": 1536},
   "base": {
     "mode": "single-intact-image",
     "mime": "image/jpeg",
     "chunks": [
-      "assets/essential-01-base/part0.b64",
-      "assets/essential-01-base/part1.b64",
-      "assets/essential-01-base/part2.b64"
+      "assets/essential-01-clean.jpg.b64"
     ],
     "allowLegacyFallback": false
   },
@@ -58,6 +56,6 @@
     "preserveGuestKey": true
   },
   "notes": {
-    "invariant": "The botanical base is reconstructed only from the exact Essential 1 chunks and is never replaced by legacy artwork."
+    "invariant": "The botanical base comes from the exact image uploaded by the user in this project and is never replaced by legacy artwork."
   }
 }
