@@ -41,9 +41,9 @@
     background-repeat:no-repeat;background-position:top center;background-size:100% auto;
     background-color:var(--cream);
   }
-  .cover-content{padding:52px 18% 46px;text-align:center}
-  .cover-kicker{font-size:clamp(30px,9.5vw,40px);margin:0 0 8px}
-  .cover-sub{font-size:10.5px;letter-spacing:.08em;font-weight:600;margin:0 0 18px;color:var(--ink)}
+  .cover-content{padding:42% 18% 46px;text-align:center}
+  .cover-kicker{font-size:clamp(30px,10vw,44px);line-height:1.1;margin:0 0 10px;white-space:nowrap}
+  .cover-sub{font-size:10.5px;letter-spacing:.08em;font-weight:600;margin:0 0 18px;color:var(--ink);text-wrap:balance}
   .cover-photo-wrap{width:150px;height:150px;border-radius:50%;overflow:hidden;margin:4px auto 18px;border:4px solid #fff;box-shadow:0 0 0 1px var(--gold);display:none}
   .cover-photo-wrap.has-photo{display:block}
   .cover-photo-wrap img{width:100%;height:100%;object-fit:cover;display:block}
@@ -52,7 +52,8 @@
   .cover-waiting{font-size:16px;margin:0}
 
   .facts{display:flex;align-items:flex-start;justify-content:center;gap:16px;margin:26px 0 8px}
-  .fact{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11.5px;letter-spacing:.03em;line-height:1.3}
+  .fact{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;font-size:11.5px;letter-spacing:.03em;line-height:1.3;min-width:0}
+  #factTime{white-space:nowrap}
   .fact svg{width:18px;height:18px;color:var(--gold)}
   .fact-div{width:1px;height:34px;background:var(--line);margin-top:9px}
   .city{font-size:11.5px;color:var(--muted);text-align:center;margin:0}
@@ -68,12 +69,12 @@
   .divider svg{width:15px;height:15px;color:var(--sage)}
 
   .agenda-row{display:flex;justify-content:space-between;align-items:flex-start;gap:4px;margin-top:8px}
-  .agenda-node{display:flex;flex-direction:column;align-items:center;text-align:center;flex:1;font-size:11px}
-  .agenda-node .ring{width:52px;height:52px;border-radius:999px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;background:#fff;margin-bottom:8px}
+  .agenda-node{display:flex;flex-direction:column;align-items:stretch;text-align:center;flex:1;min-width:0;font-size:11px}
+  .agenda-node .ring{width:52px;height:52px;border-radius:999px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;background:#fff;margin:0 auto 8px;flex-shrink:0}
   .agenda-node svg{width:20px;height:20px;color:var(--sage)}
-  .agenda-time{font-weight:600;font-size:12px}
-  .agenda-title{font-family:'Mrs Saint Delafield',cursive;font-size:20px;color:var(--sage-deep);margin-top:1px}
-  .agenda-place{font-size:9.5px;letter-spacing:.04em;color:var(--muted);margin-top:2px}
+  .agenda-time{font-weight:600;font-size:12px;overflow-wrap:break-word}
+  .agenda-title{font-family:'Mrs Saint Delafield',cursive;font-size:12.5px;color:var(--sage-deep);margin-top:2px;line-height:1.2;overflow-wrap:break-word;hyphens:auto}
+  .agenda-place{font-size:9.5px;letter-spacing:.02em;color:var(--muted);margin-top:2px;overflow-wrap:break-word;hyphens:auto}
   .agenda-sep{flex:0 0 auto;width:18px;height:1px;border-top:1px dashed var(--line);margin:24px 2px 0}
 
   .cards{display:flex;flex-direction:column;gap:16px;margin-top:6px}
@@ -214,8 +215,8 @@
   ];
 
   const locations = [
-    { title:'Ceremonia',  detail:'18:00 · Finca Los Olivos' },
-    { title:'Celebración',detail:'19:00 · Jardín Norte' },
+    { title:'Ceremonia',  time:'18:00', place:'Finca Los Olivos', address:'Finca Los Olivos, Murcia' },
+    { title:'Celebración',time:'19:00', place:'Jardín Norte',     address:'Jardín Norte, Murcia' },
   ];
 
   const RSVP_ENGINE = 'guests-rsvp-v105-mobile.html';
@@ -265,11 +266,44 @@
         <span class="agenda-place">${item.place}</span>
       </div>`).join('');
 
+    // Autoajuste: mide la palabra más ancha de cada elemento y reduce el
+    // tamaño de letra hasta que quepa en su columna, evitando que ninguna
+    // palabra tenga que partirse (la partición silábica queda como último
+    // recurso si aun al tamaño mínimo no cupiera).
+    const fitProbe = document.createElement('span');
+    fitProbe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;left:-9999px;top:-9999px';
+    document.body.appendChild(fitProbe);
+
+    function fitWords(el, maxSize, minSize, step) {
+      const words = el.textContent.trim().split(/\s+/);
+      const cs = getComputedStyle(el);
+      fitProbe.style.fontFamily = cs.fontFamily;
+      fitProbe.style.fontWeight = cs.fontWeight;
+      fitProbe.style.letterSpacing = cs.letterSpacing;
+      let size = maxSize;
+      function widestWordWidth(fs) {
+        fitProbe.style.fontSize = fs + 'px';
+        let max = 0;
+        for (const w of words) {
+          fitProbe.textContent = w;
+          max = Math.max(max, fitProbe.offsetWidth);
+        }
+        return max;
+      }
+      const available = el.clientWidth || el.parentElement.clientWidth;
+      while (widestWordWidth(size) > available * 0.94 && size > minSize) {
+        size -= step;
+      }
+      el.style.fontSize = size + 'px';
+    }
+    document.querySelectorAll('.agenda-title').forEach(el => fitWords(el, 12.5, 10, 0.5));
+    document.querySelectorAll('.agenda-place').forEach(el => fitWords(el, 9.5, 7, 0.5));
+
     document.getElementById('locationCards').innerHTML = locations.map(loc => `
       <div class="card">
         <p class="card-eyebrow">${loc.title}</p>
-        <p class="card-detail">${loc.detail}</p>
-        <a class="card-btn" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.detail)}" target="_blank" rel="noopener">${pinIcon} Ver ubicación</a>
+        <p class="card-detail">${loc.time} · ${loc.place}</p>
+        <a class="card-btn" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address || loc.place)}" target="_blank" rel="noopener">${pinIcon} Ver ubicación</a>
       </div>`).join('');
 
     // Enlace real del RSVP de Guests. guest_key y el token de boda viajan
