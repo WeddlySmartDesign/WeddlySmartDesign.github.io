@@ -18,7 +18,8 @@
   function appDoc(){return walkDocs().find(d=>d.getElementById('invitados')&&d.querySelector('.nav'))||null}
 
   function openSettings(){
-    try{window.top.location.href='weddly-settings.html?from=guests'}catch{location.href='weddly-settings.html?from=guests'}
+    const u='weddly-settings.html?from=guests&v=shared-settings-20260910-1';
+    try{window.top.location.href=u}catch{location.href=u}
   }
 
   function ensureSettings(d){
