@@ -20,6 +20,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
   const PERS_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-personalization';
   const frame=document.getElementById('editor'),bootEl=document.getElementById('boot');
   const qs=new URLSearchParams(location.search);
+  const inSuite=qs.get('suite')==='1'||qs.get('_wsd_suite')==='1';
   const member=()=>localStorage.getItem('weddly_shared_wedding_token')||'';
   let token=qs.get('t')||'', cfg={}, pers=null, installed=false;
 
@@ -44,6 +45,15 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
     }
   }
 
+  function goGuests(){
+    if(inSuite&&parent!==window){try{const b=parent.document.querySelector('[data-view="guests"]');if(b){b.click();return}}catch{}}
+    location.assign('guests.html#invitados');
+  }
+  function goForm(){
+    if(inSuite&&parent!==window){parent.postMessage({type:'wsd-suite-open',view:'guests-rsvp',url:'guests-rsvp-form.html?v=134'},location.origin);return}
+    location.assign('guests-rsvp-form.html?v=134');
+  }
+
   function addChrome(d,w){
     if(d.getElementById('weddlyIntegrationBar')) return;
     const panel=d.querySelector('.panel');
@@ -52,7 +62,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
     st.textContent=`
       .weddly-intbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
       .weddly-intbar a,.weddly-intbar button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:8px 12px;font:600 11px 'Jost',system-ui,sans-serif;text-decoration:none;cursor:pointer}
-      .weddly-intbar button{margin-left:auto;background:var(--ink);color:#fff;border-color:var(--ink)}
+      .weddly-intbar button[data-save-essential]{margin-left:auto;background:var(--ink);color:#fff;border-color:var(--ink)}
       .weddly-intfb{display:none;margin:0 0 18px;padding:11px 12px;border-radius:10px;background:#f0e8df;font:500 12px/1.4 'Jost',system-ui,sans-serif}
       .weddly-intfb.on{display:block}.weddly-intfb.ok{background:#e7eee8;color:#4e6656}
       .weddly-save-bottom{margin:8px 0 34px;border-top:1px solid var(--line);padding-top:18px}
@@ -61,8 +71,10 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
     `;
     d.head.appendChild(st);
     const bar=d.createElement('div'); bar.id='weddlyIntegrationBar'; bar.className='weddly-intbar';
-    bar.innerHTML='<a href="guests.html#invitados" target="_top">← Invitados</a><a href="guests-rsvp-v105-mobile.html?v=form-122" target="_top">Formulario y envíos</a><button type="button" data-save-essential>Guardar</button>';
+    bar.innerHTML='<button type="button" id="weddlyBackGuests">← Invitados</button><button type="button" id="weddlyOpenRsvpForm">Formulario RSVP</button><button type="button" data-save-essential>Guardar</button>';
     panel.prepend(bar);
+    d.getElementById('weddlyBackGuests').onclick=goGuests;
+    d.getElementById('weddlyOpenRsvpForm').onclick=goForm;
     const fb=d.createElement('div'); fb.id='weddlyIntegrationFeedback'; fb.className='weddly-intfb'; bar.insertAdjacentElement('afterend',fb);
     const bottom=d.createElement('div'); bottom.className='weddly-save-bottom'; bottom.innerHTML='<button type="button" data-save-essential>Guardar diseño Essential</button>';
     panel.appendChild(bottom);
@@ -80,7 +92,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
   }
 
   function inject(d,w){
-    w.__WEDDLY_BOOT={cfg,pers,token,memberToken:member(),persApi:PERS_API};
+    w.__WEDDLY_BOOT={cfg,pers,token,memberToken:member(),persApi:PERS_API,rsvpApi:RSVP_API};
     const s=d.createElement('script');
     s.textContent=`(()=> {
       const B=window.__WEDDLY_BOOT||{}, saved=B.pers||{}, cfg=B.cfg||{};
@@ -141,8 +153,13 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
         };
         const r=await fetch(B.persApi,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':B.memberToken},body:JSON.stringify({token:B.token,personalization:p})});
         const x=await r.json().catch(()=>({})); if(!r.ok||!x.ok) throw new Error(x.error||'save_failed');
+        const nextCfg={...cfg,title:p.p1+' & '+p.p2,date:p.date,time:p.time,venue:[p.venue,p.city].filter(Boolean).join(', '),intro:cfg.intro||'Nos encantará celebrar este día contigo.',transportOffered:cfg.transportOffered!==false,questions:{meal:cfg.questions?.meal!==false,allergy:cfg.questions?.allergy!==false,transport:cfg.questions?.transport!==false,plusone:cfg.questions?.plusone!==false}};
+        const cr=await fetch(B.rsvpApi,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':B.memberToken},body:JSON.stringify({action:'config',token:B.token,config:nextCfg})});
+        const cx=await cr.json().catch(()=>({}));if(!cr.ok||!cx.ok)throw new Error(cx.error||'rsvp_sync_failed');
+        Object.assign(cfg,nextCfg);
         try{localStorage.setItem('weddly_guests_design',JSON.stringify(x.personalization||p))}catch{}
         window.__WEDDLY_BOOT.pers=x.personalization||p;
+        window.__WEDDLY_BOOT.cfg=nextCfg;
         renderPreview();
         return x.personalization||p;
       };
