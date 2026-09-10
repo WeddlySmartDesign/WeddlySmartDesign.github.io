@@ -1,5 +1,6 @@
 (()=>{
   const G=window.__GuestsProd;if(!G)return;
+  const SETTINGS_URL='weddly-settings.html?from=guests&v=shared-settings-20260910-2';
 
   function walkDocs(){
     const out=[];
@@ -18,17 +19,35 @@
   function appDoc(){return walkDocs().find(d=>d.getElementById('invitados')&&d.querySelector('.nav'))||null}
 
   function openSettings(){
-    const u='weddly-settings.html?from=guests&v=shared-settings-20260910-1';
-    try{window.top.location.href=u}catch{location.href=u}
+    try{window.top.location.assign(SETTINGS_URL)}catch{location.assign(SETTINGS_URL)}
+  }
+
+  function hijackSettings(d){
+    if(!d?.documentElement||d.documentElement.dataset.wsdSharedSettingsHooked==='1')return;
+    d.documentElement.dataset.wsdSharedSettingsHooked='1';
+    d.addEventListener('click',e=>{
+      const t=e.target?.closest?.('button,a');
+      if(!t)return;
+      const label=(t.textContent||'').trim().toLowerCase();
+      if(t.id==='wsdAppSettings'||label==='ajustes'||label==='settings'){
+        e.preventDefault();
+        e.stopPropagation();
+        if(typeof e.stopImmediatePropagation==='function')e.stopImmediatePropagation();
+        openSettings();
+      }
+    },true);
   }
 
   function ensureSettings(d){
     if(d.getElementById('wsdAppSettings'))return;
     const st=d.createElement('style');
     st.id='wsdAppSettingsCss';
-    st.textContent=`#wsdAppSettings{position:fixed;z-index:49;top:14px;right:16px;border:1px solid #d7d0c6;background:#fff;color:#2c2a26;border-radius:999px;padding:9px 13px;font:700 13px system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 4px 16px #00000012}#wsdAppSettings:active{transform:translateY(1px)}@media(max-width:520px){#wsdAppSettings{top:12px;right:12px;padding:8px 11px;font-size:12px}}`;
+    st.textContent=`#wsdAppSettings{position:fixed;z-index:49000;top:14px;right:16px;border:1px solid #d7d0c6;background:#fff;color:#2c2a26;border-radius:999px;padding:9px 13px;font:700 13px system-ui,-apple-system,Segoe UI,sans-serif;box-shadow:0 4px 16px #00000012}#wsdAppSettings:active{transform:translateY(1px)}@media(max-width:520px){#wsdAppSettings{top:12px;right:12px;padding:8px 11px;font-size:12px}}`;
     d.head.appendChild(st);
-    const b=d.createElement('button');b.id='wsdAppSettings';b.type='button';b.textContent='Ajustes';b.addEventListener('click',openSettings);d.body.appendChild(b);
+    const b=d.createElement('button');
+    b.id='wsdAppSettings';b.type='button';b.textContent='Ajustes';
+    b.onclick=e=>{e.preventDefault();e.stopPropagation();openSettings()};
+    d.body.appendChild(b);
   }
 
   function ensurePlanBack(d){
@@ -48,7 +67,8 @@
 
   function patch(){
     try{
-      const docs=walkDocs();docs.forEach(d=>{spanishUi(d);ensurePlanBack(d)});
+      const docs=walkDocs();
+      docs.forEach(d=>{hijackSettings(d);spanishUi(d);ensurePlanBack(d)});
       const d=appDoc();
       if(d){
         const b=d.querySelector('.brand');
@@ -60,5 +80,8 @@
     }catch{}
   }
 
-  G.f.addEventListener('load',()=>setTimeout(patch,120));addEventListener('hashchange',patch);addEventListener('guests-prod-open',patch);setInterval(patch,500);
+  G.f.addEventListener('load',()=>setTimeout(patch,120));
+  addEventListener('hashchange',patch);
+  addEventListener('guests-prod-open',patch);
+  setInterval(patch,400);
 })();
