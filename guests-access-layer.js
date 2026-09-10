@@ -1,18 +1,18 @@
 (()=>{
-  const BASE='weddly_guests_qa_v67',PAY='weddly_pro_v7',MODE='weddly_owner_demo_mode',TRACK='weddly_guests_local_mode_v1';
+  const BASE='weddly_guests_qa_v67',PAY='weddly_pro_v7',TOKEN='weddly_shared_wedding_token',MODE='weddly_owner_demo_mode',TRACK='weddly_guests_local_mode_v1';
   const rawGet=Storage.prototype.getItem,rawSet=Storage.prototype.setItem,rawRemove=Storage.prototype.removeItem;
   const params=new URLSearchParams(location.search),incoming=(params.get('ownerDemo')||'').toLowerCase();
   if(incoming==='es'||incoming==='en'){try{rawSet.call(localStorage,MODE,incoming)}catch{}}
   if(incoming==='real'){try{rawRemove.call(localStorage,MODE)}catch{}}
   let demo='';try{const x=rawGet.call(localStorage,MODE)||'';demo=x==='es'||x==='en'?x:''}catch{}
-  const current=demo?'demo_'+demo:'real',snap=m=>BASE+'_snapshot_'+m;
+  const demoToken=demo?(rawGet.call(localStorage,'weddly_owner_demo_token_'+demo)||''):'',current=demo?'demo_'+demo:'real',snap=m=>BASE+'_snapshot_'+m;
   try{
     const previous=rawGet.call(localStorage,TRACK)||'real',base=rawGet.call(localStorage,BASE);
     if(previous!==current){if(base!==null)rawSet.call(localStorage,snap(previous),base);const next=rawGet.call(localStorage,snap(current));if(next!==null)rawSet.call(localStorage,BASE,next);else rawRemove.call(localStorage,BASE);rawSet.call(localStorage,TRACK,current)}
   }catch{}
   setInterval(()=>{try{const v=rawGet.call(localStorage,BASE);if(v!==null)rawSet.call(localStorage,snap(current),v)}catch{}},500);
   if(demo){
-    Storage.prototype.getItem=function(key){if(this===localStorage&&key===PAY){const v=rawGet.call(this,PAY+'_owner_demo_'+demo);if(v!==null)return v}return rawGet.call(this,key)};
+    Storage.prototype.getItem=function(key){if(this===localStorage&&key===PAY){const v=rawGet.call(this,PAY+'_owner_demo_'+demo);if(v!==null)return v}if(this===localStorage&&key===TOKEN&&demoToken.length>=40)return demoToken;return rawGet.call(this,key)};
   }
   function lock(){
     if(document.getElementById('wsdAccessLock'))return;
@@ -23,7 +23,6 @@
   const nativeFetch=window.fetch.bind(window);
   window.fetch=async function(input,init){
     let url='';try{url=typeof input==='string'?input:input?.url||''}catch{}
-    if(url.includes('/weddly-guests-state')&&demo){init={...(init||{})};const h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});h.set('x-weddly-demo',demo);init.headers=h}
     const r=await nativeFetch(input,init);
     if(url.includes('/weddly-guests-state')&&(r.status===401||r.status===403))setTimeout(lock,0);
     return r;
