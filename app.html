@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="only light">
 <meta name="theme-color" content="#FBF8F3">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon-192.png">
 <title>WeddlySmartDesign</title>
 <style>
 :root{--bg:#F2EFE9;--paper:#FBF8F3;--line:#E4DED2;--soft:#EEF0E9;--accent:#6E7A5C;--dark:#525C43;--ink:#2C2A26;--muted:#736F63}
@@ -48,19 +53,23 @@ function setActive(view){current=view;tabs.forEach(b=>b.classList.toggle('on',b.
 function addSuite(url){try{const u=new URL(url,location.href);u.searchParams.set('suite','1');u.searchParams.set('_wsd_suite','1');return u.href}catch{return url}}
 function open(view,url=''){childMode=view;setActive(view==='settings'?'settings':view.startsWith('guests')?'guests':'payments');loading.classList.remove('off');error.classList.remove('on');frame.src=url?addSuite(url):route(view)}
 function interactiveText(el){return String(el?.textContent||'').replace(/\s+/g,' ').trim().toLowerCase()}
+function hookDocOnce(d,key,fn){if(!d?.documentElement||d.documentElement.dataset[key])return;d.documentElement.dataset[key]='1';d.addEventListener('click',fn,true)}
 function patchChild(){
   try{
     const d=frame.contentDocument;if(!d)return;
     if(childMode==='payments'){
-      d.querySelectorAll('button,a,[role="button"]').forEach(el=>{const t=interactiveText(el);if(t==='ajustes'||t==='settings'){el.style.setProperty('display','none','important');el.setAttribute('aria-hidden','true')}})
+      const settings=d.getElementById('nav-settings');if(settings)settings.style.setProperty('display','none','important');
+      d.querySelectorAll('button,a,[role="button"]').forEach(el=>{const t=interactiveText(el);if(t==='ajustes'||t==='settings'){el.style.setProperty('display','none','important');el.setAttribute('aria-hidden','true')}});
+      const nav=settings?.parentElement||d.querySelector('nav');if(nav&&getComputedStyle(nav).display==='grid')nav.style.gridTemplateColumns='repeat(3,minmax(0,1fr))';
     }
     if(childMode==='settings'){
       const b=d.getElementById('back');if(b)b.style.setProperty('display','none','important')
     }
     if(childMode==='guests-rsvp'){
-      const back=d.getElementById('back');if(back&&!back.dataset.suiteHook){back.dataset.suiteHook='1';d.addEventListener('click',e=>{const t=e.target?.closest?.('#back,#editInvitation');if(!t)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();if(t.id==='back')open('guests');else open('guests-design','guests-rsvp-design-manage.html')},true)}
+      hookDocOnce(d,'wsdSuiteRsvp',e=>{const t=e.target?.closest?.('#back,#editInvitation');if(!t)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();if(t.id==='back')open('guests');else open('guests-design','guests-rsvp-design-manage.html')})
     }
     if(childMode==='guests-design'){
+      hookDocOnce(d,'wsdSuiteDesign',e=>{const t=e.target?.closest?.('a,button');if(!t)return;const label=interactiveText(t);if((label.includes('volver')&&label.includes('invitad'))||label==='invitados'){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();open('guests');return}if(label.includes('formulario y envíos')||label.includes('envíos y respuestas')){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();open('guests-rsvp','guests-rsvp-operations.html')}});
       d.querySelectorAll('a,button').forEach(el=>{const t=interactiveText(el);if(t.includes('volver')&&t.includes('invitad'))el.style.setProperty('display','none','important')})
     }
   }catch{}
