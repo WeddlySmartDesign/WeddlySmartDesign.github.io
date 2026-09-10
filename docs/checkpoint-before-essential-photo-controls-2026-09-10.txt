@@ -1,0 +1,4 @@
+Checkpoint before Essential photo-control UX change.
+Current main commit: 7d7ff28eaaa721c8aa18f97634868ee8f0834a0e
+Current guests-personalizacion-essential.html blob: 553def9d66963493236c8d438d8daa32c93a4cec
+Reason: add explicit saved-photo preview/change/remove controls without touching approved Essential 01–06 renderers.
