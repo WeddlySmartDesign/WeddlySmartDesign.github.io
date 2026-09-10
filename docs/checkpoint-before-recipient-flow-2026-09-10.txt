@@ -1,0 +1,1 @@
+Checkpoint before replacing the previous invitation-unit UX with the recipient-first grouped RSVP flow requested on 2026-09-10. Stable Guests core remains guests-v114-integrated.html SHA 751160d817d95437b7d17812a4c158b7f5457d21. Current suite/Guests files immediately before the change are preserved in Git history and prior freeze branches.
