@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f1ea">
+<title>WeddlySmartDesign · Guests</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f5f1ea;color:#2c2a26;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+#app{width:100%;height:100%;border:0;display:none;background:#f5f1ea}
+#boot{position:fixed;inset:0;display:grid;place-items:center;padding:28px;text-align:center;background:#f5f1ea;z-index:20}
+.logo{font-family:Georgia,serif;line-height:1.02;color:#525c43}.logo .a{font-size:35px}.logo .b{font-size:24px;margin-top:4px}.product{margin-top:15px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#77716b}.msg{margin-top:22px;font-size:13px;color:#706b65;max-width:320px;line-height:1.5}.bootbtn{display:none;margin:18px auto 0;border:0;border-radius:12px;background:#2c2a26;color:#fff;padding:12px 16px;font-weight:700;text-decoration:none}
+#syncBadge{position:fixed;z-index:30;right:12px;top:12px;display:none;border:1px solid #ddd5c8;background:#fff;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:700;box-shadow:0 5px 18px #0001;color:#655f59}
+#toast{position:fixed;z-index:40;left:16px;right:16px;top:16px;max-width:620px;margin:auto;display:none;background:#2c2a26;color:#fff;border-radius:15px;padding:13px 15px;font-size:13px;box-shadow:0 8px 28px #0003}
+</style>
+</head>
+<body>
+<div id="boot"><div><div class="logo"><div class="a">Weddly</div><div class="b">Smart Design</div></div><div class="product">Guests</div><div class="msg" id="bootMsg">Abriendo vuestra lista de invitados…</div><a class="bootbtn" id="accessBtn" href="access.html">Abrir acceso</a></div></div>
+<div id="syncBadge">Guardando…</div>
+<div id="toast"></div>
+<iframe id="app" title="WeddlySmartDesign Guests"></iframe>
+<script>
+(()=>{
+  const KEY='weddly_guests_qa_v67';
+  const TOKEN_KEY='weddly_shared_wedding_token';
+  const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-guests-state';
+  const APP='guests-v115-integrated.html?v=116-production';
+  const frame=document.getElementById('app'),boot=document.getElementById('boot'),msg=document.getElementById('bootMsg'),accessBtn=document.getElementById('accessBtn'),badge=document.getElementById('syncBadge'),toast=document.getElementById('toast');
+  let token='',serverVersion=0,lastSeen='',pushTimer=0,pushing=false,reloadingRemote=false,started=false;
+  const read=()=>{try{return localStorage.getItem(KEY)||''}catch{return''}};
+  const parse=s=>{try{const x=JSON.parse(s||'null');return x&&typeof x==='object'&&!Array.isArray(x)?x:null}catch{return null}};
+  const write=x=>{try{localStorage.setItem(KEY,JSON.stringify(x));return true}catch{return false}};
+  const meaningful=x=>!!(x&&typeof x==='object'&&(Object.keys(x.guests||{}).length||Object.keys(x.tables||{}).length||x.activity||x.sent||x.prepared||Object.keys(x.meta||{}).length));
+  const showBadge=t=>{badge.textContent=t;badge.style.display='block'};
+  const hideBadge=()=>{badge.style.display='none'};
+  const say=t=>{toast.textContent=t;toast.style.display='block';clearTimeout(say.t);say.t=setTimeout(()=>toast.style.display='none',3600)};
+  async function api(method,body){
+    const r=await fetch(API,{method,headers:{'x-weddly-token':token,...(body?{'content-type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,cache:'no-store'});
+    const x=await r.json().catch(()=>({}));
+    return {r,x};
+  }
+  function appDoc(){
+    try{let d=frame.contentDocument;for(let i=0;i<40;i++){if(d?.getElementById('invitados')&&d?.querySelector('.nav'))return d;const f=d?.querySelector('iframe');if(!f||!f.contentDocument)break;d=f.contentDocument}return d?.getElementById('invitados')?d:null}catch{return null}
+  }
+  function patchUi(){
+    try{const d=appDoc();if(d){const b=d.querySelector('.brand');if(b&&!b.dataset.wsdBrand){b.dataset.wsdBrand='1';b.innerHTML='<span style="display:block;text-transform:none;letter-spacing:0;font:500 18px/1.02 Georgia,serif;color:#525c43">Weddly</span><span style="display:block;text-transform:none;letter-spacing:0;font:500 13px/1.08 Georgia,serif;color:#525c43;margin-top:2px">Smart Design</span>';}}
+      let d=frame.contentDocument;for(let i=0;i<40;i++){const bar=d?.getElementById('weddlyIntegrationBar');if(bar){const a=bar.querySelector('a');if(a){a.href='guests.html#invitados';a.target='_top'}break}const f=d?.querySelector('iframe');if(!f||!f.contentDocument)break;d=f.contentDocument}
+    }catch{}
+  }
+  function applyHash(){
+    const id=(location.hash||'').replace(/^#/,'');if(!id)return;
+    let tries=0;const run=()=>{tries++;try{const d=appDoc(),b=d?.querySelector(`[data-go="${CSS.escape(id)}"]`);if(b){b.click();return}}catch{}if(tries<25)setTimeout(run,120)};setTimeout(run,160);
+  }
+  function loadApp(){
+    if(started)return;started=true;frame.src=APP;frame.style.display='block';boot.style.display='none';frame.addEventListener('load',()=>{applyHash();patchUi()});applyHash();patchUi();startWatchers();
+  }
+  async function bootstrap(){
+    try{token=localStorage.getItem(TOKEN_KEY)||''}catch{}
+    const local=parse(read());
+    if(!token){msg.textContent='Este dispositivo todavía no tiene acceso a vuestra boda.';accessBtn.style.display='inline-block';return}
+    try{
+      const {r,x}=await api('GET');
+      if(!r.ok||!x.ok)throw new Error(x.error||'load_failed');
+      serverVersion=Number(x.version||0);
+      if(x.state&&typeof x.state==='object'){
+        write(x.state);lastSeen=JSON.stringify(x.state);
+      }else if(meaningful(local)){
+        const put=await api('PUT',{version:0,state:local});
+        if(put.r.ok&&put.x.ok){serverVersion=Number(put.x.version||1);lastSeen=JSON.stringify(local)}else lastSeen=read();
+      }else lastSeen=read();
+      loadApp();
+    }catch(e){
+      if(meaningful(local)){lastSeen=read();msg.textContent='Sin conexión. Abriendo la copia guardada en este dispositivo…';setTimeout(loadApp,500)}
+      else{msg.textContent='No hemos podido abrir Guests. Comprueba la conexión y vuelve a intentarlo.';accessBtn.textContent='Reintentar';accessBtn.href=location.href;accessBtn.style.display='inline-block'}
+    }
+  }
+  function schedulePush(){clearTimeout(pushTimer);pushTimer=setTimeout(pushNow,650)}
+  async function pushNow(){
+    if(pushing||!token)return;const raw=read();if(!raw||raw===lastSeen)return;const state=parse(raw);if(!state)return;
+    pushing=true;showBadge('Guardando…');
+    try{
+      const {r,x}=await api('PUT',{version:serverVersion,state});
+      if(r.status===409&&x.server){
+        try{localStorage.setItem('weddly_guests_conflict_backup',raw)}catch{}
+        if(x.server.state){write(x.server.state);lastSeen=JSON.stringify(x.server.state)}
+        serverVersion=Number(x.server.version||serverVersion);reloadingRemote=true;frame.src=APP+'&remote='+Date.now();say('Había cambios en el otro dispositivo. Hemos cargado la versión más reciente.');
+      }else if(!r.ok||!x.ok)throw new Error(x.error||'save_failed');
+      else{serverVersion=Number(x.version||serverVersion+1);lastSeen=raw}
+    }catch{showBadge('Pendiente de conexión');setTimeout(()=>{pushing=false;schedulePush()},2500);return}
+    pushing=false;hideBadge();
+  }
+  async function pollRemote(){
+    if(!token||pushing)return;
+    const raw=read();if(raw!==lastSeen){schedulePush();return}
+    try{
+      const {r,x}=await api('GET');if(!r.ok||!x.ok)return;
+      const v=Number(x.version||0);if(v>serverVersion&&x.state){serverVersion=v;write(x.state);lastSeen=JSON.stringify(x.state);reloadingRemote=true;frame.src=APP+'&remote='+Date.now();say('Guests se ha actualizado con los cambios de vuestra pareja.')}
+    }catch{}
+  }
+  function startWatchers(){
+    setInterval(()=>{patchUi();const raw=read();if(reloadingRemote){reloadingRemote=false;lastSeen=raw;return}if(raw!==lastSeen)schedulePush()},500);
+    setInterval(pollRemote,12000);
+    addEventListener('online',()=>{schedulePush();pollRemote()});
+    addEventListener('hashchange',applyHash);
+  }
+  bootstrap();
+})();
+</script>
+</body>
+</html>
