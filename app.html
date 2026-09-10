@@ -17,7 +17,7 @@
 :root[data-theme="sand"]{--bg:#F1EAE1;--paper:#FCF8F2;--line:#DED3C5;--soft:#F2E9DE;--accent:#9B7F62;--dark:#725A45;--ink:#302B26}
 :root[data-theme="slate"]{--bg:#EEF1F3;--paper:#F8FAFB;--line:#D8DEE2;--soft:#E9EEF1;--accent:#73808A;--dark:#4C5963;--ink:#252A2E}
 :root[data-theme="editorial"]{--bg:#F0ECE8;--paper:#FBF8F5;--line:#DED6D0;--soft:#EFE8E4;--accent:#6B5B52;--dark:#443833;--ink:#2A2421}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{height:100dvh;display:flex;flex-direction:column;background:var(--bg)}.global{flex:0 0 auto;background:var(--paper);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 12px 9px}.brandrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;max-width:760px;margin:0 auto 8px}.brand{font-family:Georgia,serif;color:var(--dark);line-height:1}.brand b{display:block;font-size:20px;font-weight:500}.brand span{display:block;font-size:13px;margin-top:2px}.suiteLabel{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:750}.tabs{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.tab{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:11px;padding:9px 8px;font-size:13px;font-weight:750;cursor:pointer;min-height:40px}.tab.on{background:var(--dark);border-color:var(--dark);color:#fff}.stage{position:relative;flex:1 1 auto;min-height:0;background:var(--bg)}.pane{position:absolute;inset:0;display:none;width:100%;height:100%;border:0;background:var(--bg)}.pane.on{display:block}.loading{position:absolute;inset:0;display:grid;place-items:center;background:var(--bg);color:var(--muted);font-size:13px;z-index:3}.loading.off{display:none}.error{display:none;position:absolute;inset:0;place-items:center;padding:28px;text-align:center;background:var(--bg);z-index:4}.error.on{display:grid}.error .card{max-width:420px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px}.error button{border:0;border-radius:11px;background:var(--dark);color:#fff;padding:12px 15px;font-weight:750;margin-top:12px}.toast{position:fixed;z-index:50;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);max-width:min(520px,calc(100vw - 32px));background:var(--ink);color:#fff;border-radius:14px;padding:12px 15px;font-size:13px;line-height:1.4;box-shadow:0 10px 30px #0003;opacity:0;pointer-events:none;transition:.18s}.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{height:100dvh;display:flex;flex-direction:column;background:var(--bg)}.global{flex:0 0 auto;background:var(--paper);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 10px 9px}.brandrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;max-width:760px;margin:0 auto 8px}.brand{font-family:Georgia,serif;color:var(--dark);line-height:1}.brand b{display:block;font-size:20px;font-weight:500}.brand span{display:block;font-size:13px;margin-top:2px}.suiteLabel{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:750}.tabs{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.tab{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:9px 5px;font-size:11.5px;font-weight:750;cursor:pointer;min-height:40px;white-space:nowrap}.tab.on{background:var(--dark);border-color:var(--dark);color:#fff}.stage{position:relative;flex:1 1 auto;min-height:0;background:var(--bg)}.pane{position:absolute;inset:0;display:none;width:100%;height:100%;border:0;background:var(--bg)}.pane.on{display:block}.loading{position:absolute;inset:0;display:grid;place-items:center;background:var(--bg);color:var(--muted);font-size:13px;z-index:3}.loading.off{display:none}.error{display:none;position:absolute;inset:0;place-items:center;padding:28px;text-align:center;background:var(--bg);z-index:4}.error.on{display:grid}.error .card{max-width:420px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px}.error button{border:0;border-radius:11px;background:var(--dark);color:#fff;padding:12px 15px;font-weight:750;margin-top:12px}.toast{position:fixed;z-index:50;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);max-width:min(520px,calc(100vw - 32px));background:var(--ink);color:#fff;border-radius:14px;padding:12px 15px;font-size:13px;line-height:1.4;box-shadow:0 10px 30px #0003;opacity:0;pointer-events:none;transition:.18s}.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(min-width:760px){.global{padding-left:20px;padding-right:20px}.tab{font-size:14px}}
 </style>
 </head>
@@ -28,6 +28,7 @@
     <nav class="tabs" aria-label="Módulos">
       <button class="tab" data-view="payments">Pagos</button>
       <button class="tab" data-view="guests">Invitados</button>
+      <button class="tab" data-view="planning">Planning</button>
       <button class="tab" data-view="settings">Ajustes</button>
     </nav>
   </header>
@@ -35,6 +36,7 @@
     <div class="loading" id="loading">Abriendo vuestra boda…</div>
     <iframe class="pane" id="paymentsFrame" title="WeddlySmartDesign · Pagos"></iframe>
     <iframe class="pane" id="guestsFrame" title="WeddlySmartDesign · Invitados"></iframe>
+    <iframe class="pane" id="planningFrame" title="Weddly Smart Design · Planning"></iframe>
     <iframe class="pane" id="auxFrame" title="WeddlySmartDesign"></iframe>
     <div class="error" id="error"><div class="card"><b>No hemos podido abrir este módulo.</b><div style="margin-top:7px;color:var(--muted);font-size:13px">Comprueba la conexión y vuelve a intentarlo.</div><button id="retry">Reintentar</button></div></div>
   </main>
@@ -43,22 +45,22 @@
 <script>
 (()=>{
 const TOKEN='weddly_shared_wedding_token',PAY='weddly_pro_v7',GUESTKEY='weddly_guests_qa_v67',THEME1='weddly_personal_theme_v51',THEME2='weddly_personal_theme_v20',LAST='weddly_suite_last_module';
-const payFrame=document.getElementById('paymentsFrame'),guestFrame=document.getElementById('guestsFrame'),auxFrame=document.getElementById('auxFrame'),loading=document.getElementById('loading'),error=document.getElementById('error'),toast=document.getElementById('toast'),tabs=[...document.querySelectorAll('.tab')];
+const payFrame=document.getElementById('paymentsFrame'),guestFrame=document.getElementById('guestsFrame'),planningFrame=document.getElementById('planningFrame'),auxFrame=document.getElementById('auxFrame'),loading=document.getElementById('loading'),error=document.getElementById('error'),toast=document.getElementById('toast'),tabs=[...document.querySelectorAll('.tab')];
 let current='payments',auxMode='',theme='',installPrompt=null,toastTimer=null,identityMark='';
-const loaded={payments:false,guests:false};
+const loaded={payments:false,guests:false,planning:false};
 function hasAccess(){try{return (localStorage.getItem(TOKEN)||'').length>=40}catch{return false}}
-function lang(){try{const x=JSON.parse(localStorage.getItem(PAY)||'null'),v=x?.settings?.lang;if(v==='es'||v==='en')return v}catch{}try{const v=localStorage.getItem('weddly_access_lang');if(v==='es'||v==='en')return v}catch{}return (navigator.language||'').toLowerCase().startsWith('es')?'es':'en'}
-const copy={es:{payments:'Pagos',guests:'Invitados',settings:'Ajustes',label:'Vuestra boda',opening:'Abriendo vuestra boda…',fail:'No hemos podido abrir este módulo.',installMenu:'Abre el menú del navegador y elige «Añadir a pantalla de inicio» o «Instalar app».',installed:'WeddlySmartDesign se ha añadido al móvil.'},en:{payments:'Payments',guests:'Guests',settings:'Settings',label:'Your wedding',opening:'Opening your wedding…',fail:'We could not open this module.',installMenu:'Open your browser menu and choose “Add to Home screen” or “Install app”.',installed:'WeddlySmartDesign has been added to your device.'}};
+function lang(){try{const m=localStorage.getItem('weddly_owner_demo_mode'),k=(m==='es'||m==='en')?PAY+'_owner_demo_'+m:PAY,x=JSON.parse(localStorage.getItem(k)||'null'),v=x?.settings?.lang;if(v==='es'||v==='en')return v;if(m==='es'||m==='en')return m}catch{}try{const v=localStorage.getItem('weddly_access_lang');if(v==='es'||v==='en')return v}catch{}return (navigator.language||'').toLowerCase().startsWith('es')?'es':'en'}
+const copy={es:{payments:'Pagos',guests:'Invitados',planning:'Planning',settings:'Ajustes',label:'Vuestra boda',opening:'Abriendo vuestra boda…',fail:'No hemos podido abrir este módulo.',installMenu:'Abre el menú del navegador y elige «Añadir a pantalla de inicio» o «Instalar app».',installed:'WeddlySmartDesign se ha añadido al móvil.'},en:{payments:'Payments',guests:'Guests',planning:'Planning',settings:'Settings',label:'Your wedding',opening:'Opening your wedding…',fail:'We could not open this module.',installMenu:'Open your browser menu and choose “Add to Home screen” or “Install app”.',installed:'WeddlySmartDesign has been added to your device.'}};
 function translate(){const l=lang(),c=copy[l];document.documentElement.lang=l;document.getElementById('suiteLabel').textContent=c.label;tabs.forEach(b=>b.textContent=c[b.dataset.view]);loading.textContent=c.opening;error.querySelector('b').textContent=c.fail}
 function themeRead(){try{const v=localStorage.getItem(THEME1)||localStorage.getItem(THEME2)||'nordic';return['nordic','blush','sand','slate','editorial'].includes(v)?v:'nordic'}catch{return'nordic'}}
 function applyTheme(){const v=themeRead();if(v===theme)return;theme=v;document.documentElement.dataset.theme=v}
 function showToast(text){clearTimeout(toastTimer);toast.textContent=text;toast.classList.add('on');toastTimer=setTimeout(()=>toast.classList.remove('on'),3600)}
-function addSuite(url){try{const u=new URL(url,location.href);u.searchParams.set('suite','1');u.searchParams.set('_wsd_suite','1');return u.href}catch{return url}}
-function route(view){if(view==='payments')return addSuite('payments.html');if(view==='guests')return addSuite('guests.html');return addSuite('weddly-settings.html')}
-function setActive(view){current=view;tabs.forEach(b=>b.classList.toggle('on',b.dataset.view===view));if(view==='payments'||view==='guests')try{localStorage.setItem(LAST,view)}catch{}}
-function showPane(which){[payFrame,guestFrame,auxFrame].forEach(f=>f.classList.remove('on'));if(which==='payments')payFrame.classList.add('on');else if(which==='guests')guestFrame.classList.add('on');else auxFrame.classList.add('on')}
-function ensure(view){const f=view==='payments'?payFrame:guestFrame;if(!loaded[view]){loaded[view]=true;f.src=route(view)}return f}
-function readIdentity(){try{const x=JSON.parse(localStorage.getItem(PAY)||'null'),s=x?.settings||{};return{p1:String(s.partner1||'').trim(),p2:String(s.partner2||'').trim(),date:/^\d{4}-\d{2}-\d{2}$/.test(String(s.weddingDate||''))?String(s.weddingDate):''}}catch{return{p1:'',p2:'',date:''}}}
+function addSuite(url){try{const u=new URL(url,location.href);u.searchParams.set('suite','1');u.searchParams.set('_wsd_suite','1');const demo=new URLSearchParams(location.search).get('ownerDemo');if(demo==='es'||demo==='en')u.searchParams.set('ownerDemo',demo);return u.href}catch{return url}}
+function route(view){if(view==='payments')return addSuite('payments.html');if(view==='guests')return addSuite('guests.html');if(view==='planning')return addSuite('planning.html');return addSuite('weddly-settings.html')}
+function setActive(view){current=view;tabs.forEach(b=>b.classList.toggle('on',b.dataset.view===view));if(view==='payments'||view==='guests'||view==='planning')try{localStorage.setItem(LAST,view)}catch{}}
+function showPane(which){[payFrame,guestFrame,planningFrame,auxFrame].forEach(f=>f.classList.remove('on'));if(which==='payments')payFrame.classList.add('on');else if(which==='guests')guestFrame.classList.add('on');else if(which==='planning')planningFrame.classList.add('on');else auxFrame.classList.add('on')}
+function ensure(view){const f=view==='payments'?payFrame:view==='guests'?guestFrame:planningFrame;if(!loaded[view]){loaded[view]=true;f.src=route(view)}return f}
+function readIdentity(){try{const m=localStorage.getItem('weddly_owner_demo_mode'),k=(m==='es'||m==='en')?PAY+'_owner_demo_'+m:PAY,x=JSON.parse(localStorage.getItem(k)||'null'),s=x?.settings||{};return{p1:String(s.partner1||'').trim(),p2:String(s.partner2||'').trim(),date:/^\d{4}-\d{2}-\d{2}$/.test(String(s.weddingDate||''))?String(s.weddingDate):''}}catch{return{p1:'',p2:'',date:''}}}
 function identitySignature(){const x=readIdentity();return JSON.stringify([x.p1,x.p2,x.date])}
 function escReg(s){return String(s||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
 function syncGuestIdentity(forceRefresh=false){
@@ -69,49 +71,32 @@ function syncGuestIdentity(forceRefresh=false){
   if((changed||forceRefresh)&&loaded.guests){try{const gp=guestFrame.contentWindow?.__GuestsProd;if(gp?.f&&gp.APP){gp.f.src=gp.APP+'&identity='+Date.now();window.dispatchEvent(new Event('guests-prod-open'))}else if(guestFrame.src)guestFrame.contentWindow.location.reload()}catch{}}
   return changed
 }
-function refreshPaymentsIdentity(){
-  if(!loaded.payments||!payFrame.src)return;
-  const wasVisible=payFrame.classList.contains('on');
-  payFrame.dataset.ready='0';
-  payFrame.src=addSuite('payments.html?identity='+Date.now());
-  if(wasVisible)loading.classList.remove('off')
-}
-function watchIdentity(){const sig=identitySignature();if(sig!==identityMark){const had=!!identityMark;identityMark=sig;syncGuestIdentity(true);if(had)refreshPaymentsIdentity();applyTheme();translate()}}
+function refreshPaymentsIdentity(){if(!loaded.payments||!payFrame.src)return;const wasVisible=payFrame.classList.contains('on');payFrame.dataset.ready='0';payFrame.src=addSuite('payments.html?identity='+Date.now());if(wasVisible)loading.classList.remove('off')}
+function refreshPlanningIdentity(){if(!loaded.planning||!planningFrame.src)return;try{planningFrame.contentWindow.location.reload()}catch{planningFrame.src=route('planning')}}
+function watchIdentity(){const sig=identitySignature();if(sig!==identityMark){const had=!!identityMark;identityMark=sig;syncGuestIdentity(true);if(had){refreshPaymentsIdentity();refreshPlanningIdentity()}applyTheme();translate()}}
 function open(view,url=''){
   error.classList.remove('on');
-  if(view==='payments'||view==='guests'){
+  if(view==='payments'||view==='guests'||view==='planning'){
     if(view==='guests')syncGuestIdentity(false);auxMode='';setActive(view);const f=ensure(view);showPane(view);loading.classList.toggle('off',f.dataset.ready==='1');return;
   }
   auxMode=view;setActive(view==='settings'?'settings':'guests');showPane('aux');loading.classList.remove('off');auxFrame.dataset.ready='0';auxFrame.src=url?addSuite(url):route('settings');
 }
 function interactiveText(el){return String(el?.textContent||'').replace(/\s+/g,' ').trim().toLowerCase()}
 function hookDocOnce(d,key,fn){if(!d?.documentElement||d.documentElement.dataset[key])return;d.documentElement.dataset[key]='1';d.addEventListener('click',fn,true)}
-async function installSuite(){
-  const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;if(standalone){showToast(copy[lang()].installed);return}
-  if(installPrompt){const p=installPrompt;installPrompt=null;try{await p.prompt();await p.userChoice}catch{}return}
-  showToast(copy[lang()].installMenu)
-}
-function patchPayments(){
-  try{const d=payFrame.contentDocument;if(!d)return;const settings=d.getElementById('nav-settings');if(settings)settings.style.setProperty('display','none','important');d.querySelectorAll('button,a,[role="button"]').forEach(el=>{const t=interactiveText(el);if(t==='ajustes'||t==='settings'){el.style.setProperty('display','none','important');el.setAttribute('aria-hidden','true')}});hookDocOnce(d,'wsdSuitePayments',e=>{const t=e.target?.closest?.('#install-action');if(!t)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();installSuite()})}catch{}
-}
-function patchAux(){
-  try{const d=auxFrame.contentDocument;if(!d)return;
-    if(auxMode==='settings'){const b=d.getElementById('back');if(b)b.style.setProperty('display','none','important')}
-    if(auxMode==='guests-rsvp')hookDocOnce(d,'wsdSuiteRsvp',e=>{const t=e.target?.closest?.('#back,#editInvitation');if(!t)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();if(t.id==='back')open('guests');else open('guests-design','guests-rsvp-design-manage.html')});
-    if(auxMode==='guests-design'){hookDocOnce(d,'wsdSuiteDesign',e=>{const t=e.target?.closest?.('a,button');if(!t)return;const label=interactiveText(t);if((label.includes('volver')&&label.includes('invitad'))||label==='invitados'){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();open('guests');return}if(label.includes('formulario y envíos')||label.includes('envíos y respuestas')){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();open('guests-rsvp','guests-rsvp-operations-v2.html?v=130-units')}});d.querySelectorAll('a,button').forEach(el=>{const t=interactiveText(el);if(t.includes('volver')&&t.includes('invitad'))el.style.setProperty('display','none','important')})}
-  }catch{}
-}
+async function installSuite(){const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;if(standalone){showToast(copy[lang()].installed);return}if(installPrompt){const p=installPrompt;installPrompt=null;try{await p.prompt();await p.userChoice}catch{}return}showToast(copy[lang()].installMenu)}
+function patchPayments(){try{const d=payFrame.contentDocument;if(!d)return;const settings=d.getElementById('nav-settings');if(settings)settings.style.setProperty('display','none','important');d.querySelectorAll('button,a,[role="button"]').forEach(el=>{const t=interactiveText(el);if(t==='ajustes'||t==='settings'){el.style.setProperty('display','none','important');el.setAttribute('aria-hidden','true')}});hookDocOnce(d,'wsdSuitePayments',e=>{const t=e.target?.closest?.('#install-action');if(!t)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();installSuite()})}catch{}}
+function patchAux(){try{const d=auxFrame.contentDocument;if(!d)return;if(auxMode==='settings'){const b=d.getElementById('back');if(b)b.style.setProperty('display','none','important')}if(auxMode==='guests-rsvp')hookDocOnce(d,'wsdSuiteRsvp',e=>{const t=e.target?.closest?.('#back,#editInvitation');if(!t)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();if(t.id==='back')open('guests');else open('guests-design','guests-rsvp-design-manage.html')});if(auxMode==='guests-design'){hookDocOnce(d,'wsdSuiteDesign',e=>{const t=e.target?.closest?.('a,button');if(!t)return;const label=interactiveText(t);if((label.includes('volver')&&label.includes('invitad'))||label==='invitados'){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();open('guests');return}if(label.includes('formulario y envíos')||label.includes('envíos y respuestas')){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();open('guests-rsvp','guests-rsvp-operations-v2.html?v=130-units')}});d.querySelectorAll('a,button').forEach(el=>{const t=interactiveText(el);if(t.includes('volver')&&t.includes('invitad'))el.style.setProperty('display','none','important')})}}catch{}}
 function frameReady(f,kind){f.dataset.ready='1';if((kind===current)||(kind==='aux'&&auxMode))loading.classList.add('off');if(kind==='payments'){setTimeout(patchPayments,50);setTimeout(patchPayments,300)}if(kind==='aux'){setTimeout(patchAux,50);setTimeout(patchAux,300)}}
-payFrame.addEventListener('load',()=>frameReady(payFrame,'payments'));guestFrame.addEventListener('load',()=>frameReady(guestFrame,'guests'));auxFrame.addEventListener('load',()=>frameReady(auxFrame,'aux'));
-[payFrame,guestFrame,auxFrame].forEach(f=>f.addEventListener('error',()=>{if(f.classList.contains('on')){loading.classList.add('off');error.classList.add('on')}}));
+payFrame.addEventListener('load',()=>frameReady(payFrame,'payments'));guestFrame.addEventListener('load',()=>frameReady(guestFrame,'guests'));planningFrame.addEventListener('load',()=>frameReady(planningFrame,'planning'));auxFrame.addEventListener('load',()=>frameReady(auxFrame,'aux'));
+[payFrame,guestFrame,planningFrame,auxFrame].forEach(f=>f.addEventListener('error',()=>{if(f.classList.contains('on')){loading.classList.add('off');error.classList.add('on')}}));
 tabs.forEach(b=>b.onclick=()=>open(b.dataset.view));document.getElementById('retry').onclick=()=>open(current);
 addEventListener('message',e=>{if(e.origin!==location.origin||!e.data||e.data.type!=='wsd-suite-open')return;if(e.data.view==='settings')open('settings');else if(e.data.view==='guests-rsvp')open('guests-rsvp',e.data.url||'guests-rsvp-operations-v2.html?v=130-units');else if(e.data.view==='guests-design')open('guests-design',e.data.url||'guests-rsvp-design-manage.html')});
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});addEventListener('appinstalled',()=>{installPrompt=null;showToast(copy[lang()].installed)});
-addEventListener('storage',e=>{if(e.key===THEME1||e.key===THEME2||e.key===PAY){applyTheme();translate();watchIdentity();setTimeout(()=>{patchPayments();patchAux()},50)}});
+addEventListener('storage',e=>{if(e.key===THEME1||e.key===THEME2||e.key===PAY||e.key==='weddly_owner_demo_mode'){applyTheme();translate();watchIdentity();setTimeout(()=>{patchPayments();patchAux()},50)}});
 setInterval(()=>{applyTheme();translate();watchIdentity();patchPayments();patchAux()},250);
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 if(!hasAccess()){location.replace('access.html');return}
-applyTheme();translate();identityMark=identitySignature();syncGuestIdentity(false);let first='payments';try{const x=localStorage.getItem(LAST);if(x==='payments'||x==='guests')first=x}catch{}open(first);setTimeout(()=>ensure(first==='payments'?'guests':'payments'),350);
+applyTheme();translate();identityMark=identitySignature();syncGuestIdentity(false);let first='payments';try{const x=localStorage.getItem(LAST);if(x==='payments'||x==='guests'||x==='planning')first=x}catch{}open(first);setTimeout(()=>{['payments','guests','planning'].filter(x=>x!==first).forEach((x,i)=>setTimeout(()=>ensure(x),i*250))},350);
 })();
 </script>
 </body>
