@@ -1,7 +1,7 @@
 (()=>{
   const G=window.__GuestsProd;if(!G)return;
   const SETTINGS_URL='weddly-settings.html?from=guests&v=123-rsvp-ops';
-  const RSVP_URL='guests-rsvp-operations.html?v=123-rsvp-ops';
+  const RSVP_URL='guests-rsvp-operations-v2.html?v=130-units';
   const SUITE=new URLSearchParams(location.search).get('suite')==='1'||new URLSearchParams(location.search).get('_wsd_suite')==='1';
   const THEMES={
     nordic:{bg:'#F2EFE9',paper:'#FBF8F3',line:'#E4DED2',soft:'#EEF0E9',accent:'#6E7A5C',dark:'#525C43',ink:'#2C2A26'},
