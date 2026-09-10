@@ -20,12 +20,7 @@
     if(write(S))reload();
   }
   function createdIds(before){const S=read(),b=new Set(before||[]);return Object.keys(S.guests||{}).filter(id=>!b.has(id))}
-  function finishPending(){
-    if(!pending)return;
-    const ids=pending.ids?.length?pending.ids:createdIds(pending.before);
-    if(!ids.length)return;
-    const p=pending;pending=null;applyUnit(ids,p.mode,p.label)
-  }
+  function finishPending(){if(!pending)return;const ids=pending.ids?.length?pending.ids:createdIds(pending.before);if(!ids.length)return;const p=pending;pending=null;applyUnit(ids,p.mode,p.label)}
   function choiceUi(d){
     const names=d.getElementById('names');if(!names||d.getElementById('wsdInviteUnitChoice'))return;
     const actions=d.getElementById('saveOnly')?.parentElement;if(!actions)return;
@@ -41,24 +36,21 @@
     d.addEventListener('click',e=>{
       const t=e.target?.closest?.('button');if(!t)return;
       if(t.id==='saveOnly'||t.id==='saveSeat'){
-        const names=d.getElementById('names'),box=d.getElementById('wsdInviteUnitChoice');if(!names||!box)return;
+        const names=d.getElementById('names');if(!names)return;
         const arr=names.value.split(/\n+/).map(x=>x.trim()).filter(Boolean);if(!arr.length)return;
-        let mode=arr.length===1?'separate':box.dataset.mode;
+        if(!d.getElementById('wsdInviteUnitChoice'))choiceUi(d);
+        const box=d.getElementById('wsdInviteUnitChoice');
+        let mode=arr.length===1?'separate':box?.dataset.mode;
         if(arr.length>1&&!['together','separate'].includes(mode)){
-          e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();const er=box.querySelector('#wsdInviteErr');if(er)er.textContent='Elige si estas personas recibirán una invitación conjunta o separada.';return;
+          e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();const er=box?.querySelector('#wsdInviteErr');if(er)er.textContent='Elige si estas personas recibirán una invitación conjunta o separada.';box?.scrollIntoView({behavior:'smooth',block:'center'});return;
         }
-        pending={before:Object.keys(read().guests||{}),mode,label:box.querySelector('#wsdInviteLabel')?.value||'',seat:t.id==='saveSeat',ids:[]};
-        setTimeout(()=>{
-          if(!pending)return;pending.ids=createdIds(pending.before);
-          if(!pending.seat)finishPending();
-        },20);
+        pending={before:Object.keys(read().guests||{}),mode,label:box?.querySelector('#wsdInviteLabel')?.value||'',seat:t.id==='saveSeat',ids:[]};
+        setTimeout(()=>{if(!pending)return;pending.ids=createdIds(pending.before);if(!pending.seat)finishPending()},20);
         return;
       }
-      if(pending?.seat&&(t.id==='bulkLater'||t.id==='bulkCreate'||t.hasAttribute('data-bulk-table'))){
-        setTimeout(()=>{const sheet=d.getElementById('sheet');if(sheet&&!sheet.classList.contains('on'))finishPending()},40)
-      }
+      if(pending?.seat&&(t.id==='bulkLater'||t.id==='bulkCreate'||t.hasAttribute('data-bulk-table'))){setTimeout(()=>{const sheet=d.getElementById('sheet');if(sheet&&!sheet.classList.contains('on'))finishPending()},60)}
     },true)
   }
   function patch(){try{const d=appDoc();if(!d)return;hook(d);choiceUi(d)}catch{}}
-  G.f.addEventListener('load',()=>{setTimeout(patch,90);setTimeout(patch,300)});addEventListener('guests-prod-open',patch);setInterval(patch,300);
+  G.f.addEventListener('load',()=>{setTimeout(patch,70);setTimeout(patch,220)});addEventListener('guests-prod-open',patch);setInterval(patch,220);
 })();
