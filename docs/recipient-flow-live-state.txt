@@ -1,0 +1,1 @@
+Live implementation switched RSVP sending to mirror group → subgroup → people and select recipients at send time. Guest creation no longer asks how invitations are distributed. Stable Guests core remains untouched.
