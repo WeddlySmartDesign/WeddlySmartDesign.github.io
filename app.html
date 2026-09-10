@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es" data-theme="nordic">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#FBF8F3">
+<title>WeddlySmartDesign</title>
+<style>
+:root{--bg:#F2EFE9;--paper:#FBF8F3;--line:#E4DED2;--soft:#EEF0E9;--accent:#6E7A5C;--dark:#525C43;--ink:#2C2A26;--muted:#736F63}
+:root[data-theme="blush"]{--bg:#F5EEEC;--paper:#FFF9F7;--line:#E9DAD6;--soft:#F5E9E7;--accent:#B48683;--dark:#825F5D}
+:root[data-theme="sand"]{--bg:#F1EAE1;--paper:#FCF8F2;--line:#DED3C5;--soft:#F2E9DE;--accent:#9B7F62;--dark:#725A45;--ink:#302B26}
+:root[data-theme="slate"]{--bg:#EEF1F3;--paper:#F8FAFB;--line:#D8DEE2;--soft:#E9EEF1;--accent:#73808A;--dark:#4C5963;--ink:#252A2E}
+:root[data-theme="editorial"]{--bg:#F0ECE8;--paper:#FBF8F5;--line:#DED6D0;--soft:#EFE8E4;--accent:#6B5B52;--dark:#443833;--ink:#2A2421}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{height:100dvh;display:flex;flex-direction:column;background:var(--bg)}.global{flex:0 0 auto;background:var(--paper);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 12px 9px}.brandrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;max-width:760px;margin:0 auto 8px}.brand{font-family:Georgia,serif;color:var(--dark);line-height:1}.brand b{display:block;font-size:20px;font-weight:500}.brand span{display:block;font-size:13px;margin-top:2px}.suiteLabel{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:750}.tabs{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.tab{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:11px;padding:9px 8px;font-size:13px;font-weight:750;cursor:pointer;min-height:40px}.tab.on{background:var(--dark);border-color:var(--dark);color:#fff}.stage{position:relative;flex:1 1 auto;min-height:0;background:var(--bg)}iframe{display:block;width:100%;height:100%;border:0;background:var(--bg)}.loading{position:absolute;inset:0;display:grid;place-items:center;background:var(--bg);color:var(--muted);font-size:13px;z-index:3}.loading.off{display:none}.error{display:none;position:absolute;inset:0;place-items:center;padding:28px;text-align:center;background:var(--bg);z-index:4}.error.on{display:grid}.error .card{max-width:420px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px}.error button{border:0;border-radius:11px;background:var(--dark);color:#fff;padding:12px 15px;font-weight:750;margin-top:12px}
+@media(min-width:760px){.global{padding-left:20px;padding-right:20px}.tab{font-size:14px}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="global">
+    <div class="brandrow"><div class="brand"><b>Weddly</b><span>Smart Design</span></div><div class="suiteLabel" id="suiteLabel">Vuestra boda</div></div>
+    <nav class="tabs" aria-label="Módulos">
+      <button class="tab" data-view="payments">Pagos</button>
+      <button class="tab" data-view="guests">Invitados</button>
+      <button class="tab" data-view="settings">Ajustes</button>
+    </nav>
+  </header>
+  <main class="stage">
+    <div class="loading" id="loading">Abriendo vuestra boda…</div>
+    <iframe id="module" title="WeddlySmartDesign"></iframe>
+    <div class="error" id="error"><div class="card"><b>No hemos podido abrir este módulo.</b><div style="margin-top:7px;color:var(--muted);font-size:13px">Comprueba la conexión y vuelve a intentarlo.</div><button id="retry">Reintentar</button></div></div>
+  </main>
+</div>
+<script>
+(()=>{
+const TOKEN='weddly_shared_wedding_token',PAY='weddly_pro_v7',THEME1='weddly_personal_theme_v51',THEME2='weddly_personal_theme_v20',LAST='weddly_suite_last_module';
+const frame=document.getElementById('module'),loading=document.getElementById('loading'),error=document.getElementById('error'),tabs=[...document.querySelectorAll('.tab')];
+let current='payments',childMode='payments',theme='';
+function hasAccess(){try{return (localStorage.getItem(TOKEN)||'').length>=40}catch{return false}}
+function lang(){try{const x=JSON.parse(localStorage.getItem(PAY)||'null'),v=x?.settings?.lang;if(v==='es'||v==='en')return v}catch{}try{const v=localStorage.getItem('weddly_access_lang');if(v==='es'||v==='en')return v}catch{}return (navigator.language||'').toLowerCase().startsWith('es')?'es':'en'}
+const copy={es:{payments:'Pagos',guests:'Invitados',settings:'Ajustes',label:'Vuestra boda',opening:'Abriendo vuestra boda…',fail:'No hemos podido abrir este módulo.'},en:{payments:'Payments',guests:'Guests',settings:'Settings',label:'Your wedding',opening:'Opening your wedding…',fail:'We could not open this module.'}};
+function translate(){const l=lang(),c=copy[l];document.documentElement.lang=l;document.getElementById('suiteLabel').textContent=c.label;tabs.forEach(b=>b.textContent=c[b.dataset.view]);loading.textContent=c.opening;error.querySelector('b').textContent=c.fail}
+function themeRead(){try{const v=localStorage.getItem(THEME1)||localStorage.getItem(THEME2)||'nordic';return['nordic','blush','sand','slate','editorial'].includes(v)?v:'nordic'}catch{return'nordic'}}
+function applyTheme(){const v=themeRead();if(v===theme)return;theme=v;document.documentElement.dataset.theme=v}
+function route(view){if(view==='payments')return 'payments.html?suite=1&_wsd_suite=1';if(view==='guests')return 'guests.html?suite=1&_wsd_suite=1';return 'weddly-settings.html?suite=1&_wsd_suite=1'}
+function setActive(view){current=view;tabs.forEach(b=>b.classList.toggle('on',b.dataset.view===view));if(view==='payments'||view==='guests')try{localStorage.setItem(LAST,view)}catch{}}
+function addSuite(url){try{const u=new URL(url,location.href);u.searchParams.set('suite','1');u.searchParams.set('_wsd_suite','1');return u.href}catch{return url}}
+function open(view,url=''){childMode=view;setActive(view==='settings'?'settings':view.startsWith('guests')?'guests':'payments');loading.classList.remove('off');error.classList.remove('on');frame.src=url?addSuite(url):route(view)}
+function interactiveText(el){return String(el?.textContent||'').replace(/\s+/g,' ').trim().toLowerCase()}
+function patchChild(){
+  try{
+    const d=frame.contentDocument;if(!d)return;
+    if(childMode==='payments'){
+      d.querySelectorAll('button,a,[role="button"]').forEach(el=>{const t=interactiveText(el);if(t==='ajustes'||t==='settings'){el.style.setProperty('display','none','important');el.setAttribute('aria-hidden','true')}})
+    }
+    if(childMode==='settings'){
+      const b=d.getElementById('back');if(b)b.style.setProperty('display','none','important')
+    }
+    if(childMode==='guests-rsvp'){
+      const back=d.getElementById('back');if(back&&!back.dataset.suiteHook){back.dataset.suiteHook='1';d.addEventListener('click',e=>{const t=e.target?.closest?.('#back,#editInvitation');if(!t)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();if(t.id==='back')open('guests');else open('guests-design','guests-rsvp-design-manage.html')},true)}
+    }
+    if(childMode==='guests-design'){
+      d.querySelectorAll('a,button').forEach(el=>{const t=interactiveText(el);if(t.includes('volver')&&t.includes('invitad'))el.style.setProperty('display','none','important')})
+    }
+  }catch{}
+}
+frame.addEventListener('load',()=>{loading.classList.add('off');setTimeout(patchChild,60);setTimeout(patchChild,300)});
+frame.addEventListener('error',()=>{loading.classList.add('off');error.classList.add('on')});
+tabs.forEach(b=>b.onclick=()=>open(b.dataset.view));
+document.getElementById('retry').onclick=()=>open(current);
+addEventListener('message',e=>{if(e.origin!==location.origin||!e.data||e.data.type!=='wsd-suite-open')return;if(e.data.view==='settings')open('settings');else if(e.data.view==='guests-rsvp')open('guests-rsvp',e.data.url||'guests-rsvp-operations.html');else if(e.data.view==='guests-design')open('guests-design',e.data.url||'guests-rsvp-design-manage.html')});
+addEventListener('storage',e=>{if(e.key===THEME1||e.key===THEME2||e.key===PAY){applyTheme();translate();setTimeout(patchChild,50)}});
+setInterval(()=>{applyTheme();translate();patchChild()},700);
+if(!hasAccess()){location.replace('access.html');return}
+applyTheme();translate();let first='payments';try{const x=localStorage.getItem(LAST);if(x==='payments'||x==='guests')first=x}catch{}open(first);
+})();
+</script>
+</body>
+</html>
