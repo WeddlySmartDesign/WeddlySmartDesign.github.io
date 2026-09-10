@@ -1,15 +1,19 @@
 (()=>{
-  const BASE='weddly_guests_qa_v67',MODE='weddly_owner_demo_mode',TRACK='weddly_guests_local_mode_v1';
+  const BASE='weddly_guests_qa_v67',PAY='weddly_pro_v7',MODE='weddly_owner_demo_mode',TRACK='weddly_guests_local_mode_v1';
+  const rawGet=Storage.prototype.getItem,rawSet=Storage.prototype.setItem,rawRemove=Storage.prototype.removeItem;
   const params=new URLSearchParams(location.search),incoming=(params.get('ownerDemo')||'').toLowerCase();
-  if(incoming==='es'||incoming==='en'){try{localStorage.setItem(MODE,incoming)}catch{}}
-  if(incoming==='real'){try{localStorage.removeItem(MODE)}catch{}}
-  let demo='';try{const x=localStorage.getItem(MODE)||'';demo=x==='es'||x==='en'?x:''}catch{}
+  if(incoming==='es'||incoming==='en'){try{rawSet.call(localStorage,MODE,incoming)}catch{}}
+  if(incoming==='real'){try{rawRemove.call(localStorage,MODE)}catch{}}
+  let demo='';try{const x=rawGet.call(localStorage,MODE)||'';demo=x==='es'||x==='en'?x:''}catch{}
   const current=demo?'demo_'+demo:'real',snap=m=>BASE+'_snapshot_'+m;
   try{
-    const previous=localStorage.getItem(TRACK)||'real',base=localStorage.getItem(BASE);
-    if(previous!==current){if(base!==null)localStorage.setItem(snap(previous),base);const next=localStorage.getItem(snap(current));if(next!==null)localStorage.setItem(BASE,next);else localStorage.removeItem(BASE);localStorage.setItem(TRACK,current)}
+    const previous=rawGet.call(localStorage,TRACK)||'real',base=rawGet.call(localStorage,BASE);
+    if(previous!==current){if(base!==null)rawSet.call(localStorage,snap(previous),base);const next=rawGet.call(localStorage,snap(current));if(next!==null)rawSet.call(localStorage,BASE,next);else rawRemove.call(localStorage,BASE);rawSet.call(localStorage,TRACK,current)}
   }catch{}
-  setInterval(()=>{try{const v=localStorage.getItem(BASE);if(v!==null)localStorage.setItem(snap(current),v)}catch{}},500);
+  setInterval(()=>{try{const v=rawGet.call(localStorage,BASE);if(v!==null)rawSet.call(localStorage,snap(current),v)}catch{}},500);
+  if(demo){
+    Storage.prototype.getItem=function(key){if(this===localStorage&&key===PAY){const v=rawGet.call(this,PAY+'_owner_demo_'+demo);if(v!==null)return v}return rawGet.call(this,key)};
+  }
   function lock(){
     if(document.getElementById('wsdAccessLock'))return;
     const o=document.createElement('div');o.id='wsdAccessLock';o.style.cssText='position:fixed;z-index:999999;inset:0;background:#FBF8F3;display:grid;place-items:center;padding:28px;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#2C2A26;text-align:center';
