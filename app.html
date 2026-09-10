@@ -69,7 +69,14 @@ function syncGuestIdentity(forceRefresh=false){
   if((changed||forceRefresh)&&loaded.guests){try{const gp=guestFrame.contentWindow?.__GuestsProd;if(gp?.f&&gp.APP){gp.f.src=gp.APP+'&identity='+Date.now();window.dispatchEvent(new Event('guests-prod-open'))}else if(guestFrame.src)guestFrame.contentWindow.location.reload()}catch{}}
   return changed
 }
-function watchIdentity(){const sig=identitySignature();if(sig!==identityMark){identityMark=sig;syncGuestIdentity(true);applyTheme();translate()}}
+function refreshPaymentsIdentity(){
+  if(!loaded.payments||!payFrame.src)return;
+  const wasVisible=payFrame.classList.contains('on');
+  payFrame.dataset.ready='0';
+  payFrame.src=addSuite('payments.html?identity='+Date.now());
+  if(wasVisible)loading.classList.remove('off')
+}
+function watchIdentity(){const sig=identitySignature();if(sig!==identityMark){const had=!!identityMark;identityMark=sig;syncGuestIdentity(true);if(had)refreshPaymentsIdentity();applyTheme();translate()}}
 function open(view,url=''){
   error.classList.remove('on');
   if(view==='payments'||view==='guests'){
