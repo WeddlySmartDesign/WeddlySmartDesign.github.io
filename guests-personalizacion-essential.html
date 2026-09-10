@@ -1,1 +1,227 @@
-PLACEHOLDER
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WeddlySmartDesign · Personalización Essential</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
+#editor{width:100%;height:100%;border:0;display:block;background:#f6f4f0}
+#boot{position:fixed;inset:0;display:grid;place-items:center;background:#f6f4f0;z-index:10;font:500 13px system-ui,-apple-system,Segoe UI,sans-serif;color:#6f6a61}
+#boot.hide{display:none}
+</style>
+</head>
+<body>
+<div id="boot">Cargando personalización…</div>
+<iframe id="editor" src="weddly-personalizacion-essential.html?v=essential-6-rev2-20260909" title="Personalización Essential"></iframe>
+<script>
+(()=> {
+  const RSVP_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp';
+  const PERS_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-personalization';
+  const frame=document.getElementById('editor'),bootEl=document.getElementById('boot');
+  const qs=new URLSearchParams(location.search);
+  const inSuite=qs.get('suite')==='1'||qs.get('_wsd_suite')==='1';
+  const member=()=>localStorage.getItem('weddly_shared_wedding_token')||'';
+  let token=qs.get('t')||'', cfg={}, pers=null, installed=false;
+
+  async function j(url,opt={}){
+    const r=await fetch(url,opt),x=await r.json().catch(()=>({}));
+    if(!r.ok||!x.ok) throw new Error(x.error||'request_failed');
+    return x;
+  }
+  async function resolve(){
+    if(member()){
+      try{
+        const x=await j(RSVP_API+'?manage=1',{headers:{'x-weddly-token':member()}});
+        const f=x.forms?.[0];
+        if(f){token=token||f.public_token||'';cfg=f.config||{}}
+      }catch{}
+    }
+    if(token){
+      try{const x=await j(PERS_API+'?token='+encodeURIComponent(token),{cache:'no-store'});pers=x.personalization||null}catch{}
+      if(!Object.keys(cfg).length){
+        try{const x=await j(RSVP_API+'?token='+encodeURIComponent(token),{cache:'no-store'});cfg=x.form?.config||{}}catch{}
+      }
+    }
+  }
+
+  function goGuests(){
+    if(inSuite&&parent!==window){try{const b=parent.document.querySelector('[data-view="guests"]');if(b){b.click();return}}catch{}}
+    location.assign('guests.html#invitados');
+  }
+  function goForm(){
+    if(inSuite&&parent!==window){parent.postMessage({type:'wsd-suite-open',view:'guests-rsvp',url:'guests-rsvp-form.html?v=134'},location.origin);return}
+    location.assign('guests-rsvp-form.html?v=134');
+  }
+
+  function addChrome(d,w){
+    if(d.getElementById('weddlyIntegrationBar')) return;
+    const panel=d.querySelector('.panel');
+    if(!panel) return;
+    const st=d.createElement('style');
+    st.textContent=`
+      .weddly-intbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+      .weddly-intbar a,.weddly-intbar button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:8px 12px;font:600 11px 'Jost',system-ui,sans-serif;text-decoration:none;cursor:pointer}
+      .weddly-intbar button[data-save-essential]{margin-left:auto;background:var(--ink);color:#fff;border-color:var(--ink)}
+      .weddly-intfb{display:none;margin:0 0 18px;padding:11px 12px;border-radius:10px;background:#f0e8df;font:500 12px/1.4 'Jost',system-ui,sans-serif}
+      .weddly-intfb.on{display:block}.weddly-intfb.ok{background:#e7eee8;color:#4e6656}
+      .weddly-save-bottom{margin:8px 0 34px;border-top:1px solid var(--line);padding-top:18px}
+      .weddly-save-bottom button{width:100%;border:0;border-radius:12px;padding:14px;background:var(--ink);color:#fff;font:600 14px 'Jost',system-ui,sans-serif;cursor:pointer}
+      .weddly-intbar button:disabled,.weddly-save-bottom button:disabled{opacity:.55}
+      .weddly-photo-card{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center;margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#fff}
+      .weddly-photo-thumb{width:72px;height:72px;border-radius:10px;object-fit:cover;background:#f3efe9;display:block}
+      .weddly-photo-meta{min-width:0}
+      .weddly-photo-status{font:600 12px 'Jost',system-ui,sans-serif;color:var(--ink);margin:0 0 8px}
+      .weddly-photo-actions{display:flex;gap:8px;flex-wrap:wrap}
+      .weddly-photo-actions button{border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);padding:8px 10px;font:600 11px 'Jost',system-ui,sans-serif;cursor:pointer}
+      .weddly-photo-empty{margin-top:10px}
+      .weddly-photo-empty button{border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);padding:9px 12px;font:600 11px 'Jost',system-ui,sans-serif;cursor:pointer}
+      input[type=file]{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+    `;
+    d.head.appendChild(st);
+    const bar=d.createElement('div'); bar.id='weddlyIntegrationBar'; bar.className='weddly-intbar';
+    bar.innerHTML='<button type="button" id="weddlyBackGuests">← Invitados</button><button type="button" id="weddlyOpenRsvpForm">Formulario RSVP</button><button type="button" data-save-essential>Guardar</button>';
+    panel.prepend(bar);
+    d.getElementById('weddlyBackGuests').onclick=goGuests;
+    d.getElementById('weddlyOpenRsvpForm').onclick=goForm;
+    const fb=d.createElement('div'); fb.id='weddlyIntegrationFeedback'; fb.className='weddly-intfb'; bar.insertAdjacentElement('afterend',fb);
+    const bottom=d.createElement('div'); bottom.className='weddly-save-bottom'; bottom.innerHTML='<button type="button" data-save-essential>Guardar diseño Essential</button>';
+    panel.appendChild(bottom);
+    d.querySelectorAll('[data-save-essential]').forEach(b=>b.onclick=async()=>{
+      if(!w.__weddlySaveEssential) return;
+      const buttons=[...d.querySelectorAll('[data-save-essential]')];
+      buttons.forEach(x=>x.disabled=true); fb.className='weddly-intfb on'; fb.textContent='Guardando…';
+      try{
+        await w.__weddlySaveEssential();
+        if(w.__weddlyRefreshPhotoControls) w.__weddlyRefreshPhotoControls();
+        fb.className='weddly-intfb on ok'; fb.textContent='Diseño Essential guardado y conectado al RSVP.';
+      }catch(e){
+        fb.className='weddly-intfb on'; fb.textContent='No se ha podido guardar. Comprueba la conexión y vuelve a intentarlo.';
+      }finally{buttons.forEach(x=>x.disabled=false)}
+    });
+  }
+
+  function inject(d,w){
+    w.__WEDDLY_BOOT={cfg,pers,token,memberToken:member(),persApi:PERS_API,rsvpApi:RSVP_API};
+    const s=d.createElement('script');
+    s.textContent=`(()=> {
+      const B=window.__WEDDLY_BOOT||{}, saved=B.pers||{}, cfg=B.cfg||{};
+      const by=id=>document.getElementById(id);
+      const splitNames=t=>{for(const sep of [' & ',' y ',' Y ',' + '])if(String(t||'').includes(sep)){const p=String(t).split(sep);return[p[0].trim(),p.slice(1).join(sep.trim()).trim()]}return['Alba','Leo']};
+      const splitVenue=v=>{const p=String(v||'').split(',');return[(p.shift()||'').trim(),p.join(',').trim()]};
+      const digits=v=>String(v||'').replace(/^https?:\\/\\/wa\\.me\\//i,'').replace(/\\D/g,'');
+      const n=splitNames(cfg.title),vp=splitVenue(cfg.venue);
+      if(saved.agenda&&Array.isArray(saved.agenda)&&saved.agenda.length) state.agenda=saved.agenda.map(x=>({...x}));
+      if(saved.locations&&Array.isArray(saved.locations)&&saved.locations.length) state.locations=saved.locations.map(x=>({...x}));
+      state.template=TEMPLATES[saved.template]?saved.template:'e01';
+      state.fontPair=FONT_PAIRS.some(x=>x.id===saved.fontPair)?saved.fontPair:'editorial';
+      state.heroPhoto=saved.heroPhoto||'';
+      state.storyPhoto=saved.storyPhoto||'';
+      by('p1').value=saved.p1||n[0];
+      by('p2').value=saved.p2||n[1];
+      by('date').value=saved.date||(/^\\d{4}-\\d{2}-\\d{2}$/.test(cfg.date||'')?cfg.date:'2027-09-12');
+      by('time').value=saved.time||cfg.time||'18:00';
+      by('venue').value=saved.venue||vp[0]||'Finca Los Olivos';
+      by('city').value=saved.city||vp[1]||'Murcia';
+      by('storyTitle').value=saved.storyTitle||'Nos encantará celebrarlo contigo.';
+      by('storyText').value=saved.storyText||'Hemos preparado este espacio para que tengas toda la información del día, sin perder el carácter de una invitación diseñada para nosotros.';
+      by('contactName').value=saved.contactName||'Ana';
+      by('contactPhone').value=saved.contactPhone||'';
+      by('whatsapp').value=digits(saved.whatsapp||'');
+      buildTemplateGrid(); buildFontGrid(); buildAgendaFields(); buildLocationFields(); renderPreview();
+
+      function setupPhotoControls(){
+        const inputs=[...document.querySelectorAll('input[type="file"]')];
+        if(!inputs.length) return;
+        const defs=[
+          {input:inputs[0],key:'heroPhoto',label:'Foto principal guardada'},
+          {input:inputs[1],key:'storyPhoto',label:'Foto secundaria guardada'}
+        ];
+        defs.filter(x=>x.input).forEach(def=>{
+          let host=def.input.closest('.upload,.photo-upload,.field,.card')||def.input.parentElement;
+          if(!host) return;
+          let ui=host.querySelector('[data-weddly-photo="'+def.key+'"]');
+          if(!ui){ui=document.createElement('div');ui.dataset.weddlyPhoto=def.key;def.input.insertAdjacentElement('afterend',ui)}
+          const redraw=()=>{
+            const src=state[def.key]||'';
+            ui.className=src?'weddly-photo-card':'weddly-photo-empty';
+            ui.innerHTML=src
+              ? '<img class="weddly-photo-thumb" alt="Vista previa"><div class="weddly-photo-meta"><div class="weddly-photo-status">'+def.label+'</div><div class="weddly-photo-actions"><button type="button" data-change>Cambiar foto</button><button type="button" data-remove>Eliminar foto</button></div></div>'
+              : '<button type="button" data-change>Elegir foto</button>';
+            if(src){const im=ui.querySelector('img');if(im)im.src=src}
+            const change=ui.querySelector('[data-change]'); if(change) change.onclick=()=>def.input.click();
+            const remove=ui.querySelector('[data-remove]'); if(remove) remove.onclick=()=>{state[def.key]='';try{def.input.value=''}catch{}renderPreview();redraw()};
+          };
+          def.input.addEventListener('change',()=>setTimeout(redraw,60));
+          redraw();
+        });
+      }
+      window.__weddlyRefreshPhotoControls=setupPhotoControls;
+      setupPhotoControls();
+
+      async function compressDataUrl(src){
+        if(!src||!/^data:image\\//i.test(src)||src.length<500000) return src||'';
+        return await new Promise(resolve=>{
+          const im=new Image();
+          im.onload=()=>{
+            const max=1100,scale=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');
+            c.width=Math.max(1,Math.round(im.width*scale)); c.height=Math.max(1,Math.round(im.height*scale));
+            c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+            let q=.76,out=c.toDataURL('image/jpeg',q);
+            while(out.length>650000&&q>.42){q-=.08;out=c.toDataURL('image/jpeg',q)}
+            resolve(out);
+          };
+          im.onerror=()=>resolve(src); im.src=src;
+        });
+      }
+      window.__weddlySaveEssential=async()=>{
+        if(!B.token||!B.memberToken) throw new Error('missing_access');
+        state.heroPhoto=await compressDataUrl(state.heroPhoto);
+        state.storyPhoto=await compressDataUrl(state.storyPhoto);
+        const phoneDigits=digits(by('whatsapp').value);
+        const p={
+          tier:'essential',template:state.template,fontPair:state.fontPair,
+          p1:(by('p1').value||'Persona 1').trim(),p2:(by('p2').value||'Persona 2').trim(),
+          date:by('date').value||'2027-01-01',time:by('time').value||'18:00',
+          venue:(by('venue').value||'Lugar de la ceremonia').trim(),city:(by('city').value||'').trim(),
+          heroPhoto:state.heroPhoto||'',storyPhoto:state.storyPhoto||'',
+          storyTitle:(by('storyTitle').value||'').trim(),storyText:(by('storyText').value||'').trim(),
+          agenda:(state.agenda||[]).map(x=>({...x})),locations:(state.locations||[]).map(x=>({...x})),
+          contactName:(by('contactName').value||'').trim(),contactPhone:(by('contactPhone').value||'').trim(),
+          whatsapp:phoneDigits?'https://wa.me/'+phoneDigits:''
+        };
+        const r=await fetch(B.persApi,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':B.memberToken},body:JSON.stringify({token:B.token,personalization:p})});
+        const x=await r.json().catch(()=>({})); if(!r.ok||!x.ok) throw new Error(x.error||'save_failed');
+        const nextCfg={...cfg,title:p.p1+' & '+p.p2,date:p.date,time:p.time,venue:[p.venue,p.city].filter(Boolean).join(', '),intro:cfg.intro||'Nos encantará celebrar este día contigo.',transportOffered:cfg.transportOffered!==false,questions:{meal:cfg.questions?.meal!==false,allergy:cfg.questions?.allergy!==false,transport:cfg.questions?.transport!==false,plusone:cfg.questions?.plusone!==false}};
+        const cr=await fetch(B.rsvpApi,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':B.memberToken},body:JSON.stringify({action:'config',token:B.token,config:nextCfg})});
+        const cx=await cr.json().catch(()=>({}));if(!cr.ok||!cx.ok)throw new Error(cx.error||'rsvp_sync_failed');
+        Object.assign(cfg,nextCfg);
+        try{localStorage.setItem('weddly_guests_design',JSON.stringify(x.personalization||p))}catch{}
+        window.__WEDDLY_BOOT.pers=x.personalization||p;
+        window.__WEDDLY_BOOT.cfg=nextCfg;
+        renderPreview();
+        setupPhotoControls();
+        return x.personalization||p;
+      };
+    })();`;
+    d.body.appendChild(s);
+    addChrome(d,w);
+  }
+
+  async function install(){
+    if(installed) return;
+    try{
+      const d=frame.contentDocument,w=frame.contentWindow;
+      if(!d?.body||!d.getElementById('tplGrid')) return;
+      installed=true;
+      await resolve();
+      inject(d,w);
+      bootEl.classList.add('hide');
+    }catch(e){bootEl.textContent='No se ha podido abrir la personalización.'}
+  }
+  frame.addEventListener('load',()=>{setTimeout(install,50);setTimeout(install,250)});
+  setTimeout(install,600);
+})();
+</script>
+</body>
+</html>
