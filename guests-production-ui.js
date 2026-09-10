@@ -1,7 +1,7 @@
 (()=>{
   const G=window.__GuestsProd;if(!G)return;
-  const SETTINGS_URL='weddly-settings.html?from=guests&v=122-v129-core';
-  const RSVP_URL='guests-rsvp-v110.html?v=122-v129-core';
+  const SETTINGS_URL='weddly-settings.html?from=guests&v=123-rsvp-ops';
+  const RSVP_URL='guests-rsvp-operations.html?v=123-rsvp-ops';
   const THEMES={
     nordic:{bg:'#F2EFE9',paper:'#FBF8F3',line:'#E4DED2',soft:'#EEF0E9',accent:'#6E7A5C',dark:'#525C43',ink:'#2C2A26'},
     blush:{bg:'#F5EEEC',paper:'#FFF9F7',line:'#E9DAD6',soft:'#F5E9E7',accent:'#B48683',dark:'#825F5D',ink:'#2C2A26'},
@@ -20,7 +20,7 @@
   function settings(d){d.getElementById('wsdAppSettings')?.remove();const b=d.getElementById('editWedding');if(!b)return;b.textContent='Ajustes';b.setAttribute('aria-label','Ajustes de la app');b.style.textDecoration='none';b.style.border='1px solid #d7d0c6';b.style.background='#fff';b.style.borderRadius='999px';b.style.padding='7px 11px'}
   function planPriority(d){const b=d.getElementById('planBtnGuest'),step=b?.closest('.step');if(step)step.classList.add('wsdPlanGuestHero')}
   function spanish(d){d.querySelectorAll('.brand').forEach(b=>{if(/Weddly Smart Design\s*·\s*Guests/i.test(b.textContent||''))b.textContent=(b.textContent||'').replace(/Guests/gi,'Invitados')});const back=d.getElementById('backGuests');if(back)back.textContent='← Volver'}
-  function hook(d){if(!d?.documentElement||d.documentElement.dataset.wsdV129Prod==='1')return;d.documentElement.dataset.wsdV129Prod='1';d.addEventListener('click',e=>{const t=e.target?.closest?.('button,a');if(!t)return;const label=(t.textContent||'').trim();if(t.dataset?.go){setTimeout(()=>setTopHash(t.dataset.go),0);return}if(t.id==='editWedding'||label==='Ajustes'){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();topGo(SETTINGS_URL);return}if(t.id==='rsvpBtn'||/^Gestionar RSVP$/i.test(label)){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();topGo(RSVP_URL)}},true)}
+  function hook(d){if(!d?.documentElement||d.documentElement.dataset.wsdV129Prod==='1')return;d.documentElement.dataset.wsdV129Prod='1';d.addEventListener('click',e=>{const t=e.target?.closest?.('button,a');if(!t)return;const label=(t.textContent||'').trim();if(t.dataset?.go){setTimeout(()=>setTopHash(t.dataset.go),0);return}if(t.id==='editWedding'||label==='Ajustes'){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();topGo(SETTINGS_URL);return}if(t.id==='rsvpBtn'||/^Gestionar RSVP$/i.test(label)||/^Envíos y respuestas$/i.test(label)){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();topGo(RSVP_URL)}},true)}
   function applyInitialHash(d){if(hashApplied)return;hashApplied=true;const id=(window.top.location.hash||'').slice(1);if(!['hoy','invitados','mesas','listados'].includes(id))return;const b=d.querySelector(`#nav button[data-go="${CSS.escape(id)}"]`);if(b&&!b.classList.contains('on'))b.click()}
   function patch(){try{const all=docs();all.forEach(d=>{applyTheme(d);spanish(d);hook(d)});const d=appDoc();if(!d)return;brand(d);settings(d);planPriority(d);applyInitialHash(d)}catch{}}
   G.f.addEventListener('load',()=>{hashApplied=false;setTimeout(patch,80);setTimeout(patch,300)});
