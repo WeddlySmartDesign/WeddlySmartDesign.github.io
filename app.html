@@ -42,9 +42,9 @@
 <div class="toast" id="toast" aria-live="polite"></div>
 <script>
 (()=>{
-const TOKEN='weddly_shared_wedding_token',PAY='weddly_pro_v7',THEME1='weddly_personal_theme_v51',THEME2='weddly_personal_theme_v20',LAST='weddly_suite_last_module';
+const TOKEN='weddly_shared_wedding_token',PAY='weddly_pro_v7',GUESTKEY='weddly_guests_qa_v67',THEME1='weddly_personal_theme_v51',THEME2='weddly_personal_theme_v20',LAST='weddly_suite_last_module';
 const payFrame=document.getElementById('paymentsFrame'),guestFrame=document.getElementById('guestsFrame'),auxFrame=document.getElementById('auxFrame'),loading=document.getElementById('loading'),error=document.getElementById('error'),toast=document.getElementById('toast'),tabs=[...document.querySelectorAll('.tab')];
-let current='payments',auxMode='',theme='',installPrompt=null,toastTimer=null;
+let current='payments',auxMode='',theme='',installPrompt=null,toastTimer=null,identityMark='';
 const loaded={payments:false,guests:false};
 function hasAccess(){try{return (localStorage.getItem(TOKEN)||'').length>=40}catch{return false}}
 function lang(){try{const x=JSON.parse(localStorage.getItem(PAY)||'null'),v=x?.settings?.lang;if(v==='es'||v==='en')return v}catch{}try{const v=localStorage.getItem('weddly_access_lang');if(v==='es'||v==='en')return v}catch{}return (navigator.language||'').toLowerCase().startsWith('es')?'es':'en'}
@@ -58,10 +58,22 @@ function route(view){if(view==='payments')return addSuite('payments.html');if(vi
 function setActive(view){current=view;tabs.forEach(b=>b.classList.toggle('on',b.dataset.view===view));if(view==='payments'||view==='guests')try{localStorage.setItem(LAST,view)}catch{}}
 function showPane(which){[payFrame,guestFrame,auxFrame].forEach(f=>f.classList.remove('on'));if(which==='payments')payFrame.classList.add('on');else if(which==='guests')guestFrame.classList.add('on');else auxFrame.classList.add('on')}
 function ensure(view){const f=view==='payments'?payFrame:guestFrame;if(!loaded[view]){loaded[view]=true;f.src=route(view)}return f}
+function readIdentity(){try{const x=JSON.parse(localStorage.getItem(PAY)||'null'),s=x?.settings||{};return{p1:String(s.partner1||'').trim(),p2:String(s.partner2||'').trim(),date:/^\d{4}-\d{2}-\d{2}$/.test(String(s.weddingDate||''))?String(s.weddingDate):''}}catch{return{p1:'',p2:'',date:''}}}
+function identitySignature(){const x=readIdentity();return JSON.stringify([x.p1,x.p2,x.date])}
+function escReg(s){return String(s||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+function syncGuestIdentity(forceRefresh=false){
+  const id=readIdentity();if(!id.p1||!id.p2)return false;let g;try{g=JSON.parse(localStorage.getItem(GUESTKEY)||'null')}catch{return false}if(!g||typeof g!=='object'||Array.isArray(g))return false;
+  g.meta=g.meta||{};const old=Array.isArray(g.meta.couple)&&g.meta.couple.length>=2?[String(g.meta.couple[0]||''),String(g.meta.couple[1]||'')]:['',''];let changed=old[0]!==id.p1||old[1]!==id.p2||String(g.meta.weddingDate||'')!==id.date;
+  if(old[0]&&old[1]&&(old[0]!==id.p1||old[1]!==id.p2)){Object.values(g.guests||{}).forEach(person=>{if(!person?.group)return;let v=String(person.group);v=v.replace(new RegExp(`^(Familia|Amigos) ${escReg(old[0])}$`,'i'),(_,k)=>`${k} ${id.p1}`);v=v.replace(new RegExp(`^(Familia|Amigos) ${escReg(old[1])}$`,'i'),(_,k)=>`${k} ${id.p2}`);person.group=v})}
+  g.meta.couple=[id.p1,id.p2];g.meta.weddingDate=id.date;try{localStorage.setItem(GUESTKEY,JSON.stringify(g))}catch{return false}
+  if((changed||forceRefresh)&&loaded.guests){try{const gp=guestFrame.contentWindow?.__GuestsProd;if(gp?.f&&gp.APP){gp.f.src=gp.APP+'&identity='+Date.now();window.dispatchEvent(new Event('guests-prod-open'))}else if(guestFrame.src)guestFrame.contentWindow.location.reload()}catch{}}
+  return changed
+}
+function watchIdentity(){const sig=identitySignature();if(sig!==identityMark){identityMark=sig;syncGuestIdentity(true);applyTheme();translate()}}
 function open(view,url=''){
   error.classList.remove('on');
   if(view==='payments'||view==='guests'){
-    auxMode='';setActive(view);const f=ensure(view);showPane(view);loading.classList.toggle('off',f.dataset.ready==='1');return;
+    if(view==='guests')syncGuestIdentity(false);auxMode='';setActive(view);const f=ensure(view);showPane(view);loading.classList.toggle('off',f.dataset.ready==='1');return;
   }
   auxMode=view;setActive(view==='settings'?'settings':'guests');showPane('aux');loading.classList.remove('off');auxFrame.dataset.ready='0';auxFrame.src=url?addSuite(url):route('settings');
 }
@@ -88,11 +100,11 @@ payFrame.addEventListener('load',()=>frameReady(payFrame,'payments'));guestFrame
 tabs.forEach(b=>b.onclick=()=>open(b.dataset.view));document.getElementById('retry').onclick=()=>open(current);
 addEventListener('message',e=>{if(e.origin!==location.origin||!e.data||e.data.type!=='wsd-suite-open')return;if(e.data.view==='settings')open('settings');else if(e.data.view==='guests-rsvp')open('guests-rsvp',e.data.url||'guests-rsvp-operations.html');else if(e.data.view==='guests-design')open('guests-design',e.data.url||'guests-rsvp-design-manage.html')});
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});addEventListener('appinstalled',()=>{installPrompt=null;showToast(copy[lang()].installed)});
-addEventListener('storage',e=>{if(e.key===THEME1||e.key===THEME2||e.key===PAY){applyTheme();translate();setTimeout(()=>{patchPayments();patchAux()},50)}});
-setInterval(()=>{applyTheme();translate();patchPayments();patchAux()},800);
+addEventListener('storage',e=>{if(e.key===THEME1||e.key===THEME2||e.key===PAY){applyTheme();translate();watchIdentity();setTimeout(()=>{patchPayments();patchAux()},50)}});
+setInterval(()=>{applyTheme();translate();watchIdentity();patchPayments();patchAux()},250);
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
 if(!hasAccess()){location.replace('access.html');return}
-applyTheme();translate();let first='payments';try{const x=localStorage.getItem(LAST);if(x==='payments'||x==='guests')first=x}catch{}open(first);setTimeout(()=>ensure(first==='payments'?'guests':'payments'),350);
+applyTheme();translate();identityMark=identitySignature();syncGuestIdentity(false);let first='payments';try{const x=localStorage.getItem(LAST);if(x==='payments'||x==='guests')first=x}catch{}open(first);setTimeout(()=>ensure(first==='payments'?'guests':'payments'),350);
 })();
 </script>
 </body>
