@@ -1,7 +1,7 @@
 (()=>{
   const G=window.__GuestsProd;if(!G)return;
   const GKEY='weddly_guests_qa_v67',OPS='guests-rsvp-operations-v2.html?v=130-units',DESIGN='guests-rsvp-design-manage.html';
-  const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
+  const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function docs(){const out=[];try{let d=G.f.contentDocument;for(let i=0;i<8&&d;i++){out.push(d);const f=d.querySelector('iframe');if(!f||!f.contentDocument)break;d=f.contentDocument}}catch{}return out}
   const appDoc=()=>docs().find(d=>d.getElementById('hoy')&&d.getElementById('invitados')&&d.getElementById('listados'))||null;
   function state(){try{return JSON.parse(localStorage.getItem(GKEY))||{guests:{},tables:{}}}catch{return{guests:{},tables:{}}}}
