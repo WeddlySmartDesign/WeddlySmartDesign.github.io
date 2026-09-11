@@ -20,7 +20,7 @@
     for(const p of people){
       const name=String(p.name||'').trim(),phone=String(p.phone||'').trim(),email=String(p.email||'').trim();
       if(!name){skipped++;continue}
-      const exists=all.some(g=>(phone&&digits(g.phone)===digits(phone))||(email&&norm(g.email)===norm(email))||(!phone&&!email&&norm(g.name)===norm(name)));
+      const exists=all.some(g=>norm(g.name)===norm(name)&&((phone&&digits(g.phone)===digits(phone))||(email&&norm(g.email)===norm(email))||(!phone&&!email)));
       if(exists){skipped++;continue}
       const id='g_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7);
       const g={name,rsvp:'pending',meal:'',mealRequired:true,table:'',transport:false,group:'',unitId:''};
