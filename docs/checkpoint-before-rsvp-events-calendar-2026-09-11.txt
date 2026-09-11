@@ -1,0 +1,13 @@
+Checkpoint before RSVP/events/calendar extension — 2026-09-11
+
+Frozen Guests production wrapper: guests-v116-production.html
+Frozen core: guests-v114-integrated.html (do not modify)
+Current public RSVP mobile: guests-rsvp-v106-mobile.html
+Current Essential invitation wrapper: guests-rsvp-essential-live-v2.html
+Current Edge Function: weddly-rsvp v10
+
+Implementation rule:
+- Do not modify frozen Guests core.
+- Keep v106 intact as immediate rollback.
+- Add new capabilities as public RSVP / access layers only.
+- Existing wedding-only flow must remain unchanged when optional event features are not enabled.
