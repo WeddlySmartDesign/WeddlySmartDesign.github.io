@@ -4,23 +4,18 @@ if(window.__wsdSuiteVisualCoherence)return;window.__wsdSuiteVisualCoherence=true
 const payFrame=document.getElementById('paymentsFrame'),guestFrame=document.getElementById('guestsFrame'),planningFrame=document.getElementById('planningFrame'),auxFrame=document.getElementById('auxFrame');
 if(!payFrame||!guestFrame||!planningFrame||!auxFrame)return;
 const lang=()=>document.documentElement.lang==='en'?'en':'es';
-const copy={es:{primary:'APP COMPLETA',payments:'Pagos',paySub:'PRESUPUESTO Y PAGOS',guests:'INVITADOS'},en:{primary:'FULL APP',payments:'Payments',paySub:'BUDGET & PAYMENTS',guests:'GUESTS'}};
+const copy={es:{payments:'Pagos',paySub:'PRESUPUESTO Y PAGOS',guests:'INVITADOS'},en:{payments:'Payments',paySub:'BUDGET & PAYMENTS',guests:'GUESTS'}};
 function addGlobalHierarchy(){
-  let label=document.getElementById('wsdPrimaryNavLabel');
-  const tabs=document.querySelector('.tabs');if(!tabs)return;
-  if(!label){label=document.createElement('div');label.id='wsdPrimaryNavLabel';label.className='wsd-primary-label';tabs.before(label)}
-  label.textContent=(copy[lang()]||copy.es).primary;
-  if(!document.getElementById('wsdSuiteHierarchyStyle')){
-    const s=document.createElement('style');s.id='wsdSuiteHierarchyStyle';s.textContent=`
-      .global{padding-bottom:10px!important;box-shadow:0 1px 0 var(--line)}
-      .brandrow{margin-bottom:7px!important}
-      .wsd-primary-label{max-width:760px;margin:0 auto 5px;font-size:9px;line-height:1;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);font-weight:850}
-      .tabs{padding:4px!important;background:var(--soft)!important;border:1px solid var(--line)!important;border-radius:14px!important;gap:3px!important}
-      .tab{border:0!important;background:transparent!important;color:var(--muted)!important;border-radius:10px!important;min-height:38px!important;padding:8px 4px!important;font-size:12px!important;font-weight:780!important;box-shadow:none!important}
-      .tab.on{background:var(--dark)!important;color:#fff!important;box-shadow:0 2px 8px rgba(44,42,38,.12)!important}
-      @media(min-width:760px){.tab{font-size:13px!important}.wsd-primary-label{font-size:10px}}
-    `;document.head.appendChild(s)
-  }
+  document.getElementById('wsdPrimaryNavLabel')?.remove();
+  if(document.getElementById('wsdSuiteHierarchyStyle'))return;
+  const s=document.createElement('style');s.id='wsdSuiteHierarchyStyle';s.textContent=`
+    .global{padding-bottom:10px!important;box-shadow:0 1px 0 var(--line)}
+    .brandrow{margin-bottom:9px!important}
+    .tabs{padding:4px!important;background:var(--soft)!important;border:1px solid var(--line)!important;border-radius:14px!important;gap:3px!important}
+    .tab{border:0!important;background:transparent!important;color:var(--muted)!important;border-radius:10px!important;min-height:38px!important;padding:8px 4px!important;font-size:12px!important;font-weight:780!important;box-shadow:none!important}
+    .tab.on{background:var(--dark)!important;color:#fff!important;box-shadow:0 2px 8px rgba(44,42,38,.12)!important}
+    @media(min-width:760px){.tab{font-size:13px!important}}
+  `;document.head.appendChild(s)
 }
 function ensureStyle(d,id,css){if(!d||d.getElementById(id))return;const s=d.createElement('style');s.id=id;s.textContent=css;d.head?.appendChild(s)}
 function patchPayments(){
@@ -60,17 +55,22 @@ function patchPayments(){
 }
 function patchGuests(){
   try{
-    const shell=guestFrame.contentDocument,inner=shell?.getElementById('app'),d=inner?.contentDocument;if(!d?.body)return;
+    const shell=guestFrame.contentDocument,inner=shell?.getElementById('app');if(!inner)return;
+    if(!inner.dataset.wsdVisualHook){inner.dataset.wsdVisualHook='1';inner.addEventListener('load',()=>setTimeout(patchGuests,40));}
+    const d=inner.contentDocument;if(!d?.body)return;
     ensureStyle(d,'wsd-suite-guests-coherence',`
       .wrap{max-width:680px!important;padding-top:20px!important}
-      .brand{font-size:11px!important;letter-spacing:.15em!important;color:#77716b!important;font-weight:800!important}
+      .brand{font-size:0!important;line-height:1!important;min-height:13px!important;color:#77716b!important}
+      .brand::after{content:var(--wsd-guests-label);font-size:11px!important;line-height:1!important;letter-spacing:.15em!important;color:#77716b!important;font-weight:800!important;text-transform:uppercase}
       h1{font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif!important;font-weight:500!important}
       .card,.stat,.step{border-radius:20px!important}
       .nav{background:#fff!important;padding:8px 6px calc(8px + env(safe-area-inset-bottom))!important;gap:4px!important}
       .nav button{min-height:48px!important;border-radius:13px!important;color:#2c2a26!important}
       .nav button.on{background:#eef0e9!important;color:#525c43!important}
     `);
-    const b=d.querySelector('.brand');if(b)b.textContent=(copy[lang()]||copy.es).guests;
+    const label=(copy[lang()]||copy.es).guests;
+    const cssValue='"'+label.replace(/"/g,'\\"')+'"';
+    if(d.documentElement.style.getPropertyValue('--wsd-guests-label')!==cssValue)d.documentElement.style.setProperty('--wsd-guests-label',cssValue);
   }catch{}
 }
 function patchPlanning(){
@@ -79,6 +79,7 @@ function patchPlanning(){
     ensureStyle(d,'wsd-suite-planning-coherence',`
       .app{max-width:680px!important}
       .top{padding-top:20px!important}
+      #eyebrow{display:none!important}
       .brand,.hero h1,.section h2,.sheetHead h2{font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif!important;font-weight:500!important}
       .nav{gap:8px!important}
       .nav button{border-radius:18px!important}
@@ -98,10 +99,11 @@ function patchSettings(){
   }catch{}
 }
 function patchAll(){addGlobalHierarchy();patchPayments();patchGuests();patchPlanning();patchSettings()}
-payFrame.addEventListener('load',()=>{setTimeout(patchPayments,50);setTimeout(patchPayments,350)});
-guestFrame.addEventListener('load',()=>{setTimeout(patchGuests,120);setTimeout(patchGuests,600)});
-planningFrame.addEventListener('load',()=>{setTimeout(patchPlanning,60);setTimeout(patchPlanning,350)});
-auxFrame.addEventListener('load',()=>{setTimeout(patchSettings,60);setTimeout(patchSettings,350)});
-new MutationObserver(()=>addGlobalHierarchy()).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
-patchAll();setInterval(patchAll,700);
+function retry(fn){[40,180,500,1200,2600].forEach(ms=>setTimeout(fn,ms))}
+payFrame.addEventListener('load',()=>retry(patchPayments));
+guestFrame.addEventListener('load',()=>retry(patchGuests));
+planningFrame.addEventListener('load',()=>retry(patchPlanning));
+auxFrame.addEventListener('load',()=>retry(patchSettings));
+new MutationObserver(()=>patchAll()).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+patchAll();retry(patchPayments);retry(patchGuests);retry(patchPlanning);retry(patchSettings);
 })();
