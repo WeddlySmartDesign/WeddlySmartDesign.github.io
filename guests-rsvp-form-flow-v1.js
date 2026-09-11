@@ -1,0 +1,10 @@
+(()=>{
+'use strict';
+const qs=new URLSearchParams(location.search),inSuite=qs.get('suite')==='1'||qs.get('_wsd_suite')==='1';
+function goOps(){if(inSuite&&parent!==window){parent.postMessage({type:'wsd-suite-open',view:'guests-rsvp',url:'guests-rsvp-operations-live.html?v=3'},location.origin);return}location.assign('guests-rsvp-operations-live.html?v=3')}
+function addStepper(){if(document.getElementById('wsdRsvpFlow'))return;const top=document.querySelector('.top');if(!top)return;const s=document.createElement('style');s.id='wsdRsvpFlowStyle';s.textContent='.wsd-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 18px}.wsd-flow span{border:1px solid var(--line);border-radius:999px;padding:8px 7px;text-align:center;font-size:11px;font-weight:800;color:var(--muted);background:#fff}.wsd-flow span.on{background:var(--dark);border-color:var(--dark);color:#fff}.wsd-flow span.done{background:var(--soft);color:var(--dark)}';document.head.appendChild(s);const f=document.createElement('div');f.id='wsdRsvpFlow';f.className='wsd-flow';f.innerHTML='<span class="done">✓ Invitación</span><span class="on">2 · RSVP</span><span>3 · Enviar</span>';top.insertAdjacentElement('afterend',f)}
+let waiting=false,navigated=false;
+function check(){if(!waiting||navigated)return;const fb=document.getElementById('feedback');if(fb?.classList.contains('ok')){navigated=true;setTimeout(goOps,260)}}
+function patch(){addStepper();const save=document.getElementById('save'),open=document.getElementById('openOps'),edit=document.getElementById('editBottom');if(save){save.textContent='Guardar y continuar a enviar →';if(save.dataset.wsdFlow!=='1'){save.dataset.wsdFlow='1';save.addEventListener('click',()=>{waiting=true;navigated=false;setTimeout(check,50);setTimeout(check,250);setTimeout(check,700);setTimeout(check,1600)})}}if(open){open.textContent='Ir a enviar invitaciones';open.style.display='none'}if(edit)edit.textContent='← Volver a la invitación'}
+const fb=document.getElementById('feedback');if(fb)new MutationObserver(check).observe(fb,{attributes:true,childList:true,characterData:true,subtree:true});patch();
+})();

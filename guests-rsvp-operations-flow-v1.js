@@ -1,0 +1,8 @@
+(()=>{
+'use strict';
+function lang(){try{const x=JSON.parse(localStorage.getItem('weddly_pro_v7')||'null'),v=x?.settings?.lang;if(v==='es'||v==='en')return v}catch{}try{const v=localStorage.getItem('weddly_access_lang');if(v==='es'||v==='en')return v}catch{}return(navigator.language||'').toLowerCase().startsWith('en')?'en':'es'}
+const T=(es,en)=>lang()==='en'?en:es;
+function addStepper(){if(document.getElementById('wsdOpsFlow'))return;const top=document.querySelector('.top');if(!top)return;const s=document.createElement('style');s.id='wsdOpsFlowStyle';s.textContent='.wsd-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 18px}.wsd-flow span{border:1px solid var(--line);border-radius:999px;padding:8px 7px;text-align:center;font-size:11px;font-weight:800;color:var(--muted);background:#fff}.wsd-flow span.on{background:var(--dark);border-color:var(--dark);color:#fff}.wsd-flow span.done{background:var(--soft);color:var(--dark)}';document.head.appendChild(s);const f=document.createElement('div');f.id='wsdOpsFlow';f.className='wsd-flow';f.innerHTML=`<span class="done">✓ ${T('Invitación','Invitation')}</span><span class="done">✓ RSVP</span><span class="on">3 · ${T('Enviar','Send')}</span>`;top.insertAdjacentElement('afterend',f)}
+function addEditRsvp(){const actions=document.querySelector('.topActions');if(!actions||document.getElementById('wsdEditRsvp'))return;const b=document.createElement('button');b.id='wsdEditRsvp';b.className='btn line';b.textContent=T('Editar RSVP','Edit RSVP');b.onclick=()=>location.assign('guests-rsvp-form-flow.html?v=1');actions.insertBefore(b,actions.lastElementChild||null)}
+[20,120,360].forEach(ms=>setTimeout(()=>{addStepper();addEditRsvp()},ms));
+})();
