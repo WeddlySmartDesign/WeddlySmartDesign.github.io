@@ -1,8 +1,8 @@
 (()=>{
 'use strict';
 if(window.__wsdSuiteVisualCoherence)return;window.__wsdSuiteVisualCoherence=true;
-const payFrame=document.getElementById('paymentsFrame'),guestFrame=document.getElementById('guestsFrame'),planningFrame=document.getElementById('planningFrame');
-if(!payFrame||!guestFrame||!planningFrame)return;
+const payFrame=document.getElementById('paymentsFrame'),guestFrame=document.getElementById('guestsFrame'),planningFrame=document.getElementById('planningFrame'),auxFrame=document.getElementById('auxFrame');
+if(!payFrame||!guestFrame||!planningFrame||!auxFrame)return;
 const lang=()=>document.documentElement.lang==='en'?'en':'es';
 const copy={es:{primary:'APP COMPLETA',payments:'Pagos',paySub:'PRESUPUESTO Y PAGOS',guests:'INVITADOS'},en:{primary:'FULL APP',payments:'Payments',paySub:'BUDGET & PAYMENTS',guests:'GUESTS'}};
 function addGlobalHierarchy(){
@@ -85,10 +85,23 @@ function patchPlanning(){
     `);
   }catch{}
 }
-function patchAll(){addGlobalHierarchy();patchPayments();patchGuests();patchPlanning()}
+function patchSettings(){
+  try{
+    const d=auxFrame.contentDocument;if(!d?.body||!d.getElementById('content')||!d.getElementById('save'))return;
+    ensureStyle(d,'wsd-suite-settings-coherence',`
+      .app{max-width:680px!important;background:var(--bg)!important;box-shadow:none!important;padding-top:20px!important}
+      .top{display:none!important}
+      .eyebrow{font-size:11px!important;letter-spacing:.15em!important;color:var(--muted)!important}
+      h1{font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif!important;font-size:40px!important;font-weight:500!important}
+      .card,.sync{border-radius:18px!important}
+    `);
+  }catch{}
+}
+function patchAll(){addGlobalHierarchy();patchPayments();patchGuests();patchPlanning();patchSettings()}
 payFrame.addEventListener('load',()=>{setTimeout(patchPayments,50);setTimeout(patchPayments,350)});
 guestFrame.addEventListener('load',()=>{setTimeout(patchGuests,120);setTimeout(patchGuests,600)});
 planningFrame.addEventListener('load',()=>{setTimeout(patchPlanning,60);setTimeout(patchPlanning,350)});
+auxFrame.addEventListener('load',()=>{setTimeout(patchSettings,60);setTimeout(patchSettings,350)});
 new MutationObserver(()=>addGlobalHierarchy()).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 patchAll();setInterval(patchAll,700);
 })();
