@@ -105,11 +105,11 @@ addEventListener('message',e=>{
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});addEventListener('appinstalled',()=>{installPrompt=null;showToast(copy[lang()].installed)});
 addEventListener('storage',e=>{if(e.key===THEME1||e.key===THEME2||e.key===PAY||e.key==='weddly_owner_demo_mode'){applyTheme();translate();watchIdentity();setTimeout(()=>{patchPayments();patchAux()},50)}});
 setInterval(()=>{applyTheme();translate();watchIdentity();patchPayments();patchAux()},250);
-if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js?v=58').catch(()=>{});
 if(!hasAccess()){location.replace('access.html');return}
 applyTheme();translate();identityMark=identitySignature();syncGuestIdentity(false);let first='payments';try{const x=localStorage.getItem(LAST);if(x==='payments'||x==='guests'||x==='planning')first=x}catch{}open(first);setTimeout(()=>{['payments','guests','planning'].filter(x=>x!==first).forEach((x,i)=>setTimeout(()=>ensure(x),i*250))},350);
 })();
 </script>
-<script src="suite-install-hotfix-v1.js?v=1"></script>
+<script src="suite-install-hotfix-v1.js?v=4"></script>
 </body>
 </html>
