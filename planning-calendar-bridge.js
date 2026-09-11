@@ -10,16 +10,13 @@ function selectedText(id){const el=$(id);return el?.selectedOptions?.[0]?.value?
 function formEvent(){const date=$('eventDate')?.value||'',time=$('eventTime')?.value||'',title=($('eventTitle')?.value||'').trim(),notes=($('eventNotes')?.value||'').trim();const provider=selectedText('eventProvider'),task=selectedText('eventTask'),owner=selectedText('eventOwner'),reminder=selectedText('eventReminder');return{date,time,title,notes,provider,task,owner,reminder}}
 function googleCalendarUrl(ev){if(!ev?.date||!ev?.title)return'';let dates='';if(ev.time){const start=new Date(`${ev.date}T${ev.time}:00`),end=new Date(start.getTime()+60*60000);dates=`${localBasic(start)}/${localBasic(end)}`}else dates=`${dayBasic(ev.date)}/${nextDayBasic(ev.date)}`;const details=[];if(ev.notes)details.push(ev.notes);if(ev.provider)details.push(`Proveedor: ${ev.provider}`);if(ev.task)details.push(`Tarea: ${ev.task}`);if(ev.owner)details.push(`Responsable: ${ev.owner}`);if(ev.reminder)details.push(`Aviso elegido en Weddly Smart Design: ${ev.reminder}`);const p=new URLSearchParams({action:'TEMPLATE',text:ev.title,dates,details:details.join('\n')});try{const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;if(tz)p.set('ctz',tz)}catch{}return `https://calendar.google.com/calendar/render?${p.toString()}`}
 function safeCalendarUrl(url){try{const u=new URL(url);return u.protocol==='https:'&&u.hostname==='calendar.google.com'?u.href:''}catch{return''}}
-function openGoogle(ev){const url=safeCalendarUrl(googleCalendarUrl(ev));if(!url)return;const host=window.parent;
- if(host&&host!==window){
-   try{host.location.assign(url);return}catch{}
-   try{host.postMessage({type:'wsd-open-external',url},location.origin);return}catch{}
-   return;
- }
- location.assign(url)
-}
+function navigateTop(url){url=safeCalendarUrl(url);if(!url)return false;const a=document.createElement('a');a.href=url;a.target='_top';a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();a.remove();return true}
+function isNewEvent(){return !!$('deleteEvent')?.hidden}
+function updateButton(){const b=$('calendarEvent');if(!b)return;const ev=formEvent(),valid=!!(ev.title&&ev.date),fresh=isNewEvent();b.hidden=false;b.disabled=!valid;b.setAttribute('aria-disabled',valid?'false':'true');b.textContent=document.documentElement.lang==='en'?(fresh?'Save + Google Calendar':'Add to Google Calendar'):(fresh?'Guardar + Google Calendar':'Añadir a Google Calendar');document.querySelectorAll('[data-event-cal]').forEach(x=>x.textContent='Google Calendar')}
+function saveThenOpen(){const ev=formEvent(),url=googleCalendarUrl(ev);if(!url){updateButton();return}const form=$('eventForm');if(form&&!form.checkValidity()){form.reportValidity();updateButton();return}if(form){try{form.requestSubmit($('saveEvent')||undefined)}catch{try{form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))}catch{}}}navigateTop(url)}
 function editButtonFor(id){return [...document.querySelectorAll('[data-event-edit]')].find(x=>x.dataset.eventEdit===id)||null}
-function refreshLabel(){const b=$('calendarEvent');if(b)b.textContent=document.documentElement.lang==='en'?'Add to Google Calendar':'Añadir a Google Calendar';document.querySelectorAll('[data-event-cal]').forEach(x=>x.textContent='Google Calendar')}
-document.addEventListener('click',e=>{const card=e.target?.closest?.('[data-event-cal]');if(card){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();const edit=editButtonFor(card.dataset.eventCal);if(edit){edit.click();refreshLabel();openGoogle(formEvent())}return}const main=e.target?.closest?.('#calendarEvent');if(main){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();openGoogle(formEvent())}},true);
-const sheet=$('eventSheet');if(sheet)new MutationObserver(()=>refreshLabel()).observe(sheet,{attributes:true,attributeFilter:['class']});new MutationObserver(()=>refreshLabel()).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});refreshLabel();
+document.addEventListener('click',e=>{const card=e.target?.closest?.('[data-event-cal]');if(card){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();const edit=editButtonFor(card.dataset.eventCal);if(edit){edit.click();updateButton();saveThenOpen()}return}const main=e.target?.closest?.('#calendarEvent');if(main){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();saveThenOpen()}},true);
+['input','change'].forEach(type=>document.addEventListener(type,e=>{if(e.target?.closest?.('#eventForm'))updateButton()},true));
+const sheet=$('eventSheet');if(sheet)new MutationObserver(()=>updateButton()).observe(sheet,{attributes:true,subtree:true,attributeFilter:['class','hidden']});new MutationObserver(()=>updateButton()).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+updateButton();
 })();
