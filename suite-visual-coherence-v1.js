@@ -24,7 +24,7 @@ function patchPayments(){
     const c=copy[lang()]||copy.es;
     ensureStyle(d,'wsd-suite-payments-coherence',`
       body{background:var(--bg)!important}
-      .app-container{max-width:680px!important;background:var(--bg)!important;box-shadow:none!important}
+      .app-container{max-width:680px!important;background:var(--bg)!important;box-shadow:none!important;padding-bottom:92px!important}
       .header{position:relative!important;top:auto!important;background:var(--bg)!important;border-bottom:0!important;padding:20px 22px 10px!important;align-items:flex-end!important}
       .brand-group{line-height:1.03!important}
       .brand-title{font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif!important;font-size:34px!important;font-weight:500!important;color:var(--ink)!important;letter-spacing:0!important}
@@ -42,7 +42,7 @@ function patchPayments(){
       .stat-card .val{font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif!important;font-size:27px!important;font-weight:500!important}
       .alert-card,.provider-card,.sync-card{border-radius:18px!important}
       h3{font-size:11px!important;letter-spacing:.12em!important;color:#77716b!important;border-bottom:0!important;padding-bottom:0!important}
-      nav{background:#fff!important;border-top:1px solid var(--paper-line)!important;padding:8px 6px calc(8px + env(safe-area-inset-bottom))!important;gap:4px!important}
+      nav{position:fixed!important;left:50%!important;right:auto!important;bottom:0!important;transform:translateX(-50%)!important;width:min(680px,100%)!important;max-width:680px!important;margin:0!important;background:rgba(255,255,255,.97)!important;backdrop-filter:blur(12px)!important;border-top:1px solid var(--paper-line)!important;padding:8px 6px calc(8px + env(safe-area-inset-bottom))!important;gap:4px!important;z-index:120!important;box-shadow:0 -7px 20px rgba(44,42,38,.05)!important}
       nav button{font-size:15px!important;font-weight:700!important;color:var(--ink)!important;min-height:48px!important;border-radius:13px!important;gap:0!important}
       nav button svg{display:none!important}
       nav button.active{background:var(--sage-light)!important;color:var(--sage-dark)!important}
@@ -60,8 +60,10 @@ function patchGuests(){
     const d=inner.contentDocument;if(!d?.body)return;
     ensureStyle(d,'wsd-suite-guests-coherence',`
       .wrap{max-width:680px!important;padding-top:20px!important}
-      .brand{font-size:0!important;line-height:1!important;min-height:13px!important;color:#77716b!important}
-      .brand::after{content:var(--wsd-guests-label);font-size:11px!important;line-height:1!important;letter-spacing:.15em!important;color:#77716b!important;font-weight:800!important;text-transform:uppercase}
+      .brand{font-size:0!important;line-height:1!important;min-height:13px!important;color:transparent!important;text-shadow:none!important}
+      .brand *{display:none!important;color:transparent!important;font-size:0!important}
+      .brand::before{content:var(--wsd-guests-label);display:block!important;font:800 11px/1 system-ui,-apple-system,"Segoe UI",sans-serif!important;letter-spacing:.15em!important;color:#77716b!important;text-transform:uppercase!important}
+      .brand::after{content:none!important;display:none!important}
       h1{font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif!important;font-weight:500!important}
       .card,.stat,.step{border-radius:20px!important}
       .nav{background:#fff!important;padding:8px 6px calc(8px + env(safe-area-inset-bottom))!important;gap:4px!important}
@@ -101,9 +103,5 @@ function patchSettings(){
 function patchAll(){addGlobalHierarchy();patchPayments();patchGuests();patchPlanning();patchSettings()}
 function retry(fn){[40,180,500,1200,2600].forEach(ms=>setTimeout(fn,ms))}
 payFrame.addEventListener('load',()=>retry(patchPayments));
-guestFrame.addEventListener('load',()=>retry(patchGuests));
-planningFrame.addEventListener('load',()=>retry(patchPlanning));
-auxFrame.addEventListener('load',()=>retry(patchSettings));
-new MutationObserver(()=>patchAll()).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
-patchAll();retry(patchPayments);retry(patchGuests);retry(patchPlanning);retry(patchSettings);
+guestFrame.addEventListener('load',()=>retry(patchGuests));planningFrame.addEventListener('load',()=>retry(patchPlanning));auxFrame.addEventListener('load',()=>retry(patchSettings));new MutationObserver(()=>patchAll()).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});patchAll();retry(patchPayments);retry(patchGuests);retry(patchPlanning);retry(patchSettings);
 })();
