@@ -1,0 +1,25 @@
+name: Validate import persistence
+on:
+  push:
+    branches:
+      - hotfix/import-persistence-people-all-2026-09-11
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: |
+          node --check guests-import-audit-v1.js
+          node --check guests-people-manager-v1.js
+      - name: Check loader and cache versions
+        run: |
+          grep -q 'guests-import-audit-v1.js?v=2' guests-v116-production.html
+          grep -q 'guests-people-manager-v1.js?v=2' guests-v116-production.html
+          grep -q "weddly-v61-suite" sw.js
+      - name: Check full-list manager and cloud persistence hooks
+        run: |
+          grep -q "Object.entries(S.guests||{})" guests-people-manager-v1.js
+          grep -q "data-f=\"declined\"" guests-people-manager-v1.js
+          grep -q "async function persist" guests-import-audit-v1.js
+          grep -q "Guardado y sincronizado con vuestra boda" guests-import-audit-v1.js
