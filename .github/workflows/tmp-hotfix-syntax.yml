@@ -1,0 +1,21 @@
+name: tmp-hotfix-syntax
+on:
+  push:
+    branches:
+      - hotfix/events-rsvp-invitation-regressions-2026-09-11
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          node --check guests-events-ux-hotfix-v1.js
+          node --check guests-events-invite-button-hotfix-v1.js
+          node --check guests-rsvp-services-hotfix-v1.js
+          node --check guests-invitation-flow-v1.js
+          node --check guests-rsvp-form-flow-v1.js
+          node --check guests-events-invite-addon-v1.js
