@@ -68,9 +68,55 @@ function installFastGuestNav(d){
   },true);
 }
 
+function bindGuestDirect(d){
+  if(!d?.body||d.documentElement.dataset.wsdGuestSwipeDirect==='5')return;
+  d.documentElement.dataset.wsdGuestSwipeDirect='5';ensureStyle(d);installFastGuestNav(d);
+  const nav=d.getElementById('nav');if(!nav)return;
+  const safeBlock='input,textarea,select,label,[contenteditable="true"],#nav,.sheet,.panel,.plan';
+  let g=null,suppressUntil=0;
+  try{d.documentElement.style.touchAction='pan-y';d.body.style.touchAction='pan-y'}catch{}
+  function buttons(){return [...nav.querySelectorAll('button[data-go]')].filter(visible)}
+  function activate(index,dir){
+    const bs=buttons();if(index<0||index>=bs.length)return false;
+    const id=bs[index].dataset.go,old=d.querySelector('.view.on');clean(old);
+    d.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id===id));
+    bs.forEach((b,i)=>b.classList.toggle('on',i===index));
+    const fresh=d.querySelector('.view.on');if(fresh)arrive(fresh,dir>0?16:-16);
+    try{d.defaultView.scrollTo({top:0,behavior:'auto'})}catch{}
+    suppressUntil=Date.now()+420;return true;
+  }
+  d.addEventListener('click',e=>{if(Date.now()<suppressUntil){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.()}},true);
+  d.addEventListener('touchstart',e=>{
+    if(e.touches.length!==1||modalOpen(d)){g=null;return}
+    const t=e.target;if(!(t instanceof d.defaultView.Element)||t.closest(safeBlock)){g=null;return}
+    const p=e.touches[0],w=d.defaultView.innerWidth||d.documentElement.clientWidth||0;if(p.clientX<16||p.clientX>w-16){g=null;return}
+    const bs=buttons();let i=bs.findIndex(b=>b.classList.contains('on'));if(i<0)i=0;
+    const view=d.querySelector('.view.on');if(!view){g=null;return}
+    g={x:p.clientX,y:p.clientY,i,view,axis:'',dx:0,done:false};
+  },{passive:true});
+  d.addEventListener('touchmove',e=>{
+    if(!g||g.done||e.touches.length!==1)return;
+    const p=e.touches[0],dx=p.clientX-g.x,dy=p.clientY-g.y,ax=Math.abs(dx),ay=Math.abs(dy);
+    if(!g.axis){if(ax<2&&ay<2)return;if(ay>ax*1.28){g.axis='v';clean(g.view);return}g.axis='h'}
+    if(g.axis!=='h')return;
+    e.preventDefault();suppressUntil=Date.now()+420;g.dx=dx;
+    const dir=dx<0?1:-1,ni=g.i+dir,valid=ni>=0&&ni<buttons().length;
+    g.view.classList.add('wsd-swipe-live');g.view.style.transform=`translate3d(${valid?Math.max(-58,Math.min(58,dx)):dx*.16}px,0,0)`;
+    if(valid&&ax>=18){const s=g;g.done=true;g=null;activate(s.i+dir,dir)}
+  },{passive:false});
+  function finish(e,cancel=false){
+    if(!g)return;const s=g;g=null;if(cancel||s.axis!=='h'){clean(s.view);return}
+    const p=e?.changedTouches?.[0],dx=p?p.clientX-s.x:s.dx,dir=dx<0?1:-1,ni=s.i+dir;
+    if(Math.abs(dx)>=10&&activate(ni,dir))return;
+    s.view.style.transition='transform .07s ease-out';s.view.style.transform='translate3d(0,0,0)';setTimeout(()=>clean(s.view),85);
+  }
+  d.addEventListener('touchend',e=>finish(e,false),{passive:true});
+  d.addEventListener('touchcancel',e=>finish(e,true),{passive:true});
+}
+
 function bindPayments(){try{const d=payFrame.contentDocument;if(!d?.body)return;bind(d,()=>[...d.querySelectorAll('nav button')].filter(b=>b.id!=='nav-settings'),'active',()=>d.querySelector('.view.active'))}catch{}}
 function bindPlanning(){try{const d=planningFrame.contentDocument;if(!d?.body)return;bind(d,()=>[...d.querySelectorAll('.nav button[data-view]')],'on',()=>d.querySelector('.view.on'),{commit:22,finish:15,start:4,ratio:1.02})}catch{}}
-function bindGuests(){try{const shell=guestFrame.contentDocument,inner=shell?.getElementById('app');if(!inner)return;if(!inner.dataset.wsdSwipeHook){inner.dataset.wsdSwipeHook='1';inner.addEventListener('load',()=>setTimeout(bindGuests,25))}const d=inner.contentDocument;if(!d?.body)return;installFastGuestNav(d);bind(d,()=>[...d.querySelectorAll('.nav button[data-go]')],'on',()=>d.querySelector('.view.on'),{edge:18,start:2,commit:14,finish:10,ratio:1,maxMove:44,animate:false})}catch{}}
-function retry(fn){[25,90,220,520].forEach(ms=>setTimeout(fn,ms))}
+function bindGuests(){try{const shell=guestFrame.contentDocument,inner=shell?.getElementById('app');if(!inner)return;if(!inner.dataset.wsdSwipeHook5){inner.dataset.wsdSwipeHook5='1';inner.addEventListener('load',()=>setTimeout(bindGuests,20))}const d=inner.contentDocument;if(!d?.body)return;bindGuestDirect(d)}catch{}}
+function retry(fn){[20,70,180,420].forEach(ms=>setTimeout(fn,ms))}
 payFrame.addEventListener('load',()=>retry(bindPayments));planningFrame.addEventListener('load',()=>retry(bindPlanning));guestFrame.addEventListener('load',()=>retry(bindGuests));retry(bindPayments);retry(bindPlanning);retry(bindGuests);
 })();
