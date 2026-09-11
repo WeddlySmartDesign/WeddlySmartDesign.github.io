@@ -1,0 +1,20 @@
+(()=>{
+'use strict';
+let busy=false;
+function lang(){return (document.documentElement.lang||'es').toLowerCase().startsWith('en')?'en':'es'}
+function escICS(v){return String(v??'').replace(/\\/g,'\\\\').replace(/\r?\n/g,'\\n').replace(/;/g,'\\;').replace(/,/g,'\\,')}
+function localStamp(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('')+'T'+[String(d.getHours()).padStart(2,'0'),String(d.getMinutes()).padStart(2,'0'),'00'].join('')}
+function utcStamp(){return new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z$/,'Z')}
+function dayStamp(s){return String(s||'').replace(/-/g,'')}
+function nextDayStamp(s){const [y,m,d]=String(s||'').split('-').map(Number),x=new Date(y,m-1,d+1,12);return [x.getFullYear(),String(x.getMonth()+1).padStart(2,'0'),String(x.getDate()).padStart(2,'0')].join('')}
+function cleanupSpanish(){if(lang()!=='es')return;const sub=document.getElementById('suggestSub');if(sub)sub.textContent='Fechas que ya existen en vuestra boda y podéis llevar a la agenda con un toque.';document.querySelectorAll('#suggestList .suggestion .source').forEach(x=>{const s=(x.textContent||'').trim();x.textContent=s.replace(/^(Payments|Guests|Pagos|Invitados)\s*·\s*/i,'')});document.querySelectorAll('.card.event .badge.signal').forEach(x=>{const s=(x.textContent||'').trim();if(/^(Payments|Guests|Pagos|Invitados)$/i.test(s))x.style.display='none'});}
+function preWeddingICS(){const date=document.getElementById('wsde-date')?.value||'',time=document.getElementById('wsde-time')?.value||'',name=(document.getElementById('wsde-name')?.value||'').trim()||(lang()==='en'?'Pre-wedding':'Preboda'),venue=(document.getElementById('wsde-venue')?.value||'').trim(),address=(document.getElementById('wsde-address')?.value||'').trim();if(!date)return'';const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Weddly Smart Design//Wedding Events//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH','BEGIN:VEVENT',`UID:${crypto.randomUUID?crypto.randomUUID():Date.now()}@weddlysmartdesign`,`DTSTAMP:${utcStamp()}`,`SUMMARY:${escICS(name)}`];if(time){const s=new Date(`${date}T${time}:00`),e=new Date(s.getTime()+4*3600000);lines.push(`DTSTART:${localStamp(s)}`,`DTEND:${localStamp(e)}`)}else{lines.push(`DTSTART;VALUE=DATE:${dayStamp(date)}`,`DTEND;VALUE=DATE:${nextDayStamp(date)}`)}const location=[venue,address].filter(Boolean).join(', ');if(location)lines.push(`LOCATION:${escICS(location)}`);if(venue)lines.push(`DESCRIPTION:${escICS(venue)}`);lines.push('END:VEVENT','END:VCALENDAR');return lines.join('\r\n')+'\r\n'}
+function downloadPreWedding(){const text=preWeddingICS();if(!text)return false;const name=(document.getElementById('wsde-name')?.value||'Preboda').trim()||'Preboda',blob=new Blob([text],{type:'text/calendar;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name.replace(/[^\p{L}\p{N}._-]+/gu,'-').replace(/^-+|-+$/g,'').slice(0,80)+'.ics';a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1200);return true}
+function patchPreWedding(){const a=document.getElementById('wsde-calendar');if(!a)return;a.textContent=lang()==='en'?'Add pre-wedding to calendar':'Añadir Preboda al calendario';a.removeAttribute('href');a.removeAttribute('target');a.style.opacity=document.getElementById('wsde-date')?.value?'1':'.45';a.setAttribute('role','button');}
+function apply(){if(busy)return;busy=true;try{cleanupSpanish();patchPreWedding()}finally{busy=false}}
+document.addEventListener('click',e=>{const a=e.target?.closest?.('#wsde-calendar');if(!a)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();if(!downloadPreWedding())patchPreWedding()},true);
+['input','change'].forEach(type=>document.addEventListener(type,e=>{if(e.target?.closest?.('#wsde-pane-event'))patchPreWedding()},true));
+new MutationObserver(()=>queueMicrotask(apply)).observe(document.body,{childList:true,subtree:true,characterData:true});
+new MutationObserver(()=>apply()).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+apply();
+})();
