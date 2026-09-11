@@ -1,0 +1,70 @@
+name: Validate real wedding feedback
+on:
+  push:
+    branches:
+      - feature/real-wedding-feedback-2026-09-11
+jobs:
+  static-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check standalone JavaScript syntax
+        run: |
+          set -e
+          for f in \
+            guests-import-audit-v1.js \
+            guests-mobile-compat-hotfix-v1.js \
+            guests-rsvp-share-primary-v1.js \
+            suite-wedding-services-v1.js \
+            guests-service-visibility-v1.js \
+            guests-invitation-editor-feedback-inner-v1.js \
+            guests-invitation-feedback-v1.js; do
+            node --check "$f"
+          done
+      - name: Check inline JavaScript syntax in changed HTML
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const files = [
+            'guests-rsvp-public-clean.html',
+            'guests-rsvp-v113-single-flex.html',
+            'guests-rsvp-v112-wedding-flex.html',
+            'guests-rsvp-form-flex.html',
+            'guests-rsvp-design-manage.html',
+            'guests-rsvp-operations-live.html',
+            'guests-v116-production.html'
+          ];
+          let checked = 0;
+          for (const file of files) {
+            const html = fs.readFileSync(file, 'utf8');
+            const re = /<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi;
+            let m, n = 0;
+            while ((m = re.exec(html))) {
+              const code = m[1].trim();
+              if (!code) continue;
+              n++;
+              try { new vm.Script(code, { filename: `${file}#script-${n}` }); }
+              catch (e) { console.error(e.stack || e); process.exit(1); }
+              checked++;
+            }
+          }
+          console.log(`Validated ${checked} inline scripts.`);
+          NODE
+      - name: Reject conflict markers
+        run: |
+          ! grep -R -n -E '^(<<<<<<<|=======|>>>>>>>)' \
+            guests-import-audit-v1.js \
+            guests-mobile-compat-hotfix-v1.js \
+            guests-rsvp-share-primary-v1.js \
+            suite-wedding-services-v1.js \
+            guests-service-visibility-v1.js \
+            guests-invitation-editor-feedback-inner-v1.js \
+            guests-invitation-feedback-v1.js \
+            guests-rsvp-public-clean.html \
+            guests-rsvp-v113-single-flex.html \
+            guests-rsvp-v112-wedding-flex.html \
+            guests-rsvp-form-flex.html \
+            guests-rsvp-design-manage.html \
+            guests-rsvp-operations-live.html \
+            guests-v116-production.html
