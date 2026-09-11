@@ -1,0 +1,63 @@
+name: Validate real wedding feedback
+on:
+  push:
+    branches:
+      - feature/real-wedding-feedback-2026-09-11
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: |
+          set -e
+          for f in \
+            guests-import-audit-v1.js \
+            guests-mobile-compat-hotfix-v1.js \
+            guests-rsvp-share-primary-v1.js \
+            suite-wedding-services-v1.js \
+            guests-service-visibility-v1.js \
+            guests-invitation-editor-feedback-inner-v1.js \
+            guests-invitation-feedback-v1.js; do
+            node --check "$f"
+          done
+      - name: Check inline scripts
+        run: |
+          node <<'NODE'
+          const fs=require('fs'),vm=require('vm');
+          const files=['guests-rsvp-public-clean.html','guests-rsvp-v114-single-flex.html','guests-rsvp-v115-wedding-flex-live.html','guests-rsvp-v112-wedding-flex.html','guests-rsvp-form-flex.html','guests-rsvp-design-manage.html','guests-rsvp-operations-live.html','guests-v116-production.html'];
+          let checked=0;
+          for(const file of files){const html=fs.readFileSync(file,'utf8'),re=/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi;let m,n=0;while((m=re.exec(html))){const code=m[1].trim();if(!code)continue;n++;new vm.Script(code,{filename:`${file}#script-${n}`});checked++}}
+          console.log(`Validated ${checked} inline scripts.`);
+          NODE
+      - name: Test 107-row import and duplicate safety
+        run: |
+          node <<'NODE'
+          const fs=require('fs'),vm=require('vm');
+          let src=fs.readFileSync('guests-import-audit-v1.js','utf8');
+          const pos=src.lastIndexOf('})();');
+          if(pos<0)throw new Error('test hook not found');
+          src=src.slice(0,pos)+'globalThis.__wsdImportTest={parse,importRows};'+src.slice(pos);
+          function store(){const m=new Map();return{getItem:k=>m.has(k)?m.get(k):null,setItem:(k,v)=>m.set(k,String(v)),removeItem:k=>m.delete(k)}}
+          const sandbox={window:{__GuestsProd:{KEY:'test-guests',f:{addEventListener(){}}}},localStorage:store(),document:{getElementById(){return null}},addEventListener(){},setInterval(){return 0},setTimeout(){return 0},location:{reload(){}},console,URL,Blob};sandbox.globalThis=sandbox;vm.createContext(sandbox);new vm.Script(src).runInContext(sandbox);
+          const {parse,importRows}=sandbox.__wsdImportTest;
+          const names=Array.from({length:107},(_,i)=>`Persona ${i+1}`);
+          let p=parse(names.join('\n'));if(p.detected!==107)throw new Error(`plain list detected ${p.detected}, expected 107`);let r=importRows(p,{group:'',subgroup:''});if(r.added!==107||r.skipped.length)throw new Error(`plain import ${JSON.stringify(r)}`);
+          sandbox.localStorage=store();sandbox.window.__GuestsProd.KEY='test-header';const header=['Nombre',...names].join('\n');p=parse(header);if(p.detected!==107)throw new Error(`header list detected ${p.detected}, expected 107`);
+          sandbox.localStorage=store();
+          const rows='Nombre;Teléfono\nAlex García;600000001\nAlex García;600000002\nLaura Pérez;600000003\nMario Pérez;600000003';p=parse(rows);r=importRows(p,{group:'',subgroup:''});if(r.added!==4)throw new Error(`duplicate safety failed: ${JSON.stringify(r)}`);
+          console.log('107-row and duplicate-safety import tests passed.');
+          NODE
+      - name: Check final route targets and conflict markers
+        run: |
+          set -e
+          test -f guests-rsvp-v114-single-flex.html
+          test -f guests-rsvp-v115-wedding-flex-live.html
+          grep -q 'guests-rsvp-v114-single-flex.html' guests-rsvp-public-clean.html
+          grep -q 'guests-rsvp-v115-wedding-flex-live.html' guests-rsvp-public-clean.html
+          grep -q 'guests-rsvp-operations-live.html?v=137' guests-mobile-compat-hotfix-v1.js
+          ! grep -R -n -E '^(<<<<<<<|=======|>>>>>>>)' \
+            guests-import-audit-v1.js guests-mobile-compat-hotfix-v1.js guests-rsvp-share-primary-v1.js \
+            suite-wedding-services-v1.js guests-service-visibility-v1.js guests-invitation-editor-feedback-inner-v1.js \
+            guests-rsvp-public-clean.html guests-rsvp-v114-single-flex.html guests-rsvp-v115-wedding-flex-live.html \
+            guests-rsvp-v112-wedding-flex.html guests-rsvp-form-flex.html guests-rsvp-design-manage.html guests-rsvp-operations-live.html
