@@ -92,7 +92,16 @@ function frameReady(f,kind){f.dataset.ready='1';if((kind===current)||(kind==='au
 payFrame.addEventListener('load',()=>frameReady(payFrame,'payments'));guestFrame.addEventListener('load',()=>frameReady(guestFrame,'guests'));planningFrame.addEventListener('load',()=>frameReady(planningFrame,'planning'));auxFrame.addEventListener('load',()=>frameReady(auxFrame,'aux'));
 [payFrame,guestFrame,planningFrame,auxFrame].forEach(f=>f.addEventListener('error',()=>{if(f.classList.contains('on')){loading.classList.add('off');error.classList.add('on')}}));
 tabs.forEach(b=>b.onclick=()=>open(b.dataset.view));document.getElementById('retry').onclick=()=>open(current);
-addEventListener('message',e=>{if(e.origin!==location.origin||!e.data||e.data.type!=='wsd-suite-open')return;if(e.data.view==='settings')open('settings');else if(e.data.view==='guests-rsvp')open('guests-rsvp',e.data.url||'guests-rsvp-operations-v2.html?v=130-units');else if(e.data.view==='guests-design')open('guests-design',e.data.url||'guests-rsvp-design-manage.html')});
+addEventListener('message',e=>{
+  if(e.origin!==location.origin||!e.data)return;
+  if(e.data.type==='wsd-open-external'){
+    if(e.source!==planningFrame.contentWindow)return;
+    try{const u=new URL(String(e.data.url||''));if(u.protocol==='https:'&&u.hostname==='calendar.google.com')location.assign(u.href)}catch{}
+    return;
+  }
+  if(e.data.type!=='wsd-suite-open')return;
+  if(e.data.view==='settings')open('settings');else if(e.data.view==='guests-rsvp')open('guests-rsvp',e.data.url||'guests-rsvp-operations-v2.html?v=130-units');else if(e.data.view==='guests-design')open('guests-design',e.data.url||'guests-rsvp-design-manage.html');
+});
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});addEventListener('appinstalled',()=>{installPrompt=null;showToast(copy[lang()].installed)});
 addEventListener('storage',e=>{if(e.key===THEME1||e.key===THEME2||e.key===PAY||e.key==='weddly_owner_demo_mode'){applyTheme();translate();watchIdentity();setTimeout(()=>{patchPayments();patchAux()},50)}});
 setInterval(()=>{applyTheme();translate();watchIdentity();patchPayments();patchAux()},250);
