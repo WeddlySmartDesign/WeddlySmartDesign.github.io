@@ -1,4 +1,4 @@
-const C='weddly-v60-suite';
+const C='weddly-v61-suite';
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['/','/app.html','/manifest.webmanifest','/manifest-suite.webmanifest','/icon.svg','/icon-192.png','/icon-512.png'])).catch(()=>{}));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))));self.clients.claim()});
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const u=new URL(e.request.url);if(u.origin!==self.location.origin){e.respondWith(fetch(e.request));return}const fresh=e.request.mode==='navigate'||/\.(?:html|js|css)$/.test(u.pathname);e.respondWith(fetch(e.request,fresh?{cache:'no-store'}:undefined).then(r=>{if(r.ok){const q=r.clone();caches.open(C).then(c=>c.put(e.request,q)).catch(()=>{})}return r}).catch(()=>caches.match(e.request).then(r=>r||(e.request.mode==='navigate'?caches.match('/app.html').then(x=>x||caches.match('/')):undefined))))});
