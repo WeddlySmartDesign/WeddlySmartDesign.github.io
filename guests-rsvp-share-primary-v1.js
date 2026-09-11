@@ -1,0 +1,12 @@
+(()=>{
+'use strict';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',TOKEN='weddly_shared_wedding_token',GKEY='weddly_guests_qa_v67';
+let publicToken='';
+function guests(){try{const s=JSON.parse(localStorage.getItem(GKEY)||'{}')||{};return Object.entries(s.guests||{}).map(([id,g])=>({id,...g}))}catch{return[]}}
+async function token(){if(publicToken)return publicToken;try{const r=await fetch(API+'?manage=1',{headers:{'x-weddly-token':localStorage.getItem(TOKEN)||''},cache:'no-store'}),x=await r.json();if(r.ok&&x?.ok)publicToken=x.forms?.[0]?.public_token||''}catch{}return publicToken}
+function rowId(el){return el.closest('.guest')?.querySelector('[data-recipient]')?.dataset.recipient||''}
+function link(id,t){const all=guests(),g=all.find(x=>x.id===id);if(!g)return'';const base=new URL(location.origin+'/guests-rsvp-v105.html');base.searchParams.set('guest','1');base.searchParams.set('t',t);base.searchParams.set('g',id);if(g.name)base.searchParams.set('n',g.name);if(g.invitationUnitId){const ms=all.filter(x=>x.invitationUnitId===g.invitationUnitId&&x.invitationRecipientId===id);if(ms.length>1){base.searchParams.delete('g');base.searchParams.delete('n');base.searchParams.set('u',g.invitationUnitId)}}return base.href}
+async function shareButton(b){const id=rowId(b),t=await token(),url=link(id,t);if(!url)return;const name=guests().find(x=>x.id===id)?.name||'';try{if(navigator.share){await navigator.share({title:'Invitación de boda',text:name?`Invitación para ${name}`:'Nuestra invitación de boda',url});return}await navigator.clipboard.writeText(url);b.textContent='Enlace copiado';setTimeout(()=>b.textContent='Compartir invitación',1400)}catch(e){if(e?.name!=='AbortError')try{await navigator.clipboard.writeText(url)}catch{prompt('Copia este enlace:',url)}}}
+function patch(){document.querySelectorAll('.sendBox').forEach(box=>{const actions=box.querySelector('.actions');if(actions)actions.style.display='none'});document.querySelectorAll('.wsdrf-share').forEach(b=>{if(b.dataset.wsdPrimary==='1')return;b.dataset.wsdPrimary='1';b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();shareButton(b)},true)})}
+new MutationObserver(patch).observe(document.documentElement,{childList:true,subtree:true});setInterval(patch,1000);patch();
+})();
