@@ -89,4 +89,4 @@
   auxFrame.addEventListener('load',()=>{setTimeout(()=>{patchSettings();patchEssentialSave()},80);setTimeout(()=>{patchSettings();patchEssentialSave()},400)});
   setInterval(()=>{hidePaymentsInstall();patchSettings();patchEssentialSave()},500);
 })();
-(()=>{if(document.getElementById('wsdSuiteVisualLoader'))return;const s=document.createElement('script');s.id='wsdSuiteVisualLoader';s.src='suite-visual-coherence-v1.js?v=1';document.head.appendChild(s)})();
+(()=>{if(document.getElementById('wsdSuiteVisualLoader'))return;const s=document.createElement('script');s.id='wsdSuiteVisualLoader';s.src='suite-visual-coherence-v1.js?v=2';document.head.appendChild(s)})();
