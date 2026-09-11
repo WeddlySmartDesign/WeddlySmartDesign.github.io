@@ -2,7 +2,7 @@
   const G=window.__GuestsProd;if(!G)return;
   const KEY='weddly_guests_qa_v67';
   const SUITE=new URLSearchParams(location.search).get('suite')==='1'||new URLSearchParams(location.search).get('_wsd_suite')==='1';
-  const OPS='guests-rsvp-operations-v2.html?v=130-units';
+  const OPS='guests-rsvp-operations-live.html?v=137';
   const DESIGN='guests-rsvp-design-manage.html';
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const en=()=>{try{const x=JSON.parse(localStorage.getItem('weddly_pro_v7')||'null');if(x?.settings?.lang==='en')return true;if(x?.settings?.lang==='es')return false}catch{}try{return localStorage.getItem('weddly_access_lang')==='en'}catch{return false}};
