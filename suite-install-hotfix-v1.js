@@ -90,5 +90,6 @@
   setInterval(()=>{hidePaymentsInstall();patchSettings();patchEssentialSave()},500);
 })();
 (()=>{if(document.getElementById('wsdSuiteVisualLoader'))return;const s=document.createElement('script');s.id='wsdSuiteVisualLoader';s.src='suite-visual-coherence-v1.js?v=3';document.head.appendChild(s)})();
-(()=>{if(document.getElementById('wsdSuiteSwipeLoader'))return;const s=document.createElement('script');s.id='wsdSuiteSwipeLoader';s.src='suite-swipe-navigation-v1.js?v=3';document.head.appendChild(s)})();
+(()=>{if(document.getElementById('wsdSuiteSwipeLoader'))return;const s=document.createElement('script');s.id='wsdSuiteSwipeLoader';s.src='suite-swipe-navigation-v1.js?v=4';document.head.appendChild(s)})();
 (()=>{if(document.getElementById('wsdPlanningBottomNavLoader'))return;const s=document.createElement('script');s.id='wsdPlanningBottomNavLoader';s.src='suite-planning-bottomnav-v1.js?v=1';document.head.appendChild(s)})();
+(()=>{if(document.getElementById('wsdPlanningCompactLoader'))return;const s=document.createElement('script');s.id='wsdPlanningCompactLoader';s.src='suite-planning-compact-v1.js?v=1';document.head.appendChild(s)})();
