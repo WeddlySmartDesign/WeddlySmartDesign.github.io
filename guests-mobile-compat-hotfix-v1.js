@@ -12,6 +12,7 @@
   function read(){try{return JSON.parse(localStorage.getItem(KEY)||'null')||{guests:{},tables:{},meta:{}}}catch{return{guests:{},tables:{},meta:{}}}}
   function norm(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
   function digits(v){return String(v||'').replace(/\D/g,'')}
+  function refreshCore(){try{G.f.src=G.APP+'&contacts='+Date.now();window.dispatchEvent(new Event('guests-prod-open'))}catch{}}
   function importPeople(people){
     const S=read();S.guests=S.guests||{};
     const all=Object.values(S.guests);
@@ -26,7 +27,6 @@
       if(phone)g.phone=phone;if(email)g.email=email;S.guests[id]=g;all.push(g);added++;
     }
     try{localStorage.setItem(KEY,JSON.stringify(S))}catch{return{added:0,skipped:people.length,error:true}}
-    if(added){try{G.f.src=G.APP+'&contacts='+Date.now();window.dispatchEvent(new Event('guests-prod-open'))}catch{}}
     return{added,skipped,error:false};
   }
   function unfoldVcard(text){return String(text||'').replace(/\r\n[ \t]/g,'').replace(/\n[ \t]/g,'')}
@@ -44,7 +44,7 @@
   function resultSheet(d,res){
     const p=d.getElementById('panel'),sheet=d.getElementById('sheet');if(!p||!sheet)return;
     const l=en()?{tag:'CONTACTS',title:'Contacts added',msg:`${res.added} added · ${res.skipped} already existed or could not be read.`,done:'Done'}:{tag:'CONTACTOS',title:'Contactos añadidos',msg:`${res.added} añadidos · ${res.skipped} ya existían o no se pudieron leer.`,done:'Hecho'};
-    p.innerHTML=`<div class="sectiontag">${l.tag}</div><h2>${l.title}</h2><p class="small">${esc(l.msg)}</p><div class="actions one"><button class="btn" id="wsdContactsDone">${l.done}</button></div>`;sheet.classList.add('on');p.querySelector('#wsdContactsDone').onclick=()=>closeSheet(d);
+    p.innerHTML=`<div class="sectiontag">${l.tag}</div><h2>${l.title}</h2><p class="small">${esc(l.msg)}</p><div class="actions one"><button class="btn" id="wsdContactsDone">${l.done}</button></div>`;sheet.classList.add('on');p.querySelector('#wsdContactsDone').onclick=()=>{closeSheet(d);if(res.added)refreshCore()};
   }
   async function directContacts(d){
     try{
