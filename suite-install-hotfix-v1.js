@@ -61,9 +61,31 @@
     }catch{}
   }
 
+  function patchEssentialSave(){
+    try{
+      const outer=auxFrame.contentDocument,editor=outer?.getElementById('editor'),w=editor?.contentWindow,B=w?.__WEDDLY_BOOT;
+      if(!w||!B?.persApi||!B?.rsvpApi||!w.__weddlySaveEssential||w.__wsdEssentialSaveHotfix)return;
+      const nativeFetch=w.fetch.bind(w);let personalizationSaved=false;
+      w.fetch=async function(input,init){
+        const url=typeof input==='string'?input:input?.url||'',method=String(init?.method||(typeof input!=='string'?input?.method:'GET')||'GET').toUpperCase();
+        let action='';if(method==='POST'&&init?.body){try{action=JSON.parse(String(init.body))?.action||''}catch{}}
+        if(url===B.persApi&&method==='POST'){
+          const r=await nativeFetch(input,init);personalizationSaved=r.ok;return r;
+        }
+        if(url===B.rsvpApi&&method==='POST'&&action==='config'&&personalizationSaved){
+          personalizationSaved=false;
+          try{const r=await nativeFetch(input,init);if(r.ok)return r;console.warn('Weddly: RSVP config refresh failed after personalization was saved',r.status)}catch(e){console.warn('Weddly: RSVP config refresh failed after personalization was saved',e)}
+          return new w.Response(JSON.stringify({ok:true,resilient:true}),{status:200,headers:{'Content-Type':'application/json'}});
+        }
+        return nativeFetch(input,init);
+      };
+      w.__wsdEssentialSaveHotfix=true;
+    }catch{}
+  }
+
   addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;patchSettings()});
   addEventListener('appinstalled',()=>{deferredPrompt=null;patchSettings()});
   paymentsFrame.addEventListener('load',()=>{setTimeout(hidePaymentsInstall,60);setTimeout(hidePaymentsInstall,350)});
-  auxFrame.addEventListener('load',()=>{setTimeout(patchSettings,60);setTimeout(patchSettings,350)});
-  setInterval(()=>{hidePaymentsInstall();patchSettings()},500);
+  auxFrame.addEventListener('load',()=>{setTimeout(()=>{patchSettings();patchEssentialSave()},80);setTimeout(()=>{patchSettings();patchEssentialSave()},400)});
+  setInterval(()=>{hidePaymentsInstall();patchSettings();patchEssentialSave()},500);
 })();
