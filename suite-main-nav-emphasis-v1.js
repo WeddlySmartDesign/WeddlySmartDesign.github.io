@@ -40,3 +40,4 @@
   `;
   document.head.appendChild(s);
 })();
+(()=>{if(document.getElementById('wsdWeddingServicesLoader'))return;const s=document.createElement('script');s.id='wsdWeddingServicesLoader';s.src='suite-wedding-services-v1.js?v=1';document.head.appendChild(s)})();
