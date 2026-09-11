@@ -15,7 +15,7 @@ main{max-width:560px;margin:auto;padding:32px}
 (()=> {
   const RSVP_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp';
   const PERS_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-personalization';
-  const qs=new URLSearchParams(location.search),token=qs.get('t')||'';
+  const qs=new URLSearchParams(location.search),token=qs.get('t')||'',unitId=qs.get('u')||'';
   const templates={
     e01:'guests-rsvp-essential-01.html',
     e02:'guests-rsvp-essential-02.html',
@@ -66,9 +66,16 @@ main{max-width:560px;margin:auto;padding:32px}
     const re=new RegExp('const '+name+' = '+open+'[\\s\\S]*?\\n  '+close+';');
     return h.replace(re,'const '+name+' = '+JSON.stringify(value)+';');
   }
-  function patch(h,w,f){
+  function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+  function nextDay(s){const [y,m,d]=String(s||'').split('-').map(Number),x=new Date(y,m-1,d+1,12);return [x.getFullYear(),String(x.getMonth()+1).padStart(2,'0'),String(x.getDate()).padStart(2,'0')].join('')}
+  function localBasic(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('')+'T'+[String(d.getHours()).padStart(2,'0'),String(d.getMinutes()).padStart(2,'0'),'00'].join('')}
+  function calendarUrl(e){if(!e?.date)return'';let dates='';if(e.time){const a=new Date(`${e.date}T${e.time}:00`),b=new Date(a.getTime()+4*3600000);dates=`${localBasic(a)}/${localBasic(b)}`}else dates=`${e.date.replaceAll('-','')}/${nextDay(e.date).replaceAll('-','')}`;const p=new URLSearchParams({action:'TEMPLATE',text:e.name||'Preboda',dates,location:e.address||e.venue||'',details:e.venue||''});try{const z=Intl.DateTimeFormat().resolvedOptions().timeZone;if(z)p.set('ctz',z)}catch{}return 'https://calendar.google.com/calendar/render?'+p.toString()}
+  function uniqueEvents(unit){const map=new Map();for(const m of unit?.members||[])for(const e of Array.isArray(m.events)?m.events:[])if(e?.id&&!map.has(e.id))map.set(e.id,e);return [...map.values()]}
+  function eventAddon(events){if(!events.length)return{css:'',html:''};const css=`<style id="weddly-extra-events">.weddly-extra-events{max-width:560px;margin:42px auto 28px;padding:0 20px;box-sizing:border-box}.weddly-extra-events-card{border:1px solid rgba(100,95,85,.22);border-radius:18px;padding:20px;background:rgba(255,255,255,.82);color:#2c2a26}.weddly-extra-events-kicker{font:700 11px/1.2 system-ui;letter-spacing:.12em;text-transform:uppercase;color:#736f63}.weddly-extra-event{padding:16px 0;border-bottom:1px solid rgba(100,95,85,.14)}.weddly-extra-event:last-child{border-bottom:0;padding-bottom:0}.weddly-extra-event h3{font:500 27px/1.1 Georgia,serif;margin:3px 0 6px}.weddly-extra-event p{font:400 14px/1.5 system-ui;margin:0;color:#736f63}.weddly-extra-event a{display:inline-block;margin-top:11px;border:1px solid rgba(100,95,85,.25);border-radius:999px;padding:9px 12px;text-decoration:none;color:#2c2a26;font:700 12px/1.2 system-ui;background:#fff}</style>`;const html=`<section class="weddly-extra-events"><div class="weddly-extra-events-card"><div class="weddly-extra-events-kicker">También estás invitado a</div>${events.map(e=>{const u=calendarUrl(e);return `<div class="weddly-extra-event"><h3>${esc(e.name||'Preboda')}</h3><p>${esc([e.date,e.time,e.venue].filter(Boolean).join(' · '))}</p>${u?`<a target="_top" href="${esc(u)}">Añadir al calendario</a>`:''}</div>`}).join('')}</div></section>`;return{css,html}}
+  function patch(h,w,f,events=[]){
     const href=`https://fonts.googleapis.com/css2?family=${f.primaryParam}&family=${f.secondaryParam}&display=swap`;
-    const css=`<link rel="stylesheet" href="${href}"><style id="weddly-font-choice">body,input,button{font-family:'${f.secondary}',system-ui,sans-serif!important}.script,.agenda-title,.card-eyebrow,.cover-names,.names,.kicker,.caption{font-family:'${f.primary}',serif!important}.historia-text{font-family:'${f.secondary}',serif!important}</style>`;
+    const addon=eventAddon(events);
+    const css=`<link rel="stylesheet" href="${href}"><style id="weddly-font-choice">body,input,button{font-family:'${f.secondary}',system-ui,sans-serif!important}.script,.agenda-title,.card-eyebrow,.cover-names,.names,.kicker,.caption{font-family:'${f.primary}',serif!important}.historia-text{font-family:'${f.secondary}',serif!important}</style>${addon.css}`;
     h=h.replace('</head>',css+'</head>');
     h=h.replace(/WEDDLY SMART DESIGN\s*·\s*GUESTS/gi,'WEDDLY SMART DESIGN · INVITADOS');
     h=h.replace(/Weddly Smart Design\s*·\s*Guests/gi,'Weddly Smart Design · Invitados');
@@ -81,6 +88,7 @@ main{max-width:560px;margin:auto;padding:32px}
     },'object');
     h=replaceConst(h,'agenda',w.agenda,'array');
     h=replaceConst(h,'locations',w.locations,'array');
+    if(addon.html)h=h.replace('</body>',addon.html+'</body>');
     return h;
   }
   async function getJson(url){
@@ -88,16 +96,16 @@ main{max-width:560px;margin:auto;padding:32px}
     return r.ok&&x?.ok?x:null;
   }
   async function run(){
-    let cfg={},pers=null;
+    let cfg={},pers=null,events=[];
     if(token){
-      try{const x=await getJson(RSVP_API+'?token='+encodeURIComponent(token));if(x?.form?.config)cfg=x.form.config}catch{}
+      try{const x=await getJson(RSVP_API+'?token='+encodeURIComponent(token)+(unitId?'&unit='+encodeURIComponent(unitId):''));if(x?.form?.config)cfg=x.form.config;if(x?.unit)events=uniqueEvents(x.unit)}catch{}
       try{const x=await getJson(PERS_API+'?token='+encodeURIComponent(token));if(x?.personalization)pers=x.personalization}catch{}
     }
     if(!pers){try{pers=JSON.parse(localStorage.getItem('weddly_guests_design')||'null')}catch{}}
     const w=fallback(cfg,pers),url=templates[w.template]||templates.e01,f=fonts.find(x=>x.id===w.fontPair)||fonts[0];
     try{
       const r=await fetch(url+'?v=essential-six-rev2-20260909',{cache:'no-store'});if(!r.ok)throw 0;
-      const h=patch(await r.text(),w,f);
+      const h=patch(await r.text(),w,f,events);
       document.open();document.write(h);document.close();
     }catch{document.getElementById('loading').textContent='No se ha podido cargar la invitación.'}
   }
