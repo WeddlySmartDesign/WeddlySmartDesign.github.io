@@ -15,7 +15,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
 <script>
 (()=>{
   const f=document.getElementById('invite'),q=location.search,hash=location.hash,sp=new URLSearchParams(q);
-  const target=(sp.get('u')?'guests-rsvp-v115-wedding-flex-live.html':sp.get('g')?'guests-rsvp-v114-single-flex.html':'guests-rsvp-v105-mobile.html')+q+hash;
+  const target=(sp.get('u')?'guests-rsvp-v115-wedding-flex-live.html':sp.get('g')?'guests-rsvp-v116-single-live.html':'guests-rsvp-v105-mobile.html')+q+hash;
   f.src='guests-rsvp-essential-live.html'+q+hash;
   let installed=null,observer=null,scheduled=false;
 
