@@ -89,6 +89,7 @@ main{max-width:560px;margin:auto;padding:32px}
     h=replaceConst(h,'agenda',w.agenda,'array');
     h=replaceConst(h,'locations',w.locations,'array');
     if(addon.html)h=h.replace('</body>',addon.html+'</body>');
+    h=h.replace('</body>','<script src="guests-rsvp-essential-readability-v1.js?v=1"><\/script></body>');
     return h;
   }
   async function getJson(url){
