@@ -5,7 +5,7 @@ let busy=false;
 function demo(){try{const d=new URLSearchParams(location.search).get('ownerDemo');return d==='es'||d==='en'?d:''}catch{return''}}
 function en(){if(demo())return demo()==='en';try{return JSON.parse(localStorage.getItem(PAY)||'null')?.settings?.lang==='en'}catch{return false}}
 const T=(es,enText)=>en()?enText:es;
-const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
+const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function headers(){const h={'content-type':'application/json','x-weddly-token':localStorage.getItem(TOKEN)||''};if(demo())h['x-weddly-demo']=demo();return h}
 function eventId(){return document.querySelector('.eventTabs [data-tab].on')?.dataset.tab||''}
 async function ownerGet(id){const r=await fetch(API+'?event_id='+encodeURIComponent(id),{headers:headers(),cache:'no-store'}),x=await r.json().catch(()=>({}));if(!r.ok||!x?.ok)throw 0;return x}
