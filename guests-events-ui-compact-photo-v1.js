@@ -7,7 +7,7 @@ const INVITE_API='weddly-event-invite';
 let removeHero=false;
 let patchTimer=0;
 const $=s=>document.querySelector(s);
-const isEn=()=>{try{return JSON.parse(localStorage.getItem('weddly_pro_v7')||'null')?.settings?.lang==='en'}catch{return false}};
+const isEn=()=>{try{const q=new URLSearchParams(location.search).get('ownerDemo');if(q==='en')return true;if(q==='es')return false;return JSON.parse(localStorage.getItem('weddly_pro_v7')||'null')?.settings?.lang==='en'}catch{return false}};
 const T=(es,en)=>isEn()?en:es;
 
 function ensureStyle(){
@@ -97,11 +97,7 @@ function patchEditor(){
   remove.hidden=first.querySelector('#photoPrev1')?.tagName!=='IMG';
 }
 
-function patchAll(){
-  ensureStyle();
-  patchGuestList();
-  patchEditor();
-}
+function patchAll(){ensureStyle();patchGuestList();patchEditor()}
 function schedule(ms=0){clearTimeout(patchTimer);patchTimer=setTimeout(patchAll,ms)}
 
 const nativeFetch=window.fetch.bind(window);
@@ -125,11 +121,11 @@ window.fetch=(input,init)=>{
 };
 
 document.addEventListener('click',e=>{
-  if(e.target?.closest?.('#inviteEdit')){removeHero=false;setTimeout(patchEditor,0);setTimeout(patchEditor,80)}
+  if(e.target?.closest?.('#inviteEdit')){removeHero=false;[0,80,220].forEach(ms=>setTimeout(patchEditor,ms))}
   if(e.target?.closest?.('#app')){setTimeout(patchGuestList,120);setTimeout(patchGuestList,700)}
 },true);
 document.addEventListener('change',e=>{
-  if(e.target?.id==='photo1'){removeHero=false;setTimeout(patchEditor,90)}
+  if(e.target?.id==='photo1'){removeHero=false;[90,320,800].forEach(ms=>setTimeout(patchEditor,ms))}
   if(e.target?.closest?.('#app')){setTimeout(patchGuestList,120);setTimeout(patchGuestList,700)}
 },true);
 addEventListener('pageshow',()=>{[40,180,600,1400].forEach(ms=>setTimeout(patchAll,ms))});
