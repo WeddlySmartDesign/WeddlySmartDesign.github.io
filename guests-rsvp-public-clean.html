@@ -68,7 +68,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
     try{
       const d=f.contentDocument;if(!d?.body)return;
       d.title='Invitación';
-      d.querySelectorAll('#brand,.brand,.pill').forEach(x=>x.remove());
+      d.querySelectorAll('#brand,.brand,.pill,.weddly-extra-events').forEach(x=>x.remove());
       const nav=d.querySelector('.nav');if(nav)nav.style.justifyContent='flex-end';
       cleanText(d);readable(d);
       const cta=d.getElementById('ctaBtn');if(cta)cta.href=target;
