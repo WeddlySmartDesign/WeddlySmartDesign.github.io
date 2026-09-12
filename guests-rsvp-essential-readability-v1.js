@@ -5,9 +5,9 @@ const style=document.createElement('style');
 style.id='wsdEssentialReadability';
 style.textContent=`
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-/* Secondary information must remain readable in every Essential palette. */
-.askline,.city,.agenda-place,.card-detail,.lead,.footer-thanks,.cover-sub,.cover-datevenue{color:var(--ink)!important}
-.caption{paint-order:stroke fill;text-shadow:0 1px 4px rgba(255,255,255,.82)}
+/* Secondary information on plain invitation surfaces must remain readable. */
+.askline,.city,.agenda-place,.card-detail,.lead,.footer-thanks{color:var(--ink)!important}
+.caption{text-shadow:0 1px 4px rgba(255,255,255,.82)}
 @media (max-width:640px){
   .brand{font-size:11px!important;line-height:1.35!important}
   .eyebrow,.subtitle,.cover-sub,.askline,.fact,.waiting,.city,.agenda-node,.card-detail,.footer-name,.footer-thanks{font-size:12px!important;line-height:1.45!important}
@@ -24,7 +24,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 `;
 document.head.appendChild(style);
 
-/* Add a subtle opposite-colour shadow only to text that really sits on a CSS image. */
+/* Preserve each template's palette; only add an opposite-colour shadow when text actually sits on a CSS image. */
 const selectors='.cover-kicker,.cover-sub,.cover-names,.cover-datevenue,.cover-waiting,.kicker,.subtitle,.names,.waiting,.caption';
 function luminance(rgb){
   const m=String(rgb||'').match(/[\d.]+/g);if(!m||m.length<3)return 0;
