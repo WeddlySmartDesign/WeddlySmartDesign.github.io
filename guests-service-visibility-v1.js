@@ -11,6 +11,7 @@ function guestState(){try{return JSON.parse(localStorage.getItem(GKEY)||'{}')||{
 function csv(rows){const txt=rows.map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+txt],{type:'text/csv;charset=utf-8'}));a.download=en()?'weddly-accommodation.csv':'weddly-alojamiento.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),800)}
 function setField(d,id,on){const el=d.getElementById(id);if(!el)return;el.style.display=on?'':'none';const lab=el.previousElementSibling;if(lab&&lab.tagName==='LABEL')lab.style.display=on?'':'none'}
 function patch(){let d;try{d=G.f?.contentDocument}catch{return}if(!d?.body||!services)return;
+  if(!d.documentElement.dataset.wsdServiceVisibilityHook){d.documentElement.dataset.wsdServiceVisibilityHook='1';d.addEventListener('click',()=>{[0,60,180].forEach(ms=>setTimeout(patch,ms))},true)}
   const list=d.getElementById('listados');
   if(list){
     for(const card of list.querySelectorAll('.card')){const title=String(card.querySelector('b')?.textContent||'').trim().toLowerCase();if(title.startsWith('transporte')||title.startsWith('transport'))card.style.display=services.transport?'':'none'}
