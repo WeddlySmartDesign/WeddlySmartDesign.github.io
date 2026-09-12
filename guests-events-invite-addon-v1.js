@@ -1,1 +1,1 @@
-(()=>{const s=document.createElement('script');s.src='guests-events-invite-addon-v2.js?v=6';s.defer=false;document.head.appendChild(s)})();
+(()=>{const s=document.createElement('script');s.src='guests-events-invite-addon-v2.js?v=7';s.defer=false;s.onload=()=>{const u=document.createElement('script');u.src='guests-events-ui-compact-photo-v1.js?v=1';u.defer=false;document.head.appendChild(u)};document.head.appendChild(s)})();
