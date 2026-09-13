@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Weddly Smart Design · Events preview</title><style>html,body{margin:0;min-height:100%;background:#f2efe9}.loading{min-height:100vh;display:grid;place-items:center;font:600 13px system-ui;color:#736f63}</style></head><body><div class="loading">Abriendo Eventos…</div>
+<script>
+(()=>{
+const GKEY='weddly_web_preview_events_guests_v1',PKEY='weddly_web_preview_events_pay_v1';
+const guests={guests:{g1:{name:'Claudia Martín',rsvp:'confirmed',group:'Amigos Lucía'},g2:{name:'Mario Martín',rsvp:'confirmed',group:'Amigos Lucía'},g3:{name:'Elena Ruiz',rsvp:'confirmed',group:'Familia Álex'},g4:{name:'Daniel Torres',rsvp:'confirmed',group:'Familia Álex'},g5:{name:'Sara Gil',rsvp:'confirmed',group:'Trabajo'},g6:{name:'Javier León',rsvp:'pending',group:'Amigos Álex'},g7:{name:'Marta López',rsvp:'pending',group:'Amigos Álex'}},meta:{couple:['Lucía','Álex'],weddingDate:'2027-06-12'}};
+const pay={settings:{lang:'es',weddingDate:'2027-06-12'}};
+const ev={id:'event_preview',name:'Preboda',date:'2027-06-11',time:'20:00',venue:'La Terraza',address:'Murcia',enabled:true,budget:2800,guestIds:['g1','g2','g3','g5','g6'],tasks:{venue:{id:'venue',title:'Confirmar espacio y horario',due:'2027-04-02',done:true,custom:false},food:{id:'food',title:'Cerrar comida y bebida',due:'2027-05-02',done:false,custom:false},invite:{id:'invite',title:'Enviar información a invitados',due:'2027-05-12',done:false,custom:false},confirm:{id:'confirm',title:'Confirmar asistentes y cantidades',due:'2027-06-01',done:false,custom:false}},payments:{p1:{id:'p1',concept:'Reserva del espacio',amount:800,due:'2026-10-20',provider:'La Terraza',status:'paid'},p2:{id:'p2',concept:'Pago final',amount:1200,due:'2027-06-04',provider:'La Terraza',status:'scheduled'}},responses:{},updatedAt:new Date().toISOString()};
+async function boot(){try{
+ let h=await (await fetch('guests-events.html',{cache:'no-store'})).text();
+ h=h.replace("GUEST='weddly_guests_qa_v67'","GUEST='"+GKEY+"'").replace("PAY='weddly_pro_v7'","PAY='"+PKEY+"'");
+ const seed=`<script>try{localStorage.setItem('${GKEY}',${JSON.stringify(JSON.stringify(guests))});localStorage.setItem('${PKEY}',${JSON.stringify(JSON.stringify(pay))})}catch(e){}<\/script>`;
+ const state={schema:1,events:{event_preview:ev},updatedAt:new Date().toISOString()};
+ h=h.replace('<body>','<body>'+seed).replace('load()})();</script>',`state=${JSON.stringify(state)};version=1;current='event_preview';$('#status').textContent='Vista demo';render()})();<\/script>`).replace('</head>','<style>body{pointer-events:none}#status{display:none!important}</style></head>');
+ document.open();document.write(h);document.close();
+}catch(e){document.body.innerHTML='<div class="loading">No se ha podido abrir Eventos.</div>'}}
+boot();
+})();
+</script></body></html>
