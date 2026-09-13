@@ -1,7 +1,8 @@
 (()=>{
 'use strict';
 if(window.__wsdRsvpChildrenConfig)return;window.__wsdRsvpChildrenConfig=true;
-const T=(es,en)=>document.documentElement.lang==='en'?en:es;
+function isEn(){try{const v=localStorage.getItem('weddly_access_lang');if(v==='en')return true;if(v==='es')return false}catch{}try{const x=JSON.parse(localStorage.getItem('weddly_pro_v7')||'null'),v=x?.settings?.lang;if(v==='en')return true;if(v==='es')return false}catch{}return document.documentElement.lang==='en'}
+const T=(es,en)=>isEn()?en:es;
 function install(){
   if(document.getElementById('wsdChildrenConfig'))return;
   const plus=document.getElementById('plusQ')?.closest('label.question');if(!plus)return;
