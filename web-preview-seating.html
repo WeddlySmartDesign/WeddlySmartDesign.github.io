@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Weddly Smart Design · Seating preview</title><style>html,body{margin:0;min-height:100%;background:#f5f1ea}.loading{min-height:100vh;display:grid;place-items:center;font:600 13px system-ui;color:#706b65}</style></head><body><div class="loading">Abriendo plano…</div>
+<script>
+(()=>{
+const MKEY='weddly_web_preview_guests_v1',VKEY='weddly_web_preview_visual_v1';
+const demo={guests:{
+ g1:{name:'Claudia Martín',rsvp:'confirmed',meal:'Infantil',mealRequired:true,table:'Mesa 1',transport:true,group:'Amigos Lucía'},g2:{name:'Mario Martín',rsvp:'confirmed',meal:'Estándar',mealRequired:true,table:'Mesa 1',transport:true,group:'Amigos Lucía'},g3:{name:'Paula Martín',rsvp:'confirmed',meal:'Infantil',mealRequired:true,table:'Mesa 1',transport:true,group:'Amigos Lucía'},g4:{name:'Elena Ruiz',rsvp:'confirmed',meal:'Vegetariano',mealRequired:true,table:'Mesa 2',transport:false,group:'Familia Álex'},g5:{name:'Daniel Torres',rsvp:'confirmed',meal:'Estándar',mealRequired:true,table:'Mesa 2',transport:false,group:'Familia Álex'},g6:{name:'Sara Gil',rsvp:'confirmed',meal:'Vegano',mealRequired:true,table:'Mesa 2',transport:true,group:'Trabajo'},g7:{name:'Javier León',rsvp:'pending',meal:'',mealRequired:true,table:'',transport:false,group:'Amigos Álex'},g8:{name:'Marta López',rsvp:'pending',meal:'',mealRequired:true,table:'',transport:false,group:'Amigos Álex'},g9:{name:'Ana Beltrán',rsvp:'confirmed',meal:'Celíaco',mealRequired:true,table:'Mesa 3',transport:true,group:'Familia Lucía'}
+},tables:{t1:{name:'Mesa 1',cap:6},t2:{name:'Mesa 2',cap:6},t3:{name:'Mesa 3',cap:6}},meta:{couple:['Lucía','Álex'],weddingDate:'2027-06-12'}};
+const visual={room:'wide',tables:{t1:{name:'Mesa 1',cap:6,type:'round',x:105,y:115,w:165,h:165,rotation:0},t2:{name:'Mesa 2',cap:6,type:'round',x:430,y:115,w:165,h:165,rotation:0},t3:{name:'Mesa 3',cap:6,type:'rect',x:735,y:130,w:190,h:105,rotation:0}},features:{stage:{name:'Escenario',x:365,y:420,w:280,h:88,rotation:0},dance:{name:'Pista de baile',x:390,y:545,w:320,h:180,rotation:0}}};
+async function boot(){try{
+ let h=await (await fetch('guests-v081-visual-seating.html?v=129-desktop',{cache:'no-store'})).text();
+ h=h.replace("const MKEY='weddly_guests_qa_v67',VKEY='weddly_guests_v81_visual_meta'","const MKEY='"+MKEY+"',VKEY='"+VKEY+"'");
+ const seed=`<script>try{localStorage.setItem('${MKEY}',${JSON.stringify(JSON.stringify(demo))});localStorage.setItem('${VKEY}',${JSON.stringify(JSON.stringify(visual))})}catch(e){}<\/script>`;
+ h=h.replace('<body>','<body>'+seed);
+ document.open();document.write(h);document.close();
+}catch(e){document.body.innerHTML='<div class="loading">No se ha podido abrir el plano.</div>'}}
+boot();
+})();
+</script></body></html>
