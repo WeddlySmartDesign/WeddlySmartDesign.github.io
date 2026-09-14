@@ -25,6 +25,7 @@ try{
   const j=await r.json().catch(()=>({}));
   if(!r.ok||!j?.ok||j.product!=='full'){fail('Este enlace de demo ya no es válido. Genera uno nuevo desde tu Gestor de accesos.');return}
   if(window.__WSD_ACCESS_BRIDGE?.remember)window.__WSD_ACCESS_BRIDGE.remember(token);else localStorage.setItem('weddly_shared_wedding_token',token);
+  localStorage.setItem('weddly_owner_demo_token_'+lang,token);
   localStorage.setItem('weddly_owner_demo_mode',lang);
   localStorage.setItem('weddly_access_lang',lang);
   msg.textContent=lang==='es'?'Demo recuperada. Abriendo Weddly Smart Design…':'Demo restored. Opening Weddly Smart Design…';
