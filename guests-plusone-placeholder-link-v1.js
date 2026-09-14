@@ -2,14 +2,15 @@
 'use strict';
 if(window.__wsdPlusOnePlaceholderLinkV1)return;window.__wsdPlusOnePlaceholderLinkV1=true;
 const KEY='weddly_guests_qa_v67';
-const norm=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’']/g,' ').replace(/[()\[\],.;:]/g,' ').replace(/\s+/g,' ').trim();
+const norm=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’']/g,' ').replace(/[()\[\],.;:–—-]/g,' ').replace(/\s+/g,' ').trim();
 function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||'null');return x&&typeof x==='object'?x:null}catch{return null}}
 function write(x){try{localStorage.setItem(KEY,JSON.stringify(x));return true}catch{return false}}
+function cleanPendingNote(v){return norm(v).replace(/\s+(nombre pendiente|nombre por confirmar|sin nombre|nombre desconocido|no se su nombre|no sabemos su nombre|por confirmar|pending name|name pending|unknown name|name unknown)$/,'').trim()}
 function targetFromLabel(label){
-  const n=norm(label).replace(/\s+(nombre pendiente|nombre por confirmar|pending name)$/,'').trim();
-  const patterns=[/^pareja de (.+)$/,/^acompanante de (.+)$/,/^\+1 de (.+)$/,/^plus one de (.+)$/,/^partner of (.+)$/,/^guest of (.+)$/,/^(.+) partner$/,/^(.+) plus one$/];
-  for(const re of patterns){const m=n.match(re);if(m?.[1])return{target:norm(m[1]),generic:false}}
-  if(/^(pareja|acompanante|\+1|plus one|partner|guest)$/.test(n))return{target:'',generic:true};
+  const n=cleanPendingNote(label);
+  const patterns=[/^pareja de (.+)$/,/^acompanante de (.+)$/,/^novio de (.+)$/,/^novia de (.+)$/,/^esposo de (.+)$/,/^esposa de (.+)$/,/^marido de (.+)$/,/^mujer de (.+)$/,/^\+1 de (.+)$/,/^plus one de (.+)$/,/^partner of (.+)$/,/^guest of (.+)$/,/^(.+) partner$/,/^(.+) plus one$/];
+  for(const re of patterns){const m=n.match(re);if(m?.[1])return{target:cleanPendingNote(m[1]),generic:false}}
+  if(/^(pareja|acompanante|novio|novia|esposo|esposa|marido|mujer|\+1|plus one|partner|guest)$/.test(n))return{target:'',generic:true};
   return null;
 }
 function sameScope(a,b){
@@ -22,7 +23,7 @@ function candidateFor(S,id,p){
   const gs=S.guests||{},parsed=targetFromLabel(p?.name);if(!parsed)return'';
   const direct=String(p?.invitationRecipientId||'');if(direct&&direct!==id&&gs[direct])return direct;
   if(!parsed.target)return'';
-  let all=Object.entries(gs).filter(([gid,g])=>gid!==id&&g&&g.source!=='rsvp_plus_one'&&!targetFromLabel(g.name));
+  const all=Object.entries(gs).filter(([gid,g])=>gid!==id&&g&&g.source!=='rsvp_plus_one'&&!targetFromLabel(g.name));
   const words=parsed.target.split(' ').filter(Boolean),isFull=words.length>1;
   const matches=all.filter(([,g])=>{const n=norm(g.name);return isFull?n===parsed.target:n.split(' ')[0]===parsed.target});
   if(matches.length===1)return String(matches[0][0]);
