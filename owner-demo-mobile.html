@@ -28,6 +28,18 @@ try{
   localStorage.setItem('weddly_owner_demo_token_'+lang,token);
   localStorage.setItem('weddly_owner_demo_mode',lang);
   localStorage.setItem('weddly_access_lang',lang);
+  try{
+    const demoKey='weddly_pro_v7_owner_demo_'+lang;
+    const raw=localStorage.getItem(demoKey);
+    if(raw){
+      const data=JSON.parse(raw);
+      if(data&&typeof data==='object'){
+        data.settings=data.settings&&typeof data.settings==='object'?data.settings:{};
+        data.settings.lang=lang;
+        localStorage.setItem(demoKey,JSON.stringify(data));
+      }
+    }
+  }catch{}
   msg.textContent=lang==='es'?'Demo recuperada. Abriendo Weddly Smart Design…':'Demo restored. Opening Weddly Smart Design…';
   const target=product==='payments'?'/payments.html?ownerDemo='+encodeURIComponent(lang):product==='guests'?'/guests.html?ownerDemo='+encodeURIComponent(lang):'/app.html?ownerDemo='+encodeURIComponent(lang);
   setTimeout(()=>location.replace(target),250);
