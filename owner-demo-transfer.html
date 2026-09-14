@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Weddly Smart Design · Demo móvil</title>
+<style>
+:root{--ink:#2C2A26;--sage:#596248;--paper:#FBF8F3;--line:#E5DED2;--muted:#756F65;--soft:#F3F0EA;--danger:#A84535}*{box-sizing:border-box}body{margin:0;background:#F2EFE9;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{min-height:100vh;max-width:620px;margin:0 auto;background:var(--paper);padding:34px 24px 56px}.brand{font-family:Georgia,serif;color:var(--sage);font-size:34px;line-height:.95}.brand span{display:block;font-family:system-ui,sans-serif;font-size:12px;letter-spacing:.15em;text-transform:uppercase;margin-top:10px;color:var(--muted);font-weight:700}.card{margin-top:48px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 12px 30px rgba(44,42,38,.04)}h1{font-family:Georgia,serif;font-size:30px;font-weight:500;margin:0 0 10px}.lead,.small{color:var(--muted);line-height:1.55}.lead{font-size:14px;margin:0 0 20px}.small{font-size:12px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.btn{border:0;border-radius:11px;padding:14px 16px;background:var(--ink);color:#fff;font-size:14px;font-weight:750;cursor:pointer}.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn:disabled{opacity:.5;cursor:wait}.result{display:none;margin-top:18px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--soft);font-size:12px;line-height:1.55;word-break:break-all}.result.on{display:block}.status{margin-top:16px;font-size:13px;color:var(--muted)}.status.err{color:var(--danger)}@media(max-width:480px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body><main class="shell"><div class="brand">Weddly<span>Smart Design</span></div><section class="card"><h1>Recuperar demo en el móvil</h1><p class="lead">Genera desde este PC un acceso privado a tu demo de marketing. No cambia tu acceso real de propietaria ni crea una boda nueva.</p><div class="row"><button id="es" class="btn" type="button">Generar demo ES</button><button id="en" class="btn secondary" type="button">Generar demo EN</button></div><div id="result" class="result"></div><div id="actions" class="row" style="display:none"><button id="copy" class="btn" type="button">Copiar enlace</button><button id="share" class="btn secondary" type="button">Compartir</button></div><div id="status" class="status">Comprobando acceso de propietaria…</div><p class="small">Abre esta página en el PC donde ya tienes instalado y operativo el acceso de propietaria. El enlace generado contiene una credencial exclusiva de demo y debe enviarse solo a tu propio móvil.</p></section></main>
+<script src="/access-cookie-bridge-v1.js?v=1"></script>
+<script>
+(()=>{
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access';
+const TOKEN='weddly_shared_wedding_token';
+const $=id=>document.getElementById(id);let current='';
+function ownerToken(){try{return window.__WSD_ACCESS_BRIDGE?.sync?.()||localStorage.getItem(TOKEN)||''}catch{return''}}
+function status(t,err=false){$('status').textContent=t;$('status').className='status'+(err?' err':'')}
+async function post(data){const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':ownerToken()},body:JSON.stringify(data),cache:'no-store'});const j=await r.json().catch(()=>({}));return{status:r.status,body:j}}
+async function check(){if(ownerToken().length<40){status('Este navegador no tiene tu acceso de propietaria. Abre esta página en el PC donde sí lo tienes.',true);$('es').disabled=$('en').disabled=true;return false}const r=await post({action:'owner_status'});if(r.status!==200||!r.body?.ok){status('Este navegador no está autorizado como propietaria.',true);$('es').disabled=$('en').disabled=true;return false}status('Acceso de propietaria confirmado. Puedes generar tu demo móvil.');return true}
+async function make(lang,button){button.disabled=true;status('Generando demo '+lang.toUpperCase()+'…');try{const r=await post({action:'owner_demo_token',lang});if(r.status!==200||!r.body?.ok||!r.body.memberToken)throw new Error('demo');current=`${location.origin}/owner-demo-mobile.html#lang=${encodeURIComponent(lang)}&token=${encodeURIComponent(r.body.memberToken)}`;$('result').textContent=current;$('result').classList.add('on');$('actions').style.display='grid';status('Enlace listo. Envíatelo al móvil y ábrelo allí una sola vez.')}catch{status('No se pudo generar la demo. No se ha modificado tu acceso real.',true)}finally{button.disabled=false}}
+$('es').onclick=()=>make('es',$('es'));$('en').onclick=()=>make('en',$('en'));
+$('copy').onclick=async()=>{if(!current)return;try{await navigator.clipboard.writeText(current);$('copy').textContent='Copiado';setTimeout(()=>$('copy').textContent='Copiar enlace',1200)}catch{status('No se pudo copiar automáticamente. Selecciona el enlace de arriba.',true)}};
+$('share').onclick=async()=>{if(!current)return;try{if(navigator.share)await navigator.share({title:'Weddly Smart Design · Demo móvil',url:current});else{await navigator.clipboard.writeText(current);status('Enlace copiado. Envíatelo al móvil.')}}catch(e){if(e?.name!=='AbortError')status('No se pudo compartir automáticamente.',true)}};
+check();
+})();
+</script>
+</body></html>
