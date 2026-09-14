@@ -55,10 +55,11 @@ function plusCustom(){
 function plusData(){
   const name=document.getElementById('plusone')?.value?.trim()||'';if(!name)return null;
   const mealEl=document.getElementById('wsdPlusMeal'),meal=mealEl?.value||'',mealOn=!!mealEl;
-  return {name,meal_required:mealOn?(meal==='Sin menú'?false:true):null,meal:mealOn&&meal!=='Sin menú'?meal:'',allergy:document.getElementById('wsdPlusAllergy')?.value?.trim()||'',highchair:meal==='Infantil'&&!!document.getElementById('wsdPlusHigh')?.checked,transport:!!document.getElementById('wsdPlusTransport')?.checked,accommodation:!!document.getElementById('wsdPlusAccommodation')?.checked,custom_answers:plusCustom()}
+  return {name,meal_required:mealOn?(meal?meal!=='Sin menú':null):null,meal:mealOn&&meal&&meal!=='Sin menú'?meal:'',allergy:document.getElementById('wsdPlusAllergy')?.value?.trim()||'',highchair:meal==='Infantil'&&!!document.getElementById('wsdPlusHigh')?.checked,transport:!!document.getElementById('wsdPlusTransport')?.checked,accommodation:!!document.getElementById('wsdPlusAccommodation')?.checked,custom_answers:plusCustom()}
 }
 function validate(){
   const name=document.getElementById('plusone')?.value?.trim()||'';if(!name)return true;
+  const meal=document.getElementById('wsdPlusMeal');if(meal&&!meal.value){const fb=document.getElementById('fb');if(fb){fb.className='notice on';fb.textContent=T(`Indica el menú de ${name}.`,`Choose ${name}'s meal.`)}meal.scrollIntoView({behavior:'smooth',block:'center'});meal.focus();return false}
   for(const q of document.querySelectorAll('#wsdPlusDetails [data-q][data-required="1"]')){
     let ok=false;if(q.dataset.type==='yesno')ok=q.dataset.wsdValue==='true'||q.dataset.wsdValue==='false';else ok=!!q.querySelector('.cv')?.value?.trim();
     if(!ok){const fb=document.getElementById('fb');if(fb){fb.className='notice on';fb.textContent=T(`Falta responder una pregunta obligatoria de ${name}.`,`${name} has an unanswered required question.`)}q.scrollIntoView({behavior:'smooth',block:'center'});return false}
