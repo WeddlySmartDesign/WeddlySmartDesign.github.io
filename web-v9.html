@@ -40,7 +40,8 @@ em{font-style:italic;color:var(--clay)}
 .head .eyebrow{color:var(--clayDeep)}
 .head h2{font-size:29px;line-height:1.09;font-weight:700;max-width:290px}
 .sub{font:400 14.5px/1.6 'Work Sans';color:var(--muted);margin:14px 0 28px;max-width:300px}
-.guide{display:flex;gap:6px;overflow-x:auto;padding:0 0 16px;scroll-snap-type:x proximity;scrollbar-width:none}
+.guide{display:flex;gap:6px;overflow-x:auto;padding:0 0 16px;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-mask-image:linear-gradient(to right,#000 88%,transparent 100%);mask-image:linear-gradient(to right,#000 88%,transparent 100%)}
+.guide button:last-child{margin-right:22px;scroll-snap-align:end}
 .guide::-webkit-scrollbar{display:none}
 .guide button{flex:0 0 auto;scroll-snap-align:start;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:2px;padding:9px 12px;font:700 9.5px/1 'Work Sans';letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
 .guide button.on{background:var(--ink);border-color:var(--ink);color:var(--creamText)}
