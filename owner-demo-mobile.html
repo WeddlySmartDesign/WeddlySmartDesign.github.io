@@ -18,18 +18,19 @@ const msg=document.getElementById('msg');
 function fail(t){msg.textContent=t;msg.classList.add('err')}
 try{
   const hp=new URLSearchParams(location.hash.startsWith('#')?location.hash.slice(1):location.hash);
-  const lang=(hp.get('lang')||'').toLowerCase(),token=hp.get('token')||'';
+  const lang=(hp.get('lang')||'').toLowerCase(),token=hp.get('token')||'',product=(hp.get('product')||'full').toLowerCase();
   history.replaceState(null,'',location.pathname);
-  if((lang!=='es'&&lang!=='en')||token.length<40){fail('Este enlace de demo no es válido. Genera uno nuevo desde tu PC.');return}
+  if((lang!=='es'&&lang!=='en')||token.length<40||!['full','payments','guests'].includes(product)){fail('Este enlace de demo no es válido. Genera uno nuevo desde tu Gestor de accesos.');return}
   const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':token},body:JSON.stringify({action:'entitlement'}),cache:'no-store'});
   const j=await r.json().catch(()=>({}));
-  if(!r.ok||!j?.ok||j.product!=='full'){fail('Este enlace de demo ya no es válido. Genera uno nuevo desde tu PC.');return}
+  if(!r.ok||!j?.ok||j.product!=='full'){fail('Este enlace de demo ya no es válido. Genera uno nuevo desde tu Gestor de accesos.');return}
   if(window.__WSD_ACCESS_BRIDGE?.remember)window.__WSD_ACCESS_BRIDGE.remember(token);else localStorage.setItem('weddly_shared_wedding_token',token);
   localStorage.setItem('weddly_owner_demo_mode',lang);
   localStorage.setItem('weddly_access_lang',lang);
-  msg.textContent=lang==='es'?'Demo recuperada. Abriendo Weddly…':'Demo restored. Opening Weddly…';
-  setTimeout(()=>location.replace('/app.html?ownerDemo='+encodeURIComponent(lang)),250);
-}catch{fail('No hemos podido recuperar la demo. Genera un enlace nuevo desde tu PC.')}
+  msg.textContent=lang==='es'?'Demo recuperada. Abriendo Weddly Smart Design…':'Demo restored. Opening Weddly Smart Design…';
+  const target=product==='payments'?'/payments.html?ownerDemo='+encodeURIComponent(lang):product==='guests'?'/guests.html?ownerDemo='+encodeURIComponent(lang):'/app.html?ownerDemo='+encodeURIComponent(lang);
+  setTimeout(()=>location.replace(target),250);
+}catch{fail('No hemos podido recuperar la demo. Genera un enlace nuevo desde tu Gestor de accesos.')}
 })();
 </script>
 </body></html>
