@@ -1,0 +1,51 @@
+(()=>{
+'use strict';
+if(window.__wsdPlusOnePlaceholderLinkV1)return;window.__wsdPlusOnePlaceholderLinkV1=true;
+const KEY='weddly_guests_qa_v67';
+const norm=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’']/g,' ').replace(/[()\[\],.;:]/g,' ').replace(/\s+/g,' ').trim();
+function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||'null');return x&&typeof x==='object'?x:null}catch{return null}}
+function write(x){try{localStorage.setItem(KEY,JSON.stringify(x));return true}catch{return false}}
+function targetFromLabel(label){
+  const n=norm(label).replace(/\s+(nombre pendiente|nombre por confirmar|pending name)$/,'').trim();
+  const patterns=[/^pareja de (.+)$/,/^acompanante de (.+)$/,/^\+1 de (.+)$/,/^plus one de (.+)$/,/^partner of (.+)$/,/^guest of (.+)$/,/^(.+) partner$/,/^(.+) plus one$/];
+  for(const re of patterns){const m=n.match(re);if(m?.[1])return{target:norm(m[1]),generic:false}}
+  if(/^(pareja|acompanante|\+1|plus one|partner|guest)$/.test(n))return{target:'',generic:true};
+  return null;
+}
+function sameScope(a,b){
+  const ag=norm(a?.group),bg=norm(b?.group),au=norm(a?.unitId),bu=norm(b?.unitId);
+  if(au&&bu)return au===bu&&(!ag||!bg||ag===bg);
+  if(ag&&bg)return ag===bg;
+  return false;
+}
+function candidateFor(S,id,p){
+  const gs=S.guests||{},parsed=targetFromLabel(p?.name);if(!parsed)return'';
+  const direct=String(p?.invitationRecipientId||'');if(direct&&direct!==id&&gs[direct])return direct;
+  if(!parsed.target)return'';
+  let all=Object.entries(gs).filter(([gid,g])=>gid!==id&&g&&g.source!=='rsvp_plus_one'&&!targetFromLabel(g.name));
+  const words=parsed.target.split(' ').filter(Boolean),isFull=words.length>1;
+  const matches=all.filter(([,g])=>{const n=norm(g.name);return isFull?n===parsed.target:n.split(' ')[0]===parsed.target});
+  if(matches.length===1)return String(matches[0][0]);
+  const scoped=matches.filter(([,g])=>sameScope(p,g));
+  if(scoped.length===1)return String(scoped[0][0]);
+  return'';
+}
+function scan(){
+  const S=read();if(!S?.guests)return;let changed=false;
+  for(const [id,p] of Object.entries(S.guests)){
+    if(!p||typeof p!=='object'||p.source==='rsvp_plus_one'||p.rsvpPlaceholderResolved===true)continue;
+    const parsed=targetFromLabel(p.name);if(!parsed)continue;
+    const existing=String(p.rsvpPlaceholderFor||'');if(existing&&S.guests[existing])continue;
+    const target=candidateFor(S,id,p);if(!target)continue;
+    p.rsvpPlaceholderFor=target;
+    p.rsvpPlaceholderKind='plus_one';
+    p.rsvpPlaceholderPending=true;
+    p.rsvpPlaceholderDetectedAt=p.rsvpPlaceholderDetectedAt||new Date().toISOString();
+    changed=true;
+  }
+  if(changed)write(S);
+}
+let last='';setInterval(()=>{let raw='';try{raw=localStorage.getItem(KEY)||''}catch{}if(raw===last)return;last=raw;scan();try{last=localStorage.getItem(KEY)||''}catch{}},650);
+[60,250,800,1800].forEach(ms=>setTimeout(scan,ms));
+addEventListener('storage',e=>{if(e.key===KEY)setTimeout(scan,0)});
+})();
