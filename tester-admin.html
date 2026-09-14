@@ -17,11 +17,12 @@
 <div class="section"><h2>Mis accesos creados</h2><p class="small">Si alguien pierde su enlace, genera uno nuevo desde aquí. Mantiene la misma licencia y, si ya estaba activada, la misma boda y sus datos.</p><div id="list" class="small">Cargando…</div></div>
 <div class="section"><h2>Recuperación de propietaria</h2><p class="small">Tu código de recuperación sigue siendo independiente. Guárdalo fuera del navegador.</p><div class="row"><button id="showRecovery" class="btn secondary" type="button">Mostrar código de recuperación</button></div><div id="recovery" class="result hidden"></div><div id="recoveryCopyRow" class="row hidden"><button id="copyRecovery" class="btn secondary" type="button">Copiar código</button></div></div>
 </div></section></main>
+<script src="/access-cookie-bridge-v1.js?v=1"></script>
 <script>
 (()=>{
 const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access',REISSUE='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-reissue',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access',TOKEN='weddly_shared_wedding_token';
 const $=id=>document.getElementById(id);let testerLink='',recoveryCode='';
-function token(){try{return localStorage.getItem(TOKEN)||''}catch{return''}}
+function token(){try{return window.__WSD_ACCESS_BRIDGE?.sync?.()||localStorage.getItem(TOKEN)||''}catch{return''}}
 async function post(url,data){const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':token()},body:JSON.stringify(data),cache:'no-store'});const j=await r.json().catch(()=>({}));return{status:r.status,body:j}}
 function status(text,err=false){$('status').textContent=text;$('status').className='status'+(err?' err':'')}
 function formatExpiry(raw){if(!raw)return'';try{return new Date(raw).toLocaleString('es-ES')}catch{return String(raw)}}
