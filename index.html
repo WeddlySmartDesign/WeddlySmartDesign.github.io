@@ -14,8 +14,8 @@
 <body><div class="launch"><div><div class="brand"><div class="brand-main">Weddly</div><div class="brand-sub">Smart Design</div></div><div class="msg" id="msg">Abriendo tu boda…</div></div></div>
 <script>
 (async()=>{
-  const TOKEN='weddly_shared_wedding_token',REAL='weddly_owner_real_token_v1',MODE='weddly_owner_demo_mode',API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access';
-  let token='';try{const real=localStorage.getItem(REAL)||'',mode=localStorage.getItem(MODE)||'';if(real.length>=40&&(mode==='es'||mode==='en')){localStorage.setItem(TOKEN,real);localStorage.removeItem(MODE);document.cookie=`weddly_member_access=${encodeURIComponent(real)}; Path=/; Max-Age=${60*60*24*30}; SameSite=Lax; Secure`}token=localStorage.getItem(TOKEN)||''}catch{}
+  const TOKEN='weddly_shared_wedding_token',API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access';
+  let token='';try{token=localStorage.getItem(TOKEN)||''}catch{}
   if(token.length<40){location.replace('/access.html');return}
   try{
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':token},body:JSON.stringify({action:'entitlement'}),cache:'no-store'});
