@@ -3,11 +3,12 @@
 const root=document.documentElement;
 const lang=(root.dataset.lang||'es').toLowerCase();
 const product=(root.dataset.product||'full').toLowerCase();
+const params=new URLSearchParams(location.search),installFlow=params.get('install')==='1';
 const TOKEN='weddly_shared_wedding_token',MODE='weddly_owner_demo_mode';
 const tokenKey='weddly_owner_demo_token_'+lang;
 const copy={
-  es:{loading:'Recuperando vuestra demo…',save:'Guardar demo',missing:'No encuentro el acceso de esta demo en este dispositivo. Ábrela de nuevo desde WSD Accesos.',access:'Abrir WSD Accesos',installed:'Esta demo ya está abierta como app.',installHelp:'Esta copia tiene una identidad propia. En Chrome usa el menú ⋮ → «Instalar app» o «Añadir a pantalla de inicio».',ios:'En iPhone: Compartir ↑ → «Añadir a pantalla de inicio».'},
-  en:{loading:'Restoring your demo…',save:'Save demo',missing:'This demo access is not available on this device. Open it again from WSD Access.',access:'Open WSD Access',installed:'This demo is already open as an app.',installHelp:'This copy has its own app identity. In Chrome use ⋮ → “Install app” or “Add to Home Screen”.',ios:'On iPhone: Share ↑ → “Add to Home Screen”.'}
+  es:{loading:'Recuperando vuestra demo…',save:'Guardar demo',missing:'No encuentro el acceso de esta demo en este dispositivo. Ábrela de nuevo desde WSD Accesos.',access:'Abrir WSD Accesos',installed:'Esta demo ya está abierta como app.',installHelp:'Para guardar esta copia, debe estar abierta en una pestaña normal de Chrome. Si arriba ves una X, pulsa ⋮ → «Abrir en Chrome». Después vuelve a tocar «Guardar demo».',ios:'En iPhone: Compartir ↑ → «Añadir a pantalla de inicio».'},
+  en:{loading:'Restoring your demo…',save:'Save demo',missing:'This demo access is not available on this device. Open it again from WSD Access.',access:'Open WSD Access',installed:'This demo is already open as an app.',installHelp:'To save this copy, open it in a normal Chrome tab. If you see an X at the top, tap ⋮ → “Open in Chrome”. Then tap “Save demo” again.',ios:'On iPhone: Share ↑ → “Add to Home Screen”.'}
 };
 const C=copy[lang]||copy.es;
 if(!document.getElementById('demoFrame')){
@@ -24,12 +25,25 @@ function ios(){return /iPad|iPhone|iPod/.test(navigator.userAgent||'')||(navigat
 function showHelp(text){helpText.textContent=text;help.classList.add('on')}
 function getToken(){try{return localStorage.getItem(tokenKey)||''}catch{return''}}
 function prepare(){const token=getToken();if(token.length<40){msg.textContent=C.missing;access.textContent=C.access;access.style.display='inline-block';save.style.display='none';return false}try{localStorage.setItem(TOKEN,token);localStorage.setItem(MODE,lang);localStorage.setItem('weddly_access_lang',lang)}catch{}return true}
-function launch(){if(!prepare())return;msg.textContent=C.loading;const u=new URL('/owner-demo-shell.html',location.origin);u.searchParams.set('lang',lang);u.searchParams.set('product',product);u.searchParams.set('embed','1');u.searchParams.set('_host',String(Date.now()));frame.src=u.href;frame.addEventListener('load',()=>{setTimeout(()=>{boot.style.display='none';frame.style.display='block'},100)},{once:true})}
-async function install(){if(standalone()){showHelp(C.installed);return}if(ios()){showHelp(C.ios);return}if(promptEvent){const p=promptEvent;promptEvent=null;try{await p.prompt();const choice=await p.userChoice;if(choice?.outcome==='accepted')save.style.display='none'}catch{}return}showHelp(C.installHelp)}
-addEventListener('beforeinstallprompt',e=>{e.preventDefault();promptEvent=e;if(!standalone())save.style.display='block'});
+function hideNestedInstall(){
+  try{
+    const shellDoc=frame.contentDocument,suiteFrame=shellDoc?.getElementById('demo'),suiteDoc=suiteFrame?.contentDocument,aux=suiteDoc?.getElementById('auxFrame'),settings=aux?.contentDocument;
+    settings?.getElementById('wsdSuiteInstallTitle')?.remove();
+    settings?.getElementById('wsdSuiteInstallCard')?.remove();
+  }catch{}
+}
+function launch(){if(!prepare())return;msg.textContent=C.loading;const u=new URL('/owner-demo-shell.html',location.origin);u.searchParams.set('lang',lang);u.searchParams.set('product',product);u.searchParams.set('embed','1');u.searchParams.set('_host',String(Date.now()));frame.src=u.href;frame.addEventListener('load',()=>{setTimeout(()=>{boot.style.display='none';frame.style.display='block';hideNestedInstall()},100)},{once:true})}
+async function install(){
+  if(ios()){showHelp(C.ios);return}
+  if(promptEvent){const p=promptEvent;promptEvent=null;try{await p.prompt();const choice=await p.userChoice;if(choice?.outcome==='accepted')save.style.display='none'}catch{}return}
+  if(standalone()&&!installFlow){showHelp(C.installed);return}
+  showHelp(C.installHelp)
+}
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();promptEvent=e;save.style.display='block'});
 addEventListener('appinstalled',()=>{promptEvent=null;save.style.display='none'});
 save.textContent=C.save;save.onclick=install;
 $('demoHelpClose').onclick=()=>help.classList.remove('on');help.onclick=e=>{if(e.target===help)help.classList.remove('on')};
-if(standalone())save.style.display='none';else save.style.display='block';
+if(installFlow||!standalone())save.style.display='block';else save.style.display='none';
+setInterval(hideNestedInstall,400);
 launch();
 })();
