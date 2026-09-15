@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#FBF8F3">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<title>Weddly Smart Design · Demo</title>
+<script>
+(()=>{const q=new URLSearchParams(location.search),lang=q.get('lang')==='en'?'en':'es',product=['full','payments','guests'].includes(q.get('product'))?q.get('product'):'full';const l=document.createElement('link');l.rel='manifest';l.href=`/manifest-demo-${lang}-${product}.webmanifest`;document.head.appendChild(l);document.documentElement.lang=lang})();
+</script>
+<style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#F2EFE9;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}#demo{display:block;width:100%;height:100dvh;border:0;background:#F2EFE9}.install{position:fixed;z-index:99999;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));margin:auto;max-width:520px;background:#fff;border:1px solid #E4DED2;border-radius:16px;padding:14px;box-shadow:0 14px 40px #0002;color:#2C2A26}.install b{display:block;font-size:14px}.install p{margin:5px 0 11px;color:#736F63;font-size:12px;line-height:1.4}.install button{width:100%;border:0;border-radius:10px;padding:12px;background:#525C43;color:#fff;font-weight:750}.install[hidden]{display:none}</style>
+</head>
+<body>
+<iframe id="demo" title="Weddly Smart Design · Demo"></iframe>
+<div id="install" class="install" hidden><b id="installTitle"></b><p id="installText"></p><button id="installBtn" type="button"></button></div>
+<script>
+(()=>{
+const q=new URLSearchParams(location.search),lang=q.get('lang')==='en'?'en':'es',product=['full','payments','guests'].includes(q.get('product'))?q.get('product'):'full';
+const TOKEN='weddly_shared_wedding_token',MODE='weddly_owner_demo_mode',demoKey='weddly_owner_demo_token_'+lang;
+try{const t=localStorage.getItem(demoKey)||'';if(t.length>=40)localStorage.setItem(TOKEN,t);localStorage.setItem(MODE,lang);localStorage.setItem('weddly_access_lang',lang);if(['payments','guests'].includes(product))localStorage.setItem('weddly_suite_last_module',product)}catch{}
+const target=product==='payments'?`/payments.html?ownerDemo=${lang}`:product==='guests'?`/guests.html?ownerDemo=${lang}`:`/app.html?ownerDemo=${lang}`;
+document.getElementById('demo').src=target;
+let prompt=null;const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true,installRequested=q.get('install')==='1',box=document.getElementById('install'),btn=document.getElementById('installBtn');
+const C=lang==='en'?{title:'Save this demo separately',text:'This demo has its own app identity. You do not need to uninstall any existing Weddly copy.',button:'Install this demo',fallback:'Open the browser menu and choose “Install app” or “Add to Home screen”.'}:{title:'Guardar esta demo por separado',text:'Esta demo tiene una identidad propia. No necesitas desinstalar ninguna copia de Weddly que ya tengas.',button:'Instalar esta demo',fallback:'Abre el menú del navegador y elige «Instalar app» o «Añadir a pantalla de inicio».'};
+document.getElementById('installTitle').textContent=C.title;document.getElementById('installText').textContent=C.text;btn.textContent=C.button;
+if(installRequested&&!standalone)box.hidden=false;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();prompt=e;if(installRequested)box.hidden=false});
+addEventListener('appinstalled',()=>{prompt=null;box.hidden=true});
+btn.onclick=async()=>{if(prompt){const p=prompt;prompt=null;try{await p.prompt();await p.userChoice}catch{}return}document.getElementById('installText').textContent=C.fallback};
+})();
+</script>
+<script src="/owner-demo-en-localize-v1.js?v=1"></script>
+</body>
+</html>
