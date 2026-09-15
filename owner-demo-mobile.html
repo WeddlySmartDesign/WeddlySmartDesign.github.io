@@ -14,10 +14,12 @@
 <script src="/access-cookie-bridge-v1.js?v=1"></script>
 <script>
 (async()=>{
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access',PWA='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-demo-pwa',TOKEN='weddly_shared_wedding_token',REAL='weddly_owner_real_token_v1';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access',PWA='https://weddly-owner-demos-pilarrodriguezbonilla-2303.vercel.app',TOKEN='weddly_shared_wedding_token',REAL='weddly_owner_real_token_v1';
 const msg=document.getElementById('msg'),open=document.getElementById('open');
 function fail(t){msg.textContent=t;msg.classList.add('err')}
 async function post(memberToken,body){const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':memberToken},body:JSON.stringify(body),cache:'no-store'}),j=await r.json().catch(()=>({}));return{r,j}}
+function android(){return /Android/i.test(navigator.userAgent||'')}
+function chromeIntent(url){const clean=url.replace(/^https?:\/\//,'');return `intent://${clean}#Intent;scheme=https;package=com.android.chrome;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;launchFlags=0x10000000;S.browser_fallback_url=${encodeURIComponent(url)};end`}
 try{
   const hp=new URLSearchParams(location.hash.startsWith('#')?location.hash.slice(1):location.hash),lang=(hp.get('lang')||'').toLowerCase(),token=hp.get('token')||'',product=(hp.get('product')||'full').toLowerCase();
   history.replaceState(null,'',location.pathname);
@@ -29,9 +31,9 @@ try{
   try{const current=localStorage.getItem(TOKEN)||'';if(current.length>=40&&current!==demoToken){const ce=await post(current,{action:'entitlement'});if(ce.r.ok&&ce.j?.ok&&ce.j.owner===true)localStorage.setItem(REAL,current)}}catch{}
   if(window.__WSD_ACCESS_BRIDGE?.remember)window.__WSD_ACCESS_BRIDGE.remember(demoToken);else localStorage.setItem(TOKEN,demoToken);
   localStorage.setItem('weddly_owner_demo_token_'+lang,demoToken);localStorage.setItem('weddly_owner_demo_mode',lang);localStorage.setItem('weddly_access_lang',lang);
-  const u=new URL(`${PWA}/${lang}/${product}/`);u.hash='token='+encodeURIComponent(demoToken);
+  const u=new URL(`/${lang}/${product}/index.html`,PWA);u.hash='token='+encodeURIComponent(demoToken);
   msg.textContent=lang==='en'?'Demo ready. Open the independent installer.':'Demo preparada. Abre el instalador independiente.';
-  open.textContent=lang==='en'?'Open independent installer':'Abrir instalador independiente';open.href=u.href;open.target='_blank';open.rel='noopener';open.classList.add('on');
+  open.textContent=lang==='en'?'Open independent installer':'Abrir instalador independiente';open.href=android()?chromeIntent(u.href):u.href;if(!android()){open.target='_blank';open.rel='noopener'}open.classList.add('on');
 }catch{fail('No hemos podido recuperar la demo. Genera un enlace nuevo desde WSD Accesos.')}
 })();
 </script>
