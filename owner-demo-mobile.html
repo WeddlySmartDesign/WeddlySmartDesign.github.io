@@ -14,13 +14,14 @@
 <script src="/access-cookie-bridge-v1.js?v=1"></script>
 <script>
 (async()=>{
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access',TOKEN='weddly_shared_wedding_token',REAL='weddly_owner_real_token_v1';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access',BROWSER_BRIDGE='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-browser-bridge',TOKEN='weddly_shared_wedding_token',REAL='weddly_owner_real_token_v1';
 const msg=document.getElementById('msg'),open=document.getElementById('open');
 function fail(t){msg.textContent=t;msg.classList.add('err')}
 async function post(memberToken,body){const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':memberToken},body:JSON.stringify(body),cache:'no-store'}),j=await r.json().catch(()=>({}));return{r,j}}
 function standalone(){return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}
 function android(){return /Android/i.test(navigator.userAgent||'')}
 function chromeIntent(url){const clean=url.replace(/^https?:\/\//,'');return `intent://${clean}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(url)};end`}
+function browserBridge(url){const b=new URL(BROWSER_BRIDGE);b.searchParams.set('to',url);return b.href}
 try{
   const hp=new URLSearchParams(location.hash.startsWith('#')?location.hash.slice(1):location.hash),lang=(hp.get('lang')||'').toLowerCase(),token=hp.get('token')||'',product=(hp.get('product')||'full').toLowerCase();
   history.replaceState(null,'',location.pathname);
@@ -34,13 +35,16 @@ try{
   localStorage.setItem('weddly_owner_demo_token_'+lang,demoToken);localStorage.setItem('weddly_owner_demo_mode',lang);localStorage.setItem('weddly_access_lang',lang);
   const u=new URL(`/demo/${lang}/${product}/`,location.origin);u.searchParams.set('_from','access');u.searchParams.set('install','1');
   if(standalone()){
-    msg.textContent=lang==='en'?'Demo ready. Open it in Chrome so this copy can be saved separately.':'Demo preparada. Ábrela en Chrome para poder guardar esta copia por separado.';
-    open.textContent=lang==='en'?'Open in Chrome to save':'Abrir en Chrome para guardar';
-    open.href=android()?chromeIntent(u.href):u.href;
+    msg.textContent=lang==='en'?'Demo ready. Open Chrome to install this copy separately.':'Demo preparada. Abre Chrome para instalar esta copia por separado.';
+    open.textContent=lang==='en'?'Open Chrome to install':'Abrir Chrome para instalar';
+    const external=browserBridge(u.href);
+    open.href=android()?chromeIntent(external):external;
     if(!android()){open.target='_blank';open.rel='noopener'}
     open.classList.add('on');return;
   }
-  msg.textContent=lang==='en'?'Demo restored. Opening the independent copy…':'Demo recuperada. Abriendo la copia independiente…';setTimeout(()=>location.replace(u.href),180);
+  msg.textContent=lang==='en'?'Demo restored. Opening the install screen…':'Demo recuperada. Abriendo la pantalla de instalación…';
+  const external=browserBridge(u.href);
+  setTimeout(()=>location.replace(android()?chromeIntent(external):external),180);
 }catch{fail('No hemos podido recuperar la demo. Genera un enlace nuevo desde WSD Accesos.')}
 })();
 </script>
