@@ -30,12 +30,12 @@ try{
   try{const current=localStorage.getItem(TOKEN)||'';if(current.length>=40&&current!==demoToken){const ce=await post(current,{action:'entitlement'});if(ce.r.ok&&ce.j?.ok&&ce.j.owner===true)localStorage.setItem(REAL,current)}}catch{}
   if(window.__WSD_ACCESS_BRIDGE?.remember)window.__WSD_ACCESS_BRIDGE.remember(demoToken);else localStorage.setItem(TOKEN,demoToken);
   localStorage.setItem('weddly_owner_demo_token_'+lang,demoToken);localStorage.setItem('weddly_owner_demo_mode',lang);localStorage.setItem('weddly_access_lang',lang);
-  const u=new URL('/owner-demo-shell.html',location.origin);u.searchParams.set('lang',lang);u.searchParams.set('product',product);u.searchParams.set('from','access');
+  const u=new URL(`/demo/${lang}/${product}/`,location.origin);u.searchParams.set('_from','access');
   if(standalone()){
-    msg.textContent=lang==='en'?'Demo ready. Open it in the browser so it can be saved as a separate copy.':'Demo preparada. Ábrela en el navegador para poder guardarla como una copia independiente.';
-    open.textContent=lang==='en'?'Open demo in browser':'Abrir demo en navegador';open.href=u.href;open.classList.add('on');return;
+    msg.textContent=lang==='en'?'Demo ready. Open this independent copy in the browser.':'Demo preparada. Abre esta copia independiente en el navegador.';
+    open.textContent=lang==='en'?'Open independent demo':'Abrir demo independiente';open.href=u.href;open.classList.add('on');return;
   }
-  msg.textContent=lang==='en'?'Demo restored. Opening Weddly Smart Design…':'Demo recuperada. Abriendo Weddly Smart Design…';setTimeout(()=>location.replace(u.href),180);
+  msg.textContent=lang==='en'?'Demo restored. Opening the independent copy…':'Demo recuperada. Abriendo la copia independiente…';setTimeout(()=>location.replace(u.href),180);
 }catch{fail('No hemos podido recuperar la demo. Genera un enlace nuevo desde WSD Accesos.')}
 })();
 </script>
