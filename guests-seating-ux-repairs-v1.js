@@ -10,8 +10,8 @@
       doc.documentElement.dataset[MARK]='1';
       const s=doc.createElement('script');
       s.textContent=`(()=>{
-        if(window.__wsdSeatingUxRepairsV1)return;
-        window.__wsdSeatingUxRepairsV1=true;
+        if(window.__wsdSeatingUxRepairsV2)return;
+        window.__wsdSeatingUxRepairsV2=true;
         const panelEl=document.getElementById('panel');
         const unseatedEl=document.getElementById('unseated');
         const isEn=()=>{try{return localStorage.getItem('weddly_access_lang')==='en'}catch{return false}};
@@ -21,7 +21,8 @@
           const candidates=[...card.querySelectorAll('.hint')].filter(el=>/toca|tap/i.test(String(el.textContent||'')));
           if(!candidates.length)return;
           const keep=candidates[0];
-          keep.textContent=isEn()?'Tap one or more guests to select them and assign them together.':'Toca uno o varios invitados para seleccionarlos y asignarlos juntos.';
+          const wanted=isEn()?'Tap one or more guests to select them and assign them together.':'Toca uno o varios invitados para seleccionarlos y asignarlos juntos.';
+          if(String(keep.textContent||'')!==wanted)keep.textContent=wanted;
           candidates.slice(1).forEach(el=>el.remove());
         }
         function ensureDeleteAction(){
@@ -75,11 +76,13 @@
           },true);
         }
         function patch(){cleanDuplicateHint();ensureDeleteAction();repairCreateAndSeat()}
-        const mo=new MutationObserver(()=>queueMicrotask(patch));
-        if(panelEl)mo.observe(panelEl,{childList:true,subtree:true});
-        const card=unseatedEl?.closest('.card');if(card)mo.observe(card,{childList:true,subtree:true});
-        document.addEventListener('click',()=>setTimeout(patch,0),true);
-        patch();setInterval(patch,1200);
+        cleanDuplicateHint();
+        if(panelEl){
+          const mo=new MutationObserver(()=>queueMicrotask(()=>{ensureDeleteAction();repairCreateAndSeat()}));
+          mo.observe(panelEl,{childList:true,subtree:true});
+        }
+        document.addEventListener('click',()=>setTimeout(()=>{ensureDeleteAction();repairCreateAndSeat()},0),true);
+        patch();
       })();`;
       (doc.body||doc.documentElement).appendChild(s);s.remove();
     }catch(err){console.warn('[WSD seating UX repairs]',err)}
