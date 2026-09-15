@@ -14,7 +14,7 @@
 <script src="/access-cookie-bridge-v1.js?v=1"></script>
 <script>
 (async()=>{
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access',TOKEN='weddly_shared_wedding_token',REAL='weddly_owner_real_token_v1';
 const msg=document.getElementById('msg'),open=document.getElementById('open');
 function fail(t){msg.textContent=t;msg.classList.add('err')}
 async function post(memberToken,body){const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':memberToken},body:JSON.stringify(body),cache:'no-store'}),j=await r.json().catch(()=>({}));return{r,j}}
@@ -27,7 +27,8 @@ try{
   if(!ent.r.ok||!j?.ok||j.product!=='full'){fail(lang==='en'?'This demo link is no longer valid. Generate a new one from WSD Access.':'Este enlace de demo ya no es válido. Genera uno nuevo desde WSD Accesos.');return}
   let demoToken=token;
   if(j.owner===true){const d=await post(token,{action:'owner_demo_token',lang});if(!d.r.ok||!d.j?.memberToken){fail(lang==='en'?'We could not prepare the demo wedding. Open it again from WSD Access.':'No hemos podido preparar la boda demo. Vuelve a abrirla desde WSD Accesos.');return}demoToken=d.j.memberToken}
-  if(window.__WSD_ACCESS_BRIDGE?.remember)window.__WSD_ACCESS_BRIDGE.remember(demoToken);else localStorage.setItem('weddly_shared_wedding_token',demoToken);
+  try{const current=localStorage.getItem(TOKEN)||'';if(current.length>=40&&current!==demoToken){const ce=await post(current,{action:'entitlement'});if(ce.r.ok&&ce.j?.ok&&ce.j.owner===true)localStorage.setItem(REAL,current)}}catch{}
+  if(window.__WSD_ACCESS_BRIDGE?.remember)window.__WSD_ACCESS_BRIDGE.remember(demoToken);else localStorage.setItem(TOKEN,demoToken);
   localStorage.setItem('weddly_owner_demo_token_'+lang,demoToken);localStorage.setItem('weddly_owner_demo_mode',lang);localStorage.setItem('weddly_access_lang',lang);
   const u=new URL('/owner-demo-shell.html',location.origin);u.searchParams.set('lang',lang);u.searchParams.set('product',product);u.searchParams.set('from','access');
   if(standalone()){
