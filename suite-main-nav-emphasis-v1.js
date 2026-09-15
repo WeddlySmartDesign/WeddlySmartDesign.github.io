@@ -42,8 +42,8 @@
 })();
 (()=>{if(document.getElementById('wsdWeddingServicesLoader'))return;const s=document.createElement('script');s.id='wsdWeddingServicesLoader';s.src='suite-wedding-services-v1.js?v=2';document.head.appendChild(s)})();
 (()=>{
-  if(window.__wsdVisibleViewportFixV1)return;
-  window.__wsdVisibleViewportFixV1=true;
+  if(window.__wsdVisibleViewportFixV2)return;
+  window.__wsdVisibleViewportFixV2=true;
   const payFrame=document.getElementById('paymentsFrame');
   const guestFrame=document.getElementById('guestsFrame');
   const planningFrame=document.getElementById('planningFrame');
@@ -60,14 +60,16 @@
   function liftNav(d,selector){
     try{
       const n=d?.querySelector(selector);if(!n)return;
-      const {inset}=metrics();
-      n.style.setProperty('display',selector==='nav'?'flex':'grid','important');
+      const {inset}=metrics(),cs=d.defaultView?.getComputedStyle(n);
+      if(!cs||cs.display==='none')n.style.setProperty('display','grid','important');
       n.style.setProperty('visibility','visible','important');
       n.style.setProperty('opacity','1','important');
       n.style.setProperty('position','fixed','important');
+      n.style.setProperty('left','0','important');
+      n.style.setProperty('right','0','important');
       n.style.setProperty('bottom',inset+'px','important');
       n.style.setProperty('z-index','2147483000','important');
-      if(d.body){const want=88+inset;const cur=parseFloat(getComputedStyle(d.body).paddingBottom)||0;if(cur<want)d.body.style.setProperty('padding-bottom',want+'px','important')}
+      if(d.body){const want=88+inset,cur=parseFloat(d.defaultView?.getComputedStyle(d.body)?.paddingBottom)||0;if(cur<want)d.body.style.setProperty('padding-bottom',want+'px','important')}
     }catch{}
   }
   function patchChildren(){
