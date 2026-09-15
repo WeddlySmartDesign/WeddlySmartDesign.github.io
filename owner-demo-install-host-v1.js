@@ -25,7 +25,14 @@ function ios(){return /iPad|iPhone|iPod/.test(navigator.userAgent||'')||(navigat
 function showHelp(text){helpText.textContent=text;help.classList.add('on')}
 function getToken(){try{return localStorage.getItem(tokenKey)||''}catch{return''}}
 function prepare(){const token=getToken();if(token.length<40){msg.textContent=C.missing;access.textContent=C.access;access.style.display='inline-block';save.style.display='none';return false}try{localStorage.setItem(TOKEN,token);localStorage.setItem(MODE,lang);localStorage.setItem('weddly_access_lang',lang)}catch{}return true}
-function launch(){if(!prepare())return;msg.textContent=C.loading;const u=new URL('/owner-demo-shell.html',location.origin);u.searchParams.set('lang',lang);u.searchParams.set('product',product);u.searchParams.set('embed','1');u.searchParams.set('_host',String(Date.now()));frame.src=u.href;frame.addEventListener('load',()=>{setTimeout(()=>{boot.style.display='none';frame.style.display='block'},100)},{once:true})}
+function hideNestedInstall(){
+  try{
+    const shellDoc=frame.contentDocument,suiteFrame=shellDoc?.getElementById('demo'),suiteDoc=suiteFrame?.contentDocument,aux=suiteDoc?.getElementById('auxFrame'),settings=aux?.contentDocument;
+    settings?.getElementById('wsdSuiteInstallTitle')?.remove();
+    settings?.getElementById('wsdSuiteInstallCard')?.remove();
+  }catch{}
+}
+function launch(){if(!prepare())return;msg.textContent=C.loading;const u=new URL('/owner-demo-shell.html',location.origin);u.searchParams.set('lang',lang);u.searchParams.set('product',product);u.searchParams.set('embed','1');u.searchParams.set('_host',String(Date.now()));frame.src=u.href;frame.addEventListener('load',()=>{setTimeout(()=>{boot.style.display='none';frame.style.display='block';hideNestedInstall()},100)},{once:true})}
 async function install(){
   if(ios()){showHelp(C.ios);return}
   if(promptEvent){const p=promptEvent;promptEvent=null;try{await p.prompt();const choice=await p.userChoice;if(choice?.outcome==='accepted')save.style.display='none'}catch{}return}
@@ -37,5 +44,6 @@ addEventListener('appinstalled',()=>{promptEvent=null;save.style.display='none'}
 save.textContent=C.save;save.onclick=install;
 $('demoHelpClose').onclick=()=>help.classList.remove('on');help.onclick=e=>{if(e.target===help)help.classList.remove('on')};
 if(installFlow||!standalone())save.style.display='block';else save.style.display='none';
+setInterval(hideNestedInstall,400);
 launch();
 })();
