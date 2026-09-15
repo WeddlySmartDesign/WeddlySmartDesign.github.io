@@ -54,14 +54,8 @@ try{
     }
   }catch{}
   msg.textContent=lang==='es'?'Demo recuperada. Abriendo Weddly Smart Design…':'Demo restored. Opening Weddly Smart Design…';
-  let target='';
-  if(lang==='en'){
-    const start=product==='guests'?'guests':product==='payments'?'payments':'';
-    target='/owner-demo-suite.html?ownerDemo=en'+(start?'&start='+encodeURIComponent(start):'');
-  }else{
-    target=product==='payments'?'/payments.html?ownerDemo=es':product==='guests'?'/guests.html?ownerDemo=es':'/app.html?ownerDemo=es';
-  }
-  setTimeout(()=>location.replace(target),250);
+  const target='/owner-demo-app.html?lang='+encodeURIComponent(lang)+'&product='+encodeURIComponent(product)+'&install=1';
+  setTimeout(()=>location.replace(target),180);
 }catch{fail('No hemos podido recuperar la demo. Genera un enlace nuevo desde tu Gestor de accesos.')}
 })();
 </script>
