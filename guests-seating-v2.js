@@ -167,6 +167,41 @@
       wrap.appendChild(b);panelEl.appendChild(wrap);
     }
 
+    function applyTableShape(o,nextType){
+      const oldType=o.type||'round';
+      if(nextType===oldType)return;
+      const oldW=Math.max(1,Number(o.w)||150),oldH=Math.max(1,Number(o.h)||150);
+      const cx=(Number(o.x)||0)+oldW/2,cy=(Number(o.y)||0)+oldH/2;
+      let w=oldW,h=oldH;
+      if(nextType==='round'){
+        const side=Math.max(110,Math.min(260,Math.sqrt(oldW*oldH)));
+        w=side;h=side;
+      }else if(oldType==='round'){
+        const area=Math.max(12000,oldW*oldH);
+        w=Math.max(160,Math.min(340,Math.sqrt(area*1.9)));
+        h=Math.max(90,Math.min(220,w/1.9));
+      }
+      o.type=nextType;o.w=Math.round(w);o.h=Math.round(h);
+      o.x=Math.round(cx-o.w/2);o.y=Math.round(cy-o.h/2);
+    }
+
+    function ensureTableShapeEditor(){
+      if(!panelEl||!selectedObj||panelEl.querySelector('#wsdTableShapeEditor'))return;
+      const saveBtn=panelEl.querySelector('#objSave');if(!saveBtn)return;
+      const [kind,id]=String(selectedObj).split(':');if(kind!=='t')return;
+      const table=S.tables[id];if(!table)return;
+      let chosenType=['round','rect','pres'].includes(table.type)?table.type:'round';
+      const box=document.createElement('div');box.id='wsdTableShapeEditor';
+      box.innerHTML='<label>'+(isEn()?'Shape':'Forma')+'</label><div class="typeRow"><button type="button" class="typeBtn" data-wsd-shape="round">'+(isEn()?'Round':'Redonda')+'</button><button type="button" class="typeBtn" data-wsd-shape="rect">'+(isEn()?'Rectangular':'Rectangular')+'</button><button type="button" class="typeBtn" data-wsd-shape="pres">'+(isEn()?'Head table':'Presidencial')+'</button></div>';
+      const cap=panelEl.querySelector('#objCap'),anchor=cap?.previousElementSibling||cap||panelEl.querySelector('.rotateRow');
+      if(anchor)panelEl.insertBefore(box,anchor);else panelEl.insertBefore(box,saveBtn.parentElement||saveBtn);
+      const buttons=[...box.querySelectorAll('[data-wsd-shape]')];
+      const refresh=()=>buttons.forEach(b=>b.classList.toggle('sel',b.dataset.wsdShape===chosenType));
+      buttons.forEach(b=>b.onclick=e=>{e.preventDefault();chosenType=b.dataset.wsdShape;refresh()});
+      refresh();
+      saveBtn.addEventListener('click',()=>applyTableShape(table,chosenType),true);
+    }
+
     function repairCreateAndSeat(){
       if(!panelEl)return;
       const b=panelEl.querySelector('#createAndSeat');
@@ -190,7 +225,7 @@
       },true);
     }
 
-    function patchPanel(){ensureDeleteAction();repairCreateAndSeat()}
+    function patchPanel(){ensureTableShapeEditor();ensureDeleteAction();repairCreateAndSeat()}
     if(panelEl){
       const mo=new MutationObserver(()=>queueMicrotask(patchPanel));
       mo.observe(panelEl,{childList:true,subtree:true});
