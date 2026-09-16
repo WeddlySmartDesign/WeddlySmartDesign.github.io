@@ -84,3 +84,21 @@ jobs:
           assert live.get('part_count') == p['part_count'], (live,p)
           print('Runtime manifest matches release/runtime-manifest.json')
           PY
+      - name: Verify RSVP sanitizer candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --retry 2 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp-qa-v12?health=sanitizer' -o /tmp/rsvp-v12.json
+          curl --fail --silent --show-error --location --retry 2 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp-single-v2-qa-v4?health=sanitizer' -o /tmp/rsvp-single-v4.json
+          python - <<'PY'
+          import json
+          for p in ['/tmp/rsvp-v12.json','/tmp/rsvp-single-v4.json']:
+              x=json.load(open(p,encoding='utf-8'))
+              assert x.get('ok') is True, x
+              checks=x.get('checks',{})
+              assert checks.get('plus_pending') is None or checks.get('plus_pending_meal') is None, x
+              assert checks.get('child_pending') is None or checks.get('child_pending_meal') is None, x
+              assert checks.get('plus_meal','') == '', x
+              assert checks.get('child_meal','') == '', x
+          print('RSVP sanitizer candidates preserve unanswered meal as pending/null')
+          PY
