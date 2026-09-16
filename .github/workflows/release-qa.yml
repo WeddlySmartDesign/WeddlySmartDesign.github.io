@@ -25,10 +25,14 @@ jobs:
         run: node qa/guests_merge_test.js
       - name: Run RSVP send regression suite
         run: node qa/rsvp_send_regression_test.js
+      - name: Run exhaustive static product invariants
+        run: node qa/exhaustive_static_test.js
       - name: Install browser QA driver
         run: npm install --no-save playwright-core@1.55.0
       - name: Run RSVP real-browser interaction suite
         run: node qa/rsvp_runtime_browser_test.js
+      - name: Run exhaustive Chromium browser QA
+        run: node qa/exhaustive_browser_test.js
       - name: Smoke candidate files locally
         shell: bash
         run: |
