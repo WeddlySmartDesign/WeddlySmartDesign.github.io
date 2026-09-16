@@ -2,6 +2,7 @@ const fs=require('fs');
 function text(p){return fs.readFileSync(p,'utf8')}
 function must(ok,msg){if(!ok){console.error('FAIL',msg);process.exitCode=1}else console.log('PASS',msg)}
 const live=text('guests-rsvp-operations-live.html');
+const formFlow=text('guests-rsvp-form-flow.html');
 const composer=text('guests-rsvp-share-composer-v2.js');
 const contact=text('guests-rsvp-contact-picker-v1.js');
 const single=text('guests-rsvp-v116-single-live.html');
@@ -10,13 +11,18 @@ const cal=text('guests-rsvp-postsubmit-calendar-v1.js');
 
 must(live.includes('guests-rsvp-share-composer-v2.js'),'operations loads safe share composer v2');
 must(live.includes('guests-rsvp-contact-picker-v1.js'),'operations loads contact-picker bridge');
-must(!live.includes("render();const __ctl=new AbortController()"),'operations does not render interactive Guests while the document is still being assembled');
-must(live.includes("document.readyState==='loading'?new Promise"),'operations waits for DOM readiness before first interactive render');
-must(live.includes("setTimeout(()=>c.abort(),5000)"),'operations remote RSVP requests have bounded timeouts');
-must(live.includes("render();show('Tus invitados están disponibles"),'operations falls back to an interactive local guest list when remote status cannot refresh');
-must(live.includes("if(migrateLegacy())syncFields().catch(()=>{})"),'legacy field sync cannot block the interactive render');
-must(live.includes('rsvp_load_signature_mismatch'),'operations refuses to boot if the source patch no longer matches');
-must(live.includes("localStorage.setItem('weddly_rsvp_public_token_v1',PT)"),'operations caches the validated public RSVP token after remote load');
+must(!live.includes('document.open()')&&!live.includes('document.write('),'operations runtime no longer rewrites the active document');
+must(live.includes('new Blob([h]')&&live.includes('location.replace(u)'),'operations assembles a fresh parser-driven runtime');
+must(live.includes('render();const __manage'),'operations renders local Guests before remote RSVP refresh');
+must(live.includes("setTimeout(()=>c.abort(),6000)"),'operations management and claim requests are bounded');
+must(live.includes("show('Tus invitados están disponibles"),'operations keeps local Guests usable when remote refresh fails');
+must(live.includes("if(migrateLegacy())syncFields().catch(()=>{})"),'legacy field sync cannot block interaction');
+must(live.includes('rsvp_load_signature_mismatch'),'operations refuses to boot if source patch no longer matches');
+must(live.includes("localStorage.setItem('weddly_rsvp_public_token_v1',PT)"),'operations caches validated public RSVP token');
+must(formFlow.includes('new Blob([h]')&&formFlow.includes('location.replace(u)'),'RSVP form uses the same stable parser-driven runtime');
+must(!formFlow.includes('document.open()')&&!formFlow.includes('document.write('),'RSVP form no longer rewrites the active document');
+must(formFlow.includes("setTimeout(()=>c.abort(),7000)"),'RSVP form wrapper and API requests are bounded');
+must(formFlow.includes('rsvp_form_request_signature_mismatch'),'RSVP form fails closed if source hardening no longer matches');
 must(composer.includes("target='_blank'")||composer.includes("a.target='_blank'"),'WhatsApp opens outside the suite instead of replacing it');
 must(!composer.includes('window.top.location.assign'),'share composer does not navigate the top-level suite');
 must(composer.includes('function markSent(')&&composer.includes("status:'sent'"),'share composer persists sent delivery state');
@@ -29,4 +35,4 @@ must(contact.includes("autocomplete','tel")&&contact.includes("autocomplete','em
 must(single.includes('guests-rsvp-postsubmit-calendar-v1.js'),'single RSVP loads post-submit calendar recovery');
 must(unit.includes('guests-rsvp-postsubmit-calendar-v1.js'),'group RSVP loads post-submit calendar recovery');
 must(cal.includes('BEGIN:VCALENDAR')&&cal.includes('Añadir al calendario'),'calendar recovery generates an ICS action');
-if(process.exitCode)process.exit(process.exitCode);console.log('RSVP send/agenda/calendar/loading/controls regression suite passed');
+if(process.exitCode)process.exit(process.exitCode);console.log('RSVP runtime/send/agenda/calendar regression suite passed');
