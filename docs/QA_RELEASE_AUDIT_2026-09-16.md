@@ -83,6 +83,18 @@ Required fix:
 Acceptance:
 - A deliberately broken QA fixture cannot be merged to `main` without failing a required check.
 
+### QA-012 — Production RSVP +1 operations script does not parse
+
+The automated Node syntax check fails on `guests-rsvp-plusone-ops-v1.js` with `SyntaxError: Unexpected token ')'`. This is not an archived-only file: `guests-rsvp-operations-live.html` injects that script into the active RSVP management flow.
+
+Required fix:
+- Correct the script on an isolated defect branch and add its syntax check permanently to the release gate.
+- Validate RSVP management with an existing +1, a newly created +1, rename/remove, manual response and return to Guests.
+
+Acceptance:
+- Production-reachable JS graph parses cleanly.
+- +1 operations render and persist correctly in RSVP management, Guests and a second device.
+
 ## P1 — high-priority release risks
 
 ### QA-006 — Full product is not reproducible from GitHub alone
@@ -119,6 +131,7 @@ Required direction: explicit `postMessage`/module integration contract and smoke
 
 - Test residue such as `zz-test-create.txt` exists in the production tree.
 - There is substantial branch/version/hotfix sprawl. Old files cannot be deleted blindly because production intentionally references versioned cores, but reachable vs archived assets should be documented.
+- The full-repository syntax scan also found malformed JavaScript in several legacy/preview files. These are not currently classified as production-reachable, so they are warnings rather than release blockers, but they should be archived or repaired once the production graph is documented.
 - Numerous temporary/test Edge Functions are active in the same Supabase project. They require an ownership/auth/reachability review before release; `verify_jwt:false` alone is not treated as a vulnerability because several functions implement their own member-token authentication.
 
 ## What looked comparatively stronger
