@@ -42,60 +42,85 @@
 })();
 (()=>{if(document.getElementById('wsdWeddingServicesLoader'))return;const s=document.createElement('script');s.id='wsdWeddingServicesLoader';s.src='suite-wedding-services-v1.js?v=2';document.head.appendChild(s)})();
 (()=>{
-  if(window.__wsdVisibleViewportFixV2)return;
-  window.__wsdVisibleViewportFixV2=true;
+  if(window.__wsdVisibleViewportFixV3)return;
+  window.__wsdVisibleViewportFixV3=true;
   const payFrame=document.getElementById('paymentsFrame');
   const guestFrame=document.getElementById('guestsFrame');
   const planningFrame=document.getElementById('planningFrame');
-  const shell=document.querySelector('.shell');
-  let lastH=0,lastInset=-1;
-  function metrics(){
-    const vv=window.visualViewport;
-    const h=Math.round(vv?.height||window.innerHeight||document.documentElement.clientHeight||0);
-    const layout=Math.round(window.innerHeight||h);
-    const top=Math.max(0,Math.round(vv?.offsetTop||0));
-    const inset=Math.max(0,Math.min(120,layout-h-top));
-    return{h,inset};
+
+  function editableFocused(d){
+    try{
+      const a=d?.activeElement;if(!a)return false;
+      const tag=String(a.tagName||'').toLowerCase();
+      return tag==='input'||tag==='textarea'||tag==='select'||a.isContentEditable===true;
+    }catch{return false}
   }
-  function liftNav(d,selector){
+
+  function patchNav(d,selector){
     try{
       const n=d?.querySelector(selector);if(!n)return;
-      const {inset}=metrics(),cs=d.defaultView?.getComputedStyle(n);
+
+      /* Keyboard open: do not move the app navigation into the form area. */
+      if(editableFocused(d)){
+        n.style.setProperty('display','none','important');
+        n.style.removeProperty('z-index');
+        return;
+      }
+
+      /* Restore navigation after editing. Keep each module's own horizontal
+         geometry and stacking order; only anchor it to the visible bottom. */
+      const cs=d.defaultView?.getComputedStyle(n);
       if(!cs||cs.display==='none')n.style.setProperty('display','grid','important');
       n.style.setProperty('visibility','visible','important');
       n.style.setProperty('opacity','1','important');
       n.style.setProperty('position','fixed','important');
       n.style.setProperty('top','auto','important');
+      n.style.setProperty('bottom','0','important');
       n.style.removeProperty('left');
       n.style.removeProperty('right');
-      n.style.setProperty('bottom',inset+'px','important');
-      n.style.setProperty('z-index','2147483000','important');
-      if(d.body){const want=88+inset,cur=parseFloat(d.defaultView?.getComputedStyle(d.body)?.paddingBottom)||0;if(cur<want)d.body.style.setProperty('padding-bottom',want+'px','important')}
+      n.style.removeProperty('z-index');
+
+      /* The previous viewport hotfix could leave an oversized padding after
+         the Android keyboard closed. Keep only the normal nav clearance. */
+      if(d.body){
+        const cur=parseFloat(d.defaultView?.getComputedStyle(d.body)?.paddingBottom)||0;
+        if(cur>140)d.body.style.setProperty('padding-bottom','88px','important');
+        else if(cur<88)d.body.style.setProperty('padding-bottom','88px','important');
+      }
     }catch{}
   }
+
   function patchChildren(){
-    try{const d=payFrame?.contentDocument;if(d?.body)liftNav(d,'nav')}catch{}
+    try{const d=payFrame?.contentDocument;if(d?.body)patchNav(d,'nav')}catch{}
     try{
       const shellDoc=guestFrame?.contentDocument,inner=shellDoc?.getElementById('app'),d=inner?.contentDocument;
-      if(d?.body)liftNav(d,'#nav');
+      if(d?.body)patchNav(d,'#nav');
     }catch{}
-    try{const d=planningFrame?.contentDocument;if(d?.body)liftNav(d,'.nav')}catch{}
+    try{const d=planningFrame?.contentDocument;if(d?.body)patchNav(d,'.nav')}catch{}
   }
-  function fit(){
-    const {h,inset}=metrics();
-    if(shell&&h>320&&(h!==lastH||inset!==lastInset)){
-      shell.style.setProperty('height',h+'px','important');
-      shell.style.setProperty('max-height',h+'px','important');
-      document.documentElement.style.setProperty('height',h+'px','important');
-      document.body.style.setProperty('height',h+'px','important');
-      lastH=h;lastInset=inset;
-    }
-    patchChildren();
+
+  /* Never resize the outer shell to visualViewport.height. On Android that
+     value collapses when the keyboard opens and was the cause of half-screen
+     forms and clipped action buttons. The validated 100dvh shell remains in
+     charge of viewport sizing. */
+  function clearLegacyShellSizing(){
+    try{
+      const shell=document.querySelector('.shell');
+      shell?.style.removeProperty('height');
+      shell?.style.removeProperty('max-height');
+      document.documentElement.style.removeProperty('height');
+      document.body.style.removeProperty('height');
+    }catch{}
   }
-  [payFrame,guestFrame,planningFrame].forEach(f=>f?.addEventListener('load',()=>{setTimeout(fit,30);setTimeout(fit,250);setTimeout(fit,900)}));
-  window.visualViewport?.addEventListener('resize',fit);
-  window.visualViewport?.addEventListener('scroll',fit);
-  addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,120));
-  fit();[80,250,700,1600,3500].forEach(ms=>setTimeout(fit,ms));
-  setInterval(patchChildren,1500);
+
+  function apply(){clearLegacyShellSizing();patchChildren()}
+  [payFrame,guestFrame,planningFrame].forEach(f=>f?.addEventListener('load',()=>{[30,180,500,1000].forEach(ms=>setTimeout(apply,ms))}));
+  window.visualViewport?.addEventListener('resize',apply);
+  window.visualViewport?.addEventListener('scroll',apply);
+  addEventListener('resize',apply);
+  addEventListener('orientationchange',()=>setTimeout(apply,120));
+  addEventListener('focusin',()=>setTimeout(apply,0),true);
+  addEventListener('focusout',()=>setTimeout(apply,120),true);
+  apply();[80,250,700,1600].forEach(ms=>setTimeout(apply,ms));
+  setInterval(apply,900);
 })();
