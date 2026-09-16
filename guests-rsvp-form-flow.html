@@ -11,10 +11,12 @@ function harden(h){
   return h.replace(oldJ,newJ);
 }
 function injectRuntime(h,effective){
+  const close='</'+'script>';
   if(!h.includes('<base '))h=h.replace('<head>','<head><base href="'+location.origin+'/">');
-  const tokenScript='<script>(()=>{const __effective='+JSON.stringify(effective)+';const __nativeGet=Storage.prototype.getItem;Storage.prototype.getItem=function(k){if(this===localStorage&&k===\"weddly_shared_wedding_token\")return __effective;return __nativeGet.call(this,k)}})();<\\/script>';
+  const tokenScript='<script>(()=>{const __effective='+JSON.stringify(effective)+';const __nativeGet=Storage.prototype.getItem;Storage.prototype.getItem=function(k){if(this===localStorage&&k===\"weddly_shared_wedding_token\")return __effective;return __nativeGet.call(this,k)}})();'+close;
   h=h.replace('<body>','<body>'+tokenScript);
-  return h.replace('</body>','<script src="guests-rsvp-services-hotfix-v1.js?v=1"><\\/script><script src="guests-rsvp-form-flow-v1.js?v=4"><\\/script><script src="guests-rsvp-children-config-v1.js?v=1"><\\/script></body>');
+  const files=['guests-rsvp-services-hotfix-v1.js?v=1','guests-rsvp-form-flow-v1.js?v=4','guests-rsvp-children-config-v1.js?v=1'];
+  return h.replace('</body>',files.map(src=>'<script src="'+src+'">'+close).join('')+'</body>');
 }
-async function run(){try{const raw=localStorage.getItem(K)||'',effective=await effectiveMember();if(!raw||raw.length<40)throw new Error('missing_access');const r=await fetchBound('guests-rsvp-form-flex.html?v=4-runtime-stable',{cache:'no-store'});if(!r.ok)throw new Error('form_source_failed');const h=injectRuntime(harden(await r.text()),effective);const blob=new Blob([h],{type:'text/html'}),u=URL.createObjectURL(blob);location.replace(u)}catch(e){console.error('[WSD RSVP form boot]',e);boot.innerHTML='<div class="card"><h1>No se ha podido abrir el formulario RSVP</h1><p>Comprueba la conexión y vuelve a intentarlo.</p></div>'}}run();
+async function run(){try{const raw=localStorage.getItem(K)||'',effective=await effectiveMember();if(!raw||raw.length<40)throw new Error('missing_access');const r=await fetchBound('guests-rsvp-form-flex.html?v=5-runtime-stable',{cache:'no-store'});if(!r.ok)throw new Error('form_source_failed');const h=injectRuntime(harden(await r.text()),effective),blob=new Blob([h],{type:'text/html'}),u=URL.createObjectURL(blob);location.replace(u)}catch(e){console.error('[WSD RSVP form boot]',e);boot.innerHTML='<div class="card"><h1>No se ha podido abrir el formulario RSVP</h1><p>Comprueba la conexión y vuelve a intentarlo.</p></div>'}}run();
 })();</script></body></html>
