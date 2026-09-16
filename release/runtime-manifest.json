@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "release": "app64-assets-34c5f09ffe9385cd25df8310c6da8b0a",
+  "captured_at": "2026-09-16",
+  "supabase_project": "dnjsxequwgtyyauuofxj",
+  "payments": {
+    "edge_function": "weddly-app",
+    "edge_function_version": 64,
+    "edge_function_sha256": "183b0f879e26a06b1daf1e537149c924bae52ac91739c63ba68c603531771349",
+    "asset_manifest_md5": "34c5f09ffe9385cd25df8310c6da8b0a",
+    "asset_count": 42,
+    "required_markers": ["weddly-v19-core", "weddly-v20-core", "Weddly Smart Design"]
+  },
+  "guests": {
+    "state_function": "weddly-guests-state",
+    "state_function_version": 2,
+    "state_function_sha256": "133ea311abbfbcd29de63933cb609402cc78e326216f28e8d9d9996c5ef0ef6e"
+  },
+  "planning": {
+    "state_function": "weddly-planning-state",
+    "state_function_version": 1,
+    "state_function_sha256": "e12b1ad80b549368d9509ccbfa99a9579f3f4614c936205a499ac04750885ba6"
+  },
+  "rsvp": {
+    "edge_function": "weddly-rsvp",
+    "edge_function_version": 11,
+    "edge_function_sha256": "0a9e75775bd5e43852564da408ef2727d62ea7de0a970b062856987371c67870"
+  }
+}
