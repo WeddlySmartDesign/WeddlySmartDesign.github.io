@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Static release gate for Weddly Smart Design.
 
-This gate intentionally fails on known release blockers. It distinguishes the
-commercial runtime from archived/preview files so legacy repository debris is
-reported without obscuring release-critical failures.
+The gate blocks production-reachable syntax/packaging defects and known data
+integrity regressions. Legacy/preview debris is reported as warning unless it is
+reachable from the commercial runtime.
 """
 from __future__ import annotations
 
@@ -39,19 +39,18 @@ def text(path: str) -> str:
 REQUIRED = [
     "app.html", "payments.html", "guests.html", "guests-v116-production.html",
     "guests-v114-integrated.html", "guests-production-sync.js",
-    "guests-plusone-placeholder-link-v1.js", "guests-seating-sync-hotfix-v1.js",
-    "planning.html", "planning-v2.js", "weddly-settings.html", "sw.js",
-    "manifest-suite.webmanifest", "access.html", "guests-rsvp-v105.html",
-    "guests-rsvp-public-clean.html", "guests-rsvp-operations-live.html",
-    "guests-rsvp-operations-v3.html", "guests-rsvp-plusone-public-v1.js",
-    "guests-rsvp-plusone-ops-v1.js",
+    "guests-state-integrity-v1.js", "guests-plusone-placeholder-link-v1.js",
+    "guests-seating-sync-hotfix-v1.js", "planning.html", "planning-v2.js",
+    "weddly-settings.html", "sw.js", "manifest-suite.webmanifest", "access.html",
+    "guests-rsvp-v105.html", "guests-rsvp-public-clean.html",
+    "guests-rsvp-operations-live.html", "guests-rsvp-operations-v3.html",
+    "guests-rsvp-plusone-public-v1.js", "guests-rsvp-plusone-ops-v1.js",
 ]
 for item in REQUIRED:
     if not (ROOT / item).exists():
         fail("PKG-001", f"required production file missing: {item}")
 
 
-# JSON / webmanifest syntax across the repository.
 for p in ROOT.rglob("*"):
     if any(part == ".git" for part in p.parts) or not p.is_file():
         continue
@@ -64,7 +63,7 @@ for p in ROOT.rglob("*"):
 
 
 PRODUCTION_JS = {
-    "guests-access-layer.js", "guests-production-sync.js",
+    "guests-access-layer.js", "guests-production-sync.js", "guests-state-integrity-v1.js",
     "guests-plusone-placeholder-link-v1.js", "guests-production-ui.js",
     "guests-production-ops.js", "guests-home-rsvp-status-v1.js",
     "guests-smart-actions-v1.js", "guests-mobile-compat-hotfix-v1.js",
@@ -114,21 +113,15 @@ def node_check(code: str, label: str, critical: bool) -> None:
             pass
     if r.returncode:
         message = f"{label}: {r.stderr.strip()}"
-        if critical:
-            fail("JS-SYNTAX-PROD", message)
-        else:
-            warn("JS-SYNTAX-LEGACY", message)
+        (fail if critical else warn)("JS-SYNTAX-PROD" if critical else "JS-SYNTAX-LEGACY", message)
 
 
-# Every JS file is parsed; only production-reachable JS blocks a release.
 for p in ROOT.rglob("*.js"):
     if ".git" in p.parts:
         continue
     rel = str(p.relative_to(ROOT))
     node_check(p.read_text(encoding="utf-8"), rel, rel in PRODUCTION_JS)
 
-# Inline scripts are checked in the known production HTML graph. Other HTML is
-# still scanned and reported as a repository-hygiene warning.
 SCRIPT_RE = re.compile(r"<script(?P<attrs>[^>]*)>(?P<body>.*?)</script\s*>", re.I | re.S)
 for p in ROOT.rglob("*.html"):
     if ".git" in p.parts:
@@ -147,7 +140,6 @@ for p in ROOT.rglob("*.html"):
             node_check(body, f"{rel} inline script #{i}", rel in PRODUCTION_HTML)
 
 
-# Local src/href integrity for release entrypoints.
 ENTRYPOINTS = [
     "app.html", "payments.html", "guests-v116-production.html", "planning.html",
     "guests-rsvp-v105.html", "guests-rsvp-public-clean.html", "owner-demo-shell.html",
@@ -164,9 +156,7 @@ for rel in ENTRYPOINTS:
         if not path or path == "/":
             continue
         target = (ROOT / path.lstrip("/")) if path.startswith("/") else (p.parent / path)
-        if not target.resolve().is_relative_to(ROOT.resolve()):
-            continue
-        if not target.exists():
+        if target.resolve().is_relative_to(ROOT.resolve()) and not target.exists():
             fail("PKG-REF", f"{rel} references missing local asset: {raw}")
 
 
@@ -174,31 +164,54 @@ for p in ROOT.glob("zz-test*"):
     fail("HYGIENE-001", f"test residue present in production tree: {p.name}")
 
 
-# Current Guests architectural blockers.
+# Guests state integrity. The frozen core still emits whole-state writes, but the
+# production wrapper must intercept them with a three-way rebase against the
+# latest canonical state before they can reach localStorage.
 core = text("guests-v114-integrated.html")
+wrapper = text("guests-v116-production.html")
+integrity = text("guests-state-integrity-v1.js")
 render_match = re.search(r"function\s+render\s*\([^)]*\)\s*\{(?P<body>.{0,1200}?)\}", core, re.S)
-if render_match and re.search(r"\bsave\s*\(", render_match.group("body")):
-    fail("GUESTS-STATE-001", "Guests core render() still writes the whole in-memory state; stale snapshots can overwrite external mutations.")
+core_writes_on_render = bool(render_match and re.search(r"\bsave\s*\(", render_match.group("body")))
+if core_writes_on_render:
+    required_integrity = [
+        "guests-state-integrity-v1.js" in wrapper,
+        "function merge3(" in integrity,
+        "P.setItem=function" in integrity,
+        "coreBase=structuredClone(candidate)" in integrity,
+        "latest=parse(nativeGet.call(ls,KEY))" in integrity,
+    ]
+    if not all(required_integrity):
+        fail("GUESTS-STATE-001", "frozen Guests core writes whole snapshots without an active three-way rebase guard")
 
 plus_link = text("guests-plusone-placeholder-link-v1.js")
-if "localStorage.setItem(KEY,JSON.stringify" in plus_link:
-    fail("GUESTS-STATE-002", "plus-one placeholder layer independently writes the canonical Guests document while the core can remain loaded.")
+if "wsd-safe-patch-write-v1" not in plus_link or "persistLatest(" not in plus_link:
+    fail("GUESTS-STATE-002", "plus-one placeholder linking is not constrained to patching the latest canonical Guests state")
 
 sync = text("guests-production-sync.js")
-if "CONFLICT_BACKUP" in sync and "localStorage.setItem(CONFLICT_BACKUP" in sync:
-    fail("GUESTS-SYNC-001", "Guests conflict path still falls back to a hidden local backup instead of deterministic merge/recovery.")
-if re.search(r"if\s*\(remote\?\.state\).*?writeRaw\(remote\.state\)", sync, re.S):
-    fail("GUESTS-SYNC-002", "Guests startup can replace local state with server state without a durable dirty/freshness merge.")
+for needle, code, msg in [
+    ("weddly_guests_sync_meta_v2", "GUESTS-SYNC-001", "durable dirty/base sync metadata is missing"),
+    ("function merge3(", "GUESTS-SYNC-002", "three-way merge is missing from Guests synchronization"),
+    ("function markDirty(", "GUESTS-SYNC-003", "local Guests edits are not durably marked dirty"),
+    ("async function reconcileDirty(", "GUESTS-SYNC-004", "startup dirty-state reconciliation is missing"),
+    ("a.r.status===409", "GUESTS-SYNC-005", "409 conflict handling is missing"),
+]:
+    if needle not in sync:
+        fail(code, msg)
+if "weddly_guests_conflict_backup" in sync:
+    fail("GUESTS-SYNC-006", "legacy conflict path can still replace one device with a hidden backup instead of merging")
 
+# Backup restore may write Guests remotely while an old Guests iframe is still
+# open. This is safe only if the sync layer has durable base state and 409 merge
+# semantics, so stale pre-restore data cannot overwrite the restored snapshot.
 settings = text("weddly-settings.html")
 restore = re.search(r"async function restoreBackup\([^)]*\)\{(?P<body>.*?)\n?\}\n?\$\('back'\)", settings, re.S)
 if restore:
     body = restore.group("body")
-    if "localStorage.setItem(GKEY" not in body and "location.reload" not in body:
-        fail("BACKUP-001", "backup restore updates remote Guests but does not synchronously replace/reload canonical local Guests state.")
+    direct_local_refresh = "localStorage.setItem(GKEY" in body or "location.reload" in body
+    merge_barrier = all(x in sync for x in ["weddly_guests_sync_meta_v2", "function merge3(", "a.r.status===409", "function reconcileDirty("])
+    if not direct_local_refresh and not merge_barrier:
+        fail("BACKUP-001", "backup restore can be overwritten by stale Guests state")
 
-# Confirm production RSVP operations really inject the +1 operations layer; if
-# that layer has a syntax error the feature is silently absent at runtime.
 rsvp_live = text("guests-rsvp-operations-live.html")
 if "guests-rsvp-plusone-ops-v1.js" not in rsvp_live:
     fail("RSVP-OPS-001", "RSVP operations live wrapper no longer includes the +1 operations layer")
