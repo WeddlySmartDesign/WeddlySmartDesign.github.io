@@ -1,10 +1,10 @@
 # PRODUCTION FREEZE — FULL COMMERCIAL RUNTIME — 2026-09-16
 
 Authoritative operational lock: `PRODUCTION_FROZEN.md`.
-Archive branch preserving the current full-runtime state: `freeze-full-runtime-2026-09-16`.
-Current runtime candidate after the Payments Android keyboard/navigation repair: `90e38b5d7e42837b5d89e48691f8128ff0f28f4a`.
+Validated full-runtime recovery branch: `freeze-full-runtime-validated-2026-09-16`.
+Validated production runtime commit after the Payments rollback: `37d81add632856a6f514dfe1ef53925bc6f61a25`.
 
-IMPORTANT: this runtime candidate is not to be called fully validated until the user rechecks the exact real-device Payments provider flow. The earlier notion that a stable module core could be considered "frozen" while shared shell/demo/viewport layers kept changing is retired.
+The user confirmed on a real Android device that the Payments menu lockup observed after adding a contribution/gift appears solved after rolling back the generic child-navigation viewport patch. This validated runtime is now the frozen commercial baseline.
 
 ## Frozen scope
 The freeze is end-to-end and includes every layer capable of affecting what a buyer, tester, influencer or owner sees or can do:
@@ -38,30 +38,34 @@ The freeze is end-to-end and includes every layer capable of affecting what a bu
 - If the check fails, continue on the isolated branch or revert. Do not stack speculative live hotfixes.
 
 ## Sales-critical regression history
-On 2026-09-16 two regressions demonstrated why the entire commercial runtime must be frozen, not only module cores.
+On 2026-09-16 several regressions demonstrated why the entire commercial runtime must be frozen, not only module cores.
 
-First, a global Android viewport/navigation patch forced horizontal positioning (`left:0` / `right:0`) onto internal module navigation. Planning already had its own centering transform, so the rules conflicted and moved part of the navigation off-screen. Payments showed the same class of problem.
+A global Android viewport/navigation patch first forced horizontal positioning (`left:0` / `right:0`) onto internal module navigation. Planning already had its own centering transform, so the rules conflicted and moved part of the navigation off-screen. Payments showed the same class of problem.
 
-Second, the same family of generic viewport logic treated the reduced `visualViewport.height` produced by the Android software keyboard as system-bar space. It moved Payments navigation into the middle of the provider form, reduced usable form height during editing, clipped content and allowed navigation to cover the final black action button through an excessive `z-index`.
+The same family of generic viewport logic then treated the reduced `visualViewport.height` produced by the Android software keyboard as system-bar space. It moved Payments navigation into the middle of the provider form, reduced usable form height during editing, clipped content and allowed navigation to cover the final black action button through an excessive `z-index`.
+
+A later repair layer introduced another regression by restoring hidden module navigation with `display:grid` even though Payments' native navigation uses `display:flex`. After focus changes such as adding a gift/contribution, Resumen / Proveedores / Gastos stacked vertically and blocked a large part of the screen. The validated fix was not another patch: the entire generic child-navigation viewport layer was rolled back to the earlier stable baseline.
 
 ## Permanent technical guardrails
-- Never globally override the horizontal geometry of internal module navigation unless every affected module's own `left`, `right`, `width`, `max-width` and `transform` rules have been checked.
+- Never globally override the horizontal geometry of internal module navigation unless every affected module's own `left`, `right`, `width`, `max-width`, `transform` and native `display` rules have been checked.
+- Never change a module navigation's layout mode (`flex`, `grid`, etc.) from the suite shell unless the module explicitly requires it.
 - Do not assume Payments, Guests and Planning share navigation CSS or stacking behaviour.
 - Never derive Android system-bar spacing directly from `layout viewport - visualViewport` without distinguishing an open software keyboard.
 - Never force suite/document height to `visualViewport.height` while an input, textarea or select is being edited.
-- Internal bottom navigation must not jump above the software keyboard. It may be hidden temporarily while editing if that is safer, then restored afterward.
+- Internal bottom navigation must not jump above the software keyboard.
 - Never assign ordinary navigation a global/maximal `z-index` that can cover sheets, dialogs, forms or action buttons.
 - Do not derive body padding from keyboard height.
 - Never alter demo/install/access/PWA architecture as part of unrelated feature work.
 - Never deploy a generic mobile geometry fix across every child iframe without checking all affected modules.
+- Prefer rollback to a known-good baseline over stacking additional generic hotfixes when a shared integration layer causes regressions.
 
 ## Mandatory mobile smoke test for shared-shell/viewport/navigation/PWA changes
 1. Open the full ES demo on Android in portrait.
-2. Payments: confirm Resumen / Proveedores / Gastos are fully visible and tappable.
-3. Payments: open `+ Proveedor`, focus a text field and verify the keyboard does not move navigation into the form or collapse the form area.
-4. Payments: repeat with a numeric field such as quantity or unit price.
-5. Payments: close keyboard, scroll to the bottom and verify the final black action/save button is completely visible and tappable.
-6. Payments: confirm internal navigation returns to the correct bottom position after keyboard dismissal.
+2. Payments: confirm Resumen / Proveedores / Gastos remain in one horizontal row and are fully visible and tappable.
+3. Payments: add/edit a contribution or gift and confirm navigation remains correctly positioned after focus changes.
+4. Payments: open `+ Proveedor`, focus a text field and verify the keyboard does not move navigation into the form or collapse the form area.
+5. Payments: repeat with a numeric field such as quantity or unit price.
+6. Payments: close keyboard, scroll to the bottom and verify the final black action/save button is completely visible and tappable.
 7. Guests: confirm all main navigation is visible and usable.
 8. Planning: confirm Ahora / Agenda / Timeline / Progreso are all visible and tappable.
 9. Confirm global Pagos / Invitados / Planning / Ajustes navigation remains visible and usable.
