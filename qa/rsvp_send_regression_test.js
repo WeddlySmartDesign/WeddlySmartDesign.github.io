@@ -10,9 +10,12 @@ const cal=text('guests-rsvp-postsubmit-calendar-v1.js');
 
 must(live.includes('guests-rsvp-share-composer-v2.js'),'operations loads safe share composer v2');
 must(live.includes('guests-rsvp-contact-picker-v1.js'),'operations loads contact-picker bridge');
-must(live.includes("render();const __ctl=new AbortController()"),'operations renders local guests before waiting for remote RSVP state');
-must(live.includes("setTimeout(()=>__ctl.abort(),7000)"),'operations remote RSVP refresh has a bounded timeout');
-must(live.includes('rsvp_load_signature_mismatch'),'operations refuses to boot if the resilience source patch no longer matches');
+must(!live.includes("render();const __ctl=new AbortController()"),'operations does not render interactive Guests while the document is still being assembled');
+must(live.includes("document.readyState==='loading'?new Promise"),'operations waits for DOM readiness before first interactive render');
+must(live.includes("setTimeout(()=>c.abort(),5000)"),'operations remote RSVP requests have bounded timeouts');
+must(live.includes("render();show('Tus invitados están disponibles"),'operations falls back to an interactive local guest list when remote status cannot refresh');
+must(live.includes("if(migrateLegacy())syncFields().catch(()=>{})"),'legacy field sync cannot block the interactive render');
+must(live.includes('rsvp_load_signature_mismatch'),'operations refuses to boot if the source patch no longer matches');
 must(live.includes("localStorage.setItem('weddly_rsvp_public_token_v1',PT)"),'operations caches the validated public RSVP token after remote load');
 must(composer.includes("target='_blank'")||composer.includes("a.target='_blank'"),'WhatsApp opens outside the suite instead of replacing it');
 must(!composer.includes('window.top.location.assign'),'share composer does not navigate the top-level suite');
@@ -26,4 +29,4 @@ must(contact.includes("autocomplete','tel")&&contact.includes("autocomplete','em
 must(single.includes('guests-rsvp-postsubmit-calendar-v1.js'),'single RSVP loads post-submit calendar recovery');
 must(unit.includes('guests-rsvp-postsubmit-calendar-v1.js'),'group RSVP loads post-submit calendar recovery');
 must(cal.includes('BEGIN:VCALENDAR')&&cal.includes('Añadir al calendario'),'calendar recovery generates an ICS action');
-if(process.exitCode)process.exit(process.exitCode);console.log('RSVP send/agenda/calendar/loading regression suite passed');
+if(process.exitCode)process.exit(process.exitCode);console.log('RSVP send/agenda/calendar/loading/controls regression suite passed');
