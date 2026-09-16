@@ -23,9 +23,7 @@ const server=http.createServer((req,res)=>{
   const context=await browser.newContext();
   const guestState={meta:{couple:['Ana','Luis'],weddingDate:'2027-06-12'},guests:{g1:{name:'Ana Test',group:'Familia',unitId:'Mesa A',rsvp:'pending'},g2:{name:'Luis Test',group:'Familia',unitId:'Mesa A',rsvp:'pending'}}};
   await context.addInitScript(({state})=>{
-    localStorage.setItem('weddly_shared_wedding_token','T'.repeat(64));
-    localStorage.setItem('weddly_guests_qa_v67',JSON.stringify(state));
-    localStorage.setItem('weddly_access_lang','es');
+    try{localStorage.setItem('weddly_shared_wedding_token','T'.repeat(64));localStorage.setItem('weddly_guests_qa_v67',JSON.stringify(state));localStorage.setItem('weddly_access_lang','es')}catch{}
   },{state:guestState});
   const page=await context.newPage();
   await page.route('https://dnjsxequwgtyyauuofxj.supabase.co/**',async route=>{
@@ -40,8 +38,10 @@ const server=http.createServer((req,res)=>{
     return reply({ok:true});
   });
 
-  const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+  const errors=[];page.on('pageerror',e=>{errors.push(String(e));console.log('PAGEERROR',String(e))});
   await page.goto(`${origin}/guests-rsvp-operations-live.html?suite=1`,{waitUntil:'domcontentloaded'});
+  await page.waitForURL('blob:*',{timeout:5000});
+  try{console.log('RUNTIME',await page.evaluate(()=>({href:location.href,origin:location.origin,base:document.baseURI,token:localStorage.getItem('weddly_shared_wedding_token'),guests:localStorage.getItem('weddly_guests_qa_v67')})))}catch(e){console.log('RUNTIME_EVAL_ERROR',String(e))}
   await page.getByText('Ana Test',{exact:true}).waitFor({state:'visible',timeout:10000});
   must(await page.getByText('Ana Test',{exact:true}).isVisible(),'Send runtime renders Guests');
   const cb=page.locator('[data-recipient="g1"]');
