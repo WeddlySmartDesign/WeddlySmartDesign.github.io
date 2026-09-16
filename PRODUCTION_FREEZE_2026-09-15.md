@@ -1,59 +1,74 @@
-# PRODUCTION FREEZE — 2026-09-16
+# PRODUCTION FREEZE — FULL COMMERCIAL RUNTIME — 2026-09-16
 
-Canonical validated runtime/frontend commit: `7622529b76f8222fe74c98b7323aa4aed5bbed2d`.
+Authoritative operational lock: `PRODUCTION_FROZEN.md`.
+Archive branch preserving the current full-runtime state: `freeze-full-runtime-2026-09-16`.
+Current runtime candidate after the Payments Android keyboard/navigation repair: `90e38b5d7e42837b5d89e48691f8128ff0f28f4a`.
 
-This freeze captures the current production state after the validated Mesas repairs and the mobile demo navigation repair confirmed on Android on 2026-09-16. Treat this state as the recovery baseline for Weddly Smart Design.
+IMPORTANT: this runtime candidate is not to be called fully validated until the user rechecks the exact real-device Payments provider flow. The earlier notion that a stable module core could be considered "frozen" while shared shell/demo/viewport layers kept changing is retired.
 
 ## Frozen scope
+The freeze is end-to-end and includes every layer capable of affecting what a buyer, tester, influencer or owner sees or can do:
 - Payments
-- Guests core and current production enhancement layers
-- Mesas, including multi-select, moving guests to existing or new tables, deleting tables/elements, editing tables, and changing table shape after creation
+- Guests core and enhancement layers
+- Mesas
 - Preboda / extra events
 - Invitations / RSVP
 - Planning / Agenda
 - Calendar
-- Access / production routing
-- Demo shells and their validated mobile navigation behaviour
+- Access and routing
+- `app.html` and shared suite/integration scripts
+- module and global navigation
+- iframe sizing and routing
+- viewport, scrolling, keyboard and safe-area behaviour
+- demo and owner-demo shells
+- install/PWA behaviour, manifests, service workers and cache/version routing
+- all CSS/JS hotfix or visual-coherence layers that can affect production UI
 
-## Rules from this point
-- Do not rebuild or redesign frozen modules unless the user explicitly requests a change or a confirmed production bug requires a minimal fix.
-- Preserve `guests-v114-integrated.html` as frozen core.
-- Prefer isolated, additive fixes around stable modules.
-- Before any future production change, create a backup branch from the then-current production state.
-- Do not alter demo/install/access architecture as part of unrelated feature work.
-- Signature remains a future independent extension.
+## Non-negotiable release process
+- Production is immutable by default.
+- Start work only for a confirmed defect or a change explicitly requested by the user.
+- Create a backup/freeze branch before implementation.
+- Implement on an isolated working branch/test copy, never as live experimentation on `main`.
+- One defect/change per patch. No opportunistic cleanup or unrelated design changes.
+- Validate the affected flow and neighbouring modules before advancing production.
+- Shared shell, viewport, navigation, PWA or iframe changes require Payments + Guests + Planning smoke testing.
+- Mobile UI fixes require testing real interaction states: text keyboard, numeric keyboard, scroll, modals/sheets, fixed menus, bottom actions and Android/iPhone system bars when relevant.
+- A visual/interactive bug is not fixed merely because the code loads or data remains intact.
+- The user must explicitly confirm the relevant real-device flow before the changed runtime becomes the new frozen baseline.
+- If the check fails, continue on the isolated branch or revert. Do not stack speculative live hotfixes.
 
-## SALES-CRITICAL DEMO REGRESSION GUARDRAILS
-The demos are production-facing commercial surfaces. A demo that visually breaks, hides navigation or makes a module appear incomplete is a release-blocking defect because it can directly affect sales and influencer/partner evaluations.
+## Sales-critical regression history
+On 2026-09-16 two regressions demonstrated why the entire commercial runtime must be frozen, not only module cores.
 
-The first regression seen on 2026-09-16 was caused by a global Android viewport/navigation patch forcing horizontal positioning (`left:0` / `right:0`) onto internal module navigation. Planning already had its own centering transform, so the two rules conflicted and moved half of the internal navigation off-screen. Payments was affected in the same class of issue.
+First, a global Android viewport/navigation patch forced horizontal positioning (`left:0` / `right:0`) onto internal module navigation. Planning already had its own centering transform, so the rules conflicted and moved part of the navigation off-screen. Payments showed the same class of problem.
 
-A second regression on the same day exposed a related Android keyboard/viewport failure in Payments. The generic viewport patch treated the reduced `visualViewport.height` produced by the on-screen keyboard as if it were Android system-bar space. This moved the internal navigation upward into the form, reduced the effective shell height while editing and made part of the provider form disappear. The same patch also forced an extremely high navigation `z-index`, allowing the navigation to cover modal/form actions, including the black save/action button near the bottom.
+Second, the same family of generic viewport logic treated the reduced `visualViewport.height` produced by the Android software keyboard as system-bar space. It moved Payments navigation into the middle of the provider form, reduced usable form height during editing, clipped content and allowed navigation to cover the final black action button through an excessive `z-index`.
 
-Permanent rules:
-- Never globally override the horizontal geometry of internal module navigation from the suite shell unless the target module has been explicitly checked for its own `left`, `right`, `width`, `max-width` and `transform` rules.
-- Do not assume that Payments, Guests and Planning share the same internal navigation CSS.
-- A fix for one mobile device must not be deployed by applying generic geometry to every child iframe without checking the other modules.
-- Never derive Android system-bar spacing directly from `layout viewport - visualViewport` without explicitly distinguishing an open software keyboard.
-- Never force the suite shell/document height to `visualViewport.height` while an input, textarea or select is being edited. The Android keyboard can reduce that value dramatically and collapse the usable form area.
-- Internal bottom navigation must not jump above the software keyboard. During text/number editing it may be temporarily hidden if necessary, then restored after editing.
-- Never give ordinary module navigation a maximal/global `z-index` that can place it above sheets, dialogs, provider forms or action buttons. Module modals must retain their intended stacking order.
-- Do not use body padding derived from keyboard height. Navigation clearance must remain bounded and independent from keyboard size.
-- Any change touching `app.html`, `suite-main-nav-emphasis-v1.js`, `suite-planning-bottomnav-v1.js`, demo shells, viewport sizing, iframe sizing, safe-area handling or internal navigation requires a mobile smoke test before considering production validated.
+## Permanent technical guardrails
+- Never globally override the horizontal geometry of internal module navigation unless every affected module's own `left`, `right`, `width`, `max-width` and `transform` rules have been checked.
+- Do not assume Payments, Guests and Planning share navigation CSS or stacking behaviour.
+- Never derive Android system-bar spacing directly from `layout viewport - visualViewport` without distinguishing an open software keyboard.
+- Never force suite/document height to `visualViewport.height` while an input, textarea or select is being edited.
+- Internal bottom navigation must not jump above the software keyboard. It may be hidden temporarily while editing if that is safer, then restored afterward.
+- Never assign ordinary navigation a global/maximal `z-index` that can cover sheets, dialogs, forms or action buttons.
+- Do not derive body padding from keyboard height.
+- Never alter demo/install/access/PWA architecture as part of unrelated feature work.
+- Never deploy a generic mobile geometry fix across every child iframe without checking all affected modules.
 
-Required smoke test after those changes:
-1. Open the full ES demo on Android at normal portrait width.
-2. Confirm Payments internal navigation is fully visible and every tab can be tapped.
-3. Open `+ Proveedor` in Payments and focus a normal text field. Confirm the keyboard opens without moving the internal navigation into the middle of the form or collapsing the visible form.
-4. Focus a numeric field such as quantity or unit price and repeat the check with the numeric keyboard.
-5. Scroll to the end of the provider form with the keyboard closed and confirm the bottom action/save button is completely visible and tappable, not covered by the internal navigation.
-6. Confirm the Payments navigation returns to its correct position after closing the keyboard.
-7. Confirm Guests navigation is fully visible and every main area can be reached.
-8. Confirm Planning shows all four internal tabs — Ahora, Agenda, Timeline and Progreso — fully visible and tappable.
-9. Confirm the global suite navigation — Pagos, Invitados, Planning, Ajustes — remains visible and usable.
-10. Scroll each module to verify fixed/sticky navigation does not cover content or the Android system bar.
-11. If the change concerns install/PWA/viewport behaviour, repeat the relevant check on iPhone as well.
+## Mandatory mobile smoke test for shared-shell/viewport/navigation/PWA changes
+1. Open the full ES demo on Android in portrait.
+2. Payments: confirm Resumen / Proveedores / Gastos are fully visible and tappable.
+3. Payments: open `+ Proveedor`, focus a text field and verify the keyboard does not move navigation into the form or collapse the form area.
+4. Payments: repeat with a numeric field such as quantity or unit price.
+5. Payments: close keyboard, scroll to the bottom and verify the final black action/save button is completely visible and tappable.
+6. Payments: confirm internal navigation returns to the correct bottom position after keyboard dismissal.
+7. Guests: confirm all main navigation is visible and usable.
+8. Planning: confirm Ahora / Agenda / Timeline / Progreso are all visible and tappable.
+9. Confirm global Pagos / Invitados / Planning / Ajustes navigation remains visible and usable.
+10. Scroll all modules and verify internal navigation does not cover content or the Android system bar.
+11. If install/PWA/viewport behaviour is involved, repeat the relevant flow on iPhone.
 
-Do not mark this class of change as complete merely because the page loads or data is present. The actual visible, scrollable and tappable mobile UI — including the keyboard-open state and bottom action buttons — must be checked.
+## Definition of broken production
+If a customer, tester or influencer can see clipped content, hidden controls, displaced navigation, an inaccessible button, failed save, broken install or a flow that cannot be completed, production is broken even if the underlying data/core is intact.
 
-The runtime restore point is the commit above. This document is operational documentation and a mandatory regression checklist for future changes.
+This document and `PRODUCTION_FROZEN.md` are mandatory operating constraints for future work on Weddly Smart Design unless the user explicitly overrides them for a specific change.
