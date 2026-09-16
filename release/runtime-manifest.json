@@ -8,7 +8,12 @@
     "edge_function_version": 64,
     "edge_function_sha256": "183b0f879e26a06b1daf1e537149c924bae52ac91739c63ba68c603531771349",
     "asset_manifest_md5": "34c5f09ffe9385cd25df8310c6da8b0a",
+    "asset_sha256": "4b1c671c0c98b6109d31e5505b0e3f6fb62c59ed8969888f9004ed650ba62994",
     "asset_count": 42,
+    "part_count": 69,
+    "manifest_endpoint": "weddly-runtime-manifest",
+    "manifest_endpoint_version": 1,
+    "manifest_endpoint_sha256": "49bc382f4abadebfe5cdb85c6fa7a3ad1a7b31beaf185240616fed12841c1a2f",
     "required_markers": ["weddly-v19-core", "weddly-v20-core", "Weddly Smart Design"]
   },
   "guests": {
