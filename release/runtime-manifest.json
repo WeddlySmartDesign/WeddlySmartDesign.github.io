@@ -1,5 +1,5 @@
 {
-  "schema": 1,
+  "schema": 2,
   "release": "app64-assets-34c5f09ffe9385cd25df8310c6da8b0a",
   "captured_at": "2026-09-16",
   "supabase_project": "dnjsxequwgtyyauuofxj",
@@ -28,7 +28,11 @@
   },
   "rsvp": {
     "edge_function": "weddly-rsvp",
-    "edge_function_version": 11,
-    "edge_function_sha256": "0a9e75775bd5e43852564da408ef2727d62ea7de0a970b062856987371c67870"
+    "edge_function_version": 12,
+    "edge_function_sha256": "1e3525627817df8060f03bf1e3946f935ccbe666af405ced845046f91467b101",
+    "single_function": "weddly-rsvp-single-v2",
+    "single_function_version": 4,
+    "single_function_sha256": "29f56550ae6e7b1eaced79e153b2bd65c12d1e677ca9800a078f88258bebd681",
+    "sanitizer_health": "?health=sanitizer"
   }
 }
