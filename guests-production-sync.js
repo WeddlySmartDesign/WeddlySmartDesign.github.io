@@ -7,10 +7,10 @@
   G.APP='guests-v114-integrated.html?v=122-v129-core';
   G.f=document.getElementById('app');G.boot=document.getElementById('boot');G.msg=document.getElementById('msg');G.retry=document.getElementById('retry');G.note=document.getElementById('notice');
   G.token='';G.ver=0;G.last='';G.pushing=false;G.remote=false;G.identity='';G.identitySyncing=false;
-  const MISSING=Symbol('missing');
+  const MISSING=Symbol('missing'),OUTER_SET=Storage.prototype.setItem;
   const read=()=>{try{return localStorage.getItem(G.KEY)||''}catch{return''}};
   const parse=s=>{try{const x=JSON.parse(s||'null');return x&&typeof x==='object'&&!Array.isArray(x)?x:null}catch{return null}};
-  const writeRaw=x=>{try{localStorage.setItem(G.KEY,JSON.stringify(x));return 1}catch{return 0}};
+  const writeRaw=x=>{try{OUTER_SET.call(localStorage,G.KEY,JSON.stringify(x));return 1}catch{return 0}};
   const readMeta=()=>{try{const x=JSON.parse(localStorage.getItem(G.META)||'null');return x&&typeof x==='object'?x:{}}catch{return{}}};
   const writeMeta=x=>{try{localStorage.setItem(G.META,JSON.stringify(x));return 1}catch{return 0}};
   const has=x=>!!(x&&(Object.keys(x.guests||{}).length||Object.keys(x.tables||{}).length||x.activity||x.sent||x.prepared||Object.keys(x.meta||{}).length));
@@ -144,6 +144,7 @@
     if(!G.token||G.pushing)return;if(syncIdentityNow())return;const raw=read();if(raw!==G.last){markDirty(raw);queue();return}
     try{const a=await api('GET');if(!a.r.ok||!a.x.ok)return;const v=+a.x.version||0;if(v>G.ver&&a.x.state){const state=mergeSharedIdentity(structuredClone(a.x.state));writeRaw(state);G.ver=v;G.last=JSON.stringify(state);G.identity=identityOf(state);cleanMeta(state);G.remote=true;reloadCore('remote');G.notice('Actualizado con los cambios de vuestra pareja');setTimeout(G.clearNotice,2500)}}catch{}
   }
+  Storage.prototype.setItem=function(k,v){const r=OUTER_SET.call(this,k,v);if(this===localStorage&&String(k)===G.KEY){markDirty(String(v));queue()}return r};
   setInterval(()=>{if(syncIdentityNow())return;const raw=read();if(G.remote){G.remote=false;G.last=raw;return}if(raw!==G.last){markDirty(raw);queue()}},300);
   addEventListener('storage',e=>{if(e.key==='weddly_pro_v7')syncIdentityNow();if(e.key===G.KEY&&e.newValue!==null){markDirty(e.newValue);queue()}});
   setInterval(poll,5000);addEventListener('online',()=>{syncIdentityNow();queue();poll()});addEventListener('focus',poll);addEventListener('pageshow',poll);document.addEventListener('visibilitychange',()=>{if(!document.hidden)poll()});
