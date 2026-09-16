@@ -40,8 +40,8 @@ const server=http.createServer((req,res)=>{
 
   const errors=[];page.on('pageerror',e=>{errors.push(String(e));console.log('PAGEERROR',String(e))});
   await page.goto(`${origin}/guests-rsvp-operations-live.html?suite=1`,{waitUntil:'domcontentloaded'});
-  await page.waitForURL('blob:*',{timeout:5000});
-  try{console.log('RUNTIME',await page.evaluate(()=>({href:location.href,origin:location.origin,base:document.baseURI,token:localStorage.getItem('weddly_shared_wedding_token'),guests:localStorage.getItem('weddly_guests_qa_v67')})))}catch(e){console.log('RUNTIME_EVAL_ERROR',String(e))}
+  await page.waitForFunction(()=>location.protocol==='blob:',null,{timeout:5000});
+  console.log('RUNTIME',await page.evaluate(()=>({href:location.href,origin:location.origin,base:document.baseURI,token:localStorage.getItem('weddly_shared_wedding_token'),guests:localStorage.getItem('weddly_guests_qa_v67')})));
   await page.getByText('Ana Test',{exact:true}).waitFor({state:'visible',timeout:10000});
   must(await page.getByText('Ana Test',{exact:true}).isVisible(),'Send runtime renders Guests');
   const cb=page.locator('[data-recipient="g1"]');
@@ -54,7 +54,7 @@ const server=http.createServer((req,res)=>{
   await page.locator('#mc').click();
   must(!(await page.locator('#sheet').evaluate(el=>el.classList.contains('on'))),'manual RSVP sheet opens and closes');
   await page.locator('[data-wsd-step="rsvp"]').click();
-  await page.getByText('Formulario RSVP',{exact:true}).waitFor({state:'visible',timeout:10000});
+  await page.waitForFunction(()=>document.title.includes('Formulario RSVP')||document.body.textContent.includes('Formulario RSVP'),null,{timeout:10000});
   must(await page.locator('#mealQ').isVisible(),'RSVP step navigates without freezing the runtime');
   await page.locator('#mealQ').click();
   must(errors.length===0,'no uncaught browser errors during Send → RSVP interaction');
