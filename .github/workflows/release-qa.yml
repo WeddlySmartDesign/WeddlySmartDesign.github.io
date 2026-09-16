@@ -1,0 +1,44 @@
+name: Release QA
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-release-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run Weddly release gate
+        run: python qa/release_gate.py
+
+  live-packaging-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify deployed suite entrypoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --retry 2 https://weddlysmartdesign.github.io/app.html -o /tmp/app.html
+          grep -q 'paymentsFrame' /tmp/app.html
+          grep -q 'guestsFrame' /tmp/app.html
+          grep -q 'planningFrame' /tmp/app.html
+          curl --fail --silent --show-error --location --retry 2 https://weddlysmartdesign.github.io/guests-v116-production.html -o /tmp/guests.html
+          grep -q 'guests-seating-sync-hotfix-v1.js' /tmp/guests.html
+      - name: Verify live Payments runtime assembly
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --retry 2 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-app?weddly=16' -o /tmp/payments-live.html
+          grep -q 'weddly-v19-core' /tmp/payments-live.html
+          grep -q 'weddly-v20-core' /tmp/payments-live.html
