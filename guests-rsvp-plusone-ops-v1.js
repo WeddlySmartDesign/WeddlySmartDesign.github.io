@@ -3,12 +3,13 @@
 if(window.__wsdRsvpPlusOneOpsV1)return;window.__wsdRsvpPlusOneOpsV1=true;
 const GAPI='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-guests-state',KEY='weddly_guests_qa_v67',TOKEN='weddly_shared_wedding_token',SAFE_PATCH_WRITE='wsd-safe-patch-write-v1';
 function local(){try{const x=JSON.parse(localStorage.getItem(KEY)||'null');return x&&typeof x==='object'?x:{guests:{}}}catch{return{guests:{}}}}
+function same(a,b){try{return JSON.stringify(a??null)===JSON.stringify(b??null)}catch{return false}}
 function writeLatestPlusGuests(remote){
   const latest=local();latest.guests=latest.guests||{};let changed=false;
   for(const [id,g] of Object.entries(remote?.guests||{})){
     if(!g||typeof g!=='object'||(g.source!=='rsvp_plus_one'&&!g.rsvpPlusOneOf))continue;
-    const cur=latest.guests[id],remoteAt=Date.parse(String(g.rsvpUpdatedAt||''))||0,localAt=Date.parse(String(cur?.rsvpUpdatedAt||''))||0;
-    if(!cur||remoteAt>=localAt){latest.guests[id]=structuredClone(g);changed=true}
+    const cur=latest.guests[id],next=structuredClone(g),remoteAt=Date.parse(String(g.rsvpUpdatedAt||''))||0,localAt=Date.parse(String(cur?.rsvpUpdatedAt||''))||0;
+    if(!cur||(remoteAt>=localAt&&!same(cur,next))){latest.guests[id]=next;changed=true}
   }
   if(!changed)return false;try{Storage.prototype.setItem.call(localStorage,KEY,JSON.stringify(latest));void SAFE_PATCH_WRITE;return true}catch{return false}
 }
