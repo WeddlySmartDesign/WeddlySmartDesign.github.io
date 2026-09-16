@@ -21,6 +21,8 @@ jobs:
           python-version: '3.12'
       - name: Run Weddly release gate
         run: python qa/release_gate.py
+      - name: Run Guests merge regression suite
+        run: node qa/guests_merge_test.js
 
   live-packaging-smoke:
     runs-on: ubuntu-latest
