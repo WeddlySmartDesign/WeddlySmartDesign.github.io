@@ -48,13 +48,14 @@ const server=http.createServer((req,res)=>{
   await cb.click();
   await page.locator('[data-contact="g1"]').waitFor({state:'visible',timeout:5000});
   must(await page.locator('[data-contact="g1"]').isVisible(),'recipient checkbox remains interactive');
-  const manual=page.locator('[data-manual="g1"]');
-  await manual.click();
-  await page.getByText('Respuesta manual',{exact:true}).waitFor({state:'visible',timeout:3000});
+  await page.locator('[data-manual="g1"]').click();
+  await page.getByRole('heading',{name:'Respuesta manual',exact:true}).waitFor({state:'visible',timeout:3000});
+  must(await page.locator('#sheet').evaluate(el=>el.classList.contains('on')),'manual RSVP sheet opens');
   await page.locator('#mc').click();
-  must(!(await page.locator('#sheet').evaluate(el=>el.classList.contains('on'))),'manual RSVP sheet opens and closes');
+  must(!(await page.locator('#sheet').evaluate(el=>el.classList.contains('on'))),'manual RSVP sheet closes');
   await page.locator('[data-wsd-step="rsvp"]').click();
   await page.waitForFunction(()=>document.title.includes('Formulario RSVP')||document.body.textContent.includes('Formulario RSVP'),null,{timeout:10000});
+  await page.locator('#mealQ').waitFor({state:'visible',timeout:10000});
   must(await page.locator('#mealQ').isVisible(),'RSVP step navigates without freezing the runtime');
   await page.locator('#mealQ').click();
   must(errors.length===0,'no uncaught browser errors during Send → RSVP interaction');
