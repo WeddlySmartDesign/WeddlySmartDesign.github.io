@@ -53,7 +53,7 @@ const server=http.createServer((req,res)=>{
   await aux.locator('[data-manual="g1"]').click();
   await aux.getByRole('heading',{name:'Respuesta manual',exact:true}).waitFor({state:'visible',timeout:3000});
   must(await aux.locator('#sheet').evaluate(el=>el.classList.contains('on')),'manual RSVP sheet opens');
-  await aux.locator('#mc').click();
+  await aux.locator('#wsdManualCancel').click();
   must(!(await aux.locator('#sheet').evaluate(el=>el.classList.contains('on'))),'manual RSVP sheet closes');
   await aux.locator('[data-wsd-step="rsvp"]').click();
   await aux.locator('#mealQ').waitFor({state:'visible',timeout:12000});
