@@ -1,0 +1,107 @@
+name: Release QA
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-release-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Run Weddly release gate
+        run: python qa/release_gate.py
+      - name: Run Guests merge regression suite
+        run: node qa/guests_merge_test.js
+      - name: Smoke candidate files locally
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m http.server 8765 >/tmp/wsd-http.log 2>&1 &
+          pid=$!
+          trap 'kill $pid 2>/dev/null || true' EXIT
+          sleep 1
+          curl --fail --silent --show-error http://127.0.0.1:8765/app.html -o /tmp/candidate-app.html
+          grep -q 'paymentsFrame' /tmp/candidate-app.html
+          grep -q 'guestsFrame' /tmp/candidate-app.html
+          grep -q 'planningFrame' /tmp/candidate-app.html
+          grep -q 'sw.js?v=70' /tmp/candidate-app.html
+          curl --fail --silent --show-error http://127.0.0.1:8765/payments.html -o /tmp/candidate-payments.html
+          grep -q 'app64-assets-34c5f09ffe9385cd25df8310c6da8b0a' /tmp/candidate-payments.html
+          curl --fail --silent --show-error http://127.0.0.1:8765/guests-v116-production.html -o /tmp/candidate-guests.html
+          grep -q 'guests-state-integrity-v1.js' /tmp/candidate-guests.html
+          grep -q 'guests-seating-sync-hotfix-v1.js' /tmp/candidate-guests.html
+
+  live-runtime-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify currently deployed suite entrypoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --retry 2 https://weddlysmartdesign.github.io/app.html -o /tmp/live-app.html
+          grep -q 'paymentsFrame' /tmp/live-app.html
+          grep -q 'guestsFrame' /tmp/live-app.html
+          grep -q 'planningFrame' /tmp/live-app.html
+          curl --fail --silent --show-error --location --retry 2 https://weddlysmartdesign.github.io/guests-v116-production.html -o /tmp/live-guests.html
+          grep -q 'guests-seating-sync-hotfix-v1.js' /tmp/live-guests.html
+      - name: Verify live Payments runtime assembly
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --retry 2 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-app?weddly=16' -o /tmp/payments-live.html
+          grep -q 'weddly-v19-core' /tmp/payments-live.html
+          grep -q 'weddly-v20-core' /tmp/payments-live.html
+          grep -q 'Weddly Smart Design' /tmp/payments-live.html
+      - name: Verify immutable runtime manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --retry 2 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-runtime-manifest' -o /tmp/live-runtime.json
+          python - <<'PY'
+          import json
+          expected=json.load(open('release/runtime-manifest.json',encoding='utf-8'))
+          live=json.load(open('/tmp/live-runtime.json',encoding='utf-8'))
+          assert live.get('ok') is True, live
+          p=expected['payments']
+          assert live.get('payments_function_release') == f"weddly-app-v{p['edge_function_version']}", (live,p)
+          assert live.get('asset_sha256') == p['asset_sha256'], (live,p)
+          assert live.get('asset_count') == p['asset_count'], (live,p)
+          assert live.get('part_count') == p['part_count'], (live,p)
+          print('Runtime manifest matches release/runtime-manifest.json')
+          PY
+      - name: Verify production RSVP sanitizers
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --retry 2 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp?health=sanitizer' -o /tmp/rsvp-v12.json
+          curl --fail --silent --show-error --location --retry 2 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp-single-v2?health=sanitizer' -o /tmp/rsvp-single-v4.json
+          python - <<'PY'
+          import json
+          expected=json.load(open('release/runtime-manifest.json',encoding='utf-8'))['rsvp']
+          a=json.load(open('/tmp/rsvp-v12.json',encoding='utf-8'))
+          b=json.load(open('/tmp/rsvp-single-v4.json',encoding='utf-8'))
+          assert a.get('ok') is True and a.get('version') == f"rsvp-v{expected['edge_function_version']}", a
+          assert b.get('ok') is True and b.get('version') == f"single-v2-v{expected['single_function_version']}", b
+          for x in [a,b]:
+              checks=x.get('checks',{})
+              assert checks.get('plus_pending') is None or checks.get('plus_pending_meal') is None, x
+              assert checks.get('child_pending') is None or checks.get('child_pending_meal') is None, x
+              assert checks.get('plus_meal','') == '', x
+              assert checks.get('child_meal','') == '', x
+          print('Production RSVP sanitizers preserve unanswered meal as pending/null')
+          PY

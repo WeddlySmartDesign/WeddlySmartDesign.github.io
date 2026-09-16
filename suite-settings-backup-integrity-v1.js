@@ -1,0 +1,21 @@
+(()=>{
+'use strict';
+if(window.__wsdSettingsBackupIntegrityV1)return;window.__wsdSettingsBackupIntegrityV1=true;
+const aux=document.getElementById('auxFrame'),guestsFrame=document.getElementById('guestsFrame');if(!aux)return;
+const TOKEN='weddly_shared_wedding_token',GKEY='weddly_guests_qa_v67',GMETA='weddly_guests_sync_meta_v2';
+const PAY_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/wedding-sync',GUEST_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-guests-state';
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const parse=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch{return null}};
+const lang=()=>{try{const x=JSON.parse(localStorage.getItem('weddly_pro_v7')||'null'),v=x?.settings?.lang;if(v==='en'||v==='es')return v}catch{}return'es'};
+const T=(es,en)=>lang()==='en'?en:es;
+function notice(d,msg,err=false){const n=d?.getElementById('notice');if(!n)return;n.textContent=msg;n.className='notice on'+(err?' err':'');n.scrollIntoView({behavior:'smooth',block:'nearest'})}
+function canonical(v){try{return JSON.stringify(v??null)}catch{return''}}
+async function getJson(url,token){const r=await fetch(url,{headers:{'x-weddly-token':token},cache:'no-store'}),x=await r.json().catch(()=>({}));if(!r.ok||!x?.ok)throw new Error('sync_failed');return x}
+function nudgeGuests(){try{guestsFrame?.contentWindow?.dispatchEvent(new Event('online'));guestsFrame?.contentWindow?.dispatchEvent(new Event('focus'))}catch{}}
+async function waitGuestsClean(){for(let i=0;i<24;i++){const m=parse(GMETA);if(!m?.dirty)return true;nudgeGuests();await sleep(350)}return false}
+async function consistentGuests(token){if(!await waitGuestsClean())return null;let remote=await getJson(GUEST_API,token),local=parse(GKEY);if(canonical(remote.state)===canonical(local))return remote;for(let i=0;i<10;i++){nudgeGuests();await sleep(400);const m=parse(GMETA);if(m?.dirty)continue;remote=await getJson(GUEST_API,token);local=parse(GKEY);if(canonical(remote.state)===canonical(local))return remote}return null}
+function download(payload){const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='weddly_backup_'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+async function exportSafe(d,b){const original=b.textContent;b.disabled=true;b.textContent=T('Sincronizando…','Syncing…');try{const token=localStorage.getItem(TOKEN)||'';if(token.length<40)throw new Error('access');const g=await consistentGuests(token);if(!g){notice(d,T('No puedo crear una copia mientras Invitados tenga cambios pendientes. Conéctate a internet y vuelve a intentarlo.','A backup cannot be created while Guests has pending changes. Connect to the internet and try again.'),true);return}const p=await getJson(PAY_API,token);const payload={format:'WeddlySmartDesign-backup',version:2,exportedAt:new Date().toISOString(),integrity:{guestsVersion:Number(g.version||0),paymentsVersion:Number(p.version||0),guestsSynchronized:true},wedding:{settings:p.settings||{},providers:Array.isArray(p.providers)?p.providers:[],diy:Array.isArray(p.diy)?p.diy:[],contributions:Array.isArray(p.contributions)?p.contributions:[]},guests:g.state&&typeof g.state==='object'?g.state:null};download(payload);notice(d,T('Copia creada con Invitados y Pagos sincronizados.','Backup created with Guests and Payments synchronized.'))}catch{notice(d,T('No se ha podido verificar una copia completa. No se ha descargado ningún archivo.','A complete backup could not be verified. No file was downloaded.'),true)}finally{b.disabled=false;b.textContent=original}}
+function hook(){try{const d=aux.contentDocument;if(!d?.getElementById('export')||d.documentElement.dataset.wsdBackupIntegrity==='1')return;d.documentElement.dataset.wsdBackupIntegrity='1';d.addEventListener('click',e=>{const b=e.target?.closest?.('#export');if(!b)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();exportSafe(d,b)},true)}catch{}}
+aux.addEventListener('load',()=>{setTimeout(hook,40);setTimeout(hook,250)});addEventListener('focus',hook);
+})();
