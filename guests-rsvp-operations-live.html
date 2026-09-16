@@ -11,11 +11,12 @@ function harden(h){
   return h.replace(oldLoad,newLoad);
 }
 function injectRuntime(h,effective){
-  const base='<base href="'+location.origin+'/">';
+  const base='<base href="'+location.origin+'/">',close='</'+'script>';
   if(!h.includes('<base '))h=h.replace('<head>','<head>'+base);
-  const tokenScript='<script>(()=>{const __effective='+JSON.stringify(effective)+';const __nativeGet=Storage.prototype.getItem;Storage.prototype.getItem=function(k){if(this===localStorage&&k===\"weddly_shared_wedding_token\")return __effective;return __nativeGet.call(this,k)}})();<\\/script>';
+  const tokenScript='<script>(()=>{const __effective='+JSON.stringify(effective)+';const __nativeGet=Storage.prototype.getItem;Storage.prototype.getItem=function(k){if(this===localStorage&&k===\"weddly_shared_wedding_token\")return __effective;return __nativeGet.call(this,k)}})();'+close;
   h=h.replace('<body>','<body>'+tokenScript);
-  const extras='<script src="guests-rsvp-operations-polish-v1.js?v=133"><\\/script><script src="guests-rsvp-segments-v1.js?v=1"><\\/script><script src="guests-rsvp-operations-feedback-v1.js?v=2"><\\/script><script src="guests-rsvp-share-primary-v1.js?v=3"><\\/script><script src="guests-rsvp-share-composer-v2.js?v=2"><\\/script><script src="guests-rsvp-contact-picker-v1.js?v=1"><\\/script><script src="guests-rsvp-operations-clarity-v1.js?v=2"><\\/script><script src="guests-rsvp-operations-flow-v1.js?v=3"><\\/script><script src="guests-rsvp-custom-answers-v1.js?v=1"><\\/script><script src="guests-rsvp-children-answers-v1.js?v=1"><\\/script><script src="guests-rsvp-plusone-ops-v1.js?v=3"><\\/script><script src="guests-rsvp-manual-parity-v1.js?v=1"><\\/script>';
+  const files=['guests-rsvp-operations-polish-v1.js?v=133','guests-rsvp-segments-v1.js?v=1','guests-rsvp-operations-feedback-v1.js?v=2','guests-rsvp-share-primary-v1.js?v=3','guests-rsvp-share-composer-v2.js?v=2','guests-rsvp-contact-picker-v1.js?v=1','guests-rsvp-operations-clarity-v1.js?v=2','guests-rsvp-operations-flow-v1.js?v=3','guests-rsvp-custom-answers-v1.js?v=1','guests-rsvp-children-answers-v1.js?v=1','guests-rsvp-plusone-ops-v1.js?v=3','guests-rsvp-manual-parity-v1.js?v=1'];
+  const extras=files.map(src=>'<script src="'+src+'">'+close).join('');
   return h.replace('</body>',extras+'</body>');
 }
 async function run(){
@@ -26,10 +27,9 @@ async function run(){
     if(!a.r.ok||!a.x?.ok||!['guests','full','owner'].includes(a.x.product)){fail();return}
     let effective=ownerToken,mode=(localStorage.getItem(M)||'').toLowerCase();
     if(a.x.owner===true&&(mode==='es'||mode==='en')){const d=await call(ownerToken,{action:'owner_demo_token',lang:mode});if(!d.r.ok||!d.x?.memberToken)throw new Error('owner_demo_token_failed');effective=d.x.memberToken;localStorage.setItem('weddly_owner_demo_token_'+mode,effective)}
-    const r=await fetchBound('guests-rsvp-operations-v3.html?flow=138-runtime-stable',{cache:'no-store'});
+    const r=await fetchBound('guests-rsvp-operations-v3.html?flow=139-runtime-stable',{cache:'no-store'});
     if(!r.ok)throw new Error('operations_source_failed');
-    let h=injectRuntime(harden(await r.text()),effective);
-    const blob=new Blob([h],{type:'text/html'}),u=URL.createObjectURL(blob);
+    const h=injectRuntime(harden(await r.text()),effective),blob=new Blob([h],{type:'text/html'}),u=URL.createObjectURL(blob);
     location.replace(u);
   }catch(e){console.error('[WSD RSVP operations boot]',e);boot.innerHTML='<div class="card"><h1>No se ha podido abrir Invitaciones y respuestas</h1><p>Comprueba la conexión y vuelve a intentarlo.</p></div>'}
 }
