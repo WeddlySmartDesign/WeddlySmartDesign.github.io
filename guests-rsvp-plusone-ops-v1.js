@@ -29,8 +29,12 @@ function patch(){
     const main=gs[g.rsvpPlusOneOf]||{},label=g.rsvpSourceLabel||`Añadido por RSVP · +1 de ${main.name||'invitado'}`;
     const safeLabel=String(label).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
     const meta=row.querySelector('.guestMeta');if(meta&&!meta.dataset.wsdPlus){meta.dataset.wsdPlus='1';meta.insertAdjacentHTML('afterbegin',`<span style="display:block;font-weight:750;color:var(--dark);margin-bottom:2px">${safeLabel}</span>`)}
-    const assignment=row.querySelector('.assignment');if(assignment)assignment.innerHTML=`<div class="guestMeta">${safeLabel}</div>`;
+    const assignment=row.querySelector('.assignment');
+    if(assignment&&assignment.dataset.wsdPlusLabel!==label){assignment.dataset.wsdPlusLabel=label;assignment.innerHTML=`<div class="guestMeta">${safeLabel}</div>`}
   }
 }
-new MutationObserver(patch).observe(document.documentElement,{childList:true,subtree:true});[0,100,350,900].forEach(ms=>setTimeout(patch,ms));refresh();
+let scheduled=false;
+function queuePatch(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;patch()})}
+new MutationObserver(queuePatch).observe(document.documentElement,{childList:true,subtree:true});
+[0,100,350,900].forEach(ms=>setTimeout(queuePatch,ms));refresh();
 })();
