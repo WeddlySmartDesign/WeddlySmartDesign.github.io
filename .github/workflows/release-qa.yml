@@ -84,21 +84,24 @@ jobs:
           assert live.get('part_count') == p['part_count'], (live,p)
           print('Runtime manifest matches release/runtime-manifest.json')
           PY
-      - name: Verify RSVP sanitizer candidates
+      - name: Verify production RSVP sanitizers
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --silent --show-error --location --retry 2 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp-qa-v12?health=sanitizer' -o /tmp/rsvp-v12.json
-          curl --fail --silent --show-error --location --retry 2 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp-single-v2-qa-v4?health=sanitizer' -o /tmp/rsvp-single-v4.json
+          curl --fail --silent --show-error --location --retry 2 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp?health=sanitizer' -o /tmp/rsvp-v12.json
+          curl --fail --silent --show-error --location --retry 2 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp-single-v2?health=sanitizer' -o /tmp/rsvp-single-v4.json
           python - <<'PY'
           import json
-          for p in ['/tmp/rsvp-v12.json','/tmp/rsvp-single-v4.json']:
-              x=json.load(open(p,encoding='utf-8'))
-              assert x.get('ok') is True, x
+          expected=json.load(open('release/runtime-manifest.json',encoding='utf-8'))['rsvp']
+          a=json.load(open('/tmp/rsvp-v12.json',encoding='utf-8'))
+          b=json.load(open('/tmp/rsvp-single-v4.json',encoding='utf-8'))
+          assert a.get('ok') is True and a.get('version') == f"rsvp-v{expected['edge_function_version']}", a
+          assert b.get('ok') is True and b.get('version') == f"single-v2-v{expected['single_function_version']}", b
+          for x in [a,b]:
               checks=x.get('checks',{})
               assert checks.get('plus_pending') is None or checks.get('plus_pending_meal') is None, x
               assert checks.get('child_pending') is None or checks.get('child_pending_meal') is None, x
               assert checks.get('plus_meal','') == '', x
               assert checks.get('child_meal','') == '', x
-          print('RSVP sanitizer candidates preserve unanswered meal as pending/null')
+          print('Production RSVP sanitizers preserve unanswered meal as pending/null')
           PY
