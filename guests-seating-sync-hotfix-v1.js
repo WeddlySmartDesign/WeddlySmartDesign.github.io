@@ -43,19 +43,24 @@
     if(!frame)return;
     try{
       const doc=frame.contentDocument;
-      if(!doc||!doc.documentElement)return;
+      if(!doc||!doc.documentElement||doc.documentElement.dataset[MARK]==='1')return;
       const back=doc.getElementById('planBack');
       const plan=doc.getElementById('plan');
-      if(!back||!plan||back.dataset[MARK]==='1')return;
-      back.dataset[MARK]='1';
-      back.addEventListener('click',()=>{
-        if(!plan.classList.contains('on'))return;
+      if(!back||!plan)return;
+      doc.documentElement.dataset[MARK]='1';
+
+      // Capture at document level so this runs BEFORE the frozen core's
+      // #planBack handler. That handler calls render(), and render() saves its
+      // old in-memory snapshot. Letting it run would overwrite the seating
+      // changes the visual plan has just written to canonical localStorage.
+      doc.addEventListener('click',e=>{
+        const target=e.target?.closest?.('#planBack');
+        if(!target||!plan.classList.contains('on'))return;
         const active=doc.querySelector('#nav [data-go].on')?.dataset.go||'mesas';
         const y=frame.contentWindow?.scrollY||0;
-        // The visual plan writes the canonical Guests state to localStorage.
-        // Reloading only the Guests core makes its in-memory snapshot read that
-        // canonical state before Mesas/Hoy can save stale seating back over it.
-        setTimeout(()=>reloadCoreFromCanonicalState(frame,active,y),0);
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        reloadCoreFromCanonicalState(frame,active,y);
       },true);
     }catch(err){console.warn('[WSD seating sync hook]',err)}
   }
