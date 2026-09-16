@@ -1,13 +1,13 @@
 # PRODUCTION FROZEN — FULL RUNTIME LOCK — 2026-09-16
 
-Weddly Smart Design is frozen end-to-end. "Frozen" no longer means only the functional cores: it means the complete commercial runtime visible or usable by a customer, tester, influencer or owner demo.
+Weddly Smart Design is frozen end-to-end. "Frozen" means the complete commercial runtime visible or usable by a customer, tester, influencer or owner demo — not only the functional cores.
 
-## Current status
-- Current production runtime candidate after the Payments mobile keyboard/navigation repair: `90e38b5d7e42837b5d89e48691f8128ff0f28f4a`.
-- This candidate must not be described as fully validated until the exact Android provider-flow regression is rechecked by the user.
-- Archive branch preserving the current full-runtime state: `freeze-full-runtime-2026-09-16`.
-- Earlier stable core recovery point remains available in repository history; do not confuse a stable core with a validated complete mobile runtime.
-- Full regression history and checks: `PRODUCTION_FREEZE_2026-09-15.md`.
+## Current validated baseline
+- Validated production runtime commit after the Payments navigation rollback: `37d81add632856a6f514dfe1ef53925bc6f61a25`.
+- The user confirmed on a real Android device that the reported Payments navigation lockup appears solved after that rollback.
+- Immutable recovery/archive branch for this validated runtime: `freeze-full-runtime-validated-2026-09-16`.
+- Pre-rollback backup remains available as `backup/pre-rollback-2026-09-16-0858`.
+- Full regression history and mandatory checks: `PRODUCTION_FREEZE_2026-09-15.md`.
 
 ## What is frozen
 Everything that can change what a customer sees, taps, edits, saves, installs or receives is production and is frozen, including:
@@ -20,7 +20,7 @@ Everything that can change what a customer sees, taps, edits, saves, installs or
 - Install/PWA logic, manifests, service workers, cache/version behaviour and launch routing.
 - Shared settings and any code capable of changing visible/tappable mobile UI.
 
-A change outside a module core can break the product just as seriously as a core change. There is no longer a "safe integration layer" that may be changed directly in production.
+A change outside a module core can break the product just as seriously as a core change. There is no "safe integration layer" that may be changed directly in production.
 
 ## Mandatory production-change process
 Production is immutable by default.
