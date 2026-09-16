@@ -5,12 +5,14 @@ const live=text('guests-rsvp-operations-live.html');
 const formFlow=text('guests-rsvp-form-flow.html');
 const composer=text('guests-rsvp-share-composer-v2.js');
 const contact=text('guests-rsvp-contact-picker-v1.js');
+const plusOps=text('guests-rsvp-plusone-ops-v1.js');
 const single=text('guests-rsvp-v116-single-live.html');
 const unit=text('guests-rsvp-v115-wedding-flex-live.html');
 const cal=text('guests-rsvp-postsubmit-calendar-v1.js');
 
 must(live.includes('guests-rsvp-share-composer-v2.js'),'operations loads safe share composer v2');
 must(live.includes('guests-rsvp-contact-picker-v1.js'),'operations loads contact-picker bridge');
+must(live.includes('guests-rsvp-plusone-ops-v1.js?v=4'),'operations cache-busts the fixed plus-one layer');
 must(!live.includes('document.open()')&&!live.includes('document.write('),'operations runtime no longer rewrites the active document');
 must(live.includes('new Blob([h]')&&live.includes('location.replace(u)'),'operations assembles a fresh parser-driven runtime');
 must(live.includes('render();const __manage'),'operations renders local Guests before remote RSVP refresh');
@@ -19,6 +21,8 @@ must(live.includes("show('Tus invitados están disponibles"),'operations keeps l
 must(live.includes("if(migrateLegacy())syncFields().catch(()=>{})"),'legacy field sync cannot block interaction');
 must(live.includes('rsvp_load_signature_mismatch'),'operations refuses to boot if source patch no longer matches');
 must(live.includes("localStorage.setItem('weddly_rsvp_public_token_v1',PT)"),'operations caches validated public RSVP token');
+must(plusOps.includes('assignment.dataset.wsdPlusLabel!==label'),'plus-one DOM patch is idempotent and cannot rewrite its own mutation forever');
+must(plusOps.includes('requestAnimationFrame(()=>{scheduled=false;patch()})'),'plus-one mutation observer is frame-throttled');
 must(formFlow.includes('new Blob([h]')&&formFlow.includes('location.replace(u)'),'RSVP form uses the same stable parser-driven runtime');
 must(!formFlow.includes('document.open()')&&!formFlow.includes('document.write('),'RSVP form no longer rewrites the active document');
 must(formFlow.includes("setTimeout(()=>c.abort(),7000)"),'RSVP form wrapper and API requests are bounded');
