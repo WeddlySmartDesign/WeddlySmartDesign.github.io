@@ -65,8 +65,9 @@
       n.style.setProperty('visibility','visible','important');
       n.style.setProperty('opacity','1','important');
       n.style.setProperty('position','fixed','important');
-      n.style.setProperty('left','0','important');
-      n.style.setProperty('right','0','important');
+      n.style.setProperty('top','auto','important');
+      n.style.removeProperty('left');
+      n.style.removeProperty('right');
       n.style.setProperty('bottom',inset+'px','important');
       n.style.setProperty('z-index','2147483000','important');
       if(d.body){const want=88+inset,cur=parseFloat(d.defaultView?.getComputedStyle(d.body)?.paddingBottom)||0;if(cur<want)d.body.style.setProperty('padding-bottom',want+'px','important')}
