@@ -105,6 +105,35 @@ async function createSession(edition:string,consent:boolean){
     body:p.toString()
   });
 }
+async function createHostedSession(edition:string){
+  const amount=amountFor(edition),priceId=priceIdFor(edition),launch=launchMode();
+  const p=new URLSearchParams();
+  p.set('mode','payment');
+  p.set('locale','es');
+  p.set('submit_type','pay');
+  p.set('billing_address_collection','auto');
+  p.set('success_url','https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa?session_id={CHECKOUT_SESSION_ID}');
+  p.set('cancel_url','https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa?cancelled=1');
+  p.set('client_reference_id','one_qa_'+crypto.randomUUID());
+  p.set('line_items[0][quantity]','1');
+  p.set('line_items[0][price]',priceId);
+  p.set('metadata[product]','full');
+  p.set('metadata[edition]',edition);
+  p.set('metadata[pricing]',launch?'launch':'standard');
+  p.set('metadata[amount_cents]',String(amount));
+  p.set('metadata[stripe_price_id]',priceId);
+  p.set('metadata[qa]','true');
+  p.set('metadata[immediate_access_consent]','true');
+  p.set('metadata[consent_version]','sandbox-qa-2026-09-19');
+  p.set('payment_intent_data[metadata][product]','full');
+  p.set('payment_intent_data[metadata][edition]',edition);
+  p.set('payment_intent_data[metadata][qa]','true');
+  return await stripeRequest('/checkout/sessions',{
+    method:'POST',
+    headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:p.toString()
+  });
+}
 async function retrieveSession(id:string){
   if(!/^cs_(test_|live_)?[A-Za-z0-9_]+$/.test(id))throw new Error('invalid_session');
   return await stripeRequest('/checkout/sessions/'+encodeURIComponent(id)+'?expand[]=line_items.data.price');
@@ -235,70 +264,32 @@ async function handleWebhook(raw:string,header:string){
 }
 
 
-function qaPage(){
-  return `<!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="robots" content="noindex,nofollow"><title>WeddlySmartDesign · Stripe Sandbox QA</title>
-<style>
-:root{--paper:#f7eee5;--ink:#4a3a36;--terra:#b97a5c;--line:#daccc3}
-*{box-sizing:border-box}body{margin:0;background:#2f2927;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
-main{max-width:620px;min-height:100vh;margin:auto;background:var(--paper);padding:28px 18px 48px}
-.badge{display:inline-block;padding:7px 10px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12px;font-weight:800}
-h1{font-family:Georgia,serif;font-weight:500;font-size:34px;margin:22px 0 8px}.lead{line-height:1.55;color:#6d5d58;margin:0 0 22px}
-.editions{display:grid;gap:10px}.edition{width:100%;text-align:left;border:1px solid var(--line);border-radius:16px;background:#fffaf5;padding:16px;color:var(--ink);display:flex;justify-content:space-between;gap:14px}
-.edition.sel{outline:2px solid var(--terra);border-color:transparent}.edition b{font-size:16px}.edition span{font-weight:800}
-.consent{display:flex;gap:10px;align-items:flex-start;margin:18px 2px;font-size:13px;line-height:1.45}.consent input{margin-top:3px}
-#mount{min-height:70px}.msg{padding:16px;border:1px dashed var(--line);border-radius:14px;background:#fff8f2;line-height:1.5}
-.ok{border-style:solid}.code{display:block;margin:12px 0;padding:12px;background:#fff;border:1px solid var(--line);border-radius:10px;word-break:break-all;font-family:ui-monospace,monospace}
-a.btn{display:block;text-align:center;background:var(--ink);color:#fff;text-decoration:none;padding:14px;border-radius:12px;font-weight:800;margin-top:12px}
-small{display:block;margin-top:18px;color:#7c6d67;line-height:1.45}
-</style>
-<script src="https://js.stripe.com/clover/stripe.js"></script></head>
-<body><main><span class="badge">SANDBOX · NO COBRA DINERO REAL</span><h1>Prueba de compra de ONE</h1>
-<p class="lead">Esta página está aislada de la web comercial. Sirve únicamente para validar Stripe antes de tocar producción.</p>
-<div id="checkout">
-  <div class="editions">
-    <button class="edition sel" data-edition="essential"><b>ONE Essential</b><span>39,90 €</span></button>
-    <button class="edition" data-edition="signature"><b>ONE Signature</b><span>49,90 €</span></button>
-  </div>
-  <label class="consent"><input id="consent" type="checkbox"><span>Solicito acceso inmediato tras el pago de prueba y acepto las condiciones de contratación para esta validación.</span></label>
-  <div id="msg" class="msg">Marca la casilla para cargar Stripe Sandbox.</div>
-  <div id="mount"></div>
-</div>
-<div id="result" style="display:none"></div>
-<small>La licencia generada queda marcada como <b>stripe_sandbox</b> para separarla de futuras ventas reales.</small>
-<script>
-const API=location.origin+location.pathname;
-let edition='essential',embedded=null,stripe=null,cfg=null;
-const msg=document.getElementById('msg'),mount=document.getElementById('mount');
-async function api(body){const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const j=await r.json().catch(()=>({}));if(!r.ok||!j.ok)throw new Error(j.error||'error');return j}
-async function reset(){try{embedded?.destroy?.()}catch{}embedded=null;mount.innerHTML=''}
-async function start(){
-  await reset();msg.textContent='Preparando pago seguro de prueba…';
-  try{
-    cfg=cfg||await api({action:'config'});stripe=stripe||Stripe(cfg.publishableKey);
-    embedded=await stripe.initEmbeddedCheckout({fetchClientSecret:async()=>{const x=await api({action:'create',edition,immediateAccessConsent:true});return x.clientSecret}});
-    msg.style.display='none';embedded.mount('#mount');
-  }catch(e){msg.style.display='block';msg.textContent='No se puede iniciar todavía: '+e.message}
-}
-document.querySelectorAll('[data-edition]').forEach(b=>b.onclick=async()=>{edition=b.dataset.edition;document.querySelectorAll('[data-edition]').forEach(x=>x.classList.toggle('sel',x===b));if(document.getElementById('consent').checked)await start()});
-document.getElementById('consent').onchange=async e=>{if(e.target.checked)await start();else{await reset();msg.style.display='block';msg.textContent='Marca la casilla para cargar Stripe Sandbox.'}};
-(async()=>{
- const sid=new URLSearchParams(location.search).get('session_id');
- if(!sid)return;
- document.getElementById('checkout').style.display='none';const out=document.getElementById('result');out.style.display='block';out.innerHTML='<div class="msg">Comprobando el pago de prueba…</div>';
- try{
-   const x=await api({action:'status',sessionId:sid});
-   if(!x.paid)throw new Error('payment_not_paid');
-   out.innerHTML='<div class="msg ok"><b>Pago de prueba confirmado.</b><br>Edición: '+x.edition+'<span class="code">'+x.activationCode+'</span><a class="btn" href="'+x.activationUrl+'">Activar ONE</a></div>';
- }catch(e){out.innerHTML='<div class="msg">No se ha podido validar: '+e.message+'</div>'}
-})();
-</script></main></body></html>`;
-}
-
 Deno.serve(async req=>{
   if(req.method==='OPTIONS')return new Response('ok',{headers:cors});
-  if(req.method==='GET')return new Response(qaPage(),{headers:{...cors,'Content-Type':'text/html; charset=utf-8'}});
+  if(req.method==='GET'){
+    try{
+      const u=new URL(req.url),sessionId=String(u.searchParams.get('session_id')||''),requested=String(u.searchParams.get('edition')||'').toLowerCase();
+      if(sessionId){
+        const session=await retrieveSession(sessionId);
+        if(session.status!=='complete'||session.payment_status!=='paid')return json({ok:false,error:'payment_not_paid'},402);
+        const provision=await provisionPaidSession(session);
+        if(!provision?.activationUrl)return json({ok:false,error:'license_provision_failed'},500);
+        return Response.redirect(provision.activationUrl,302);
+      }
+      if(u.searchParams.get('cancelled')==='1')return json({ok:true,cancelled:true,message:'Stripe Sandbox checkout cancelled. No charge was made.'});
+      if(requested==='essential'||requested==='signature'){
+        const session=await createHostedSession(requested);
+        if(!session?.url)return json({ok:false,error:'stripe_checkout_url_missing'},500);
+        return Response.redirect(String(session.url),303);
+      }
+      return json({ok:true,sandbox:true,ready:!!env('STRIPE_TEST_SECRET_KEY'),prices:{essential:'39,90 EUR',signature:'49,90 EUR'}});
+    }catch(e){
+      const m=String((e as Error)?.message||'');
+      if(m==='stripe_not_configured'||m==='stripe_price_not_configured')return json({ok:false,error:m},503);
+      if(m==='invalid_session'||m==='invalid_checkout_session')return json({ok:false,error:m},400);
+      console.warn(e);return json({ok:false,error:'server_error'},500);
+    }
+  }
   if(req.method!=='POST')return json({ok:false,error:'method_not_allowed'},405);
   try{
     const raw=await req.text(),sig=req.headers.get('stripe-signature')||'';
