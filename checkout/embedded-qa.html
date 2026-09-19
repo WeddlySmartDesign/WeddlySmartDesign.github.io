@@ -69,7 +69,7 @@ body{margin:0;background:#2d2927;color:var(--ink);font-family:system-ui,-apple-s
   const qs=new URLSearchParams(location.search);
   const QA=qs.get('qa')||'';
   const sessionId=qs.get('session_id')||'';
-  let edition='essential',embedded=null,stripe=null,cfg=null;
+  let edition='essential',embedded=null,stripe=null,cfg=null,createdSessionId='',polling=false;
 
   const state=document.getElementById('state');
   const mount=document.getElementById('mount');
@@ -104,6 +104,8 @@ body{margin:0;background:#2d2927;color:var(--ink);font-family:system-ui,-apple-s
       embedded=await stripe.initEmbeddedCheckout({
         fetchClientSecret:async()=>{
           const x=await api({action:'create',edition,immediateAccessConsent:true});
+          createdSessionId=x.sessionId||'';
+          if(createdSessionId&&!polling)pollUntilPaid();
           return x.clientSecret;
         }
       });
@@ -133,6 +135,27 @@ body{margin:0;background:#2d2927;color:var(--ink);font-family:system-ui,-apple-s
       state.textContent='Marca la casilla para cargar Stripe.';
     }
   };
+
+  async function pollUntilPaid(){
+    if(polling||!createdSessionId)return;
+    polling=true;
+    for(let i=0;i<240;i++){
+      try{
+        const x=await api({action:'status',sessionId:createdSessionId});
+        if(x.paid&&x.provisioned&&x.activationUrl){
+          try{embedded?.destroy?.()}catch{}
+          embedded=null;
+          buy.classList.add('hidden');
+          result.classList.remove('hidden');
+          result.innerHTML='<b>Pago y webhook confirmados.</b><p>'+(x.edition==='signature'?'ONE Signature':'ONE Essential')+' está preparado.</p><a class="btn" href="'+x.activationUrl+'">Activar ONE</a>';
+          polling=false;
+          return;
+        }
+      }catch{}
+      await new Promise(r=>setTimeout(r,1000));
+    }
+    polling=false;
+  }
 
   async function finish(){
     if(!sessionId)return;
