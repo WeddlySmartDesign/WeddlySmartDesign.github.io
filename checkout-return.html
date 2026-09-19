@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#211d1a">
+<title>ONE · Compra completada</title>
+<style>
+:root{--ink:#211d1a;--paper:#f7eee5;--muted:#8f8178;--terr:#b97a5c;--rose:#cba28f}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--ink);color:var(--paper);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{min-height:100dvh;display:grid;place-items:center;padding:calc(28px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom))}
+.card{width:min(100%,520px);padding:30px 24px;border:1px solid rgba(247,238,229,.14);border-radius:26px;background:#2d2724;box-shadow:0 28px 80px rgba(0,0,0,.25)}
+.brand{font:500 22px/1.1 "Brush Script MT","Segoe Script",cursive;color:var(--rose);margin-bottom:34px}
+.kicker{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--terr);font-weight:800}
+h1{margin:11px 0 0;font:400 clamp(46px,13vw,72px)/.91 Georgia,"Times New Roman",serif;letter-spacing:-.04em}
+.lead{margin:20px 0 0;font-size:15px;line-height:1.6;color:#d6ccc5}
+.status{margin-top:28px;padding:15px 16px;border-radius:15px;background:rgba(255,255,255,.06);font-size:13px;line-height:1.55;color:#d6ccc5}
+.actions{display:grid;gap:10px;margin-top:22px}
+a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;text-decoration:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.primary{background:var(--paper);color:var(--ink)}
+.secondary{background:transparent;color:var(--paper);border:1px solid rgba(247,238,229,.18)}
+.meta{margin-top:18px;font-size:11px;line-height:1.5;color:#8f8178}
+.hidden{display:none!important}
+.spinner{width:18px;height:18px;border:2px solid rgba(247,238,229,.25);border-top-color:var(--paper);border-radius:50%;display:inline-block;vertical-align:-4px;margin-right:8px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<main>
+<section class="card">
+ <div class="brand">WeddlySmartDesign</div>
+ <div class="kicker">ONE</div>
+ <h1 id="title">Un momento.</h1>
+ <p class="lead" id="lead">Estamos confirmando el pago y preparando vuestra boda.</p>
+ <div class="status" id="status"><span class="spinner"></span>Confirmando el pago…</div>
+ <div class="actions">
+  <a class="primary hidden" id="activate" href="#">Activar ONE →</a>
+  <button class="secondary hidden" id="retry" type="button">Volver a comprobar</button>
+  <a class="secondary hidden" id="back" href="/#comprar">Volver a ONE</a>
+ </div>
+ <p class="meta" id="meta">No cierres esta pantalla todavía. La licencia se crea únicamente después de que Stripe confirme el cobro.</p>
+</section>
+</main>
+<script>
+(()=>{
+ const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout';
+ const q=new URLSearchParams(location.search),sessionId=q.get('session_id')||'';
+ const $=id=>document.getElementById(id),title=$('title'),lead=$('lead'),status=$('status'),activate=$('activate'),retry=$('retry'),back=$('back'),meta=$('meta');
+ async function check(){
+   retry.classList.add('hidden');back.classList.add('hidden');activate.classList.add('hidden');
+   status.innerHTML='<span class="spinner"></span>Confirmando el pago…';
+   if(!sessionId){failed('No encontramos la referencia de esta compra.');return}
+   try{
+     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'status',sessionId}),cache:'no-store'});
+     const x=await r.json().catch(()=>({}));
+     if(!r.ok||!x?.ok)throw new Error(x?.error||'status_failed');
+     if(x.paid&&x.activationUrl){
+       title.textContent='Ya es vuestra.';
+       lead.textContent=x.edition==='signature'?'ONE Signature está preparado para vuestra boda.':'ONE Essential está preparado para vuestra boda.';
+       status.textContent=x.emailSent?'Pago confirmado · acceso preparado · email enviado.':'Pago confirmado · acceso preparado.';
+       activate.href=x.activationUrl;activate.classList.remove('hidden');
+       meta.textContent='Activa ONE en este móvil. Después podrás personalizarlo, añadirlo a la pantalla de inicio e invitar a tu pareja.';
+       history.replaceState(null,'',location.pathname+'?session_id='+encodeURIComponent(sessionId));
+       return;
+     }
+     if(x.status==='open'){
+       failed('El pago no se ha completado. Puedes volver a la compra e intentarlo de nuevo.');
+       return;
+     }
+     status.textContent='El pago está procesándose. Vuelve a comprobar en unos segundos.';
+     retry.classList.remove('hidden');back.classList.remove('hidden');
+   }catch(e){failed('No hemos podido comprobar el pago ahora mismo. Tu cobro no se repite por volver a comprobar.')}
+ }
+ function failed(message){
+   title.textContent='No está terminado.';
+   lead.textContent=message;
+   status.textContent='ONE solo se activa cuando Stripe confirma un pago válido.';
+   retry.classList.remove('hidden');back.classList.remove('hidden');
+ }
+ retry.onclick=check;
+ check();
+})();
+</script>
+</body>
+</html>
