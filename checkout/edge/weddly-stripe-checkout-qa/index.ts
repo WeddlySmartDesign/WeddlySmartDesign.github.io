@@ -236,7 +236,7 @@ async function handleWebhook(raw:string,header:string){
 
 
 function qaPage(){
-  return \`<!doctype html>
+  return `<!doctype html>
 <html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow"><title>WeddlySmartDesign · Stripe Sandbox QA</title>
 <style>
@@ -293,7 +293,7 @@ document.getElementById('consent').onchange=async e=>{if(e.target.checked)await 
    out.innerHTML='<div class="msg ok"><b>Pago de prueba confirmado.</b><br>Edición: '+x.edition+'<span class="code">'+x.activationCode+'</span><a class="btn" href="'+x.activationUrl+'">Activar ONE</a></div>';
  }catch(e){out.innerHTML='<div class="msg">No se ha podido validar: '+e.message+'</div>'}
 })();
-<\/script></main></body></html>\`;
+</script></main></body></html>`;
 }
 
 Deno.serve(async req=>{
