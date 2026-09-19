@@ -437,6 +437,6 @@ Deno.serve(async req=>{
     if(m==='invalid_session')return json({ok:false,error:m},400);
     if(m==='stripe_not_configured'||m==='stripe_price_not_configured')return json({ok:false,error:m},503);
     if(m==='invalid_checkout_session')return json({ok:false,error:m},400);
-    return json({ok:false,error:'server_error'},500);
+    return json({ok:false,error:'server_error',qaDetail:m.slice(0,180)},500);
   }
 });
