@@ -63,7 +63,7 @@ function loadStripeJs(){
   if(window.Stripe)return Promise.resolve();
   return new Promise((resolve,reject)=>{
     const old=document.querySelector('script[data-wsd-stripe]');if(old){old.addEventListener('load',resolve,{once:true});old.addEventListener('error',reject,{once:true});return}
-    const s=document.createElement('script');s.src='https://js.stripe.com/v3/';s.async=true;s.dataset.wsdStripe='1';s.onload=resolve;s.onerror=reject;document.head.appendChild(s);
+    const s=document.createElement('script');s.src='https://js.stripe.com/clover/stripe.js';s.async=true;s.dataset.wsdStripe='1';s.onload=resolve;s.onerror=reject;document.head.appendChild(s);
   });
 }
 async function open(){
