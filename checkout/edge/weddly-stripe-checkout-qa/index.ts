@@ -225,11 +225,32 @@ async function provisionPaidSession(session:any){
     }
   }
   return {
+    licenseId:String(row.license_id),
     edition,
     buyerEmail,
     activationCode:String(row.activation_code),
     activationUrl:origin()+'/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(String(row.activation_code)),
     emailSent
+  };
+}
+async function lookupProvisionedSession(session:any){
+  const sessionId=String(session?.id||'');
+  if(!sessionId)return null;
+  const db=admin();
+  const {data:l,error}=await db.from('licenses').select('id,status,metadata').eq('source','stripe_sandbox').eq('source_order_id',sessionId).maybeSingle();
+  if(error)throw error;
+  if(!l||l.status!=='active')return null;
+  const {data:d,error:de}=await db.from('license_delivery_codes').select('activation_code,buyer_email').eq('license_id',l.id).maybeSingle();
+  if(de)throw de;
+  if(!d?.activation_code)return null;
+  const edition=editionOf(l.metadata?.edition);
+  return {
+    licenseId:String(l.id),
+    edition,
+    activationCode:String(d.activation_code),
+    activationUrl:origin()+'/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(String(d.activation_code)),
+    buyerEmail:String(d.buyer_email||l.metadata?.buyer_email||''),
+    emailSent:!!l.metadata?.activation_email_sent_at
   };
 }
 async function deactivateByPaymentIntent(paymentIntent:string,reason:string){
@@ -242,8 +263,15 @@ async function deactivateByPaymentIntent(paymentIntent:string,reason:string){
     await db.from('licenses').update({status:'inactive',metadata,updated_at:new Date().toISOString()}).eq('id',row.id);
   }
 }
+async function webhookSecret(){
+  const direct=env('STRIPE_TEST_WEBHOOK_SECRET');
+  if(direct)return direct;
+  const {data,error}=await admin().rpc('get_weddly_stripe_qa_webhook_secret');
+  if(error)throw error;
+  return String(data||'').trim();
+}
 async function verifyWebhook(raw:string,header:string){
-  const secret=env('STRIPE_TEST_WEBHOOK_SECRET');
+  const secret=await webhookSecret();
   if(!secret)return false;
   const parts=header.split(',').map(x=>x.trim());
   const ts=parts.find(x=>x.startsWith('t='))?.slice(2)||'';
@@ -253,11 +281,26 @@ async function verifyWebhook(raw:string,header:string){
   const expected=await hmacHex(secret,ts+'.'+raw);
   return sigs.some(x=>secureEqual(x,expected));
 }
+async function markWebhook(provision:any,evt:any,type:string){
+  if(!provision?.licenseId)return;
+  const db=admin();
+  const {data:l,error}=await db.from('licenses').select('metadata').eq('id',provision.licenseId).maybeSingle();
+  if(error)throw error;
+  const metadata={...(l?.metadata||{}),stripe_webhook_seen_at:new Date().toISOString(),stripe_webhook_event_id:String(evt?.id||''),stripe_webhook_type:type};
+  const {error:ue}=await db.from('licenses').update({metadata,updated_at:new Date().toISOString()}).eq('id',provision.licenseId);
+  if(ue)throw ue;
+}
 async function handleWebhook(raw:string,header:string){
   if(!await verifyWebhook(raw,header))return json({ok:false,error:'invalid_signature'},400);
   const evt=JSON.parse(raw||'{}'),type=String(evt.type||''),obj=evt.data?.object||{};
-  if(type==='checkout.session.completed'&&obj.payment_status==='paid')await provisionPaidSession(await retrieveSession(String(obj.id||'')));
-  if(type==='checkout.session.async_payment_succeeded')await provisionPaidSession(await retrieveSession(String(obj.id||'')));
+  if(type==='checkout.session.completed'&&obj.payment_status==='paid'){
+    const provision=await provisionPaidSession(await retrieveSession(String(obj.id||'')));
+    await markWebhook(provision,evt,type);
+  }
+  if(type==='checkout.session.async_payment_succeeded'){
+    const provision=await provisionPaidSession(await retrieveSession(String(obj.id||'')));
+    await markWebhook(provision,evt,type);
+  }
   if(type==='charge.refunded'&&obj.refunded===true){
     const pi=typeof obj.payment_intent==='string'?obj.payment_intent:String(obj.payment_intent?.id||'');
     await deactivateByPaymentIntent(pi,'full_refund');
@@ -303,6 +346,25 @@ Deno.serve(async req=>{
     if(sig)return await handleWebhook(raw,sig);
     const b=JSON.parse(raw||'{}'),action=String(b?.action||'');
     if(!await validQaToken(String(b?.qaToken||'')))return json({ok:false,error:'qa_forbidden'},403);
+    if(action==='setup_webhook'){
+      const url='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa';
+      const listed=await stripeRequest('/webhook_endpoints?limit=100');
+      const existing=(Array.isArray(listed?.data)?listed.data:[]).find((x:any)=>String(x?.url||'')===url);
+      let haveSecret=false;
+      try{haveSecret=!!(await webhookSecret())}catch{}
+      if(existing&&haveSecret)return json({ok:true,configured:true,webhookId:String(existing.id),reused:true});
+      if(existing&&!haveSecret)await stripeRequest('/webhook_endpoints/'+encodeURIComponent(String(existing.id)),{method:'DELETE'});
+      const p=new URLSearchParams();
+      p.set('url',url);
+      ['checkout.session.completed','checkout.session.async_payment_succeeded','charge.refunded','charge.dispute.created'].forEach((e,i)=>p.set('enabled_events['+i+']',e));
+      p.set('description','WeddlySmartDesign ONE Sandbox QA');
+      const created=await stripeRequest('/webhook_endpoints',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()});
+      const whsec=String(created?.secret||'');
+      if(!whsec)throw new Error('webhook_secret_missing');
+      const {error:se}=await admin().rpc('set_weddly_stripe_qa_webhook_secret',{p_secret:whsec});
+      if(se)throw se;
+      return json({ok:true,configured:true,webhookId:String(created.id||''),reused:false});
+    }
     if(action==='config'){
       const pk=env('STRIPE_TEST_PUBLISHABLE_KEY');
       if(!pk)return json({ok:false,error:'stripe_not_configured'},503);
@@ -327,12 +389,14 @@ Deno.serve(async req=>{
     if(action==='status'){
       const session=await retrieveSession(String(b.sessionId||''));
       const paid=session.status==='complete'&&session.payment_status==='paid';
-      const provision=paid?await provisionPaidSession(session):null;
+      if(paid)validatePaidSession(session);
+      const provision=paid?await lookupProvisionedSession(session):null;
       return json({
         ok:true,
         status:session.status,
         paymentStatus:session.payment_status,
         paid,
+        provisioned:!!provision,
         edition:editionOf(session.metadata?.edition),
         amountTotal:session.amount_total||null,
         currency:session.currency||'eur',
