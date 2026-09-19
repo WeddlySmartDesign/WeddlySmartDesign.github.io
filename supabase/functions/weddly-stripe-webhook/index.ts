@@ -56,20 +56,80 @@ Deno.serve(async(req:Request)=>{
       throw inserted.error;
     }
 
-    const session=event?.data?.object;
+    const object=event?.data?.object;
     if(
       eventType==='checkout.session.completed' ||
       eventType==='checkout.session.async_payment_succeeded'
     ){
-      if(session?.payment_status==='paid'){
-        await provisionPaidStripeSession(db,session);
+      if(object?.payment_status==='paid'){
+        await provisionPaidStripeSession(db,object);
       }
     }else if(eventType==='checkout.session.expired'){
-      if(session?.id){
+      if(object?.id){
         const upd=await db.from('commerce_orders').update({
           payment_status:'expired',updated_at:new Date().toISOString()
-        }).eq('provider','stripe').eq('provider_session_id',String(session.id));
+        }).eq('provider','stripe').eq('provider_session_id',String(object.id));
         if(upd.error)console.warn('expired_order_update_failed',upd.error);
+      }
+    }else if(eventType==='charge.refunded'){
+      const pi=object?.payment_intent?String(object.payment_intent):'';
+      if(pi){
+        const fullyRefunded=Number(object?.amount_refunded||0)>=Number(object?.amount||0);
+        const {data:order,error:oe}=await db.from('commerce_orders')
+          .select('id,license_id').eq('provider','stripe').eq('provider_payment_intent_id',pi).maybeSingle();
+        if(oe)throw oe;
+        if(order){
+          const upd=await db.from('commerce_orders').update({
+            payment_status:fullyRefunded?'refunded':'partially_refunded',
+            updated_at:new Date().toISOString()
+          }).eq('id',order.id);
+          if(upd.error)throw upd.error;
+          if(fullyRefunded&&order.license_id){
+            const lu=await db.from('licenses').update({
+              status:'inactive',updated_at:new Date().toISOString()
+            }).eq('id',order.license_id);
+            if(lu.error)throw lu.error;
+          }
+        }
+      }
+    }else if(eventType==='charge.dispute.created'){
+      const pi=object?.payment_intent?String(object.payment_intent):'';
+      if(pi){
+        const {data:order,error:oe}=await db.from('commerce_orders')
+          .select('id,license_id').eq('provider','stripe').eq('provider_payment_intent_id',pi).maybeSingle();
+        if(oe)throw oe;
+        if(order){
+          const upd=await db.from('commerce_orders').update({
+            payment_status:'disputed',updated_at:new Date().toISOString()
+          }).eq('id',order.id);
+          if(upd.error)throw upd.error;
+          if(order.license_id){
+            const lu=await db.from('licenses').update({
+              status:'inactive',updated_at:new Date().toISOString()
+            }).eq('id',order.license_id);
+            if(lu.error)throw lu.error;
+          }
+        }
+      }
+    }else if(eventType==='charge.dispute.closed'){
+      const pi=object?.payment_intent?String(object.payment_intent):'';
+      const won=String(object?.status||'')==='won';
+      if(pi){
+        const {data:order,error:oe}=await db.from('commerce_orders')
+          .select('id,license_id').eq('provider','stripe').eq('provider_payment_intent_id',pi).maybeSingle();
+        if(oe)throw oe;
+        if(order){
+          const upd=await db.from('commerce_orders').update({
+            payment_status:won?'paid':'dispute_lost',updated_at:new Date().toISOString()
+          }).eq('id',order.id);
+          if(upd.error)throw upd.error;
+          if(won&&order.license_id){
+            const lu=await db.from('licenses').update({
+              status:'active',updated_at:new Date().toISOString()
+            }).eq('id',order.license_id);
+            if(lu.error)throw lu.error;
+          }
+        }
       }
     }
 
