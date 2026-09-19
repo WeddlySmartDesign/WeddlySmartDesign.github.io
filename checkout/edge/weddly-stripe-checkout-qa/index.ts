@@ -87,9 +87,12 @@ async function createSession(edition:string,consent:boolean,qaToken=''){
   p.set('locale','es');
   p.set('submit_type','pay');
   p.set('billing_address_collection','auto');
-  p.set('redirect_on_completion','always');
-  const returnUrl=qaToken?'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-embedded-qa?qa='+encodeURIComponent(qaToken)+'&session_id={CHECKOUT_SESSION_ID}':'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa?session_id={CHECKOUT_SESSION_ID}';
-  p.set('return_url',returnUrl);
+  if(qaToken){
+    p.set('redirect_on_completion','never');
+  }else{
+    p.set('redirect_on_completion','always');
+    p.set('return_url','https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa?session_id={CHECKOUT_SESSION_ID}');
+  }
   p.set('client_reference_id','one_'+crypto.randomUUID());
   p.set('line_items[0][quantity]','1');
   p.set('line_items[0][price]',priceId);
