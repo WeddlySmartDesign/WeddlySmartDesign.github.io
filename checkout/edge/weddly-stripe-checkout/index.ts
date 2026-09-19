@@ -122,7 +122,7 @@ function validatePaidSession(session:any){
 async function sendActivationEmail(to:string,code:string,sessionId:string,edition:string){
   const apiKey=env('RESEND_API_KEY'),from=env('WEDDLY_RESEND_FROM');
   if(!apiKey||!from)return false;
-  const activationUrl=origin()+'/access.html#code='+encodeURIComponent(code);
+  const activationUrl=origin()+'/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(code);
   const productName=edition==='signature'?'ONE Signature by WeddlySmartDesign':'ONE Essential by WeddlySmartDesign';
   const r=await fetch('https://api.resend.com/emails',{
     method:'POST',
@@ -193,7 +193,7 @@ async function provisionPaidSession(session:any){
     edition,
     buyerEmail,
     activationCode:String(row.activation_code),
-    activationUrl:origin()+'/access.html#code='+encodeURIComponent(String(row.activation_code)),
+    activationUrl:origin()+'/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(String(row.activation_code)),
     emailSent
   };
 }
