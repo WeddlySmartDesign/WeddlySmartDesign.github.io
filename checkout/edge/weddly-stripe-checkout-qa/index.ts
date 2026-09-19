@@ -1,6 +1,7 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const TEMPLATE_ID='7a755bcf-69b5-4934-8ef7-bcb3ed74e6d9';
+const QA_TOKEN_HASH='7d8c6c467b2bbc8aa0905c5edcc1e2d24e8821c296e533ae5158992ac163e3bc';
 const cors={
   'Access-Control-Allow-Origin':'*',
   'Access-Control-Allow-Headers':'content-type,stripe-signature',
@@ -28,6 +29,10 @@ function secureEqual(a:string,b:string){
   if(a.length!==b.length)return false;let d=0;
   for(let i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);
   return d===0;
+}
+async function validQaToken(value:string){
+  if(value.length<32)return false;
+  return secureEqual(await sha256(value),QA_TOKEN_HASH);
 }
 function activationCode(){
   const a=crypto.randomUUID().replaceAll('-','').toUpperCase();
@@ -105,15 +110,16 @@ async function createSession(edition:string,consent:boolean){
     body:p.toString()
   });
 }
-async function createHostedSession(edition:string){
+async function createHostedSession(edition:string,qaToken:string){
   const amount=amountFor(edition),priceId=priceIdFor(edition),launch=launchMode();
   const p=new URLSearchParams();
   p.set('mode','payment');
   p.set('locale','es');
   p.set('submit_type','pay');
   p.set('billing_address_collection','auto');
-  p.set('success_url','https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa?session_id={CHECKOUT_SESSION_ID}');
-  p.set('cancel_url','https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa?cancelled=1');
+  const qa=encodeURIComponent(qaToken);
+  p.set('success_url','https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa?session_id={CHECKOUT_SESSION_ID}&qa='+qa);
+  p.set('cancel_url','https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa?cancelled=1&qa='+qa);
   p.set('client_reference_id','one_qa_'+crypto.randomUUID());
   p.set('line_items[0][quantity]','1');
   p.set('line_items[0][price]',priceId);
@@ -140,7 +146,7 @@ async function retrieveSession(id:string){
 }
 function validatePaidSession(session:any){
   const rawEdition=String(session?.metadata?.edition||'').toLowerCase();
-  if(String(session?.metadata?.product||'')!=='full'||!['essential','signature'].includes(rawEdition))throw new Error('invalid_checkout_session');
+  if(String(session?.metadata?.product||'')!=='full'||String(session?.metadata?.qa||'')!=='true'||!['essential','signature'].includes(rawEdition))throw new Error('invalid_checkout_session');
   const expectedPrice=priceIdFor(rawEdition);
   const priceObj=session?.line_items?.data?.[0]?.price;
   const actualPrice=typeof priceObj==='string'?priceObj:String(priceObj?.id||'');
@@ -268,7 +274,8 @@ Deno.serve(async req=>{
   if(req.method==='OPTIONS')return new Response('ok',{headers:cors});
   if(req.method==='GET'){
     try{
-      const u=new URL(req.url),sessionId=String(u.searchParams.get('session_id')||''),requested=String(u.searchParams.get('edition')||'').toLowerCase();
+      const u=new URL(req.url),qaToken=String(u.searchParams.get('qa')||''),sessionId=String(u.searchParams.get('session_id')||''),requested=String(u.searchParams.get('edition')||'').toLowerCase();
+      if(!await validQaToken(qaToken))return json({ok:false,error:'qa_forbidden'},403);
       if(sessionId){
         const session=await retrieveSession(sessionId);
         if(session.status!=='complete'||session.payment_status!=='paid')return json({ok:false,error:'payment_not_paid'},402);
@@ -278,7 +285,7 @@ Deno.serve(async req=>{
       }
       if(u.searchParams.get('cancelled')==='1')return json({ok:true,cancelled:true,message:'Stripe Sandbox checkout cancelled. No charge was made.'});
       if(requested==='essential'||requested==='signature'){
-        const session=await createHostedSession(requested);
+        const session=await createHostedSession(requested,qaToken);
         if(!session?.url)return json({ok:false,error:'stripe_checkout_url_missing'},500);
         return Response.redirect(String(session.url),303);
       }
@@ -295,6 +302,7 @@ Deno.serve(async req=>{
     const raw=await req.text(),sig=req.headers.get('stripe-signature')||'';
     if(sig)return await handleWebhook(raw,sig);
     const b=JSON.parse(raw||'{}'),action=String(b?.action||'');
+    if(!await validQaToken(String(b?.qaToken||'')))return json({ok:false,error:'qa_forbidden'},403);
     if(action==='config'){
       const pk=env('STRIPE_TEST_PUBLISHABLE_KEY');
       if(!pk)return json({ok:false,error:'stripe_not_configured'},503);
