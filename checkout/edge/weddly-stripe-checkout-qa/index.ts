@@ -75,7 +75,7 @@ async function stripeRequest(path:string,init:RequestInit={}){
     headers:{Authorization:'Bearer '+secret,...(init.headers||{})}
   });
   const x=await r.json().catch(()=>({}));
-  if(!r.ok){console.warn('stripe_error',r.status,x);throw new Error('stripe_request_failed')}
+  if(!r.ok){console.warn('stripe_error',r.status,x);const d=String(x?.error?.message||x?.error?.code||x?.error?.type||'stripe_request_failed');throw new Error('stripe_request_failed: '+d.slice(0,140))}
   return x;
 }
 async function createSession(edition:string,consent:boolean,qaToken=''){
