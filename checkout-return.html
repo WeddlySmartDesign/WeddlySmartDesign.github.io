@@ -48,15 +48,15 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
  const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout';
  const q=new URLSearchParams(location.search),sessionId=q.get('session_id')||'';
  const $=id=>document.getElementById(id),title=$('title'),lead=$('lead'),status=$('status'),activate=$('activate'),retry=$('retry'),back=$('back'),meta=$('meta');
- async function check(){
+ async function check(attempt=0){
    retry.classList.add('hidden');back.classList.add('hidden');activate.classList.add('hidden');
-   status.innerHTML='<span class="spinner"></span>Confirmando el pago…';
+   status.innerHTML='<span class="spinner"></span>Confirmando el pago y preparando el acceso…';
    if(!sessionId){failed('No encontramos la referencia de esta compra.');return}
    try{
      const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'status',sessionId}),cache:'no-store'});
      const x=await r.json().catch(()=>({}));
      if(!r.ok||!x?.ok)throw new Error(x?.error||'status_failed');
-     if(x.paid&&x.activationUrl){
+     if(x.paid&&x.provisioned&&x.activationUrl){
        title.textContent='Ya es vuestra.';
        lead.textContent=x.edition==='signature'?'ONE Signature está preparado para vuestra boda.':'ONE Essential está preparado para vuestra boda.';
        status.textContent=x.emailSent?'Pago confirmado · acceso preparado · email enviado.':'Pago confirmado · acceso preparado.';
@@ -69,9 +69,17 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
        failed('El pago no se ha completado. Puedes volver a la compra e intentarlo de nuevo.');
        return;
      }
-     status.textContent='El pago está procesándose. Vuelve a comprobar en unos segundos.';
+     if(x.paid&&!x.provisioned&&attempt<10){
+       status.innerHTML='<span class="spinner"></span>Pago confirmado. Estamos preparando vuestro acceso…';
+       setTimeout(()=>check(attempt+1),1200);
+       return;
+     }
+     status.textContent=x.paid?'El pago está confirmado, pero el acceso está tardando más de lo normal.':'El pago está procesándose.';
      retry.classList.remove('hidden');back.classList.remove('hidden');
-   }catch(e){failed('No hemos podido comprobar el pago ahora mismo. Tu cobro no se repite por volver a comprobar.')}
+   }catch(e){
+     if(attempt<3){setTimeout(()=>check(attempt+1),1200);return}
+     failed('No hemos podido comprobar el pago ahora mismo. Tu cobro no se repite por volver a comprobar.');
+   }
  }
  function failed(message){
    title.textContent='No está terminado.';
