@@ -159,7 +159,7 @@ function validatePaidSession(session:any){
 async function sendActivationEmail(to:string,code:string,sessionId:string,edition:string){
   const apiKey=env('RESEND_API_KEY'),from=env('WEDDLY_RESEND_FROM');
   if(!apiKey||!from)return false;
-  const activationUrl=origin()+'/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(code);
+  const activationUrl='https://raw.githack.com/WeddlySmartDesign/WeddlySmartDesign.github.io/checkout-one-2026-09-19/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(code);
   const productName=edition==='signature'?'ONE Signature by WeddlySmartDesign':'ONE Essential by WeddlySmartDesign';
   const r=await fetch('https://api.resend.com/emails',{
     method:'POST',
@@ -231,7 +231,7 @@ async function provisionPaidSession(session:any){
     edition,
     buyerEmail,
     activationCode:String(row.activation_code),
-    activationUrl:origin()+'/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(String(row.activation_code)),
+    activationUrl:'https://raw.githack.com/WeddlySmartDesign/WeddlySmartDesign.github.io/checkout-one-2026-09-19/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(String(row.activation_code)),
     emailSent
   };
 }
@@ -250,7 +250,7 @@ async function lookupProvisionedSession(session:any){
     licenseId:String(l.id),
     edition,
     activationCode:String(d.activation_code),
-    activationUrl:origin()+'/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(String(d.activation_code)),
+    activationUrl:'https://raw.githack.com/WeddlySmartDesign/WeddlySmartDesign.github.io/checkout-one-2026-09-19/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(String(d.activation_code)),
     buyerEmail:String(d.buyer_email||l.metadata?.buyer_email||''),
     emailSent:!!l.metadata?.activation_email_sent_at
   };
