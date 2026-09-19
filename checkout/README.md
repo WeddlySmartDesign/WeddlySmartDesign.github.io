@@ -69,7 +69,23 @@ Do not guess or commit secrets. After the Stripe account is ready, configure **t
 - optional `WEDDLY_STRIPE_AUTOMATIC_TAX`
 - optional `WEDDLY_SITE_ORIGIN` (defaults to GitHub Pages origin)
 
-The checkout server owns the prices; the browser cannot choose arbitrary amounts.
+The checkout server owns the prices; the browser cannot choose arbitrary amounts. Checkout Sessions now use fixed Stripe Price IDs and validate the paid Session (product, edition, price, amount and currency) before provisioning a license.
+
+### Stripe Sandbox mapping · 19 Sep 2026
+- ONE Essential · 39,90 €: `price_1UHU0wK3yBy1nCpM7u7JPNSg`
+- ONE Signature · 49,90 €: `price_1UHU2bK3yBy1nCpMlsKxaOAy`
+
+When `STRIPE_SECRET_KEY` is a test key, these two Sandbox Price IDs are the safe fallback. A live secret key **does not** fall back to test prices: live launch requires explicit `STRIPE_PRICE_ESSENTIAL` and `STRIPE_PRICE_SIGNATURE` values.
+
+### Isolated Sandbox QA endpoint
+A separate Edge Function, `weddly-stripe-checkout-qa`, is deployed for payment testing without touching production/main or the frozen V45. It serves its own small noindex QA page and stores test purchases with source `stripe_sandbox`.
+
+Project-level secrets required for that QA function:
+- `STRIPE_TEST_SECRET_KEY`
+- `STRIPE_TEST_PUBLISHABLE_KEY`
+- later, for webhook testing: `STRIPE_TEST_WEBHOOK_SECRET`
+
+No Stripe secret is committed to GitHub.
 
 ## Resend configuration still required
 The template is already published:
