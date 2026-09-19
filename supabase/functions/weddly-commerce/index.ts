@@ -1,5 +1,5 @@
 import {
-  admin, env, siteOrigin, stripeGetSession, provisionPaidStripeSession
+  admin, env, siteOrigin, stripeGetSession, provisionPaidStripeSession, sha256
 } from '../_shared/weddly-commerce.ts';
 
 const allowedOrigin=siteOrigin();
@@ -19,6 +19,21 @@ async function readBody(req:Request){
 }
 function cleanCode(v:unknown){return String(v||'').trim().toLowerCase().slice(0,80)}
 function termsVersion(){return '2026-09-19-v1'}
+
+async function requireOwner(db:any,req:Request){
+  const token=String(req.headers.get('x-weddly-member')||'').trim();
+  if(token.length<40)return null;
+  const memberHash=await sha256(token);
+  const {data:m,error:me}=await db.from('wedding_members')
+    .select('id,license_id,role,status').eq('member_hash',memberHash).eq('status','active').maybeSingle();
+  if(me)throw me;
+  if(!m||m.role!=='primary')return null;
+  const {data:l,error:le}=await db.from('licenses')
+    .select('id,source,status,metadata').eq('id',m.license_id).eq('status','active').maybeSingle();
+  if(le)throw le;
+  if(!l||l.source!=='internal_owner'||l.metadata?.grant_type!=='owner')return null;
+  return {member:m,license:l};
+}
 
 async function createStripeCheckout(product:any, acceptedTerms:boolean, acceptedImmediate:boolean){
   const key=env('STRIPE_SECRET_KEY');
@@ -76,6 +91,36 @@ Deno.serve(async(req:Request)=>{
     const b=await readBody(req);
     const action=String(b?.action||'');
     const db=admin();
+
+    if(action==='admin_orders'){
+      const owner=await requireOwner(db,req);
+      if(!owner)return json(req,{ok:false,error:'owner_required'},403);
+
+      const {data:orders,error}=await db.from('commerce_orders')
+        .select('id,provider,provider_session_id,product_code,buyer_email,amount_total,currency,payment_status,license_id,email_status,email_id,paid_at,created_at,updated_at')
+        .order('created_at',{ascending:false}).limit(100);
+      if(error)throw error;
+
+      const licenseIds=(orders||[]).map((x:any)=>x.license_id).filter(Boolean);
+      let licenseMap=new Map<string,any>();
+      if(licenseIds.length){
+        const {data:licenses,error:le}=await db.from('licenses')
+          .select('id,status,wedding_id,activated_at,metadata').in('id',licenseIds);
+        if(le)throw le;
+        for(const l of licenses||[])licenseMap.set(String(l.id),l);
+      }
+
+      return json(req,{ok:true,orders:(orders||[]).map((o:any)=>{
+        const l=o.license_id?licenseMap.get(String(o.license_id)):null;
+        return {
+          id:o.id,provider:o.provider,sessionId:o.provider_session_id,productCode:o.product_code,
+          buyerEmail:o.buyer_email,amountTotal:o.amount_total,currency:o.currency,
+          paymentStatus:o.payment_status,emailStatus:o.email_status,
+          createdAt:o.created_at,paidAt:o.paid_at,
+          licenseStatus:l?.status||null,weddingId:l?.wedding_id||null,activatedAt:l?.activated_at||null
+        };
+      })});
+    }
 
     if(action==='catalog'){
       const {data,error}=await db.from('commerce_products')
