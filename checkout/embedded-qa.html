@@ -147,7 +147,8 @@ body{margin:0;background:#2d2927;color:var(--ink);font-family:system-ui,-apple-s
           embedded=null;
           buy.classList.add('hidden');
           result.classList.remove('hidden');
-          result.innerHTML='<b>Pago y webhook confirmados.</b><p>'+(x.edition==='signature'?'ONE Signature':'ONE Essential')+' está preparado.</p><a class="btn" href="'+x.activationUrl+'">Activar ONE</a>';
+          const qaActivation='https://raw.githack.com/WeddlySmartDesign/WeddlySmartDesign.github.io/checkout-one-2026-09-19/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(x.activationCode||'');
+          result.innerHTML='<b>Pago y webhook confirmados.</b><p>'+(x.edition==='signature'?'ONE Signature':'ONE Essential')+' está preparado.</p><a class="btn" href="'+qaActivation+'">Activar ONE</a>';
           polling=false;
           return;
         }
