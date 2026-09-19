@@ -78,7 +78,7 @@ async function stripeRequest(path:string,init:RequestInit={}){
   if(!r.ok){console.warn('stripe_error',r.status,x);throw new Error('stripe_request_failed')}
   return x;
 }
-async function createSession(edition:string,consent:boolean){
+async function createSession(edition:string,consent:boolean,qaToken=''){
   if(!consent)throw new Error('consent_required');
   const amount=amountFor(edition),priceId=priceIdFor(edition),launch=launchMode(),base=origin();
   const p=new URLSearchParams();
@@ -88,7 +88,8 @@ async function createSession(edition:string,consent:boolean){
   p.set('submit_type','pay');
   p.set('billing_address_collection','auto');
   p.set('redirect_on_completion','always');
-  p.set('return_url','https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa?session_id={CHECKOUT_SESSION_ID}');
+  const returnUrl=qaToken?'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-embedded-qa?qa='+encodeURIComponent(qaToken)+'&session_id={CHECKOUT_SESSION_ID}':'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa?session_id={CHECKOUT_SESSION_ID}';
+  p.set('return_url',returnUrl);
   p.set('client_reference_id','one_'+crypto.randomUUID());
   p.set('line_items[0][quantity]','1');
   p.set('line_items[0][price]',priceId);
@@ -402,7 +403,7 @@ Deno.serve(async req=>{
     }
     if(action==='create'){
       const edition=editionOf(b.edition);
-      const session=await createSession(edition,b.immediateAccessConsent===true);
+      const session=await createSession(edition,b.immediateAccessConsent===true,String(b.qaToken||''));
       return json({ok:true,clientSecret:session.client_secret,sessionId:session.id,edition});
     }
     if(action==='status'){
