@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#f7eee5">
+<title>WeddlySmartDesign · Checkout Sandbox</title>
+<style>
+:root{--paper:#f7eee5;--ink:#433d3b;--muted:#7e7069;--terr:#b97a5c;--line:#dbcfc6}
+*{box-sizing:border-box}
+body{margin:0;background:#2d2927;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.shell{max-width:620px;min-height:100dvh;margin:auto;background:var(--paper);padding:calc(26px + env(safe-area-inset-top)) 18px calc(40px + env(safe-area-inset-bottom))}
+.brand{font:500 25px/1.1 "Brush Script MT","Segoe Script",cursive}
+.badge{display:inline-block;margin-top:18px;padding:7px 10px;border-radius:999px;border:1px solid var(--line);background:#fff8f2;font-size:11px;font-weight:800}
+.title{font:400 42px/1 Georgia,"Times New Roman",serif;margin:24px 0 8px;letter-spacing:-.03em}
+.lead{color:var(--muted);line-height:1.55}
+.editions{display:grid;gap:10px;margin:22px 0}
+.ed{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px;border:1px solid var(--line);border-radius:16px;background:#fffaf6;color:var(--ink);text-align:left}
+.ed.on{outline:2px solid var(--terr);border-color:transparent}
+.ed strong{display:block}.ed small{display:block;color:var(--muted);margin-top:4px}.ed b{font-size:19px}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45;margin:18px 2px}
+.consent input{margin-top:3px}
+.state{padding:14px;border:1px dashed var(--line);border-radius:13px;background:#fff8f2;color:var(--muted);font-size:13px;line-height:1.5}
+.hidden{display:none!important}
+.result{padding:20px;border:1px solid var(--line);border-radius:18px;background:#fffaf6;margin-top:20px}
+.btn{display:block;text-align:center;text-decoration:none;border:0;border-radius:12px;background:var(--ink);color:#fff;padding:15px;font-weight:800;margin-top:14px}
+.meta{font-size:11px;color:var(--muted);line-height:1.45;margin-top:18px}
+#mount{margin-top:14px;min-height:0}
+</style>
+<script src="https://js.stripe.com/clover/stripe.js"></script>
+</head>
+<body>
+<main class="shell">
+  <div class="brand">WeddlySmartDesign</div>
+  <div class="badge">SANDBOX · NO COBRA DINERO REAL</div>
+
+  <section id="buy">
+    <h1 class="title">Checkout embebido.</h1>
+    <p class="lead">Esta vez Stripe debe aparecer dentro de WeddlySmartDesign, sin abrir la página externa de checkout.</p>
+
+    <div class="editions">
+      <button class="ed on" type="button" data-edition="essential">
+        <span><strong>ONE Essential</strong><small>ONE completo + 6 diseños Essential</small></span>
+        <b>39,90 €</b>
+      </button>
+      <button class="ed" type="button" data-edition="signature">
+        <span><strong>ONE Signature</strong><small>ONE completo + 4 Signature y personalización</small></span>
+        <b>49,90 €</b>
+      </button>
+    </div>
+
+    <label class="consent">
+      <input id="consent" type="checkbox">
+      <span>Solicito acceso inmediato tras el pago de prueba y acepto las condiciones de contratación para esta validación.</span>
+    </label>
+
+    <div id="state" class="state">Marca la casilla para cargar Stripe.</div>
+    <div id="mount"></div>
+  </section>
+
+  <section id="result" class="result hidden"></section>
+  <p class="meta">Entorno aislado de QA. La web comercial y <code>main</code> permanecen sin cambios.</p>
+</main>
+
+<script>
+(()=>{
+  const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa';
+  const qs=new URLSearchParams(location.search);
+  const QA=qs.get('qa')||'';
+  const sessionId=qs.get('session_id')||'';
+  let edition='essential',embedded=null,stripe=null,cfg=null;
+
+  const state=document.getElementById('state');
+  const mount=document.getElementById('mount');
+  const buy=document.getElementById('buy');
+  const result=document.getElementById('result');
+
+  async function api(body){
+    const r=await fetch(API,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({...body,qaToken:QA}),
+      cache:'no-store'
+    });
+    const x=await r.json().catch(()=>({}));
+    if(!r.ok||!x?.ok)throw new Error(x?.error||'qa_error');
+    return x;
+  }
+
+  async function destroy(){
+    try{embedded?.destroy?.()}catch{}
+    embedded=null;
+    mount.innerHTML='';
+  }
+
+  async function start(){
+    await destroy();
+    state.classList.remove('hidden');
+    state.textContent='Preparando Stripe Sandbox…';
+    try{
+      cfg=cfg||await api({action:'config'});
+      stripe=stripe||Stripe(cfg.publishableKey);
+      embedded=await stripe.initEmbeddedCheckout({
+        fetchClientSecret:async()=>{
+          const x=await api({action:'create',edition,immediateAccessConsent:true});
+          return x.clientSecret;
+        }
+      });
+      state.classList.add('hidden');
+      embedded.mount('#mount');
+    }catch(e){
+      state.classList.remove('hidden');
+      state.textContent=e?.message==='stripe_not_configured'
+        ?'Falta conectar Stripe Sandbox.'
+        :'No se ha podido abrir Stripe: '+(e?.message||'error');
+    }
+  }
+
+  document.querySelectorAll('[data-edition]').forEach(b=>{
+    b.onclick=async()=>{
+      edition=b.dataset.edition;
+      document.querySelectorAll('[data-edition]').forEach(x=>x.classList.toggle('on',x===b));
+      if(document.getElementById('consent').checked)await start();
+    };
+  });
+
+  document.getElementById('consent').onchange=async e=>{
+    if(e.target.checked)await start();
+    else{
+      await destroy();
+      state.classList.remove('hidden');
+      state.textContent='Marca la casilla para cargar Stripe.';
+    }
+  };
+
+  async function finish(){
+    if(!sessionId)return;
+    buy.classList.add('hidden');
+    result.classList.remove('hidden');
+    result.innerHTML='<b>Pago recibido.</b><p>Esperando a que el webhook de Stripe prepare el acceso…</p>';
+    for(let i=0;i<12;i++){
+      try{
+        const x=await api({action:'status',sessionId});
+        if(x.paid&&x.provisioned&&x.activationUrl){
+          result.innerHTML='<b>Pago y webhook confirmados.</b><p>'+(x.edition==='signature'?'ONE Signature':'ONE Essential')+' está preparado.</p><a class="btn" href="'+x.activationUrl+'">Activar ONE</a>';
+          return;
+        }
+      }catch{}
+      await new Promise(r=>setTimeout(r,1200));
+    }
+    result.innerHTML='<b>El pago está confirmado.</b><p>El acceso está tardando más de lo normal. No vuelvas a pagar.</p>';
+  }
+
+  if(!QA){
+    state.textContent='Enlace QA incompleto.';
+    document.getElementById('consent').disabled=true;
+  }else{
+    finish();
+  }
+})();
+</script>
+</body>
+</html>
