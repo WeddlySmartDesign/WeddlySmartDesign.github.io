@@ -1,7 +1,7 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const TEMPLATE_ID='7a755bcf-69b5-4934-8ef7-bcb3ed74e6d9';
-const QA_TOKEN_HASH='7d8c6c467b2bbc8aa0905c5edcc1e2d24e8821c296e533ae5158992ac163e3bc';
+const QA_TOKEN_HASH='c2991c1c758b5fe840bd7968d96f8c8d23e7f740bb4b92fb53ec259a809574ec';
 const cors={
   'Access-Control-Allow-Origin':'*',
   'Access-Control-Allow-Headers':'content-type,stripe-signature',
