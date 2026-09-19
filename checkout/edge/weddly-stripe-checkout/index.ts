@@ -37,6 +37,16 @@ function activationCode(){
 function normalizeCode(v:string){return String(v||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'')}
 function editionOf(v:unknown){return String(v||'').toLowerCase()==='signature'?'signature':'essential'}
 function launchMode(){return !['0','false','off','no'].includes(env('WEDDLY_LAUNCH_MODE').toLowerCase())}
+const TEST_PRICE_IDS={
+  essential:'price_1UHU0wK3yBy1nCpM7u7JPNSg',
+  signature:'price_1UHU2bK3yBy1nCpMlsKxaOAy'
+} as const;
+function priceIdFor(edition:string){
+  const configured=env(edition==='signature'?'STRIPE_PRICE_SIGNATURE':'STRIPE_PRICE_ESSENTIAL');
+  if(configured)return configured;
+  if(env('STRIPE_SECRET_KEY').startsWith('sk_test_'))return edition==='signature'?TEST_PRICE_IDS.signature:TEST_PRICE_IDS.essential;
+  throw new Error('stripe_price_not_configured');
+}
 function amountFor(edition:string){
   const launch=launchMode();
   if(edition==='signature')return launch?4990:5990;
@@ -65,7 +75,7 @@ async function stripeRequest(path:string,init:RequestInit={}){
 }
 async function createSession(edition:string,consent:boolean){
   if(!consent)throw new Error('consent_required');
-  const amount=amountFor(edition),launch=launchMode(),base=origin();
+  const amount=amountFor(edition),priceId=priceIdFor(edition),launch=launchMode(),base=origin();
   const p=new URLSearchParams();
   p.set('ui_mode','embedded');
   p.set('mode','payment');
@@ -76,14 +86,12 @@ async function createSession(edition:string,consent:boolean){
   p.set('return_url',base+'/checkout-return.html?session_id={CHECKOUT_SESSION_ID}');
   p.set('client_reference_id','one_'+crypto.randomUUID());
   p.set('line_items[0][quantity]','1');
-  p.set('line_items[0][price_data][currency]','eur');
-  p.set('line_items[0][price_data][unit_amount]',String(amount));
-  p.set('line_items[0][price_data][product_data][name]',labelFor(edition));
-  p.set('line_items[0][price_data][product_data][description]',descriptionFor(edition));
+  p.set('line_items[0][price]',priceId);
   p.set('metadata[product]','full');
   p.set('metadata[edition]',edition);
   p.set('metadata[pricing]',launch?'launch':'standard');
   p.set('metadata[amount_cents]',String(amount));
+  p.set('metadata[stripe_price_id]',priceId);
   p.set('metadata[immediate_access_consent]','true');
   p.set('metadata[consent_version]','2026-09-19');
   p.set('payment_intent_data[metadata][product]','full');
@@ -99,7 +107,17 @@ async function createSession(edition:string,consent:boolean){
 }
 async function retrieveSession(id:string){
   if(!/^cs_(test_|live_)?[A-Za-z0-9_]+$/.test(id))throw new Error('invalid_session');
-  return await stripeRequest('/checkout/sessions/'+encodeURIComponent(id));
+  return await stripeRequest('/checkout/sessions/'+encodeURIComponent(id)+'?expand[]=line_items.data.price');
+}
+function validatePaidSession(session:any){
+  const rawEdition=String(session?.metadata?.edition||'').toLowerCase();
+  if(String(session?.metadata?.product||'')!=='full'||!['essential','signature'].includes(rawEdition))throw new Error('invalid_checkout_session');
+  const expectedPrice=priceIdFor(rawEdition);
+  const priceObj=session?.line_items?.data?.[0]?.price;
+  const actualPrice=typeof priceObj==='string'?priceObj:String(priceObj?.id||'');
+  if(actualPrice!==expectedPrice)throw new Error('invalid_checkout_session');
+  if(Number(session?.amount_total||0)!==amountFor(rawEdition)||String(session?.currency||'').toLowerCase()!=='eur')throw new Error('invalid_checkout_session');
+  return rawEdition;
 }
 async function sendActivationEmail(to:string,code:string,sessionId:string,edition:string){
   const apiKey=env('RESEND_API_KEY'),from=env('WEDDLY_RESEND_FROM');
@@ -129,7 +147,7 @@ async function sendActivationEmail(to:string,code:string,sessionId:string,editio
 }
 async function provisionPaidSession(session:any){
   if(!session||session.status!=='complete'||session.payment_status!=='paid')return null;
-  const edition=editionOf(session.metadata?.edition),buyerEmail=String(session.customer_details?.email||session.customer_email||'').trim().toLowerCase();
+  const edition=validatePaidSession(session),buyerEmail=String(session.customer_details?.email||session.customer_email||'').trim().toLowerCase();
   if(!buyerEmail.includes('@'))throw new Error('missing_buyer_email');
   const sessionId=String(session.id||'');
   const paymentIntent=typeof session.payment_intent==='string'?session.payment_intent:String(session.payment_intent?.id||'');
@@ -203,8 +221,8 @@ async function verifyWebhook(raw:string,header:string){
 async function handleWebhook(raw:string,header:string){
   if(!await verifyWebhook(raw,header))return json({ok:false,error:'invalid_signature'},400);
   const evt=JSON.parse(raw||'{}'),type=String(evt.type||''),obj=evt.data?.object||{};
-  if(type==='checkout.session.completed'&&obj.payment_status==='paid')await provisionPaidSession(obj);
-  if(type==='checkout.session.async_payment_succeeded')await provisionPaidSession(obj);
+  if(type==='checkout.session.completed'&&obj.payment_status==='paid')await provisionPaidSession(await retrieveSession(String(obj.id||'')));
+  if(type==='checkout.session.async_payment_succeeded')await provisionPaidSession(await retrieveSession(String(obj.id||'')));
   if(type==='charge.refunded'&&obj.refunded===true){
     const pi=typeof obj.payment_intent==='string'?obj.payment_intent:String(obj.payment_intent?.id||'');
     await deactivateByPaymentIntent(pi,'full_refund');
@@ -227,10 +245,12 @@ Deno.serve(async req=>{
       const pk=env('STRIPE_PUBLISHABLE_KEY');
       if(!pk)return json({ok:false,error:'stripe_not_configured'},503);
       const launch=launchMode();
+      const priceIds={essential:priceIdFor('essential'),signature:priceIdFor('signature')};
       return json({
         ok:true,
         publishableKey:pk,
         launch,
+        priceIds,
         prices:{
           essential:{current:amountFor('essential'),normal:4990},
           signature:{current:amountFor('signature'),normal:5990}
@@ -266,7 +286,8 @@ Deno.serve(async req=>{
     console.warn(e);
     if(m==='consent_required')return json({ok:false,error:m},400);
     if(m==='invalid_session')return json({ok:false,error:m},400);
-    if(m==='stripe_not_configured')return json({ok:false,error:m},503);
+    if(m==='stripe_not_configured'||m==='stripe_price_not_configured')return json({ok:false,error:m},503);
+    if(m==='invalid_checkout_session')return json({ok:false,error:m},400);
     return json({ok:false,error:'server_error'},500);
   }
 });
