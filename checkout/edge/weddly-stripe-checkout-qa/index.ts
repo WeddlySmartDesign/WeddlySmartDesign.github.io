@@ -319,6 +319,25 @@ Deno.serve(async req=>{
     try{
       const u=new URL(req.url),qaToken=String(u.searchParams.get('qa')||''),sessionId=String(u.searchParams.get('session_id')||''),requested=String(u.searchParams.get('edition')||'').toLowerCase();
       if(!await validQaToken(qaToken))return json({ok:false,error:'qa_forbidden'},403);
+      if(u.searchParams.get('setup_webhook')==='1'){
+        const url='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa';
+        const listed=await stripeRequest('/webhook_endpoints?limit=100');
+        const existing=(Array.isArray(listed?.data)?listed.data:[]).find((x:any)=>String(x?.url||'')===url);
+        let haveSecret=false;
+        try{haveSecret=!!(await webhookSecret())}catch{}
+        if(existing&&haveSecret)return json({ok:true,configured:true,webhookId:String(existing.id),reused:true});
+        if(existing&&!haveSecret)await stripeRequest('/webhook_endpoints/'+encodeURIComponent(String(existing.id)),{method:'DELETE'});
+        const p=new URLSearchParams();
+        p.set('url',url);
+        ['checkout.session.completed','checkout.session.async_payment_succeeded','charge.refunded','charge.dispute.created'].forEach((e,i)=>p.set('enabled_events['+i+']',e));
+        p.set('description','WeddlySmartDesign ONE Sandbox QA');
+        const created=await stripeRequest('/webhook_endpoints',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()});
+        const whsec=String(created?.secret||'');
+        if(!whsec)throw new Error('webhook_secret_missing');
+        const {error:se}=await admin().rpc('set_weddly_stripe_qa_webhook_secret',{p_secret:whsec});
+        if(se)throw se;
+        return json({ok:true,configured:true,webhookId:String(created.id||''),reused:false});
+      }
       if(sessionId){
         const session=await retrieveSession(sessionId);
         if(session.status!=='complete'||session.payment_status!=='paid')return json({ok:false,error:'payment_not_paid'},402);
