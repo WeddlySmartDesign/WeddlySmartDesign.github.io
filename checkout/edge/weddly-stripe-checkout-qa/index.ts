@@ -85,6 +85,8 @@ async function createSession(edition:string,consent:boolean,qaToken=''){
   p.set('ui_mode','embedded_page');
   p.set('mode','payment');
   p.set('locale','es');
+  p.set('submit_type','pay');
+  p.set('billing_address_collection','auto');
   p.set('redirect_on_completion','never');
   p.set('client_reference_id','one_qa_embed_'+crypto.randomUUID());
   p.set('line_items[0][quantity]','1');
@@ -97,6 +99,12 @@ async function createSession(edition:string,consent:boolean,qaToken=''){
   p.set('metadata[qa]','true');
   p.set('metadata[immediate_access_consent]','true');
   p.set('metadata[consent_version]','sandbox-embedded-qa-2026-09-19');
+  p.set('payment_intent_data[metadata][product]','full');
+  p.set('payment_intent_data[metadata][edition]',edition);
+  p.set('payment_intent_data[metadata][pricing]',launch?'launch':'standard');
+  p.set('payment_intent_data[metadata][qa]','true');
+  p.set('custom_text[submit][message]','Al pagar confirmas las condiciones de contratación y solicitas acceso inmediato a ONE.');
+  if(['1','true','on','yes'].includes(env('WEDDLY_STRIPE_AUTOMATIC_TAX').toLowerCase()))p.set('automatic_tax[enabled]','true');
   return await stripeRequest('/checkout/sessions',{
     method:'POST',
     headers:{'Content-Type':'application/x-www-form-urlencoded'},
