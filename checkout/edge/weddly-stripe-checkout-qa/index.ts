@@ -80,20 +80,13 @@ async function stripeRequest(path:string,init:RequestInit={}){
 }
 async function createSession(edition:string,consent:boolean,qaToken=''){
   if(!consent)throw new Error('consent_required');
-  const amount=amountFor(edition),priceId=priceIdFor(edition),launch=launchMode(),base=origin();
+  const amount=amountFor(edition),priceId=priceIdFor(edition),launch=launchMode();
   const p=new URLSearchParams();
   p.set('ui_mode','embedded');
   p.set('mode','payment');
   p.set('locale','es');
-  p.set('submit_type','pay');
-  p.set('billing_address_collection','auto');
-  if(qaToken){
-    p.set('redirect_on_completion','never');
-  }else{
-    p.set('redirect_on_completion','always');
-    p.set('return_url','https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-qa?session_id={CHECKOUT_SESSION_ID}');
-  }
-  p.set('client_reference_id','one_'+crypto.randomUUID());
+  p.set('redirect_on_completion','never');
+  p.set('client_reference_id','one_qa_embed_'+crypto.randomUUID());
   p.set('line_items[0][quantity]','1');
   p.set('line_items[0][price]',priceId);
   p.set('metadata[product]','full');
@@ -101,19 +94,16 @@ async function createSession(edition:string,consent:boolean,qaToken=''){
   p.set('metadata[pricing]',launch?'launch':'standard');
   p.set('metadata[amount_cents]',String(amount));
   p.set('metadata[stripe_price_id]',priceId);
+  p.set('metadata[qa]','true');
   p.set('metadata[immediate_access_consent]','true');
-  p.set('metadata[consent_version]','2026-09-19');
-  p.set('payment_intent_data[metadata][product]','full');
-  p.set('payment_intent_data[metadata][edition]',edition);
-  p.set('payment_intent_data[metadata][pricing]',launch?'launch':'standard');
-  p.set('custom_text[submit][message]','Al pagar confirmas las condiciones de contratación y solicitas acceso inmediato a ONE.');
-  if(['1','true','on','yes'].includes(env('WEDDLY_STRIPE_AUTOMATIC_TAX').toLowerCase()))p.set('automatic_tax[enabled]','true');
+  p.set('metadata[consent_version]','sandbox-embedded-qa-2026-09-19');
   return await stripeRequest('/checkout/sessions',{
     method:'POST',
     headers:{'Content-Type':'application/x-www-form-urlencoded'},
     body:p.toString()
   });
 }
+
 async function createHostedSession(edition:string,qaToken:string){
   const amount=amountFor(edition),priceId=priceIdFor(edition),launch=launchMode();
   const p=new URLSearchParams();
