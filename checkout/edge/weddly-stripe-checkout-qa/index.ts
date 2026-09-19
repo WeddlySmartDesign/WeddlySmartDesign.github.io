@@ -82,7 +82,7 @@ async function createSession(edition:string,consent:boolean,qaToken=''){
   if(!consent)throw new Error('consent_required');
   const amount=amountFor(edition),priceId=priceIdFor(edition),launch=launchMode();
   const p=new URLSearchParams();
-  p.set('ui_mode','embedded');
+  p.set('ui_mode','embedded_page');
   p.set('mode','payment');
   p.set('locale','es');
   p.set('redirect_on_completion','never');
