@@ -190,11 +190,32 @@ async function provisionPaidSession(session:any){
     }
   }
   return {
+    licenseId:String(row.license_id),
     edition,
     buyerEmail,
     activationCode:String(row.activation_code),
     activationUrl:origin()+'/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(String(row.activation_code)),
     emailSent
+  };
+}
+async function lookupProvisionedSession(session:any){
+  const sessionId=String(session?.id||'');
+  if(!sessionId)return null;
+  const db=admin();
+  const {data:l,error}=await db.from('licenses').select('id,status,metadata').eq('source','stripe').eq('source_order_id',sessionId).maybeSingle();
+  if(error)throw error;
+  if(!l||l.status!=='active')return null;
+  const {data:d,error:de}=await db.from('license_delivery_codes').select('activation_code,buyer_email').eq('license_id',l.id).maybeSingle();
+  if(de)throw de;
+  if(!d?.activation_code)return null;
+  const edition=editionOf(l.metadata?.edition);
+  return {
+    licenseId:String(l.id),
+    edition,
+    activationCode:String(d.activation_code),
+    activationUrl:origin()+'/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(String(d.activation_code)),
+    buyerEmail:String(d.buyer_email||l.metadata?.buyer_email||''),
+    emailSent:!!l.metadata?.activation_email_sent_at
   };
 }
 async function deactivateByPaymentIntent(paymentIntent:string,reason:string){
@@ -218,11 +239,26 @@ async function verifyWebhook(raw:string,header:string){
   const expected=await hmacHex(secret,ts+'.'+raw);
   return sigs.some(x=>secureEqual(x,expected));
 }
+async function markWebhook(provision:any,evt:any,type:string){
+  if(!provision?.licenseId)return;
+  const db=admin();
+  const {data:l,error}=await db.from('licenses').select('metadata').eq('id',provision.licenseId).maybeSingle();
+  if(error)throw error;
+  const metadata={...(l?.metadata||{}),stripe_webhook_seen_at:new Date().toISOString(),stripe_webhook_event_id:String(evt?.id||''),stripe_webhook_type:type};
+  const {error:ue}=await db.from('licenses').update({metadata,updated_at:new Date().toISOString()}).eq('id',provision.licenseId);
+  if(ue)throw ue;
+}
 async function handleWebhook(raw:string,header:string){
   if(!await verifyWebhook(raw,header))return json({ok:false,error:'invalid_signature'},400);
   const evt=JSON.parse(raw||'{}'),type=String(evt.type||''),obj=evt.data?.object||{};
-  if(type==='checkout.session.completed'&&obj.payment_status==='paid')await provisionPaidSession(await retrieveSession(String(obj.id||'')));
-  if(type==='checkout.session.async_payment_succeeded')await provisionPaidSession(await retrieveSession(String(obj.id||'')));
+  if(type==='checkout.session.completed'&&obj.payment_status==='paid'){
+    const provision=await provisionPaidSession(await retrieveSession(String(obj.id||'')));
+    await markWebhook(provision,evt,type);
+  }
+  if(type==='checkout.session.async_payment_succeeded'){
+    const provision=await provisionPaidSession(await retrieveSession(String(obj.id||'')));
+    await markWebhook(provision,evt,type);
+  }
   if(type==='charge.refunded'&&obj.refunded===true){
     const pi=typeof obj.payment_intent==='string'?obj.payment_intent:String(obj.payment_intent?.id||'');
     await deactivateByPaymentIntent(pi,'full_refund');
@@ -265,12 +301,14 @@ Deno.serve(async req=>{
     if(action==='status'){
       const session=await retrieveSession(String(b.sessionId||''));
       const paid=session.status==='complete'&&session.payment_status==='paid';
-      const provision=paid?await provisionPaidSession(session):null;
+      if(paid)validatePaidSession(session);
+      const provision=paid?await lookupProvisionedSession(session):null;
       return json({
         ok:true,
         status:session.status,
         paymentStatus:session.payment_status,
         paid,
+        provisioned:!!provision,
         edition:editionOf(session.metadata?.edition),
         amountTotal:session.amount_total||null,
         currency:session.currency||'eur',
