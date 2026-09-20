@@ -26,8 +26,8 @@ function inject(){
       <div class="one-launch-note" id="oneLaunchNote">Precio especial de lanzamiento.</div>
       <div class="one-same-product"><strong>No compras una versión recortada.</strong> Invitados, RSVP, mesas, pagos y Planning están completos en Essential y Signature.</div>
       <div class="one-consent">
-        <label><input id="oneImmediateConsent" type="checkbox"><span>Solicito que el acceso a ONE comience inmediatamente después del pago y acepto las Condiciones de contratación. Entiendo que el inicio inmediato del contenido digital puede afectar al derecho de desistimiento cuando resulte legalmente aplicable.</span></label>
-        <div class="one-consent-actions"><button type="button" data-one-legal="terms-policy">Ver Condiciones</button><button type="button" data-one-legal="privacy-policy">Privacidad</button></div>
+        <label><input id="oneImmediateConsent" type="checkbox"><span>Solicito expresamente que el suministro digital de ONE comience inmediatamente después del pago, durante el plazo de desistimiento. Sé y acepto que, una vez iniciado el suministro, perderé el derecho de desistimiento en los casos previstos legalmente. Acepto las Condiciones de contratación.</span></label>
+        <div class="one-consent-actions"><button type="button" data-one-legal="terms-policy">Condiciones y reembolsos</button><button type="button" data-one-legal="privacy-policy">Privacidad</button></div>
       </div>
       <div class="one-payment-wrap"><div class="one-payment-placeholder" id="onePaymentState">Marca la casilla anterior y el pago aparecerá aquí, sin salir de WeddlySmartDesign.</div><div id="oneStripeMount"></div></div>
       <p class="one-checkout-foot">Pago procesado de forma segura por Stripe. ONE solo se activa después de confirmar el cobro.</p>
