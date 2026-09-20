@@ -4,6 +4,7 @@ const q=new URLSearchParams(location.search);
 const publicFlow=q.has('g')||q.has('u')||q.has('unit')||q.get('guest')==='1';
 if(!publicFlow)return;
 const VERSION='2026-09-20';
+const QA_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp-qa-health-consent';
 const $=s=>document.querySelector(s);
 const fields=()=>[...document.querySelectorAll('.allergy,#allergy,#rAllergy,#rPlusAllergy,[data-kid-allergy],input[id*="allergy" i],textarea[id*="allergy" i]')].filter((x,i,a)=>a.indexOf(x)===i);
 const hasHealthData=()=>fields().some(x=>String(x.value||'').trim());
@@ -76,6 +77,7 @@ window.fetch=async function(input,init){
  }catch(e){
    if(String(e?.message||'')==='health_consent_required'){allowed();return Promise.reject(e)}
  }
+ if(typeof input==='string'&&/weddly-rsvp(?:\?|$)/.test(input)&&String(init?.method||'GET').toUpperCase()==='POST')input=QA_API;
  return nativeFetch(input,init);
 };
 new MutationObserver(()=>ensure()).observe(document.documentElement,{childList:true,subtree:true});
