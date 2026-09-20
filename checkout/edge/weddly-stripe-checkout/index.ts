@@ -1,6 +1,8 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const TEMPLATE_ID='7a755bcf-69b5-4934-8ef7-bcb3ed74e6d9';
+const CONSENT_VERSION='2026-09-20';
+const CONSENT_TEXT="Solicito expresamente que el suministro digital de ONE comience inmediatamente después del pago, durante el plazo de desistimiento. Sé y acepto que, una vez iniciado el suministro, perderé el derecho de desistimiento en los casos previstos legalmente. Acepto las Condiciones de contratación.";
 const cors={
   'Access-Control-Allow-Origin':'*',
   'Access-Control-Allow-Headers':'content-type,stripe-signature',
@@ -93,11 +95,12 @@ async function createSession(edition:string,consent:boolean){
   p.set('metadata[amount_cents]',String(amount));
   p.set('metadata[stripe_price_id]',priceId);
   p.set('metadata[immediate_access_consent]','true');
-  p.set('metadata[consent_version]','2026-09-19');
+  p.set('metadata[consent_version]',CONSENT_VERSION);
+  p.set('metadata[immediate_access_consent_text]',CONSENT_TEXT);
   p.set('payment_intent_data[metadata][product]','full');
   p.set('payment_intent_data[metadata][edition]',edition);
   p.set('payment_intent_data[metadata][pricing]',launch?'launch':'standard');
-  p.set('custom_text[submit][message]','Al pagar confirmas las condiciones de contratación y solicitas acceso inmediato a ONE.');
+  p.set('custom_text[submit][message]','Al pagar confirmas las Condiciones y el acceso digital inmediato a ONE.');
   if(['1','true','on','yes'].includes(env('WEDDLY_STRIPE_AUTOMATIC_TAX').toLowerCase()))p.set('automatic_tax[enabled]','true');
   return await stripeRequest('/checkout/sessions',{
     method:'POST',
@@ -119,11 +122,13 @@ function validatePaidSession(session:any){
   if(Number(session?.amount_total||0)!==amountFor(rawEdition)||String(session?.currency||'').toLowerCase()!=='eur')throw new Error('invalid_checkout_session');
   return rawEdition;
 }
-async function sendActivationEmail(to:string,code:string,sessionId:string,edition:string){
+async function sendActivationEmail(to:string,code:string,sessionId:string,edition:string,amountTotal:number,purchasedAt:string){
   const apiKey=env('RESEND_API_KEY'),from=env('WEDDLY_RESEND_FROM');
   if(!apiKey||!from)return false;
   const activationUrl=origin()+'/access.html?purchase=stripe&lang=es#code='+encodeURIComponent(code);
   const productName=edition==='signature'?'ONE Signature by WeddlySmartDesign':'ONE Essential by WeddlySmartDesign';
+  const amount=(Number(amountTotal||0)/100).toLocaleString('es-ES',{style:'currency',currency:'EUR'});
+  const purchaseDate=new Date(purchasedAt).toLocaleString('es-ES',{dateStyle:'long',timeStyle:'short',timeZone:'Europe/Madrid'});
   const r=await fetch('https://api.resend.com/emails',{
     method:'POST',
     headers:{
@@ -138,7 +143,11 @@ async function sendActivationEmail(to:string,code:string,sessionId:string,editio
         ACTIVATION_URL:activationUrl,
         ACTIVATION_CODE:code,
         ORDER_ID:sessionId,
-        PRODUCT_NAME:productName
+        PRODUCT_NAME:productName,
+        AMOUNT:amount,
+        PURCHASE_DATE:purchaseDate,
+        CONSENT_TEXT:CONSENT_TEXT,
+        TERMS_VERSION:CONSENT_VERSION
       }}
     })
   });
@@ -164,6 +173,8 @@ async function provisionPaidSession(session:any){
     pricing:String(session.metadata?.pricing||''),
     immediate_access_consent:session.metadata?.immediate_access_consent==='true',
     consent_version:String(session.metadata?.consent_version||''),
+    immediate_access_consent_text:String(session.metadata?.immediate_access_consent_text||''),
+    consent_recorded_at:new Date((Number(session.created)||Math.floor(Date.now()/1000))*1000).toISOString(),
     purchased_at:new Date((Number(session.created)||Math.floor(Date.now()/1000))*1000).toISOString()
   };
   const {data,error}=await db.rpc('provision_weddly_license',{
@@ -183,7 +194,7 @@ async function provisionPaidSession(session:any){
   if(le)throw le;
   let emailSent=!!license?.metadata?.activation_email_sent_at;
   if(!emailSent){
-    emailSent=await sendActivationEmail(buyerEmail,String(row.activation_code),sessionId,edition);
+    emailSent=await sendActivationEmail(buyerEmail,String(row.activation_code),sessionId,edition,Number(session.amount_total||amountFor(edition)),new Date((Number(session.created)||Math.floor(Date.now()/1000))*1000).toISOString());
     if(emailSent){
       const next={...(license?.metadata||{}),activation_email_sent_at:new Date().toISOString()};
       await db.from('licenses').update({metadata:next,updated_at:new Date().toISOString()}).eq('id',row.license_id);
