@@ -142,3 +142,13 @@ Stripe LIVE still requires account-owner actions:
 - run one controlled real payment before public launch.
 
 Nothing in this branch should be merged into production until real-device RSVP consent QA and the controlled LIVE purchase both pass.
+
+
+### Verified health-consent QA · 20 Sep 2026
+The isolated `weddly-rsvp-qa-health-consent` self-test passed:
+- allergy/intolerance data without explicit consent → HTTP 400;
+- the same health-data submission with explicit consent → HTTP 201;
+- persisted payload contains `health_consent=true`, version `2026-09-20` and a recorded timestamp;
+- the technical test submission was deleted automatically after verification.
+
+This verifies backend enforcement + evidence persistence. Real-device UI interaction still remains a release gate before production deployment.
