@@ -326,7 +326,10 @@ Deno.serve(async req=>{
         activationCode:provision?.activationCode||null,
         activationUrl:provision?.activationUrl||null,
         email:provision?.buyerEmail||session.customer_details?.email||null,
-        emailSent:provision?.emailSent||false
+        emailSent:provision?.emailSent||false,
+        purchasedAt:new Date((Number(session.created)||Math.floor(Date.now()/1000))*1000).toISOString(),
+        consentVersion:String(session.metadata?.consent_version||CONSENT_VERSION),
+        consentText:String(session.metadata?.immediate_access_consent_text||CONSENT_TEXT)
       });
     }
     return json({ok:false,error:'invalid_action'},400);
