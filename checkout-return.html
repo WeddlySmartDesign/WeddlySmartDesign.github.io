@@ -37,6 +37,7 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
  <div class="status" id="status"><span class="spinner"></span>Confirmando el pago…</div>
  <div class="actions">
   <a class="primary hidden" id="activate" href="#">Activar ONE →</a>
+  <button class="secondary hidden" id="saveConfirmation" type="button">Guardar confirmación de compra</button>
   <button class="secondary hidden" id="retry" type="button">Volver a comprobar</button>
   <a class="secondary hidden" id="back" href="/#comprar">Volver a ONE</a>
  </div>
@@ -47,9 +48,9 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
 (()=>{
  const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout';
  const q=new URLSearchParams(location.search),sessionId=q.get('session_id')||'';
- const $=id=>document.getElementById(id),title=$('title'),lead=$('lead'),status=$('status'),activate=$('activate'),retry=$('retry'),back=$('back'),meta=$('meta');
+ const $=id=>document.getElementById(id),title=$('title'),lead=$('lead'),status=$('status'),activate=$('activate'),saveConfirmation=$('saveConfirmation'),retry=$('retry'),back=$('back'),meta=$('meta');let purchase=null;
  async function check(attempt=0){
-   retry.classList.add('hidden');back.classList.add('hidden');activate.classList.add('hidden');
+   retry.classList.add('hidden');back.classList.add('hidden');activate.classList.add('hidden');saveConfirmation.classList.add('hidden');
    status.innerHTML='<span class="spinner"></span>Confirmando el pago y preparando el acceso…';
    if(!sessionId){failed('No encontramos la referencia de esta compra.');return}
    try{
@@ -61,7 +62,9 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
        lead.textContent=x.edition==='signature'?'ONE Signature está preparado para vuestra boda.':'ONE Essential está preparado para vuestra boda.';
        status.textContent=x.emailSent?'Pago confirmado · acceso preparado · email enviado.':'Pago confirmado · acceso preparado.';
        activate.href=x.activationUrl;activate.classList.remove('hidden');
-       meta.textContent='Activa ONE en este móvil. Después podrás personalizarlo, añadirlo a la pantalla de inicio e invitar a tu pareja.';
+       purchase={...x,sessionId};
+       saveConfirmation.classList.remove('hidden');
+       meta.textContent=x.emailSent?'Activa ONE en este móvil y guarda este email/confirmación como justificante de la compra.':'Activa ONE en este móvil y guarda la confirmación de compra. El acceso no depende del email.';
        history.replaceState(null,'',location.pathname+'?session_id='+encodeURIComponent(sessionId));
        return;
      }
@@ -87,6 +90,33 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
    status.textContent='ONE solo se activa cuando Stripe confirma un pago válido.';
    retry.classList.remove('hidden');back.classList.remove('hidden');
  }
+ saveConfirmation.onclick=()=>{
+   if(!purchase)return;
+   const amount=(Number(purchase.amountTotal||0)/100).toLocaleString('es-ES',{style:'currency',currency:'EUR'});
+   const when=purchase.purchasedAt?new Date(purchase.purchasedAt).toLocaleString('es-ES',{dateStyle:'long',timeStyle:'short'}):'';
+   const edition=purchase.edition==='signature'?'ONE Signature':'ONE Essential';
+   const text=[
+     'WeddlySmartDesign · Confirmación de compra',
+     '',
+     'Producto: '+edition,
+     'Importe total: '+amount+' · IVA incluido',
+     'Fecha: '+when,
+     'Pedido Stripe: '+sessionId,
+     purchase.email?'Email: '+purchase.email:'',
+     '',
+     'Acceso / activación:',
+     purchase.activationUrl||'',
+     purchase.activationCode?'Código de recuperación: '+purchase.activationCode:'',
+     '',
+     'Consentimiento de acceso inmediato:',
+     purchase.consentText||'',
+     'Versión: '+(purchase.consentVersion||'2026-09-20'),
+     '',
+     'Una boda · hasta dos personas autorizadas · pago único · sin suscripción.'
+   ].filter(Boolean).join('\n');
+   const blob=new Blob([text],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+   a.href=url;a.download='WeddlySmartDesign_ONE_confirmacion_'+sessionId+'.txt';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ };
  retry.onclick=check;
  check();
 })();
