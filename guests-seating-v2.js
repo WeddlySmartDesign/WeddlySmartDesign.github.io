@@ -13,6 +13,36 @@
     const summaryIntro=document.querySelector('#summarySection .summaryIntro');
     const isEn=()=>{try{return localStorage.getItem('weddly_access_lang')==='en'}catch{return false}};
 
+    function installSeatChangeRecorder(){
+      if(window.__wsdSeatChangeRecorderV1)return;
+      window.__wsdSeatChangeRecorderV1=true;
+      const originalSave=save;
+      let guestSeats=new Map();
+      function snap(){
+        const nameToId=new Map(Object.entries(S.tables||{}).map(([id,t])=>[String(t?.name||''),id]));
+        guestSeats=new Map(Object.entries(S.guests||{}).map(([id,g])=>[id,{tableId:g?.table?(nameToId.get(String(g.table))||'name:'+String(g.table)):'',tableName:String(g?.table||''),name:String(g?.name||id)}]));
+      }
+      snap();
+      save=function(){
+        const nameToId=new Map(Object.entries(S.tables||{}).map(([id,t])=>[String(t?.name||''),id]));
+        const now=Date.now(),changes=[];
+        Object.entries(S.guests||{}).forEach(([id,g])=>{
+          const prev=guestSeats.get(id);if(!prev)return;
+          const tableName=String(g?.table||''),tableId=tableName?(nameToId.get(tableName)||'name:'+tableName):'';
+          if(prev.tableId===tableId)return;
+          changes.push({id,name:String(g?.name||prev.name||id),from:prev.tableName||'',to:tableName,ts:now});
+        });
+        if(changes.length){
+          M.meta=M.meta||{};
+          const cutoff=now-7*86400000;
+          const prior=(Array.isArray(M.meta.todaySeatChanges)?M.meta.todaySeatChanges:[]).filter(x=>(Number(x?.ts)||0)>=cutoff);
+          M.meta.todaySeatChanges=[...prior,...changes].slice(-60);
+        }
+        originalSave();
+        snap();
+      };
+    }
+
     function fixPlanLayer(){
       try{
         const pd=window.parent.document;
@@ -232,7 +262,7 @@
     }
     document.addEventListener('click',()=>setTimeout(patchPanel,0),true);
 
-    fixPlanLayer();removeLegacyTip();patchPanel();paint();
+    installSeatChangeRecorder();fixPlanLayer();removeLegacyTip();patchPanel();paint();
     [0,80,250,700,1500].forEach(ms=>setTimeout(()=>{fixPlanLayer();removeLegacyTip()},ms));
   }
 
