@@ -114,3 +114,41 @@ Nothing in this branch should reach production until test mode passes:
 
 ## Legal
 The purchase sheet includes an explicit immediate-access acknowledgement and stores its version in Stripe/license metadata. This is implementation support, not a claim of legal compliance. Final checkout wording and the health/allergy flow should receive professional legal review before launch.
+
+
+## Pre-LIVE legal closure · 20 Sep 2026
+This branch layers the final pilot-legal work on top of the validated checkout branch without changing production/main.
+
+Prepared:
+- checkout consent wording aligned with the final Spanish legal copy;
+- consent evidence stored in Stripe metadata and license metadata with version `2026-09-20`;
+- Resend template `one-purchase-activation` updated and published with edition, total, purchase date, order reference and exact consent text;
+- checkout return page can download a durable purchase confirmation containing the same order/consent details;
+- public RSVP allergy/intolerance answers require explicit consent in the staged UI;
+- staged submissions persist `health_consent`, `health_consent_version` and `health_consent_recorded_at` in RSVP payload metadata;
+- isolated Supabase QA function deployed as `weddly-rsvp-qa-health-consent`;
+- production `weddly-rsvp` remains untouched.
+
+Email delivery note:
+- Resend currently has no verified sending domain in the connected account.
+- The template and backend integration are ready, but customer delivery cannot be treated as LIVE-ready until a sending domain is verified and `WEDDLY_RESEND_FROM` / `RESEND_API_KEY` are configured.
+- The downloadable post-payment confirmation is an independent fallback and does not depend on email delivery.
+
+Stripe LIVE still requires account-owner actions:
+- complete/confirm LIVE account identity + payout bank details;
+- create/confirm LIVE Essential and Signature prices;
+- supply LIVE secret/publishable keys and webhook signing secret through Supabase secrets (never GitHub);
+- enable Stripe customer payment/refund emails if desired;
+- run one controlled real payment before public launch.
+
+Nothing in this branch should be merged into production until real-device RSVP consent QA and the controlled LIVE purchase both pass.
+
+
+### Verified health-consent QA · 20 Sep 2026
+The isolated `weddly-rsvp-qa-health-consent` self-test passed:
+- allergy/intolerance data without explicit consent → HTTP 400;
+- the same health-data submission with explicit consent → HTTP 201;
+- persisted payload contains `health_consent=true`, version `2026-09-20` and a recorded timestamp;
+- the technical test submission was deleted automatically after verification.
+
+This verifies backend enforcement + evidence persistence. Real-device UI interaction still remains a release gate before production deployment.
