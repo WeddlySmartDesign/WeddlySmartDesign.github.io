@@ -59,7 +59,7 @@ function decorate(){
   const content=document.getElementById('content');
   if(!content)return;
   content.querySelectorAll('.guest').forEach(guest=>{
-    guest.querySelector('[data-wsd-custom-answers]')?.remove();
+    if(guest.querySelector('[data-wsd-custom-answers]'))return;
     const keyEl=guest.querySelector('[data-manual]');
     const id=keyEl?.dataset?.manual||'';
     const name=guest.querySelector('.guestName')?.textContent?.trim()||'';
@@ -93,6 +93,7 @@ async function load(){
     }
     submissions=Array.isArray(x.submissions)?x.submissions:[];
     loaded=true;
+    document.querySelectorAll('[data-wsd-custom-answers]').forEach(el=>el.remove());
     decorate();
   }catch{}finally{loading=false}
 }
