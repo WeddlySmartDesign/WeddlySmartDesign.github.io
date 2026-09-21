@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const G=window.__GuestsProd;if(!G)return,K=G.KEY||'weddly_guests_qa_v67';
+const G=window.__GuestsProd;if(!G)return;const K=G.KEY||'weddly_guests_qa_v67';
 function doc(){try{let d=G.f?.contentDocument;for(let i=0;i<8&&d;i++){if(d.getElementById('listados')&&d.getElementById('hoy'))return d;d=d.querySelector('iframe')?.contentDocument}return null}catch{return null}}
 function S(){try{const x=JSON.parse(localStorage.getItem(K)||'{}')||{};x.guests=x.guests||{};x.tables=x.tables||{};x.meta=x.meta||{};return x}catch{return{guests:{},tables:{},meta:{}}}}
 function save(x){localStorage.setItem(K,JSON.stringify(x))}
