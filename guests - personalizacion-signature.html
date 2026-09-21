@@ -202,8 +202,7 @@
         <input type="text" id="playlistText" value="Ayúdanos con la música: pide una canción para la fiesta.">
         <label>Texto del botón</label>
         <input type="text" id="playlistLinkText" value="Pedir canción">
-        <label>Enlace (WhatsApp, Spotify...)</label>
-        <input type="text" id="playlistLink" value="https://wa.me/34600123123?text=Mi%20canci%C3%B3n%20para%20la%20fiesta%20es...">
+        <p class="hint">El botón abrirá WhatsApp al mismo número indicado en Contacto, con el mensaje preparado para que el invitado escriba su canción.</p>
       </div>
 
       <div class="toggle-row">
@@ -226,8 +225,9 @@
       <input type="text" id="contact2Name" value="Jorge">
       <label>Contacto 2 — teléfono</label>
       <input type="text" id="contact2Phone" value="600456456">
-      <label>WhatsApp (número con prefijo de país, sin espacios)</label>
-      <input type="text" id="whatsapp" value="34600123123">
+      <label>WhatsApp de la pareja</label>
+      <input type="text" id="whatsapp" inputmode="tel" maxlength="15" value="600123123" placeholder="600123123">
+      <p class="hint">Puedes escribir solo el móvil español de 9 dígitos. ONE añade +34 automáticamente.</p>
     </div>
 
     <div class="section">
@@ -472,7 +472,7 @@ document.getElementById('hotelPhotoInput').addEventListener('change', e => readP
 const directIds = [
   'p1','p2','date','time','city','tagline','storyQuote','storyText',
   'hotelName','hotelDesc','hotelCode','hotelLink','dressNote',
-  'giftText','giftStrong','playlistText','playlistLinkText','playlistLink',
+  'giftText','giftStrong','playlistText','playlistLinkText',
   'infoExtraText','contact1Name','contact1Phone','contact2Name','contact2Phone','whatsapp'
 ];
 directIds.forEach(id => document.getElementById(id).addEventListener('input', renderPreview));
@@ -493,6 +493,19 @@ blockToggles.forEach(([checkId, bodyId]) => {
     renderPreview();
   });
 });
+
+function spanishWhatsAppNumber(raw) {
+  let d = String(raw || '').replace(/\D/g,'');
+  if (d.startsWith('0034')) d = d.slice(4);
+  if (d.length === 11 && d.startsWith('34')) return d;
+  if (d.length === 9) return '34' + d;
+  return d;
+}
+function whatsAppLink(raw, message='') {
+  const number = spanishWhatsAppNumber(raw);
+  if (!number) return '#';
+  return 'https://wa.me/' + number + (message ? '?text=' + encodeURIComponent(message) : '');
+}
 
 function renderPreview() {
   const tpl = TEMPLATES[state.template];
@@ -519,7 +532,7 @@ function renderPreview() {
     contact1Phone: document.getElementById('contact1Phone').value || '',
     contact2Name: document.getElementById('contact2Name').value || '',
     contact2Phone: document.getElementById('contact2Phone').value || '',
-    whatsapp: `https://wa.me/${document.getElementById('whatsapp').value.replace(/\D/g,'')}`,
+    whatsapp: whatsAppLink(document.getElementById('whatsapp').value),
   };
 
   const venuesOut = state.venues.map(v => ({ ...v, photo: v.photo }));
@@ -539,7 +552,7 @@ function renderPreview() {
   const playlist = {
     text: document.getElementById('playlistText').value || '',
     linkText: document.getElementById('playlistLinkText').value || '',
-    link: document.getElementById('playlistLink').value || '#',
+    link: whatsAppLink(document.getElementById('whatsapp').value, 'Mi canción para la fiesta es...'),
   };
   const infoExtra = { text: document.getElementById('infoExtraText').value || '' };
   const blocks = {
