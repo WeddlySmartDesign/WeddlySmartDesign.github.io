@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const G=window.__GuestsProd;if(!G)return,API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',TOKEN='weddly_shared_wedding_token';
+const G=window.__GuestsProd;if(!G)return;const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',TOKEN='weddly_shared_wedding_token';
 let remote=null,busy=false,last=0;
 function doc(){try{let d=G.f?.contentDocument;for(let i=0;i<8&&d;i++){if(d.getElementById('listados')&&d.getElementById('hoy'))return d;const f=d.querySelector('iframe');d=f?.contentDocument}return null}catch{return null}}
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),norm=s=>String(s||'').trim().toLowerCase();
