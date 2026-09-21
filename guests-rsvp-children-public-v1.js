@@ -1,10 +1,10 @@
 (()=>{
 'use strict';
 if(window.__wsdRsvpChildrenPublic)return;window.__wsdRsvpChildrenPublic=true;
-const qs=new URLSearchParams(location.search),unitMode=!!qs.get('u');
+const qs=new URLSearchParams(location.search),unitMode=!!qs.get('u'),API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',token=qs.get('t')||'';
 const T=(es,en)=>document.documentElement.lang==='en'?en:es;
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let patchQueued=false;
+let patchQueued=false,settingReady=false,childrenEnabled=false;
 
 function installStyle(){
   if(document.getElementById('wsdChildrenPublicStyle'))return;
@@ -51,7 +51,7 @@ function wire(b){
   count.oninput=()=>drawRows(b);drawRows(b);updateUnitVisibility();
 }
 function patch(){
-  patchQueued=false;installStyle();if(block()){updateUnitVisibility();return}
+  patchQueued=false;if(!settingReady||!childrenEnabled){block()?.remove();return}installStyle();if(block()){updateUnitVisibility();return}
   if(unitMode){const people=document.getElementById('people');if(!people)return;people.insertAdjacentHTML('afterend',blockHtml())}
   else{const details=document.getElementById('details'),allergy=document.getElementById('allergyBlock');if(!details)return;(allergy||details.firstElementChild)?.insertAdjacentHTML?.('afterend',blockHtml());if(!block())details.insertAdjacentHTML('afterbegin',blockHtml())}
   const b=block();if(b)wire(b)
@@ -87,6 +87,15 @@ document.addEventListener('click',e=>{
   if(e.target?.closest?.('#send')&&!validate()){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();return}
   if(unitMode&&e.target?.closest?.('[data-answer]'))setTimeout(updateUnitVisibility,0)
 },true);
+async function loadSetting(){
+  try{
+    if(!token)return;
+    const u=API+'?token='+encodeURIComponent(token)+(unitMode?'&unit='+encodeURIComponent(qs.get('u')||''):'');
+    const r=await nativeFetch(u,{cache:'no-store'}),x=await r.json().catch(()=>({}));
+    childrenEnabled=!!(r.ok&&x?.ok&&x?.form?.config?.questions?.children===true);
+  }catch{childrenEnabled=false}
+  finally{settingReady=true;schedulePatch()}
+}
 const app=document.getElementById('app');if(app){const obs=new MutationObserver(schedulePatch);obs.observe(app,{childList:true,subtree:true})}
-[0,60,180,500].forEach(ms=>setTimeout(schedulePatch,ms));
+loadSetting();[80,220,600].forEach(ms=>setTimeout(schedulePatch,ms));
 })();
