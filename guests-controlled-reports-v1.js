@@ -80,14 +80,15 @@ function customDef(q,S){
   else summary=answered+' respuestas · '+missing+' sin respuesta';
   return{key:'custom:'+q.id,label:'Pregunta RSVP · '+q.label,slug:'RSVP_'+String(q.label||'Pregunta').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'_').replace(/^_|_$/g,'').slice(0,60),headers:['Nombre','Respuesta','Grupo','Subgrupo','Mesa'],rows,summary}
 }
-function printReport(def){
-  const rec=prepare(def);touchPrint(def.key,rec.version);
-  const S=state(),c=controlFor(S,def.key),saved=findVersion(c,rec.version)||rec,w=window.open('','_blank');if(!w)return;
+function printSnapshot(def,rec){
+  touchPrint(def.key,rec.version);
+  const S=state(),ctrl=controlFor(S,def.key),saved=findVersion(ctrl,rec.version)||rec,w=window.open('','_blank');if(!w)return;
   const sent=saved.sentAt?'Enviada '+formatDate(saved.sentAt):'Preparada · todavía no marcada como enviada';
   const printed='Impresión '+formatDate(new Date().toISOString());
-  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safe(def.slug+'_V'+saved.version)}</title><style>body{font-family:Arial,sans-serif;color:#222;margin:28px}h1{font-family:Georgia,serif;font-weight:500;margin:6px 0}.brand{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#666}.meta{color:#666;margin:4px 0 8px}.control{margin:14px 0 22px;padding:10px 12px;border:1px solid #bbb;background:#f7f5ef;font-size:12px}.control b{font-size:14px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border-bottom:1px solid #ddd;padding:8px 7px;text-align:left;vertical-align:top}th{background:#f5f2ed;text-transform:uppercase;font-size:10px;letter-spacing:.06em}@media print{body{margin:12mm}}</style></head><body><div class="brand">Weddly Smart Design · ONE</div><h1>${safe(saved.label)}</h1><div class="meta">${safe(couple(S))} · ${safe(saved.summary||'')}</div><div class="control"><b>COPIA CONTROLADA · V${saved.version}</b><br>Preparada ${safe(formatDate(saved.preparedAt))} · ${safe(sent)}<br>${safe(printed)}</div><table><thead><tr>${saved.headers.map(h=>'<th>'+safe(h)+'</th>').join('')}</tr></thead><tbody>${saved.rows.map(r=>'<tr>'+r.map(x=>'<td>'+safe(x)+'</td>').join('')+'</tr>').join('')}</tbody></table><script>setTimeout(()=>window.print(),250)<\/script></body></html>`);
+  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safe((def.slug||'Listado')+'_V'+saved.version)}</title><style>body{font-family:Arial,sans-serif;color:#222;margin:28px}h1{font-family:Georgia,serif;font-weight:500;margin:6px 0}.brand{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#666}.meta{color:#666;margin:4px 0 8px}.control{margin:14px 0 22px;padding:10px 12px;border:1px solid #bbb;background:#f7f5ef;font-size:12px}.control b{font-size:14px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border-bottom:1px solid #ddd;padding:8px 7px;text-align:left;vertical-align:top}th{background:#f5f2ed;text-transform:uppercase;font-size:10px;letter-spacing:.06em}@media print{body{margin:12mm}}</style></head><body><div class="brand">Weddly Smart Design · ONE</div><h1>${safe(saved.label)}</h1><div class="meta">${safe(couple(S))} · ${safe(saved.summary||'')}</div><div class="control"><b>COPIA CONTROLADA · V${saved.version}</b><br>Preparada ${safe(formatDate(saved.preparedAt))} · ${safe(sent)}<br>${safe(printed)}</div><table><thead><tr>${saved.headers.map(h=>'<th>'+safe(h)+'</th>').join('')}</tr></thead><tbody>${saved.rows.map(r=>'<tr>'+r.map(x=>'<td>'+safe(x)+'</td>').join('')+'</tr>').join('')}</tbody></table><script>setTimeout(()=>window.print(),250)<\/script></body></html>`);
   w.document.close();setTimeout(patch,100)
 }
+function printReport(def){printSnapshot(def,prepare(def))}
 function escCsv(v){return '"'+String(v??'').replaceAll('"','""')+'"'}
 function csvReport(def){
   const rec=prepare(def),csv='\ufeffsep=;\r\n'+[rec.headers,...rec.rows].map(r=>r.map(escCsv).join(';')).join('\r\n'),blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=def.slug+'_V'+rec.version+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);setTimeout(patch,100)
@@ -99,15 +100,22 @@ function addStyle(d){
   .wsd-copy-control b{color:var(--dark)}.wsd-copy-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.wsd-copy-actions button{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:8px 10px;font-size:11.5px;font-weight:750}
   .wsd-report-heading{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dark);font-weight:850;margin:25px 2px 8px}
   .wsd-history{position:fixed;z-index:9999;inset:0;background:#0006;display:flex;align-items:flex-end}.wsd-history-card{width:100%;max-width:700px;max-height:88vh;overflow:auto;margin:auto;background:#fff;border-radius:24px 24px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom))}
-  .wsd-history-row{padding:12px 0;border-top:1px solid var(--line)}.wsd-history-row:first-of-type{border-top:0}.wsd-history-actions{display:flex;gap:7px;margin-top:8px}.wsd-history-actions button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;font-weight:750}
+  .wsd-history-row{padding:12px 0;border-top:1px solid var(--line)}.wsd-history-row:first-of-type{border-top:0}.wsd-history-actions{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}.wsd-history-actions button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;font-weight:750}
+  .wsd-view-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:14px}.wsd-view-table th,.wsd-view-table td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.wsd-view-table th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
   `;d.head.appendChild(s)
+}
+function viewRows(d,def){
+  d.getElementById('wsdReportRows')?.remove();
+  const ov=d.createElement('div');ov.id='wsdReportRows';ov.className='wsd-history';
+  ov.innerHTML=`<div class="wsd-history-card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><div><div class="sectiontag">RESUMEN GENERAL</div><h2 style="margin:5px 0">${safe(def.label)}</h2><div class="small">${safe(def.summary||'')}</div></div><button class="btn soft" id="wsdRowsClose">Cerrar</button></div>${def.rows.length?`<table class="wsd-view-table"><thead><tr>${def.headers.map(h=>'<th>'+safe(h)+'</th>').join('')}</tr></thead><tbody>${def.rows.map(r=>'<tr>'+r.map(v=>'<td>'+safe(v)+'</td>').join('')+'</tr>').join('')}</tbody></table>`:'<p class="small" style="margin-top:18px">Todavía no hay respuestas registradas.</p>'}</div>`;
+  d.body.appendChild(ov);ov.onclick=e=>{if(e.target===ov)ov.remove()};ov.querySelector('#wsdRowsClose').onclick=()=>ov.remove()
 }
 function openHistory(d,def){
   d.getElementById('wsdReportHistory')?.remove();
   const S=state(),c=controlFor(S,def.key),history=[...(c.history||[])].reverse(),ov=d.createElement('div');ov.id='wsdReportHistory';ov.className='wsd-history';
   ov.innerHTML=`<div class="wsd-history-card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><div><div class="sectiontag">COPIAS CONTROLADAS</div><h2 style="margin:5px 0">${safe(def.label)}</h2></div><button class="btn soft" id="wsdHistoryClose">Cerrar</button></div>${history.length?history.map(r=>`<div class="wsd-history-row"><b>V${r.version}</b><div class="small">Preparada ${safe(formatDate(r.preparedAt))} · ${r.sentAt?'Enviada '+safe(formatDate(r.sentAt)):'No marcada como enviada'}${r.printCount?' · '+r.printCount+' impresión'+(r.printCount===1?'':'es'):''}</div><div class="wsd-history-actions"><button data-reprint="${r.version}">Reimprimir V${r.version}</button>${r.sentAt?'':`<button data-sent="${r.version}">Marcar V${r.version} como enviada</button>`}</div></div>`).join(''):'<p class="small">Todavía no hay ninguna copia preparada.</p>'}</div>`;
   d.body.appendChild(ov);ov.onclick=e=>{if(e.target===ov)ov.remove()};ov.querySelector('#wsdHistoryClose').onclick=()=>ov.remove();
-  ov.querySelectorAll('[data-reprint]').forEach(b=>b.onclick=()=>{const S2=state(),cc=controlFor(S2,def.key),r=findVersion(cc,Number(b.dataset.reprint));if(!r)return;ov.remove();printReport({key:def.key,label:r.label,slug:def.slug,headers:r.headers,rows:r.rows,summary:r.summary})});
+  ov.querySelectorAll('[data-reprint]').forEach(b=>b.onclick=()=>{const S2=state(),cc=controlFor(S2,def.key),r=findVersion(cc,Number(b.dataset.reprint));if(!r)return;ov.remove();printSnapshot({key:def.key,slug:def.slug},r)});
   ov.querySelectorAll('[data-sent]').forEach(b=>b.onclick=()=>{const v=Number(b.dataset.sent);if(!confirm('¿Confirmar que V'+v+' se ha enviado o entregado?'))return;markSent(def.key,v);ov.remove();patch()})
 }
 function decorateControl(d,card,def){
@@ -144,14 +152,15 @@ function renderCustom(d){
   for(const q of qs){
     const def=customDef(q,S),id='wsdCustomReport_'+String(q.id).replace(/[^a-zA-Z0-9_-]/g,''),sig=hash([def.summary,def.rows]);
     let card=d.getElementById(id);if(!card){card=d.createElement('div');card.id=id;card.dataset.wsdCustomReport='1';card.className='card';list.appendChild(card)}
-    if(card.dataset.sig!==sig){card.dataset.sig=sig;card.innerHTML=`<b>${safe(q.label)}</b><p class="small">${safe(def.summary)}</p><div class="actions"><button class="btn" type="button" data-custom-print>Imprimir / PDF</button><button class="btn soft" type="button" data-custom-csv>Excel / CSV</button></div>`}
+    if(card.dataset.sig!==sig){card.dataset.sig=sig;card.innerHTML=`<b>${safe(q.label)}</b><p class="small">${safe(def.summary)}</p><button class="btn line full" type="button" data-custom-view style="margin:4px 0 9px">Ver respuestas</button><div class="actions"><button class="btn" type="button" data-custom-print>Imprimir / PDF</button><button class="btn soft" type="button" data-custom-csv>Excel / CSV</button></div>`}
+    card.querySelector('[data-custom-view]').onclick=()=>viewRows(d,customDef(q,state()));
     card.querySelector('[data-custom-print]').onclick=()=>printReport(customDef(q,state()));
     card.querySelector('[data-custom-csv]').onclick=()=>csvReport(customDef(q,state()));
     decorateControl(d,card,def)
   }
 }
 async function memberToken(){
-  const raw=localStorage.getItem(TOKEN)||'',m=(localStorage.getItem(MODE)||'').toLowerCase();if(!m||!['es','en'].includes(m)||raw.length<40)return raw;
+  const raw=localStorage.getItem(TOKEN)||'',q=new URLSearchParams(location.search).get('ownerDemo'),stored=(localStorage.getItem(MODE)||'').toLowerCase(),m=(q==='es'||q==='en')?q:stored;if(!m||!['es','en'].includes(m)||raw.length<40)return raw;
   const cached=localStorage.getItem('weddly_owner_demo_token_'+m)||'';if(cached.length>=40)return cached;
   try{const r=await fetch(ACCESS,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':raw},body:JSON.stringify({action:'owner_demo_token',lang:m}),cache:'no-store'}),x=await r.json().catch(()=>({}));if(r.ok&&x?.memberToken){localStorage.setItem('weddly_owner_demo_token_'+m,x.memberToken);return x.memberToken}}catch{}return raw
 }
