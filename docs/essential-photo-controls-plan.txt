@@ -1,1 +1,0 @@
-Planned change: replace misleading native file picker presentation with explicit saved-photo state, preview, Change photo, Remove photo; keep approved Essential templates untouched.
