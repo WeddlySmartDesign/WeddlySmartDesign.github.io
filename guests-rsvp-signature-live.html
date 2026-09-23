@@ -1,1 +1,110 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Invitación</title></head><body><script>location.replace('guests-rsvp-public-clean.html'+location.search+location.hash)</script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Invitación</title>
+<style>html,body{margin:0;background:#f6f4f0;font-family:system-ui;color:#5f5a54}main{max-width:560px;margin:auto;padding:32px}.err{margin-top:18vh;background:#fff;border:1px solid #e1ddd6;border-radius:20px;padding:24px;text-align:center}.err h1{font:500 28px Georgia,serif;color:#49453f;margin:0 0 10px}.err p{font-size:14px;line-height:1.5}</style>
+</head>
+<body>
+<main id="loading">Cargando invitación…</main>
+<script>
+(()=> {
+  const RSVP_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp';
+  const PERS_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-personalization';
+  const qs=new URLSearchParams(location.search),token=qs.get('t')||'',unitId=qs.get('u')||'';
+  const templates={sig01:'guests-signature-01.html',sig02:'guests-signature-02.html',sig03:'guests-signature-03.html',sig04:'guests-signature-04.html'};
+  const fonts=[
+    {id:'editorial',primary:'Cormorant Garamond',primaryParam:'Cormorant+Garamond:wght@500;600',secondary:'Jost',secondaryParam:'Jost:wght@300;400;500;600'},
+    {id:'romantico',primary:'Mrs Saint Delafield',primaryParam:'Mrs+Saint+Delafield',secondary:'Cormorant Garamond',secondaryParam:'Cormorant+Garamond:wght@400;500'},
+    {id:'clasico',primary:'Playfair Display',primaryParam:'Playfair+Display:ital,wght@0,600;1,500',secondary:'EB Garamond',secondaryParam:'EB+Garamond:ital,wght@0,400;0,500;1,400'},
+    {id:'moderno',primary:'Fraunces',primaryParam:'Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500',secondary:'Work Sans',secondaryParam:'Work+Sans:wght@300;400;500;600'},
+    {id:'caligrafico',primary:'Beau Rivage',primaryParam:'Beau+Rivage',secondary:'Marcellus',secondaryParam:'Marcellus'}
+  ];
+  const defaultAgenda=[
+    {time:'18:00',title:'Ceremonia',place:'',icon:'ring'},
+    {time:'19:00',title:'Cóctel',place:'',icon:'glass'},
+    {time:'21:00',title:'Cena',place:'',icon:'fork'},
+    {time:'00:00',title:'Fiesta',place:'',icon:'note'}
+  ];
+  function splitNames(t){for(const s of [' & ',' y ',' Y ',' + '])if(String(t||'').includes(s)){const p=String(t).split(s);return[p[0].trim(),p.slice(1).join(s.trim()).trim()]}return['Persona 1','Persona 2']}
+  function fallback(cfg={},p=null){
+    const n=splitNames(cfg.title),x=p||{},city=String(cfg.venue||'').split(',').slice(1).join(',').trim();
+    const venues=Array.isArray(x.venues)&&x.venues.length?x.venues:(Array.isArray(x.locations)&&x.locations.length?x.locations.map((v,i)=>({label:v.title||('Lugar '+(i+1)),name:v.place||'',detail:[v.time,city].filter(Boolean).join(' · '),address:v.address||'',pos:'center',photo:''})):[]);
+    return {
+      tier:'signature',template:/^sig0[1-4]$/.test(String(x.template||''))?String(x.template):'sig01',fontPair:x.fontPair||'moderno',
+      p1:x.p1||n[0],p2:x.p2||n[1],date:x.date||cfg.date||'2027-01-01',time:x.time||cfg.time||'18:00',city:x.city||city,tagline:x.tagline||'',
+      heroPhoto:x.heroPhoto||'',storyPhoto:x.storyPhoto||'',storyQuote:x.storyQuote||x.storyTitle||'',storyText:x.storyText||'',
+      agenda:Array.isArray(x.agenda)&&x.agenda.length?x.agenda:defaultAgenda,
+      venues,transporte:Array.isArray(x.transporte)?x.transporte:[],galeria:Array.isArray(x.galeria)?x.galeria:[],
+      hotel:x.hotel||{},dress:x.dress||{},gift:x.gift||{},playlist:x.playlist||{},infoExtra:x.infoExtra||{},blocks:x.blocks||{},
+      contact1Name:x.contact1Name||x.contactName||'',contact1Phone:x.contact1Phone||x.contactPhone||'',contact2Name:x.contact2Name||'',contact2Phone:x.contact2Phone||'',whatsapp:x.whatsapp||''
+    };
+  }
+  function replaceConst(h,name,value,kind){
+    const start=h.indexOf('const '+name+' = '+(kind==='array'?'[':'{'));if(start<0)return h;
+    const from=start+('const '+name+' = ').length,open=kind==='array'?'[':'{',close=kind==='array'?']':'}';
+    let depth=0,quote='',esc=false,end=-1;
+    for(let i=from;i<h.length;i++){
+      const ch=h[i];
+      if(quote){if(esc){esc=false;continue}if(ch==='\\'){esc=true;continue}if(ch===quote)quote='';continue}
+      if(ch==='"'||ch==="'"||ch==='\`'){quote=ch;continue}
+      if(ch===open)depth++;
+      else if(ch===close){depth--;if(depth===0){end=i+1;break}}
+    }
+    if(end<0)return h;
+    return h.slice(0,from)+JSON.stringify(value)+h.slice(end);
+  }
+  function mapLink(x){if(x?.link)return x.link;const q=String(x?.address||'').trim();return q?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q):'#'}
+  function uniqueEvents(unit){const map=new Map();for(const m of unit?.members||[])for(const e of Array.isArray(m.events)?m.events:[])if(e?.id&&!map.has(e.id))map.set(e.id,e);return[...map.values()]}
+  function nextDay(s){const [y,m,d]=String(s||'').split('-').map(Number),x=new Date(y,m-1,d+1,12);return[x.getFullYear(),String(x.getMonth()+1).padStart(2,'0'),String(x.getDate()).padStart(2,'0')].join('')}
+  function localBasic(d){return[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('')+'T'+String(d.getHours()).padStart(2,'0')+String(d.getMinutes()).padStart(2,'0')+'00'}
+  function calendarUrl(e){if(!e?.date)return'';let dates='';if(e.time){const a=new Date(`${e.date}T${e.time}:00`),b=new Date(a.getTime()+4*3600000);dates=`${localBasic(a)}/${localBasic(b)}`}else dates=`${e.date.replaceAll('-','')}/${nextDay(e.date).replaceAll('-','')}`;const p=new URLSearchParams({action:'TEMPLATE',text:e.name||'Evento',dates,location:e.address||e.venue||'',details:e.venue||''});try{const z=Intl.DateTimeFormat().resolvedOptions().timeZone;if(z)p.set('ctz',z)}catch{}return'https://calendar.google.com/calendar/render?'+p.toString()}
+  function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+  function eventAddon(events){
+    if(!events.length)return'';
+    const cards=events.map(e=>`<div class="wsd-sig-event"><h3>${esc(e.name||'Evento')}</h3><p>${esc([e.date,e.time,e.venue].filter(Boolean).join(' · '))}</p>${e.date?`<a href="${esc(calendarUrl(e))}" target="_blank" rel="noopener">Añadir al calendario</a>`:''}</div>`).join('');
+    return `<style id="wsd-signature-events">.wsd-sig-events{max-width:560px;margin:0 auto;padding:30px 26px 46px;box-sizing:border-box;background:#fffdf8;color:#221f1a}.wsd-sig-events>p{font:700 10px/1.2 system-ui;letter-spacing:.14em;text-transform:uppercase;color:#8a7233}.wsd-sig-event{padding:16px 0;border-bottom:1px solid rgba(80,70,55,.16)}.wsd-sig-event:last-child{border-bottom:0}.wsd-sig-event h3{font:500 25px/1.1 Georgia,serif;margin:0 0 5px}.wsd-sig-event p{font:400 13px/1.5 system-ui;margin:0;color:#7c7364}.wsd-sig-event a{display:inline-block;margin-top:10px;border:1px solid rgba(80,70,55,.18);border-radius:999px;padding:8px 12px;text-decoration:none;color:#221f1a;font:700 11px/1.2 system-ui}</style><section class="wsd-sig-events"><p>También estáis invitados a</p>${cards}</section>`;
+  }
+  function patch(h,w,f,events=[]){
+    const href=`https://fonts.googleapis.com/css2?family=${f.primaryParam}&family=${f.secondaryParam}&display=swap`;
+    h=h.replace('</head>',`<link rel="stylesheet" href="${href}"><style id="wsd-signature-fonts">body,input,button{font-family:'${f.secondary}',system-ui,sans-serif!important}.display,.script,.story-quote,.t-time,.hotel-info .name,.pill{font-family:'${f.primary}',Georgia,serif!important}#brand{text-transform:none!important;letter-spacing:.02em!important;font-family:'${f.secondary}',system-ui,sans-serif!important}</style></head>`);
+    h=h.replace(/WEDDLY\s*SMART\s*DESIGN\s*·\s*GUESTS/gi,'WeddlySmartDesign · Invitados').replace(/Weddly\s*Smart\s*Design\s*·\s*Guests/gi,'WeddlySmartDesign · Invitados');
+    h=h.replace(/const RSVP_ENGINE = ['"][^'"]+['"];/,"const RSVP_ENGINE = 'guests-rsvp-v108-mobile.html';");
+    const wedding={p1:w.p1,p2:w.p2,date:w.date,time:w.time,city:w.city,tagline:w.tagline,heroPhoto:w.heroPhoto,storyPhoto:w.storyPhoto,storyQuote:w.storyQuote,storyText:w.storyText,contact1Name:w.contact1Name,contact1Phone:w.contact1Phone,contact2Name:w.contact2Name,contact2Phone:w.contact2Phone,whatsapp:w.whatsapp};
+    const venues=(w.venues||[]).map(v=>({...v}));
+    const transporte=(w.transporte||[]).map(x=>({title:x.title||'',detail:x.detail||'',link:mapLink(x)}));
+    h=replaceConst(h,'wedding',wedding,'object');
+    h=replaceConst(h,'agenda',w.agenda||[],'array');
+    h=replaceConst(h,'venues',venues,'array');
+    h=replaceConst(h,'blocks',{transporte:w.blocks?.transporte===true,alojamiento:w.blocks?.alojamiento===true,dresscode:w.blocks?.dresscode===true,regalo:w.blocks?.regalo===true,playlist:w.blocks?.playlist===true,infoExtra:w.blocks?.infoExtra===true,galeria:w.blocks?.galeria!==false},'object');
+    h=replaceConst(h,'transporte',transporte,'array');
+    h=replaceConst(h,'hotel',w.hotel||{},'object');
+    h=replaceConst(h,'dress',w.dress||{},'object');
+    h=replaceConst(h,'gift',w.gift||{},'object');
+    h=replaceConst(h,'playlist',w.playlist||{},'object');
+    h=replaceConst(h,'infoExtra',w.infoExtra||{},'object');
+    h=replaceConst(h,'galeria',w.galeria||[],'array');
+    const addon=eventAddon(events);if(addon)h=h.replace('<section class="chapter confirm" id="confirmacion">',addon+'<section class="chapter confirm" id="confirmacion">');
+    return h;
+  }
+  async function getJson(url){const r=await fetch(url,{cache:'no-store'}),x=await r.json().catch(()=>({}));return r.ok&&x?.ok?x:null}
+  async function run(){
+    let cfg={},pers=null,events=[];
+    if(token){
+      try{const x=await getJson(RSVP_API+'?token='+encodeURIComponent(token)+(unitId?'&unit='+encodeURIComponent(unitId):''));if(x?.form?.config)cfg=x.form.config;if(x?.unit)events=uniqueEvents(x.unit)}catch{}
+      try{const x=await getJson(PERS_API+'?token='+encodeURIComponent(token));if(x?.personalization)pers=x.personalization}catch{}
+    }
+    if(!pers){try{pers=JSON.parse(localStorage.getItem('weddly_guests_design')||'null')}catch{}}
+    const w=fallback(cfg,pers),url=templates[w.template]||templates.sig01,f=fonts.find(x=>x.id===w.fontPair)||fonts[3];
+    try{
+      const r=await fetch(url+'?v=signature-live-20260919',{cache:'no-store'});if(!r.ok)throw new Error('template');
+      const h=patch(await r.text(),w,f,events);
+      document.open();document.write(h);document.close();
+    }catch{document.getElementById('loading').innerHTML='<div class="err"><h1>No se ha podido abrir la invitación</h1><p>Comprueba la conexión y vuelve a intentarlo.</p></div>'}
+  }
+  run();
+})();
+</script>
+</body>
+</html>
