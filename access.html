@@ -17,7 +17,7 @@
 (()=>{
 const ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access';
 const TOKEN_KEY='weddly_shared_wedding_token';
-const params=new URLSearchParams(location.search),invite=params.get('invite')||'',purchaseSource=(params.get('purchase')||'').toLowerCase(),forcedLang=(params.get('lang')||'').toLowerCase();
+const params=new URLSearchParams(location.search),invite=params.get('invite')||'',purchaseSource=(params.get('purchase')||'').toLowerCase(),forcedLang=(params.get('lang')||'').toLowerCase(),repair=params.get('repair')==='1';
 const hashParams=new URLSearchParams(location.hash.startsWith('#')?location.hash.slice(1):location.hash),tester=hashParams.get('tester')||'',purchaseCodeFromLink=hashParams.get('code')||'';
 const isInvite=!!invite,isTester=!!tester;
 const savedLang=localStorage.getItem('weddly_access_lang');
@@ -60,6 +60,14 @@ $('activateTester').onclick=async()=>{const b=$('activateTester');b.disabled=tru
 $('activateEtsy').onclick=async()=>{const orderId=$('order').value.trim(),email=$('email').value.trim();if(!orderId||!email){show(copy[lang].badLicense,true);return}const b=$('activateEtsy');b.disabled=true;show(copy[lang].busy);try{const r=await post({action:'activate_etsy',orderId,email});if(r.status===201&&r.body?.memberToken)return finish(r.body.memberToken);if(r.body?.error==='already_activated')show(copy[lang].used,true);else if(r.body?.error==='invalid_license'||r.body?.error==='license_inactive')show(copy[lang].badLicense,true);else show(copy[lang].generic,true)}catch{show(copy[lang].generic,true)}finally{b.disabled=false}};
 $('code').addEventListener('keydown',e=>{if(e.key==='Enter')$('activate').click()});$('order').addEventListener('keydown',e=>{if(e.key==='Enter')$('email').focus()});$('email').addEventListener('keydown',e=>{if(e.key==='Enter')$('activateEtsy').click()});
 $('join').onclick=async()=>{const b=$('join');b.disabled=true;show(copy[lang].busy);try{if(await existingAccess()){show(copy[lang].alreadySignedIn,true);return}const r=await post({action:'join',inviteCode:invite});if(r.status===201&&r.body?.memberToken){history.replaceState(null,'',location.pathname);return finish(r.body.memberToken)}show(copy[lang].badInvite,true)}catch{show(copy[lang].generic,true)}finally{b.disabled=false}};
+if(repair){
+  clearActiveRuntimeState();
+  const token=currentToken();
+  if(token.length>=40)remember(token);
+  document.body.innerHTML='<main class="shell"><section class="card"><h1>Preparando vuestro ONE</h1><p class="lead">Limpiando datos antiguos de este navegador…</p></section></main>';
+  setTimeout(()=>location.replace('/app.html?recovered=1'),180);
+  return;
+}
 render();
 if(purchaseCodeFromLink&&!isInvite&&!isTester){
   mode='code';
