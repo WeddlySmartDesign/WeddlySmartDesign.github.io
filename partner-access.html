@@ -189,16 +189,25 @@
     try{return decodeURIComponent(row.slice(COOKIE_KEY.length+1)).trim()}catch(_){return row.slice(COOKIE_KEY.length+1).trim()}
   };
 
+  const PARTNER_API = SUPABASE + '/functions/v1/one-partner-couple-api';
   async function rpc(name, payload){
-    const r = await fetch(SUPABASE + '/rest/v1/rpc/' + name,{
+    const actions={
+      partner_connection_preview:'preview',
+      partner_connection_approve:'approve',
+      partner_manage_grants:'manage',
+      partner_update_grant:'update'
+    };
+    const action=actions[name];
+    if(!action) throw new Error('invalid_action');
+    const r = await fetch(PARTNER_API,{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':KEY,'Cache-Control':'no-store'},
-      body:JSON.stringify(payload || {})
+      body:JSON.stringify(Object.assign({action},payload||{}))
     });
     const text = await r.text();
     let data = null; try{data = text ? JSON.parse(text) : null}catch(_){}
     if(!r.ok){
-      const err = new Error(data?.message || data?.hint || data?.code || 'request_failed');
+      const err = new Error(data?.error || 'request_failed');
       err.status = r.status; throw err;
     }
     return data;
