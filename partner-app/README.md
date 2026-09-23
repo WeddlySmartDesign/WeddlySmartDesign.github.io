@@ -23,6 +23,11 @@ https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/one-partner-app
 Couple consent/revocation page:
 https://weddlysmartdesign.github.io/partner-access.html
 
+Couple-side API:
+one-partner-couple-api (Supabase Edge Function)
+
+The consent page never calls privileged database functions directly. It sends the existing high-entropy ONE member capability to the isolated couple API, which validates it server-side against the existing hashed wedding member record.
+
 The professional app is deliberately on a different origin from ONE, so it cannot access ONE localStorage/cookies.
 
 ## Data model
@@ -66,3 +71,20 @@ MVP includes:
 - couple approval / permission editing / revocation
 
 Do not add CRM, leads, planner invoicing, supplier CRM, chat, white-label or duplicate ONE planning tools without an explicit product decision.
+
+
+## Financial summary
+
+When the couple explicitly enables the payments scope, ONE Partner reproduces the current ONE Payments calculation server-side:
+- cost breakdowns replace simple provider price when present
+- quantity/person/hour/person-hour modes are respected
+- paid refunds reduce paid net
+- external/gifted costs do not reduce the couple's operating budget
+- cancelled losses and non-external DIY are included
+- budget, committed, paid, pending, next 30 days, unscheduled and available are returned
+
+No receipts, attachments, payer details or raw provider records are exposed by the summary.
+
+## Deployment boundary
+
+The only file added to the existing GitHub Pages production surface is `partner-access.html`. No existing ONE file was edited for the Partner feature. The professional app and couple API are new Supabase Edge Functions. Partner database objects are additive and prefixed `partner_` or live in `partner_private`.
