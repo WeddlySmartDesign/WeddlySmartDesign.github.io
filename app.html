@@ -29,11 +29,22 @@
 <script>
 (()=>{
 'use strict';
-const TOKEN='weddly_shared_wedding_token',PAY='weddly_pro_v7',GUESTKEY='weddly_guests_qa_v67',THEME1='weddly_personal_theme_v51',THEME2='weddly_personal_theme_v20',LAST='weddly_suite_last_module';
+const TOKEN='weddly_shared_wedding_token',PAY='weddly_pro_v7',GUESTKEY='weddly_guests_qa_v67',THEME1='weddly_personal_theme_v51',THEME2='weddly_personal_theme_v20',LAST='weddly_suite_last_module',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access';
 const payFrame=document.getElementById('paymentsFrame'),guestFrame=document.getElementById('guestsFrame'),planningFrame=document.getElementById('planningFrame'),auxFrame=document.getElementById('auxFrame'),loading=document.getElementById('loading'),error=document.getElementById('error'),toast=document.getElementById('toast'),tabs=[...document.querySelectorAll('.tab')];
 let current='payments',auxMode='',theme='',installPrompt=null,toastTimer=null,identityMark='',eventsBackArmed=false,eventsReturnUrl='guests-rsvp-form-flow.html?v=6-stable-runtime';
 const loaded={payments:false,guests:false,planning:false},observers=new WeakMap();
-function hasAccess(){try{return(localStorage.getItem(TOKEN)||'').length>=40}catch{return false}}
+function accessToken(){try{return localStorage.getItem(TOKEN)||''}catch{return''}}
+function hasAccess(){return accessToken().length>=40}
+function clearAccessToken(){try{localStorage.removeItem(TOKEN)}catch{}try{document.cookie='weddly_member_access=; Path=/; Max-Age=0; SameSite=Lax; Secure'}catch{}}
+async function validateAccess(){
+  const token=accessToken();if(token.length<40)return'invalid';
+  try{
+    const r=await fetch(ACCESS,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':token},body:JSON.stringify({action:'status'}),cache:'no-store'});
+    if(r.ok)return'valid';
+    if(r.status===401||r.status===403||r.status===410)return'invalid';
+    return'unknown';
+  }catch{return'unknown'}
+}
 function demoMode(){try{const q=new URLSearchParams(location.search).get('ownerDemo');if(q==='es'||q==='en')return q;const m=localStorage.getItem('weddly_owner_demo_mode');return m==='es'||m==='en'?m:''}catch{return''}}
 function lang(){try{const m=demoMode(),k=m?PAY+'_owner_demo_'+m:PAY,x=JSON.parse(localStorage.getItem(k)||'null'),v=x?.settings?.lang;if(v==='es'||v==='en')return v;if(m)return m}catch{}try{const v=localStorage.getItem('weddly_access_lang');if(v==='es'||v==='en')return v}catch{}return(navigator.language||'').toLowerCase().startsWith('es')?'es':'en'}
 const copy={es:{payments:'Pagos',guests:'Invitados',planning:'Planning',settings:'Ajustes',label:'Vuestra boda',opening:'Abriendo vuestra boda…',fail:'No hemos podido abrir este módulo.',installMenu:'Abre el menú del navegador y elige «Añadir a pantalla de inicio» o «Instalar app».',installed:'WeddlySmartDesign se ha añadido al móvil.'},en:{payments:'Payments',guests:'Guests',planning:'Planning',settings:'Settings',label:'Your wedding',opening:'Opening your wedding…',fail:'We could not open this module.',installMenu:'Open your browser menu and choose “Add to Home screen” or “Install app”.',installed:'WeddlySmartDesign has been added to your device.'}};
@@ -73,8 +84,13 @@ addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
 function refreshShell(){applyTheme();translate();watchIdentity()}
 addEventListener('storage',e=>{if([THEME1,THEME2,PAY,'weddly_owner_demo_mode',GUESTKEY].includes(e.key))refreshShell()});addEventListener('focus',refreshShell);addEventListener('pageshow',refreshShell);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshShell()});
 if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js?v=70').catch(()=>{});
-if(!hasAccess()){location.replace('access.html');return}
-applyTheme();translate();identityMark=identitySignature();syncGuestIdentity(false);let first='payments';try{const x=localStorage.getItem(LAST);if(['payments','guests','planning'].includes(x))first=x}catch{}open(first);setTimeout(()=>{['payments','guests','planning'].filter(x=>x!==first).forEach((x,i)=>setTimeout(()=>ensure(x),i*250))},350);
+async function boot(){
+  if(!hasAccess()){location.replace('access.html');return}
+  const gate=await validateAccess();
+  if(gate==='invalid'){clearAccessToken();location.replace('access.html?inactive=1');return}
+  applyTheme();translate();identityMark=identitySignature();syncGuestIdentity(false);let first='payments';try{const x=localStorage.getItem(LAST);if(['payments','guests','planning'].includes(x))first=x}catch{}open(first);setTimeout(()=>{['payments','guests','planning'].filter(x=>x!==first).forEach((x,i)=>setTimeout(()=>ensure(x),i*250))},350);
+}
+boot();
 })();
 </script>
 <script src="suite-install-hotfix-v1.js?v=5"></script>
