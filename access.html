@@ -17,7 +17,7 @@
 (()=>{
 const ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access';
 const TOKEN_KEY='weddly_shared_wedding_token';
-const params=new URLSearchParams(location.search),invite=params.get('invite')||'',purchaseSource=(params.get('purchase')||'').toLowerCase(),forcedLang=(params.get('lang')||'').toLowerCase(),repair=params.get('repair')==='1';
+const params=new URLSearchParams(location.search),invite=params.get('invite')||'',purchaseSource=(params.get('purchase')||'').toLowerCase(),forcedLang=(params.get('lang')||'').toLowerCase(),repairMode=(params.get('repair')||'').toLowerCase(),repair=repairMode==='1'||repairMode==='hard';
 const hashParams=new URLSearchParams(location.hash.startsWith('#')?location.hash.slice(1):location.hash),tester=hashParams.get('tester')||'',purchaseCodeFromLink=hashParams.get('code')||'';
 const isInvite=!!invite,isTester=!!tester;
 const savedLang=localStorage.getItem('weddly_access_lang');
@@ -36,7 +36,8 @@ async function existingAccess(){const token=currentToken();if(token.length<40)re
 function remember(token){if(window.__WSD_ACCESS_BRIDGE?.remember)window.__WSD_ACCESS_BRIDGE.remember(token);else localStorage.setItem(TOKEN_KEY,token)}
 const ACTIVE_RUNTIME_KEYS=[
   'weddly_owner_demo_mode',
-  'weddly_pro_v7',
+  'weddly_pro_v7','weddly_pro_v7_temp','weddly_pro_v7_previous',
+  'weddly_pro_v6','weddly_pro_v6_previous','weddly_pro_v5','weddly_pro_v5_previous',
   'weddly_sync_base_v20',
   'weddly_suite_last_module',
   'weddly_guests_local_mode_v1',
@@ -46,9 +47,14 @@ const ACTIVE_RUNTIME_KEYS=[
   'weddly_guests_v81_visual_meta',
   'weddly_guests_rsvp_v82',
   'weddly_invitation_draft_v1_local',
-  'weddly_planning_v2'
+  'weddly_planning_v2','weddly_planning_v1'
 ];
 function clearActiveRuntimeState(){for(const key of ACTIVE_RUNTIME_KEYS){try{localStorage.removeItem(key)}catch{}}}
+function clearHardRuntimeState(){
+  const keep=k=>k===TOKEN_KEY||k==='weddly_access_lang'||k.startsWith('weddly_app_shell_')||k.startsWith('weddly_personal_theme_')||k==='weddly_owner_manager_token_v1'||k.startsWith('weddly_owner_demo_token_');
+  const keys=[];try{for(let i=0;i<localStorage.length;i++)keys.push(localStorage.key(i)||'')}catch{}
+  for(const key of keys){if(key.startsWith('weddly_')&&!keep(key)){try{localStorage.removeItem(key)}catch{}}}
+}
 function finish(token){clearActiveRuntimeState();remember(token);if(purchaseCodeFromLink)history.replaceState(null,'',location.pathname);show(copy[lang].done);setTimeout(()=>location.replace('/'),450)}
 function routeFor(active){const p=active?.product;return p==='guests'?'/guests.html':p==='payments'?'/payments.html':'/app.html'}
 async function recoverInstalledAccess(){if(isInvite||isTester)return false;const token=currentToken();if(token.length<40)return false;show(copy[lang].restoring);const active=await existingAccess();if(!active)return false;remember(token);setTimeout(()=>location.replace(routeFor(active)),120);return true}
@@ -61,7 +67,7 @@ $('activateEtsy').onclick=async()=>{const orderId=$('order').value.trim(),email=
 $('code').addEventListener('keydown',e=>{if(e.key==='Enter')$('activate').click()});$('order').addEventListener('keydown',e=>{if(e.key==='Enter')$('email').focus()});$('email').addEventListener('keydown',e=>{if(e.key==='Enter')$('activateEtsy').click()});
 $('join').onclick=async()=>{const b=$('join');b.disabled=true;show(copy[lang].busy);try{if(await existingAccess()){show(copy[lang].alreadySignedIn,true);return}const r=await post({action:'join',inviteCode:invite});if(r.status===201&&r.body?.memberToken){history.replaceState(null,'',location.pathname);return finish(r.body.memberToken)}show(copy[lang].badInvite,true)}catch{show(copy[lang].generic,true)}finally{b.disabled=false}};
 if(repair){
-  clearActiveRuntimeState();
+  if(repairMode==='hard')clearHardRuntimeState();else clearActiveRuntimeState();
   const token=currentToken();
   if(token.length>=40)remember(token);
   document.body.innerHTML='<main class="shell"><section class="card"><h1>Preparando vuestro ONE</h1><p class="lead">Limpiando datos antiguos de este navegador…</p></section></main>';
