@@ -55,7 +55,7 @@ function clearHardRuntimeState(){
   const keys=[];try{for(let i=0;i<localStorage.length;i++)keys.push(localStorage.key(i)||'')}catch{}
   for(const key of keys){if(key.startsWith('weddly_')&&!keep(key)){try{localStorage.removeItem(key)}catch{}}}
 }
-function finish(token){clearActiveRuntimeState();remember(token);if(purchaseCodeFromLink)history.replaceState(null,'',location.pathname);show(copy[lang].done);setTimeout(()=>location.replace('/'),450)}
+function finish(token){clearHardRuntimeState();remember(token);if(purchaseCodeFromLink)history.replaceState(null,'',location.pathname);show(copy[lang].done);setTimeout(()=>location.replace('/'),450)}
 function routeFor(active){const p=active?.product;return p==='guests'?'/guests.html':p==='payments'?'/payments.html':'/app.html'}
 async function recoverInstalledAccess(){if(isInvite||isTester)return false;const token=currentToken();if(token.length<40)return false;show(copy[lang].restoring);const active=await existingAccess();if(!active)return false;remember(token);setTimeout(()=>location.replace(routeFor(active)),120);return true}
 async function loadMarket(){try{const r=await post({action:'marketplace_status'});if(r.status===200&&r.body?.ok){market={etsy:!!r.body.etsy,gumroad:!!r.body.gumroad};render()}}catch{}}
