@@ -6,12 +6,13 @@ Deno.serve(async (req: Request) => {
   if (req.method !== "GET" && req.method !== "HEAD") {
     return new Response("Method not allowed", { status: 405, headers: { "Allow": "GET, HEAD" } });
   }
-  return new Response(req.method === "HEAD" ? null : HTML, {
+  const body = req.method === "HEAD" ? null : new Blob([HTML], { type: "text/html; charset=utf-8" });
+  return new Response(body, {
     status: 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
+      "Content-Disposition": "inline",
       "Cache-Control": "no-store, max-age=0",
-      "X-Content-Type-Options": "nosniff",
       "X-Frame-Options": "DENY",
       "Referrer-Policy": "no-referrer",
       "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
