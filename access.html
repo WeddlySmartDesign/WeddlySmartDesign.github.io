@@ -17,7 +17,7 @@
 (()=>{
 const ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access';
 const TOKEN_KEY='weddly_shared_wedding_token';
-const params=new URLSearchParams(location.search),invite=params.get('invite')||'',purchaseSource=(params.get('purchase')||'').toLowerCase(),forcedLang=(params.get('lang')||'').toLowerCase(),repairMode=(params.get('repair')||'').toLowerCase(),repair=repairMode==='1'||repairMode==='hard';
+const params=new URLSearchParams(location.search),invite=params.get('invite')||'',purchaseSource=(params.get('purchase')||'').toLowerCase(),forcedLang=(params.get('lang')||'').toLowerCase(),repairMode=(params.get('repair')||'').toLowerCase(),repair=repairMode==='1'||repairMode==='hard',inactive=params.get('inactive')==='1';
 const hashParams=new URLSearchParams(location.hash.startsWith('#')?location.hash.slice(1):location.hash),tester=hashParams.get('tester')||'',purchaseCodeFromLink=hashParams.get('code')||'';
 const isInvite=!!invite,isTester=!!tester;
 const savedLang=localStorage.getItem('weddly_access_lang');
@@ -75,6 +75,17 @@ if(repair){
   return;
 }
 render();
+if(inactive){
+  $('title').textContent=lang==='es'?'Este acceso ya no está activo':'This access is no longer active';
+  $('lead').textContent=lang==='es'?'El acceso a esta boda ha finalizado. Los datos de la boda no se borran.':'Access to this wedding has ended. The wedding data has not been deleted.';
+  document.querySelector('#codeMode .field').style.display='none';
+  $('etsySwitch').style.display='none';
+  $('activate').textContent=lang==='es'?'Abrir acceso':'Open access';
+  $('activate').onclick=()=>location.replace('access.html');
+  $('note').textContent=lang==='es'?'Si necesitas acceder con otra compra o código válido, pulsa «Abrir acceso».':'If you need to use another valid purchase or access code, choose “Open access”.';
+  $('msg').textContent='';
+  return;
+}
 if(purchaseCodeFromLink&&!isInvite&&!isTester){
   mode='code';
   $('code').value=purchaseCodeFromLink;
