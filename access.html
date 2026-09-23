@@ -34,7 +34,22 @@ async function post(body){const r=await fetch(ACCESS,{method:'POST',headers:{'Co
 function currentToken(){try{return window.__WSD_ACCESS_BRIDGE?.sync?.()||localStorage.getItem(TOKEN_KEY)||''}catch{return ''}}
 async function existingAccess(){const token=currentToken();if(token.length<40)return null;try{const r=await fetch(ACCESS,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':token},body:JSON.stringify({action:'status'})});const j=await r.json().catch(()=>({}));return r.ok&&j?.ok?j:null}catch{return null}}
 function remember(token){if(window.__WSD_ACCESS_BRIDGE?.remember)window.__WSD_ACCESS_BRIDGE.remember(token);else localStorage.setItem(TOKEN_KEY,token)}
-function finish(token){remember(token);localStorage.removeItem('weddly_sync_base_v20');if(purchaseCodeFromLink)history.replaceState(null,'',location.pathname);show(copy[lang].done);setTimeout(()=>location.replace('/'),450)}
+const ACTIVE_RUNTIME_KEYS=[
+  'weddly_owner_demo_mode',
+  'weddly_pro_v7',
+  'weddly_sync_base_v20',
+  'weddly_suite_last_module',
+  'weddly_guests_local_mode_v1',
+  'weddly_guests_qa_v67',
+  'weddly_guests_qa_v67_snapshot_real',
+  'weddly_guests_sync_meta_v2',
+  'weddly_guests_v81_visual_meta',
+  'weddly_guests_rsvp_v82',
+  'weddly_invitation_draft_v1_local',
+  'weddly_planning_v2'
+];
+function clearActiveRuntimeState(){for(const key of ACTIVE_RUNTIME_KEYS){try{localStorage.removeItem(key)}catch{}}}
+function finish(token){clearActiveRuntimeState();remember(token);if(purchaseCodeFromLink)history.replaceState(null,'',location.pathname);show(copy[lang].done);setTimeout(()=>location.replace('/'),450)}
 function routeFor(active){const p=active?.product;return p==='guests'?'/guests.html':p==='payments'?'/payments.html':'/app.html'}
 async function recoverInstalledAccess(){if(isInvite||isTester)return false;const token=currentToken();if(token.length<40)return false;show(copy[lang].restoring);const active=await existingAccess();if(!active)return false;remember(token);setTimeout(()=>location.replace(routeFor(active)),120);return true}
 async function loadMarket(){try{const r=await post({action:'marketplace_status'});if(r.status===200&&r.body?.ok){market={etsy:!!r.body.etsy,gumroad:!!r.body.gumroad};render()}}catch{}}
