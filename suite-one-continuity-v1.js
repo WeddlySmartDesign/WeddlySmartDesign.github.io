@@ -48,6 +48,22 @@ function patchPayments(){
   const x=id();box.querySelector('#onePaymentsLabel').textContent=lang()==='en'?'PAYMENTS':'PAGOS';box.querySelector('#onePaymentsNames').textContent=[x.p1,x.p2].filter(Boolean).join(' & ');box.querySelector('#onePaymentsDate').textContent=fmtDate(x.date);
  }catch{}
 }
-pay.addEventListener('load',()=>setTimeout(patchPayments,250));
-setInterval(()=>{if(pay.classList.contains('on'))patchPayments()},700);
+let observer=null,queued=false;
+function schedulePayments(){
+ if(queued)return;queued=true;
+ requestAnimationFrame(()=>{queued=false;if(pay.classList.contains('on'))patchPayments()});
+}
+function observePayments(){
+ try{
+  observer?.disconnect();
+  const d=pay.contentDocument;if(!d?.documentElement)return;
+  patchPayments();
+  observer=new MutationObserver(schedulePayments);
+  observer.observe(d.documentElement,{childList:true,subtree:true,characterData:true});
+ }catch{}
+}
+pay.addEventListener('load',()=>setTimeout(observePayments,250));
+['focus','pageshow'].forEach(ev=>addEventListener(ev,schedulePayments));
+addEventListener('storage',e=>{if(!e||e.key==='weddly_pro_v7'||e.key==='weddly_owner_demo_mode')schedulePayments()});
+setTimeout(observePayments,500);
 })();
