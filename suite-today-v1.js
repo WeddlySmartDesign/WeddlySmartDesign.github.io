@@ -48,7 +48,7 @@ function readButton(k){return'<button type="button" class="todayRead" data-read=
 function readAllButton(scope,n){return n>1?'<button type="button" class="todayReadAll" data-read-all="'+scope+'">'+esc(t('readAll'))+'</button>':''}
 function pay(){return json(payKey())}
 function guests(){try{var k=guestKey();return JSON.parse(localStorage.getItem(k)||localStorage.getItem(GUEST)||'null')||{}}catch(e){return{}}}
-function guestRsvpHeaders(){var h={'x-weddly-token':todayToken()},m=mode();if(m)h['x-weddly-demo']=m;return h}
+function guestRsvpHeaders(){return{'x-weddly-token':todayToken()}}
 async function refreshGuestRemote(force){if(guestRemoteBusy||!authorized||!navigator.onLine||todayToken().length<40)return;if(!force&&Date.now()-guestRemoteAt<12000)return;guestRemoteBusy=true;try{var r=await fetch(GUEST_RSVP_API+'?manage=1',{headers:guestRsvpHeaders(),cache:'no-store'}),x=await r.json().catch(function(){return{}});if(r.ok&&x.ok){guestRemote=x;guestRemoteAt=Date.now();lastSig='';if(pane&&pane.classList.contains('on'))render()}}catch(e){}finally{guestRemoteBusy=false}}
 function grNorm(s){return String(s||'').trim().toLowerCase()}
 function grWhen(x){var n=new Date((x||{}).received_at||(x||{}).created_at||(x||{}).updated_at||0).getTime();return Number.isFinite(n)?n:0}
