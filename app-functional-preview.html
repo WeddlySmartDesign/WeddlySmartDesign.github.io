@@ -25,6 +25,22 @@
 </style>
 </head>
 <body>
+<script>
+(()=>{try{
+const pay={version:9,settings:{lang:'es',partner1:'Elena',partner2:'Marco',weddingDate:'2027-06-12',guests:92,currency:'EUR|es-ES',budget:28000},providers:[
+{id:'photo',name:'Luz de Junio Fotografía',payments:[{id:'ph2',concept:'Segundo pago',amount:1000,kind:'payment',status:'scheduled',dueDate:'2026-09-21'}]},
+{id:'venue',name:'Finca El Olivar',payments:[{id:'v2',concept:'Segundo pago',amount:2500,kind:'payment',status:'scheduled',dueDate:'2026-10-05'}]}
+],diy:[],contributions:[]};
+const guests={guests:{g1:{name:'Lucía Martín',rsvp:'confirmed',meal:'Adulto',table:'Mesa 1'},g2:{name:'Daniel Martín',rsvp:'confirmed',meal:'Adulto',table:'Mesa 1'},g3:{name:'Pablo Sánchez',rsvp:'confirmed',meal:'',table:''}},tables:{t1:{name:'Mesa 1',cap:8}},meta:{couple:['Elena','Marco'],weddingDate:'2027-06-12'}};
+const state={schema:2,tasks:{c1:{custom:true,title:'Confirmar horarios con proveedores',due:'2026-09-24',cat:'logistics',owner:'both',status:'open',updatedAt:'2026-09-24T08:00:00Z'},c2:{custom:true,title:'Revisar respuestas pendientes',due:'2026-09-29',cat:'guests',owner:'both',status:'open',updatedAt:'2026-09-24T08:00:00Z'}},events:{},dismissedSuggestions:{},updatedAt:'2026-09-24T08:00:00Z'};
+localStorage.setItem('ONE_PREVIEW_SEED_V2','1');
+localStorage.setItem('weddly_owner_demo_mode','es');
+localStorage.setItem('weddly_access_lang','es');
+localStorage.setItem('weddly_pro_v7_owner_demo_es',JSON.stringify(pay));
+localStorage.setItem('weddly_guests_qa_v67_snapshot_demo_es',JSON.stringify(guests));
+localStorage.setItem('weddly_planning_v2_owner_demo_es',JSON.stringify({state,version:1,dirty:false}));
+}catch(e){}})();
+</script>
 <div class="shell">
 <header class="global"><div class="brandrow"><div class="brand"><b>ONE</b><span>by WeddlySmartDesign</span></div><div class="suiteLabel" id="suiteLabel">Vuestra boda</div></div><nav class="tabs" aria-label="Módulos"><button class="tab" data-view="payments">Pagos</button><button class="tab" data-view="guests">Invitados</button><button class="tab" data-view="planning">Planning</button><button class="tab" data-view="settings">Ajustes</button></nav></header>
 <main class="stage"><div class="loading" id="loading">Abriendo vuestra boda…</div><iframe class="pane" id="paymentsFrame" title="ONE by WeddlySmartDesign · Pagos"></iframe><iframe class="pane" id="guestsFrame" title="ONE by WeddlySmartDesign · Invitados"></iframe><iframe class="pane" id="planningFrame" title="ONE by WeddlySmartDesign · Planning"></iframe><iframe class="pane" id="auxFrame" title="WeddlySmartDesign"></iframe><div class="error" id="error"><div class="card"><b>No hemos podido abrir este módulo.</b><div style="margin-top:7px;color:var(--muted);font-size:13px">Comprueba la conexión y vuelve a intentarlo.</div><button id="retry">Reintentar</button></div></div></main>
