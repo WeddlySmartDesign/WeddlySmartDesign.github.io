@@ -4,7 +4,7 @@ if(window.__wsdSuiteVisualCoherence)return;window.__wsdSuiteVisualCoherence=true
 const payFrame=document.getElementById('paymentsFrame'),guestFrame=document.getElementById('guestsFrame'),planningFrame=document.getElementById('planningFrame'),auxFrame=document.getElementById('auxFrame');
 if(!payFrame||!guestFrame||!planningFrame||!auxFrame)return;
 const lang=()=>document.documentElement.lang==='en'?'en':'es';
-const copy={es:{payments:'PAGOS',guests:'INVITADOS'},en:{payments:'PAYMENTS',guests:'GUESTS'}};
+const copy={es:{payments:'Pagos',paySub:'PRESUPUESTO Y PAGOS',guests:'INVITADOS'},en:{payments:'Payments',paySub:'BUDGET & PAYMENTS',guests:'GUESTS'}};
 function addGlobalHierarchy(){
   document.getElementById('wsdPrimaryNavLabel')?.remove();
   if(document.getElementById('wsdSuiteHierarchyStyle'))return;
@@ -26,17 +26,17 @@ function patchPayments(){
       body{background:var(--bg)!important}
       .app-container{max-width:680px!important;background:var(--bg)!important;box-shadow:none!important;padding-bottom:92px!important}
       .header{position:relative!important;top:auto!important;background:var(--bg)!important;border-bottom:0!important;padding:20px 22px 10px!important;align-items:flex-end!important}
-      .brand-group{display:none!important}
+      .brand-group{line-height:1.03!important}
       .brand-title{font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif!important;font-size:34px!important;font-weight:500!important;color:var(--ink)!important;letter-spacing:0!important}
       .brand-subtitle{font-family:system-ui,-apple-system,"Segoe UI",sans-serif!important;font-size:10px!important;letter-spacing:.16em!important;color:#77716b!important;font-weight:800!important;margin-top:7px!important}
       .header-actions{align-self:center!important}
       .view{padding:12px 22px 28px!important}
       #view-dashboard .wedding-identity{text-align:left!important;margin:0 0 17px!important;padding:0!important}
-      #view-dashboard .wedding-eyebrow{display:block!important;font-size:11px!important;letter-spacing:.15em!important;color:#77716b!important;margin-bottom:10px!important;font-weight:800!important;text-transform:uppercase!important}
+      #view-dashboard .wedding-eyebrow{font-size:11px!important;letter-spacing:.12em!important;color:#77716b!important;margin-bottom:7px!important}
       #view-dashboard .wedding-names{font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif!important;font-size:44px!important;line-height:1.02!important;font-weight:500!important;color:var(--ink)!important}
       #view-dashboard .wedding-date{font-size:18px!important;color:#706b65!important;font-weight:500!important;margin-top:12px!important}
       #view-dashboard .wedding-countdown{font-size:14px!important;color:#706b65!important;margin-top:4px!important}
-      #view-dashboard #autosave-note{display:none!important}
+      #view-dashboard #autosave-note{text-align:left!important;margin:0 0 20px!important;font-size:12px!important}
       .stat-card{border-radius:18px!important;padding:18px!important}
       .stat-card .label{font-size:14px!important;color:#706b65!important}
       .stat-card .val{font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif!important;font-size:27px!important;font-weight:500!important}
@@ -48,7 +48,8 @@ function patchPayments(){
       nav button.active{background:var(--sage-light)!important;color:var(--sage-dark)!important}
       @media(max-width:420px){.header{padding-left:18px!important;padding-right:18px!important}.view{padding-left:18px!important;padding-right:18px!important}#view-dashboard .wedding-names{font-size:40px!important}.brand-title{font-size:31px!important}.stat-card .val{font-size:24px!important}}
     `);
-    const eyebrow=d.querySelector('#view-dashboard .wedding-eyebrow');if(eyebrow&&eyebrow.textContent!==c.payments)eyebrow.textContent=c.payments;
+    const title=d.querySelector('.brand-title');if(title&&title.textContent!==c.payments)title.textContent=c.payments;
+    const sub=d.querySelector('.brand-subtitle');if(sub&&sub.textContent!==c.paySub)sub.textContent=c.paySub;
     const settings=d.getElementById('nav-settings');if(settings)settings.style.setProperty('display','none','important');
   }catch{}
 }
