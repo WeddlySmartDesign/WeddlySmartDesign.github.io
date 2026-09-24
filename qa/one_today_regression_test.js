@@ -38,3 +38,10 @@ has(/currentUnread\.guests=\[\.\.\.new Set/,'Marcar todos debe incluir todos los
 has(/oldTop=oldScroll\?oldScroll\.scrollTop:0/,'Hoy debe conservar posición de scroll al actualizarse');
 
 console.log('ONE Today regression guard: PASS');
+
+// Planning mobile layout: read action must remain inside its card.
+has(/todayCard todayCardPlanning/,'Planning card must keep its dedicated layout hook');
+has(/todayPlanActions/,'Planning must keep deadline + read action in a bounded action column');
+has(/todayItemMain\{min-width:0;flex:1 1 auto\}/,'Planning/main item text must be allowed to shrink inside flex rows');
+has(/todayCardPlanning \.todayPlanActions \.todayRead/,'Planning read button must have a mobile-bounded rule');
+console.log('Planning read controls must stay inside the card');
