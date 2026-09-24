@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es" data-theme="nordic">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>ONE · Preview Hoy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F2EFE9;--paper:#FBF8F3;--line:#E4DED2;--soft:#EEF0E9;--accent:#6E7A5C;--dark:#525C43;--ink:#2C2A26;--muted:#736F63}
+*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.shell{min-height:100dvh;display:flex;flex-direction:column}
+.global{position:sticky;top:0;z-index:10;background:var(--paper);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 10px 9px}
+.brandrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;max-width:760px;margin:0 auto 8px}.headerTools{display:flex;align-items:center;gap:9px}.settingsMini{border:1px solid var(--line);background:#fff;color:var(--dark);border-radius:9px;font:750 11.5px system-ui;padding:7px 10px;white-space:nowrap}
+.brand{color:var(--dark);line-height:1}.brand b{display:block;font:700 22px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.08em}.brand span{display:block;font-family:"Caveat","Segoe Print","Bradley Hand",cursive;font-size:18px;line-height:.9;margin-top:3px;color:var(--muted);font-weight:600;letter-spacing:0;white-space:nowrap}
+.suiteLabel{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:750}
+.tabs{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.tab{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:9px 2px;font-size:11.5px;font-weight:750;min-height:40px}.tab.on{background:var(--dark);border-color:var(--dark);color:#fff}
+.stage{flex:1}.todayScroll{padding:18px 10px calc(28px + env(safe-area-inset-bottom))}.todayInner{width:min(100%,760px);margin:auto}
+.todayHero,.todayCard{background:var(--paper);border:1px solid var(--line);border-radius:20px}
+.todayHero{padding:21px 18px;margin-bottom:14px}
+.todayEyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+.todayHero h1{font:500 clamp(30px,8vw,42px)/1 Georgia,serif;color:var(--dark);margin:10px 0 9px;letter-spacing:-.03em}
+.todayHero p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}.todayDate{margin-top:17px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;font-weight:800}
+.todayGrid{display:grid;gap:12px}.todayCard{padding:15px}.todayCardHead,.todayItem{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.todayModule{font:500 31px/1.1 Georgia,serif;color:var(--dark)}.todayStats{margin-top:6px;font-size:13px;color:var(--muted);line-height:1.45}.todayStats b{color:var(--ink)}
+.headActions{display:flex;flex-direction:column;align-items:flex-end;gap:8px}.todayStatus{flex:0 0 auto;border:0;background:transparent;padding:2px 0;font-size:11px;font-weight:800;color:var(--dark);white-space:nowrap}.todayStatus:before{content:"•";color:var(--accent);margin-right:5px}.markAll{border:1px solid var(--line);background:#fff;color:var(--dark);border-radius:9px;font:750 11px system-ui;padding:7px 9px;white-space:nowrap}
+.todayList{margin-top:13px;border-top:1px solid var(--line)}.todayItem,.todayNotice{padding:14px 0;border-bottom:1px solid var(--line)}
+.todayRead{display:flex;width:max-content;margin:9px 0 0 auto;border:1px solid var(--line);background:var(--soft);color:var(--dark);border-radius:9px;padding:7px 10px;font:750 11.5px system-ui;cursor:pointer;white-space:nowrap;line-height:1}
+.todayItem strong{display:block;font-size:15px;line-height:1.35}.todayItem small{display:block;color:var(--muted);font-size:14px;line-height:1.45;margin-top:3px}
+.todayRight{text-align:right;flex:0 0 auto}.todayRight b{display:block;font-size:16px}.danger{color:#9a4537}
+.todayOpen{width:100%;min-height:50px;margin-top:13px;border:0;border-radius:13px;background:var(--dark);color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;font:800 15px system-ui}
+.note{max-width:760px;margin:0 auto 10px;padding:9px 12px;border-radius:12px;background:#fff8;border:1px dashed var(--line);font-size:11px;color:var(--muted)}
+@media(min-width:700px){.todayGrid{grid-template-columns:1fr 1fr}.todayCard:last-child{grid-column:1/-1}.tab{font-size:13px;padding:9px 5px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="global">
+  <div class="brandrow"><div class="brand"><b>ONE</b><span>by WeddlySmartDesign</span></div><div class="headerTools"><div class="suiteLabel">Vuestra boda</div><button class="settingsMini">Ajustes</button></div></div>
+  <nav class="tabs"><button class="tab on">Hoy</button><button class="tab">Pagos</button><button class="tab">Invitados</button><button class="tab">Planning</button></nav>
+</header>
+<main class="stage">
+<div class="todayScroll"><div class="todayInner">
+<div class="note">Vista previa aislada · no modifica vuestra boda ni producción.</div>
+<section class="todayHero">
+  <div class="todayEyebrow">HOY</div>
+  <h1>Elena & Marco</h1>
+  <p>Lo importante de vuestra boda, reunido en un solo sitio.</p>
+  <div class="todayDate">261 días para la boda</div>
+</section>
+<div class="todayGrid">
+<article class="todayCard">
+  <div class="todayCardHead"><div><div class="todayModule">Pagos</div><div class="todayStats"><b>1</b> vencido · <b>2</b> próx. 30 días</div></div><div class="headActions"><span class="todayStatus">Necesita atención</span><button class="markAll">Marcar todos como leídos</button></div></div>
+  <div class="todayList">
+    <div class="todayItem" data-item><div><strong>Fotografía</strong><small>Segundo pago</small></div><div class="todayRight"><b>1.000 €</b><small class="danger">vencido · 21 sep</small></div><button class="todayRead">Marcar como leído</button></div>
+    <div class="todayItem" data-item><div><strong>Finca El Olivar</strong><small>Segundo pago</small></div><div class="todayRight"><b>2.500 €</b><small>en 12 días</small></div><button class="todayRead">Marcar como leído</button></div>
+  </div>
+  <button class="todayOpen">Abrir Pagos <span>→</span></button>
+</article>
+<article class="todayCard">
+  <div class="todayCardHead"><div><div class="todayModule">Invitados</div><div class="todayStats"><b>78</b> confirmados · <b>9</b> pendientes</div></div><div class="headActions"><span class="todayStatus">Necesita atención</span><button class="markAll">Marcar todos como leídos</button></div></div>
+  <div class="todayList">
+    <div class="todayItem" data-item><div><strong>Laura Martínez</strong><small>Ha cambiado de Mesa 4 a Mesa 7</small></div><button class="todayRead">Marcar como leído</button></div>
+    <div class="todayItem" data-item><div><strong>Pablo Sánchez</strong><small>Está confirmado y aún no tiene menú</small></div><button class="todayRead">Marcar como leído</button></div>
+  </div>
+  <button class="todayOpen">Abrir Invitados <span>→</span></button>
+</article>
+<article class="todayCard">
+  <div class="todayCardHead"><div><div class="todayModule">Planning</div><div class="todayStats"><b>1</b> vencida · <b>4</b> próx. 30 días · <b>18</b> completadas</div></div><div class="headActions"><span class="todayStatus">Necesita atención</span><button class="markAll">Marcar todos como leídos</button></div></div>
+  <div class="todayList">
+    <div class="todayItem" data-item><div><strong>Confirmar horarios con proveedores</strong><small>Logística · Ambos</small></div><div class="todayRight"><small>vence hoy</small></div><button class="todayRead">Marcar como leído</button></div>
+    <div class="todayItem" data-item><div><strong>Revisar respuestas pendientes</strong><small>Invitados · Ambos</small></div><div class="todayRight"><small>en 5 días</small></div><button class="todayRead">Marcar como leído</button></div>
+  </div>
+  <button class="todayOpen">Abrir Planning <span>→</span></button>
+</article>
+</div>
+</div></div>
+</main>
+</div>
+<script>
+function clearCard(card){
+  card.querySelectorAll('[data-item]').forEach(x=>x.remove());
+  const list=card.querySelector('.todayList');
+  if(list&&!list.querySelector('.todayEmpty')){
+    const empty=document.createElement('div');empty.className='todayEmpty';
+    empty.textContent='No hay avisos nuevos en Hoy. El estado completo sigue disponible en el módulo.';
+    list.appendChild(empty);
+  }
+  const status=card.querySelector('.todayStatus');if(status)status.textContent='Sin avisos nuevos';
+  card.querySelector('.markAll')?.remove();
+}
+document.addEventListener('click',function(e){
+  const all=e.target.closest('.markAll');if(all){clearCard(all.closest('.todayCard'));return}
+  const b=e.target.closest('.todayRead');if(!b)return;
+  const card=b.closest('.todayCard'),item=b.closest('[data-item]'),list=item?.parentElement;
+  item?.remove();
+  if(list && !list.querySelector('[data-item]'))clearCard(card);
+});
+</script></body></html>
