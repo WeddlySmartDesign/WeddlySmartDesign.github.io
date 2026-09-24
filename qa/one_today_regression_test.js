@@ -2,8 +2,10 @@ const fs=require('fs');
 const assert=require('assert');
 
 const src=fs.readFileSync('suite-today-v1.js','utf8');
+const app=fs.readFileSync('app.html','utf8');
 
 function has(re,msg){ assert(re.test(src),msg); }
+function hasApp(re,msg){ assert(re.test(app),msg); }
 
 // ONE · Hoy — invariantes aprobados.
 // Invitados NO puede volver a "alertas + recientes -> primeros 3".
@@ -46,3 +48,9 @@ has(/todayItemMain\{min-width:0;flex:1 1 auto\}/,'Planning/main item text must b
 has(/todayPlanItem>\.todayRead/,'Planning read button must sit below the row and remain inside the item');
 has(/white-space:normal/,'Planning read button must be allowed to wrap rather than overflow');
 console.log('Planning read controls must stay inside the card');
+
+// Approved ONE grouped header: four module buttons live inside one soft-green container.
+hasApp(/\.tabs\{[^}]*padding:4px[^}]*background:var\(--soft\)[^}]*border:1px solid var\(--line\)[^}]*border-radius:14px/,'Approved ONE grouped header container must remain');
+hasApp(/\.tab\{[^}]*border:0[^}]*background:transparent[^}]*color:var\(--muted\)/,'Approved ONE grouped header buttons must remain integrated, not separate white pills');
+hasApp(/\.tab\.on\{[^}]*background:var\(--dark\)[^}]*color:#fff/,'Approved ONE active module state must remain dark green');
+console.log('Approved ONE grouped header: PASS');
