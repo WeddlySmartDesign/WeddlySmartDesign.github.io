@@ -141,6 +141,140 @@ tr:last-child td{border-bottom:0}
   .f-label strong{font-size:11px}
   .metric strong{font-size:34px}
 }
+
+/* ONE-screen mobile dashboard */
+body:has(#app:not([hidden])){overflow:hidden}
+#app{height:100dvh;overflow:hidden}
+.top{height:62px}
+.top-inner{min-height:62px}
+.dashboard-main{
+  height:calc(100dvh - 62px);
+  padding:14px 0 12px;
+  overflow:hidden;
+  display:grid;
+  grid-template-rows:auto auto auto auto auto;
+  gap:10px;
+}
+.dashboard-hero{display:grid;gap:8px}
+.dashboard-hero h1{
+  font-size:clamp(29px,7.7vw,43px);
+  line-height:.94;
+  max-width:none;
+  margin-top:5px;
+}
+.dashboard-hero .eyebrow{font-size:11px}
+.range-row{margin-top:0;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.range{padding:9px 5px;font-size:12px}
+.compact-status{margin-top:0;font-size:11.5px}
+.metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.compact-metric{
+  min-height:104px;
+  padding:12px 11px;
+  border-radius:17px;
+  box-shadow:0 10px 28px rgba(52,47,45,.055)
+}
+.compact-metric small{font-size:11px;letter-spacing:.08em}
+.compact-metric strong{font-size:32px}
+.compact-metric span{font-size:11.5px;line-height:1.18}
+.compact-funnel{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:10px 12px 11px;
+  box-shadow:0 10px 28px rgba(52,47,45,.05)
+}
+.funnel-title{font-family:var(--serif);font-size:25px;line-height:1;margin-bottom:8px}
+.funnel-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:center;gap:5px}
+.funnel-flow>div{min-width:0}
+.funnel-flow small{display:block;font-size:10.5px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.funnel-flow strong{display:block;font-family:var(--serif);font-size:27px;line-height:1.05;font-weight:400;margin-top:2px}
+.funnel-flow>b{font-size:14px;color:var(--clay)}
+.quick-read{
+  display:grid;
+  grid-template-columns:1.35fr .85fr .9fr;
+  gap:7px;
+}
+.quick-read>div{
+  min-width:0;
+  background:rgba(255,250,246,.76);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:9px 10px;
+}
+.quick-read small{
+  display:block;font-size:10.5px;color:var(--muted);font-weight:800;
+  text-transform:uppercase;letter-spacing:.06em
+}
+.quick-read strong{
+  display:block;font-size:13px;line-height:1.15;margin-top:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.dashboard-footline{font-size:10.5px;color:var(--muted);text-align:center;align-self:end}
+.details-dialog{
+  width:min(94vw,760px);height:min(90dvh,860px);border:0;border-radius:24px;padding:0;
+  background:var(--paper);color:var(--ink);box-shadow:0 30px 90px rgba(52,47,45,.22)
+}
+.details-dialog::backdrop{background:rgba(33,29,27,.46);backdrop-filter:blur(5px)}
+.details-shell{height:100%;display:grid;grid-template-rows:auto 1fr}
+.details-top{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:17px 18px;border-bottom:1px solid var(--line);background:rgba(246,238,231,.95)
+}
+.details-top h2{font-size:34px;margin-top:3px}
+.details-scroll{overflow:auto;padding:16px 16px 24px}
+.details-section{margin-bottom:18px}
+.details-section h3{font-family:var(--serif);font-size:29px;font-weight:400;margin:0 0 9px}
+.details-split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.details-dialog .card{padding:15px}
+.details-dialog th{font-size:10px}
+.details-dialog td{font-size:13px}
+.details-dialog .list-row strong{font-size:13px}
+.details-dialog .list-row span{font-size:12px}
+.detail-logout{margin-top:8px;background:#665f5a}
+@media(max-width:520px){
+  .top{height:58px}
+  .top-inner{
+    min-height:58px;display:flex;grid-template-columns:none;gap:8px;padding:0
+  }
+  .brand{flex:1;min-width:0}
+  .brand strong{font-size:18px}
+  .top-actions{display:flex;width:auto;gap:5px}
+  .icon-btn{padding:8px 9px;font-size:11px}
+  #installBtn[hidden]{display:none!important}
+  .dashboard-main{
+    height:calc(100dvh - 58px);
+    padding:10px 0 9px;
+    gap:8px
+  }
+  .dashboard-hero{gap:6px}
+  .dashboard-hero h1{font-size:30px;line-height:.93}
+  .dashboard-hero .eyebrow{font-size:10.5px}
+  .range{padding:8px 3px;font-size:11.5px}
+  .compact-status{font-size:10.5px}
+  .compact-metric{min-height:96px;padding:10px;border-radius:16px}
+  .compact-metric small{font-size:10.5px}
+  .compact-metric strong{font-size:30px}
+  .compact-metric span{font-size:11px}
+  .compact-funnel{padding:9px 10px}
+  .funnel-title{font-size:23px;margin-bottom:7px}
+  .funnel-flow small{font-size:9.8px}
+  .funnel-flow strong{font-size:25px}
+  .quick-read>div{padding:8px}
+  .quick-read small{font-size:9.5px}
+  .quick-read strong{font-size:12.5px}
+  .dashboard-footline{font-size:9.5px}
+  .details-split{grid-template-columns:1fr}
+}
+@media(max-height:760px) and (max-width:520px){
+  .dashboard-main{gap:6px;padding-top:8px}
+  .dashboard-hero h1{font-size:27px}
+  .compact-status{display:none}
+  .compact-metric{min-height:86px}
+  .compact-metric strong{font-size:27px}
+  .compact-funnel{padding:8px 9px}
+  .quick-read>div{padding:7px 8px}
+}
+
 </style>
 </head>
 <body>
@@ -168,85 +302,89 @@ tr:last-child td{border-bottom:0}
       <div class="top-actions">
         <button class="icon-btn" id="installBtn" type="button">Añadir al móvil</button>
         <button class="icon-btn" id="refreshBtn" type="button">Actualizar</button>
-        <button class="icon-btn" id="logoutBtn" type="button">Salir</button>
+        <button class="icon-btn" id="detailsBtn" type="button">Detalles</button>
       </div>
     </div>
   </header>
 
-  <main class="shell">
-    <section class="hero">
-      <div class="eyebrow">ONE · rendimiento comercial</div>
-      <h1>Qué entra. Qué avanza. Qué compra.</h1>
-      <p>Un panel sencillo para ver el embudo real de ONE sin entrar en Supabase ni interpretar tablas técnicas.</p>
+  <main class="shell dashboard-main">
+    <section class="dashboard-hero">
+      <div>
+        <div class="eyebrow">ONE · rendimiento comercial</div>
+        <h1>Qué entra. Qué avanza. Qué compra.</h1>
+      </div>
       <div class="range-row" id="ranges">
         <button class="range" data-range="today" type="button">Hoy</button>
         <button class="range active" data-range="7d" type="button">7 días</button>
         <button class="range" data-range="30d" type="button">30 días</button>
-        <button class="range" data-range="all" type="button">Desde el inicio</button>
+        <button class="range" data-range="all" type="button">Inicio</button>
       </div>
-      <div class="status-row">
+      <div class="status-row compact-status">
         <span><i class="status-dot"></i><span id="trackingSince">Medición activa</span></span>
         <span id="updatedAt">—</span>
       </div>
     </section>
 
-    <section class="grid" aria-label="Resumen">
-      <article class="metric"><small>Visitas</small><strong id="mVisits">0</strong><span>Cargas de la web en este periodo</span></article>
-      <article class="metric"><small>Clics en comprar</small><strong id="mBuy">0</strong><span id="mBuyRate">—</span></article>
-      <article class="metric"><small>Pago iniciado</small><strong id="mCheckout">0</strong><span id="mCheckoutRate">—</span></article>
-      <article class="metric primary"><small>Compras</small><strong id="mPurchases">0</strong><span id="mPurchaseRate">—</span></article>
-      <article class="metric"><small>Conversión</small><strong id="mConversion">—</strong><span>Visita → compra</span></article>
-      <article class="metric"><small>Ingresos</small><strong id="mRevenue">0 €</strong><span>Compras registradas desde que mide Analytics</span></article>
+    <section class="metric-grid" aria-label="Resumen">
+      <article class="metric compact-metric"><small>Visitas</small><strong id="mVisits">0</strong><span>Cargas</span></article>
+      <article class="metric compact-metric"><small>Comprar</small><strong id="mBuy">0</strong><span id="mBuyRate">—</span></article>
+      <article class="metric compact-metric"><small>Pago</small><strong id="mCheckout">0</strong><span id="mCheckoutRate">—</span></article>
+      <article class="metric compact-metric primary"><small>Compras</small><strong id="mPurchases">0</strong><span id="mPurchaseRate">—</span></article>
+      <article class="metric compact-metric"><small>Conversión</small><strong id="mConversion">—</strong><span>Visita → compra</span></article>
+      <article class="metric compact-metric"><small>Ingresos</small><strong id="mRevenue">0 €</strong><span>Stripe</span></article>
     </section>
 
-    <section class="section">
-      <div class="section-head"><h2>Embudo</h2><div class="section-note">Una misma visita cuenta una vez por paso.</div></div>
-      <div class="card funnel">
-        <div class="f-step"><div class="f-label"><strong>Visitas</strong><span>web ONE</span></div><div class="track"><div class="fill" id="barVisits"></div></div><div class="f-value" id="fVisits">0</div></div>
-        <div class="f-step"><div class="f-label"><strong>Comprar</strong><span>clic</span></div><div class="track"><div class="fill" id="barBuy"></div></div><div class="f-value" id="fBuy">0</div></div>
-        <div class="f-step"><div class="f-label"><strong>Checkout</strong><span>pago iniciado</span></div><div class="track"><div class="fill" id="barCheckout"></div></div><div class="f-value" id="fCheckout">0</div></div>
-        <div class="f-step"><div class="f-label"><strong>Compra</strong><span>Stripe confirmado</span></div><div class="track"><div class="fill" id="barPurchase"></div></div><div class="f-value" id="fPurchase">0</div></div>
+    <section class="compact-funnel" aria-label="Embudo">
+      <div class="funnel-title">Embudo</div>
+      <div class="funnel-flow">
+        <div><small>Visitas</small><strong id="fVisits">0</strong></div><b>→</b>
+        <div><small>Comprar</small><strong id="fBuy">0</strong></div><b>→</b>
+        <div><small>Pago</small><strong id="fCheckout">0</strong></div><b>→</b>
+        <div class="last"><small>Compra</small><strong id="fPurchase">0</strong></div>
       </div>
+      <div hidden><div id="barVisits"></div><div id="barBuy"></div><div id="barCheckout"></div><div id="barPurchase"></div></div>
     </section>
 
-    <section class="section split">
-      <div>
-        <div class="section-head"><h2>De dónde llegan</h2><div class="section-note">UTM cuando existe; si no, dominio de procedencia.</div></div>
-        <div class="card"><div class="table-wrap"><table>
-          <thead><tr><th>Origen</th><th>Visitas</th><th>Comprar</th><th>Checkout</th></tr></thead>
-          <tbody id="sourceRows"></tbody>
-        </table></div><div class="empty" id="sourceEmpty" hidden>Aún no hay procedencias registradas en este periodo.</div></div>
-      </div>
-      <div>
-        <div class="section-head"><h2>Dispositivo</h2><div class="section-note">Categoría general, sin identificar el dispositivo.</div></div>
-        <div class="card list" id="deviceList"></div>
-      </div>
+    <section class="quick-read" aria-label="Lectura rápida">
+      <div><small>Origen principal</small><strong id="quickSource">—</strong></div>
+      <div><small>Dispositivo</small><strong id="quickDevice">—</strong></div>
+      <div><small>Edición</small><strong id="quickEdition">—</strong></div>
     </section>
 
-    <section class="section split">
-      <div>
-        <div class="section-head"><h2>Ediciones</h2><div class="section-note">Compras reales.</div></div>
-        <div class="card list" id="editionList"></div>
-      </div>
-      <div>
-        <div class="section-head"><h2>Checkout</h2><div class="section-note">Edición elegida al iniciar el pago.</div></div>
-        <div class="card list" id="checkoutEditionList"></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head"><h2>Día a día</h2><div class="section-note">Para detectar si una publicación o colaboración mueve el embudo.</div></div>
-      <div class="card"><div class="table-wrap"><table>
-        <thead><tr><th>Fecha</th><th>Visitas</th><th>Comprar</th><th>Checkout</th><th>Compras</th><th>Ingresos</th></tr></thead>
-        <tbody id="dailyRows"></tbody>
-      </table></div><div class="empty" id="dailyEmpty" hidden>Aún no hay datos en este periodo.</div></div>
-    </section>
-
-    <div class="foot">
-      Panel privado de WeddlySmartDesign. La analítica no guarda nombres, emails, IP ni datos de la boda y no utiliza cookies para reconocer visitantes entre sesiones.
-    </div>
+    <div class="dashboard-footline">Datos internos · sin cookies de seguimiento</div>
   </main>
 </div>
+
+<dialog class="details-dialog" id="detailsPanel" aria-labelledby="detailsTitle">
+  <div class="details-shell">
+    <header class="details-top">
+      <div><div class="eyebrow">WeddlySmartDesign · Analytics</div><h2 id="detailsTitle">Detalle</h2></div>
+      <button class="icon-btn" id="detailsClose" type="button">Cerrar</button>
+    </header>
+    <div class="details-scroll">
+      <section class="details-section">
+        <h3>De dónde llegan</h3>
+        <div class="card"><div class="table-wrap"><table>
+          <thead><tr><th>Origen</th><th>Visitas</th><th>Comprar</th><th>Pago</th></tr></thead>
+          <tbody id="sourceRows"></tbody>
+        </table></div><div class="empty" id="sourceEmpty" hidden>Aún no hay datos en este periodo.</div></div>
+      </section>
+      <section class="details-split">
+        <div class="details-section"><h3>Dispositivo</h3><div class="card list" id="deviceList"></div></div>
+        <div class="details-section"><h3>Ediciones compradas</h3><div class="card list" id="editionList"></div></div>
+      </section>
+      <section class="details-section"><h3>Checkout por edición</h3><div class="card list" id="checkoutEditionList"></div></section>
+      <section class="details-section">
+        <h3>Día a día</h3>
+        <div class="card"><div class="table-wrap"><table>
+          <thead><tr><th>Fecha</th><th>Visitas</th><th>Comprar</th><th>Pago</th><th>Compras</th><th>Ingresos</th></tr></thead>
+          <tbody id="dailyRows"></tbody>
+        </table></div><div class="empty" id="dailyEmpty" hidden>Aún no hay datos en este periodo.</div></div>
+      </section>
+      <button class="login-btn detail-logout" id="logoutBtn" type="button">Cerrar sesión en este móvil</button>
+    </div>
+  </div>
+</dialog>
 
 <dialog id="installHelp" style="border:0;border-radius:24px;padding:0;max-width:min(92vw,430px);background:#fffaf6;color:#342f2d;box-shadow:0 30px 90px rgba(52,47,45,.22)">
   <div style="padding:22px">
@@ -399,6 +537,14 @@ function render(data){
   renderList($('editionList'),Array.isArray(s.purchases_by_edition)?s.purchases_by_edition:[],'purchaseEdition');
   renderList($('checkoutEditionList'),Array.isArray(s.checkout_by_edition)?s.checkout_by_edition:[],'checkoutEdition');
 
+  const topSource=Array.isArray(s.sources)&&s.sources.length?s.sources[0]:null;
+  const topDevice=Array.isArray(s.devices)&&s.devices.length?s.devices[0]:null;
+  const topEdition=Array.isArray(s.purchases_by_edition)&&s.purchases_by_edition.length?s.purchases_by_edition[0]:null;
+  const deviceLabels={mobile:'Móvil',tablet:'Tablet',desktop:'Ordenador',unknown:'—'};
+  $('quickSource').textContent=topSource?.source||'—';
+  $('quickDevice').textContent=topDevice?deviceLabels[topDevice.device]||topDevice.device:'—';
+  $('quickEdition').textContent=topEdition?(topEdition.edition==='signature'?'Signature':'Essential'):'—';
+
   const daily=Array.isArray(s.daily)?[...s.daily].reverse():[];
   renderRows($('dailyRows'),daily,r=>{
     const tr=document.createElement('tr');
@@ -452,11 +598,10 @@ const installHelpText=$('installHelpText');
 const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true;
 function updateInstallButton(){
   if(isStandalone()){
-    installBtn.textContent='Instalada';
-    installBtn.disabled=true;
-    installBtn.style.opacity='.6';
+    installBtn.hidden=true;
     return;
   }
+  installBtn.hidden=false;
   installBtn.textContent='Añadir al móvil';
   installBtn.disabled=false;
   installBtn.style.opacity='1';
@@ -494,7 +639,15 @@ if('serviceWorker' in navigator){
   },{once:true});
 }
 updateInstallButton();
+const detailsPanel=$('detailsPanel');
+$('detailsBtn').addEventListener('click',()=>{
+  if(typeof detailsPanel.showModal==='function'&&!detailsPanel.open)detailsPanel.showModal();
+});
+$('detailsClose').addEventListener('click',()=>detailsPanel.close());
+detailsPanel.addEventListener('click',e=>{if(e.target===detailsPanel)detailsPanel.close()});
+
 $('logoutBtn').addEventListener('click',()=>{
+  if(detailsPanel.open)detailsPanel.close();
   localStorage.removeItem(STORAGE);token='';$('accessCode').value='';setScreen(false);
 });
 
