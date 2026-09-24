@@ -34,7 +34,51 @@
 (()=>{
   try{
     localStorage.setItem('weddly_owner_demo_mode','es');
+    
     localStorage.setItem('weddly_access_lang','es');
+    const payKey='weddly_pro_v7_owner_demo_es';
+    const guestKey='weddly_guests_qa_v67_snapshot_demo_es';
+    const planKey='weddly_planning_v2_owner_demo_es';
+    if(!localStorage.getItem(payKey)){
+      localStorage.setItem(payKey,JSON.stringify({
+        settings:{lang:'es',currency:'EUR|es-ES',partner1:'Elena',partner2:'Marco',weddingDate:'2027-06-12',budget:28000,budgetTotal:28000},
+        providers:[
+          {id:'pv_photo',name:'Fotografía',category:'Fotografía',status:'hired',contractedCost:2500,payments:[
+            {id:'p_photo_2',concept:'Segundo pago',amount:1000,dueDate:'2026-09-21',status:'scheduled',kind:'payment'}
+          ]},
+          {id:'pv_venue',name:'Finca El Olivar',category:'Lugar',status:'hired',contractedCost:8500,payments:[
+            {id:'p_venue_2',concept:'Segundo pago',amount:2500,dueDate:'2026-10-06',status:'scheduled',kind:'payment'}
+          ]}
+        ]
+      }));
+    }
+    if(!localStorage.getItem(guestKey)){
+      localStorage.setItem(guestKey,JSON.stringify({
+        meta:{couple:['Elena','Marco'],weddingDate:'2027-06-12',todaySeatChanges:[{name:'Laura Martínez',from:'Mesa 4',to:'Mesa 7',ts:Date.now()}]},
+        guests:{
+          g1:{name:'Laura Martínez',rsvp:'confirmed',mealRequired:true,meal:'Estándar',table:'Mesa 7',group:'Amigos Elena'},
+          g2:{name:'Pablo Sánchez',rsvp:'confirmed',mealRequired:true,meal:'',table:'Mesa 3',group:'Familia Marco'},
+          g3:{name:'Ana López',rsvp:'confirmed',mealRequired:true,meal:'Vegetariano',table:'Mesa 3',group:'Amigos Marco'},
+          g4:{name:'Carlos Ruiz',rsvp:'pending',mealRequired:true,meal:'',table:'',group:'Familia Elena'}
+        },
+        tables:{
+          t1:{name:'Mesa 3',cap:8},
+          t2:{name:'Mesa 7',cap:8}
+        }
+      }));
+    }
+    if(!localStorage.getItem(planKey)){
+      const now=new Date(),iso=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
+      const d5=new Date(now);d5.setDate(d5.getDate()+5);
+      localStorage.setItem(planKey,JSON.stringify({state:{
+        schema:2,
+        tasks:{
+          preview_today:{custom:true,title:'Confirmar horarios con proveedores',due:iso(now),cat:'logistics',owner:'both',status:'open',updatedAt:new Date().toISOString()},
+          preview_5:{custom:true,title:'Revisar respuestas pendientes',due:iso(d5),cat:'guests',owner:'both',status:'open',updatedAt:new Date().toISOString()}
+        },
+        events:{},dismissedSuggestions:{},updatedAt:new Date().toISOString()
+      },version:0,dirty:false}));
+    }
     if((localStorage.getItem('weddly_shared_wedding_token')||'').length<40){
       localStorage.setItem('weddly_shared_wedding_token','WSD_PREVIEW_ONLY_20260924_ABCDEFGHIJKLMNOPQRSTUVWXYZ');
     }
