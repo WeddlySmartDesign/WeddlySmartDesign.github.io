@@ -10,7 +10,7 @@
 *{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .shell{min-height:100dvh;display:flex;flex-direction:column}
 .global{position:sticky;top:0;z-index:10;background:var(--paper);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 10px 9px}
-.brandrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;max-width:760px;margin:0 auto 8px}.headerTools{display:flex;align-items:center;gap:9px}.settingsMini{border:0;background:transparent;color:var(--muted);font:750 11px system-ui;text-decoration:underline;text-underline-offset:3px;padding:4px 0}
+.brandrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;max-width:760px;margin:0 auto 8px}.headerTools{display:flex;align-items:center;gap:9px}.settingsMini{border:1px solid var(--line);background:#fff;color:var(--dark);border-radius:9px;font:750 11.5px system-ui;padding:7px 10px;white-space:nowrap}
 .brand{font-family:Georgia,serif;color:var(--dark);line-height:1}.brand b{display:block;font-size:20px;font-weight:500}.brand span{display:block;font-size:13px;margin-top:2px}
 .suiteLabel{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:750}
 .tabs{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
@@ -23,9 +23,9 @@
 .todayHero p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}.todayDate{margin-top:17px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;font-weight:800}
 .todayGrid{display:grid;gap:12px}.todayCard{padding:15px}.todayCardHead,.todayItem{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 .todayModule{font:500 31px/1.1 Georgia,serif;color:var(--dark)}.todayStats{margin-top:6px;font-size:13px;color:var(--muted);line-height:1.45}.todayStats b{color:var(--ink)}
-.headActions{display:flex;flex-direction:column;align-items:flex-end;gap:7px}.todayStatus{flex:0 0 auto;border:1px solid var(--accent);background:var(--paper);border-radius:999px;padding:7px 10px;font-size:11px;font-weight:800;color:var(--dark)}.markAll{border:0;background:transparent;color:var(--dark);font:750 11px system-ui;text-decoration:underline;text-underline-offset:3px;padding:0}
+.headActions{display:flex;flex-direction:column;align-items:flex-end;gap:8px}.todayStatus{flex:0 0 auto;border:0;background:transparent;padding:2px 0;font-size:11px;font-weight:800;color:var(--dark);white-space:nowrap}.todayStatus:before{content:"•";color:var(--accent);margin-right:5px}.markAll{border:1px solid var(--line);background:#fff;color:var(--dark);border-radius:9px;font:750 11px system-ui;padding:7px 9px;white-space:nowrap}
 .todayList{margin-top:13px;border-top:1px solid var(--line)}.todayItem,.todayNotice{padding:14px 0;border-bottom:1px solid var(--line)}
-.todayRead{border:0;background:transparent;color:var(--dark);text-decoration:underline;text-underline-offset:3px;padding:9px 0 0;font:750 13px system-ui;cursor:pointer}
+.todayRead{display:flex;width:max-content;margin:9px 0 0 auto;border:1px solid var(--line);background:var(--soft);color:var(--dark);border-radius:9px;padding:7px 10px;font:750 11.5px system-ui;cursor:pointer;white-space:nowrap;line-height:1}
 .todayItem strong{display:block;font-size:15px;line-height:1.35}.todayItem small{display:block;color:var(--muted);font-size:14px;line-height:1.45;margin-top:3px}
 .todayRight{text-align:right;flex:0 0 auto}.todayRight b{display:block;font-size:16px}.danger{color:#9a4537}
 .todayOpen{width:100%;min-height:50px;margin-top:13px;border:0;border-radius:13px;background:var(--dark);color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;font:800 15px system-ui}
