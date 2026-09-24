@@ -1,8 +1,8 @@
 (()=>{
 'use strict';
 if(window.__oneContinuityV1)return;window.__oneContinuityV1=true;
-const pay=document.getElementById('paymentsFrame'),aux=document.getElementById('auxFrame');
-if(!pay||!aux)return;
+const pay=document.getElementById('paymentsFrame');
+if(!pay)return;
 const low=s=>String(s||'').replace(/\s+/g,' ').trim().toLowerCase();
 const mode=()=>{try{const q=new URLSearchParams(location.search).get('ownerDemo');if(q==='es'||q==='en')return q;const m=localStorage.getItem('weddly_owner_demo_mode')||'';return m==='es'||m==='en'?m:''}catch{return''}};
 const lang=()=>{try{const m=mode(),k=m?'weddly_pro_v7_owner_demo_'+m:'weddly_pro_v7',x=JSON.parse(localStorage.getItem(k)||'null'),v=x?.settings?.lang;if(v==='es'||v==='en')return v}catch{}return' es'.trim()};
@@ -48,16 +48,6 @@ function patchPayments(){
   const x=id();box.querySelector('#onePaymentsLabel').textContent=lang()==='en'?'PAYMENTS':'PAGOS';box.querySelector('#onePaymentsNames').textContent=[x.p1,x.p2].filter(Boolean).join(' & ');box.querySelector('#onePaymentsDate').textContent=fmtDate(x.date);
  }catch{}
 }
-function patchSettings(){
- try{
-  const d=aux.contentDocument;if(!d?.body)return;
-  const title=d.getElementById('wsdSuiteInstallTitle');if(title)title.textContent=lang()==='en'?'INSTALL ON THIS DEVICE':'INSTALAR EN ESTE DISPOSITIVO';
-  const body=d.getElementById('wsdSuiteInstallBody');if(body)body.textContent=lang()==='en'?'Add ONE to your Home Screen to open your wedding like an app.':'Añade ONE a tu pantalla de inicio para abrir vuestra boda como una app.';
-  const btn=d.getElementById('wsdSuiteInstallAction');if(btn&&!btn.disabled)btn.textContent=lang()==='en'?'Install ONE':'Instalar ONE';
-  const hint=d.getElementById('wsdSuiteInstallHint');if(hint&&hint.textContent)hint.textContent=lang()==='en'?'If the install window does not appear, open your browser menu and choose “Install app” or “Add to Home Screen”.':'Si no aparece la ventana de instalación, abre el menú del navegador y elige «Instalar app» o «Añadir a pantalla de inicio».';
- }catch{}
-}
 pay.addEventListener('load',()=>setTimeout(patchPayments,250));
-aux.addEventListener('load',()=>setTimeout(patchSettings,250));
-setInterval(()=>{if(pay.classList.contains('on'))patchPayments();if(aux.classList.contains('on'))patchSettings()},700);
+setInterval(()=>{if(pay.classList.contains('on'))patchPayments()},700);
 })();
