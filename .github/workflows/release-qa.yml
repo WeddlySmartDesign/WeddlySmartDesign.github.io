@@ -54,6 +54,46 @@ jobs:
           curl --fail --silent --show-error http://127.0.0.1:8765/guests-rsvp-v116-single-live.html -o /tmp/candidate-rsvp-single.html
           grep -q 'guests-rsvp-postsubmit-calendar-v1.js' /tmp/candidate-rsvp-single.html
 
+  candidate-browser-and-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install browser QA driver
+        run: npm install --no-save playwright-core@1.55.0
+      - name: Run RSVP real-browser interaction suite independently
+        run: node qa/rsvp_runtime_browser_test.js
+      - name: Smoke candidate files locally
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m http.server 8765 >/tmp/wsd-http.log 2>&1 &
+          pid=$!
+          trap 'kill $pid 2>/dev/null || true' EXIT
+          sleep 1
+          curl --fail --silent --show-error http://127.0.0.1:8765/app.html -o /tmp/candidate-app.html
+          grep -q 'paymentsFrame' /tmp/candidate-app.html
+          grep -q 'guestsFrame' /tmp/candidate-app.html
+          grep -q 'planningFrame' /tmp/candidate-app.html
+          grep -q 'suite-today-v1.js?v=10-planning-read-fit' /tmp/candidate-app.html
+          grep -q 'sw.js?v=70' /tmp/candidate-app.html
+          curl --fail --silent --show-error http://127.0.0.1:8765/payments.html -o /tmp/candidate-payments.html
+          grep -q 'app64-assets-34c5f09ffe9385cd25df8310c6da8b0a' /tmp/candidate-payments.html
+          curl --fail --silent --show-error http://127.0.0.1:8765/guests-v116-production.html -o /tmp/candidate-guests.html
+          grep -q 'guests-state-integrity-v1.js' /tmp/candidate-guests.html
+          grep -q 'guests-seating-sync-hotfix-v1.js' /tmp/candidate-guests.html
+          curl --fail --silent --show-error http://127.0.0.1:8765/guests-rsvp-operations-live.html -o /tmp/candidate-rsvp-ops.html
+          grep -q 'guests-rsvp-share-composer-v2.js' /tmp/candidate-rsvp-ops.html
+          grep -q 'guests-rsvp-contact-picker-v1.js' /tmp/candidate-rsvp-ops.html
+          grep -q 'new Blob' /tmp/candidate-rsvp-ops.html
+          curl --fail --silent --show-error http://127.0.0.1:8765/guests-rsvp-v116-single-live.html -o /tmp/candidate-rsvp-single.html
+          grep -q 'guests-rsvp-postsubmit-calendar-v1.js' /tmp/candidate-rsvp-single.html
+
   one-today-regression:
     runs-on: ubuntu-latest
     steps:
@@ -111,6 +151,13 @@ jobs:
           assert live.get('part_count') == p['part_count'], (live,p)
           print('Runtime manifest matches release/runtime-manifest.json')
           PY
+      - name: Verify ONE Today shared-state endpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          code=$(curl --silent --show-error --output /tmp/today-state.json --write-out '%{http_code}' 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-today-state')
+          test "$code" = "401"
+          grep -q 'invalid_access' /tmp/today-state.json
       - name: Verify production RSVP sanitizers
         shell: bash
         run: |
