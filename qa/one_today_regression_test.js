@@ -182,7 +182,7 @@ console.log('ONE Today behavioral QA: PASS');
 
 /* A new Guest change must not recount already-read members in the grouped title. */
 {
-  const tr={guestCriticalMany:'cambios de alergias/intolerancias',guestRsvp:'cambios RSVP',guestOps:'cambios operativos'};
+  const tr={guestCriticalMany:'cambios de alergias/intolerancias',guestRsvp:'cambios RSVP',guestRsvpOne:'cambio RSVP',guestOps:'cambios operativos',guestOpsOne:'cambio operativo'};
   const ctx=makeCtx({lng:()=> 'es',t:k=>tr[k]||k,hashKey:s=>'h'+String(s).length});
   loadFns(ctx,['isRead','guestText','guestCat','guestBreakdown','guestGroupKey','guestPriority','guestUnreadPriority']);
   const g={alerts:[],recent:[
