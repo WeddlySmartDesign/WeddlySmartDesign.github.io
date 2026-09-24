@@ -43,6 +43,6 @@ console.log('ONE Today regression guard: PASS');
 has(/todayCard todayCardPlanning/,'Planning card must keep its dedicated layout hook');
 has(/todayPlanDeadline/,'Planning must keep the deadline in a bounded top-row column');
 has(/todayItemMain\{min-width:0;flex:1 1 auto\}/,'Planning/main item text must be allowed to shrink inside flex rows');
-has(/todayPlanItem>\\.todayRead/,'Planning read button must sit below the row and remain inside the item');
+has(/todayPlanItem>\.todayRead/,'Planning read button must sit below the row and remain inside the item');
 has(/white-space:normal/,'Planning read button must be allowed to wrap rather than overflow');
 console.log('Planning read controls must stay inside the card');
