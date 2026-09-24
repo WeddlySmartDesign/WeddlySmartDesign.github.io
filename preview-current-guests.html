@@ -1,0 +1,42 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f1ea"><title>ONE · Guests current production preview</title><style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f5f1ea;font-family:system-ui,-apple-system,Segoe UI,sans-serif}#app{width:100%;height:100%;border:0;display:none}#boot{position:fixed;inset:0;display:grid;place-items:center;text-align:center;color:#706b65}.logo{font-family:Georgia,serif;color:#525c43;line-height:1.02}.logo b{display:block;font-size:35px;font-weight:500}.logo span{display:block;font-size:24px;margin-top:4px}.product{margin-top:15px;font-size:12px;letter-spacing:.16em;text-transform:uppercase}#msg{margin-top:22px;font-size:13px}.retry{display:none;margin-top:18px;color:#2c2a26;font-weight:700}#notice{position:fixed;z-index:30;top:12px;right:12px;display:none;background:#fff;border:1px solid #ddd5c8;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:700}</style></head><body><script>
+(()=>{try{
+ const TOKEN='weddly_shared_wedding_token',MODE='weddly_owner_demo_mode',BASE='weddly_guests_qa_v67',SNAP=BASE+'_snapshot_demo_es',PAY='weddly_pro_v7_owner_demo_es';
+ const token='preview-'+('x'.repeat(56));
+ const guests={guests:{
+  g1:{name:'Lucía Martín',group:'Familia Elena',unitId:'Familia Martín',rsvp:'confirmed',meal:'Adulto',transport:true,accommodation:false,table:'Mesa 1'},
+  g2:{name:'Daniel Martín',group:'Familia Elena',unitId:'Familia Martín',rsvp:'confirmed',meal:'Adulto',transport:true,accommodation:false,table:'Mesa 1'},
+  g3:{name:'Carmen Ruiz',group:'Familia Elena',unitId:'Familia Ruiz',rsvp:'confirmed',meal:'Vegetariano',transport:false,accommodation:false,table:'Mesa 2'},
+  g4:{name:'Álvaro Ruiz',group:'Familia Elena',unitId:'Familia Ruiz',rsvp:'pending',meal:'',transport:false,accommodation:false,table:''},
+  g5:{name:'Marta López',group:'Amigos Marco',unitId:'Universidad',rsvp:'confirmed',meal:'Adulto',transport:true,accommodation:false,table:'Mesa 3'},
+  g6:{name:'Pablo Sánchez',group:'Amigos Marco',unitId:'Universidad',rsvp:'confirmed',meal:'',transport:true,accommodation:false,table:''},
+  g7:{name:'Sara Molina',group:'Amigos Elena',unitId:'Trabajo',rsvp:'pending',meal:'',transport:false,accommodation:false,table:''},
+  g8:{name:'Javier Cano',group:'Amigos Elena',unitId:'Trabajo',rsvp:'confirmed',meal:'Sin gluten',transport:false,accommodation:false,table:'Mesa 2'},
+  g9:{name:'Nuria Vidal',group:'Familia Marco',unitId:'Familia Vidal',rsvp:'confirmed',meal:'Infantil',transport:true,accommodation:false,table:'Mesa 4'},
+  g10:{name:'Leo Vidal',group:'Familia Marco',unitId:'Familia Vidal',rsvp:'confirmed',meal:'Infantil',transport:true,accommodation:false,table:'Mesa 4'},
+  g11:{name:'Andrea Soler',group:'Amigos Elena',unitId:'Colegio',rsvp:'confirmed',meal:'Adulto',transport:false,accommodation:false,table:'Mesa 1'},
+  g12:{name:'Hugo Pérez',group:'Amigos Marco',unitId:'Fútbol',rsvp:'pending',meal:'',transport:true,accommodation:false,table:''}
+ },tables:{t1:{name:'Mesa 1',cap:8},t2:{name:'Mesa 2',cap:8},t3:{name:'Mesa 3',cap:8},t4:{name:'Mesa 4',cap:8}},meta:{couple:['Elena','Marco'],weddingDate:'2027-06-12'}};
+ const pay={version:9,settings:{lang:'es',partner1:'Elena',partner2:'Marco',weddingDate:'2027-06-12',guests:96,currency:'EUR|es-ES',budget:28000},providers:[],diy:[],contributions:[]};
+ localStorage.setItem(TOKEN,token);localStorage.setItem(MODE,'es');localStorage.setItem('weddly_owner_demo_token_es',token);localStorage.setItem('weddly_access_lang','es');
+ if(!localStorage.getItem(SNAP))localStorage.setItem(SNAP,JSON.stringify(guests));if(!localStorage.getItem(BASE))localStorage.setItem(BASE,JSON.stringify(guests));if(!localStorage.getItem(PAY))localStorage.setItem(PAY,JSON.stringify(pay));
+ localStorage.setItem('weddly_wedding_services_v1_es',JSON.stringify({transport:true,accommodation:false,updatedAt:Date.now()}));
+ let state=JSON.parse(localStorage.getItem(BASE)||JSON.stringify(guests)),version=1,real=window.fetch.bind(window);
+ const reply=(x,status=200)=>Promise.resolve(new Response(JSON.stringify(x),{status,headers:{'content-type':'application/json'}}));
+ const rsvp={ok:true,forms:[{id:'form1',config:{transportOffered:true,accommodationOffered:false,questions:{transport:true},customQuestions:[]}}],submissions:[],delivery:[]};
+ const eventState={ok:true,state:{events:{preboda:{id:'preboda',name:'Preboda',date:'2027-06-11',enabled:true,guestIds:['g1','g2','g3','g5']}}}};
+ const eventInvite={ok:true,recipients:[{members:[{id:'g1',name:'Lucía Martín'},{id:'g2',name:'Daniel Martín'}],response:{g1:'yes',g2:'yes'}},{members:[{id:'g3',name:'Carmen Ruiz'},{id:'g5',name:'Marta López'}],response:{g3:'yes',g5:'yes'}}]};
+ window.fetch=(input,init={})=>{
+  const u=typeof input==='string'?input:(input?.url||''),m=String(init?.method||'GET').toUpperCase();
+  if(u.includes('/weddly-guests-state')){
+    if(m==='PUT'){let b={};try{b=JSON.parse(init.body||'{}')}catch{};if(b.state){state=b.state;version++;localStorage.setItem(BASE,JSON.stringify(state));localStorage.setItem(SNAP,JSON.stringify(state))}return reply({ok:true,version,state})}
+    return reply({ok:true,version,state});
+  }
+  if(u.includes('/weddly-rsvp')) return reply(rsvp);
+  if(u.includes('/weddly-event-state')) return reply(eventState);
+  if(u.includes('/weddly-event-invite')) return reply(eventInvite);
+  if(u.includes('/weddly-test-access')) return reply({ok:true,memberToken:token,owner:true,role:'primary'});
+  if(u.includes('/weddly-access')) return reply({ok:true,owner:true,role:'primary',partnerJoined:false});
+  return real(input,init);
+ };
+}catch(e){console.error('ONE guests production preview bootstrap',e)}})();
+</script><div id="boot"><div><div class="logo"><b>Weddly</b><span>Smart Design</span></div><div class="product">Invitados</div><div id="msg">Abriendo vuestra lista de invitados…</div><a id="retry" class="retry" href="access.html">Abrir acceso</a></div></div><div id="notice"></div><iframe id="app" title="WeddlySmartDesign · Invitados"></iframe><script src="guests-access-layer.js?v=135"></script><script src="guests-production-sync.js?v=128-integrity"></script><script src="guests-state-integrity-v1.js?v=1"></script><script src="guests-plusone-placeholder-link-v1.js?v=3"></script><script src="guests-production-ui.js?v=132-mobile-ux"></script><script src="guests-production-ops.js?v=132-suite-rsvp"></script><script src="guests-rsvp-route-v1.js?v=1"></script><script src="guests-home-rsvp-status-v1.js?v=137-table-changes"></script><script src="guests-smart-actions-v1.js?v=4-events-guests"></script><script src="guests-mobile-compat-hotfix-v1.js?v=1"></script><script src="guests-import-audit-v1.js?v=2"></script><script src="guests-service-visibility-v1.js?v=4-reports"></script><script src="guests-custom-lists-v1.js?v=1"></script><script src="guests-extra-event-lists-v1.js?v=1"></script><script src="guests-copy-control-v1.js?v=2-events"></script><script src="guests-people-manager-v1.js?v=2"></script><script src="guests-people-polish-v1.js?v=1"></script><script src="guests-rsvp-clarity-v1.js?v=2"></script><script src="guests-rsvp-plusone-core-label-v1.js?v=1"></script><script src="guests-seating-v2.js?v=3-today-table-changes"></script><script src="guests-seating-sync-hotfix-v1.js?v=1"></script></body></html>
