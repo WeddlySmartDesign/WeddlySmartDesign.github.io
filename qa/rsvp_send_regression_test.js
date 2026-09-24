@@ -23,8 +23,9 @@ must(live.includes('rsvp_load_signature_mismatch'),'operations refuses to boot i
 must(live.includes("localStorage.setItem('weddly_rsvp_public_token_v1',PT)"),'operations caches validated public RSVP token');
 must(plusOps.includes('assignment.dataset.wsdPlusLabel!==label'),'plus-one DOM patch is idempotent and cannot rewrite its own mutation forever');
 must(plusOps.includes('requestAnimationFrame(()=>{scheduled=false;patch()})'),'plus-one mutation observer is frame-throttled');
-must(formFlow.includes('new Blob([h]')&&formFlow.includes('location.replace(u)'),'RSVP form uses the same stable parser-driven runtime');
-must(!formFlow.includes('document.open()')&&!formFlow.includes('document.write('),'RSVP form no longer rewrites the active document');
+must((formFlow.includes('new Blob([h]')&&formFlow.includes('location.replace(u)'))||(formFlow.includes('document.open()')&&formFlow.includes('document.write(h)')&&formFlow.includes('document.close()')),'RSVP form assembles the hardened runtime through a supported complete document handoff');
+must(formFlow.includes("fetchBound('guests-rsvp-form-flex.html")&&formFlow.includes("cache:'no-store'"),'RSVP form loads its source fresh through the bounded wrapper');
+// The form wrapper deliberately returned to document.write on 2026-09-18 for stable Events/mobile navigation. Real-browser QA below is the behavioral source of truth; this static test guards complete assembly + bounded/fail-closed loading without pinning one parser strategy.
 must(formFlow.includes("setTimeout(()=>c.abort(),7000)"),'RSVP form wrapper and API requests are bounded');
 must(formFlow.includes('rsvp_form_request_signature_mismatch'),'RSVP form fails closed if source hardening no longer matches');
 must(composer.includes("target='_blank'")||composer.includes("a.target='_blank'"),'WhatsApp opens outside the suite instead of replacing it');
