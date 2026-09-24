@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<title>ONE · prueba final v3</title>
+<title>ONE · prueba final v3 sobre producción actual</title>
 <style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#F2EFE9}#app{width:100%;height:100dvh;border:0;display:block}.boot{position:fixed;inset:0;display:grid;place-items:center;background:#F2EFE9;color:#736F63;font:600 13px system-ui;z-index:5}</style>
 </head>
 <body><div class="boot" id="boot">Preparando ONE actual + Hoy…</div><iframe id="app" title="ONE actual con Hoy"></iframe>
@@ -36,7 +36,7 @@
   localStorage.setItem('weddly_guests_qa_v67',JSON.stringify(guests));
   localStorage.setItem('weddly_planning_v2_owner_demo_es',JSON.stringify(planning));
  }catch{}
- let h=await (await fetch('app.html?preview=payments-identity-one-v3',{cache:'no-store'})).text();
+ let h=await (await fetch('app.html?preview=one-continuity-v3',{cache:'no-store'})).text();
  h=h.replace('<head>','<head><base href="./">');
  h=h.replace("new URL(url,location.href)","new URL(url,document.baseURI)");
  h=h.replace("function route(view){if(view==='payments')return addSuite('payments.html');if(view==='guests')return addSuite('guests.html');if(view==='planning')return addSuite('planning.html');return addSuite('weddly-settings.html')}",
