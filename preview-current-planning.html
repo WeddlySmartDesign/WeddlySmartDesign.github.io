@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es" data-theme="nordic">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#FBF8F3">
+<title>ONE · Planning current production preview</title>
+<link rel="stylesheet" href="planning-v2.css?v=3">
+<link rel="stylesheet" href="planning-mobile-readable.css?v=1">
+</head>
+<body><script>
+(()=>{try{
+ const TOKEN='weddly_shared_wedding_token',MODE='weddly_owner_demo_mode',KEY='weddly_planning_v2_owner_demo_es';
+ const token='preview-'+('x'.repeat(56));
+ const state={schema:2,tasks:{
+  c_demo_1:{custom:true,title:'Confirmar horarios con proveedores',due:'2026-09-24',cat:'logistics',owner:'both',status:'open',updatedAt:'2026-09-24T08:00:00Z'},
+  c_demo_2:{custom:true,title:'Revisar respuestas pendientes',due:'2026-09-29',cat:'guests',owner:'both',status:'open',updatedAt:'2026-09-24T08:00:00Z'},
+  c_demo_done:{custom:true,title:'Confirmar fotógrafo',due:'2026-09-10',cat:'vendors',owner:'both',status:'done',updatedAt:'2026-09-20T08:00:00Z'}
+ },events:{},dismissedSuggestions:{},updatedAt:'2026-09-24T08:00:00Z'};
+ localStorage.setItem(TOKEN,token);localStorage.setItem(MODE,'es');localStorage.setItem('weddly_owner_demo_token_es',token);localStorage.setItem('weddly_access_lang','es');
+ if(!localStorage.getItem(KEY))localStorage.setItem(KEY,JSON.stringify({state,version:1,dirty:false}));
+ let remote=JSON.parse(localStorage.getItem(KEY)||'null')?.state||state,version=1,real=window.fetch.bind(window);
+ const reply=(x,status=200)=>Promise.resolve(new Response(JSON.stringify(x),{status,headers:{'content-type':'application/json'}}));
+ window.fetch=(input,init={})=>{
+  const u=typeof input==='string'?input:(input?.url||''),m=String(init?.method||'GET').toUpperCase();
+  if(u.includes('/weddly-planning-state')){
+   if(m==='PUT'){let b={};try{b=JSON.parse(init.body||'{}')}catch{};if(b.state)remote=b.state;version++;localStorage.setItem(KEY,JSON.stringify({state:remote,version,dirty:false}));return reply({ok:true,version,state:remote})}
+   return reply({ok:true,version,state:remote});
+  }
+  return real(input,init);
+ };
+}catch(e){console.error('ONE planning production preview bootstrap',e)}})();
+</script>
+<main class="app" id="app" hidden>
+  <div class="top">
+    <div><div class="eyebrow" id="eyebrow"></div><div class="brand">Planning</div></div>
+    <div class="sync" id="sync"></div>
+  </div>
+
+  <section class="hero">
+    <div class="eyebrow" id="heroEyebrow"></div>
+    <h1 id="heroTitle"></h1>
+    <p id="heroSub"></p>
+    <div class="count"><strong id="countNum">—</strong><span id="countLabel"></span></div>
+    <div class="nextEvent" id="nextEvent" hidden></div>
+  </section>
+
+  <nav class="nav">
+    <button data-view="now" class="on" id="navNow"></button>
+    <button data-view="agenda" id="navAgenda"></button>
+    <button data-view="timeline" id="navTimeline"></button>
+    <button data-view="progress" id="navProgress"></button>
+  </nav>
+
+  <section class="view on" id="viewNow">
+    <div class="stats" id="nowStats"></div>
+    <div class="section" id="reminderSection" hidden>
+      <div class="sectionHead"><div><h2 id="reminderTitle"></h2><p id="reminderSub"></p></div></div>
+      <div id="reminderList"></div>
+    </div>
+    <div class="section">
+      <div class="sectionHead"><div><h2 id="priorityTitle"></h2><p id="prioritySub"></p></div></div>
+      <div id="priorityList"></div>
+    </div>
+    <div class="section">
+      <div class="sectionHead"><div><h2 id="nextAgendaTitle"></h2><p id="nextAgendaSub"></p></div><button class="add" data-add-event></button></div>
+      <div id="nextAgendaList"></div>
+    </div>
+  </section>
+
+  <section class="view" id="viewAgenda">
+    <div class="stats" id="agendaStats"></div>
+    <div class="section" id="suggestSection">
+      <div class="sectionHead"><div><h2 id="suggestTitle"></h2><p id="suggestSub"></p></div></div>
+      <div id="suggestList"></div>
+    </div>
+    <div class="section">
+      <div class="sectionHead"><div><h2 id="agendaTitle"></h2><p id="agendaSub"></p></div><button class="add" data-add-event></button></div>
+      <div class="filters" id="agendaFilters"></div>
+      <div id="agendaList"></div>
+    </div>
+  </section>
+
+  <section class="view" id="viewTimeline">
+    <div class="sectionHead"><div><h2 id="timelineTitle"></h2><p id="timelineSub"></p></div><button class="add" id="addTask"></button></div>
+    <div class="filters" id="taskFilters"></div>
+    <div id="timelineList"></div>
+  </section>
+
+  <section class="view" id="viewProgress">
+    <div id="progressBox"></div>
+    <div class="section"><div class="sectionHead"><div><h2 id="areasTitle"></h2><p id="areasSub"></p></div></div><div id="areasList"></div></div>
+  </section>
+</main>
+
+<div class="sheet" id="eventSheet"><section class="sheetCard">
+  <div class="sheetHead"><h2 id="eventSheetTitle"></h2><button class="x" data-close="eventSheet">×</button></div>
+  <form id="eventForm">
+    <div class="field"><label id="eventTitleLabel"></label><input id="eventTitle" required maxlength="140"></div>
+    <div class="two">
+      <div class="field"><label id="eventDateLabel"></label><input id="eventDate" type="date" required></div>
+      <div class="field"><label id="eventTimeLabel"></label><input id="eventTime" type="time"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label id="eventTypeLabel"></label><select id="eventType"></select></div>
+      <div class="field"><label id="eventReminderLabel"></label><select id="eventReminder"></select></div>
+    </div>
+    <div class="field"><label id="eventOwnerLabel"></label><select id="eventOwner"></select></div>
+    <div class="field"><label id="eventTaskLabel"></label><select id="eventTask"></select></div>
+    <div class="field"><label id="eventProviderLabel"></label><select id="eventProvider"></select></div>
+    <div class="field"><label id="eventNotesLabel"></label><textarea id="eventNotes" maxlength="1000"></textarea></div>
+    <div class="sheetActions">
+      <button class="btn" type="submit" id="saveEvent"></button>
+      <button class="btn secondary" type="button" id="calendarEvent"></button>
+      <button class="btn danger" type="button" id="deleteEvent" hidden></button>
+    </div>
+  </form>
+</section></div>
+
+<div class="sheet" id="taskSheet"><section class="sheetCard">
+  <div class="sheetHead"><h2 id="taskSheetTitle"></h2><button class="x" data-close="taskSheet">×</button></div>
+  <form id="taskForm">
+    <div class="field"><label id="taskTitleLabel"></label><input id="taskTitle" required maxlength="140"></div>
+    <div class="two">
+      <div class="field"><label id="taskDateLabel"></label><input id="taskDate" type="date"></div>
+      <div class="field"><label id="taskAreaLabel"></label><select id="taskArea"></select></div>
+    </div>
+    <div class="field"><label id="taskOwnerLabel"></label><select id="taskOwner"></select></div>
+    <div class="field"><label id="taskNotesLabel"></label><textarea id="taskNotes" maxlength="1000"></textarea></div>
+    <div class="sheetActions">
+      <button class="btn" type="submit" id="saveTask"></button>
+      <button class="btn secondary" type="button" id="taskToAgenda"></button>
+      <button class="btn secondary" type="button" id="naTask"></button>
+      <button class="btn danger" type="button" id="deleteTask" hidden></button>
+    </div>
+  </form>
+</section></div>
+
+<div class="access on" id="access"><div class="accessCard"><h2>Planning</h2><p id="accessText"></p></div></div>
+
+<script src="planning-v2.js?v=2"></script>
+<script src="planning-calendar-bridge.js?v=6"></script>
+<script src="planning-wedding-events-v1.js?v=2"></script>
+<script src="planning-ui-hotfix-v1.js?v=1"></script>
+</body>
+</html>
