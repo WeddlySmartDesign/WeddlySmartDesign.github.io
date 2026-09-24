@@ -61,6 +61,11 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
+      - name: Syntax-check ONE shell scripts
+        run: |
+          node --check suite-today-v1.js
+          node --check suite-one-continuity-v1.js
+          node --check suite-install-one-v1.js
       - name: Guard approved ONE Today behavior
         run: node qa/one_today_regression_test.js
 
