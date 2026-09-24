@@ -74,7 +74,38 @@ function open(view,url=''){error.classList.remove('on');if(['payments','guests',
 function interactiveText(el){return String(el?.textContent||'').replace(/\s+/g,' ').trim().toLowerCase()}
 function hookDocOnce(d,key,fn){if(!d?.documentElement||d.documentElement.dataset[key])return;d.documentElement.dataset[key]='1';d.addEventListener('click',fn,true)}
 async function installSuite(){const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;if(standalone){showToast(copy[lang()].installed);return}if(installPrompt){const p=installPrompt;installPrompt=null;try{await p.prompt();await p.userChoice}catch{}return}showToast(copy[lang()].installMenu)}
-function patchPayments(){try{const d=payFrame.contentDocument;if(!d)return;const settings=d.getElementById('nav-settings');if(settings)settings.style.setProperty('display','none','important');d.querySelectorAll('button,a,[role="button"]').forEach(el=>{const t=interactiveText(el);if(t==='ajustes'||t==='settings'){el.style.setProperty('display','none','important');el.setAttribute('aria-hidden','true')}});hookDocOnce(d,'wsdSuitePayments',e=>{const t=e.target?.closest?.('#install-action');if(!t)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();installSuite()})}catch{}}
+function patchPayments(){try{
+ const d=payFrame.contentDocument;if(!d)return;
+ const settings=d.getElementById('nav-settings');if(settings)settings.style.setProperty('display','none','important');
+ d.querySelectorAll('button,a,[role="button"]').forEach(el=>{const t=interactiveText(el);if(t==='ajustes'||t==='settings'){el.style.setProperty('display','none','important');el.setAttribute('aria-hidden','true')}});
+ const all=[...d.querySelectorAll('body *')],hide=el=>{if(!el)return;el.style.setProperty('display','none','important');el.setAttribute('aria-hidden','true')};
+ all.forEach(el=>{
+   const t=interactiveText(el);
+   if((t==='pagos'||t==='payments')&&/^(H1|H2|DIV|P|SPAN)$/.test(el.tagName)&&!el.closest('nav'))hide(el);
+   if(t==='presupuesto y pagos'||t==='budget & payments'||t==='budget and payments'){
+     el.textContent=lang()==='en'?'PAYMENTS':'PAGOS';
+     el.style.setProperty('display','block','important');
+     el.style.setProperty('font-size','12px','important');
+     el.style.setProperty('letter-spacing','.14em','important');
+     el.style.setProperty('font-weight','750','important');
+     el.style.setProperty('text-transform','uppercase','important');
+     el.style.setProperty('color','var(--muted,#736F63)','important');
+   }
+   if(t==='nuestra boda'||t==='our wedding')hide(el);
+ });
+ const phrases=lang()==='en'?['automatic saving enabled','autosave enabled']:['guardado automático activado','guardado automatico activado'];
+ const hit=all.find(el=>{const t=interactiveText(el);return phrases.some(x=>t.includes(x))&&t.length<320});
+ if(hit){
+   let box=hit,best=hit;
+   for(let i=0;i<4&&box?.parentElement&&box.parentElement!==d.body;i++){
+     const p=box.parentElement,txt=interactiveText(p);
+     if(txt.length>420)break;
+     best=p;box=p;
+   }
+   hide(best);
+ }
+ hookDocOnce(d,'wsdSuitePayments',e=>{const t=e.target?.closest?.('#install-action');if(!t)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();installSuite()})
+}catch{}}
 function patchAux(){try{const d=auxFrame.contentDocument;if(!d)return;if(auxMode==='settings'){const b=d.getElementById('back');if(b)b.style.setProperty('display','none','important')}if(auxMode==='guests-rsvp')hookDocOnce(d,'wsdSuiteRsvp',e=>{const t=e.target?.closest?.('#back,#editInvitation');if(!t)return;e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();if(t.id==='back')open('guests');else open('guests-design','guests-rsvp-design-manage.html')});if(auxMode==='guests-design'){hookDocOnce(d,'wsdSuiteDesign',e=>{const t=e.target?.closest?.('a,button');if(!t)return;const label=interactiveText(t);if((label.includes('volver')&&label.includes('invitad'))||label==='invitados'){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();open('guests');return}if(label.includes('formulario y envíos')||label.includes('envíos y respuestas')){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.();open('guests-rsvp','guests-rsvp-operations-v2.html?v=130-units')}});d.querySelectorAll('a,button').forEach(el=>{const t=interactiveText(el);if(t.includes('volver')&&t.includes('invitad'))el.style.setProperty('display','none','important')})}if(auxMode==='guests-events'){const main=d.querySelector('main.wrap');if(main&&!d.getElementById('wsdEventsBack')){const box=d.createElement('div');box.style.cssText='display:flex;justify-content:flex-start;margin:0 0 10px';const b=d.createElement('button');b.type='button';b.id='wsdEventsBack';b.className='btn secondary';b.textContent=lang()==='en'?'← Back to RSVP':'← Volver al RSVP';b.onclick=e=>{e.preventDefault();e.stopPropagation();returnFromEvents()};box.appendChild(b);main.insertBefore(box,main.firstChild)}}}catch{}}
 function observeFrame(f,kind){try{observers.get(f)?.disconnect();const d=f.contentDocument;if(!d?.documentElement)return;let queued=false;const run=()=>{queued=false;if(kind==='payments')patchPayments();if(kind==='aux')patchAux()};run();const o=new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(run)});o.observe(d.documentElement,{childList:true,subtree:true});observers.set(f,o)}catch{}}
 function frameReady(f,kind){f.dataset.ready='1';if(kind===current||(kind==='aux'&&auxMode))loading.classList.add('off');if(kind==='payments'||kind==='aux')observeFrame(f,kind)}
