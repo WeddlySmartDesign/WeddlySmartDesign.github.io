@@ -133,7 +133,7 @@ function loadFns(ctx,names){for(const n of names)vm.runInContext(extractFunction
 
 /* Guests approved synthesis: critical -> grouped RSVP -> grouped operations. */
 {
-  const tr={guestCriticalMany:'cambios de alergias/intolerancias',guestRsvp:'cambios RSVP',guestOps:'cambios operativos'};
+  const tr={guestCriticalMany:'cambios de alergias/intolerancias',guestRsvp:'cambios RSVP',guestRsvpOne:'cambio RSVP',guestOps:'cambios operativos',guestOpsOne:'cambio operativo'};
   const ctx=makeCtx({lng:()=> 'es',t:k=>tr[k]||k,hashKey:s=>'k'+String(s).length});
   loadFns(ctx,['guestText','guestCat','guestBreakdown','guestGroupKey','guestPriority']);
   const recent=[];
@@ -192,7 +192,7 @@ console.log('ONE Today behavioral QA: PASS');
   ]};
   const p=ctx.guestUnreadPriority(g,{old1:Date.now(),old2:Date.now()});
   assert.strictEqual(p.primary.length,1);
-  assert.strictEqual(p.primary[0].title,'1 cambios RSVP');
+  assert.strictEqual(p.primary[0].title,'1 cambio RSVP');
   assert.strictEqual(p.primary[0].members.length,1);
   assert.strictEqual(p.primary[0].members[0],'new1');
 }
