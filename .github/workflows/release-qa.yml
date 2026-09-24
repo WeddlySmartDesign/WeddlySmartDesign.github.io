@@ -25,6 +25,8 @@ jobs:
         run: node qa/guests_merge_test.js
       - name: Run RSVP send regression suite
         run: node qa/rsvp_send_regression_test.js
+      - name: Run license wedding-window regression suite
+        run: node qa/license_wedding_window_test.js
       - name: Install browser QA driver
         run: npm install --no-save playwright-core@1.55.0
       - name: Run RSVP real-browser interaction suite
