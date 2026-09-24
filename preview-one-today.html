@@ -14,7 +14,7 @@
 .brand{font-family:Georgia,serif;color:var(--dark);line-height:1}.brand b{display:block;font-size:20px;font-weight:500}.brand span{display:block;font-size:13px;margin-top:2px}
 .suiteLabel{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:750}
 .tabs{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
-.tab{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:9px 2px;font-size:10px;font-weight:750;min-height:40px}.tab.on{background:var(--dark);border-color:var(--dark);color:#fff}
+.tab{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:9px 2px;font-size:11.5px;font-weight:750;min-height:40px}.tab.on{background:var(--dark);border-color:var(--dark);color:#fff}
 .stage{flex:1}.todayScroll{padding:18px 10px calc(28px + env(safe-area-inset-bottom))}.todayInner{width:min(100%,760px);margin:auto}
 .todayHero,.todayCard{background:var(--paper);border:1px solid var(--line);border-radius:20px}
 .todayHero{padding:21px 18px;margin-bottom:14px}
@@ -22,12 +22,13 @@
 .todayHero h1{font:500 clamp(30px,8vw,42px)/1 Georgia,serif;color:var(--dark);margin:10px 0 9px;letter-spacing:-.03em}
 .todayHero p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}.todayDate{margin-top:17px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;font-weight:800}
 .todayGrid{display:grid;gap:12px}.todayCard{padding:15px}.todayCardHead,.todayItem{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-.todayModule{font:500 23px/1.1 Georgia,serif;color:var(--dark)}.todayStats{margin-top:6px;font-size:10.8px;color:var(--muted);line-height:1.45}.todayStats b{color:var(--ink)}
-.todayStatus{flex:0 0 auto;border:1px solid var(--accent);background:var(--paper);border-radius:999px;padding:6px 8px;font-size:9px;font-weight:800;color:var(--dark)}
-.todayList{margin-top:13px;border-top:1px solid var(--line)}.todayItem,.todayNotice{padding:12px 0;border-bottom:1px solid var(--line)}
-.todayItem strong{display:block;font-size:13px;line-height:1.35}.todayItem small{display:block;color:var(--muted);font-size:11.5px;line-height:1.4;margin-top:2px}
-.todayRight{text-align:right;flex:0 0 auto}.todayRight b{display:block;font-size:12.5px}.danger{color:#9a4537}
-.todayOpen{width:100%;margin-top:13px;border:0;border-radius:12px;background:var(--dark);color:#fff;padding:12px 13px;display:flex;align-items:center;justify-content:space-between;font:800 12.5px system-ui}
+.todayModule{font:500 28px/1.1 Georgia,serif;color:var(--dark)}.todayStats{margin-top:6px;font-size:14px;color:var(--muted);line-height:1.45}.todayStats b{color:var(--ink)}
+.todayStatus{flex:0 0 auto;border:1px solid var(--accent);background:var(--paper);border-radius:999px;padding:7px 10px;font-size:11.5px;font-weight:800;color:var(--dark)}
+.todayList{margin-top:13px;border-top:1px solid var(--line)}.todayItem,.todayNotice{padding:14px 0;border-bottom:1px solid var(--line)}
+.todayRead{border:0;background:transparent;color:var(--dark);text-decoration:underline;text-underline-offset:3px;padding:9px 0 0;font:800 14px system-ui;cursor:pointer}
+.todayItem strong{display:block;font-size:18px;line-height:1.35}.todayItem small{display:block;color:var(--muted);font-size:15px;line-height:1.45;margin-top:3px}
+.todayRight{text-align:right;flex:0 0 auto}.todayRight b{display:block;font-size:16px}.danger{color:#9a4537}
+.todayOpen{width:100%;min-height:50px;margin-top:13px;border:0;border-radius:13px;background:var(--dark);color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;font:800 15px system-ui}
 .note{max-width:760px;margin:0 auto 10px;padding:9px 12px;border-radius:12px;background:#fff8;border:1px dashed var(--line);font-size:11px;color:var(--muted)}
 @media(min-width:700px){.todayGrid{grid-template-columns:1fr 1fr}.todayCard:last-child{grid-column:1/-1}.tab{font-size:13px;padding:9px 5px}}
 </style>
@@ -51,24 +52,24 @@
 <article class="todayCard">
   <div class="todayCardHead"><div><div class="todayModule">Pagos</div><div class="todayStats"><b>1</b> vencido · <b>2</b> próx. 30 días</div></div><span class="todayStatus">Necesita atención</span></div>
   <div class="todayList">
-    <div class="todayItem"><div><strong>Fotografía</strong><small>Segundo pago</small></div><div class="todayRight"><b>1.000 €</b><small class="danger">vencido · 21 sep</small></div></div>
-    <div class="todayItem"><div><strong>Finca El Olivar</strong><small>Segundo pago</small></div><div class="todayRight"><b>2.500 €</b><small>en 12 días</small></div></div>
+    <div class="todayItem" data-item><div><strong>Fotografía</strong><small>Segundo pago</small></div><div class="todayRight"><b>1.000 €</b><small class="danger">vencido · 21 sep</small></div><button class="todayRead">Marcar como leído</button></div>
+    <div class="todayItem" data-item><div><strong>Finca El Olivar</strong><small>Segundo pago</small></div><div class="todayRight"><b>2.500 €</b><small>en 12 días</small></div><button class="todayRead">Marcar como leído</button></div>
   </div>
   <button class="todayOpen">Abrir Pagos <span>→</span></button>
 </article>
 <article class="todayCard">
   <div class="todayCardHead"><div><div class="todayModule">Invitados</div><div class="todayStats"><b>78</b> confirmados · <b>9</b> pendientes</div></div><span class="todayStatus">Necesita atención</span></div>
   <div class="todayList">
-    <div class="todayItem"><div><strong>Laura Martínez</strong><small>Ha cambiado de Mesa 4 a Mesa 7</small></div></div>
-    <div class="todayItem"><div><strong>Pablo Sánchez</strong><small>Está confirmado y aún no tiene menú</small></div></div>
+    <div class="todayItem" data-item><div><strong>Laura Martínez</strong><small>Ha cambiado de Mesa 4 a Mesa 7</small></div><button class="todayRead">Marcar como leído</button></div>
+    <div class="todayItem" data-item><div><strong>Pablo Sánchez</strong><small>Está confirmado y aún no tiene menú</small></div><button class="todayRead">Marcar como leído</button></div>
   </div>
   <button class="todayOpen">Abrir Invitados <span>→</span></button>
 </article>
 <article class="todayCard">
   <div class="todayCardHead"><div><div class="todayModule">Planning</div><div class="todayStats"><b>1</b> vencida · <b>4</b> próx. 30 días · <b>18</b> completadas</div></div><span class="todayStatus">Necesita atención</span></div>
   <div class="todayList">
-    <div class="todayItem"><div><strong>Confirmar horarios con proveedores</strong><small>Logística · Ambos</small></div><div class="todayRight"><small>vence hoy</small></div></div>
-    <div class="todayItem"><div><strong>Revisar respuestas pendientes</strong><small>Invitados · Ambos</small></div><div class="todayRight"><small>en 5 días</small></div></div>
+    <div class="todayItem" data-item><div><strong>Confirmar horarios con proveedores</strong><small>Logística · Ambos</small></div><div class="todayRight"><small>vence hoy</small></div><button class="todayRead">Marcar como leído</button></div>
+    <div class="todayItem" data-item><div><strong>Revisar respuestas pendientes</strong><small>Invitados · Ambos</small></div><div class="todayRight"><small>en 5 días</small></div><button class="todayRead">Marcar como leído</button></div>
   </div>
   <button class="todayOpen">Abrir Planning <span>→</span></button>
 </article>
@@ -76,4 +77,18 @@
 </div></div>
 </main>
 </div>
-</body></html>
+<script>
+document.addEventListener('click',function(e){
+  const b=e.target.closest('.todayRead');
+  if(!b)return;
+  const item=b.closest('[data-item]');
+  const list=item?.parentElement;
+  item?.remove();
+  if(list && !list.querySelector('[data-item]')){
+    const empty=document.createElement('div');
+    empty.className='todayEmpty';
+    empty.textContent='Todo revisado en Hoy. El módulo sigue teniendo asuntos pendientes.';
+    list.appendChild(empty);
+  }
+});
+</script></body></html>
