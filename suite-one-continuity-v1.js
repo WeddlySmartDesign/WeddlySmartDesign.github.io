@@ -16,7 +16,26 @@ function patchPayments(){
   hide(d.querySelector('.header .brand-group'));
   els.forEach(el=>{const t=low(el.textContent);if(t==='nuestra boda'||t==='our wedding')hide(el)});
   const sys=els.filter(el=>{const t=low(el.textContent);return((t.includes('guardado automáticamente')||t.includes('guardado automaticamente'))&&t.includes('sincron'))&&t.length<180}).sort((a,b)=>low(a.textContent).length-low(b.textContent).length)[0];if(sys)hide(sys);
-  const note=els.filter(el=>{const t=low(el.textContent);return(t.includes('guardado automático activado')||t.includes('guardado automatico activado')||t.includes('automatic saving enabled'))&&t.length<360}).sort((a,b)=>low(a.textContent).length-low(b.textContent).length)[0];if(note)hide(note.closest('.toast,.notice,.card,.alert-card,.sync-card')||note);
+  const note=els.filter(el=>{const t=low(el.textContent);return(
+    t.includes('guardado automático activado')||
+    t.includes('guardado automatico activado')||
+    t.includes('automatic saving enabled')||
+    t.includes('tus cambios se guardan solos')||
+    t.includes('your changes save automatically')
+  )&&t.length<420}).sort((a,b)=>low(a.textContent).length-low(b.textContent).length)[0];
+  if(note){
+    let box=note.closest('.toast,.notice,.card,.alert-card,.sync-card');
+    if(!box){
+      box=note;
+      for(let i=0;i<4&&box?.parentElement&&box.parentElement!==d.body;i++){
+        const p=box.parentElement,txt=low(p.textContent);
+        if(txt.length>520)break;
+        box=p;
+        if(p.querySelector('button')||p.querySelector('[role="button"]'))break;
+      }
+    }
+    hide(box||note);
+  }
   const native=d.querySelector('#view-dashboard .wedding-identity');if(native)hide(native);
   let box=d.getElementById('onePaymentsIdentity');
   if(!box){
