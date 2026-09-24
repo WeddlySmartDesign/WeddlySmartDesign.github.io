@@ -13,8 +13,8 @@ function guestKey(){return GUEST+(mode()?'_snapshot_demo_'+mode():'')}
 function hashKey(s){var h=2166136261,x=String(s||'');for(var i=0;i<x.length;i++){h^=x.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(36)}
 function todayToken(){try{return localStorage.getItem(TODAY_TOKEN)||''}catch(e){return''}}
 function todayCacheKey(){return'weddly_one_today_state_v1_'+hashKey(todayToken()||'none')+(mode()?'_'+mode():'')}
-function cleanReads(m){var out={},cut=Date.now()-90*86400000;Object.entries(m||{}).forEach(function(z){var n=Number(z[1]||0);if(n>=cut&&n<=Date.now()+86400000)out[z[0]]=n});return out}
-function mergeReads(a,b){var out={};[a||{},b||{}].forEach(function(m){Object.entries(m).forEach(function(z){var n=Number(z[1]||0);if(n>Number(out[z[0]]||0))out[z[0]]=n})});return cleanReads(out)}
+function cleanReads(m){var out={},cut=Date.now()-90*86400000,max=Date.now()+86400000;Object.entries(m||{}).forEach(function(z){var n=Number(z[1]||0),a=Math.abs(n);if(a>=cut&&a<=max)out[z[0]]=n});return out}
+function mergeReads(a,b){var out={};[a||{},b||{}].forEach(function(m){Object.entries(m).forEach(function(z){var n=Number(z[1]||0);if(Math.abs(n)>Math.abs(Number(out[z[0]]||0)))out[z[0]]=n})});return cleanReads(out)}
 function readTodayState(){try{var x=JSON.parse(localStorage.getItem(todayCacheKey())||'null');return x&&typeof x==='object'?{reads:cleanReads(x.reads||{}),version:Number(x.version||0),dirty:!!x.dirty}:{reads:{},version:0,dirty:false}}catch(e){return{reads:{},version:0,dirty:false}}}
 function writeTodayState(x){try{localStorage.setItem(todayCacheKey(),JSON.stringify({reads:cleanReads(x.reads||{}),version:Number(x.version||0),dirty:!!x.dirty}));return true}catch(e){return false}}
 function readMap(){return readTodayState().reads}
@@ -41,9 +41,9 @@ async function syncToday(){
  }catch(e){}finally{todayBusy=false}
 }
 function saveReadMap(m){var s=readTodayState();s.reads=cleanReads(m||{});s.dirty=true;writeTodayState(s);queueTodaySync();return true}
-function isRead(k,m){return!!((m||readMap())[k])}
+function isRead(k,m){return Number((m||readMap())[k]||0)>0}
 function markRead(keys){keys=(Array.isArray(keys)?keys:[keys]).filter(Boolean);if(!keys.length)return;var m=readMap(),now=Date.now();keys.forEach(function(k){m[k]=now});saveReadMap(m)}
-function pruneReadScope(prefix,active,ready){return}
+function pruneReadScope(prefix,active,ready){if(!ready)return;var m=readMap(),set=new Set(active||[]),now=Date.now(),changed=false;Object.keys(m).forEach(function(k){if(k.indexOf(prefix)===0&&Number(m[k]||0)>0&&!set.has(k)){m[k]=-now;changed=true}});if(changed)saveReadMap(m)}
 function readButton(k){return'<button type="button" class="todayRead" data-read="'+esc(k)+'">'+esc(t('read'))+'</button>'}
 function readAllButton(scope,n){return n>1?'<button type="button" class="todayReadAll" data-read-all="'+scope+'">'+esc(t('readAll'))+'</button>':''}
 function pay(){return json(payKey())}
