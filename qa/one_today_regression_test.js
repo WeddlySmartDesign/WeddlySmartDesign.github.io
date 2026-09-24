@@ -23,7 +23,8 @@ has(/add\(c\.meal[^\n]+menú/,'Hoy/Invitados debe desglosar menús');
 has(/add\(c\.transport[^\n]+transporte/,'Hoy/Invitados debe desglosar transporte');
 has(/add\(c\.stay[^\n]+alojamiento/,'Hoy/Invitados debe desglosar alojamiento');
 has(/add\(c\.table[^\n]+mesa/,'Hoy/Invitados debe desglosar mesas');
-has(/renderGuests\(\)[\s\S]*?guestPriority\(g\)/,'renderGuests debe consumir la agrupación aprobada');
+has(/function\s+guestUnreadPriority\s*\(/,'Hoy/Invitados debe agrupar solo cambios no leídos');
+has(/renderGuests\(\)[\s\S]*?guestUnreadPriority\(g,m\)/,'renderGuests debe consumir la agrupación no leída aprobada');
 assert(!/function\s+renderGuests\(\)[\s\S]{0,500}g\.alerts\.concat\(g\.recent\)[\s\S]{0,250}slice\(0,3\)/.test(src),
   'REGRESIÓN: Invitados ha vuelto a cortar alertas+recientes sin agrupar');
 
@@ -177,3 +178,33 @@ function loadFns(ctx,names){for(const n of names)vm.runInContext(extractFunction
   assert(/cache:'no-store'/.test(sw)||/cache:"no-store"/.test(sw),'Service worker must request fresh app assets');
 }
 console.log('ONE Today behavioral QA: PASS');
+
+
+/* A new Guest change must not recount already-read members in the grouped title. */
+{
+  const tr={guestCriticalMany:'cambios de alergias/intolerancias',guestRsvp:'cambios RSVP',guestOps:'cambios operativos'};
+  const ctx=makeCtx({lng:()=> 'es',t:k=>tr[k]||k,hashKey:s=>'h'+String(s).length});
+  loadFns(ctx,['isRead','guestText','guestCat','guestBreakdown','guestGroupKey','guestPriority','guestUnreadPriority']);
+  const g={alerts:[],recent:[
+    {key:'old1',kind:'rsvpAnswer',title:'A',meta:'',ts:1},
+    {key:'old2',kind:'rsvpAnswer',title:'B',meta:'',ts:2},
+    {key:'new1',kind:'rsvpAnswer',title:'C',meta:'',ts:3}
+  ]};
+  const p=ctx.guestUnreadPriority(g,{old1:Date.now(),old2:Date.now()});
+  assert.strictEqual(p.primary.length,1);
+  assert.strictEqual(p.primary[0].title,'1 cambios RSVP');
+  assert.strictEqual(p.primary[0].members.length,1);
+  assert.strictEqual(p.primary[0].members[0],'new1');
+}
+
+
+/* Cross-device read-state merge: newest timestamp wins, including unread tombstones. */
+{
+  const ctx=makeCtx({});
+  loadFns(ctx,['cleanReads','mergeReads','isRead']);
+  const now=Date.now();
+  let merged=ctx.mergeReads({x:now-2000},{x:-(now-1000)});
+  assert.strictEqual(ctx.isRead('x',merged),false,'A newer unread tombstone must beat an older read');
+  merged=ctx.mergeReads(merged,{x:now});
+  assert.strictEqual(ctx.isRead('x',merged),true,'A newer read on another device must win later');
+}
