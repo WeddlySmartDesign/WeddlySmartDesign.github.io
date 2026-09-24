@@ -7,7 +7,8 @@ const low=s=>String(s||'').replace(/\s+/g,' ').trim().toLowerCase();
 const mode=()=>{try{const q=new URLSearchParams(location.search).get('ownerDemo');if(q==='es'||q==='en')return q;const m=localStorage.getItem('weddly_owner_demo_mode')||'';return m==='es'||m==='en'?m:''}catch{return''}};
 const lang=()=>{try{const m=mode(),k=m?'weddly_pro_v7_owner_demo_'+m:'weddly_pro_v7',x=JSON.parse(localStorage.getItem(k)||'null'),v=x?.settings?.lang;if(v==='es'||v==='en')return v}catch{}return' es'.trim()};
 function id(){try{const m=mode(),k=m?'weddly_pro_v7_owner_demo_'+m:'weddly_pro_v7',s=(JSON.parse(localStorage.getItem(k)||'null')||{}).settings||{};return{p1:String(s.partner1||'').trim(),p2:String(s.partner2||'').trim(),date:String(s.weddingDate||'')}}catch{return{p1:'',p2:'',date:''}}}
-function hide(el){if(!el)return;el.style.setProperty('display','none','important');el.setAttribute('aria-hidden','true')}
+function hide(el){if(!el)return;if(el.style.getPropertyValue('display')!=='none'||el.style.getPropertyPriority('display')!=='important')el.style.setProperty('display','none','important');if(el.getAttribute('aria-hidden')!=='true')el.setAttribute('aria-hidden','true')}
+function setText(el,v){v=String(v||'');if(el&&el.textContent!==v)el.textContent=v}
 function fmtDate(s){if(!/^\d{4}-\d{2}-\d{2}$/.test(s))return'';const a=s.split('-').map(Number),d=new Date(a[0],a[1]-1,a[2],12);return new Intl.DateTimeFormat(lang()==='en'?'en-GB':'es-ES',{day:'numeric',month:'long',year:'numeric'}).format(d)}
 function patchPayments(){
  try{
@@ -45,7 +46,7 @@ function patchPayments(){
    const firstUseful=view.querySelector('.progress-container,.progress-ring,.summary-grid,.stats-grid,.dashboard-grid')||view.firstElementChild;
    view.insertBefore(box,firstUseful||null);
   }
-  const x=id();box.querySelector('#onePaymentsLabel').textContent=lang()==='en'?'PAYMENTS':'PAGOS';box.querySelector('#onePaymentsNames').textContent=[x.p1,x.p2].filter(Boolean).join(' & ');box.querySelector('#onePaymentsDate').textContent=fmtDate(x.date);
+  const x=id();setText(box.querySelector('#onePaymentsLabel'),lang()==='en'?'PAYMENTS':'PAGOS');setText(box.querySelector('#onePaymentsNames'),[x.p1,x.p2].filter(Boolean).join(' & '));setText(box.querySelector('#onePaymentsDate'),fmtDate(x.date));
  }catch{}
 }
 let observer=null,queued=false;
