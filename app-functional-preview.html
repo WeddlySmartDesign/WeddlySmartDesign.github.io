@@ -64,7 +64,7 @@ function readIdentity(){try{const m=demoMode(),k=m?PAY+'_owner_demo_'+m:PAY,x=JS
 function identitySignature(){const x=readIdentity();return JSON.stringify([x.p1,x.p2,x.date])}
 function escReg(s){return String(s||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
 function syncGuestIdentity(forceRefresh=false){if(demoMode())return false;const id=readIdentity();if(!id.p1||!id.p2)return false;let g;try{g=JSON.parse(localStorage.getItem(GUESTKEY)||'null')}catch{return false}if(!g||typeof g!=='object'||Array.isArray(g))return false;g.meta=g.meta||{};const old=Array.isArray(g.meta.couple)&&g.meta.couple.length>=2?[String(g.meta.couple[0]||''),String(g.meta.couple[1]||'')]:['',''];const changed=old[0]!==id.p1||old[1]!==id.p2||String(g.meta.weddingDate||'')!==id.date;if(old[0]&&old[1]&&(old[0]!==id.p1||old[1]!==id.p2)){Object.values(g.guests||{}).forEach(person=>{if(!person?.group)return;let v=String(person.group);v=v.replace(new RegExp(`^(Familia|Amigos) ${escReg(old[0])}$`,'i'),(_,k)=>`${k} ${id.p1}`);v=v.replace(new RegExp(`^(Familia|Amigos) ${escReg(old[1])}$`,'i'),(_,k)=>`${k} ${id.p2}`);person.group=v})}g.meta.couple=[id.p1,id.p2];g.meta.weddingDate=id.date;try{localStorage.setItem(GUESTKEY,JSON.stringify(g))}catch{return false}if((changed||forceRefresh)&&loaded.guests){try{const gp=guestFrame.contentWindow?.__GuestsProd;if(gp?.f&&gp.APP){gp.f.src=gp.APP+'&identity='+Date.now();window.dispatchEvent(new Event('guests-prod-open'))}else if(guestFrame.src)guestFrame.contentWindow.location.reload()}catch{}}return changed}
-function refreshPaymentsIdentity(){if(!loaded.payments||!payFrame.src)return;const visible=payFrame.classList.contains('on');payFrame.dataset.ready='0';payFrame.src=addSuite('payments.html?identity='+Date.now());if(visible)loading.classList.remove('off')}
+function refreshPaymentsIdentity(){if(!loaded.payments||!payFrame.src)return;const visible=payFrame.classList.contains('on');payFrame.dataset.ready='0';payFrame.src=route('payments')+'&identity='+Date.now();if(visible)loading.classList.remove('off')}
 function refreshPlanningIdentity(){if(!loaded.planning||!planningFrame.src)return;try{planningFrame.contentWindow.location.reload()}catch{planningFrame.src=route('planning')}}
 function watchIdentity(){const sig=identitySignature();if(sig===identityMark)return;const had=!!identityMark;identityMark=sig;syncGuestIdentity(true);if(had){refreshPaymentsIdentity();refreshPlanningIdentity()}applyTheme();translate()}
 function setAuxUrl(url,replace=false){const target=url?addSuite(url):route('settings');auxFrame.dataset.ready='0';if(replace&&auxFrame.src){try{auxFrame.contentWindow.location.replace(target);return}catch{}}auxFrame.src=target}
@@ -98,6 +98,5 @@ async function boot(){
 boot();
 })();
 </script>
-<script src="suite-install-hotfix-v1.js?v=5"></script>
 <script src="suite-today-v1.js?v=4-one-brand"></script>
 </body></html>
