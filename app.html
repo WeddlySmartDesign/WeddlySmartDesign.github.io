@@ -91,6 +91,7 @@ async function boot(){
   if(!hasAccess()){location.replace('access.html');return}
   const gate=await validateAccess();
   if(gate==='invalid'){clearAccessToken();location.replace('access.html?inactive=1');return}
+  document.documentElement.dataset.oneAccessValidated='1';
   applyTheme();translate();identityMark=identitySignature();syncGuestIdentity(false);let first='payments';try{const x=localStorage.getItem(LAST);if(['payments','guests','planning'].includes(x))first=x}catch{}open(first);setTimeout(()=>{['payments','guests','planning'].filter(x=>x!==first).forEach((x,i)=>setTimeout(()=>ensure(x),i*250))},350);
 }
 boot();
