@@ -56,7 +56,7 @@ function themeRead(){try{const v=localStorage.getItem(THEME1)||localStorage.getI
 function applyTheme(){const v=themeRead();if(v!==theme){theme=v;document.documentElement.dataset.theme=v}}
 function showToast(text){clearTimeout(toastTimer);toast.textContent=text;toast.classList.add('on');toastTimer=setTimeout(()=>toast.classList.remove('on'),3600)}
 function addSuite(url){try{const u=new URL(url,location.href);u.searchParams.set('suite','1');u.searchParams.set('_wsd_suite','1');const demo=demoMode();if(demo)u.searchParams.set('ownerDemo',demo);return u.href}catch{return url}}
-function route(view){if(view==='payments')return addSuite('payments.html');if(view==='guests')return addSuite('guests.html');if(view==='planning')return addSuite('planning.html');return addSuite('weddly-settings.html')}
+function route(view){if(view==='payments')return addSuite('web-v8-demo-payments.html?view=resumen');if(view==='guests')return addSuite('web-v8-demo-guests.html?view=hoy');if(view==='planning')return addSuite('preview-one-planning-demo.html');return addSuite('preview-one-settings-demo.html')}
 function setActive(view){current=view;tabs.forEach(b=>b.classList.toggle('on',b.dataset.view===view));if(['payments','guests','planning'].includes(view))try{localStorage.setItem(LAST,view)}catch{}}
 function showPane(which){[payFrame,guestFrame,planningFrame,auxFrame].forEach(f=>f.classList.remove('on'));(which==='payments'?payFrame:which==='guests'?guestFrame:which==='planning'?planningFrame:auxFrame).classList.add('on')}
 function ensure(view){const f=view==='payments'?payFrame:view==='guests'?guestFrame:planningFrame;if(!loaded[view]){loaded[view]=true;f.src=route(view)}return f}
