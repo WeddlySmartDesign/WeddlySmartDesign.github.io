@@ -41,7 +41,8 @@ console.log('ONE Today regression guard: PASS');
 
 // Planning mobile layout: read action must remain inside its card.
 has(/todayCard todayCardPlanning/,'Planning card must keep its dedicated layout hook');
-has(/todayPlanActions/,'Planning must keep deadline + read action in a bounded action column');
+has(/todayPlanDeadline/,'Planning must keep the deadline in a bounded top-row column');
 has(/todayItemMain\{min-width:0;flex:1 1 auto\}/,'Planning/main item text must be allowed to shrink inside flex rows');
 has(/todayCardPlanning \.todayPlanActions \.todayRead/,'Planning read button must have a mobile-bounded rule');
+has(/white-space:normal/,'Planning read button must be allowed to wrap rather than overflow');
 console.log('Planning read controls must stay inside the card');
