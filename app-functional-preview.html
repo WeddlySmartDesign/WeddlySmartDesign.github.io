@@ -71,7 +71,8 @@ function translate(){const c=copy[lang()];document.documentElement.lang=lang();d
 function themeRead(){try{const v=localStorage.getItem(THEME1)||localStorage.getItem(THEME2)||'nordic';return['nordic','blush','sand','slate','editorial'].includes(v)?v:'nordic'}catch{return'nordic'}}
 function applyTheme(){const v=themeRead();if(v!==theme){theme=v;document.documentElement.dataset.theme=v}}
 function showToast(text){clearTimeout(toastTimer);toast.textContent=text;toast.classList.add('on');toastTimer=setTimeout(()=>toast.classList.remove('on'),3600)}
-function addSuite(url){try{const u=new URL(url,location.href);u.searchParams.set('suite','1');u.searchParams.set('_wsd_suite','1');const demo=demoMode();if(demo)u.searchParams.set('ownerDemo',demo);return u.href}catch{return url}}
+function addSuite(url){try{const u=new URL(url,location.href);u.searchParams.set('suite','1');u.searchParams.set('_wsd_suite','1');seedFunctionalDemo();
+  const demo=demoMode();if(demo)u.searchParams.set('ownerDemo',demo);return u.href}catch{return url}}
 function route(view){if(view==='payments')return addSuite('web-v8-demo-payments.html?view=resumen');if(view==='guests')return addSuite('web-v8-demo-guests.html?view=hoy');if(view==='planning')return addSuite('preview-one-planning-demo.html');return addSuite('preview-one-settings-demo.html')}
 function setActive(view){current=view;tabs.forEach(b=>b.classList.toggle('on',b.dataset.view===view));if(['payments','guests','planning'].includes(view))try{localStorage.setItem(LAST,view)}catch{}}
 function showPane(which){[payFrame,guestFrame,planningFrame,auxFrame].forEach(f=>f.classList.remove('on'));(which==='payments'?payFrame:which==='guests'?guestFrame:which==='planning'?planningFrame:auxFrame).classList.add('on')}
@@ -103,6 +104,27 @@ addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});
 function refreshShell(){applyTheme();translate();watchIdentity()}
 addEventListener('storage',e=>{if([THEME1,THEME2,PAY,'weddly_owner_demo_mode',GUESTKEY].includes(e.key))refreshShell()});addEventListener('focus',refreshShell);addEventListener('pageshow',refreshShell);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshShell()});
 /* functional preview: service worker intentionally disabled */
+
+function seedFunctionalDemo(){
+  try{
+    const k='weddly_pro_v7_owner_demo_es';
+    if(!localStorage.getItem(k)) localStorage.setItem(k,JSON.stringify({
+      version:9,
+      settings:{lang:'es',partner1:'Elena',partner2:'Marco',weddingDate:'2027-06-12',currency:'EUR|es-ES',budget:32000,guests:96},
+      providers:[
+        {id:'photo',name:'Fotografía',payments:[
+          {id:'p1',concept:'Segundo pago',amount:1000,dueDate:'2026-09-21',status:'scheduled',kind:'payment'},
+          {id:'p2',concept:'Entrega final',amount:850,dueDate:'2026-10-02',status:'scheduled',kind:'payment'}]},
+        {id:'venue',name:'Finca El Olivar',payments:[
+          {id:'p3',concept:'Segundo pago',amount:2500,dueDate:'2026-10-06',status:'scheduled',kind:'payment'}]}
+      ],
+      diy:[],contributions:[]
+    }));
+    localStorage.setItem('weddly_owner_demo_mode','es');
+    localStorage.setItem('weddly_access_lang','es');
+  }catch{}
+}
+
 async function boot(){
   const demo=demoMode();
   if(!demo){
@@ -114,5 +136,5 @@ async function boot(){
 boot();
 })();
 </script>
-<script src="suite-today-v1.js?v=4-one-brand"></script>
+<script src="suite-today-functional-preview.js?v=1"></script>
 </body></html>
