@@ -33,8 +33,8 @@ button{cursor:pointer}
   backdrop-filter:blur(16px);border-bottom:1px solid var(--line)
 }
 .top-inner{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{display:flex;align-items:baseline;gap:8px;min-width:0}
-.brand strong{font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:-.035em}
+.brand{display:flex;align-items:baseline;gap:8px;min-width:0;overflow:hidden}
+.brand strong{display:block;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:-.035em}
 .brand span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .top-actions{display:flex;gap:8px}
 .icon-btn{
@@ -131,8 +131,12 @@ tr:last-child td{border-bottom:0}
   .card{padding:22px}
 }
 @media(max-width:520px){
+  .top-inner{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;padding:9px 0 10px}
+  .brand{width:100%}
+  .brand strong{font-size:19px}
   .brand span{display:none}
-  .icon-btn{padding:8px 10px}
+  .top-actions{display:grid;grid-template-columns:1.35fr 1fr .72fr;width:100%;gap:6px}
+  .icon-btn{min-width:0;padding:9px 6px;font-size:10.5px;white-space:nowrap}
   .f-step{grid-template-columns:84px minmax(0,1fr) 42px;gap:8px}
   .f-label strong{font-size:11px}
   .metric strong{font-size:34px}
@@ -263,6 +267,7 @@ const STORAGE='wsd_internal_analytics_token_v1';
 const TRACKING_EARLIEST='2026-09-24T00:00:00+02:00';
 let token='';
 let currentRange='7d';
+let deferredInstallPrompt=null;
 
 const $=id=>document.getElementById(id);
 const lock=$('lock'),app=$('app'),loading=$('loading'),loginError=$('loginError');
@@ -477,8 +482,9 @@ installBtn.addEventListener('click',async()=>{
   const isiOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
   installHelpText.textContent=isiOS
     ? 'En Safari, pulsa Compartir y después “Añadir a pantalla de inicio”.'
-    : 'Abre el menú del navegador y elige “Instalar app” o “Añadir a pantalla de inicio”.';
+    : 'Ahora estás en una ventana que no ofrece la instalación directa. Pulsa ⋮ arriba a la derecha → Abrir en Chrome. Ya en Chrome, vuelve a pulsar “Añadir al móvil” y aparecerá la instalación. Si Chrome no muestra el aviso, usa ⋮ → Instalar app o Añadir a pantalla de inicio.';
   if(typeof installHelp.showModal==='function')installHelp.showModal();
+  else alert(installHelpText.textContent);
 });
 $('installHelpClose').addEventListener('click',()=>installHelp.close());
 
