@@ -51,13 +51,29 @@
     @keyframes spin{to{transform:rotate(360deg)}}
     .grant{margin-top:18px}
     .grant .permission{padding:13px 0}
+    .sharedBlock{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+    .sharedHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+    .sharedHead h3{margin:0;font-size:16px}.sharedHead span{font-size:12px;color:var(--muted)}
+    .sharedList{display:grid;gap:8px}
+    .sharedRow{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:#faf9f7}
+    .sharedRow.done b{text-decoration:line-through;color:var(--muted)}
+    .sharedRow input[type=checkbox]{width:20px;height:20px;margin-top:2px}
+    .sharedRow b{font-size:13.5px;display:block}.sharedRow small{font-size:11.5px;color:var(--muted);line-height:1.45;display:block;margin-top:3px}
+    .sharedAdd{display:grid;grid-template-columns:1fr 150px;gap:8px;margin-top:10px}.sharedAdd .wide{grid-column:1/-1}
+    .sharedAdd input,.sharedAdd select{padding:10px 11px;font-size:13px}
+    .decisionRow{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:13px;background:#fff}
+    .decisionRow b{font-size:13.5px;display:block}.decisionRow small{font-size:11.5px;color:var(--muted);line-height:1.45;display:block;margin-top:4px}
+    .statusPill{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;border-radius:99px;padding:5px 7px;background:#ede9e4;color:var(--muted);white-space:nowrap}
+    .statusPill.ok{background:#edf4ef;color:var(--ok)}
+    .confirmDecision{margin-top:9px;min-height:38px;padding:8px 11px;font-size:12px}
+    .sharedEmpty{font-size:12.5px;color:var(--muted);padding:8px 0}
     .empty{padding:34px 10px;text-align:center;color:var(--muted)}
     .successMark{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#eaf3ed;color:var(--ok);font-size:23px;margin-bottom:20px}
     .top-actions{display:flex;justify-content:flex-end;margin-bottom:16px}
     .lang{border:0;background:transparent;color:var(--muted);font-size:12px;padding:6px}
     @media(max-width:540px){
       .shell{padding-left:15px;padding-right:15px}.brand{margin-bottom:38px}.card{padding:18px;border-radius:18px}
-      .who{display:block}.badge{display:inline-block;margin-top:10px}.actions{display:grid;grid-template-columns:1fr}.btn.primary{width:100%}
+      .who{display:block}.badge{display:inline-block;margin-top:10px}.actions{display:grid;grid-template-columns:1fr}.btn.primary{width:100%}.sharedAdd{grid-template-columns:1fr}.sharedAdd .wide{grid-column:auto}.decisionRow{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -101,6 +117,7 @@
         <h2 style="font-size:25px;margin:0 0 10px" data-t="doneTitle">Acceso autorizado.</h2>
         <p class="lead" style="margin-bottom:12px" data-t="doneText">La wedding planner ya puede consultar únicamente las áreas que acabas de aprobar.</p>
         <p class="fine" data-t="doneFine">ONE no ha cambiado: la profesional trabaja desde ONE Partner y su acceso puede retirarse en cualquier momento.</p>
+        <div class="actions"><button id="goManageBtn" class="btn secondary" type="button">Gestionar acceso y coordinación</button></div>
       </div>
     </section>
 
@@ -142,6 +159,10 @@
       payments:['Pagos y presupuesto','Información económica de la boda. Permiso sensible y separado.'],
       save:'Guardar cambios',revoke:'Revocar acceso',active:'Acceso activo',
       noAccess:'No hay ninguna profesional con acceso activo a esta boda.',
+      responsibilities:'Responsabilidades compartidas',decisions:'Decisiones',
+      addResponsibility:'Añadir responsabilidad',pendingYou:'Pendiente de vosotros',pendingPlanner:'Pendiente de la planner',
+      decisionPending:'Pendiente',decisionConfirmed:'Confirmada',confirmDecision:'Confirmar decisión',
+      noResponsibilities:'No hay responsabilidades compartidas.',noDecisions:'No hay decisiones pendientes o confirmadas.',
       saved:'Permisos actualizados.',revoked:'Acceso revocado.',
       invalid:'Este enlace ya no es válido o ha caducado.',genericError:'No se ha podido completar la operación.'
     },
@@ -166,6 +187,10 @@
       payments:['Payments & budget','Wedding financial information. A separate sensitive permission.'],
       save:'Save changes',revoke:'Revoke access',active:'Active access',
       noAccess:'No professional currently has active access to this wedding.',
+      responsibilities:'Shared responsibilities',decisions:'Decisions',
+      addResponsibility:'Add responsibility',pendingYou:'Pending from you',pendingPlanner:'Pending from planner',
+      decisionPending:'Pending',decisionConfirmed:'Confirmed',confirmDecision:'Confirm decision',
+      noResponsibilities:'There are no shared responsibilities.',noDecisions:'There are no pending or confirmed decisions.',
       saved:'Permissions updated.',revoked:'Access revoked.',
       invalid:'This link is no longer valid or has expired.',genericError:'The operation could not be completed.'
     }
@@ -195,7 +220,12 @@
       partner_connection_preview:'preview',
       partner_connection_approve:'approve',
       partner_manage_grants:'manage',
-      partner_update_grant:'update'
+      partner_update_grant:'update',
+      partner_couple_responsibilities:'responsibilities',
+      partner_couple_add_responsibility:'add_responsibility',
+      partner_couple_update_responsibility:'update_responsibility',
+      partner_couple_decisions:'decisions',
+      partner_couple_confirm_decision:'confirm_decision'
     };
     const action=actions[name];
     if(!action) throw new Error('invalid_action');
@@ -278,6 +308,7 @@
       '<div class="who"><div><h2>'+escapeHtml(name)+'</h2><p>'+escapeHtml(contact||'')+'</p></div><span class="badge">'+escapeHtml(t('active'))+'</span></div>'+
       '<div class="permholder">'+permissionRows(grant.permissions,'g'+index)+'</div>'+
       '<div class="notice ok hidden grantNotice"></div>'+
+      '<div class="sharedBlock"><div id="shared-'+index+'" class="sharedEmpty">Cargando coordinación…</div></div>'+
       '<div class="actions"><button class="btn secondary saveGrant" type="button" data-index="'+index+'">'+escapeHtml(t('save'))+'</button>'+
       '<button class="btn danger revokeGrant" type="button" data-index="'+index+'">'+escapeHtml(t('revoke'))+'</button></div></div>';
   }
@@ -292,9 +323,89 @@
       show('manage');
       document.querySelectorAll('.saveGrant').forEach(b=>b.addEventListener('click',()=>saveGrant(Number(b.dataset.index),false)));
       document.querySelectorAll('.revokeGrant').forEach(b=>b.addEventListener('click',()=>saveGrant(Number(b.dataset.index),true)));
+      currentGrants.forEach((g,i)=>loadShared(i,g));
     }catch(e){
       show('missing');
     }
+  }
+
+
+  function fmtDue(s){
+    if(!s)return '';
+    const d=new Date(s+'T12:00:00');
+    return Number.isNaN(d.getTime())?s:new Intl.DateTimeFormat(lang==='es'?'es-ES':'en-GB',{day:'numeric',month:'short',year:'numeric'}).format(d);
+  }
+
+  function responsibilityHtml(r,index){
+    const owner=r.owner==='planner'?t('pendingPlanner'):t('pendingYou');
+    return '<label class="sharedRow '+(r.completed?'done':'')+'"><input class="sharedCheck" data-index="'+index+'" data-id="'+escapeHtml(r.id)+'" type="checkbox" '+(r.completed?'checked':'')+'><span><b>'+escapeHtml(r.title)+'</b><small>'+escapeHtml(owner)+(r.due_date?' · '+escapeHtml(fmtDue(r.due_date)):'')+(r.comment?' · '+escapeHtml(r.comment):'')+'</small></span></label>';
+  }
+
+  function decisionHtml(d,index){
+    const confirmed=d.status==='confirmed';
+    return '<div class="decisionRow"><div><b>'+escapeHtml(d.title)+'</b><small>'+escapeHtml(d.detail||'')+(d.scope?' · '+escapeHtml(d.scope.replaceAll('_',' ')):'')+'</small>'+
+      (!confirmed?'<button class="btn primary confirmDecision" data-index="'+index+'" data-id="'+escapeHtml(d.id)+'" type="button">'+escapeHtml(t('confirmDecision'))+'</button>':'')+
+      '</div><span class="statusPill '+(confirmed?'ok':'')+'">'+escapeHtml(confirmed?t('decisionConfirmed'):t('decisionPending'))+'</span></div>';
+  }
+
+  async function loadShared(index,grant){
+    const holder=$('shared-'+index); if(!holder)return;
+    try{
+      const [rr,dd]=await Promise.all([
+        rpc('partner_couple_responsibilities',{p_member_token:memberToken(),p_grant_id:grant.grantId}),
+        rpc('partner_couple_decisions',{p_member_token:memberToken(),p_grant_id:grant.grantId})
+      ]);
+      const responsibilities=rr?.responsibilities||[],decisions=dd?.items||[];
+      holder.className='';
+      holder.innerHTML=
+        '<div class="sharedHead"><h3>'+escapeHtml(t('responsibilities'))+'</h3><span>'+responsibilities.filter(x=>!x.completed).length+' '+(lang==='es'?'pendientes':'pending')+'</span></div>'+
+        '<div class="sharedList">'+(responsibilities.length?responsibilities.map(r=>responsibilityHtml(r,index)).join(''):'<div class="sharedEmpty">'+escapeHtml(t('noResponsibilities'))+'</div>')+'</div>'+
+        '<div class="sharedAdd"><input id="newRespTitle-'+index+'" class="wide" maxlength="240" placeholder="'+escapeHtml(t('addResponsibility'))+'">'+
+        '<select id="newRespOwner-'+index+'"><option value="couple">'+escapeHtml(t('pendingYou'))+'</option><option value="planner">'+escapeHtml(t('pendingPlanner'))+'</option></select>'+
+        '<input id="newRespDue-'+index+'" type="date"><button class="btn secondary addSharedResp" data-index="'+index+'" type="button">'+escapeHtml(t('addResponsibility'))+'</button></div>'+
+        '<div class="sharedHead" style="margin-top:20px"><h3>'+escapeHtml(t('decisions'))+'</h3><span>'+decisions.filter(x=>x.status==='pending').length+' '+(lang==='es'?'por confirmar':'to confirm')+'</span></div>'+
+        '<div class="sharedList">'+(decisions.length?decisions.map(d=>decisionHtml(d,index)).join(''):'<div class="sharedEmpty">'+escapeHtml(t('noDecisions'))+'</div>')+'</div>';
+
+      holder.querySelectorAll('.sharedCheck').forEach(c=>c.addEventListener('change',()=>updateSharedResponsibility(index,c.dataset.id,c.checked)));
+      holder.querySelector('.addSharedResp')?.addEventListener('click',()=>addSharedResponsibility(index));
+      holder.querySelectorAll('.confirmDecision').forEach(b=>b.addEventListener('click',()=>confirmSharedDecision(index,b.dataset.id)));
+    }catch(e){
+      holder.className='sharedEmpty';
+      holder.textContent=t('genericError');
+    }
+  }
+
+  async function addSharedResponsibility(index){
+    const grant=currentGrants[index],title=$('newRespTitle-'+index)?.value.trim();
+    if(!grant||!title)return;
+    const btn=document.querySelector('.addSharedResp[data-index="'+index+'"]');if(btn)btn.disabled=true;
+    try{
+      await rpc('partner_couple_add_responsibility',{
+        p_member_token:memberToken(),p_grant_id:grant.grantId,p_title:title,
+        p_owner:$('newRespOwner-'+index)?.value||'couple',
+        p_due_date:$('newRespDue-'+index)?.value||null,p_comment:''
+      });
+      await loadShared(index,grant);
+    }catch(e){if(btn)btn.disabled=false}
+  }
+
+  async function updateSharedResponsibility(index,id,completed){
+    const grant=currentGrants[index];if(!grant)return;
+    try{
+      await rpc('partner_couple_update_responsibility',{
+        p_member_token:memberToken(),p_id:id,p_title:null,p_owner:null,p_due_date:null,
+        p_set_due_date:false,p_comment:null,p_completed:!!completed
+      });
+      await loadShared(index,grant);
+    }catch(e){await loadShared(index,grant)}
+  }
+
+  async function confirmSharedDecision(index,id){
+    const grant=currentGrants[index];if(!grant)return;
+    try{
+      await rpc('partner_couple_confirm_decision',{p_member_token:memberToken(),p_decision_id:id});
+      await loadShared(index,grant);
+    }catch(e){}
   }
 
   async function saveGrant(index,revoke){
@@ -317,6 +428,7 @@
   }
 
   $('approveBtn').addEventListener('click',approve);
+  $('goManageBtn')?.addEventListener('click',loadManage);
   $('langBtn').addEventListener('click',()=>{
     lang=lang==='es'?'en':'es'; translateStatic();
     if(!$('request').classList.contains('hidden')) loadRequest();
