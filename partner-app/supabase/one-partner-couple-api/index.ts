@@ -63,6 +63,37 @@ Deno.serve(async (req: Request) => {
         p_permissions: body.p_permissions || {},
         p_revoke: !!body.p_revoke
       }
+    },
+    responsibilities: {
+      fn: "partner_couple_responsibilities",
+      args: {
+        p_member_token: body.p_member_token,
+        p_grant_id: body.p_grant_id
+      }
+    },
+    add_responsibility: {
+      fn: "partner_couple_add_responsibility",
+      args: {
+        p_member_token: body.p_member_token,
+        p_grant_id: body.p_grant_id,
+        p_title: body.p_title,
+        p_owner: body.p_owner || "couple",
+        p_due_date: body.p_due_date || null,
+        p_comment: body.p_comment || ""
+      }
+    },
+    update_responsibility: {
+      fn: "partner_couple_update_responsibility",
+      args: {
+        p_member_token: body.p_member_token,
+        p_id: body.p_id,
+        p_title: body.p_title ?? null,
+        p_owner: body.p_owner ?? null,
+        p_due_date: body.p_due_date ?? null,
+        p_set_due_date: !!body.p_set_due_date,
+        p_comment: body.p_comment ?? null,
+        p_completed: typeof body.p_completed === "boolean" ? body.p_completed : null
+      }
     }
   };
 
