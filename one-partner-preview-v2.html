@@ -56,31 +56,31 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
     <div class="attentionCard"><div class="attentionIcon">9</div><div><b>Invitados sin mesa</b><span>todos en Clara & Martín</span></div></div>
   </div>
 
-  <div class="toolbar"><div class="toolbarLeft"><button class="filter active" type="button">Todas · 2</button><button class="filter" type="button">Con cambios · 1</button><button class="filter" type="button">Con pendientes · 2</button></div><div class="toolbarMeta">Actualizado ahora</div></div>
+  <div class="toolbar"><div class="toolbarLeft"><button class="filter active" data-filter="all" type="button">Todas · 2</button><button class="filter" data-filter="changes" type="button">Con cambios · 1</button><button class="filter" data-filter="pending" type="button">Con pendientes · 2</button></div><div class="toolbarMeta">Actualizado ahora</div></div>
   <div class="sectionTitle"><h2>Mis bodas</h2><span class="muted">2 activas</span></div>
   <div class="weddingGrid">
-    <button class="card weddingCard" data-wedding="clara" type="button">
+    <button class="card weddingCard" data-wedding="clara" data-has-changes="true" data-has-pending="true" type="button">
       <div class="weddingHead">
-        <div><div class="names">Clara & Martín</div><div class="date">22 may 2027</div></div>
+        <div><div class="names">Clara & Martín</div><div class="date">22 may 2027 · 126 confirmados</div></div>
         <div class="change"><span class="dot"></span>3 cambios</div>
       </div>
       <div class="metrics">
-        <div class="metric"><b>126</b><span>confirmados</span></div>
         <div class="metric"><b>14</b><span>RSVP pendientes</span></div>
         <div class="metric"><b>9</b><span>sin mesa</span></div>
+        <div class="metric"><b>2</b><span>tareas vencidas</span></div>
       </div>
       <div class="openCue">Abrir resumen →</div>
     </button>
 
-    <button class="card weddingCard" data-wedding="elena" type="button">
+    <button class="card weddingCard" data-wedding="elena" data-has-changes="false" data-has-pending="true" type="button">
       <div class="weddingHead">
-        <div><div class="names">Elena & Dani</div><div class="date">11 sep 2027</div></div>
+        <div><div class="names">Elena & Dani</div><div class="date">11 sep 2027 · 84 confirmados</div></div>
         <div class="date">Al día</div>
       </div>
       <div class="metrics">
-        <div class="metric"><b>84</b><span>confirmados</span></div>
         <div class="metric"><b>31</b><span>RSVP pendientes</span></div>
         <div class="metric"><b>0</b><span>sin mesa</span></div>
+        <div class="metric"><b>0</b><span>tareas vencidas</span></div>
       </div>
       <div class="openCue">Abrir resumen →</div>
     </button>
@@ -162,6 +162,6 @@ document.getElementById('createDemoLink').onclick=()=>{modal.classList.add('hidd
 document.getElementById('reviewBtn').onclick=()=>{document.getElementById('changesCard').innerHTML='<div style="text-align:center;padding:22px;color:var(--muted)">No hay cambios desde tu última revisión.</div>';toast('Revisión registrada')};
 document.querySelectorAll('.check').forEach(c=>c.addEventListener('change',()=>c.closest('.respRow').classList.toggle('done',c.checked)));
 document.getElementById('addResp').onclick=()=>toast('Responsabilidad añadida: flujo disponible en la versión real.');
-document.querySelectorAll('.filter').forEach(f=>f.addEventListener('click',()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));f.classList.add('active')}));
+document.querySelectorAll('.filter').forEach(f=>f.addEventListener('click',()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));f.classList.add('active');const mode=f.dataset.filter;document.querySelectorAll('.weddingCard').forEach(card=>{const show=mode==='all'||(mode==='changes'&&card.dataset.hasChanges==='true')||(mode==='pending'&&card.dataset.hasPending==='true');card.classList.toggle('hidden',!show)})}));
 </script>
 </body></html>
