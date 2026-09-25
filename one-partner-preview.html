@@ -448,10 +448,11 @@ document.getElementById('onboardingDone').onclick=()=>{
   onboardingModal.classList.add('hidden');
   const card=document.querySelector('[data-wedding="elena"]');
   if(card){
-    card.dataset.onboarding='false';
     const status=card.querySelector('.change');if(status){status.className='date';status.textContent='Revisión inicial completada'}
     const line=card.querySelector('.closingLine');if(line)line.innerHTML='<b>Cierre profesional</b><span class="riskTag good">Seguimiento activado</span>';
   }
+  document.getElementById('onboardingDone').textContent='Revisión inicial completada';
+  document.getElementById('onboardingDone').disabled=true;
   document.querySelectorAll('[data-open-onboarding]').forEach(x=>x.remove());
   toast('Revisión inicial de Elena & Dani completada');
 };
