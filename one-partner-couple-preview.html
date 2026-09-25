@@ -21,7 +21,8 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.
 .switch{position:relative;width:44px;height:26px;flex:0 0 auto}.switch input{position:absolute;opacity:0}.track{position:absolute;inset:0;border-radius:99px;background:#d7d1ca;transition:.16s}.track:after{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.16);transition:.16s}.switch input:checked+.track{background:var(--dark)}.switch input:checked+.track:after{transform:translateX(18px)}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}.btn{border:0;border-radius:13px;min-height:48px;padding:13px 18px;font-weight:700;font-size:14px;transition:transform .15s ease,box-shadow .15s ease}.primary{background:var(--dark);color:#fff;flex:1;box-shadow:0 10px 24px rgba(29,26,23,.12)}.soft{background:var(--soft);color:var(--ink)}.danger{background:#fff3f1;color:var(--danger);border:1px solid #ead3d0}.fine{font-size:12.5px;line-height:1.55;color:var(--muted);margin-top:16px}.notice{padding:14px 15px;border-radius:13px;font-size:13px;line-height:1.55;margin-top:15px;background:#edf4ef;color:#315f49}
 .manageRow{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.sharedBlock{margin-top:20px}.sharedTitle{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:9px}.sharedTitle h2{margin:0}.sharedRight{display:flex;align-items:center;gap:8px}.sharedCount{font-size:12.5px;color:var(--muted)}.addMini{border:0;border-radius:99px;background:var(--dark);color:#fff;padding:8px 11px;font-size:12px;font-weight:700}.resp{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line)}.resp:first-child{border-top:0}.resp input{width:21px;height:21px;margin-top:2px}.resp b{font-size:14px;display:block}.resp span{font-size:12.5px;color:var(--muted);display:block;margin-top:4px;line-height:1.45}.resp.done b{text-decoration:line-through;color:var(--muted)}.manageRow:last-child{border-bottom:0}.manageRow b{font-size:15px}.manageRow span{font-size:12.5px;color:var(--muted);display:block;margin-top:4px}
-.successMark{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#eaf3ed;color:var(--good);font-size:25px;margin-bottom:18px}.footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:#8a847d}.respModalBack{position:fixed;inset:0;background:rgba(21,18,16,.38);backdrop-filter:blur(4px);display:grid;place-items:center;padding:18px;z-index:30}.respModal{width:min(560px,100%);background:#fff;border-radius:21px;padding:22px;box-shadow:0 30px 100px rgba(0,0,0,.22)}.respModalHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}.respModalHead h2{margin-bottom:5px}.xBtn{border:0;width:36px;height:36px;border-radius:50%;background:var(--soft);font-size:18px}.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.formWide{grid-column:1/-1}.formGrid label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.formGrid input,.formGrid select,.formGrid textarea{width:100%;border:1px solid #dcd5cd;border-radius:11px;background:#fff;padding:11px 12px;color:var(--ink)}.formGrid textarea{min-height:82px;resize:vertical}
+.successMark{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#eaf3ed;color:var(--good);font-size:25px;margin-bottom:18px}.coupleDecision{border:1px solid var(--line);border-radius:15px;background:#fff;padding:15px;margin-top:10px}.coupleDecision:first-child{margin-top:0}.coupleDecisionTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.coupleDecision b{font-size:14px;display:block}.coupleDecision span{font-size:12.5px;color:var(--muted);display:block;margin-top:4px;line-height:1.45}.decisionBadge{font-size:11.5px;border-radius:99px;padding:5px 8px;background:#fff5dc;color:#85631e;white-space:nowrap}.decisionConfirm{margin-top:12px;min-height:40px!important;padding:9px 12px!important;font-size:12.5px!important}
+.footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:#8a847d}.respModalBack{position:fixed;inset:0;background:rgba(21,18,16,.38);backdrop-filter:blur(4px);display:grid;place-items:center;padding:18px;z-index:30}.respModal{width:min(560px,100%);background:#fff;border-radius:21px;padding:22px;box-shadow:0 30px 100px rgba(0,0,0,.22)}.respModalHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}.respModalHead h2{margin-bottom:5px}.xBtn{border:0;width:36px;height:36px;border-radius:50%;background:var(--soft);font-size:18px}.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.formWide{grid-column:1/-1}.formGrid label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.formGrid input,.formGrid select,.formGrid textarea{width:100%;border:1px solid #dcd5cd;border-radius:11px;background:#fff;padding:11px 12px;color:var(--ink)}.formGrid textarea{min-height:82px;resize:vertical}
 @media(min-width:760px){
   .card{padding:27px}
   .permission{padding-left:2px;padding-right:2px}
@@ -81,6 +82,18 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.
   </div>
   <p class="fine">Estas responsabilidades pertenecen a ONE Partner. No modifican vuestra checklist de ONE.</p>
 </div>
+
+<div class="sharedBlock coupleDecisionBlock">
+  <div class="sharedTitle"><h2>Decisiones por confirmar</h2><span class="sharedCount decisionCount">1 pendiente</span></div>
+  <div class="card" style="margin-top:0">
+    <div class="coupleDecision">
+      <div class="coupleDecisionTop"><div><b>La ceremonia civil comenzará a las 17:30</b><span>Marea Wedding Studio · afecta a ceremonia y coordinación de proveedores.</span></div><span class="decisionBadge">Pendiente</span></div>
+      <button class="btn primary decisionConfirm" type="button">Confirmar decisión</button>
+    </div>
+  </div>
+  <p class="fine">Aquí solo aparecen acuerdos que cambian la operación de la boda. No es un chat ni sustituye vuestras conversaciones.</p>
+</div>
+
 </section>
 
 <section id="manageView" class="hidden">
@@ -105,6 +118,18 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.
   </div>
   <p class="fine">La wedding planner ve estos cambios desde ONE Partner. No se crea un chat ni se altera Planning de ONE.</p>
 </div>
+
+<div class="sharedBlock coupleDecisionBlock">
+  <div class="sharedTitle"><h2>Decisiones por confirmar</h2><span class="sharedCount decisionCount">1 pendiente</span></div>
+  <div class="card" style="margin-top:0">
+    <div class="coupleDecision">
+      <div class="coupleDecisionTop"><div><b>La ceremonia civil comenzará a las 17:30</b><span>Marea Wedding Studio · afecta a ceremonia y coordinación de proveedores.</span></div><span class="decisionBadge">Pendiente</span></div>
+      <button class="btn primary decisionConfirm" type="button">Confirmar decisión</button>
+    </div>
+  </div>
+  <p class="fine">Aquí solo aparecen acuerdos que cambian la operación de la boda. No es un chat ni sustituye vuestras conversaciones.</p>
+</div>
+
 <div class="actions" style="margin-top:24px"><a class="btn soft" style="text-decoration:none;text-align:center" href="./one-partner-preview.html">← Volver a la vista de la planner</a></div>
 </section>
 
@@ -134,6 +159,13 @@ document.getElementById('backPermissions').onclick=()=>show(req);
 document.getElementById('revokeBtn').onclick=()=>{show(req);document.querySelector('.lead').textContent='El acceso de Marea Wedding Studio ha sido revocado. Podéis volver a autorizarlo si lo necesitáis.'};
 function wireChecks(root=document){root.querySelectorAll('.coupleResp').forEach(c=>{if(c.dataset.wired)return;c.dataset.wired='1';c.addEventListener('change',()=>c.closest('.resp').classList.toggle('done',c.checked))})}
 wireChecks();
+document.querySelectorAll('.decisionConfirm').forEach(btn=>btn.addEventListener('click',()=>{
+  const card=btn.closest('.coupleDecision');
+  const badge=card.querySelector('.decisionBadge');
+  badge.textContent='Confirmada';badge.style.background='#edf4ef';badge.style.color='#315f49';
+  btn.textContent='Decisión confirmada';btn.disabled=true;
+  document.querySelectorAll('.decisionCount').forEach(x=>x.textContent='0 pendientes');
+}));
 const coupleRespModal=document.getElementById('coupleRespModal');
 document.querySelectorAll('.addCoupleResp').forEach(b=>b.addEventListener('click',()=>coupleRespModal.classList.remove('hidden')));
 document.getElementById('closeCoupleResp').onclick=()=>coupleRespModal.classList.add('hidden');
