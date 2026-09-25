@@ -122,12 +122,12 @@ $('authForm').onsubmit=async e=>{
   e.preventDefault();msg('authError','');msg('authInfo','');const email=$('email').value.trim().toLowerCase(),password=$('password').value;$('authSubmit').disabled=true;
   try{
     if(authMode==='signin'){const {error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error;await start()}
-    else{const {data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:location.href.split('?')[0]}});if(error)throw error;if(data.session)await start();else msg('authInfo','Cuenta creada. Revisa tu email para confirmar la dirección.')}
+    else{const {data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:location.origin+'/'}});if(error)throw error;if(data.session)await start();else msg('authInfo','Cuenta creada. Revisa tu email para confirmar la dirección.')}
   }catch(err){msg('authError',friendlyAuth(err))}finally{$('authSubmit').disabled=false}
 };
 $('resetBtn').onclick=async()=>{
   const email=$('email').value.trim().toLowerCase();if(!email){msg('authError','Escribe primero tu email profesional.');return}
-  $('resetBtn').disabled=true;const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:location.href.split('?')[0]+'?reset=1'});
+  $('resetBtn').disabled=true;const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:location.origin+'/'});
   msg(error?'authError':'authInfo',error?'No se ha podido enviar el enlace.':'Te hemos enviado un enlace para cambiar la contraseña.');$('resetBtn').disabled=false;
 };
 function friendlyAuth(err){const m=String(err?.message||'').toLowerCase();if(m.includes('invalid login'))return'Email o contraseña incorrectos.';if(m.includes('email not confirmed'))return'Confirma primero tu email.';return'No se ha podido completar el acceso.'}
