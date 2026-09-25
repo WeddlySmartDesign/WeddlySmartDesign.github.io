@@ -96,16 +96,15 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
 
   <div class="sectionTitle"><h2>Estado de la boda</h2><span class="muted">lectura actual</span></div>
   <div class="summaryGrid">
-    <div class="summaryBox actionable" data-detail="rsvp"><div class="big">126</div><h3>Confirmados</h3><p>14 RSVP pendientes · 8 no asisten</p><div class="summaryMore"><span>Invitados + RSVP</span><span>Ver detalle →</span></div></div>
+    <div class="summaryBox actionable" data-detail="rsvp"><div class="big">126</div><h3>Confirmados</h3><p>14 RSVP pendientes · 8 no asisten</p><div class="summaryMore"><span>Invitación + RSVP</span><span>Ver detalle →</span></div></div>
     <div class="summaryBox actionable" data-detail="seating"><div class="big">9</div><h3>Sin mesa</h3><p>117 sentados · 14 mesas</p><div class="summaryMore"><span>Mesas</span><span>Ver quiénes →</span></div></div>
     <div class="summaryBox actionable" data-detail="catering"><div class="big">6</div><h3>Menús pendientes</h3><p>5 necesidades alimentarias registradas · 3 tronas</p><div class="summaryMore"><span>Catering</span><span>Ver detalle →</span></div></div>
     <div class="summaryBox actionable" data-detail="transport"><div class="big">38</div><h3>Transporte</h3><p>personas confirmadas lo necesitan</p><div class="summaryMore"><span>Transporte</span><span>Ver listado →</span></div></div>
     <div class="summaryBox actionable" data-detail="planning"><div class="big">12</div><h3>Tareas abiertas</h3><p>2 vencidas · 47 completadas</p><div class="summaryMore"><span>Planning</span><span>Ver pendientes →</span></div></div>
     <div class="summaryBox actionable" data-detail="events"><div class="big">2</div><h3>Eventos extra</h3><p>preboda y brunch activos</p><div class="summaryMore"><span>Eventos</span><span>Ver detalle →</span></div></div>
-    <div class="summaryBox actionable" data-detail="invitation"><div class="big">✓</div><h3>Invitación</h3><p>RSVP activo · recordatorios disponibles</p><div class="summaryMore"><span>Invitación</span><span>Ver estado →</span></div></div>
   </div>
 
-  <div class="sectionTitle"><h2>Cambios desde tu última revisión</h2></div>
+  <div class="sectionTitle"><h2>Cambios desde tu última revisión</h2><span class="muted">última revisión · hace 2 días</span></div>
   <div class="card" id="changesCard">
     <div class="changeRow"><span><span class="dot"></span>Invitados / RSVP / mesas</span><b>Actualizado</b></div>
     <div class="changeRow"><span>Confirmados</span><span class="delta">+3</span></div>
@@ -113,7 +112,7 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
     <div class="changeRow"><span>Sin mesa</span><span class="delta">+2</span></div>
   </div>
 
-  <div class="sectionTitle"><h2>Responsabilidades</h2><button id="addResp" class="btn small primary" type="button">Añadir</button></div>
+  <div class="sectionTitle"><h2>Responsabilidades compartidas</h2><button id="addResp" class="btn small primary" type="button">Añadir</button></div>
   <div class="card" id="respCard">
     <div class="respRow"><input class="check" type="checkbox"><div><div class="respTitle"><b>Confirmar horario definitivo con catering</b></div><div class="respMeta">Pendiente de ti · 18 feb 2027 · Llamar después de cerrar número de invitados</div></div><span class="pill">Planner</span></div>
     <div class="respRow"><input class="check" type="checkbox"><div><div class="respTitle"><b>Enviar selección musical ceremonia</b></div><div class="respMeta">Pendiente de la pareja · 28 feb 2027</div></div><span class="pill">Pareja</span></div>
@@ -172,7 +171,7 @@ document.getElementById('backBtn').addEventListener('click',showHub);homeBtn.add
 const operationalData={
   rsvp:{
     eyebrow:'Invitados + RSVP',title:'Qué queda por cerrar',lead:'Solo información operativa compartida por la pareja.',
-    body:'<div class="detailList"><div class="detailItem"><div><b>14 RSVP pendientes</b><span>Último recordatorio: hace 5 días</span></div><div class="detailValue">Pendiente</div></div><div class="detailItem"><div><b>3 respuestas nuevas</b><span>desde tu última revisión</span></div><div class="detailValue">+3</div></div><div class="detailItem"><div><b>8 no asisten</b><span>estado actual</span></div><div class="detailValue">8</div></div></div><div class="detailHint">La planner ve el estado de coordinación; el envío de recordatorios sigue haciéndose desde el ONE de la pareja.</div>'
+    body:'<div class="detailList"><div class="detailItem"><div><b>Invitación</b><span>publicada y operativa</span></div><div class="detailValue">Activa</div></div><div class="detailItem"><div><b>14 RSVP pendientes</b><span>Último recordatorio: hace 5 días</span></div><div class="detailValue">Pendiente</div></div><div class="detailItem"><div><b>3 respuestas nuevas</b><span>desde tu última revisión</span></div><div class="detailValue">+3</div></div><div class="detailItem"><div><b>8 no asisten</b><span>estado actual</span></div><div class="detailValue">8</div></div></div><div class="detailHint">La planner ve el estado de coordinación; la edición de la invitación y el envío de recordatorios siguen haciéndose desde el ONE de la pareja.</div>'
   },
   seating:{
     eyebrow:'Mesas',title:'9 confirmados sin mesa',lead:'Personas que todavía necesitan ubicación.',
