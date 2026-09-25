@@ -5,78 +5,82 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#f2efe9">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>ONE Partner · Vista previa</title>
 <style>
 :root{--ink:#181715;--muted:#746f69;--paper:#f3f0eb;--card:#fff;--line:#e4ded7;--soft:#ebe6df;--dark:#1d1a17;--accent:#8e5b49;--good:#315f49;--warn:#a36528;--shadow:0 18px 60px rgba(38,31,24,.08)}
 *{box-sizing:border-box}html{background:var(--paper);scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(circle at 88% 0,#fff 0,transparent 34rem),var(--paper);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
 button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
 .app{max-width:1120px;margin:0 auto;padding:max(22px,env(safe-area-inset-top)) 18px calc(56px + env(safe-area-inset-bottom))}
-.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:baseline;gap:8px;letter-spacing:-.02em}.brand strong{font-size:20px}.brand span{font-size:11px;color:var(--muted);letter-spacing:.04em}
-.barRight{display:flex;align-items:center;gap:8px}.preview{font-size:10px;letter-spacing:.11em;text-transform:uppercase;border:1px solid #d8cec7;background:#fff7f3;color:#83503e;border-radius:99px;padding:7px 9px}.linkBtn{border:0;background:transparent;color:var(--muted);padding:9px;font-size:13px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:baseline;gap:8px;letter-spacing:-.02em}.brand strong{font-size:20px}.brand .byline{font-size:12px;color:var(--muted);letter-spacing:0;text-transform:none!important;font-variant:normal!important;font-feature-settings:"smcp" 0,"c2sc" 0;font-weight:400}.brandName{display:inline!important;text-transform:none!important;font-variant:normal!important;letter-spacing:0!important}
+.barRight{display:flex;align-items:center;gap:8px}.studioUser{display:flex;align-items:center;gap:9px;margin-right:4px}.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#e8dfd8;color:#684b40;font-weight:750;font-size:12px}.studioUserText{line-height:1.15;text-align:right}.studioUserText b{display:block;font-size:12px;font-weight:700}.studioUserText span{display:block;font-size:10px;color:var(--muted);margin-top:2px}.preview{font-size:10px;letter-spacing:.11em;text-transform:uppercase;border:1px solid #d8cec7;background:#fff7f3;color:#83503e;border-radius:99px;padding:7px 9px}.linkBtn{border:0;background:transparent;color:var(--muted);padding:9px;font-size:13px}
 .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 11px}
 h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(38px,5vw,56px);font-weight:400;letter-spacing:-.045em;line-height:.98;margin-bottom:14px}h2{font-size:22px;letter-spacing:-.025em}h3{font-size:15px;margin-bottom:5px}.lead{color:#514d48;font-size:15px;line-height:1.5;max-width:720px}.muted{color:var(--muted)}
 .card{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:21px}.btn{border:0;border-radius:12px;min-height:46px;padding:12px 16px;font-weight:650}.btn.primary{background:var(--dark);color:#fff}.btn.soft{background:var(--soft);color:var(--ink)}.btn.small{min-height:38px;padding:9px 12px;font-size:13px}.btn:active{transform:translateY(1px)}
-.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;padding:18px 0 6px}.heroActions{flex:0 0 auto}.attention{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 6px}.attentionCard{display:flex;gap:12px;align-items:center;padding:13px 15px;border:1px solid var(--line);background:rgba(255,255,255,.7);border-radius:14px}.attentionIcon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#f4ebe5;color:#8a513b;font-weight:800}.attentionCard b{display:block;font-size:13px}.attentionCard span{display:block;font-size:11px;color:var(--muted);margin-top:2px}.weddingGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:12px}.weddingCard{width:100%;text-align:left;transition:.16s;position:relative}.weddingCard:hover{transform:translateY(-2px);box-shadow:0 22px 70px rgba(38,31,24,.11)}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;padding:18px 0 6px}.heroActions{flex:0 0 auto}.attention{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 6px}.attentionCard{display:flex;gap:12px;align-items:center;padding:13px 15px;border:1px solid var(--line);background:rgba(255,255,255,.7);border-radius:14px}.attentionIcon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#f4ebe5;color:#8a513b;font-weight:800}.attentionCard b{display:block;font-size:13px}.attentionCard span{display:block;font-size:11px;color:var(--muted);margin-top:2px}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:26px 0 10px}.toolbarLeft{display:flex;gap:7px;flex-wrap:wrap}.filter{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 11px;font-size:11px;color:var(--muted)}.filter.active{background:var(--dark);color:#fff;border-color:var(--dark)}.toolbarMeta{font-size:11px;color:var(--muted)}.weddingGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:12px}.weddingCard{width:100%;text-align:left;transition:.16s;position:relative}.weddingCard:hover{transform:translateY(-2px);box-shadow:0 22px 70px rgba(38,31,24,.11)}
 .weddingHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:18px}.date{font-size:12px;color:var(--muted)}.names{font-family:Georgia,"Times New Roman",serif;font-size:29px;letter-spacing:-.035em}.change{font-size:12px;color:#80533d;white-space:nowrap}.openCue{font-size:11px;color:var(--muted);margin-top:14px;text-align:right}.dot{width:8px;height:8px;border-radius:50%;background:#b87333;display:inline-block;margin-right:6px}
 .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.metric{padding:12px;border-radius:12px;background:#f7f5f2}.metric b{display:block;font-size:21px;letter-spacing:-.04em}.metric span{font-size:11px;color:var(--muted)}
-.sectionTitle{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:24px 0 12px}.sectionTitle h2{margin:0}.summaryGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.summaryBox{padding:17px;background:white;border:1px solid var(--line);border-radius:16px}.summaryBox .big{font-size:29px;font-weight:700;letter-spacing:-.05em}.summaryBox p{font-size:12px;color:var(--muted);line-height:1.4;margin:5px 0 0}
-.detailHeader{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.detailHeader h1{font-size:clamp(40px,7vw,58px)}.changeRow{display:flex;justify-content:space-between;gap:14px;border-top:1px solid var(--line);padding:13px 0}.changeRow:first-child{border-top:0}.delta{font-weight:700}
+.sectionTitle{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:24px 0 12px}.sectionTitle h2{margin:0}.summaryGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.summaryBox{padding:17px;background:white;border:1px solid var(--line);border-radius:16px;position:relative}.summaryBox.actionable{cursor:pointer;transition:.16s}.summaryBox.actionable:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(38,31,24,.07);border-color:#d4cbc3}.summaryMore{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:11px;padding-top:10px;border-top:1px solid var(--line);font-size:10px;color:var(--muted)}.summaryBox .big{font-size:29px;font-weight:700;letter-spacing:-.05em}.summaryBox p{font-size:12px;color:var(--muted);line-height:1.4;margin:5px 0 0}
+.detailHeader{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.detailActions{text-align:right}.reviewMeta{font-size:11px;color:var(--muted);margin-top:7px}.focusGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 24px}.focusCard{border:1px solid var(--line);border-radius:15px;background:#fff;padding:15px}.focusTop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}.focusLabel{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.focusState{font-size:10px;border-radius:99px;padding:4px 7px;background:#fff2e8;color:#8b572d}.focusCard b{display:block;font-size:14px;line-height:1.3}.focusCard p{font-size:11px;color:var(--muted);line-height:1.4;margin:5px 0 0}.detailHeader h1{font-size:clamp(40px,7vw,58px)}.changeRow{display:flex;justify-content:space-between;gap:14px;border-top:1px solid var(--line);padding:13px 0}.changeRow:first-child{border-top:0}.delta{font-weight:700}
 .respRow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line)}.respRow:first-child{border-top:0}.check{width:22px;height:22px;margin-top:2px}.respRow.done .respTitle{text-decoration:line-through;color:var(--muted)}.respMeta{font-size:12px;color:var(--muted);margin-top:5px}.pill{display:inline-block;padding:5px 8px;border-radius:99px;font-size:10px;letter-spacing:.07em;text-transform:uppercase;background:var(--soft);color:var(--muted)}
 .permissionGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.permissionChip{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#f7f5f2;border-radius:11px;padding:11px 12px;font-size:13px}.visible{color:var(--good);background:#edf4ef}
-.modalBack{position:fixed;inset:0;background:rgba(21,18,16,.38);backdrop-filter:blur(4px);display:grid;place-items:center;padding:18px;z-index:20}.modal{width:min(620px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:22px;padding:22px;box-shadow:0 30px 100px rgba(0,0,0,.24)}.modalHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}.x{border:0;background:var(--soft);width:36px;height:36px;border-radius:50%;font-size:18px}
+.modalBack{position:fixed;inset:0;background:rgba(21,18,16,.38);backdrop-filter:blur(4px);display:grid;place-items:center;padding:18px;z-index:20}.detailModal{width:min(720px,100%);max-height:88vh;overflow:auto}.detailList{margin-top:10px}.detailItem{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}.detailItem:first-child{border-top:0}.detailItem b{display:block;font-size:13px}.detailItem span{display:block;font-size:11px;color:var(--muted);margin-top:3px}.detailValue{font-size:12px;font-weight:700;text-align:right}.detailSection{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.detailSection h3{margin-bottom:8px}.detailHint{font-size:11px;color:var(--muted);line-height:1.5;background:#f7f5f2;border-radius:11px;padding:10px 12px}.modal{width:min(620px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:22px;padding:22px;box-shadow:0 30px 100px rgba(0,0,0,.24)}.modalHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}.x{border:0;background:var(--soft);width:36px;height:36px;border-radius:50%;font-size:18px}
 .switchrow{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px 0;border-top:1px solid var(--line)}.switchrow:first-child{border-top:0}.switch{position:relative;width:42px;height:25px;flex:0 0 auto}.switch input{opacity:0;position:absolute}.track{position:absolute;inset:0;background:#d7d1ca;border-radius:99px}.track:after{content:"";position:absolute;width:19px;height:19px;top:3px;left:3px;background:#fff;border-radius:50%;box-shadow:0 1px 3px #999;transition:.15s}.switch input:checked+.track{background:var(--dark)}.switch input:checked+.track:after{transform:translateX(17px)}.sensitive{background:#fcf6f3;margin:8px -10px 0;padding:13px 10px;border-radius:12px}.fine{font-size:11px;color:var(--muted);line-height:1.45}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#1f1c19;color:#fff;border-radius:99px;padding:11px 15px;font-size:12px;z-index:40;box-shadow:0 12px 40px rgba(0,0,0,.2)}
 .footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);font-size:11px;color:#8a847d;display:flex;justify-content:space-between;gap:12px}
-@media(max-width:760px){.app{padding-left:14px;padding-right:14px}.bar{margin-bottom:24px}.hero,.detailHeader{display:block}.heroActions{margin-top:16px}.attention{grid-template-columns:1fr}.weddingGrid,.summaryGrid,.permissionGrid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}.weddingCard:hover{transform:none}.detailHeader .btn{margin-top:12px}.footer{display:block}.footer span{display:block;margin-bottom:5px}}
-@media(max-width:430px){.metrics{grid-template-columns:1fr 1fr}.brand span{display:none}.barRight .linkBtn{display:none}.respRow{grid-template-columns:auto 1fr}.respRow .pill{grid-column:2;justify-self:start}}
+@media(max-width:760px){.app{padding-left:14px;padding-right:14px}.bar{margin-bottom:24px}.hero,.detailHeader{display:block}.heroActions{margin-top:16px}.attention{grid-template-columns:1fr}.weddingGrid,.summaryGrid,.permissionGrid,.focusGrid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,1fr)}.weddingCard:hover{transform:none}.detailHeader .btn{margin-top:12px}.footer{display:block}.footer span{display:block;margin-bottom:5px}}
+@media(max-width:430px){.metrics{grid-template-columns:1fr 1fr}.studioUserText{display:none}.brand span{font-size:10px}.barRight .linkBtn{display:none}.respRow{grid-template-columns:auto 1fr}.respRow .pill{grid-column:2;justify-self:start}}
 </style>
 </head>
 <body>
 <div class="app">
 <header class="bar">
-  <div class="brand"><strong>ONE Partner</strong><span>by WeddlySmartDesign</span></div>
-  <div class="barRight"><span class="preview">Vista previa</span><button id="homeBtn" class="linkBtn hidden" type="button">Mis bodas</button></div>
+  <div class="brand"><strong>ONE Partner</strong><span class="byline">by <span class="brandName">WeddlySmartDesign</span></span></div>
+  <div class="barRight"><div class="studioUser"><div class="studioUserText"><b>Marta · Marea Wedding Studio</b><span>Wedding planner</span></div><div class="avatar">MM</div></div><span class="preview">Vista previa</span><button id="homeBtn" class="linkBtn hidden" type="button">Mis bodas</button></div>
 </header>
 
 <main id="hub">
   <div class="hero">
     <div>
-      <p class="eyebrow">Estudio Flores & Sal</p>
-      <h1>Tus bodas, claras.</h1>
-      <p class="lead">Un vistazo profesional a cada pareja: qué ha cambiado, qué está pendiente y qué necesita tu atención, sin entrar en su ONE.</p>
+      <p class="eyebrow">Marea Wedding Studio</p>
+      <h1>Qué necesita tu atención.</h1>
+      <p class="lead">Tus parejas siguen trabajando en ONE. Aquí recibes la lectura profesional: cambios, pendientes y puntos que necesitan coordinación.</p>
     </div>
     <div class="heroActions"><button id="connectBtn" class="btn primary" type="button">Conectar una boda</button></div>
   </div>
 
   <div class="attention">
-    <div class="attentionCard"><div class="attentionIcon">3</div><div><b>Cambios por revisar</b><span>en Clara & Martín</span></div></div>
-    <div class="attentionCard"><div class="attentionIcon">2</div><div><b>Tareas vencidas</b><span>requieren seguimiento</span></div></div>
-    <div class="attentionCard"><div class="attentionIcon">9</div><div><b>Invitados sin mesa</b><span>pendientes de ubicar</span></div></div>
+    <div class="attentionCard"><div class="attentionIcon">3</div><div><b>Cambios por revisar</b><span>Clara & Martín · desde tu última revisión</span></div></div>
+    <div class="attentionCard"><div class="attentionIcon">2</div><div><b>Tareas vencidas</b><span>1 de Clara & Martín · 1 de Elena & Dani</span></div></div>
+    <div class="attentionCard"><div class="attentionIcon">9</div><div><b>Invitados sin mesa</b><span>todos en Clara & Martín</span></div></div>
   </div>
 
+  <div class="toolbar"><div class="toolbarLeft"><button class="filter active" data-filter="all" type="button">Todas · 2</button><button class="filter" data-filter="changes" type="button">Con cambios · 1</button><button class="filter" data-filter="pending" type="button">Con pendientes · 2</button></div><div class="toolbarMeta">Actualizado ahora</div></div>
   <div class="sectionTitle"><h2>Mis bodas</h2><span class="muted">2 activas</span></div>
   <div class="weddingGrid">
-    <button class="card weddingCard" data-wedding="clara" type="button">
+    <button class="card weddingCard" data-wedding="clara" data-has-changes="true" data-has-pending="true" type="button">
       <div class="weddingHead">
-        <div><div class="names">Clara & Martín</div><div class="date">22 may 2027</div></div>
+        <div><div class="names">Clara & Martín</div><div class="date">22 may 2027 · 126 confirmados</div></div>
         <div class="change"><span class="dot"></span>3 cambios</div>
       </div>
       <div class="metrics">
-        <div class="metric"><b>126</b><span>confirmados</span></div>
         <div class="metric"><b>14</b><span>RSVP pendientes</span></div>
         <div class="metric"><b>9</b><span>sin mesa</span></div>
+        <div class="metric"><b>2</b><span>tareas vencidas</span></div>
       </div>
       <div class="openCue">Abrir resumen →</div>
     </button>
 
-    <button class="card weddingCard" data-wedding="elena" type="button">
+    <button class="card weddingCard" data-wedding="elena" data-has-changes="false" data-has-pending="true" type="button">
       <div class="weddingHead">
-        <div><div class="names">Elena & Dani</div><div class="date">11 sep 2027</div></div>
+        <div><div class="names">Elena & Dani</div><div class="date">11 sep 2027 · 84 confirmados</div></div>
         <div class="date">Al día</div>
       </div>
       <div class="metrics">
-        <div class="metric"><b>84</b><span>confirmados</span></div>
         <div class="metric"><b>31</b><span>RSVP pendientes</span></div>
         <div class="metric"><b>0</b><span>sin mesa</span></div>
+        <div class="metric"><b>0</b><span>tareas vencidas</span></div>
       </div>
       <div class="openCue">Abrir resumen →</div>
     </button>
@@ -90,13 +94,15 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
     <button id="reviewBtn" class="btn soft" type="button">Marcar como revisado</button>
   </div>
 
+  <div class="sectionTitle"><h2>Estado de la boda</h2><span class="muted">lectura actual</span></div>
   <div class="summaryGrid">
-    <div class="summaryBox"><div class="big">126</div><h3>Confirmados</h3><p>14 RSVP pendientes · 8 no asisten</p></div>
-    <div class="summaryBox"><div class="big">9</div><h3>Sin mesa</h3><p>117 sentados · 14 mesas</p></div>
-    <div class="summaryBox"><div class="big">6</div><h3>Menús pendientes</h3><p>5 necesidades alimentarias · 3 tronas</p></div>
-    <div class="summaryBox"><div class="big">38</div><h3>Transporte</h3><p>personas confirmadas lo necesitan</p></div>
-    <div class="summaryBox"><div class="big">12</div><h3>Tareas abiertas</h3><p>2 vencidas · 47 completadas</p></div>
-    <div class="summaryBox"><div class="big">2</div><h3>Eventos extra</h3><p>preboda y brunch activos</p></div>
+    <div class="summaryBox actionable" data-detail="rsvp"><div class="big">126</div><h3>Confirmados</h3><p>14 RSVP pendientes · 8 no asisten</p><div class="summaryMore"><span>Invitados + RSVP</span><span>Ver detalle →</span></div></div>
+    <div class="summaryBox actionable" data-detail="seating"><div class="big">9</div><h3>Sin mesa</h3><p>117 sentados · 14 mesas</p><div class="summaryMore"><span>Mesas</span><span>Ver quiénes →</span></div></div>
+    <div class="summaryBox actionable" data-detail="catering"><div class="big">6</div><h3>Menús pendientes</h3><p>5 necesidades alimentarias registradas · 3 tronas</p><div class="summaryMore"><span>Catering</span><span>Ver detalle →</span></div></div>
+    <div class="summaryBox actionable" data-detail="transport"><div class="big">38</div><h3>Transporte</h3><p>personas confirmadas lo necesitan</p><div class="summaryMore"><span>Transporte</span><span>Ver listado →</span></div></div>
+    <div class="summaryBox actionable" data-detail="planning"><div class="big">12</div><h3>Tareas abiertas</h3><p>2 vencidas · 47 completadas</p><div class="summaryMore"><span>Planning</span><span>Ver pendientes →</span></div></div>
+    <div class="summaryBox actionable" data-detail="events"><div class="big">2</div><h3>Eventos extra</h3><p>preboda y brunch activos</p><div class="summaryMore"><span>Eventos</span><span>Ver detalle →</span></div></div>
+    <div class="summaryBox actionable" data-detail="invitation"><div class="big">✓</div><h3>Invitación</h3><p>RSVP activo · recordatorios disponibles</p><div class="summaryMore"><span>Invitación</span><span>Ver estado →</span></div></div>
   </div>
 
   <div class="sectionTitle"><h2>Cambios desde tu última revisión</h2></div>
@@ -122,10 +128,20 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
     <div class="permissionChip"><span>Transporte</span><span class="pill visible">Visible</span></div>
     <div class="permissionChip"><span>Eventos extra</span><span class="pill visible">Visible</span></div>
     <div class="permissionChip"><span>Planning</span><span class="pill visible">Visible</span></div>
+    <div class="permissionChip"><span>Invitación</span><span class="pill visible">Visible</span></div>
+    <div class="permissionChip"><span>Pagos y presupuesto</span><span class="pill">No compartido</span></div>
   </div></div>
 </main>
 
 <footer class="footer"><span>Vista previa de ONE Partner · datos ficticios</span><span>WeddlySmartDesign</span></footer>
+</div>
+
+
+<div id="operationalModal" class="modalBack hidden">
+  <div class="modal detailModal">
+    <div class="modalHead"><div><p class="eyebrow" id="operationalEyebrow">Detalle</p><h2 id="operationalTitle" style="margin-bottom:6px"></h2><p id="operationalLead" class="muted" style="font-size:13px"></p></div><button id="closeOperational" class="x" type="button">×</button></div>
+    <div id="operationalBody"></div>
+  </div>
 </div>
 
 <div id="connectModal" class="modalBack hidden">
@@ -152,11 +168,49 @@ function showHub(){detail.classList.add('hidden');hub.classList.remove('hidden')
 function showDetail(){hub.classList.add('hidden');detail.classList.remove('hidden');homeBtn.classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('[data-wedding]').forEach(b=>b.addEventListener('click',showDetail));
 document.getElementById('backBtn').addEventListener('click',showHub);homeBtn.addEventListener('click',showHub);
+
+const operationalData={
+  rsvp:{
+    eyebrow:'Invitados + RSVP',title:'Qué queda por cerrar',lead:'Solo información operativa compartida por la pareja.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>14 RSVP pendientes</b><span>Último recordatorio: hace 5 días</span></div><div class="detailValue">Pendiente</div></div><div class="detailItem"><div><b>3 respuestas nuevas</b><span>desde tu última revisión</span></div><div class="detailValue">+3</div></div><div class="detailItem"><div><b>8 no asisten</b><span>estado actual</span></div><div class="detailValue">8</div></div></div><div class="detailHint">La planner ve el estado de coordinación; el envío de recordatorios sigue haciéndose desde el ONE de la pareja.</div>'
+  },
+  seating:{
+    eyebrow:'Mesas',title:'9 confirmados sin mesa',lead:'Personas que todavía necesitan ubicación.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Lucía Ortega</b><span>Familia Martín · confirmada</span></div><div class="detailValue">Sin mesa</div></div><div class="detailItem"><div><b>Álvaro Ruiz</b><span>Amigos universidad · confirmado</span></div><div class="detailValue">Sin mesa</div></div><div class="detailItem"><div><b>María + acompañante</b><span>Amigos Clara · confirmados</span></div><div class="detailValue">2 plazas</div></div><div class="detailItem"><div><b>+ 5 personas</b><span>resto del listado pendiente</span></div><div class="detailValue">Ver 9</div></div></div><div class="detailHint">Partner no mueve mesas ni modifica el plano. La pareja conserva la edición en ONE.</div>'
+  },
+  catering:{
+    eyebrow:'Catering',title:'Información que necesita el proveedor',lead:'Recuentos y casos operativos, sin exponer más datos de los necesarios.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>6 menús pendientes</b><span>confirmados sin elección cerrada</span></div><div class="detailValue">6</div></div><div class="detailItem"><div><b>Necesidades alimentarias</b><span>5 personas registradas</span></div><div class="detailValue">5</div></div><div class="detailItem"><div><b>Tronas</b><span>solicitadas por familias confirmadas</span></div><div class="detailValue">3</div></div></div><div class="detailSection"><h3>Casos a revisar</h3><div class="detailItem"><div><b>Inés García</b><span>alergia a frutos secos</span></div><div class="detailValue">Registrado</div></div><div class="detailItem"><div><b>Mario López</b><span>menú sin gluten</span></div><div class="detailValue">Registrado</div></div></div>'
+  },
+  transport:{
+    eyebrow:'Transporte',title:'38 personas necesitan transporte',lead:'Listado operativo compartido para coordinación.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Ida + vuelta</b><span>servicio completo</span></div><div class="detailValue">29</div></div><div class="detailItem"><div><b>Solo ida</b><span>pendiente de horario definitivo</span></div><div class="detailValue">6</div></div><div class="detailItem"><div><b>Solo vuelta</b><span>pendiente de horario definitivo</span></div><div class="detailValue">3</div></div></div><div class="detailHint">El listado real podrá mostrar nombres cuando el permiso de Transporte esté activo; no incorpora teléfonos o emails por defecto.</div>'
+  },
+  planning:{
+    eyebrow:'Planning',title:'12 tareas abiertas',lead:'Lo que necesita seguimiento sin reproducir todo el planning de la pareja.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Confirmar horario definitivo con catering</b><span>vencida · pendiente de planner</span></div><div class="detailValue">Vencida</div></div><div class="detailItem"><div><b>Cerrar selección musical ceremonia</b><span>vencida · pendiente de pareja</span></div><div class="detailValue">Vencida</div></div><div class="detailItem"><div><b>Revisar versión final de mesas</b><span>vence en 8 días</span></div><div class="detailValue">Próxima</div></div></div><div class="detailHint">Partner muestra estado y seguimiento. No duplica ni sustituye la checklist completa de ONE.</div>'
+  },
+  events:{
+    eyebrow:'Eventos extra',title:'2 eventos activos',lead:'Cada evento mantiene sus invitados y RSVP propios.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Preboda</b><span>62 invitados · 51 confirmados · 11 pendientes</span></div><div class="detailValue">Activa</div></div><div class="detailItem"><div><b>Brunch</b><span>48 invitados · 40 confirmados · 8 pendientes</span></div><div class="detailValue">Activo</div></div></div><div class="detailHint">Los pagos de los eventos no se muestran salvo que la pareja conceda también el permiso económico.</div>'
+  },
+  invitation:{
+    eyebrow:'Invitación + RSVP',title:'Invitación activa',lead:'Estado de publicación y respuesta, no editor de diseño.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Invitación</b><span>publicada y operativa</span></div><div class="detailValue">Activa</div></div><div class="detailItem"><div><b>RSVP</b><span>126 confirmados · 14 pendientes</span></div><div class="detailValue">Abierto</div></div><div class="detailItem"><div><b>Último cambio</b><span>configuración RSVP actualizada</span></div><div class="detailValue">Hace 2 días</div></div></div><div class="detailHint">La wedding planner no edita la invitación desde Partner. La edición sigue perteneciendo a la pareja en ONE.</div>'
+  }
+};
+const operationalModal=document.getElementById('operationalModal');
+function openOperational(key){const d=operationalData[key];if(!d)return;document.getElementById('operationalEyebrow').textContent=d.eyebrow;document.getElementById('operationalTitle').textContent=d.title;document.getElementById('operationalLead').textContent=d.lead;document.getElementById('operationalBody').innerHTML=d.body;operationalModal.classList.remove('hidden')}
+document.querySelectorAll('[data-detail]').forEach(card=>card.addEventListener('click',()=>openOperational(card.dataset.detail)));
+document.getElementById('closeOperational').onclick=()=>operationalModal.classList.add('hidden');
+operationalModal.addEventListener('click',e=>{if(e.target===operationalModal)operationalModal.classList.add('hidden')});
+
 const modal=document.getElementById('connectModal');document.getElementById('connectBtn').onclick=()=>modal.classList.remove('hidden');document.getElementById('closeModal').onclick=()=>modal.classList.add('hidden');modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.add('hidden')});
 function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.remove('hidden');setTimeout(()=>el.classList.add('hidden'),2200)}
-document.getElementById('createDemoLink').onclick=()=>{modal.classList.add('hidden');toast('En la versión real, aquí se genera el enlace privado para la pareja.')};
+document.getElementById('createDemoLink').onclick=()=>{location.href='./one-partner-couple-preview.html'};
 document.getElementById('reviewBtn').onclick=()=>{document.getElementById('changesCard').innerHTML='<div style="text-align:center;padding:22px;color:var(--muted)">No hay cambios desde tu última revisión.</div>';toast('Revisión registrada')};
 document.querySelectorAll('.check').forEach(c=>c.addEventListener('change',()=>c.closest('.respRow').classList.toggle('done',c.checked)));
 document.getElementById('addResp').onclick=()=>toast('Responsabilidad añadida: flujo disponible en la versión real.');
+document.querySelectorAll('.filter').forEach(f=>f.addEventListener('click',()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));f.classList.add('active');const mode=f.dataset.filter;document.querySelectorAll('.weddingCard').forEach(card=>{const show=mode==='all'||(mode==='changes'&&card.dataset.hasChanges==='true')||(mode==='pending'&&card.dataset.hasPending==='true');card.classList.toggle('hidden',!show)})}));
 </script>
 </body></html>
