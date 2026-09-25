@@ -215,16 +215,19 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
       <div class="focusTop"><span class="focusLabel">Cierre de invitados</span><span class="focusState">Bloqueado</span></div>
       <b>14 RSVP siguen pendientes</b>
       <p>No conviene cerrar catering, transporte ni listados finales todavía.</p>
+      <span class="summaryMore" style="margin-top:12px"><span>Acción sugerida</span><span class="blockerAction" data-resp-title="Cerrar RSVP pendientes para proveedores" data-resp-meta="Pendiente de la pareja · antes de la próxima entrega">Pedir a la pareja →</span></span>
     </button>
     <button class="focusCard" data-detail="seating" type="button">
       <div class="focusTop"><span class="focusLabel">Versión final de mesas</span><span class="focusState">Bloqueado</span></div>
       <b>9 confirmados no tienen mesa</b>
       <p>La versión para proveedores todavía no debería darse por cerrada.</p>
+      <span class="summaryMore" style="margin-top:12px"><span>Acción sugerida</span><span class="blockerAction" data-resp-title="Cerrar distribución final de mesas" data-resp-meta="Pendiente de la pareja · antes de entregar seating">Pedir a la pareja →</span></span>
     </button>
     <button class="focusCard" data-detail="planning" type="button">
       <div class="focusTop"><span class="focusLabel">Seguimiento</span><span class="focusState">Atención</span></div>
       <b>2 tareas están vencidas</b>
       <p>Una depende de la planner y otra de la pareja.</p>
+      <span class="summaryMore" style="margin-top:12px"><span>Seguimiento</span><span>Ver responsabilidades →</span></span>
     </button>
   </div>
 
@@ -497,7 +500,18 @@ const operationalData={
 };
 const operationalModal=document.getElementById('operationalModal');
 function openOperational(key){const d=operationalData[key];if(!d)return;document.getElementById('operationalEyebrow').textContent=d.eyebrow;document.getElementById('operationalTitle').textContent=d.title;document.getElementById('operationalLead').textContent=d.lead;document.getElementById('operationalBody').innerHTML=d.body;operationalModal.classList.remove('hidden')}
-document.querySelectorAll('[data-detail]').forEach(card=>card.addEventListener('click',()=>openOperational(card.dataset.detail)));
+document.querySelectorAll('[data-detail]').forEach(card=>card.addEventListener('click',e=>{if(e.target.closest('.blockerAction'))return;openOperational(card.dataset.detail)}));
+document.querySelectorAll('.blockerAction').forEach(a=>a.addEventListener('click',e=>{
+  e.preventDefault();e.stopPropagation();
+  const title=a.dataset.respTitle,meta=a.dataset.respMeta;
+  const row=document.createElement('div');row.className='respRow';
+  row.innerHTML='<input class="check" type="checkbox"><div><div class="respTitle"><b></b></div><div class="respMeta"></div></div><span class="pill">Pareja</span>';
+  row.querySelector('b').textContent=title;row.querySelector('.respMeta').textContent=meta+' · creado desde un bloqueo';
+  document.getElementById('respCard').prepend(row);
+  row.querySelector('.check').addEventListener('change',ev=>row.classList.toggle('done',ev.target.checked));
+  a.textContent='Responsabilidad creada';a.style.pointerEvents='none';
+  toast('Responsabilidad compartida creada para la pareja');
+}));
 document.getElementById('closeOperational').onclick=()=>operationalModal.classList.add('hidden');
 operationalModal.addEventListener('click',e=>{if(e.target===operationalModal)operationalModal.classList.add('hidden')});
 
