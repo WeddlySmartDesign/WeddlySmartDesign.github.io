@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f3f0eb">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>ONE Partner · Permisos profesionales</title>
+<style>
+:root{--ink:#181715;--muted:#746f69;--paper:#f3f0eb;--card:#fff;--line:#e4ded7;--soft:#ebe6df;--dark:#1d1a17;--accent:#8e5b49;--good:#315f49;--danger:#963e37;--shadow:0 18px 60px rgba(38,31,24,.08)}
+*{box-sizing:border-box}html{background:var(--paper)}body{margin:0;min-height:100vh;background:radial-gradient(circle at 88% 0,#fff 0,transparent 34rem),var(--paper);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
+button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.shell{max-width:780px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) 18px calc(54px + env(safe-area-inset-bottom))}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:17px;margin-bottom:34px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;gap:8px}.brand strong{font-size:20px}.byline{font-size:12px;color:var(--muted);text-transform:none!important;font-variant:normal!important;letter-spacing:0!important}.brandName{text-transform:none!important;font-variant:normal!important;letter-spacing:0!important}.preview{font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:7px 9px;border:1px solid #d8cec7;border-radius:99px;color:#83503e;background:#fff7f3}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 11px}h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(40px,7vw,60px);font-weight:400;line-height:.98;letter-spacing:-.045em;margin-bottom:17px}h2{font-size:22px;letter-spacing:-.025em}.lead{font-size:16px;line-height:1.55;color:#514d48;max-width:650px}
+.card{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:21px;margin-top:20px}.who{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:4px}.whoName{font-family:Georgia,"Times New Roman",serif;font-size:27px;letter-spacing:-.035em}.whoMeta{font-size:12px;color:var(--muted);margin-top:4px}.badge{font-size:10px;letter-spacing:.08em;text-transform:uppercase;border-radius:99px;padding:6px 8px;background:#edf4ef;color:var(--good)}
+.permission{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.permission:last-child{border-bottom:0}.permission h3{font-size:14px;margin:0 0 4px}.permission p{font-size:12px;color:var(--muted);line-height:1.4;margin:0;max-width:540px}.permission.sensitive{margin-top:10px;padding:15px 12px;background:#fcf6f3;border:1px solid #eadbd4;border-radius:13px}.sensitiveNote{font-size:10px;color:#8b5f4d;margin-top:5px}
+.switch{position:relative;width:44px;height:26px;flex:0 0 auto}.switch input{position:absolute;opacity:0}.track{position:absolute;inset:0;border-radius:99px;background:#d7d1ca;transition:.16s}.track:after{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.16);transition:.16s}.switch input:checked+.track{background:var(--dark)}.switch input:checked+.track:after{transform:translateX(18px)}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}.btn{border:0;border-radius:12px;min-height:47px;padding:12px 16px;font-weight:650}.primary{background:var(--dark);color:#fff;flex:1}.soft{background:var(--soft);color:var(--ink)}.danger{background:#fff3f1;color:var(--danger);border:1px solid #ead3d0}.fine{font-size:11px;line-height:1.5;color:var(--muted);margin-top:15px}.notice{padding:13px 14px;border-radius:13px;font-size:12px;line-height:1.5;margin-top:15px;background:#edf4ef;color:#315f49}
+.manageRow{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.sharedBlock{margin-top:20px}.sharedTitle{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:9px}.sharedTitle h2{margin:0}.sharedCount{font-size:11px;color:var(--muted)}.resp{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line)}.resp:first-child{border-top:0}.resp input{width:21px;height:21px;margin-top:2px}.resp b{font-size:13px;display:block}.resp span{font-size:11px;color:var(--muted);display:block;margin-top:4px;line-height:1.4}.resp.done b{text-decoration:line-through;color:var(--muted)}.manageRow:last-child{border-bottom:0}.manageRow b{font-size:14px}.manageRow span{font-size:11px;color:var(--muted);display:block;margin-top:3px}
+.successMark{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#eaf3ed;color:var(--good);font-size:25px;margin-bottom:18px}.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:11px;color:#8a847d}
+@media(max-width:560px){.shell{padding-left:14px;padding-right:14px}.brand .byline{font-size:10px}.who{display:block}.badge{display:inline-block;margin-top:10px}.actions{display:grid;grid-template-columns:1fr}.btn{width:100%}}
+</style>
+</head>
+<body>
+<main class="shell">
+<header class="top"><div class="brand"><strong>ONE Partner</strong><span class="byline">by <span class="brandName">WeddlySmartDesign</span></span></div><span class="preview">Vista previa</span></header>
+
+<section id="requestView">
+<p class="eyebrow">Clara & Martín · vuestra boda</p>
+<h1>Compartid solo lo que ayude.</h1>
+<p class="lead">Marea Wedding Studio quiere consultar parte de vuestra boda para coordinarse con vosotros. ONE sigue siendo vuestro: podéis decidir qué ve y quitar el acceso cuando queráis.</p>
+
+<div class="card">
+  <div class="who"><div><div class="whoName">Marea Wedding Studio</div><div class="whoMeta">Marta Molina · Wedding planner</div></div><span class="badge">Solo lectura</span></div>
+  <div class="permission"><div><h3>Invitados + RSVP</h3><p>Recuento de invitados y estado de las confirmaciones.</p></div><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+  <div class="permission"><div><h3>Mesas</h3><p>Situación de mesas y número de confirmados pendientes de sentar.</p></div><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+  <div class="permission"><div><h3>Catering</h3><p>Recuentos operativos de menús y necesidades alimentarias, sin compartir datos innecesarios.</p></div><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+  <div class="permission"><div><h3>Transporte</h3><p>Número de personas que han solicitado transporte.</p></div><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+  <div class="permission"><div><h3>Eventos extra</h3><p>Estado de preboda, brunch u otros eventos adicionales.</p></div><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+  <div class="permission"><div><h3>Planning</h3><p>Estado general de tareas, vencimientos y pendientes.</p></div><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+  <div class="permission"><div><h3>Invitación</h3><p>Estado de la invitación y configuración general del RSVP.</p></div><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+  <div class="permission sensitive"><div><h3>Pagos y presupuesto</h3><p>Resumen económico de la boda.</p><div class="sensitiveNote">Permiso sensible · desactivado por defecto</div></div><label class="switch"><input type="checkbox"><span class="track"></span></label></div>
+
+  <div class="actions"><button id="approveBtn" class="btn primary" type="button">Autorizar acceso</button><button id="notNowBtn" class="btn soft" type="button">Ahora no</button></div>
+  <p class="fine">La wedding planner nunca recibe vuestro código de ONE. Solo puede consultar las áreas que dejéis activas y no puede modificar vuestra boda.</p>
+</div>
+</section>
+
+<section id="successView" class="hidden">
+<p class="eyebrow">Acceso profesional</p>
+<div class="card">
+<div class="successMark">✓</div>
+<h2>Acceso autorizado.</h2>
+<p class="lead" style="font-size:15px">Marea Wedding Studio ya puede consultar únicamente las áreas que acabáis de aprobar.</p>
+<div class="notice">ONE no cambia. Vosotros seguís trabajando igual y podéis revisar o revocar este acceso en cualquier momento.</div>
+<div class="actions"><button id="manageBtn" class="btn primary" type="button">Gestionar este acceso</button></div>
+</div>
+<div class="sharedBlock">
+  <div class="sharedTitle"><h2>Responsabilidades compartidas</h2><span class="sharedCount">2 pendientes</span></div>
+  <div class="card" style="margin-top:0">
+    <div class="resp"><input class="coupleResp" type="checkbox"><div><b>Enviar selección musical de la ceremonia</b><span>Pendiente de vosotros · 28 feb 2027 · añadido por Marea Wedding Studio</span></div></div>
+    <div class="resp"><input class="coupleResp" type="checkbox"><div><b>Confirmar número final para transporte</b><span>Pendiente de vosotros · 4 mar 2027 · añadido por Marea Wedding Studio</span></div></div>
+    <div class="resp done"><input class="coupleResp" type="checkbox" checked><div><b>Compartir horario de prueba de menú</b><span>Completado</span></div></div>
+  </div>
+  <p class="fine">Estas responsabilidades pertenecen a ONE Partner. No modifican vuestra checklist de ONE.</p>
+</div>
+</section>
+
+<section id="manageView" class="hidden">
+<p class="eyebrow">Accesos profesionales</p>
+<h1>Vosotros decidís quién ve qué.</h1>
+<p class="lead">El acceso profesional es independiente del acceso de la pareja. Cambiarlo o revocarlo no afecta a ONE.</p>
+<div class="card">
+<div class="who"><div><div class="whoName">Marea Wedding Studio</div><div class="whoMeta">Marta Molina · acceso activo</div></div><span class="badge">Activo</span></div>
+<div class="manageRow"><div><b>Invitados, RSVP y mesas</b><span>Permitido</span></div><span class="badge">Visible</span></div>
+<div class="manageRow"><div><b>Catering y transporte</b><span>Permitido</span></div><span class="badge">Visible</span></div>
+<div class="manageRow"><div><b>Planning y eventos extra</b><span>Permitido</span></div><span class="badge">Visible</span></div>
+<div class="manageRow"><div><b>Pagos y presupuesto</b><span>No compartido</span></div><span class="badge" style="background:#f1eee9;color:#746f69">Oculto</span></div>
+<div class="actions"><button id="backPermissions" class="btn soft" type="button">Cambiar permisos</button><button id="revokeBtn" class="btn danger" type="button">Revocar acceso</button></div>
+</div>
+
+<div class="sharedBlock">
+  <div class="sharedTitle"><h2>Responsabilidades compartidas</h2><span class="sharedCount">2 pendientes</span></div>
+  <div class="card" style="margin-top:0">
+    <div class="resp"><input class="coupleResp" type="checkbox"><div><b>Enviar selección musical de la ceremonia</b><span>Pendiente de vosotros · 28 feb 2027</span></div></div>
+    <div class="resp"><input class="coupleResp" type="checkbox"><div><b>Confirmar número final para transporte</b><span>Pendiente de vosotros · 4 mar 2027</span></div></div>
+    <div class="resp done"><input class="coupleResp" type="checkbox" checked><div><b>Compartir horario de prueba de menú</b><span>Completado</span></div></div>
+  </div>
+  <p class="fine">La wedding planner ve estos cambios desde ONE Partner. No se crea un chat ni se altera Planning de ONE.</p>
+</div>
+<div class="actions" style="margin-top:24px"><a class="btn soft" style="text-decoration:none;text-align:center" href="./one-partner-preview-v3.html">← Volver a la vista de la planner</a></div>
+</section>
+
+<footer class="footer">Vista previa · datos ficticios · WeddlySmartDesign</footer>
+</main>
+<script>
+const req=document.getElementById('requestView'),ok=document.getElementById('successView'),manage=document.getElementById('manageView');
+const show=x=>{[req,ok,manage].forEach(v=>v.classList.add('hidden'));x.classList.remove('hidden');scrollTo({top:0,behavior:'smooth'})};
+document.getElementById('approveBtn').onclick=()=>show(ok);
+document.getElementById('notNowBtn').onclick=()=>history.back();
+document.getElementById('manageBtn').onclick=()=>show(manage);
+document.getElementById('backPermissions').onclick=()=>show(req);
+document.getElementById('revokeBtn').onclick=()=>{show(req);document.querySelector('.lead').textContent='El acceso de Marea Wedding Studio ha sido revocado. Podéis volver a autorizarlo si lo necesitáis.'};
+document.querySelectorAll('.coupleResp').forEach(c=>c.addEventListener('change',()=>c.closest('.resp').classList.toggle('done',c.checked)));
+</script>
+</body>
+</html>
