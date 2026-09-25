@@ -117,10 +117,10 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
         <div class="todayCopy"><b>El listado de transporte enviado ya no coincide con ONE</b><span>Hubo cambios después de la entrega. Conviene generar una versión nueva.</span></div>
         <div class="todayWedding">Clara & Martín</div>
       </button>
-      <button class="todayItem todayUrgent" data-open-wedding="clara" data-jump="summaryPlanning" type="button">
-        <div class="todayIcon">2</div>
-        <div class="todayCopy"><b>2 responsabilidades necesitan seguimiento</b><span>Una depende de ti y otra de la pareja.</span></div>
-        <div class="todayWedding">Clara & Martín</div>
+      <button class="todayItem todayChanged" data-open-onboarding="elena" type="button">
+        <div class="todayIcon">N</div>
+        <div class="todayCopy"><b>Nueva boda conectada · revisión inicial pendiente</b><span>Partner puede auditar automáticamente el estado antes de la primera reunión.</span></div>
+        <div class="todayWedding">Elena & Dani</div>
       </button>
       <button class="todayItem todayChanged" data-open-wedding="clara" data-jump="summarySeating" type="button">
         <div class="todayIcon">9</div>
@@ -154,17 +154,17 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
       <div class="openCue">Abrir resumen →</div>
     </button>
 
-    <button class="card weddingCard" data-wedding="elena" data-has-changes="false" data-has-pending="true" data-search="elena dani casa del lago cartagena" type="button">
+    <button class="card weddingCard" data-wedding="elena" data-onboarding="true" data-has-changes="false" data-has-pending="true" data-search="elena dani casa del lago cartagena" type="button">
       <div class="weddingHead">
         <div><div class="names">Elena & Dani</div><div class="date">11 sep 2027 · 12:30 · 84 confirmados</div><div class="venueLine">Casa del Lago · Cartagena</div></div>
-        <div class="date">Al día</div>
+        <div class="change"><span class="dot"></span>Nueva conexión</div>
       </div>
       <div class="metrics">
         <div class="metric"><b>31</b><span>RSVP pendientes</span></div>
         <div class="metric"><b>0</b><span>sin mesa</span></div>
         <div class="metric"><b>0</b><span>tareas vencidas</span></div>
       </div>
-      <div class="closingLine"><b>Cierre profesional</b><span class="riskTag good">Sin entregas en riesgo</span></div>
+      <div class="closingLine"><b>Toma de control</b><span class="riskTag outdated">Revisión inicial pendiente</span></div>
       <div class="openCue">Abrir resumen →</div>
     </button>
   </div>
@@ -306,6 +306,37 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
 
 
 
+
+<div id="onboardingModal" class="modalBack hidden">
+  <div class="modal detailModal">
+    <div class="modalHead"><div><p class="eyebrow">Toma de control · Elena & Dani</p><h2 style="margin-bottom:6px">La boda ya está organizada. Esto es lo que necesitas saber.</h2><p class="muted" style="font-size:13px">Auditoría automática al conectar ONE Partner, sin pedir a la pareja que migre sus datos.</p></div><button id="closeOnboarding" class="x" type="button">×</button></div>
+
+    <div class="summaryGrid" style="margin-top:14px">
+      <div class="summaryBox"><div class="big">84</div><h3>Confirmados</h3><p>31 RSVP pendientes</p></div>
+      <div class="summaryBox"><div class="big">0</div><h3>Sin mesa</h3><p>seating actual completo</p></div>
+      <div class="summaryBox"><div class="big">0</div><h3>Tareas vencidas</h3><p>Planning al día</p></div>
+    </div>
+
+    <div class="briefGroup"><h3>Ya está en buen estado</h3><div class="briefList">
+      <div class="briefItem"><b>Mesas</b><span>Todos los confirmados actuales están ubicados.</span></div>
+      <div class="briefItem"><b>Planning</b><span>No hay tareas vencidas en este momento.</span></div>
+    </div></div>
+
+    <div class="briefGroup"><h3>Necesita atención antes de tomar el control</h3><div class="briefList">
+      <div class="briefItem"><b>31 RSVP pendientes</b><span>Todavía no conviene fijar cierres definitivos de catering y transporte.</span></div>
+      <div class="briefItem"><b>Ficha profesional incompleta</b><span>Falta guardar contacto principal de la finca y enlaces definitivos de ubicación.</span></div>
+      <div class="briefItem"><b>Entregas sin fecha límite</b><span>Configura cuándo necesita cada proveedor su versión final.</span></div>
+    </div></div>
+
+    <div class="briefGroup"><h3>Primeras acciones sugeridas</h3><div class="briefList">
+      <div class="briefItem"><b>1 · Acordar fecha de cierre de RSVP con la pareja</b><span>Después, Partner podrá indicar cuándo catering y transporte están listos.</span></div>
+      <div class="briefItem"><b>2 · Completar la ficha de coordinación</b><span>Horario, lugares, Maps y contactos que necesitarás el día de la boda.</span></div>
+      <div class="briefItem"><b>3 · Configurar entregas a proveedores</b><span>Partner empezará a vigilar automáticamente plazos y versiones.</span></div>
+    </div></div>
+    <div class="briefActions"><button id="onboardingDone" class="btn primary" type="button">Marcar revisión inicial completada</button></div>
+  </div>
+</div>
+
 <div id="deliverConfigModal" class="modalBack hidden">
   <div class="modal">
     <div class="modalHead"><div><p class="eyebrow">Entrega a proveedor</p><h2 id="deliverConfigTitle" style="margin-bottom:6px">Configurar entrega</h2><p class="muted" style="font-size:13px">Partner usará esta fecha para avisarte si la entrega se acerca y los datos aún no están listos.</p></div><button id="closeDeliverConfig" class="x" type="button">×</button></div>
@@ -392,10 +423,29 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
 const hub=document.getElementById('hub'),detail=document.getElementById('detail'),homeBtn=document.getElementById('homeBtn');
 function showHub(){detail.classList.add('hidden');hub.classList.remove('hidden');homeBtn.classList.add('hidden');window.scrollTo({top:0,behavior:'smooth'})}
 function showDetail(targetId=''){hub.classList.add('hidden');detail.classList.remove('hidden');homeBtn.classList.remove('hidden');window.scrollTo({top:0});if(targetId){setTimeout(()=>{const el=document.getElementById(targetId);if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},80)}}
-document.querySelectorAll('[data-wedding]').forEach(b=>b.addEventListener('click',()=>showDetail()));
+document.querySelectorAll('[data-wedding]').forEach(b=>b.addEventListener('click',()=>{
+  if(b.dataset.onboarding==='true'){document.getElementById('onboardingModal').classList.remove('hidden');return}
+  showDetail();
+}));
 document.querySelectorAll('[data-open-wedding]').forEach(b=>b.addEventListener('click',()=>showDetail(b.dataset.jump||'')));
+document.querySelectorAll('[data-open-onboarding]').forEach(b=>b.addEventListener('click',()=>document.getElementById('onboardingModal').classList.remove('hidden')));
 document.getElementById('backBtn').addEventListener('click',showHub);homeBtn.addEventListener('click',showHub);
 
+
+const onboardingModal=document.getElementById('onboardingModal');
+document.getElementById('closeOnboarding').onclick=()=>onboardingModal.classList.add('hidden');
+onboardingModal.addEventListener('click',e=>{if(e.target===onboardingModal)onboardingModal.classList.add('hidden')});
+document.getElementById('onboardingDone').onclick=()=>{
+  onboardingModal.classList.add('hidden');
+  const card=document.querySelector('[data-wedding="elena"]');
+  if(card){
+    card.dataset.onboarding='false';
+    const status=card.querySelector('.change');if(status){status.className='date';status.textContent='Revisión inicial completada'}
+    const line=card.querySelector('.closingLine');if(line)line.innerHTML='<b>Cierre profesional</b><span class="riskTag good">Seguimiento activado</span>';
+  }
+  document.querySelectorAll('[data-open-onboarding]').forEach(x=>x.remove());
+  toast('Revisión inicial de Elena & Dani completada');
+};
 
 const deliverConfigModal=document.getElementById('deliverConfigModal');
 let activeDeliverButton=null;
