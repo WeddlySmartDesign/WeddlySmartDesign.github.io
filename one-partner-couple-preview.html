@@ -20,8 +20,8 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.
 .permission{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:17px 0;border-bottom:1px solid var(--line)}.permission:last-child{border-bottom:0}.permission h3{font-size:15px;margin:0 0 5px}.permission p{font-size:13px;color:var(--muted);line-height:1.48;margin:0;max-width:600px}.permission.sensitive{margin-top:10px;padding:15px 12px;background:#fcf6f3;border:1px solid #eadbd4;border-radius:13px}.sensitiveNote{font-size:11.5px;color:#8b5f4d;margin-top:6px}
 .switch{position:relative;width:44px;height:26px;flex:0 0 auto}.switch input{position:absolute;opacity:0}.track{position:absolute;inset:0;border-radius:99px;background:#d7d1ca;transition:.16s}.track:after{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.16);transition:.16s}.switch input:checked+.track{background:var(--dark)}.switch input:checked+.track:after{transform:translateX(18px)}
 .actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}.btn{border:0;border-radius:13px;min-height:48px;padding:13px 18px;font-weight:700;font-size:14px;transition:transform .15s ease,box-shadow .15s ease}.primary{background:var(--dark);color:#fff;flex:1;box-shadow:0 10px 24px rgba(29,26,23,.12)}.soft{background:var(--soft);color:var(--ink)}.danger{background:#fff3f1;color:var(--danger);border:1px solid #ead3d0}.fine{font-size:12.5px;line-height:1.55;color:var(--muted);margin-top:16px}.notice{padding:14px 15px;border-radius:13px;font-size:13px;line-height:1.55;margin-top:15px;background:#edf4ef;color:#315f49}
-.manageRow{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.sharedBlock{margin-top:20px}.sharedTitle{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:9px}.sharedTitle h2{margin:0}.sharedCount{font-size:12.5px;color:var(--muted)}.resp{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line)}.resp:first-child{border-top:0}.resp input{width:21px;height:21px;margin-top:2px}.resp b{font-size:14px;display:block}.resp span{font-size:12.5px;color:var(--muted);display:block;margin-top:4px;line-height:1.45}.resp.done b{text-decoration:line-through;color:var(--muted)}.manageRow:last-child{border-bottom:0}.manageRow b{font-size:15px}.manageRow span{font-size:12.5px;color:var(--muted);display:block;margin-top:4px}
-.successMark{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#eaf3ed;color:var(--good);font-size:25px;margin-bottom:18px}.footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:#8a847d}
+.manageRow{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.sharedBlock{margin-top:20px}.sharedTitle{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:9px}.sharedTitle h2{margin:0}.sharedRight{display:flex;align-items:center;gap:8px}.sharedCount{font-size:12.5px;color:var(--muted)}.addMini{border:0;border-radius:99px;background:var(--dark);color:#fff;padding:8px 11px;font-size:12px;font-weight:700}.resp{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line)}.resp:first-child{border-top:0}.resp input{width:21px;height:21px;margin-top:2px}.resp b{font-size:14px;display:block}.resp span{font-size:12.5px;color:var(--muted);display:block;margin-top:4px;line-height:1.45}.resp.done b{text-decoration:line-through;color:var(--muted)}.manageRow:last-child{border-bottom:0}.manageRow b{font-size:15px}.manageRow span{font-size:12.5px;color:var(--muted);display:block;margin-top:4px}
+.successMark{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#eaf3ed;color:var(--good);font-size:25px;margin-bottom:18px}.footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:#8a847d}.respModalBack{position:fixed;inset:0;background:rgba(21,18,16,.38);backdrop-filter:blur(4px);display:grid;place-items:center;padding:18px;z-index:30}.respModal{width:min(560px,100%);background:#fff;border-radius:21px;padding:22px;box-shadow:0 30px 100px rgba(0,0,0,.22)}.respModalHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:16px}.respModalHead h2{margin-bottom:5px}.xBtn{border:0;width:36px;height:36px;border-radius:50%;background:var(--soft);font-size:18px}.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.formWide{grid-column:1/-1}.formGrid label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.formGrid input,.formGrid select,.formGrid textarea{width:100%;border:1px solid #dcd5cd;border-radius:11px;background:#fff;padding:11px 12px;color:var(--ink)}.formGrid textarea{min-height:82px;resize:vertical}
 @media(min-width:760px){
   .card{padding:27px}
   .permission{padding-left:2px;padding-right:2px}
@@ -33,7 +33,7 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.
   .card{padding:19px;border-radius:18px;margin-top:18px}
   .who{display:block}.whoName{font-size:28px}.whoMeta{font-size:12.5px}.badge{display:inline-block;margin-top:10px}
   .permission{padding:15px 0;gap:12px}.permission h3{font-size:14.5px}.permission p{font-size:12.5px}.sensitiveNote{font-size:11.5px}
-  .actions{display:grid;grid-template-columns:1fr}.btn{width:100%}
+  .actions{display:grid;grid-template-columns:1fr}.btn{width:100%}.formGrid{grid-template-columns:1fr}.formWide{grid-column:auto}
   .fine{font-size:12px}.sharedCount{font-size:12px}.resp b{font-size:13.5px}.resp span{font-size:12px}
 }
 </style>
@@ -73,8 +73,8 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.
 <div class="actions"><button id="manageBtn" class="btn primary" type="button">Gestionar este acceso</button></div>
 </div>
 <div class="sharedBlock">
-  <div class="sharedTitle"><h2>Responsabilidades compartidas</h2><span class="sharedCount">2 pendientes</span></div>
-  <div class="card" style="margin-top:0">
+  <div class="sharedTitle"><h2>Responsabilidades compartidas</h2><div class="sharedRight"><span class="sharedCount">2 pendientes</span><button class="addMini addCoupleResp" type="button">Añadir</button></div></div>
+  <div class="card" id="successRespList" style="margin-top:0">
     <div class="resp"><input class="coupleResp" type="checkbox"><div><b>Enviar selección musical de la ceremonia</b><span>Pendiente de vosotros · 28 feb 2027 · añadido por Marea Wedding Studio</span></div></div>
     <div class="resp"><input class="coupleResp" type="checkbox"><div><b>Confirmar número final para transporte</b><span>Pendiente de vosotros · 4 mar 2027 · añadido por Marea Wedding Studio</span></div></div>
     <div class="resp done"><input class="coupleResp" type="checkbox" checked><div><b>Compartir horario de prueba de menú</b><span>Completado</span></div></div>
@@ -97,8 +97,8 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.
 </div>
 
 <div class="sharedBlock">
-  <div class="sharedTitle"><h2>Responsabilidades compartidas</h2><span class="sharedCount">2 pendientes</span></div>
-  <div class="card" style="margin-top:0">
+  <div class="sharedTitle"><h2>Responsabilidades compartidas</h2><div class="sharedRight"><span class="sharedCount">2 pendientes</span><button class="addMini addCoupleResp" type="button">Añadir</button></div></div>
+  <div class="card" id="manageRespList" style="margin-top:0">
     <div class="resp"><input class="coupleResp" type="checkbox"><div><b>Enviar selección musical de la ceremonia</b><span>Pendiente de vosotros · 28 feb 2027</span></div></div>
     <div class="resp"><input class="coupleResp" type="checkbox"><div><b>Confirmar número final para transporte</b><span>Pendiente de vosotros · 4 mar 2027</span></div></div>
     <div class="resp done"><input class="coupleResp" type="checkbox" checked><div><b>Compartir horario de prueba de menú</b><span>Completado</span></div></div>
@@ -107,6 +107,20 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.
 </div>
 <div class="actions" style="margin-top:24px"><a class="btn soft" style="text-decoration:none;text-align:center" href="./one-partner-preview.html">← Volver a la vista de la planner</a></div>
 </section>
+
+
+<div id="coupleRespModal" class="respModalBack hidden">
+  <div class="respModal">
+    <div class="respModalHead"><div><p class="eyebrow">Responsabilidad compartida</p><h2>Añadir seguimiento</h2><p class="fine" style="margin:0">Lo verá también Marea Wedding Studio. No modifica vuestro Planning de ONE.</p></div><button id="closeCoupleResp" class="xBtn" type="button">×</button></div>
+    <div class="formGrid">
+      <div class="formWide"><label>Responsabilidad</label><input id="newRespTitle" placeholder="Ej. Confirmar número final de autobuses"></div>
+      <div><label>Pendiente de</label><select id="newRespOwner"><option value="couple">Nosotros</option><option value="planner">Wedding planner</option></select></div>
+      <div><label>Fecha límite</label><input id="newRespDue" type="date"></div>
+      <div class="formWide"><label>Comentario breve</label><textarea id="newRespComment" placeholder="Opcional"></textarea></div>
+    </div>
+    <div class="actions"><button id="saveCoupleResp" class="btn primary" type="button">Añadir responsabilidad</button></div>
+  </div>
+</div>
 
 <footer class="footer">Vista previa · datos ficticios · WeddlySmartDesign</footer>
 </main>
@@ -118,7 +132,23 @@ document.getElementById('notNowBtn').onclick=()=>history.back();
 document.getElementById('manageBtn').onclick=()=>show(manage);
 document.getElementById('backPermissions').onclick=()=>show(req);
 document.getElementById('revokeBtn').onclick=()=>{show(req);document.querySelector('.lead').textContent='El acceso de Marea Wedding Studio ha sido revocado. Podéis volver a autorizarlo si lo necesitáis.'};
-document.querySelectorAll('.coupleResp').forEach(c=>c.addEventListener('change',()=>c.closest('.resp').classList.toggle('done',c.checked)));
+function wireChecks(root=document){root.querySelectorAll('.coupleResp').forEach(c=>{if(c.dataset.wired)return;c.dataset.wired='1';c.addEventListener('change',()=>c.closest('.resp').classList.toggle('done',c.checked))})}
+wireChecks();
+const coupleRespModal=document.getElementById('coupleRespModal');
+document.querySelectorAll('.addCoupleResp').forEach(b=>b.addEventListener('click',()=>coupleRespModal.classList.remove('hidden')));
+document.getElementById('closeCoupleResp').onclick=()=>coupleRespModal.classList.add('hidden');
+coupleRespModal.addEventListener('click',e=>{if(e.target===coupleRespModal)coupleRespModal.classList.add('hidden')});
+document.getElementById('saveCoupleResp').onclick=()=>{
+  const title=document.getElementById('newRespTitle').value.trim();if(!title)return;
+  const owner=document.getElementById('newRespOwner').value;
+  const due=document.getElementById('newRespDue').value;
+  const comment=document.getElementById('newRespComment').value.trim();
+  const meta=(owner==='planner'?'Pendiente de Marea Wedding Studio':'Pendiente de vosotros')+(due?' · '+new Date(due+'T12:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}):'')+(comment?' · '+comment:'')+' · añadido por vosotros';
+  const row='<div class="resp"><input class="coupleResp" type="checkbox"><div><b>'+title.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\\\"":"&quot;"}[c]))+'</b><span>'+meta+'</span></div></div>';
+  ['successRespList','manageRespList'].forEach(id=>{const list=document.getElementById(id);if(list)list.insertAdjacentHTML('afterbegin',row)});
+  wireChecks();coupleRespModal.classList.add('hidden');
+  document.getElementById('newRespTitle').value='';document.getElementById('newRespComment').value='';
+};
 </script>
 </body>
 </html>
