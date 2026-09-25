@@ -94,6 +94,20 @@ Deno.serve(async (req: Request) => {
         p_comment: body.p_comment ?? null,
         p_completed: typeof body.p_completed === "boolean" ? body.p_completed : null
       }
+    },
+    decisions: {
+      fn: "partner_couple_decisions",
+      args: {
+        p_member_token: body.p_member_token,
+        p_grant_id: body.p_grant_id
+      }
+    },
+    confirm_decision: {
+      fn: "partner_couple_confirm_decision",
+      args: {
+        p_member_token: body.p_member_token,
+        p_decision_id: body.p_decision_id
+      }
     }
   };
 
