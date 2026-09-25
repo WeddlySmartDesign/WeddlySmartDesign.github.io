@@ -159,7 +159,7 @@ document.querySelectorAll('[data-wedding]').forEach(b=>b.addEventListener('click
 document.getElementById('backBtn').addEventListener('click',showHub);homeBtn.addEventListener('click',showHub);
 const modal=document.getElementById('connectModal');document.getElementById('connectBtn').onclick=()=>modal.classList.remove('hidden');document.getElementById('closeModal').onclick=()=>modal.classList.add('hidden');modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.add('hidden')});
 function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.remove('hidden');setTimeout(()=>el.classList.add('hidden'),2200)}
-document.getElementById('createDemoLink').onclick=()=>{modal.classList.add('hidden');toast('En la versión real, aquí se genera el enlace privado para la pareja.')};
+document.getElementById('createDemoLink').onclick=()=>{location.href='./one-partner-couple-preview-v2.html'};
 document.getElementById('reviewBtn').onclick=()=>{document.getElementById('changesCard').innerHTML='<div style="text-align:center;padding:22px;color:var(--muted)">No hay cambios desde tu última revisión.</div>';toast('Revisión registrada')};
 document.querySelectorAll('.check').forEach(c=>c.addEventListener('change',()=>c.closest('.respRow').classList.toggle('done',c.checked)));
 document.getElementById('addResp').onclick=()=>toast('Responsabilidad añadida: flujo disponible en la versión real.');
