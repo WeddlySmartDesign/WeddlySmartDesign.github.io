@@ -75,7 +75,7 @@ label.field{display:block;font-size:12px;color:var(--muted);margin-bottom:14px}l
 <div id="app" class="app hidden">
   <header class="bar">
     <div class="brand"><strong>ONE Partner</strong><span>by WeddlySmartDesign</span></div>
-    <div class="barActions"><button id="homeBtn" class="linkBtn hidden">Mis bodas</button><button id="logoutBtn" class="linkBtn">Salir</button></div>
+    <div class="barActions"><button id="homeBtn" class="linkBtn hidden">Mis bodas</button><button id="settingsBtn" class="linkBtn">Ajustes</button><button id="logoutBtn" class="linkBtn">Salir</button></div>
   </header>
   <div id="loading" class="spinner"></div>
   <main id="main" class="hidden"></main>
@@ -131,9 +131,33 @@ $('resetBtn').onclick=async()=>{
   msg(error?'authError':'authInfo',error?'No se ha podido enviar el enlace.':'Te hemos enviado un enlace para cambiar la contraseña.');$('resetBtn').disabled=false;
 };
 function friendlyAuth(err){const m=String(err?.message||'').toLowerCase();if(m.includes('invalid login'))return'Email o contraseña incorrectos.';if(m.includes('email not confirmed'))return'Confirma primero tu email.';return'No se ha podido completar el acceso.'}
-$('logoutBtn').onclick=async()=>{await supabase.auth.signOut();showAuth()};$('homeBtn').onclick=()=>refreshHub();
+$('logoutBtn').onclick=async()=>{await supabase.auth.signOut();showAuth()};$('homeBtn').onclick=()=>refreshHub();$('settingsBtn').onclick=openSettings;
 supabase.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY')showPasswordRecovery();if(event==='SIGNED_OUT'||!session)showAuth()});
 function showPasswordRecovery(){modal('<div class="modalHead"><div><p class="eyebrow">Seguridad</p><h2>Nueva contraseña</h2></div><button class="x" data-close-modal>×</button></div><div class="formGrid"><label class="wide"><span>Nueva contraseña</span><input id="newPassword" type="password" minlength="8" placeholder="Mínimo 8 caracteres"></label></div><div class="actions" style="margin-top:14px"><button id="savePassword" class="btn primary">Guardar contraseña</button></div>');$('savePassword').onclick=async()=>{const p=$('newPassword').value;if(p.length<8)return;const {error}=await supabase.auth.updateUser({password:p});if(!error){closeModal();await start()}}}
+
+
+async function openSettings(){
+  try{
+    const p=await rpc('partner_get_notification_preferences');
+    const types=new Set(p.eventTypes||[]);
+    const rows=[
+      ['delivery_outdated','Una entrega enviada deja de coincidir con ONE'],
+      ['closure_revalidation','Un cierre profesional necesita revalidación'],
+      ['delivery_blocked_due','Se acerca una entrega y sigue bloqueada'],
+      ['decision_review','Una decisión confirmada necesita revisión'],
+      ['responsibility_overdue','Una responsabilidad compartida está vencida']
+    ];
+    modal('<div class="modalHead"><div><p class="eyebrow">Ajustes</p><h2>Avisos profesionales</h2><p class="muted" style="font-size:13px">Solo para incidencias que requieren una acción. ONE Partner seguirá mostrando todo en Hoy aunque desactives el email.</p></div><button class="x" data-close-modal>×</button></div>'+
+      '<label class="permissionChip" style="margin-bottom:12px"><span><b>Avisos por email</b><br><small class="muted">Desactivados por defecto hasta que tú los actives.</small></span><label class="switch"><input id="notifEmail" type="checkbox" '+(p.emailEnabled?'checked':'')+'><span class="track"></span></label></label>'+
+      '<div class="card" style="box-shadow:none;padding:14px">'+rows.map(([k,l])=>'<label class="permissionChip"><span>'+esc(l)+'</span><input class="notifType" data-type="'+k+'" type="checkbox" style="width:18px;height:18px" '+(types.has(k)?'checked':'')+'></label>').join('')+'</div>'+
+      '<div class="actions" style="margin-top:14px"><button id="saveNotif" class="btn primary">Guardar ajustes</button></div>');
+    $('saveNotif').onclick=async()=>{
+      const eventTypes=[...document.querySelectorAll('.notifType:checked')].map(x=>x.dataset.type);
+      await rpc('partner_save_notification_preferences',{p_email_enabled:$('notifEmail').checked,p_event_types:eventTypes});
+      closeModal();
+    };
+  }catch(e){modal('<div class="notice error">No se han podido cargar los ajustes de avisos.</div>')}
+}
 
 async function start(){
   showApp();setLoading(true);
