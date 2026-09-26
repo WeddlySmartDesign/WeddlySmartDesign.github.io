@@ -35,6 +35,8 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
 .closureGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.closureCard{background:#fff;border:1px solid rgba(209,200,192,.78);border-radius:16px;padding:16px}.closureTop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.closureName{font-size:15px;font-weight:750}.closureState{font-size:11.5px;font-weight:750;border-radius:99px;padding:5px 8px;white-space:nowrap}.closureState.blocked{background:#fff1ec;color:#984d39}.closureState.ready{background:#edf4ef;color:var(--good)}.closureState.closed{background:#edf4ef;color:var(--good)}.closureState.revalidate{background:#fff5dc;color:#85631e}.closureMeta{font-size:12px;color:var(--muted);line-height:1.45;margin-top:7px}.closureAction{margin-top:11px}
 .decisionList,.contactGrid{display:grid;gap:10px}.decisionCard{border:1px solid var(--line);border-radius:15px;background:#fff;padding:15px}.decisionTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.decisionTitle{font-size:14px;font-weight:750}.decisionMeta{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.45}.decisionStatus{font-size:11.5px;border-radius:99px;padding:5px 8px;white-space:nowrap}.decisionStatus.confirmed{background:#edf4ef;color:var(--good)}.decisionStatus.pending{background:#f1eee9;color:#746f69}.decisionStatus.review{background:#fff5dc;color:#85631e}.decisionImpacts{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
 .contactGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.contactCard{border:1px solid var(--line);border-radius:15px;background:#fff;padding:15px}.contactKind{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}.contactBusiness{font-size:15px;font-weight:750;margin-top:5px}.contactPerson{font-size:12.5px;color:#5f5a55;margin-top:4px}.contactActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.contactActions a{font-size:12px;text-decoration:none;color:#4f4944;border:1px solid var(--line);padding:6px 9px;border-radius:99px;background:#faf9f7}
+.demoDocs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.demoDoc{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px}.demoDoc b{display:block;font-size:14px}.demoDoc span{display:block;font-size:12px;color:var(--muted);margin-top:5px;line-height:1.4}.demoDocActions{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}.dangerDemo{margin-top:32px;border:1px solid #ead2cf;background:#fff8f6;border-radius:17px;padding:17px}.dangerDemo h3{color:#9b4a42;margin-bottom:7px}.dangerDemo p{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:12px}.archiveDemoCard{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}.archiveDemoCard h3{font-family:Georgia,"Times New Roman",serif;font-size:22px;font-weight:400;margin:0 0 6px}.archiveDemoCard p{font-size:12.5px;color:var(--muted);line-height:1.5;margin:0}
+
 .footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-size:12px;color:#8a847d;display:flex;justify-content:space-between;gap:12px}
 @media(min-width:900px){
   .app{padding-left:30px;padding-right:30px}
@@ -67,7 +69,7 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
   .todayList{grid-template-columns:1fr}.todayItem{grid-template-columns:auto 1fr;padding:14px}.todayWedding{grid-column:2;white-space:normal;font-size:12px;margin-top:2px}
   .attention{grid-template-columns:1fr}.attentionCard{padding:14px 15px}
   .toolbar{align-items:stretch;flex-direction:column}.toolbarLeft{order:2}.toolbarMeta{display:none}.weddingSearch{order:1;width:100%;min-width:0}.weddingSearch input{font-size:13px;padding-top:11px;padding-bottom:11px}
-  .weddingGrid,.summaryGrid,.permissionGrid,.focusGrid,.profileGrid,.editGrid,.linkedLists,.deliverGrid,.deliverEditGrid,.closureGrid,.contactGrid{grid-template-columns:1fr}.deliverEditGrid .wide{grid-column:auto}.assuranceHero{grid-template-columns:auto 1fr}.assuranceStats{grid-column:2;text-align:left;display:flex;gap:8px;align-items:baseline}.assuranceStats strong{font-size:20px}
+  .weddingGrid,.summaryGrid,.permissionGrid,.focusGrid,.profileGrid,.editGrid,.linkedLists,.deliverGrid,.deliverEditGrid,.closureGrid,.contactGrid,.demoDocs{grid-template-columns:1fr}.deliverEditGrid .wide{grid-column:auto}.assuranceHero{grid-template-columns:auto 1fr}.assuranceStats{grid-column:2;text-align:left;display:flex;gap:8px;align-items:baseline}.assuranceStats strong{font-size:20px}
   .profileBlock.wide,.fieldWide{grid-column:auto}
   .card{padding:19px;border-radius:18px}
   .weddingCard{padding:20px}.weddingHead{margin-bottom:17px}.names{font-size:31px}.date{font-size:12.5px}.venueLine{font-size:12px}
@@ -145,7 +147,7 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
   </div>
 
   <div class="toolbar"><div class="toolbarLeft"><button class="filter active" data-filter="all" type="button">Todas · 2</button><button class="filter" data-filter="changes" type="button">Con cambios · 1</button><button class="filter" data-filter="pending" type="button">Con pendientes · 2</button></div><div class="weddingSearch"><input id="weddingSearch" type="search" autocomplete="off" placeholder="Buscar pareja o lugar"></div><div class="toolbarMeta">Últimos datos ONE · hace 12 min</div></div>
-  <div class="sectionTitle"><h2>Mis bodas</h2><span class="muted">2 activas</span></div>
+  <div class="sectionTitle"><h2>Mis bodas</h2><div class="actions"><span class="muted">2 activas</span><button id="archivedDemoBtn" class="btn small soft" type="button">Finalizadas</button></div></div>
   <div class="weddingGrid">
     <button class="card weddingCard" data-wedding="clara" data-has-changes="true" data-has-pending="true" data-search="clara martín finca el olivar murcia" type="button">
       <div class="weddingHead">
@@ -223,6 +225,12 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
     </div>
   </div>
 
+  <div id="documentsSection" class="sectionTitle"><div><h2>Documentos profesionales</h2><span class="muted">privados del estudio · no se añaden a ONE</span></div><button id="addDemoDocument" class="btn small primary" type="button">Adjuntar</button></div>
+  <div class="demoDocs">
+    <div class="demoDoc"><b>Contrato firmado · Clara & Martín.pdf</b><span>Contrato · 1,8 MB · 14 sep 2026</span><div class="demoDocActions"><button class="btn small soft demoDocOpen" type="button">Abrir</button><button class="btn small soft demoDocDelete" type="button">Eliminar</button></div></div>
+    <div class="demoDoc"><b>Justificante reserva finca.pdf</b><span>Justificante de pago · 436 KB · 20 sep 2026</span><div class="demoDocActions"><button class="btn small soft demoDocOpen" type="button">Abrir</button><button class="btn small soft demoDocDelete" type="button">Eliminar</button></div></div>
+    <div class="demoDoc"><b>Indicaciones montaje.docx</b><span>Otro documento · 92 KB</span><div class="demoDocActions"><button class="btn small soft demoDocOpen" type="button">Abrir</button><button class="btn small soft demoDocDelete" type="button">Eliminar</button></div></div>
+  </div>
 
   <div class="sectionTitle"><div><h2>Conformidad profesional</h2><span class="muted">Partner comprueba la boda entre módulos</span></div><span class="muted">motor automático</span></div>
   <div class="assuranceHero">
@@ -344,6 +352,11 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
     <div class="permissionChip"><span>Invitación</span><span class="pill visible">Visible</span></div>
     <div class="permissionChip"><span>Pagos y presupuesto</span><span class="pill">No compartido</span></div>
   </div></div>
+  <div class="dangerDemo">
+    <h3>Finalizar relación profesional</h3>
+    <p>Al finalizar el servicio, cancelar el contrato o cancelar la boda, esta pareja sale del Hub activo. ONE permanece intacto y los documentos profesionales pasan a Bodas finalizadas.</p>
+    <button id="endDemoRelationship" class="btn danger" type="button">Dar de baja esta pareja</button>
+  </div>
 </main>
 
 <footer class="footer"><span>Vista previa de ONE Partner · datos ficticios</span><span>WeddlySmartDesign</span></footer>
@@ -353,6 +366,18 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
 
 
 
+
+
+<div id="archivedDemoModal" class="modalBack hidden">
+  <div class="modal detailModal">
+    <div class="modalHead"><div><p class="eyebrow">Archivo profesional</p><h2 style="margin-bottom:6px">Bodas finalizadas</h2><p class="muted" style="font-size:13px">Sin acceso a los datos vivos de ONE. Solo se conserva la información profesional necesaria.</p></div><button id="closeArchivedDemo" class="x" type="button">×</button></div>
+    <div class="archiveDemoCard">
+      <h3>Lucía & Andrés</h3>
+      <p>18 julio 2026 · Servicio finalizado<br>Finca La Torre · 3 documentos profesionales</p>
+      <div class="actions" style="margin-top:12px"><button id="archivedDocsDemo" class="btn small soft" type="button">Ver documentos</button><button id="archivedDeleteDemo" class="btn small danger" type="button">Eliminar definitivamente</button></div>
+    </div>
+  </div>
+</div>
 
 <div id="onboardingModal" class="modalBack hidden">
   <div class="modal detailModal">
@@ -616,6 +641,18 @@ document.querySelectorAll('.blockerAction').forEach(a=>a.addEventListener('click
 }));
 document.getElementById('closeOperational').onclick=()=>operationalModal.classList.add('hidden');
 operationalModal.addEventListener('click',e=>{if(e.target===operationalModal)operationalModal.classList.add('hidden')});
+
+
+const archivedDemoModal=document.getElementById('archivedDemoModal');
+document.getElementById('archivedDemoBtn').onclick=()=>archivedDemoModal.classList.remove('hidden');
+document.getElementById('closeArchivedDemo').onclick=()=>archivedDemoModal.classList.add('hidden');
+archivedDemoModal.addEventListener('click',e=>{if(e.target===archivedDemoModal)archivedDemoModal.classList.add('hidden')});
+document.getElementById('archivedDocsDemo').onclick=()=>toast('3 documentos profesionales conservados en esta boda finalizada');
+document.getElementById('archivedDeleteDemo').onclick=()=>toast('En producción exige confirmación escribiendo ELIMINAR');
+document.getElementById('addDemoDocument').onclick=()=>toast('En producción puedes adjuntar contrato, justificante de pago u otro documento');
+document.querySelectorAll('.demoDocOpen').forEach(b=>b.onclick=()=>toast('Vista demo: el archivo real se abriría con enlace privado temporal'));
+document.querySelectorAll('.demoDocDelete').forEach(b=>b.onclick=()=>toast('Vista demo: el documento real se eliminaría tras confirmar'));
+document.getElementById('endDemoRelationship').onclick=()=>toast('Vista demo: la pareja pasaría a Bodas finalizadas sin modificar ONE');
 
 const modal=document.getElementById('connectModal');document.getElementById('connectBtn').onclick=()=>modal.classList.remove('hidden');document.getElementById('closeModal').onclick=()=>modal.classList.add('hidden');modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.add('hidden')});
 function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.remove('hidden');setTimeout(()=>el.classList.add('hidden'),2200)}
