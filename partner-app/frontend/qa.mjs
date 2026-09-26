@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 
 const files={
   html:await readFile(new URL("./index.html",import.meta.url),"utf8"),
+  demo:await readFile(new URL("./demo.html",import.meta.url),"utf8"),
   manifest:JSON.parse(await readFile(new URL("./manifest.webmanifest",import.meta.url),"utf8")),
   sw:await readFile(new URL("./sw.js",import.meta.url),"utf8"),
   server:await readFile(new URL("./server.mjs",import.meta.url),"utf8")
@@ -19,6 +20,11 @@ assert(files.html.includes("partner_end_relationship"),"Client offboarding flow 
 assert(files.html.includes("partner_archived_weddings"),"Finalized weddings archive missing");
 assert(files.html.includes("partner_register_document"),"Professional document upload missing");
 assert(files.html.includes("one-partner-documents"),"Private Partner document bucket missing");
+assert(files.html.includes('href="/demo.html"'),"Full demo link missing from sign-in");
+for(const marker of ["Hoy","Conformidad profesional","Cierres profesionales","Listados vinculados","Entregas a proveedores","Decisiones confirmadas","Contactos operativos","Responsabilidades compartidas","Documentos profesionales","Dar de baja esta pareja","Finalizadas"]){
+  assert(files.demo.includes(marker),"Demo missing: "+marker);
+}
+assert(files.demo.includes("Vista previa de ONE Partner · datos ficticios"),"Demo must be clearly marked as fictitious");
 assert(!files.html.includes("weddly_shared_wedding_token"),"Professional frontend must never read the ONE couple member token");
 assert(!files.html.includes("weddly_pro_v7"),"Professional frontend must not reuse ONE Payments storage");
 assert(!files.html.includes("weddly_guests_qa_v67"),"Professional frontend must not reuse ONE Guests storage");
