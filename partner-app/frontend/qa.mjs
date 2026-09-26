@@ -20,6 +20,14 @@ assert(files.html.includes("partner_end_relationship"),"Client offboarding flow 
 assert(files.html.includes("partner_archived_weddings"),"Finalized weddings archive missing");
 assert(files.html.includes("partner_register_document"),"Professional document upload missing");
 assert(files.html.includes("one-partner-documents"),"Private Partner document bucket missing");
+assert(files.html.includes('id="teamBtn"'),"Team navigation missing");
+assert(files.html.includes("partner_team"),"Studio team loading missing");
+assert(files.html.includes("partner_assign_wedding"),"Wedding assignment flow missing");
+assert(files.html.includes("partner_unassign_wedding"),"Wedding unassignment flow missing");
+assert(files.html.includes("one-partner-team-invite"),"Team invitation function missing");
+assert(files.html.includes("currentData.access?.canWrite"),"Assistant read-only UI guard missing");
+assert(files.html.includes("currentData?.team?.studioId||hub?.studio?.id"),"Documents must be stored by studio, not individual user");
+assert(files.html.includes("Equipo de esta boda"),"Wedding team section missing");
 assert(files.html.includes('href="/demo.html"'),"Full demo link missing from sign-in");
 for(const marker of ["Hoy","Conformidad profesional","Cierres profesionales","Listados vinculados","Entregas a proveedores","Decisiones confirmadas","Contactos operativos","Responsabilidades compartidas","Documentos profesionales","Dar de baja esta pareja","Finalizadas"]){
   assert(files.demo.includes(marker),"Demo missing: "+marker);
