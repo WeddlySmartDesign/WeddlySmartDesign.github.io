@@ -35,6 +35,7 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
 .closureGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.closureCard{background:#fff;border:1px solid rgba(209,200,192,.78);border-radius:16px;padding:16px}.closureTop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.closureName{font-size:15px;font-weight:750}.closureState{font-size:11.5px;font-weight:750;border-radius:99px;padding:5px 8px;white-space:nowrap}.closureState.blocked{background:#fff1ec;color:#984d39}.closureState.ready{background:#edf4ef;color:var(--good)}.closureState.closed{background:#edf4ef;color:var(--good)}.closureState.revalidate{background:#fff5dc;color:#85631e}.closureMeta{font-size:12px;color:var(--muted);line-height:1.45;margin-top:7px}.closureAction{margin-top:11px}
 .decisionList,.contactGrid{display:grid;gap:10px}.decisionCard{border:1px solid var(--line);border-radius:15px;background:#fff;padding:15px}.decisionTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.decisionTitle{font-size:14px;font-weight:750}.decisionMeta{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.45}.decisionStatus{font-size:11.5px;border-radius:99px;padding:5px 8px;white-space:nowrap}.decisionStatus.confirmed{background:#edf4ef;color:var(--good)}.decisionStatus.pending{background:#f1eee9;color:#746f69}.decisionStatus.review{background:#fff5dc;color:#85631e}.decisionImpacts{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
 .contactGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.contactCard{border:1px solid var(--line);border-radius:15px;background:#fff;padding:15px}.contactKind{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}.contactBusiness{font-size:15px;font-weight:750;margin-top:5px}.contactPerson{font-size:12.5px;color:#5f5a55;margin-top:4px}.contactActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.contactActions a{font-size:12px;text-decoration:none;color:#4f4944;border:1px solid var(--line);padding:6px 9px;border-radius:99px;background:#faf9f7}
+.teamDemoGrid{display:grid;gap:10px}.teamDemoRow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:11px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}.teamDemoAvatar{width:38px;height:38px;border-radius:12px;background:#eee8e1;display:grid;place-items:center;font-size:12px;font-weight:750}.teamDemoCopy b{display:block;font-size:13.5px}.teamDemoCopy span{display:block;font-size:12px;color:var(--muted);margin-top:3px}.teamDemoRole{font-size:11.5px;padding:5px 8px;border-radius:99px;background:#f2eee9;color:#655f59;white-space:nowrap}.teamDemoActivity{display:grid;gap:0}.teamDemoActivity .changeRow{padding:11px 0}
 .demoDocs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.demoDoc{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px}.demoDoc b{display:block;font-size:14px}.demoDoc span{display:block;font-size:12px;color:var(--muted);margin-top:5px;line-height:1.4}.demoDocActions{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}.dangerDemo{margin-top:32px;border:1px solid #ead2cf;background:#fff8f6;border-radius:17px;padding:17px}.dangerDemo h3{color:#9b4a42;margin-bottom:7px}.dangerDemo p{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:12px}.archiveDemoCard{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}.archiveDemoCard h3{font-family:Georgia,"Times New Roman",serif;font-size:22px;font-weight:400;margin:0 0 6px}.archiveDemoCard p{font-size:12.5px;color:var(--muted);line-height:1.5;margin:0}
 
 .footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-size:12px;color:#8a847d;display:flex;justify-content:space-between;gap:12px}
@@ -99,7 +100,7 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
 <div class="app">
 <header class="bar">
   <div class="brand"><strong>ONE Partner</strong><span class="byline">by <span class="brandName">WeddlySmartDesign</span></span></div>
-  <div class="barRight"><div class="studioUser"><div class="studioUserText"><b>Marta · Marea Wedding Studio</b><span>Wedding planner</span></div><div class="avatar">MM</div></div><span class="preview"><span class="previewFull">Vista previa</span><span class="previewShort">DEMO</span></span><button id="homeBtn" class="linkBtn hidden" type="button">Mis bodas</button></div>
+  <div class="barRight"><div class="studioUser"><div class="studioUserText"><b>Marta · Marea Wedding Studio</b><span>Wedding planner</span></div><div class="avatar">MM</div></div><span class="preview"><span class="previewFull">Vista previa</span><span class="previewShort">DEMO</span></span><button id="teamDemoBtn" class="linkBtn" type="button">Equipo</button><button id="homeBtn" class="linkBtn hidden" type="button">Mis bodas</button></div>
 </header>
 
 <main id="hub">
@@ -151,7 +152,7 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
   <div class="weddingGrid">
     <button class="card weddingCard" data-wedding="clara" data-has-changes="true" data-has-pending="true" data-search="clara martín finca el olivar murcia" type="button">
       <div class="weddingHead">
-        <div><div class="names">Clara & Martín</div><div class="date">22 may 2027 · 17:30 · 126 confirmados</div><div class="venueLine">Finca El Olivar · Murcia</div><div class="sourceLine">ONE actualizado hace 12 min</div></div>
+        <div><div class="names">Clara & Martín</div><div class="date">22 may 2027 · 17:30 · 126 confirmados</div><div class="venueLine">Finca El Olivar · Murcia</div><div class="sourceLine">Responsable · Marta · apoyo Andrea</div><div class="sourceLine">ONE actualizado hace 12 min</div></div>
         <div class="change"><span class="dot"></span>3 cambios</div>
       </div>
       <div class="metrics">
@@ -165,7 +166,7 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
 
     <button class="card weddingCard" data-wedding="elena" data-onboarding="true" data-has-changes="false" data-has-pending="true" data-search="elena dani casa del lago cartagena" type="button">
       <div class="weddingHead">
-        <div><div class="names">Elena & Dani</div><div class="date">11 sep 2027 · 12:30 · 84 confirmados</div><div class="venueLine">Casa del Lago · Cartagena</div><div class="sourceLine">ONE actualizado hace 4 h</div></div>
+        <div><div class="names">Elena & Dani</div><div class="date">11 sep 2027 · 12:30 · 84 confirmados</div><div class="venueLine">Casa del Lago · Cartagena</div><div class="sourceLine">Responsable · Lucía</div><div class="sourceLine">ONE actualizado hace 4 h</div></div>
         <div class="change"><span class="dot"></span>Nueva conexión</div>
       </div>
       <div class="metrics">
@@ -193,6 +194,19 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
     <span class="freshnessItem"><span class="freshDot"></span>Invitados · hace 12 min</span>
     <span class="freshnessItem"><span class="freshDot"></span>Planning · hace 3 h</span>
     <span class="freshnessItem warn"><span class="freshDot"></span>Eventos extra · hace 1 día</span>
+  </div>
+
+  <div id="teamSection" class="sectionTitle"><div><h2>Equipo de esta boda</h2><span class="muted">responsable principal y apoyo</span></div><button id="manageTeamDemo" class="btn small soft" type="button">Gestionar</button></div>
+  <div class="teamDemoGrid">
+    <div class="teamDemoRow"><div class="teamDemoAvatar">MM</div><div class="teamDemoCopy"><b>Marta Molina</b><span>Administradora · Marea Wedding Studio</span></div><span class="teamDemoRole">Principal</span></div>
+    <div class="teamDemoRow"><div class="teamDemoAvatar">AL</div><div class="teamDemoCopy"><b>Andrea López</b><span>Asistente</span></div><span class="teamDemoRole">Apoyo</span></div>
+  </div>
+
+  <div id="activitySection" class="sectionTitle"><div><h2>Actividad del equipo</h2><span class="muted">quién hizo qué</span></div></div>
+  <div class="card teamDemoActivity">
+    <div class="changeRow"><div class="changeMain"><b>Cierre profesional · Mesas</b><div class="profileMeta">Marta · hoy, 10:42</div></div><span class="delta">✓</span></div>
+    <div class="changeRow"><div class="changeMain"><b>Entrega de Transporte configurada</b><div class="profileMeta">Lucía · ayer, 18:16</div></div></div>
+    <div class="changeRow"><div class="changeMain"><b>Decisión confirmada</b><div class="profileMeta">Pareja · 25 abr, 18:42</div></div></div>
   </div>
 
   <div id="weddingProfileSection" class="sectionTitle profileHead"><div><h2>Ficha de coordinación</h2><span class="muted">datos privados de Marea Wedding Studio</span></div><button id="editProfileBtn" class="btn small soft" type="button">Editar ficha</button></div>
@@ -368,6 +382,19 @@ h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size
 
 
 
+<div id="teamDemoModal" class="modalBack hidden">
+  <div class="modal detailModal">
+    <div class="modalHead"><div><p class="eyebrow">Marea Wedding Studio</p><h2 style="margin-bottom:6px">Equipo</h2><p class="muted" style="font-size:13px">Cada profesional tiene su propio acceso. La administradora asigna quién lleva cada boda.</p></div><button id="closeTeamDemo" class="x" type="button">×</button></div>
+    <div class="teamDemoGrid">
+      <div class="teamDemoRow"><div class="teamDemoAvatar">MM</div><div class="teamDemoCopy"><b>Marta Molina</b><span>2 bodas activas</span></div><span class="teamDemoRole">Administradora</span></div>
+      <div class="teamDemoRow"><div class="teamDemoAvatar">LR</div><div class="teamDemoCopy"><b>Lucía Romero</b><span>1 boda activa · Elena & Dani</span></div><span class="teamDemoRole">Wedding planner</span></div>
+      <div class="teamDemoRow"><div class="teamDemoAvatar">AL</div><div class="teamDemoCopy"><b>Andrea López</b><span>1 boda activa · Clara & Martín</span></div><span class="teamDemoRole">Asistente</span></div>
+    </div>
+    <div class="notice info" style="margin-top:14px"><b>Asistente = solo lectura.</b><br>Puede consultar las bodas asignadas, pero no cerrar, entregar, modificar documentos ni ver Pagos.</div>
+    <div class="actions" style="margin-top:14px"><button id="inviteTeamDemo" class="btn primary" type="button">Invitar profesional</button></div>
+  </div>
+</div>
+
 <div id="archivedDemoModal" class="modalBack hidden">
   <div class="modal detailModal">
     <div class="modalHead"><div><p class="eyebrow">Archivo profesional</p><h2 style="margin-bottom:6px">Bodas finalizadas</h2><p class="muted" style="font-size:13px">Sin acceso a los datos vivos de ONE. Solo se conserva la información profesional necesaria.</p></div><button id="closeArchivedDemo" class="x" type="button">×</button></div>
@@ -503,6 +530,13 @@ document.querySelectorAll('[data-open-wedding]').forEach(b=>b.addEventListener('
 document.querySelectorAll('[data-open-onboarding]').forEach(b=>b.addEventListener('click',()=>document.getElementById('onboardingModal').classList.remove('hidden')));
 document.getElementById('backBtn').addEventListener('click',showHub);homeBtn.addEventListener('click',showHub);
 
+
+const teamDemoModal=document.getElementById('teamDemoModal');
+document.getElementById('teamDemoBtn').onclick=()=>teamDemoModal.classList.remove('hidden');
+document.getElementById('manageTeamDemo').onclick=()=>teamDemoModal.classList.remove('hidden');
+document.getElementById('closeTeamDemo').onclick=()=>teamDemoModal.classList.add('hidden');
+teamDemoModal.addEventListener('click',e=>{if(e.target===teamDemoModal)teamDemoModal.classList.add('hidden')});
+document.getElementById('inviteTeamDemo').onclick=()=>toast('En producción, la profesional recibe una invitación por email y entra con su propia cuenta');
 
 const onboardingModal=document.getElementById('onboardingModal');
 document.getElementById('closeOnboarding').onclick=()=>onboardingModal.classList.add('hidden');
