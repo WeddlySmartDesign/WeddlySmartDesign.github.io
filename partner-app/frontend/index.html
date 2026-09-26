@@ -142,7 +142,7 @@ $('authForm').onsubmit=async e=>{
   e.preventDefault();msg('authError','');msg('authInfo','');const email=$('email').value.trim().toLowerCase(),password=$('password').value;$('authSubmit').disabled=true;
   try{
     if(authMode==='signin'){const {error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error;await start()}
-    else{const {data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:location.origin+'/'}});if(error)throw error;if(data.session)await start();else msg('authInfo','Cuenta creada. Revisa tu email para confirmar la dirección.')}
+    else{const redirect=teamInviteToken?location.origin+'/?team_invite='+encodeURIComponent(teamInviteToken):location.origin+'/';const {data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:redirect}});if(error)throw error;if(data.session)await start();else msg('authInfo','Cuenta creada. Revisa tu email para confirmar la dirección.')}
   }catch(err){msg('authError',friendlyAuth(err))}finally{$('authSubmit').disabled=false}
 };
 $('resetBtn').onclick=async()=>{
@@ -155,6 +155,84 @@ $('logoutBtn').onclick=async()=>{await supabase.auth.signOut();showAuth()};$('ho
 supabase.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY')showPasswordRecovery();if(event==='SIGNED_OUT'||!session)showAuth()});
 function showPasswordRecovery(){modal('<div class="modalHead"><div><p class="eyebrow">Seguridad</p><h2>Nueva contraseña</h2></div><button class="x" data-close-modal>×</button></div><div class="formGrid"><label class="wide"><span>Nueva contraseña</span><input id="newPassword" type="password" minlength="8" placeholder="Mínimo 8 caracteres"></label></div><div class="actions" style="margin-top:14px"><button id="savePassword" class="btn primary">Guardar contraseña</button></div>');$('savePassword').onclick=async()=>{const p=$('newPassword').value;if(p.length<8)return;const {error}=await supabase.auth.updateUser({password:p});if(!error){closeModal();await start()}}}
 
+
+
+function studioRoleLabel(r){return ({admin:'Administradora',planner:'Wedding planner',assistant:'Asistente'})[r]||r}
+function assignmentLabel(r){return ({lead:'Principal',support:'Apoyo'})[r]||'Sin asignar'}
+function initials(name){return String(name||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]||'').join('').toUpperCase()||'?'}
+
+async function openTeam(){
+  try{
+    teamCtx=await rpc('partner_team');
+    const me=teamCtx.me||{},members=teamCtx.members||[],invites=teamCtx.invites||[],isAdmin=me.role==='admin';
+    modal('<div class="modalHead"><div><p class="eyebrow">Equipo</p><h2>'+esc(teamCtx.studio?.name||'Estudio')+'</h2><p class="muted" style="font-size:13px">Cada profesional tiene su propio acceso. Las bodas se asignan internamente sin pedir una nueva autorización a la pareja.</p></div><button class="x" data-close-modal>×</button></div>'+
+      (isAdmin?'<div class="teamInviteBox"><b>Invitar a una profesional</b><div class="grid2" style="margin-top:10px"><label class="field"><span>Email</span><input id="teamInviteEmail" type="email" placeholder="nombre@estudio.com"></label><label class="field"><span>Rol</span><select id="teamInviteRole"><option value="planner">Wedding planner</option><option value="assistant">Asistente</option></select></label></div><div id="teamInviteMsg" class="notice info hidden"></div><button id="sendTeamInvite" class="btn primary">Enviar invitación</button></div>':'')+
+      '<div class="sectionTitle" style="margin-top:18px"><h2>Personas</h2><span class="muted">'+members.length+'</span></div><div class="teamGrid">'+members.map(m=>'<div class="teamMember"><div class="teamAvatar">'+esc(initials(m.displayName||m.email))+'</div><div class="teamCopy"><b>'+esc(m.displayName||m.email)+'</b><span>'+esc(m.email||'')+' · '+esc(m.assignedActiveWeddings||0)+' bodas activas</span></div><span class="teamRole '+esc(m.role)+'">'+esc(studioRoleLabel(m.role))+'</span>'+(isAdmin&&!m.isOwner?'<div class="actions" style="grid-column:2/4;margin-top:4px"><select class="memberRoleSelect" data-user="'+esc(m.userId)+'"><option value="planner" '+(m.role==='planner'?'selected':'')+'>Wedding planner</option><option value="assistant" '+(m.role==='assistant'?'selected':'')+'>Asistente</option></select><button class="btn small soft removeTeamMember" data-user="'+esc(m.userId)+'">Quitar</button></div>':'')+'</div>').join('')+'</div>'+
+      (isAdmin&&invites.length?'<div class="sectionTitle"><h2>Invitaciones pendientes</h2></div><div class="teamGrid">'+invites.map(i=>'<div class="teamMember"><div class="teamAvatar">↗</div><div class="teamCopy"><b>'+esc(i.email)+'</b><span>'+esc(studioRoleLabel(i.role))+' · caduca '+esc(dt(i.expiresAt))+'</span></div><button class="btn small soft cancelTeamInvite" data-id="'+esc(i.id)+'">Cancelar</button></div>').join('')+'</div>':'')
+    );
+
+    if(isAdmin){
+      $('sendTeamInvite').onclick=async()=>{
+        const email=$('teamInviteEmail').value.trim().toLowerCase(),role=$('teamInviteRole').value;
+        if(!email){msg('teamInviteMsg','Escribe un email.');return}
+        $('sendTeamInvite').disabled=true;msg('teamInviteMsg','');
+        try{
+          const {data,error}=await supabase.functions.invoke('one-partner-team-invite',{body:{email,role}});
+          if(error)throw error;
+          if(data?.sent)msg('teamInviteMsg','Invitación enviada por email.');
+          else msg('teamInviteMsg','Invitación creada. Copia este enlace si el email no llega: '+(data?.link||''));
+          teamCtx=await rpc('partner_team');
+          setTimeout(openTeam,600);
+        }catch(e){msg('teamInviteMsg','No se ha podido enviar la invitación.')}finally{$('sendTeamInvite').disabled=false}
+      };
+      document.querySelectorAll('.memberRoleSelect').forEach(s=>s.onchange=async()=>{await rpc('partner_set_team_member_role',{p_user_id:s.dataset.user,p_role:s.value});openTeam()});
+      document.querySelectorAll('.removeTeamMember').forEach(b=>b.onclick=async()=>{if(!confirm('¿Quitar esta persona del estudio? Dejará de ver sus bodas asignadas.'))return;await rpc('partner_remove_team_member',{p_user_id:b.dataset.user});openTeam()});
+      document.querySelectorAll('.cancelTeamInvite').forEach(b=>b.onclick=async()=>{await rpc('partner_cancel_team_invite',{p_invite_id:b.dataset.id});openTeam()});
+    }
+  }catch(e){modal('<div class="notice error">No se ha podido cargar el equipo.</div>')}
+}
+
+async function openWeddingTeamManager(){
+  try{
+    const t=await rpc('partner_team'),assigned=currentData?.team?.members||[];
+    const map=new Map(assigned.map(x=>[String(x.userId),x.assignmentRole]));
+    modal('<div class="modalHead"><div><p class="eyebrow">Equipo de esta boda</p><h2>'+esc(nameOf(currentData?.wedding))+'</h2><p class="muted" style="font-size:13px">Una responsable principal y las personas de apoyo que necesites.</p></div><button class="x" data-close-modal>×</button></div><div class="card" style="box-shadow:none;padding:14px">'+(t.members||[]).map(m=>'<div class="assignmentRow"><div><b>'+esc(m.displayName||m.email)+'</b><div class="muted" style="font-size:12px">'+esc(studioRoleLabel(m.role))+'</div></div><select class="assignmentSelect" data-user="'+esc(m.userId)+'" data-role="'+esc(m.role)+'"><option value="">Sin asignar</option><option value="lead" '+(map.get(String(m.userId))==='lead'?'selected':'')+' '+(m.role==='assistant'?'disabled':'')+'>Responsable principal</option><option value="support" '+(map.get(String(m.userId))==='support'?'selected':'')+'>Apoyo</option></select></div>').join('')+'</div>');
+    document.querySelectorAll('.assignmentSelect').forEach(s=>s.onchange=async()=>{
+      s.disabled=true;
+      try{
+        if(!s.value)await rpc('partner_unassign_wedding',{p_grant_id:currentGrant,p_user_id:s.dataset.user});
+        else await rpc('partner_assign_wedding',{p_grant_id:currentGrant,p_user_id:s.dataset.user,p_assignment_role:s.value});
+        closeModal();await openWedding(currentGrant,'team');
+      }catch(e){s.disabled=false}
+    });
+  }catch(e){modal('<div class="notice error">No se ha podido abrir la asignación del equipo.</div>')}
+}
+
+async function showTeamInvitePreview(){
+  if(!teamInviteToken)return;
+  try{
+    const p=await rpc('partner_team_invite_preview',{p_token:teamInviteToken});
+    const form=document.querySelector('.authCard');
+    if(form&&!document.getElementById('teamInviteBanner')){
+      const box=document.createElement('div');box.id='teamInviteBanner';box.className='notice info';
+      box.innerHTML='<b>Invitación a '+esc(p.studio?.name||'un estudio')+'</b><br>Accede o crea tu cuenta con <b>'+esc(p.email||'')+'</b> para unirte como '+esc(studioRoleLabel(p.role))+'.';
+      form.prepend(box);
+      if(p.email)$('email').value=p.email;
+    }
+  }catch(e){}
+}
+
+async function acceptTeamInviteIfNeeded(){
+  if(!teamInviteToken)return false;
+  try{
+    await rpc('partner_accept_team_invite',{p_token:teamInviteToken});
+    history.replaceState({},'',location.pathname);
+    return true;
+  }catch(e){
+    modal('<div class="modalHead"><div><p class="eyebrow">Invitación de equipo</p><h2>No se ha podido aceptar</h2></div><button class="x" data-close-modal>×</button></div><p class="lead">Comprueba que has accedido con el mismo email al que se envió la invitación.</p>');
+    return false;
+  }
+}
 
 async function openSettings(){
   try{
@@ -195,7 +273,7 @@ async function openSettings(){
 
 async function start(){
   showApp();setLoading(true);
-  try{hub=await rpc('partner_hub');today=await rpc('partner_today');if(!hub.profile?.business_name)renderProfile();else renderHub()}
+  try{if(teamInviteToken)await acceptTeamInviteIfNeeded();hub=await rpc('partner_hub');today=await rpc('partner_today');if(!hub.profile?.business_name)renderProfile();else renderHub()}
   catch(e){$('main').innerHTML='<div class="notice error">No se ha podido cargar ONE Partner.</div>';setLoading(false)}
 }
 function renderProfile(){
@@ -418,7 +496,7 @@ async function deleteContact(id){if(!confirm('¿Eliminar este contacto operativo
 function openProfileForm(){const p=profileOf(currentData.wedding)||{},c1=p.contact1||{},c2=p.contact2||{},ce=p.ceremony||{},re=p.reception||{};modal('<div class="modalHead"><div><p class="eyebrow">Ficha de coordinación</p><h2>Datos profesionales</h2></div><button class="x" data-close-modal>×</button></div><div class="formGrid"><label><span>Contacto 1</span><input id="p1n" value="'+esc(c1.name||'')+'"></label><label><span>Teléfono</span><input id="p1p" value="'+esc(c1.phone||'')+'"></label><label class="wide"><span>Email</span><input id="p1e" value="'+esc(c1.email||'')+'"></label><label><span>Contacto 2</span><input id="p2n" value="'+esc(c2.name||'')+'"></label><label><span>Teléfono</span><input id="p2p" value="'+esc(c2.phone||'')+'"></label><label class="wide"><span>Email</span><input id="p2e" value="'+esc(c2.email||'')+'"></label><label><span>Ceremonia</span><input id="cev" value="'+esc(ce.venue||'')+'"></label><label><span>Hora</span><input id="cet" type="time" value="'+esc(ce.time||'')+'"></label><label class="wide"><span>Dirección ceremonia</span><input id="cea" value="'+esc(ce.address||'')+'"></label><label class="wide"><span>Google Maps ceremonia</span><input id="cem" type="url" value="'+esc(ce.mapUrl||'')+'"></label><label><span>Celebración</span><input id="rev" value="'+esc(re.venue||'')+'"></label><label><span>Hora</span><input id="ret" type="time" value="'+esc(re.time||'')+'"></label><label class="wide"><span>Dirección celebración</span><input id="rea" value="'+esc(re.address||'')+'"></label><label class="wide"><span>Google Maps celebración</span><input id="rem" type="url" value="'+esc(re.mapUrl||'')+'"></label><label class="wide"><span>Nota de coordinación</span><textarea id="pnotes">'+esc(p.notes||'')+'</textarea></label></div><div class="actions" style="margin-top:14px"><button id="saveWeddingProfile" class="btn primary">Guardar ficha</button></div>');$('saveWeddingProfile').onclick=async()=>{await rpc('partner_save_wedding_profile_v2',{p_grant_id:currentGrant,p_contact_1_name:$('p1n').value,p_contact_1_phone:$('p1p').value,p_contact_1_email:$('p1e').value,p_contact_2_name:$('p2n').value,p_contact_2_phone:$('p2p').value,p_contact_2_email:$('p2e').value,p_ceremony_venue:$('cev').value,p_ceremony_address:$('cea').value,p_ceremony_time:$('cet').value,p_ceremony_map_url:$('cem').value,p_reception_venue:$('rev').value,p_reception_address:$('rea').value,p_reception_time:$('ret').value,p_reception_map_url:$('rem').value,p_coordination_notes:$('pnotes').value});closeModal();await openWedding(currentGrant,'profile')}}
 async function openBrief(){try{const b=await rpc('partner_meeting_brief',{p_grant_id:currentGrant}),blocks=b.blockers||[],rs=b.openResponsibilities||[];modal('<div class="modalHead"><div><p class="eyebrow">Brief automático</p><h2>Lo que necesitas llevar a la próxima reunión</h2></div><button class="x" data-close-modal>×</button></div><h3>Bloqueos / entregas</h3><div class="listRows">'+(blocks.length?blocks.map(x=>'<div class="listRow"><b>'+esc(scopeLabel(x.kind||x.scope))+'</b><span>'+esc(stateText(x.state))+'</span></div>').join(''):'<div class="listRow"><b>Sin bloqueos críticos</b></div>')+'</div><h3 style="margin-top:18px">Responsabilidades abiertas</h3><div class="listRows">'+(rs.length?rs.map(x=>'<div class="listRow"><b>'+esc(x.title)+'</b><span>'+esc(x.owner==='couple'?'Pendiente de la pareja':'Pendiente de ti')+'</span></div>').join(''):'<div class="listRow"><b>Sin responsabilidades abiertas</b></div>')+'</div>')}catch(e){}}
 
-const {data:{session}}=await supabase.auth.getSession();if(session)start();else showAuth();
+const {data:{session}}=await supabase.auth.getSession();if(session)start();else{showAuth();await showTeamInvitePreview();}
 </script>
 </body>
 </html>
