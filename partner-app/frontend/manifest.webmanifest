@@ -1,0 +1,24 @@
+{
+  "name": "ONE Partner by WeddlySmartDesign",
+  "short_name": "ONE Partner",
+  "description": "Coordinación profesional conectada a ONE.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f3f0eb",
+  "theme_color": "#1d1a17",
+  "lang": "es",
+  "categories": [
+    "business",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "/one-partner-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
