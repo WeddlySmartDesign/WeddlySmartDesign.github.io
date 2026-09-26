@@ -114,7 +114,10 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const dmy=s=>{if(!s)return '';const d=new Date(s+'T12:00:00');return Number.isNaN(d.getTime())?s:new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short',year:'numeric'}).format(d)};
 const dt=s=>{if(!s)return '';const d=new Date(s);return Number.isNaN(d.getTime())?'':new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}).format(d)};
 let authMode='signin',hub=null,today=null,currentGrant=null,currentData=null,currentDocuments=[],teamCtx=null,currentFilter='all';
-const teamInviteToken=new URLSearchParams(location.search).get('team_invite')||'';
+const TEAM_INVITE_KEY='one_partner_team_invite';
+const inviteFromUrl=new URLSearchParams(location.search).get('team_invite')||'';
+if(inviteFromUrl){try{localStorage.setItem(TEAM_INVITE_KEY,inviteFromUrl)}catch(_){}}
+let teamInviteToken=inviteFromUrl||(()=>{try{return localStorage.getItem(TEAM_INVITE_KEY)||''}catch(_){return ''}})();
 
 function rpc(name,args={}){return supabase.rpc(name,args).then(({data,error})=>{if(error)throw error;return data})}
 function showAuth(){ $('auth').classList.remove('hidden');$('app').classList.add('hidden') }
@@ -142,7 +145,7 @@ $('authForm').onsubmit=async e=>{
   e.preventDefault();msg('authError','');msg('authInfo','');const email=$('email').value.trim().toLowerCase(),password=$('password').value;$('authSubmit').disabled=true;
   try{
     if(authMode==='signin'){const {error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error;await start()}
-    else{const redirect=teamInviteToken?location.origin+'/?team_invite='+encodeURIComponent(teamInviteToken):location.origin+'/';const {data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:redirect}});if(error)throw error;if(data.session)await start();else msg('authInfo','Cuenta creada. Revisa tu email para confirmar la dirección.')}
+    else{const {data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:location.origin+'/'}});if(error)throw error;if(data.session)await start();else msg('authInfo','Cuenta creada. Revisa tu email para confirmar la dirección.')}
   }catch(err){msg('authError',friendlyAuth(err))}finally{$('authSubmit').disabled=false}
 };
 $('resetBtn').onclick=async()=>{
@@ -219,13 +222,15 @@ async function showTeamInvitePreview(){
       form.prepend(box);
       if(p.email)$('email').value=p.email;
     }
-  }catch(e){}
+  }catch(e){try{localStorage.removeItem(TEAM_INVITE_KEY)}catch(_){} teamInviteToken=''}
 }
 
 async function acceptTeamInviteIfNeeded(){
   if(!teamInviteToken)return false;
   try{
     await rpc('partner_accept_team_invite',{p_token:teamInviteToken});
+    try{localStorage.removeItem(TEAM_INVITE_KEY)}catch(_){}
+    teamInviteToken='';
     history.replaceState({},'',location.pathname);
     return true;
   }catch(e){
