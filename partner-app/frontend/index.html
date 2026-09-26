@@ -273,13 +273,14 @@ async function openSettings(){
 
 async function start(){
   showApp();setLoading(true);
-  try{if(teamInviteToken)await acceptTeamInviteIfNeeded();hub=await rpc('partner_hub');today=await rpc('partner_today');if(!hub.profile?.business_name)renderProfile();else renderHub()}
+  try{if(teamInviteToken)await acceptTeamInviteIfNeeded();hub=await rpc('partner_hub');today=await rpc('partner_today');if(!hub.profile?.contact_name)renderProfile();else renderHub()}
   catch(e){$('main').innerHTML='<div class="notice error">No se ha podido cargar ONE Partner.</div>';setLoading(false)}
 }
 function renderProfile(){
   $('homeBtn').classList.add('hidden');setLoading(false);
-  $('main').innerHTML='<p class="eyebrow">Tu cuenta profesional</p><h1>Una sola vez.</h1><p class="lead">Así sabrá cada pareja quién está solicitando acceso.</p><div class="card" style="max-width:640px"><div class="grid2"><label class="field"><span>Tu nombre</span><input id="profileName" value="'+esc(hub.profile?.contact_name||'')+'"></label><label class="field"><span>Estudio / empresa</span><input id="profileBusiness" value="'+esc(hub.profile?.business_name||'')+'"></label></div><div id="profileError" class="notice error hidden"></div><button id="saveProfile" class="btn primary">Guardar y continuar</button></div>';
-  $('saveProfile').onclick=async()=>{const name=$('profileName').value.trim(),business=$('profileBusiness').value.trim();if(!business){msg('profileError','Indica el nombre profesional.');return}try{await rpc('partner_save_profile',{p_contact_name:name,p_business_name:business,p_locale:'es'});await refreshHub()}catch(e){msg('profileError','No se ha podido guardar.')}};
+  const studioName=hub.studio?.name||hub.profile?.business_name||'Mi estudio',isAdmin=hub.studio?.role==='admin';
+  $('main').innerHTML='<p class="eyebrow">Tu cuenta profesional</p><h1>Una sola vez.</h1><p class="lead">Así sabrá cada pareja y vuestro equipo quién está trabajando en cada boda.</p><div class="card" style="max-width:640px"><div class="grid2"><label class="field"><span>Tu nombre</span><input id="profileName" value="'+esc(hub.profile?.contact_name||'')+'"></label><label class="field"><span>Estudio / empresa</span><input id="profileBusiness" value="'+esc(studioName)+'" '+(isAdmin?'':'readonly')+'></label></div><div id="profileError" class="notice error hidden"></div><button id="saveProfile" class="btn primary">Guardar y continuar</button></div>';
+  $('saveProfile').onclick=async()=>{const name=$('profileName').value.trim(),business=$('profileBusiness').value.trim();if(!name){msg('profileError','Indica tu nombre.');return}if(isAdmin&&!business){msg('profileError','Indica el nombre profesional.');return}try{await rpc('partner_save_profile',{p_contact_name:name,p_business_name:business||studioName,p_locale:'es'});await refreshHub()}catch(e){msg('profileError','No se ha podido guardar.')}};
 }
 async function refreshHub(){setLoading(true);try{hub=await rpc('partner_hub');today=await rpc('partner_today');renderHub()}catch(e){setLoading(false)}}
 
@@ -293,17 +294,26 @@ function cardRisk(w){
   const re=clos.filter(x=>x.state==='revalidation_required').length,old=del.filter(x=>x.state==='outdated').length,blocks=Number(a.blockers||0);
   let out='';if(blocks)out+='<span class="tag bad">'+blocks+' bloqueos</span>';if(re)out+='<span class="tag warn">'+re+' cierres a revalidar</span>';if(old)out+='<span class="tag warn">'+old+' entregas desactualizadas</span>';if(!out)out='<span class="tag good">Sin incidencias críticas</span>';return out;
 }
+function assignedTeamText(w){
+  const members=w?.team?.members||[],lead=members.find(x=>x.assignmentRole==='lead'),support=members.filter(x=>x.assignmentRole==='support');
+  if(!members.length)return '';
+  let out=lead?'Responsable · '+(lead.displayName||lead.email):'Sin responsable principal';
+  if(support.length)out+=' · Apoyo '+support.map(x=>x.displayName||x.email).join(', ');
+  return out;
+}
 function weddingCard(w){
   const p=profileOf(w),t=p?.ceremony?.time||'',v=p?.reception?.venue||p?.ceremony?.venue||'';
   const s=w.summary||{},metrics=[];
   if(s.guests)metrics.push([s.guests.confirmed,'confirmados']);if(s.seating)metrics.push([s.seating.unseated,'sin mesa']);if(s.planning)metrics.push([s.planning.overdue,'tareas vencidas']);
-  return '<button class="card weddingCard" data-open="'+esc(w.id)+'" data-search="'+esc((nameOf(w)+' '+v).toLowerCase())+'" style="width:100%;text-align:left;border:1px solid var(--line)"><div class="weddingHead"><div><div class="names">'+esc(nameOf(w))+'</div><div class="date">'+esc(dmy(w.identity?.weddingDate))+(t?' · '+esc(t):'')+'</div><div class="weddingMeta">'+esc(v)+'</div></div></div><div class="metrics">'+metrics.slice(0,3).map(x=>'<div class="metric"><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join('')+'</div><div class="riskLine">'+cardRisk(w)+'</div></button>';
+  const teamText=assignedTeamText(w);
+  return '<button class="card weddingCard" data-open="'+esc(w.id)+'" data-search="'+esc((nameOf(w)+' '+v+' '+teamText).toLowerCase())+'" style="width:100%;text-align:left;border:1px solid var(--line)"><div class="weddingHead"><div><div class="names">'+esc(nameOf(w))+'</div><div class="date">'+esc(dmy(w.identity?.weddingDate))+(t?' · '+esc(t):'')+'</div><div class="weddingMeta">'+esc(v)+'</div>'+(teamText?'<div class="weddingMeta" style="margin-top:5px">'+esc(teamText)+'</div>':'')+'</div></div><div class="metrics">'+metrics.slice(0,3).map(x=>'<div class="metric"><b>'+esc(x[0])+'</b><span>'+esc(x[1])+'</span></div>').join('')+'</div><div class="riskLine">'+cardRisk(w)+'</div></button>';
 }
 function renderHub(){
   currentGrant=null;currentData=null;$('homeBtn').classList.add('hidden');setLoading(false);
   const weddings=hub?.weddings||[];
-  $('main').innerHTML='<div class="detailHeader"><div><p class="eyebrow">'+esc(hub.profile?.business_name||'ONE Partner')+'</p><h1>Qué necesita tu atención.</h1><p class="lead">La pareja sigue trabajando en ONE. Partner te dice qué cambió, qué bloquea el cierre y qué entrega profesional necesita revisión.</p></div><button id="connectBtn" class="btn primary">Conectar una boda</button></div><div id="connectPanel" class="hidden"></div><div class="sectionTitle"><h2>Hoy</h2><span class="muted">'+(today?.items?.length||0)+' asuntos</span></div>'+todayHtml()+'<div class="toolbar"><div class="filters"><button class="filter active" data-filter="all">Todas</button><button class="filter" data-filter="risk">Con riesgo</button><button class="filter" data-filter="ok">Al día</button></div><input id="weddingSearch" class="search" type="search" placeholder="Buscar pareja o lugar"></div><div class="sectionTitle"><h2>Mis bodas</h2><div class="actions"><span class="muted">'+weddings.length+' activas</span><button id="archivedBtn" class="btn small soft">Finalizadas</button></div></div>'+(weddings.length?'<div id="weddingGrid" class="weddingGrid">'+weddings.map(weddingCard).join('')+'</div>':'<div class="card empty">Todavía no tienes ninguna boda conectada.</div>');
-  $('connectBtn').onclick=renderConnect;$('archivedBtn').onclick=openArchivedWeddings;document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openWedding(b.dataset.open));
+  const canConnect=hub.studio?.role!=='assistant';
+  $('main').innerHTML='<div class="detailHeader"><div><p class="eyebrow">'+esc(hub.studio?.name||hub.profile?.business_name||'ONE Partner')+'</p><h1>Qué necesita tu atención.</h1><p class="lead">La pareja sigue trabajando en ONE. Partner te dice qué cambió, qué bloquea el cierre y qué entrega profesional necesita revisión.</p></div>'+(canConnect?'<button id="connectBtn" class="btn primary">Conectar una boda</button>':'')+'</div><div id="connectPanel" class="hidden"></div><div class="sectionTitle"><h2>Hoy</h2><span class="muted">'+(today?.items?.length||0)+' asuntos</span></div>'+todayHtml()+'<div class="toolbar"><div class="filters"><button class="filter active" data-filter="all">Todas</button><button class="filter" data-filter="risk">Con riesgo</button><button class="filter" data-filter="ok">Al día</button></div><input id="weddingSearch" class="search" type="search" placeholder="Buscar pareja o lugar"></div><div class="sectionTitle"><h2>Mis bodas</h2><div class="actions"><span class="muted">'+weddings.length+' activas</span><button id="archivedBtn" class="btn small soft">Finalizadas</button></div></div>'+(weddings.length?'<div id="weddingGrid" class="weddingGrid">'+weddings.map(weddingCard).join('')+'</div>':'<div class="card empty">Todavía no tienes ninguna boda conectada.</div>');
+  if($('connectBtn'))$('connectBtn').onclick=renderConnect;$('archivedBtn').onclick=openArchivedWeddings;document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openWedding(b.dataset.open));
   document.querySelectorAll('[data-alert-grant]').forEach(b=>b.onclick=()=>{if(b.dataset.alertKind==='initial_review')openInitialReview(b.dataset.alertGrant);else openWedding(b.dataset.alertGrant,b.dataset.alertTarget)});
   $('weddingSearch')?.addEventListener('input',applyHubFilters);document.querySelectorAll('.filter').forEach(f=>f.onclick=()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));f.classList.add('active');currentFilter=f.dataset.filter;applyHubFilters()});
 }
