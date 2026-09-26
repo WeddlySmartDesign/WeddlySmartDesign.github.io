@@ -52,7 +52,8 @@
     @keyframes spin{to{transform:rotate(360deg)}}
     .grant{margin-top:18px}
     .grant .permission{padding:13px 0}
-    .sharedBlock{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+    .teamShared{border:1px solid var(--line);border-radius:13px;padding:12px 14px;margin:12px 0;background:#faf8f5}.teamShared h3{font-size:12px;margin:0 0 8px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}.teamSharedRow{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px solid var(--line)}.teamSharedRow:first-of-type{border-top:0}.teamSharedRow b{font-size:13px}.teamSharedRow span{font-size:12px;color:var(--muted);text-align:right}
+.sharedBlock{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
     .sharedHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
     .sharedHead h3{margin:0;font-size:16px}.sharedHead span{font-size:12px;color:var(--muted)}
     .sharedList{display:grid;gap:8px}
@@ -305,8 +306,11 @@
   function grantCard(grant,index){
     const name=grant.professional?.businessName || grant.professional?.contactName || 'Wedding planner';
     const contact=grant.professional?.businessName ? grant.professional?.contactName : '';
+    const pros=grant.assignedProfessionals||[];
+    const prosHtml=pros.length?'<div class="teamShared"><h3>'+(lang==='es'?'Profesionales asignadas':'Assigned professionals')+'</h3>'+pros.map(p=>'<div class="teamSharedRow"><b>'+escapeHtml(p.displayName||'Profesional')+'</b><span>'+escapeHtml(p.assignmentRole==='lead'?(lang==='es'?'Responsable principal':'Lead planner'):(lang==='es'?'Apoyo':'Support'))+'</span></div>').join('')+'</div>':'';
     return '<div class="card grant" data-grant="'+escapeHtml(grant.grantId)+'">'+
       '<div class="who"><div><h2>'+escapeHtml(name)+'</h2><p>'+escapeHtml(contact||'')+'</p></div><span class="badge">'+escapeHtml(t('active'))+'</span></div>'+
+      prosHtml+
       '<div class="permholder">'+permissionRows(grant.permissions,'g'+index)+'</div>'+
       '<div class="notice ok hidden grantNotice"></div>'+
       '<div class="sharedBlock"><div id="shared-'+index+'" class="sharedEmpty">Cargando coordinación…</div></div>'+
