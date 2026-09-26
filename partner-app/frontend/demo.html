@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f2efe9">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>ONE Partner · Vista previa</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap">
+<style>
+:root{--ink:#181715;--muted:#746f69;--paper:#f3f0eb;--card:#fff;--line:#e4ded7;--soft:#ebe6df;--dark:#1d1a17;--accent:#8e5b49;--good:#315f49;--warn:#a36528;--shadow:0 18px 60px rgba(38,31,24,.08)}
+*{box-sizing:border-box}html{background:var(--paper);scroll-behavior:smooth}body{margin:0;min-height:100vh;background:radial-gradient(circle at 88% 0,#fff 0,transparent 38rem),linear-gradient(180deg,#f6f3ef 0,#f2eee8 100%);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);font-size:16px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button,input,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.app{max-width:1280px;margin:0 auto;padding:max(24px,env(safe-area-inset-top)) 22px calc(64px + env(safe-area-inset-bottom))}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:34px;padding:4px 0 18px;border-bottom:1px solid rgba(198,188,178,.58)}.brand{display:flex;align-items:baseline;gap:8px;letter-spacing:-.02em}.brand strong{font-size:22px;letter-spacing:-.025em}.brand .byline{font-size:13px;color:#6f6963;letter-spacing:0;text-transform:none!important;font-variant:normal!important;font-feature-settings:"smcp" 0,"c2sc" 0;font-weight:400;font-family:"Caveat",cursive!important;font-size:19px!important;font-weight:500!important;font-family:"Caveat",cursive!important;font-size:19px!important;font-weight:500!important}.brandName{display:inline!important;text-transform:none!important;font-variant:normal!important;letter-spacing:0!important}
+.barRight{display:flex;align-items:center;gap:8px}.studioUser{display:flex;align-items:center;gap:9px;margin-right:4px}.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#e8dfd8;color:#684b40;font-weight:800;font-size:12px;border:1px solid rgba(143,116,99,.08)}.studioUserText{line-height:1.15;text-align:right}.studioUserText b{display:block;font-size:13px;font-weight:750}.studioUserText span{display:block;font-size:12px;color:var(--muted);margin-top:3px}.preview{font-size:11.5px;letter-spacing:.11em;text-transform:uppercase;border:1px solid #d8cec7;background:#fff8f4;color:#83503e;border-radius:99px;padding:8px 11px}.linkBtn{border:0;background:transparent;color:var(--muted);padding:9px;font-size:13px}
+.eyebrow{font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:#766f68;margin:0 0 12px}
+h1,h2,h3,p{margin-top:0}h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(42px,5.3vw,66px);font-weight:400;letter-spacing:-.048em;line-height:.97;margin-bottom:16px}h2{font-size:24px;letter-spacing:-.03em}h3{font-size:16px;margin-bottom:6px}.lead{color:#4f4a45;font-size:17px;line-height:1.58;max-width:780px}.muted{color:var(--muted);font-size:12.5px}
+.card{background:rgba(255,255,255,.96);border:1px solid rgba(209,200,192,.78);border-radius:22px;box-shadow:0 18px 55px rgba(38,31,24,.07);padding:24px}.btn{border:0;border-radius:13px;min-height:48px;padding:13px 18px;font-weight:700;font-size:14px;transition:transform .15s ease,box-shadow .15s ease,background .15s ease}.btn.primary{background:var(--dark);color:#fff;box-shadow:0 10px 24px rgba(29,26,23,.12)}.btn.soft{background:var(--soft);color:var(--ink)}.btn.small{min-height:38px;padding:9px 12px;font-size:13px}.btn:hover{transform:translateY(-1px)}.btn:active{transform:translateY(0)}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid rgba(142,91,73,.18);outline-offset:2px}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:36px;align-items:end;padding:24px 0 16px}.heroActions{flex:0 0 auto}.attention{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0 8px}.todayBoard{margin:30px 0 10px}.todayHead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:13px}.todayHead h2{margin:0}.todayMeta{font-size:12.5px;color:var(--muted)}.todayList{display:grid;gap:11px}.todayItem{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;text-align:left;border:1px solid rgba(209,200,192,.82);background:rgba(255,255,255,.95);border-radius:16px;padding:15px 16px;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}.todayIcon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-weight:850;font-size:13px;background:#f3e9e3;color:#85503e}.todayCopy b{display:block;font-size:14px;line-height:1.3}.todayCopy span{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.45}.todayWedding{font-size:12px;color:#5f5a55;white-space:nowrap;font-weight:650}.todayItem:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(38,31,24,.06);border-color:#d7cbc1}.todayUrgent .todayIcon{background:#fff0eb;color:#9c4c3a}.todayDue .todayIcon{background:#f2eee4;color:#7b6330}.todayChanged .todayIcon{background:#edf3ef;color:#35604b}.attentionCard{display:flex;gap:13px;align-items:center;padding:15px 16px;border:1px solid rgba(209,200,192,.72);background:rgba(255,255,255,.78);border-radius:16px}.attentionIcon{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:#f4ebe5;color:#8a513b;font-weight:800}.attentionCard b{display:block;font-size:14px}.attentionCard span{display:block;font-size:12px;color:var(--muted);margin-top:3px}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:30px 0 12px}.toolbarLeft{display:flex;gap:7px;flex-wrap:wrap;align-items:center}.weddingSearch{position:relative;min-width:250px}.weddingSearch input{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.95);border-radius:99px;padding:10px 14px 10px 35px;font-size:12.5px;color:var(--ink);outline:0}.weddingSearch:before{content:"⌕";position:absolute;left:13px;top:50%;transform:translateY(-52%);font-size:17px;color:#8a837c;pointer-events:none}.emptySearch{grid-column:1/-1;padding:26px;text-align:center;color:var(--muted);font-size:13px;border:1px dashed var(--line);border-radius:16px;background:rgba(255,255,255,.55)}.filter{border:1px solid var(--line);background:#fff;border-radius:99px;padding:9px 13px;font-size:12.5px;color:var(--muted);font-weight:600}.filter.active{background:var(--dark);color:#fff;border-color:var(--dark)}.toolbarMeta{font-size:12px;color:var(--muted)}.weddingGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:14px}.weddingCard{width:100%;text-align:left;transition:.16s;position:relative}.weddingCard:hover{transform:translateY(-2px);box-shadow:0 22px 70px rgba(38,31,24,.11)}
+.weddingHead{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:20px}.date{font-size:13px;color:var(--muted)}.venueLine{font-size:12.5px;color:#5f5a55;margin-top:5px}.sourceLine{font-size:11.5px;color:#8a837c;margin-top:5px}.freshnessStrip{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}.freshnessItem{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#faf9f7;border-radius:99px;padding:7px 10px;font-size:11.5px;color:#655f59}.freshDot{width:7px;height:7px;border-radius:50%;background:#4f805f}.freshnessItem.warn .freshDot{background:#b5792d}.freshnessItem.warn{background:#fff8ea;color:#7c6029}.profileGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.profileBlock{border:1px solid var(--line);border-radius:15px;background:#fff;padding:15px}.profileBlock.wide{grid-column:1/-1}.profileLabel{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}.profileTitle{font-size:16px;font-weight:750;margin-bottom:5px}.profileMeta{font-size:13px;color:#5f5a55;line-height:1.55}.contactLine{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.contactChip{border:1px solid var(--line);border-radius:99px;padding:6px 9px;font-size:12px;color:#5f5a55;background:#faf9f7}.mapLink{display:inline-flex;align-items:center;gap:5px;margin-top:10px;border:1px solid var(--line);border-radius:99px;padding:7px 10px;font-size:12px;font-weight:650;color:#4f4944;background:#faf9f7;text-decoration:none}.mapLink:hover{background:#f3efea}.profileNote{font-size:13.5px;color:#514d48;line-height:1.6}.profileHead{display:flex;justify-content:space-between;align-items:center;gap:12px}.editGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.fieldLabel{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.editGrid input,.editGrid textarea{width:100%;border:1px solid #dcd5cd;background:#fff;border-radius:11px;padding:11px 12px;color:var(--ink);outline:0}.editGrid textarea{min-height:90px;resize:vertical}.fieldWide{grid-column:1/-1}.names{font-family:Georgia,"Times New Roman",serif;font-size:34px;letter-spacing:-.04em}.change{font-size:12.5px;color:#80533d;white-space:nowrap;font-weight:650}.closingLine{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:13px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:#5f5a55}.closingLine b{font-size:12.5px}.riskTag{border-radius:99px;padding:5px 8px;font-size:11.5px;font-weight:700}.riskTag.blocked{background:#fff1ec;color:#984d39}.riskTag.outdated{background:#fff5dc;color:#85631e}.riskTag.good{background:#edf4ef;color:var(--good)}.openCue{font-size:12.5px;color:#5f5a55;margin-top:14px;text-align:right;font-weight:650}.dot{width:8px;height:8px;border-radius:50%;background:#b87333;display:inline-block;margin-right:6px}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{padding:14px;border-radius:14px;background:#f7f4f0;border:1px solid rgba(226,219,212,.46)}.metric b{display:block;font-size:24px;letter-spacing:-.045em}.metric span{font-size:12.5px;color:var(--muted);line-height:1.3}
+.sectionTitle{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:30px 0 14px}.sectionTitle h2{margin:0}.summaryGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.summaryBox{padding:17px;background:white;border:1px solid var(--line);border-radius:16px;position:relative}.summaryBox.actionable{cursor:pointer;transition:.16s}.summaryBox.actionable:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(38,31,24,.07);border-color:#d4cbc3}.summaryMore{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:13px;padding-top:11px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}.summaryBox .big{font-size:29px;font-weight:700;letter-spacing:-.05em}.summaryBox p{font-size:13px;color:var(--muted);line-height:1.48;margin:6px 0 0}
+.detailHeader{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.detailActions{text-align:right;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;align-items:flex-start}.detailActions .reviewMeta{flex-basis:100%}.reviewMeta{font-size:12px;color:var(--muted);margin-top:7px}.focusGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 24px}.focusCard{border:1px solid rgba(209,200,192,.78);border-radius:16px;background:#fff;padding:16px;text-align:left;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}.focusCard:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(38,31,24,.06);border-color:#d7cbc1}.focusTop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}.focusLabel{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.focusState{font-size:11.5px;border-radius:99px;padding:5px 8px;background:#fff2e8;color:#8b572d}.focusCard b{display:block;font-size:15px;line-height:1.35}.focusCard p{font-size:12.5px;color:var(--muted);line-height:1.48;margin:6px 0 0}.detailHeader h1{font-size:clamp(40px,7vw,58px)}.changeRow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;border-top:1px solid var(--line);padding:13px 0}.changeRow:first-child{border-top:0}.delta{font-weight:700}.changeMain{min-width:0}.impactTags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.impactTag{font-size:11.5px;border-radius:99px;padding:4px 7px;background:#f1ede8;color:#655f59}.impactTag.warn{background:#fff1ec;color:#984d39}
+.respRow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line)}.respRow:first-child{border-top:0}.check{width:22px;height:22px;margin-top:2px}.respRow.done .respTitle{text-decoration:line-through;color:var(--muted)}.respMeta{font-size:13px;color:var(--muted);margin-top:5px;line-height:1.45}.pill{display:inline-block;padding:6px 9px;border-radius:99px;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;background:var(--soft);color:var(--muted)}
+.permissionGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.linkedLists{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.deliverGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.deliverCard{border:1px solid rgba(209,200,192,.78);background:#fff;border-radius:16px;padding:17px}.deliverTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.deliverCard h3{margin:0;font-size:16px}.deliverMeta{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:7px}.deliverState{font-size:11.5px;font-weight:750;border-radius:99px;padding:6px 9px;white-space:nowrap}.deliverState.blocked{background:#fff1ec;color:#984d39}.deliverState.outdated{background:#fff5dc;color:#85631e}.deliverState.ready{background:#edf4ef;color:var(--good)}.deliverState.delivered{background:#edf4ef;color:var(--good)}.impactBox{margin-top:12px;padding:11px 12px;border-radius:12px;background:#f7f4f0;font-size:12px;line-height:1.45;color:#5b554f}.deliverActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.deliverActions .btn{min-height:38px;padding:8px 11px;font-size:12px}.deliverConfig{margin-left:auto}.deliverEditGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.deliverEditGrid .wide{grid-column:1/-1}.deliverEditGrid input,.deliverEditGrid textarea{width:100%;border:1px solid #dcd5cd;border-radius:11px;background:#fff;padding:11px 12px;color:var(--ink)}.deliverEditGrid textarea{min-height:82px;resize:vertical}.briefList{display:grid;gap:10px;margin-top:10px}.briefItem{padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#faf8f5}.briefItem b{display:block;font-size:14px}.briefItem span{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.45}.briefGroup{margin-top:18px}.briefGroup h3{margin-bottom:8px}.briefActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.listCard{border:1px solid rgba(209,200,192,.78);background:#fff;border-radius:16px;padding:16px}.listHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.listTitle{font-size:15px;font-weight:750}.syncBadge{font-size:11.5px;border-radius:99px;padding:5px 8px;background:#edf4ef;color:var(--good);white-space:nowrap}.listMeta{font-size:12.5px;color:var(--muted);line-height:1.45;margin-top:6px}.listActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.listActions .btn{min-height:38px;padding:8px 11px;font-size:12px}.listVersion{font-size:11.5px;color:#8a837c;margin-top:9px}.permissionChip{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#f7f5f2;border-radius:12px;padding:13px 14px;font-size:13.5px}.visible{color:var(--good);background:#edf4ef}
+.modalBack{position:fixed;inset:0;background:rgba(21,18,16,.38);backdrop-filter:blur(4px);display:grid;place-items:center;padding:18px;z-index:20}.detailModal{width:min(720px,100%);max-height:88vh;overflow:auto}.detailList{margin-top:10px}.detailItem{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:13px 0;border-top:1px solid var(--line)}.detailItem:first-child{border-top:0}.detailItem b{display:block;font-size:14px}.detailItem span{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.4}.detailValue{font-size:13px;font-weight:750;text-align:right}.detailSection{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}.detailSection h3{margin-bottom:8px}.detailHint{font-size:12.5px;color:var(--muted);line-height:1.55;background:#f7f5f2;border-radius:11px;padding:10px 12px}.modal{width:min(620px,100%);max-height:88vh;overflow:auto;background:#fff;border-radius:22px;padding:22px;box-shadow:0 30px 100px rgba(0,0,0,.24)}.modalHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}.x{border:0;background:var(--soft);width:36px;height:36px;border-radius:50%;font-size:18px}
+.switchrow{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px 0;border-top:1px solid var(--line)}.switchrow:first-child{border-top:0}.switch{position:relative;width:42px;height:25px;flex:0 0 auto}.switch input{opacity:0;position:absolute}.track{position:absolute;inset:0;background:#d7d1ca;border-radius:99px}.track:after{content:"";position:absolute;width:19px;height:19px;top:3px;left:3px;background:#fff;border-radius:50%;box-shadow:0 1px 3px #999;transition:.15s}.switch input:checked+.track{background:var(--dark)}.switch input:checked+.track:after{transform:translateX(17px)}.sensitive{background:#fcf6f3;margin:8px -10px 0;padding:13px 10px;border-radius:12px}.fine{font-size:12px;color:var(--muted);line-height:1.5}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#1f1c19;color:#fff;border-radius:99px;padding:11px 15px;font-size:12px;z-index:40;box-shadow:0 12px 40px rgba(0,0,0,.2)}
+.assuranceHero{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:18px;align-items:center;padding:21px 22px;border-radius:20px;background:#211e1b;color:#fff;box-shadow:0 20px 55px rgba(29,26,23,.14)}
+.assuranceScore{width:62px;height:62px;border-radius:18px;display:grid;place-items:center;background:#342f2b;font-family:Georgia,"Times New Roman",serif;font-size:27px}
+.assuranceCopy b{display:block;font-size:17px}.assuranceCopy span{display:block;font-size:12.5px;color:#cfc7c0;line-height:1.5;margin-top:4px}.assuranceStats{text-align:right}.assuranceStats strong{display:block;font-size:24px}.assuranceStats span{font-size:11.5px;color:#cfc7c0}
+.closureGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.closureCard{background:#fff;border:1px solid rgba(209,200,192,.78);border-radius:16px;padding:16px}.closureTop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.closureName{font-size:15px;font-weight:750}.closureState{font-size:11.5px;font-weight:750;border-radius:99px;padding:5px 8px;white-space:nowrap}.closureState.blocked{background:#fff1ec;color:#984d39}.closureState.ready{background:#edf4ef;color:var(--good)}.closureState.closed{background:#edf4ef;color:var(--good)}.closureState.revalidate{background:#fff5dc;color:#85631e}.closureMeta{font-size:12px;color:var(--muted);line-height:1.45;margin-top:7px}.closureAction{margin-top:11px}
+.decisionList,.contactGrid{display:grid;gap:10px}.decisionCard{border:1px solid var(--line);border-radius:15px;background:#fff;padding:15px}.decisionTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.decisionTitle{font-size:14px;font-weight:750}.decisionMeta{font-size:12px;color:var(--muted);margin-top:5px;line-height:1.45}.decisionStatus{font-size:11.5px;border-radius:99px;padding:5px 8px;white-space:nowrap}.decisionStatus.confirmed{background:#edf4ef;color:var(--good)}.decisionStatus.pending{background:#f1eee9;color:#746f69}.decisionStatus.review{background:#fff5dc;color:#85631e}.decisionImpacts{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.contactGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.contactCard{border:1px solid var(--line);border-radius:15px;background:#fff;padding:15px}.contactKind{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}.contactBusiness{font-size:15px;font-weight:750;margin-top:5px}.contactPerson{font-size:12.5px;color:#5f5a55;margin-top:4px}.contactActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}.contactActions a{font-size:12px;text-decoration:none;color:#4f4944;border:1px solid var(--line);padding:6px 9px;border-radius:99px;background:#faf9f7}
+.demoDocs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.demoDoc{background:#fff;border:1px solid var(--line);border-radius:15px;padding:15px}.demoDoc b{display:block;font-size:14px}.demoDoc span{display:block;font-size:12px;color:var(--muted);margin-top:5px;line-height:1.4}.demoDocActions{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}.dangerDemo{margin-top:32px;border:1px solid #ead2cf;background:#fff8f6;border-radius:17px;padding:17px}.dangerDemo h3{color:#9b4a42;margin-bottom:7px}.dangerDemo p{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:12px}.archiveDemoCard{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}.archiveDemoCard h3{font-family:Georgia,"Times New Roman",serif;font-size:22px;font-weight:400;margin:0 0 6px}.archiveDemoCard p{font-size:12.5px;color:var(--muted);line-height:1.5;margin:0}
+
+.footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);font-size:12px;color:#8a847d;display:flex;justify-content:space-between;gap:12px}
+@media(min-width:900px){
+  .app{padding-left:30px;padding-right:30px}
+  .todayList{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .todayItem{min-height:88px;grid-template-columns:auto minmax(0,1fr);align-content:center}
+  .todayWedding{grid-column:2;margin-top:3px;color:#7b746d}
+  .weddingCard{padding:26px}
+  .summaryGrid{gap:14px}
+  .summaryBox{padding:19px}
+  .profileGrid{gap:14px}
+  .profileBlock{padding:18px}
+}
+@media(min-width:1180px){
+  .app{max-width:1360px;padding-left:42px;padding-right:42px}
+  .hero{padding-top:30px;padding-bottom:20px}
+  .todayList{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .weddingGrid{gap:22px}
+  .attention{gap:14px}
+}
+@media(max-width:760px){
+  .app{padding-left:16px;padding-right:16px;padding-bottom:44px}
+  .bar{margin-bottom:24px;padding-bottom:14px}
+  .brand{gap:6px}.brand strong{font-size:19px}.brand .byline{font-size:11.5px}
+  .avatar{width:36px;height:36px}
+  .preview{font-size:11.5px;padding:7px 9px}
+  .hero,.detailHeader{display:block}.hero{padding:12px 0 8px}.heroActions{margin-top:18px}.heroActions .btn{width:100%}
+  h1{font-size:clamp(40px,12vw,52px);line-height:.98}.lead{font-size:16px;line-height:1.55}
+  h2{font-size:22px}.eyebrow{font-size:11.5px}
+  .todayBoard{margin-top:26px}.todayHead{align-items:flex-end}.todayMeta{font-size:12px;text-align:right}
+  .todayList{grid-template-columns:1fr}.todayItem{grid-template-columns:auto 1fr;padding:14px}.todayWedding{grid-column:2;white-space:normal;font-size:12px;margin-top:2px}
+  .attention{grid-template-columns:1fr}.attentionCard{padding:14px 15px}
+  .toolbar{align-items:stretch;flex-direction:column}.toolbarLeft{order:2}.toolbarMeta{display:none}.weddingSearch{order:1;width:100%;min-width:0}.weddingSearch input{font-size:13px;padding-top:11px;padding-bottom:11px}
+  .weddingGrid,.summaryGrid,.permissionGrid,.focusGrid,.profileGrid,.editGrid,.linkedLists,.deliverGrid,.deliverEditGrid,.closureGrid,.contactGrid,.demoDocs{grid-template-columns:1fr}.deliverEditGrid .wide{grid-column:auto}.assuranceHero{grid-template-columns:auto 1fr}.assuranceStats{grid-column:2;text-align:left;display:flex;gap:8px;align-items:baseline}.assuranceStats strong{font-size:20px}
+  .profileBlock.wide,.fieldWide{grid-column:auto}
+  .card{padding:19px;border-radius:18px}
+  .weddingCard{padding:20px}.weddingHead{margin-bottom:17px}.names{font-size:31px}.date{font-size:12.5px}.venueLine{font-size:12px}
+  .metrics{grid-template-columns:repeat(3,1fr);gap:7px}.metric{padding:12px 10px}.metric b{font-size:22px}.metric span{font-size:11.8px}
+  .sectionTitle{margin:26px 0 12px}
+  .summaryBox{padding:17px}.summaryBox p{font-size:12.5px}.summaryMore{font-size:11.5px}
+  .weddingCard:hover,.todayItem:hover{transform:none;box-shadow:inherit}
+  .detailHeader .btn{margin-top:12px;width:100%}.detailActions{text-align:left}
+  .profileHead{align-items:flex-end}.profileHead .btn{flex:0 0 auto}
+  .footer{display:block;margin-top:44px}.footer span{display:block;margin-bottom:5px}
+  .modal{padding:18px;border-radius:19px}.detailModal{width:100%}
+}
+@media(max-width:430px){
+  .app{padding-left:14px;padding-right:14px}
+  .studioUserText{display:none}
+  .bar{gap:8px}.barRight{gap:6px}.preview{display:none}
+  .brand .byline{font-size:11.5px}
+  .metrics{grid-template-columns:1fr 1fr}
+  .metric:last-child:nth-child(odd){grid-column:1/-1}
+  .toolbarLeft{gap:6px}.filter{font-size:11.5px;padding:8px 10px}
+  .respRow{grid-template-columns:auto 1fr}.respRow .pill{grid-column:2;justify-self:start}
+  .todayCopy b{font-size:13.5px}.todayCopy span{font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="bar">
+  <div class="brand"><strong>ONE Partner</strong><span class="byline">by <span class="brandName">WeddlySmartDesign</span></span></div>
+  <div class="barRight"><div class="studioUser"><div class="studioUserText"><b>Marta · Marea Wedding Studio</b><span>Wedding planner</span></div><div class="avatar">MM</div></div><span class="preview">Vista previa</span><button id="homeBtn" class="linkBtn hidden" type="button">Mis bodas</button></div>
+</header>
+
+<main id="hub">
+  <div class="hero">
+    <div>
+      <p class="eyebrow">Marea Wedding Studio</p>
+      <h1>Qué necesita tu atención.</h1>
+      <p class="lead">La pareja sigue trabajando en ONE. Partner te dice qué cambió, qué está bloqueando el cierre y qué entrega profesional necesita revisión.</p>
+    </div>
+    <div class="heroActions"><button id="connectBtn" class="btn primary" type="button">Conectar una boda</button></div>
+  </div>
+
+
+  <section class="todayBoard">
+    <div class="todayHead"><h2>Hoy</h2><span class="todayMeta">4 cosas necesitan tu atención</span></div>
+    <div class="todayList">
+      <button class="todayItem todayUrgent" data-open-wedding="clara" data-jump="deliveriesSection" type="button">
+        <div class="todayIcon">4d</div>
+        <div class="todayCopy"><b>El listado de catering vence en 4 días y aún no está listo</b><span>14 RSVP pendientes · 6 menús por cerrar.</span></div>
+        <div class="todayWedding">Clara & Martín</div>
+      </button>
+      <button class="todayItem todayDue" data-open-wedding="clara" data-jump="deliveriesSection" type="button">
+        <div class="todayIcon">↻</div>
+        <div class="todayCopy"><b>El listado de transporte enviado ya no coincide con ONE</b><span>Hubo cambios después de la entrega. Conviene generar una versión nueva.</span></div>
+        <div class="todayWedding">Clara & Martín</div>
+      </button>
+      <button class="todayItem todayChanged" data-open-onboarding="elena" type="button">
+        <div class="todayIcon">N</div>
+        <div class="todayCopy"><b>Nueva boda conectada · revisión inicial pendiente</b><span>Partner puede auditar automáticamente el estado antes de la primera reunión.</span></div>
+        <div class="todayWedding">Elena & Dani</div>
+      </button>
+      <button class="todayItem todayChanged" data-open-wedding="clara" data-jump="summarySeating" type="button">
+        <div class="todayIcon">9</div>
+        <div class="todayCopy"><b>9 confirmados siguen sin mesa</b><span>Bloquean la versión final para la finca.</span></div>
+        <div class="todayWedding">Clara & Martín</div>
+      </button>
+    </div>
+  </section>
+
+  <div class="sectionTitle" style="margin-top:24px"><h2>Situación global</h2><span class="muted">todas tus bodas</span></div>
+  <div class="attention">
+    <div class="attentionCard"><div class="attentionIcon">1</div><div><b>Boda con cambios</b><span>requiere revisión</span></div></div>
+    <div class="attentionCard"><div class="attentionIcon">2</div><div><b>Bodas con pendientes</b><span>necesitan seguimiento</span></div></div>
+    <div class="attentionCard"><div class="attentionIcon">1</div><div><b>Entrega desactualizada</b><span>requiere nueva versión antes de reenviar</span></div></div>
+  </div>
+
+  <div class="toolbar"><div class="toolbarLeft"><button class="filter active" data-filter="all" type="button">Todas · 2</button><button class="filter" data-filter="changes" type="button">Con cambios · 1</button><button class="filter" data-filter="pending" type="button">Con pendientes · 2</button></div><div class="weddingSearch"><input id="weddingSearch" type="search" autocomplete="off" placeholder="Buscar pareja o lugar"></div><div class="toolbarMeta">Últimos datos ONE · hace 12 min</div></div>
+  <div class="sectionTitle"><h2>Mis bodas</h2><div class="actions"><span class="muted">2 activas</span><button id="archivedDemoBtn" class="btn small soft" type="button">Finalizadas</button></div></div>
+  <div class="weddingGrid">
+    <button class="card weddingCard" data-wedding="clara" data-has-changes="true" data-has-pending="true" data-search="clara martín finca el olivar murcia" type="button">
+      <div class="weddingHead">
+        <div><div class="names">Clara & Martín</div><div class="date">22 may 2027 · 17:30 · 126 confirmados</div><div class="venueLine">Finca El Olivar · Murcia</div><div class="sourceLine">ONE actualizado hace 12 min</div></div>
+        <div class="change"><span class="dot"></span>3 cambios</div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><b>14</b><span>RSVP pendientes</span></div>
+        <div class="metric"><b>9</b><span>sin mesa</span></div>
+        <div class="metric"><b>2</b><span>tareas vencidas</span></div>
+      </div>
+      <div class="closingLine"><b>Cierre profesional</b><span class="riskTag blocked">2 bloqueos</span><span class="riskTag outdated">1 entrega desactualizada</span></div>
+      <div class="openCue">Abrir resumen →</div>
+    </button>
+
+    <button class="card weddingCard" data-wedding="elena" data-onboarding="true" data-has-changes="false" data-has-pending="true" data-search="elena dani casa del lago cartagena" type="button">
+      <div class="weddingHead">
+        <div><div class="names">Elena & Dani</div><div class="date">11 sep 2027 · 12:30 · 84 confirmados</div><div class="venueLine">Casa del Lago · Cartagena</div><div class="sourceLine">ONE actualizado hace 4 h</div></div>
+        <div class="change"><span class="dot"></span>Nueva conexión</div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><b>31</b><span>RSVP pendientes</span></div>
+        <div class="metric"><b>0</b><span>sin mesa</span></div>
+        <div class="metric"><b>0</b><span>tareas vencidas</span></div>
+      </div>
+      <div class="closingLine"><b>Toma de control</b><span class="riskTag outdated">Revisión inicial pendiente</span></div>
+      <div class="openCue">Abrir resumen →</div>
+    </button>
+  </div>
+</main>
+
+<main id="detail" class="hidden">
+  <button id="backBtn" class="linkBtn" type="button">← Mis bodas</button>
+  <div class="detailHeader">
+    <div><p class="eyebrow">22 mayo 2027 · 17:30</p><h1>Clara & Martín</h1><p class="lead">Resumen profesional en vivo, limitado a lo que la pareja te ha autorizado.</p></div>
+    <div class="detailActions">
+      <button id="briefBtn" class="btn primary" type="button">Brief de reunión</button>
+      <button id="reviewBtn" class="btn soft" type="button">Marcar como revisado</button>
+      <div class="reviewMeta">Última revisión · hace 2 días</div>
+    </div>
+  </div>
+  <div class="freshnessStrip" aria-label="Última actualización de los datos compartidos">
+    <span class="freshnessItem"><span class="freshDot"></span>Invitados · hace 12 min</span>
+    <span class="freshnessItem"><span class="freshDot"></span>Planning · hace 3 h</span>
+    <span class="freshnessItem warn"><span class="freshDot"></span>Eventos extra · hace 1 día</span>
+  </div>
+
+  <div id="weddingProfileSection" class="sectionTitle profileHead"><div><h2>Ficha de boda</h2><span class="muted">datos privados de Marea Wedding Studio</span></div><button id="editProfileBtn" class="btn small soft" type="button">Editar ficha</button></div>
+  <div class="profileGrid" id="profileGrid">
+    <div class="profileBlock">
+      <div class="profileLabel">Pareja · contactos</div>
+      <div class="profileTitle">Clara</div>
+      <div class="profileMeta" id="contact1Meta">+34 600 123 456 · clara@example.com</div>
+      <div class="profileTitle" style="margin-top:12px">Martín</div>
+      <div class="profileMeta" id="contact2Meta">+34 600 654 321 · martin@example.com</div>
+    </div>
+    <div class="profileBlock">
+      <div class="profileLabel">Ceremonia</div>
+      <div class="profileTitle" id="ceremonyVenueText">Parroquia de Santa Ana</div>
+      <div class="profileMeta" id="ceremonyMeta">17:30 · Plaza de Santa Ana, Murcia</div><a id="ceremonyMapLink" class="mapLink" href="https://www.google.com/maps/search/?api=1&query=Plaza+de+Santa+Ana+Murcia" target="_blank" rel="noopener">Abrir en Google Maps ↗</a>
+    </div>
+    <div class="profileBlock">
+      <div class="profileLabel">Celebración</div>
+      <div class="profileTitle" id="receptionVenueText">Finca El Olivar</div>
+      <div class="profileMeta" id="receptionMeta">19:00 · Camino del Olivar, Murcia</div><a id="receptionMapLink" class="mapLink" href="https://www.google.com/maps/search/?api=1&query=Finca+El+Olivar+Murcia" target="_blank" rel="noopener">Abrir en Google Maps ↗</a>
+    </div>
+    <div class="profileBlock">
+      <div class="profileLabel">Referencia rápida</div>
+      <div class="profileTitle">126 confirmados</div>
+      <div class="profileMeta">14 mesas · 2 eventos extra · 12 tareas abiertas</div>
+    </div>
+    <div class="profileBlock wide">
+      <div class="profileLabel">Nota de coordinación</div>
+      <div class="profileNote" id="coordinationNoteText">Acceso de proveedores por la entrada norte. Montaje disponible desde las 12:00. Confirmar con la finca el horario final de autobuses una semana antes.</div>
+    </div>
+  </div>
+
+  <div id="documentsSection" class="sectionTitle"><div><h2>Documentos profesionales</h2><span class="muted">privados del estudio · no se añaden a ONE</span></div><button id="addDemoDocument" class="btn small primary" type="button">Adjuntar</button></div>
+  <div class="demoDocs">
+    <div class="demoDoc"><b>Contrato firmado · Clara & Martín.pdf</b><span>Contrato · 1,8 MB · 14 sep 2026</span><div class="demoDocActions"><button class="btn small soft demoDocOpen" type="button">Abrir</button><button class="btn small soft demoDocDelete" type="button">Eliminar</button></div></div>
+    <div class="demoDoc"><b>Justificante reserva finca.pdf</b><span>Justificante de pago · 436 KB · 20 sep 2026</span><div class="demoDocActions"><button class="btn small soft demoDocOpen" type="button">Abrir</button><button class="btn small soft demoDocDelete" type="button">Eliminar</button></div></div>
+    <div class="demoDoc"><b>Indicaciones montaje.docx</b><span>Otro documento · 92 KB</span><div class="demoDocActions"><button class="btn small soft demoDocOpen" type="button">Abrir</button><button class="btn small soft demoDocDelete" type="button">Eliminar</button></div></div>
+  </div>
+
+  <div class="sectionTitle"><div><h2>Conformidad profesional</h2><span class="muted">Partner comprueba la boda entre módulos</span></div><span class="muted">motor automático</span></div>
+  <div class="assuranceHero">
+    <div class="assuranceScore">!</div>
+    <div class="assuranceCopy"><b>La boda todavía no está lista para cierre profesional.</b><span>Partner ha revisado RSVP, mesas, catering, Planning, entregas y coherencia entre datos. No necesitas comprobarlo módulo por módulo.</span></div>
+    <div class="assuranceStats"><strong>2</strong><span>bloqueos · 3 avisos</span></div>
+  </div>
+
+  <div class="sectionTitle"><h2>Qué está bloqueando el cierre</h2><span class="muted">lectura automática</span></div>
+  <div class="focusGrid">
+    <button class="focusCard" data-detail="rsvp" type="button">
+      <div class="focusTop"><span class="focusLabel">Cierre de invitados</span><span class="focusState">Bloqueado</span></div>
+      <b>14 RSVP siguen pendientes</b>
+      <p>No conviene cerrar catering, transporte ni listados finales todavía.</p>
+      <span class="summaryMore" style="margin-top:12px"><span>Acción sugerida</span><span class="blockerAction" data-resp-title="Cerrar RSVP pendientes para proveedores" data-resp-meta="Pendiente de la pareja · antes de la próxima entrega">Pedir a la pareja →</span></span>
+    </button>
+    <button class="focusCard" data-detail="seating" type="button">
+      <div class="focusTop"><span class="focusLabel">Versión final de mesas</span><span class="focusState">Bloqueado</span></div>
+      <b>9 confirmados no tienen mesa</b>
+      <p>La versión para proveedores todavía no debería darse por cerrada.</p>
+      <span class="summaryMore" style="margin-top:12px"><span>Acción sugerida</span><span class="blockerAction" data-resp-title="Cerrar distribución final de mesas" data-resp-meta="Pendiente de la pareja · antes de entregar seating">Pedir a la pareja →</span></span>
+    </button>
+    <button class="focusCard" data-detail="planning" type="button">
+      <div class="focusTop"><span class="focusLabel">Seguimiento</span><span class="focusState">Atención</span></div>
+      <b>2 tareas están vencidas</b>
+      <p>Una depende de la planner y otra de la pareja.</p>
+      <span class="summaryMore" style="margin-top:12px"><span>Seguimiento</span><span>Ver responsabilidades →</span></span>
+    </button>
+  </div>
+
+  <div class="sectionTitle"><div><h2>Cierres profesionales</h2><span class="muted">cada cierre queda ligado a una versión concreta de ONE</span></div><span class="muted">evidencia de cierre</span></div>
+  <div class="closureGrid">
+    <div class="closureCard"><div class="closureTop"><div class="closureName">RSVP</div><span class="closureState blocked">Bloqueado</span></div><div class="closureMeta">14 respuestas pendientes. Catering, mesas y transporte todavía dependen de este cierre.</div><div class="closureAction"><button class="btn small soft" data-detail="rsvp" type="button">Ver bloqueo</button></div></div>
+    <div class="closureCard"><div class="closureTop"><div class="closureName">Mesas</div><span id="seatingClosureState" class="closureState revalidate">Revalidar</span></div><div id="seatingClosureMeta" class="closureMeta">Se cerró en versión 181. ONE cambió después: +2 personas sin mesa.</div><div class="closureAction"><button id="revalidateSeating" class="btn small primary" type="button">Revisar y revalidar</button></div></div>
+    <div class="closureCard"><div class="closureTop"><div class="closureName">Catering</div><span class="closureState blocked">Bloqueado</span></div><div class="closureMeta">6 menús pendientes y 14 RSVP todavía abiertos.</div><div class="closureAction"><button class="btn small soft" data-detail="catering" type="button">Ver bloqueo</button></div></div>
+    <div class="closureCard"><div class="closureTop"><div class="closureName">Transporte</div><span class="closureState ready">Listo para cerrar</span></div><div class="closureMeta">Datos revisados. No hay incoherencias que impidan el cierre.</div><div class="closureAction"><button class="btn small soft demoCloseScope" data-scope="Transporte" type="button">Cerrar profesionalmente</button></div></div>
+    <div class="closureCard"><div class="closureTop"><div class="closureName">Alojamiento</div><span class="closureState ready">Listo para cerrar</span></div><div class="closureMeta">17 solicitudes registradas y sin inconsistencias detectadas.</div><div class="closureAction"><button class="btn small soft demoCloseScope" data-scope="Alojamiento" type="button">Cerrar profesionalmente</button></div></div>
+    <div class="closureCard"><div class="closureTop"><div class="closureName">Planning</div><span class="closureState blocked">Atención</span></div><div class="closureMeta">2 tareas vencidas. No bloquean ONE, pero sí requieren seguimiento profesional.</div><div class="closureAction"><button class="btn small soft" data-detail="planning" type="button">Ver tareas</button></div></div>
+  </div>
+
+  <div id="weddingStatusSection" class="sectionTitle"><h2>Estado de la boda</h2><span class="muted">lectura actual</span></div>
+  <div class="summaryGrid">
+    <div id="summaryRsvp" class="summaryBox actionable" data-detail="rsvp"><div class="big">126</div><h3>Confirmados</h3><p>14 RSVP pendientes · 8 no asisten</p><div class="summaryMore"><span>Invitación + RSVP</span><span>Ver detalle →</span></div></div>
+    <div id="summarySeating" class="summaryBox actionable" data-detail="seating"><div class="big">9</div><h3>Sin mesa</h3><p>117 sentados · 14 mesas</p><div class="summaryMore"><span>Mesas</span><span>Ver quiénes →</span></div></div>
+    <div class="summaryBox actionable" data-detail="catering"><div class="big">6</div><h3>Menús pendientes</h3><p>5 necesidades alimentarias registradas · 3 tronas</p><div class="summaryMore"><span>Catering</span><span>Ver detalle →</span></div></div>
+    <div class="summaryBox actionable" data-detail="transport"><div class="big">38</div><h3>Transporte</h3><p>personas confirmadas lo necesitan</p><div class="summaryMore"><span>Transporte</span><span>Ver listado →</span></div></div>
+    <div id="summaryPlanning" class="summaryBox actionable" data-detail="planning"><div class="big">12</div><h3>Tareas abiertas</h3><p>2 vencidas · 47 completadas</p><div class="summaryMore"><span>Planning</span><span>Ver pendientes →</span></div></div>
+    <div class="summaryBox actionable" data-detail="events"><div class="big">2</div><h3>Eventos extra</h3><p>preboda y brunch activos</p><div class="summaryMore"><span>Eventos</span><span>Ver detalle →</span></div></div>
+  </div>
+
+
+  <div class="sectionTitle"><div><h2>Listados vinculados</h2><span class="muted">se generan desde los datos actuales de ONE</span></div><span class="muted">sin subir archivos</span></div>
+  <div class="linkedLists">
+    <div class="listCard"><div class="listHead"><div><div class="listTitle">Mesas</div><div class="listMeta">126 confirmados · 9 pendientes de mesa</div></div><span class="syncBadge">Sincronizado</span></div><div class="listActions"><button class="btn soft listView" data-list-view="seating" type="button">Ver</button><button class="btn soft listDownload" data-list="Mesas" type="button">Descargar CSV</button></div><div class="listVersion">ONE · versión 184 · actualizado ahora</div></div>
+    <div class="listCard"><div class="listHead"><div><div class="listTitle">Catering</div><div class="listMeta">120 menús definidos · 6 pendientes</div></div><span class="syncBadge">Sincronizado</span></div><div class="listActions"><button class="btn soft listView" data-list-view="catering" type="button">Ver</button><button class="btn soft listDownload" data-list="Catering" type="button">Descargar CSV</button></div><div class="listVersion">ONE · versión 184 · actualizado ahora</div></div>
+    <div class="listCard"><div class="listHead"><div><div class="listTitle">Transporte</div><div class="listMeta">38 personas · listado operativo</div></div><span class="syncBadge">Sincronizado</span></div><div class="listActions"><button class="btn soft listView" data-list-view="transport" type="button">Ver</button><button class="btn soft listDownload" data-list="Transporte" type="button">Descargar CSV</button></div><div class="listVersion">ONE · versión 184 · actualizado ahora</div></div>
+    <div class="listCard"><div class="listHead"><div><div class="listTitle">Alojamiento</div><div class="listMeta">17 personas · solicitud registrada</div></div><span class="syncBadge">Sincronizado</span></div><div class="listActions"><button class="btn soft listView" data-list-view="accommodation" type="button">Ver</button><button class="btn soft listDownload" data-list="Alojamiento" type="button">Descargar CSV</button></div><div class="listVersion">ONE · versión 184 · actualizado ahora</div></div>
+    <div class="listCard"><div class="listHead"><div><div class="listTitle">Eventos extra</div><div class="listMeta">Preboda y brunch · listados propios</div></div><span class="syncBadge">Sincronizado</span></div><div class="listActions"><button class="btn soft listView" data-list-view="events" type="button">Ver eventos</button><button class="btn soft listDownload" data-list="Eventos extra" type="button">Generar listado</button></div><div class="listVersion">Datos propios de cada evento · actualizado ahora</div></div>
+  </div>
+
+
+  <div id="deliveriesSection" class="sectionTitle"><div><h2>Entregas a proveedores</h2><span class="muted">Partner comprueba si lo enviado sigue coincidiendo con ONE</span></div><span class="muted">control de vigencia</span></div>
+  <div class="deliverGrid">
+    <div class="deliverCard">
+      <div class="deliverTop"><div><h3>Catering</h3><div class="deliverMeta">Finca El Olivar · entregar antes del 18 may</div></div><span class="deliverState blocked">Bloqueado</span></div>
+      <div class="impactBox"><b>Faltan 14 RSVP y 6 menús.</b><br>No conviene marcar esta entrega como definitiva todavía.</div>
+      <div class="deliverActions"><button class="btn soft listView" data-list-view="catering" type="button">Ver qué falta</button><button class="btn soft" type="button" disabled>Marcar entregado</button><button class="btn soft deliverConfig" data-kind="Catering" data-recipient="Finca El Olivar" data-due="2027-05-18" type="button">Configurar</button></div>
+    </div>
+    <div class="deliverCard">
+      <div class="deliverTop"><div><h3>Mesas</h3><div class="deliverMeta">Finca El Olivar · entregar antes del 20 may</div></div><span class="deliverState blocked">Bloqueado</span></div>
+      <div class="impactBox"><b>9 confirmados siguen sin mesa.</b><br>La versión final del seating todavía no está lista.</div>
+      <div class="deliverActions"><button class="btn soft listView" data-list-view="seating" type="button">Ver pendientes</button><button class="btn soft" type="button" disabled>Marcar entregado</button><button class="btn soft deliverConfig" data-kind="Mesas" data-recipient="Finca El Olivar" data-due="2027-05-20" type="button">Configurar</button></div>
+    </div>
+    <div class="deliverCard" id="transportDeliveryCard">
+      <div class="deliverTop"><div><h3>Transporte</h3><div class="deliverMeta">Autobuses Levante · entregado el 14 may</div></div><span id="transportDeliveryState" class="deliverState outdated">Desactualizado</span></div>
+      <div id="transportImpact" class="impactBox"><b>ONE cambió después de la entrega.</b><br>+3 confirmados · +2 personas necesitan transporte · versión 181 → 184.</div>
+      <div class="deliverActions"><button class="btn soft" data-detail="transport_diff" type="button">Revisar cambios</button><button id="refreshTransportDelivery" class="btn primary" type="button">Generar versión nueva</button><button class="btn soft deliverConfig" data-kind="Transporte" data-recipient="Autobuses Levante" data-due="2027-05-20" type="button">Configurar</button></div>
+    </div>
+  </div>
+
+  <div id="changesSection" class="sectionTitle"><h2>Cambios desde tu última revisión</h2><span class="muted">última revisión · hace 2 días</span></div>
+  <div class="card" id="changesCard">
+    <div class="changeRow"><div class="changeMain"><span><span class="dot"></span>Invitados / RSVP / mesas</span></div><b>Actualizado</b></div>
+    <div class="changeRow"><div class="changeMain"><span>Confirmados</span><div class="impactTags"><span class="impactTag warn">Catering</span><span class="impactTag warn">Mesas</span><span class="impactTag">Transporte</span><span class="impactTag">Alojamiento</span></div></div><span class="delta">+3</span></div>
+    <div class="changeRow"><div class="changeMain"><span>RSVP pendientes</span><div class="impactTags"><span class="impactTag warn">Cierre de listas</span><span class="impactTag">Catering</span><span class="impactTag">Transporte</span></div></div><span class="delta">−3</span></div>
+    <div class="changeRow"><div class="changeMain"><span>Sin mesa</span><div class="impactTags"><span class="impactTag warn">Versión final de mesas</span></div></div><span class="delta">+2</span></div>
+    <div class="changeRow"><div class="changeMain"><span>Menús pendientes</span><div class="impactTags"><span class="impactTag warn">Catering</span></div></div><span class="delta">−1</span></div>
+  </div>
+
+  <div class="sectionTitle"><div><h2>Decisiones confirmadas</h2><span class="muted">solo acuerdos que cambian la operación</span></div><button id="addDecisionBtn" class="btn small soft" type="button">Añadir decisión</button></div>
+  <div class="decisionList">
+    <div class="decisionCard"><div class="decisionTop"><div><div class="decisionTitle">Una única salida de regreso a las 02:00</div><div class="decisionMeta">Transporte · confirmada por la pareja el 25 abr</div></div><span class="decisionStatus confirmed">Confirmada</span></div><div class="decisionImpacts"><span class="impactTag">Transporte</span></div></div>
+    <div class="decisionCard"><div class="decisionTop"><div><div class="decisionTitle">Mantener Mesa 1 cerca de la entrada</div><div class="decisionMeta">Mesas · ONE cambió después de confirmar esta decisión</div></div><span id="decisionReviewState" class="decisionStatus review">Revisar</span></div><div class="decisionImpacts"><span class="impactTag warn">Seating cambió</span></div></div>
+    <div class="decisionCard"><div class="decisionTop"><div><div class="decisionTitle">Ceremonia civil comenzará a las 17:30</div><div class="decisionMeta">Ceremonia · enviada a la pareja para confirmación</div></div><span class="decisionStatus pending">Pendiente</span></div><div class="decisionImpacts"><span class="impactTag">Ceremonia</span><span class="impactTag">Proveedores</span></div></div>
+  </div>
+
+  <div class="sectionTitle"><div><h2>Contactos operativos</h2><span class="muted">solo lo que necesitas para ejecutar esta boda</span></div><button id="addContactBtn" class="btn small soft" type="button">Añadir contacto</button></div>
+  <div class="contactGrid">
+    <div class="contactCard"><div class="contactKind">Catering</div><div class="contactBusiness">Finca El Olivar</div><div class="contactPerson">Laura · llegada 12:00</div><div class="contactActions"><a href="tel:+34600111222">Llamar</a><a href="mailto:laura@example.com">Email</a><a href="https://www.google.com/maps" target="_blank" rel="noopener">Maps ↗</a></div></div>
+    <div class="contactCard"><div class="contactKind">Transporte</div><div class="contactBusiness">Autobuses Levante</div><div class="contactPerson">Pablo · llegada 16:45</div><div class="contactActions"><a href="tel:+34600222333">Llamar</a><a href="mailto:pablo@example.com">Email</a></div></div>
+    <div class="contactCard"><div class="contactKind">Fotografía</div><div class="contactBusiness">Luz Norte Foto</div><div class="contactPerson">Irene · llegada 15:30</div><div class="contactActions"><a href="tel:+34600333444">Llamar</a><a href="mailto:irene@example.com">Email</a></div></div>
+  </div>
+
+  <div id="responsibilitiesSection" class="sectionTitle"><h2>Responsabilidades compartidas</h2><button id="addResp" class="btn small primary" type="button">Añadir</button></div>
+  <div class="card" id="respCard">
+    <div class="respRow"><input class="check" type="checkbox"><div><div class="respTitle"><b>Confirmar horario definitivo con catering</b></div><div class="respMeta">Pendiente de ti · 18 feb 2027 · Llamar después de cerrar número de invitados</div></div><span class="pill">Planner</span></div>
+    <div class="respRow"><input class="check" type="checkbox"><div><div class="respTitle"><b>Enviar selección musical ceremonia</b></div><div class="respMeta">Pendiente de la pareja · 28 feb 2027</div></div><span class="pill">Pareja</span></div>
+    <div class="respRow done"><input class="check" type="checkbox" checked><div><div class="respTitle"><b>Revisar distribución de mesas</b></div><div class="respMeta">Completado</div></div><span class="pill">Planner</span></div>
+  </div>
+
+  <div class="sectionTitle"><h2>Acceso concedido</h2></div>
+  <div class="card"><div class="permissionGrid">
+    <div class="permissionChip"><span>Invitados + RSVP</span><span class="pill visible">Visible</span></div>
+    <div class="permissionChip"><span>Mesas</span><span class="pill visible">Visible</span></div>
+    <div class="permissionChip"><span>Catering</span><span class="pill visible">Visible</span></div>
+    <div class="permissionChip"><span>Transporte</span><span class="pill visible">Visible</span></div>
+    <div class="permissionChip"><span>Eventos extra</span><span class="pill visible">Visible</span></div>
+    <div class="permissionChip"><span>Planning</span><span class="pill visible">Visible</span></div>
+    <div class="permissionChip"><span>Invitación</span><span class="pill visible">Visible</span></div>
+    <div class="permissionChip"><span>Pagos y presupuesto</span><span class="pill">No compartido</span></div>
+  </div></div>
+  <div class="dangerDemo">
+    <h3>Finalizar relación profesional</h3>
+    <p>Al finalizar el servicio, cancelar el contrato o cancelar la boda, esta pareja sale del Hub activo. ONE permanece intacto y los documentos profesionales pasan a Bodas finalizadas.</p>
+    <button id="endDemoRelationship" class="btn danger" type="button">Dar de baja esta pareja</button>
+  </div>
+</main>
+
+<footer class="footer"><span>Vista previa de ONE Partner · datos ficticios</span><span>WeddlySmartDesign</span></footer>
+</div>
+
+
+
+
+
+
+
+<div id="archivedDemoModal" class="modalBack hidden">
+  <div class="modal detailModal">
+    <div class="modalHead"><div><p class="eyebrow">Archivo profesional</p><h2 style="margin-bottom:6px">Bodas finalizadas</h2><p class="muted" style="font-size:13px">Sin acceso a los datos vivos de ONE. Solo se conserva la información profesional necesaria.</p></div><button id="closeArchivedDemo" class="x" type="button">×</button></div>
+    <div class="archiveDemoCard">
+      <h3>Lucía & Andrés</h3>
+      <p>18 julio 2026 · Servicio finalizado<br>Finca La Torre · 3 documentos profesionales</p>
+      <div class="actions" style="margin-top:12px"><button id="archivedDocsDemo" class="btn small soft" type="button">Ver documentos</button><button id="archivedDeleteDemo" class="btn small danger" type="button">Eliminar definitivamente</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="onboardingModal" class="modalBack hidden">
+  <div class="modal detailModal">
+    <div class="modalHead"><div><p class="eyebrow">Toma de control · Elena & Dani</p><h2 style="margin-bottom:6px">La boda ya está organizada. Esto es lo que necesitas saber.</h2><p class="muted" style="font-size:13px">Auditoría automática al conectar ONE Partner, sin pedir a la pareja que migre sus datos.</p></div><button id="closeOnboarding" class="x" type="button">×</button></div>
+
+    <div class="summaryGrid" style="margin-top:14px">
+      <div class="summaryBox"><div class="big">84</div><h3>Confirmados</h3><p>31 RSVP pendientes</p></div>
+      <div class="summaryBox"><div class="big">0</div><h3>Sin mesa</h3><p>seating actual completo</p></div>
+      <div class="summaryBox"><div class="big">0</div><h3>Tareas vencidas</h3><p>Planning al día</p></div>
+    </div>
+
+    <div class="briefGroup"><h3>Ya está en buen estado</h3><div class="briefList">
+      <div class="briefItem"><b>Mesas</b><span>Todos los confirmados actuales están ubicados.</span></div>
+      <div class="briefItem"><b>Planning</b><span>No hay tareas vencidas en este momento.</span></div>
+    </div></div>
+
+    <div class="briefGroup"><h3>Necesita atención antes de tomar el control</h3><div class="briefList">
+      <div class="briefItem"><b>31 RSVP pendientes</b><span>Todavía no conviene fijar cierres definitivos de catering y transporte.</span></div>
+      <div class="briefItem"><b>Ficha profesional incompleta</b><span>Falta guardar contacto principal de la finca y enlaces definitivos de ubicación.</span></div>
+      <div class="briefItem"><b>Entregas sin fecha límite</b><span>Configura cuándo necesita cada proveedor su versión final.</span></div>
+    </div></div>
+
+    <div class="briefGroup"><h3>Primeras acciones sugeridas</h3><div class="briefList">
+      <div class="briefItem"><b>1 · Acordar fecha de cierre de RSVP con la pareja</b><span>Después, Partner podrá indicar cuándo catering y transporte están listos.</span></div>
+      <div class="briefItem"><b>2 · Completar la ficha de coordinación</b><span>Horario, lugares, Maps y contactos que necesitarás el día de la boda.</span></div>
+      <div class="briefItem"><b>3 · Configurar entregas a proveedores</b><span>Partner empezará a vigilar automáticamente plazos y versiones.</span></div>
+    </div></div>
+    <div class="briefActions"><button id="onboardingDone" class="btn primary" type="button">Marcar revisión inicial completada</button></div>
+  </div>
+</div>
+
+<div id="deliverConfigModal" class="modalBack hidden">
+  <div class="modal">
+    <div class="modalHead"><div><p class="eyebrow">Entrega a proveedor</p><h2 id="deliverConfigTitle" style="margin-bottom:6px">Configurar entrega</h2><p class="muted" style="font-size:13px">Partner usará esta fecha para avisarte si la entrega se acerca y los datos aún no están listos.</p></div><button id="closeDeliverConfig" class="x" type="button">×</button></div>
+    <div class="deliverEditGrid">
+      <div class="wide"><label class="fieldLabel">Destinatario / proveedor</label><input id="deliverRecipient" placeholder="Ej. Finca El Olivar"></div>
+      <div><label class="fieldLabel">Fecha límite</label><input id="deliverDue" type="date"></div>
+      <div><label class="fieldLabel">Tipo</label><input id="deliverKind" disabled></div>
+      <div class="wide"><label class="fieldLabel">Nota interna</label><textarea id="deliverNote" placeholder="Opcional"></textarea></div>
+    </div>
+    <div class="actions"><button id="saveDeliverConfig" class="btn primary" type="button">Guardar entrega</button></div>
+  </div>
+</div>
+
+<div id="briefModal" class="modalBack hidden">
+  <div class="modal detailModal">
+    <div class="modalHead"><div><p class="eyebrow">Brief automático · Clara & Martín</p><h2 style="margin-bottom:6px">Lo que necesitas llevar a la próxima reunión</h2><p class="muted" style="font-size:13px">Generado con cambios, bloqueos, responsabilidades y entregas actuales.</p></div><button id="closeBrief" class="x" type="button">×</button></div>
+    <div class="briefGroup"><h3>Desde tu última revisión</h3><div class="briefList">
+      <div class="briefItem"><b>3 confirmaciones nuevas</b><span>Los pendientes bajan a 14, pero todavía afectan a catering y cierre de listas.</span></div>
+      <div class="briefItem"><b>2 personas más están sin mesa</b><span>Ahora hay 9 confirmados pendientes de ubicar.</span></div>
+    </div></div>
+    <div class="briefGroup"><h3>Decisiones que hay que cerrar</h3><div class="briefList">
+      <div class="briefItem"><b>Catering</b><span>6 menús siguen sin definir; la entrega vence en 4 días.</span></div>
+      <div class="briefItem"><b>Transporte</b><span>El listado ya enviado quedó desactualizado después de nuevos cambios.</span></div>
+      <div class="briefItem"><b>Mesas</b><span>No aprobar la versión final mientras queden 9 confirmados sin mesa.</span></div>
+    </div></div>
+    <div class="briefGroup"><h3>Responsabilidades compartidas</h3><div class="briefList">
+      <div class="briefItem"><b>Pareja · enviar selección musical</b><span>Fecha límite: 28 feb 2027.</span></div>
+      <div class="briefItem"><b>Planner · confirmar horario con catering</b><span>Revisar después de cerrar número de invitados.</span></div>
+    </div></div>
+    <div class="briefActions"><button id="briefDone" class="btn primary" type="button">Cerrar brief</button></div>
+  </div>
+</div>
+
+<div id="profileModal" class="modalBack hidden">
+  <div class="modal detailModal">
+    <div class="modalHead"><div><p class="eyebrow">Ficha profesional</p><h2 style="margin-bottom:6px">Editar datos de coordinación</h2><p class="muted" style="font-size:13px">Estos datos son privados de la wedding planner y no modifican ONE.</p></div><button id="closeProfileModal" class="x" type="button">×</button></div>
+    <div class="editGrid">
+      <div><label class="fieldLabel">Contacto 1 · nombre</label><input id="pfC1Name" value="Clara"></div>
+      <div><label class="fieldLabel">Contacto 1 · teléfono</label><input id="pfC1Phone" value="+34 600 123 456"></div>
+      <div class="fieldWide"><label class="fieldLabel">Contacto 1 · email</label><input id="pfC1Email" value="clara@example.com"></div>
+      <div><label class="fieldLabel">Contacto 2 · nombre</label><input id="pfC2Name" value="Martín"></div>
+      <div><label class="fieldLabel">Contacto 2 · teléfono</label><input id="pfC2Phone" value="+34 600 654 321"></div>
+      <div class="fieldWide"><label class="fieldLabel">Contacto 2 · email</label><input id="pfC2Email" value="martin@example.com"></div>
+      <div><label class="fieldLabel">Lugar de ceremonia</label><input id="pfCeremonyVenue" value="Parroquia de Santa Ana"></div>
+      <div><label class="fieldLabel">Hora ceremonia</label><input id="pfCeremonyTime" value="17:30"></div>
+      <div class="fieldWide"><label class="fieldLabel">Dirección ceremonia</label><input id="pfCeremonyAddress" value="Plaza de Santa Ana, Murcia"></div>
+      <div class="fieldWide"><label class="fieldLabel">Enlace Google Maps · ceremonia</label><input id="pfCeremonyMap" type="url" value="https://www.google.com/maps/search/?api=1&query=Plaza+de+Santa+Ana+Murcia" placeholder="Pega aquí el enlace de Google Maps"></div>
+      <div><label class="fieldLabel">Lugar de celebración</label><input id="pfReceptionVenue" value="Finca El Olivar"></div>
+      <div><label class="fieldLabel">Hora celebración</label><input id="pfReceptionTime" value="19:00"></div>
+      <div class="fieldWide"><label class="fieldLabel">Dirección celebración</label><input id="pfReceptionAddress" value="Camino del Olivar, Murcia"></div>
+      <div class="fieldWide"><label class="fieldLabel">Enlace Google Maps · celebración</label><input id="pfReceptionMap" type="url" value="https://www.google.com/maps/search/?api=1&query=Finca+El+Olivar+Murcia" placeholder="Pega aquí el enlace de Google Maps"></div>
+      <div class="fieldWide"><label class="fieldLabel">Nota breve de coordinación</label><textarea id="pfNotes">Acceso de proveedores por la entrada norte. Montaje disponible desde las 12:00. Confirmar con la finca el horario final de autobuses una semana antes.</textarea></div>
+    </div>
+    <div class="actions"><button id="saveProfileBtn" class="btn primary" type="button">Guardar ficha</button></div>
+  </div>
+</div>
+
+<div id="operationalModal" class="modalBack hidden">
+  <div class="modal detailModal">
+    <div class="modalHead"><div><p class="eyebrow" id="operationalEyebrow">Detalle</p><h2 id="operationalTitle" style="margin-bottom:6px"></h2><p id="operationalLead" class="muted" style="font-size:13px"></p></div><button id="closeOperational" class="x" type="button">×</button></div>
+    <div id="operationalBody"></div>
+  </div>
+</div>
+
+<div id="connectModal" class="modalBack hidden">
+  <div class="modal">
+    <div class="modalHead"><div><p class="eyebrow">Nueva colaboración</p><h2 style="margin-bottom:6px">Solicita solo lo que necesitas</h2><p class="muted" style="font-size:13px">La pareja verá y podrá cambiar estos permisos antes de aprobar.</p></div><button id="closeModal" class="x" type="button">×</button></div>
+    <div>
+      <div class="switchrow"><span>Invitados + RSVP</span><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+      <div class="switchrow"><span>Mesas</span><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+      <div class="switchrow"><span>Catering</span><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+      <div class="switchrow"><span>Transporte</span><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+      <div class="switchrow"><span>Eventos extra</span><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+      <div class="switchrow"><span>Planning</span><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+      <div class="switchrow"><span>Invitación</span><label class="switch"><input type="checkbox" checked><span class="track"></span></label></div>
+      <div class="switchrow sensitive"><div><b>Pagos y presupuesto</b><div class="fine">Permiso sensible. Siempre desactivado por defecto.</div></div><label class="switch"><input type="checkbox"><span class="track"></span></label></div>
+    </div>
+    <div style="display:flex;gap:9px;margin-top:18px"><button id="createDemoLink" class="btn primary" type="button" style="flex:1">Crear enlace para la pareja</button></div>
+  </div>
+</div>
+<div id="toast" class="toast hidden"></div>
+
+<script>
+const hub=document.getElementById('hub'),detail=document.getElementById('detail'),homeBtn=document.getElementById('homeBtn');
+function showHub(){detail.classList.add('hidden');hub.classList.remove('hidden');homeBtn.classList.add('hidden');window.scrollTo({top:0,behavior:'smooth'})}
+function showDetail(targetId=''){hub.classList.add('hidden');detail.classList.remove('hidden');homeBtn.classList.remove('hidden');window.scrollTo({top:0});if(targetId){setTimeout(()=>{const el=document.getElementById(targetId);if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},80)}}
+document.querySelectorAll('[data-wedding]').forEach(b=>b.addEventListener('click',()=>{
+  if(b.dataset.onboarding==='true'){document.getElementById('onboardingModal').classList.remove('hidden');return}
+  showDetail();
+}));
+document.querySelectorAll('[data-open-wedding]').forEach(b=>b.addEventListener('click',()=>showDetail(b.dataset.jump||'')));
+document.querySelectorAll('[data-open-onboarding]').forEach(b=>b.addEventListener('click',()=>document.getElementById('onboardingModal').classList.remove('hidden')));
+document.getElementById('backBtn').addEventListener('click',showHub);homeBtn.addEventListener('click',showHub);
+
+
+const onboardingModal=document.getElementById('onboardingModal');
+document.getElementById('closeOnboarding').onclick=()=>onboardingModal.classList.add('hidden');
+onboardingModal.addEventListener('click',e=>{if(e.target===onboardingModal)onboardingModal.classList.add('hidden')});
+document.getElementById('onboardingDone').onclick=()=>{
+  onboardingModal.classList.add('hidden');
+  const card=document.querySelector('[data-wedding="elena"]');
+  if(card){
+    const status=card.querySelector('.change');if(status){status.className='date';status.textContent='Revisión inicial completada'}
+    const line=card.querySelector('.closingLine');if(line)line.innerHTML='<b>Cierre profesional</b><span class="riskTag good">Seguimiento activado</span>';
+  }
+  document.getElementById('onboardingDone').textContent='Revisión inicial completada';
+  document.getElementById('onboardingDone').disabled=true;
+  document.querySelectorAll('[data-open-onboarding]').forEach(x=>x.remove());
+  toast('Revisión inicial de Elena & Dani completada');
+};
+
+const deliverConfigModal=document.getElementById('deliverConfigModal');
+let activeDeliverButton=null;
+document.querySelectorAll('.deliverConfig').forEach(b=>b.addEventListener('click',()=>{
+  activeDeliverButton=b;
+  document.getElementById('deliverConfigTitle').textContent='Configurar '+b.dataset.kind;
+  document.getElementById('deliverKind').value=b.dataset.kind;
+  document.getElementById('deliverRecipient').value=b.dataset.recipient||'';
+  document.getElementById('deliverDue').value=b.dataset.due||'';
+  document.getElementById('deliverNote').value=b.dataset.note||'';
+  deliverConfigModal.classList.remove('hidden');
+}));
+document.getElementById('closeDeliverConfig').onclick=()=>deliverConfigModal.classList.add('hidden');
+deliverConfigModal.addEventListener('click',e=>{if(e.target===deliverConfigModal)deliverConfigModal.classList.add('hidden')});
+document.getElementById('saveDeliverConfig').onclick=()=>{
+  if(!activeDeliverButton)return;
+  activeDeliverButton.dataset.recipient=document.getElementById('deliverRecipient').value.trim();
+  activeDeliverButton.dataset.due=document.getElementById('deliverDue').value;
+  activeDeliverButton.dataset.note=document.getElementById('deliverNote').value.trim();
+  const card=activeDeliverButton.closest('.deliverCard');
+  const meta=card?.querySelector('.deliverMeta');
+  if(meta){
+    const d=activeDeliverButton.dataset.due?new Date(activeDeliverButton.dataset.due+'T12:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short'}):'sin fecha límite';
+    meta.textContent=(activeDeliverButton.dataset.recipient||'Sin destinatario')+' · '+d;
+  }
+  deliverConfigModal.classList.add('hidden');toast('Entrega actualizada');
+};
+
+const briefModal=document.getElementById('briefModal');
+document.getElementById('briefBtn').onclick=()=>briefModal.classList.remove('hidden');
+document.getElementById('closeBrief').onclick=()=>briefModal.classList.add('hidden');
+document.getElementById('briefDone').onclick=()=>briefModal.classList.add('hidden');
+briefModal.addEventListener('click',e=>{if(e.target===briefModal)briefModal.classList.add('hidden')});
+document.getElementById('refreshTransportDelivery').onclick=()=>{
+  const state=document.getElementById('transportDeliveryState');
+  state.textContent='Entregado';state.classList.remove('outdated');state.classList.add('delivered');
+  document.getElementById('transportImpact').innerHTML='<b>Versión 184 entregada.</b><br>Coincide con los datos actuales de ONE.';
+  document.getElementById('refreshTransportDelivery').textContent='Al día';
+  document.getElementById('refreshTransportDelivery').disabled=true;
+  toast('Nueva versión de Transporte marcada como entregada');
+};
+const profileModal=document.getElementById('profileModal');
+document.getElementById('editProfileBtn').onclick=()=>profileModal.classList.remove('hidden');
+document.getElementById('closeProfileModal').onclick=()=>profileModal.classList.add('hidden');
+profileModal.addEventListener('click',e=>{if(e.target===profileModal)profileModal.classList.add('hidden')});
+document.getElementById('saveProfileBtn').onclick=()=>{
+  const c1=document.getElementById('pfC1Name').value.trim()||'Contacto 1';
+  const c2=document.getElementById('pfC2Name').value.trim()||'Contacto 2';
+  const c1p=document.getElementById('pfC1Phone').value.trim(),c1e=document.getElementById('pfC1Email').value.trim();
+  const c2p=document.getElementById('pfC2Phone').value.trim(),c2e=document.getElementById('pfC2Email').value.trim();
+  const cv=document.getElementById('pfCeremonyVenue').value.trim(),ct=document.getElementById('pfCeremonyTime').value.trim(),ca=document.getElementById('pfCeremonyAddress').value.trim(),cm=document.getElementById('pfCeremonyMap').value.trim();
+  const rv=document.getElementById('pfReceptionVenue').value.trim(),rt=document.getElementById('pfReceptionTime').value.trim(),ra=document.getElementById('pfReceptionAddress').value.trim(),rm=document.getElementById('pfReceptionMap').value.trim();
+  document.querySelectorAll('.profileBlock')[0].querySelectorAll('.profileTitle')[0].textContent=c1;
+  document.querySelectorAll('.profileBlock')[0].querySelectorAll('.profileTitle')[1].textContent=c2;
+  document.getElementById('contact1Meta').textContent=[c1p,c1e].filter(Boolean).join(' · ');
+  document.getElementById('contact2Meta').textContent=[c2p,c2e].filter(Boolean).join(' · ');
+  document.getElementById('ceremonyVenueText').textContent=cv||'Sin indicar';
+  document.getElementById('ceremonyMeta').textContent=[ct,ca].filter(Boolean).join(' · ');
+  document.getElementById('receptionVenueText').textContent=rv||'Sin indicar';
+  document.getElementById('receptionMeta').textContent=[rt,ra].filter(Boolean).join(' · ');
+  const safeUrl=u=>/^https?:\/\//i.test(u)?u:'#';
+  const cMap=document.getElementById('ceremonyMapLink'),rMap=document.getElementById('receptionMapLink');
+  cMap.href=safeUrl(cm);cMap.classList.toggle('hidden',!cm);
+  rMap.href=safeUrl(rm);rMap.classList.toggle('hidden',!rm);
+  document.getElementById('coordinationNoteText').textContent=document.getElementById('pfNotes').value.trim()||'Sin notas';
+  profileModal.classList.add('hidden');toast('Ficha de boda actualizada');
+};
+
+const operationalData={
+  rsvp:{
+    eyebrow:'Invitados + RSVP',title:'Qué queda por cerrar',lead:'Solo información operativa compartida por la pareja.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Invitación</b><span>publicada y operativa</span></div><div class="detailValue">Activa</div></div><div class="detailItem"><div><b>14 RSVP pendientes</b><span>Último recordatorio: hace 5 días</span></div><div class="detailValue">Pendiente</div></div><div class="detailItem"><div><b>3 respuestas nuevas</b><span>desde tu última revisión</span></div><div class="detailValue">+3</div></div><div class="detailItem"><div><b>8 no asisten</b><span>estado actual</span></div><div class="detailValue">8</div></div></div><div class="detailHint">La planner ve el estado de coordinación; la edición de la invitación y el envío de recordatorios siguen haciéndose desde el ONE de la pareja.</div>'
+  },
+  seating:{
+    eyebrow:'Mesas',title:'9 confirmados sin mesa',lead:'Personas que todavía necesitan ubicación.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Lucía Ortega</b><span>Familia Martín · confirmada</span></div><div class="detailValue">Sin mesa</div></div><div class="detailItem"><div><b>Álvaro Ruiz</b><span>Amigos universidad · confirmado</span></div><div class="detailValue">Sin mesa</div></div><div class="detailItem"><div><b>María + acompañante</b><span>Amigos Clara · confirmados</span></div><div class="detailValue">2 plazas</div></div><div class="detailItem"><div><b>+ 5 personas</b><span>resto del listado pendiente</span></div><div class="detailValue">Ver 9</div></div></div><div class="detailHint">Partner no mueve mesas ni modifica el plano. La pareja conserva la edición en ONE.</div>'
+  },
+  catering:{
+    eyebrow:'Catering',title:'Información que necesita el proveedor',lead:'Recuentos y casos operativos, sin exponer más datos de los necesarios.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>6 menús pendientes</b><span>confirmados sin elección cerrada</span></div><div class="detailValue">6</div></div><div class="detailItem"><div><b>Necesidades alimentarias</b><span>5 personas registradas</span></div><div class="detailValue">5</div></div><div class="detailItem"><div><b>Tronas</b><span>solicitadas por familias confirmadas</span></div><div class="detailValue">3</div></div></div><div class="detailSection"><h3>Casos a revisar</h3><div class="detailItem"><div><b>Inés García</b><span>alergia a frutos secos</span></div><div class="detailValue">Registrado</div></div><div class="detailItem"><div><b>Mario López</b><span>menú sin gluten</span></div><div class="detailValue">Registrado</div></div></div>'
+  },
+  transport:{
+    eyebrow:'Transporte',title:'38 personas necesitan transporte',lead:'Listado operativo compartido para coordinación.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Ida + vuelta</b><span>servicio completo</span></div><div class="detailValue">29</div></div><div class="detailItem"><div><b>Solo ida</b><span>pendiente de horario definitivo</span></div><div class="detailValue">6</div></div><div class="detailItem"><div><b>Solo vuelta</b><span>pendiente de horario definitivo</span></div><div class="detailValue">3</div></div></div><div class="detailHint">El listado real podrá mostrar nombres cuando el permiso de Transporte esté activo; no incorpora teléfonos o emails por defecto.</div>'
+  },
+  transport_diff:{
+    eyebrow:'Entrega desactualizada · Transporte',title:'Qué cambió desde la versión enviada',lead:'Partner compara el resumen de la entrega con el estado actual de ONE.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Confirmados</b><span>versión enviada: 123 · ahora: 126</span></div><div class="detailValue">+3</div></div><div class="detailItem"><div><b>Necesitan transporte</b><span>versión enviada: 36 · ahora: 38</span></div><div class="detailValue">+2</div></div><div class="detailItem"><div><b>RSVP pendientes</b><span>versión enviada: 17 · ahora: 14</span></div><div class="detailValue">−3</div></div></div><div class="detailHint">No tienes que comparar dos Excel. Partner te señala qué magnitudes cambiaron; cuando revises la nueva lista puedes generar y marcar una nueva versión como entregada.</div>'
+  },
+  accommodation:{
+    eyebrow:'Alojamiento',title:'17 personas han solicitado alojamiento',lead:'Listado operativo vinculado a los datos de ONE.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Lucía Ortega</b><span>Familia Martín</span></div><div class="detailValue">Alojamiento</div></div><div class="detailItem"><div><b>Sergio & Marta</b><span>Amigos Clara</span></div><div class="detailValue">2 personas</div></div><div class="detailItem"><div><b>+ 14 personas</b><span>resto del listado actual</span></div><div class="detailValue">Ver 17</div></div></div><div class="detailHint">Partner genera este listado desde ONE. No hace falta que la pareja descargue y vuelva a subir ningún archivo.</div>'
+  },
+  planning:{
+    eyebrow:'Planning',title:'12 tareas abiertas',lead:'Lo que necesita seguimiento sin reproducir todo el planning de la pareja.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Confirmar horario definitivo con catering</b><span>vencida · pendiente de planner</span></div><div class="detailValue">Vencida</div></div><div class="detailItem"><div><b>Cerrar selección musical ceremonia</b><span>vencida · pendiente de pareja</span></div><div class="detailValue">Vencida</div></div><div class="detailItem"><div><b>Revisar versión final de mesas</b><span>vence en 8 días</span></div><div class="detailValue">Próxima</div></div></div><div class="detailHint">Partner muestra estado y seguimiento. No duplica ni sustituye la checklist completa de ONE.</div>'
+  },
+  events:{
+    eyebrow:'Eventos extra',title:'2 eventos activos',lead:'Cada evento mantiene sus invitados y RSVP propios.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Preboda</b><span>62 invitados · 51 confirmados · 11 pendientes</span></div><div class="detailValue">Activa</div></div><div class="detailItem"><div><b>Brunch</b><span>48 invitados · 40 confirmados · 8 pendientes</span></div><div class="detailValue">Activo</div></div></div><div class="detailHint">Los pagos de los eventos no se muestran salvo que la pareja conceda también el permiso económico.</div>'
+  },
+  invitation:{
+    eyebrow:'Invitación + RSVP',title:'Invitación activa',lead:'Estado de publicación y respuesta, no editor de diseño.',
+    body:'<div class="detailList"><div class="detailItem"><div><b>Invitación</b><span>publicada y operativa</span></div><div class="detailValue">Activa</div></div><div class="detailItem"><div><b>RSVP</b><span>126 confirmados · 14 pendientes</span></div><div class="detailValue">Abierto</div></div><div class="detailItem"><div><b>Último cambio</b><span>configuración RSVP actualizada</span></div><div class="detailValue">Hace 2 días</div></div></div><div class="detailHint">La wedding planner no edita la invitación desde Partner. La edición sigue perteneciendo a la pareja en ONE.</div>'
+  }
+};
+const operationalModal=document.getElementById('operationalModal');
+function openOperational(key){const d=operationalData[key];if(!d)return;document.getElementById('operationalEyebrow').textContent=d.eyebrow;document.getElementById('operationalTitle').textContent=d.title;document.getElementById('operationalLead').textContent=d.lead;document.getElementById('operationalBody').innerHTML=d.body;operationalModal.classList.remove('hidden')}
+document.querySelectorAll('[data-detail]').forEach(card=>card.addEventListener('click',e=>{if(e.target.closest('.blockerAction'))return;openOperational(card.dataset.detail)}));
+document.querySelectorAll('.blockerAction').forEach(a=>a.addEventListener('click',e=>{
+  e.preventDefault();e.stopPropagation();
+  const title=a.dataset.respTitle,meta=a.dataset.respMeta;
+  const row=document.createElement('div');row.className='respRow';
+  row.innerHTML='<input class="check" type="checkbox"><div><div class="respTitle"><b></b></div><div class="respMeta"></div></div><span class="pill">Pareja</span>';
+  row.querySelector('b').textContent=title;row.querySelector('.respMeta').textContent=meta+' · creado desde un bloqueo';
+  document.getElementById('respCard').prepend(row);
+  row.querySelector('.check').addEventListener('change',ev=>row.classList.toggle('done',ev.target.checked));
+  a.textContent='Responsabilidad creada';a.style.pointerEvents='none';
+  toast('Responsabilidad compartida creada para la pareja');
+}));
+document.getElementById('closeOperational').onclick=()=>operationalModal.classList.add('hidden');
+operationalModal.addEventListener('click',e=>{if(e.target===operationalModal)operationalModal.classList.add('hidden')});
+
+
+const archivedDemoModal=document.getElementById('archivedDemoModal');
+document.getElementById('archivedDemoBtn').onclick=()=>archivedDemoModal.classList.remove('hidden');
+document.getElementById('closeArchivedDemo').onclick=()=>archivedDemoModal.classList.add('hidden');
+archivedDemoModal.addEventListener('click',e=>{if(e.target===archivedDemoModal)archivedDemoModal.classList.add('hidden')});
+document.getElementById('archivedDocsDemo').onclick=()=>toast('3 documentos profesionales conservados en esta boda finalizada');
+document.getElementById('archivedDeleteDemo').onclick=()=>toast('En producción exige confirmación escribiendo ELIMINAR');
+document.getElementById('addDemoDocument').onclick=()=>toast('En producción puedes adjuntar contrato, justificante de pago u otro documento');
+document.querySelectorAll('.demoDocOpen').forEach(b=>b.onclick=()=>toast('Vista demo: el archivo real se abriría con enlace privado temporal'));
+document.querySelectorAll('.demoDocDelete').forEach(b=>b.onclick=()=>toast('Vista demo: el documento real se eliminaría tras confirmar'));
+document.getElementById('endDemoRelationship').onclick=()=>toast('Vista demo: la pareja pasaría a Bodas finalizadas sin modificar ONE');
+
+const modal=document.getElementById('connectModal');document.getElementById('connectBtn').onclick=()=>modal.classList.remove('hidden');document.getElementById('closeModal').onclick=()=>modal.classList.add('hidden');modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.add('hidden')});
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.remove('hidden');setTimeout(()=>el.classList.add('hidden'),2200)}
+document.getElementById('createDemoLink').onclick=()=>{location.href='./one-partner-couple-preview.html'};
+document.getElementById('reviewBtn').onclick=()=>{document.getElementById('changesCard').innerHTML='<div style="text-align:center;padding:22px;color:var(--muted)">No hay cambios desde tu última revisión.</div>';toast('Revisión registrada')};
+document.querySelectorAll('.check').forEach(c=>c.addEventListener('change',()=>c.closest('.respRow').classList.toggle('done',c.checked)));
+document.getElementById('addResp').onclick=()=>toast('Responsabilidad añadida: se sincroniza con la vista de la pareja.');
+document.getElementById('revalidateSeating').onclick=()=>{
+  const s=document.getElementById('seatingClosureState'),m=document.getElementById('seatingClosureMeta');
+  s.textContent='Cerrado';s.classList.remove('revalidate');s.classList.add('closed');
+  m.textContent='Revalidado contra la versión actual de ONE.';
+  document.getElementById('revalidateSeating').disabled=true;document.getElementById('revalidateSeating').textContent='Al día';
+  const d=document.getElementById('decisionReviewState');if(d){d.textContent='Confirmada';d.classList.remove('review');d.classList.add('confirmed')}
+  toast('Mesas revalidadas contra la versión actual');
+};
+document.querySelectorAll('.demoCloseScope').forEach(b=>b.addEventListener('click',()=>{
+  const state=b.closest('.closureCard').querySelector('.closureState');
+  state.textContent='Cerrado';state.classList.remove('ready');state.classList.add('closed');
+  b.textContent='Cerrado';b.disabled=true;toast(b.dataset.scope+' cerrado profesionalmente');
+}));
+document.getElementById('addDecisionBtn').onclick=()=>toast('La decisión puede enviarse a la pareja para confirmación.');
+document.getElementById('addContactBtn').onclick=()=>toast('Contacto operativo añadido a esta boda.');
+document.querySelectorAll('.listView').forEach(b=>b.addEventListener('click',()=>openOperational(b.dataset.listView)));
+document.querySelectorAll('.listDownload').forEach(b=>b.addEventListener('click',()=>{
+  const name=b.dataset.list||'Listado';
+  const csv='ONE Partner · '+name+'\nDatos de ejemplo · en producción se genera desde la versión actual de ONE.';
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ONE-Partner-'+name.toLowerCase().replace(/\s+/g,'-')+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),600);
+  toast(name+' generado desde los datos actuales de ONE');
+}));
+let activeWeddingFilter='all';
+function normalizeSearch(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim()}
+function applyWeddingFilters(){
+  const q=normalizeSearch(document.getElementById('weddingSearch')?.value);
+  let visible=0;
+  document.querySelectorAll('.weddingCard').forEach(card=>{
+    const filterOk=activeWeddingFilter==='all'||(activeWeddingFilter==='changes'&&card.dataset.hasChanges==='true')||(activeWeddingFilter==='pending'&&card.dataset.hasPending==='true');
+    const searchOk=!q||normalizeSearch(card.dataset.search).includes(q);
+    const show=filterOk&&searchOk;card.classList.toggle('hidden',!show);if(show)visible++;
+  });
+  let empty=document.getElementById('emptyWeddingSearch');
+  if(!visible){if(!empty){empty=document.createElement('div');empty.id='emptyWeddingSearch';empty.className='emptySearch';empty.textContent='No hay bodas que coincidan con esta búsqueda.';document.querySelector('.weddingGrid').appendChild(empty)}}else if(empty)empty.remove();
+}
+document.querySelectorAll('.filter').forEach(f=>f.addEventListener('click',()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));f.classList.add('active');activeWeddingFilter=f.dataset.filter;applyWeddingFilters()}));
+document.getElementById('weddingSearch')?.addEventListener('input',applyWeddingFilters);
+</script>
+</body></html>
