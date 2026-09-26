@@ -447,30 +447,71 @@ function responsibilitiesHtml(list){if(!(list||[]).length)return'<div class="emp
 function decisionsHtml(list){if(!(list||[]).length)return'<div class="empty">No hay decisiones operativas.</div>';return list.map(d=>'<div class="decisionRow"><div class="rowTop"><div><b>'+esc(d.title)+'</b><div class="rowMeta">'+esc(scopeLabel(d.scope))+(d.detail?' · '+esc(d.detail):'')+'</div></div><span class="state '+(d.reviewState==='review_recommended'?'revalidate':d.status==='confirmed'?'ready':'blocked')+'">'+esc(d.reviewState==='review_recommended'?'Revisar':d.status==='confirmed'?'Confirmada':'Pendiente')+'</span></div><div class="rowActions">'+(d.reviewState==='review_recommended'?'<button class="btn small soft supersedeDecision" data-id="'+esc(d.id)+'">Archivar / sustituir</button>':'')+'</div></div>').join('')}
 function contactsHtml(list){if(!(list||[]).length)return'<div class="empty">No hay contactos operativos todavía.</div>';return '<div class="contactGrid">'+list.map(c=>'<div class="miniCard"><div class="miniTitle">'+esc(c.business_name)+'</div><div class="miniMeta">'+esc(scopeLabel(c.kind))+(c.contact_name?' · '+esc(c.contact_name):'')+(c.arrival_time?' · llegada '+esc(c.arrival_time):'')+'</div><div class="rowActions">'+(c.phone?'<a class="btn small soft" href="tel:'+esc(c.phone)+'">Llamar</a>':'')+(c.email?'<a class="btn small soft" href="mailto:'+esc(c.email)+'">Email</a>':'')+(c.map_url?'<a class="btn small soft" target="_blank" rel="noopener" href="'+esc(c.map_url)+'">Maps ↗</a>':'')+'<button class="btn small soft deleteContact" data-id="'+esc(c.id)+'">Eliminar</button></div></div>').join('')+'</div>'}
 
+function weddingTeamHtml(data){
+  const members=data?.team?.members||[],canManage=!!data?.access?.canManageTeam;
+  if(!members.length&& !canManage)return '<div class="card empty">No hay profesionales asignadas todavía.</div>';
+  return '<div class="card"><div class="teamGrid">'+(members.length?members.map(m=>'<div class="teamMember"><div class="teamAvatar">'+esc(initials(m.displayName||m.email))+'</div><div class="teamCopy"><b>'+esc(m.displayName||m.email)+'</b><span>'+esc(studioRoleLabel(m.studioRole))+' · '+esc(assignmentLabel(m.assignmentRole))+'</span></div><span class="teamRole '+esc(m.studioRole)+'">'+esc(m.assignmentRole==='lead'?'Principal':'Apoyo')+'</span></div>').join(''):'<div class="empty">Sin profesionales asignadas.</div>')+'</div>'+(canManage?'<div class="actions" style="margin-top:12px"><button id="manageWeddingTeam" class="btn small soft">Gestionar equipo</button></div>':'')+'</div>';
+}
+
 async function openWedding(id,target=''){
   currentGrant=id;$('homeBtn').classList.remove('hidden');setLoading(true);
   try{
-    const loaded=await Promise.all([rpc('partner_wedding',{p_grant_id:id}),rpc('partner_documents',{p_grant_id:id})]);currentData=loaded[0];currentDocuments=loaded[1]?.items||[];const w=currentData.wedding,p=profileOf(w);
-    $('main').innerHTML='<button id="backBtn" class="linkBtn back">← Mis bodas</button><div class="detailHeader"><div><p class="eyebrow">'+esc(dmy(w.identity?.weddingDate))+(timeOf(w)?' · '+esc(timeOf(w)):'')+'</p><h1>'+esc(nameOf(w))+'</h1><p class="lead">Resumen profesional en vivo, limitado a lo que la pareja te ha autorizado.</p></div><div class="actions"><button id="briefBtn" class="btn primary">Brief de reunión</button><button id="reviewBtn" class="btn soft">Marcar como revisado</button></div></div>'+freshnessHtml(w)+
-      '<div id="profileSec" class="sectionTitle"><div><h2>Ficha de coordinación</h2><span class="muted">datos profesionales, sin modificar ONE</span></div><button id="editProfile" class="btn small soft">Editar ficha</button></div>'+profileHtml(p)+
-      '<div id="documentsSec" class="sectionTitle"><div><h2>Documentos profesionales</h2><span class="muted">contratos, justificantes y archivos privados</span></div><button id="addDocument" class="btn small primary">Adjuntar</button></div>'+documentsHtml(currentDocuments,true)+
+    const loaded=await Promise.all([rpc('partner_wedding',{p_grant_id:id}),rpc('partner_documents',{p_grant_id:id})]);
+    currentData=loaded[0];currentDocuments=loaded[1]?.items||[];
+    const w=currentData.wedding,p=profileOf(w),canWrite=!!currentData.access?.canWrite,isAdmin=!!currentData.access?.canManageTeam;
+
+    $('main').innerHTML=
+      '<button id="backBtn" class="linkBtn back">← Mis bodas</button>'+
+      '<div class="detailHeader"><div><p class="eyebrow">'+esc(dmy(w.identity?.weddingDate))+(timeOf(w)?' · '+esc(timeOf(w)):'')+'</p><h1>'+esc(nameOf(w))+'</h1><p class="lead">Resumen profesional en vivo, limitado a lo que la pareja te ha autorizado.</p></div><div class="actions"><button id="briefBtn" class="btn primary">Brief de reunión</button>'+(canWrite?'<button id="reviewBtn" class="btn soft">Marcar como revisado</button>':'')+'</div></div>'+
+      freshnessHtml(w)+
+      '<div id="teamSec" class="sectionTitle"><div><h2>Equipo de esta boda</h2><span class="muted">responsable principal y apoyo</span></div></div>'+weddingTeamHtml(currentData)+
+      '<div id="profileSec" class="sectionTitle"><div><h2>Ficha de coordinación</h2><span class="muted">datos profesionales, sin modificar ONE</span></div>'+(canWrite?'<button id="editProfile" class="btn small soft">Editar ficha</button>':'')+'</div>'+profileHtml(p)+
+      '<div id="documentsSec" class="sectionTitle"><div><h2>Documentos profesionales</h2><span class="muted">contratos, justificantes y archivos privados</span></div>'+(canWrite?'<button id="addDocument" class="btn small primary">Adjuntar</button>':'')+'</div>'+documentsHtml(currentDocuments,canWrite)+
       '<div id="assuranceSec" class="sectionTitle"><div><h2>Conformidad profesional</h2><span class="muted">control automático entre módulos</span></div></div>'+assuranceHtml(currentData.assurance)+
       '<div id="closuresSec" class="sectionTitle"><div><h2>Cierres profesionales</h2><span class="muted">evidencia ligada a una versión de ONE</span></div></div>'+closureHtml(currentData.closures)+
       '<div class="sectionTitle"><h2>Estado de la boda</h2></div><div class="summaryGrid">'+summaryBoxes(w)+'</div>'+
       '<div id="listsSec" class="sectionTitle"><div><h2>Listados vinculados</h2><span class="muted">siempre desde la versión actual de ONE</span></div></div>'+linkedListsHtml(w)+
       '<div id="deliverablesSec" class="sectionTitle"><div><h2>Entregas a proveedores</h2><span class="muted">vigencia y fechas límite</span></div></div>'+deliverableHtml(currentData.deliverables)+
       '<div id="changesSec" class="sectionTitle"><h2>Cambios desde tu última revisión</h2></div><div class="card">'+changesHtml(w)+'</div>'+
-      '<div id="decisionsSec" class="sectionTitle"><h2>Decisiones</h2><button id="addDecision" class="btn small primary">Añadir</button></div><div class="card">'+decisionsHtml(currentData.decisions)+'</div>'+
-      '<div id="contactsSec" class="sectionTitle"><h2>Contactos operativos</h2><button id="addContact" class="btn small primary">Añadir</button></div>'+contactsHtml(currentData.operationalContacts)+
-      '<div id="responsibilitiesSec" class="sectionTitle"><h2>Responsabilidades compartidas</h2><button id="newRespBtn" class="btn small primary">Añadir</button></div><div id="respForm" class="hidden"></div><div class="card">'+responsibilitiesHtml(currentData.responsibilities)+'</div>'+
+      '<div id="decisionsSec" class="sectionTitle"><h2>Decisiones</h2>'+(canWrite?'<button id="addDecision" class="btn small primary">Añadir</button>':'')+'</div><div class="card">'+decisionsHtml(currentData.decisions)+'</div>'+
+      '<div id="contactsSec" class="sectionTitle"><h2>Contactos operativos</h2>'+(canWrite?'<button id="addContact" class="btn small primary">Añadir</button>':'')+'</div>'+contactsHtml(currentData.operationalContacts)+
+      '<div id="responsibilitiesSec" class="sectionTitle"><h2>Responsabilidades compartidas</h2>'+(canWrite?'<button id="newRespBtn" class="btn small primary">Añadir</button>':'')+'</div><div id="respForm" class="hidden"></div><div class="card">'+responsibilitiesHtml(currentData.responsibilities)+'</div>'+
       '<div class="sectionTitle"><h2>Acceso concedido</h2></div><div class="card"><div class="permissionList">'+Object.entries(w.permissions||{}).filter(([,v])=>v).map(([k])=>'<div class="permissionChip"><span>'+esc(scopeLabels[k]||k)+'</span><span class="pill">Visible</span></div>').join('')+'</div></div>'+
-      '<div class="dangerZone"><h3>Finalizar relación profesional</h3><p>Úsalo cuando termine el servicio, se cancele el contrato o se cancele la boda. La pareja conserva ONE intacto y tú pierdes el acceso a sus datos.</p><button id="endRelationship" class="btn danger">Dar de baja esta pareja</button></div>';
-    setLoading(false);wireWedding();if(target)setTimeout(()=>$(target+'Sec')?.scrollIntoView({behavior:'smooth',block:'start'}),50);
-  }catch(e){$('main').innerHTML='<div class="notice error">No se ha podido abrir esta boda. Puede que la pareja haya cambiado o revocado el acceso.</div>';setLoading(false)}
+      (isAdmin?'<div class="dangerZone"><h3>Finalizar relación profesional</h3><p>Úsalo cuando termine el servicio, se cancele el contrato o se cancele la boda. La pareja conserva ONE intacto y el estudio pierde el acceso a sus datos.</p><button id="endRelationship" class="btn danger">Dar de baja esta pareja</button></div>':'');
+
+    if(!canWrite){
+      document.querySelectorAll('.closeScope,.configDelivery,.sendDelivery,.supersedeDecision,.deleteContact').forEach(x=>x.remove());
+      document.querySelectorAll('.respCheck').forEach(x=>{x.disabled=true});
+    }
+
+    setLoading(false);wireWedding();
+    if(target)setTimeout(()=>$(target+'Sec')?.scrollIntoView({behavior:'smooth',block:'start'}),50);
+  }catch(e){
+    $('main').innerHTML='<div class="notice error">No se ha podido abrir esta boda. Puede que la pareja haya cambiado o revocado el acceso.</div>';
+    setLoading(false)
+  }
 }
 function wireWedding(){
-  $('backBtn').onclick=refreshHub;$('reviewBtn').onclick=async()=>{await rpc('partner_mark_reviewed',{p_grant_id:currentGrant});await openWedding(currentGrant)};$('briefBtn').onclick=openBrief;$('editProfile').onclick=openProfileForm;$('addDocument').onclick=openDocumentUpload;$('endRelationship').onclick=openEndRelationship;$('newRespBtn').onclick=openResponsibilityForm;$('addDecision').onclick=openDecisionForm;$('addContact').onclick=()=>openContactForm();wireDocumentButtons(true);
-  document.querySelectorAll('.scopeOpen').forEach(b=>b.onclick=()=>openScope(b.dataset.scope,b.dataset.event||null));document.querySelectorAll('.closeScope').forEach(b=>b.onclick=()=>closeScope(b.dataset.scope,b.dataset.event||''));document.querySelectorAll('.configDelivery').forEach(b=>b.onclick=()=>openDeliveryForm(b.dataset.kind));document.querySelectorAll('.sendDelivery').forEach(b=>b.onclick=()=>markDelivered(b.dataset.kind));document.querySelectorAll('.respCheck').forEach(c=>c.onchange=()=>toggleResp(c.dataset.id,c.checked));document.querySelectorAll('.supersedeDecision').forEach(b=>b.onclick=()=>supersedeDecision(b.dataset.id));document.querySelectorAll('.deleteContact').forEach(b=>b.onclick=()=>deleteContact(b.dataset.id));document.querySelectorAll('.downloadList').forEach(b=>b.onclick=()=>downloadList(b.dataset.kind));
+  if($('backBtn'))$('backBtn').onclick=refreshHub;
+  if($('reviewBtn'))$('reviewBtn').onclick=async()=>{await rpc('partner_mark_reviewed',{p_grant_id:currentGrant});await openWedding(currentGrant)};
+  if($('briefBtn'))$('briefBtn').onclick=openBrief;
+  if($('manageWeddingTeam'))$('manageWeddingTeam').onclick=openWeddingTeamManager;
+  if($('editProfile'))$('editProfile').onclick=openProfileForm;
+  if($('addDocument'))$('addDocument').onclick=openDocumentUpload;
+  if($('endRelationship'))$('endRelationship').onclick=openEndRelationship;
+  if($('newRespBtn'))$('newRespBtn').onclick=openResponsibilityForm;
+  if($('addDecision'))$('addDecision').onclick=openDecisionForm;
+  if($('addContact'))$('addContact').onclick=()=>openContactForm();
+  wireDocumentButtons(!!currentData?.access?.canWrite);
+
+  document.querySelectorAll('.scopeOpen').forEach(b=>b.onclick=()=>openScope(b.dataset.scope,b.dataset.event||null));
+  document.querySelectorAll('.closeScope').forEach(b=>b.onclick=()=>closeScope(b.dataset.scope,b.dataset.event||''));
+  document.querySelectorAll('.configDelivery').forEach(b=>b.onclick=()=>openDeliveryForm(b.dataset.kind));
+  document.querySelectorAll('.sendDelivery').forEach(b=>b.onclick=()=>markDelivered(b.dataset.kind));
+  document.querySelectorAll('.respCheck:not([disabled])').forEach(c=>c.onchange=()=>toggleResp(c.dataset.id,c.checked));
+  document.querySelectorAll('.supersedeDecision').forEach(b=>b.onclick=()=>supersedeDecision(b.dataset.id));
+  document.querySelectorAll('.deleteContact').forEach(b=>b.onclick=()=>deleteContact(b.dataset.id));
+  document.querySelectorAll('.downloadList').forEach(b=>b.onclick=()=>downloadList(b.dataset.kind));
 }
 
 function csvCell(v){const s=typeof v==='object'&&v!==null?JSON.stringify(v):String(v??'');return '"'+s.replaceAll('"','""')+'"'}
