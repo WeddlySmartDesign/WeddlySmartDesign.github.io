@@ -37,3 +37,24 @@ No couple member capability is ever available in the professional browser.
 4. Run the full Partner E2E suite.
 5. Only after E2E passes should the Edge Function HTML version be retired as a UI surface.
 
+
+
+## PWA and security hardening
+
+The production frontend is independently installable:
+- `manifest.webmanifest`
+- `one-partner-icon.svg`
+- `sw.js`
+
+The service worker only caches the application shell. It does not cache Supabase API responses or wedding data. Live professional data therefore always requires network access.
+
+The Railway service must start with `node server.mjs`. The custom server adds:
+- Content-Security-Policy
+- X-Content-Type-Options: nosniff
+- X-Frame-Options: DENY
+- Referrer-Policy: no-referrer
+- restrictive Permissions-Policy
+- Cross-Origin-Opener-Policy: same-origin
+- HSTS
+
+HTML responses use `no-store`; static manifest/icon/service-worker files use short cache windows so releases remain predictable.
