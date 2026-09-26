@@ -13,6 +13,12 @@ const assert=(ok,msg)=>{if(!ok)failures.push(msg)};
 assert(files.html.includes("ONE Partner"),"Missing ONE Partner identity");
 assert(files.html.includes("WeddlySmartDesign"),"Missing WeddlySmartDesign identity");
 assert(!files.html.includes("WEDDLYSMARTDESIGN"),"Brand casing regression");
+assert(files.html.includes('class="byBrand">by WeddlySmartDesign</span>'),"Public signature must be exactly by WeddlySmartDesign");
+assert(files.html.includes('font-family:"Caveat",cursive'),"by WeddlySmartDesign must use Caveat");
+assert(files.html.includes("partner_end_relationship"),"Client offboarding flow missing");
+assert(files.html.includes("partner_archived_weddings"),"Finalized weddings archive missing");
+assert(files.html.includes("partner_register_document"),"Professional document upload missing");
+assert(files.html.includes("one-partner-documents"),"Private Partner document bucket missing");
 assert(!files.html.includes("weddly_shared_wedding_token"),"Professional frontend must never read the ONE couple member token");
 assert(!files.html.includes("weddly_pro_v7"),"Professional frontend must not reuse ONE Payments storage");
 assert(!files.html.includes("weddly_guests_qa_v67"),"Professional frontend must not reuse ONE Guests storage");
@@ -35,6 +41,8 @@ for(const required of [
 ]) assert(files.server.includes(required),"Missing security header: "+required);
 assert(files.server.includes("frame-ancestors 'none'"),"CSP must block framing");
 assert(files.server.includes("connect-src https://dnjsxequwgtyyauuofxj.supabase.co"),"CSP connect-src must remain restricted to Supabase");
+assert(files.server.includes("https://fonts.googleapis.com"),"CSP must explicitly allow Caveat stylesheet only");
+assert(files.server.includes("https://fonts.gstatic.com"),"CSP must explicitly allow Caveat font files");
 
 const moduleMatch=files.html.match(/<script type="module">([\s\S]*?)<\/script>/);
 assert(!!moduleMatch,"Module script missing");
