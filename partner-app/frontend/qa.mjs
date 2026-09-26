@@ -33,6 +33,11 @@ for(const marker of ["Hoy","Conformidad profesional","Cierres profesionales","Li
   assert(files.demo.includes(marker),"Demo missing: "+marker);
 }
 assert(files.demo.includes("Vista previa de ONE Partner · datos ficticios"),"Demo must be clearly marked as fictitious");
+assert(files.demo.includes("Equipo de esta boda"),"Demo missing wedding team");
+assert(files.demo.includes("Actividad del equipo"),"Demo missing team activity");
+assert(files.demo.includes("Marea Wedding Studio"),"Demo missing studio identity");
+assert(files.demo.includes("Wedding planner"),"Demo missing planner role");
+assert(files.demo.includes("Asistente"),"Demo missing assistant role");
 assert(!files.html.includes("weddly_shared_wedding_token"),"Professional frontend must never read the ONE couple member token");
 assert(!files.html.includes("weddly_pro_v7"),"Professional frontend must not reuse ONE Payments storage");
 assert(!files.html.includes("weddly_guests_qa_v67"),"Professional frontend must not reuse ONE Guests storage");
