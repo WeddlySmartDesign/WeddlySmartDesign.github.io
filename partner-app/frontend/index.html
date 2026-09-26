@@ -5,7 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex,nofollow">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' https://esm.sh; connect-src https://dnjsxequwgtyyauuofxj.supabase.co; style-src 'unsafe-inline'; img-src data:; font-src data:; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' https://esm.sh; connect-src https://dnjsxequwgtyyauuofxj.supabase.co; style-src 'unsafe-inline'; img-src 'self' data:; font-src data:; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'">
+<meta name="theme-color" content="#1d1a17">
+<meta name="application-name" content="ONE Partner">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ONE Partner">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/one-partner-icon.svg" type="image/svg+xml">
 <title>ONE Partner by WeddlySmartDesign</title>
 <style>
 :root{--ink:#181715;--muted:#76716b;--paper:#f3f0eb;--card:#fff;--line:#e5dfd8;--soft:#ebe6df;--dark:#1d1a17;--good:#315f49;--warn:#9b5d25;--bad:#a0443d;--shadow:0 18px 60px rgba(38,31,24,.08)}
@@ -90,6 +97,10 @@ const SUPABASE='https://dnjsxequwgtyyauuofxj.supabase.co';
 const KEY='sb_publishable_cLisdD7_gd7cjhEnIQUDjQ_-GNJTQ9h';
 const COUPLE_BASE='https://weddlysmartdesign.github.io/partner-access.html?r=';
 const supabase=createClient(SUPABASE,KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+let deferredInstallPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e});
+const isStandalone=()=>window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 const dmy=s=>{if(!s)return '';const d=new Date(s+'T12:00:00');return Number.isNaN(d.getTime())?s:new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'short',year:'numeric'}).format(d)};
@@ -147,10 +158,24 @@ async function openSettings(){
       ['decision_review','Una decisión confirmada necesita revisión'],
       ['responsibility_overdue','Una responsabilidad compartida está vencida']
     ];
-    modal('<div class="modalHead"><div><p class="eyebrow">Ajustes</p><h2>Avisos profesionales</h2><p class="muted" style="font-size:13px">Solo para incidencias que requieren una acción. ONE Partner seguirá mostrando todo en Hoy aunque desactives el email.</p></div><button class="x" data-close-modal>×</button></div>'+
+    const installBlock=isStandalone()
+      ?'<div class="notice ok"><b>ONE Partner está instalado.</b><br>Se abre como una app independiente.</div>'
+      :'<div class="card" style="box-shadow:none;padding:14px;margin-bottom:12px"><b>Instalar ONE Partner</b><p class="muted" style="font-size:12px;line-height:1.45;margin:6px 0 10px">Acceso directo desde el móvil o escritorio. Los datos de las bodas no se guardan offline.</p><button id="installPartner" class="btn soft" type="button">Instalar</button><p id="installHint" class="muted" style="font-size:11.5px;line-height:1.4;margin:8px 0 0">En iPhone/iPad: Compartir → Añadir a pantalla de inicio.</p></div>';
+    modal('<div class="modalHead"><div><p class="eyebrow">Ajustes</p><h2>ONE Partner</h2><p class="muted" style="font-size:13px">Instalación y avisos profesionales.</p></div><button class="x" data-close-modal>×</button></div>'+installBlock+
+      '<h3 style="margin-top:16px">Avisos profesionales</h3><p class="muted" style="font-size:13px">Solo para incidencias que requieren una acción. ONE Partner seguirá mostrando todo en Hoy aunque desactives el email.</p>'+
       '<label class="permissionChip" style="margin-bottom:12px"><span><b>Avisos por email</b><br><small class="muted">Desactivados por defecto hasta que tú los actives.</small></span><label class="switch"><input id="notifEmail" type="checkbox" '+(p.emailEnabled?'checked':'')+'><span class="track"></span></label></label>'+
       '<div class="card" style="box-shadow:none;padding:14px">'+rows.map(([k,l])=>'<label class="permissionChip"><span>'+esc(l)+'</span><input class="notifType" data-type="'+k+'" type="checkbox" style="width:18px;height:18px" '+(types.has(k)?'checked':'')+'></label>').join('')+'</div>'+
       '<div class="actions" style="margin-top:14px"><button id="saveNotif" class="btn primary">Guardar ajustes</button></div>');
+    if($('installPartner'))$('installPartner').onclick=async()=>{
+      if(deferredInstallPrompt){
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice.catch(()=>{});
+        deferredInstallPrompt=null;
+        closeModal();
+      }else{
+        const hint=$('installHint');if(hint)hint.textContent='Usa el menú del navegador y elige “Instalar aplicación” o “Añadir a pantalla de inicio”.';
+      }
+    };
     $('saveNotif').onclick=async()=>{
       const eventTypes=[...document.querySelectorAll('.notifType:checked')].map(x=>x.dataset.type);
       await rpc('partner_save_notification_preferences',{p_email_enabled:$('notifEmail').checked,p_event_types:eventTypes});
