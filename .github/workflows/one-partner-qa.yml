@@ -1,0 +1,26 @@
+name: ONE Partner QA
+
+on:
+  push:
+    branches:
+      - one-partner-mvp-2026-09-23
+    paths:
+      - "partner-app/**"
+      - ".github/workflows/one-partner-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  partner-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: partner-app/frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: npm test
