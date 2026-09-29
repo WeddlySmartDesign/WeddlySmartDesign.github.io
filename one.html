@@ -4140,7 +4140,7 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <li>prestar las funciones de invitados, RSVP, mesas, pagos, eventos y planning;</li>
 <li>gestionar incidencias, seguridad y funcionamiento técnico;</li>
 <li>cumplir obligaciones legales, fiscales y de consumo vinculadas a la contratación;</li>
-<li>obtener estadísticas internas agregadas sobre visitas a la web y pasos del proceso de compra para evaluar su funcionamiento y conversión.</li>
+<li>obtener estadísticas internas agregadas sobre visitas a la web, tiempo activo de navegación, profundidad de desplazamiento, secciones alcanzadas y pasos del proceso de compra para evaluar su funcionamiento y conversión.</li>
 </ul>
 <h3>Base jurídica</h3>
 <p>Los tratamientos necesarios para atender una solicitud, formalizar la compra, prestar ONE o dar soporte se basan en medidas precontractuales o en la ejecución del contrato. Los tratamientos exigidos por normativa fiscal, contable o de consumo se realizan para cumplir obligaciones legales. Cuando la medición estadística interna implique tratamiento de datos personales, se limita a lo necesario para evaluar el funcionamiento y la eficacia de la web, sin identificadores persistentes ni seguimiento entre sitios. No se activa por defecto ninguna comunicación comercial ajena al servicio contratado.</p>
@@ -4154,7 +4154,7 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <h3>Proveedores tecnológicos</h3>
 <p>ONE utiliza almacenamiento técnico en el dispositivo y sincronización remota para permitir el uso compartido por la pareja. La infraestructura actual utiliza GitHub Pages para archivos estáticos y Supabase para funciones de backend, almacenamiento, sincronización y medición estadística interna, además de Stripe para el procesamiento de pagos. Estos proveedores pueden utilizar subproveedores conforme a sus propias condiciones. Cuando resulte aplicable una transferencia internacional de datos, se utilizarán los mecanismos y garantías previstos en la normativa y en los acuerdos del proveedor correspondiente.</p>
 <h3>Medición estadística interna de la web</h3>
-<p>La web registra de forma interna y agregada visitas a la página de ONE y algunos pasos del proceso comercial —por ejemplo, pulsar «Comprar», abrir el checkout o iniciarlo— para poder analizar el rendimiento de la web y la relación entre visitas y compras. Esta medición no utiliza cookies ni identificadores persistentes del navegador y no realiza seguimiento entre sitios. En la tabla de analítica no se guardan nombres, emails, direcciones IP ni datos de la boda. Se registran únicamente la página, el tipo de evento, el dominio de procedencia cuando exista, parámetros UTM si se han utilizado, una categoría general de dispositivo y, durante el proceso de compra, la edición seleccionada.</p>
+<p>La web registra de forma interna y agregada visitas a la página de ONE, tiempo activo de navegación, profundidad de desplazamiento, secciones alcanzadas y algunos pasos del proceso comercial —por ejemplo, pulsar «Comprar», abrir el checkout o iniciarlo— para poder analizar el rendimiento de la web y la relación entre visitas y compras. Esta medición no utiliza cookies ni identificadores persistentes del navegador y no realiza seguimiento entre sitios. En la analítica no se guardan nombres, emails, direcciones IP ni datos de la boda. Se registran únicamente datos técnicos y de interacción de esa carga de página, el dominio de procedencia cuando exista, parámetros UTM si se han utilizado, una categoría general de dispositivo y, durante el proceso de compra, la edición seleccionada.</p>
 <p>El selector de contactos del dispositivo permite elegir contactos concretos; no implica subir automáticamente la agenda completa.</p>
 <h3>Conservación</h3>
 <p>Los datos operativos de una boda se mantienen durante la vigencia del acceso y hasta 90 días naturales después de la fecha de boda indicada. Después puede existir una ventana técnica adicional de hasta 30 días para recuperación o incidencias antes de la supresión de los datos operativos, salvo que una obligación legal exija conservar información concreta. Si la boda se aplaza, el plazo queda vinculado a la nueva fecha de esa misma boda. Los datos mínimos de compra, facturación o defensa de reclamaciones se conservan durante los plazos legales aplicables.</p>
@@ -4170,7 +4170,7 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <h2 id="cookie-policy-title">Cookies y almacenamiento técnico</h2>
 <button aria-label="Cerrar" class="legal-close" type="button">×</button>
 </div>
-<p>La web no incorpora Google Analytics, Meta Pixel, TikTok Pixel, Hotjar ni otras tecnologías de publicidad comportamental o seguimiento entre sitios. Sí utiliza una medición estadística interna y propia para conocer, de forma agregada, visitas a la página de ONE y pasos del proceso comercial.</p>
+<p>La web no incorpora Google Analytics, Meta Pixel, TikTok Pixel, Hotjar ni otras tecnologías de publicidad comportamental o seguimiento entre sitios. Sí utiliza una medición estadística interna y propia para conocer, de forma agregada, visitas a la página de ONE, tiempo activo, profundidad de desplazamiento, secciones alcanzadas y pasos del proceso comercial.</p>
 <h3>Medición estadística interna</h3>
 <p>Esta medición no escribe cookies ni utiliza almacenamiento local para identificar o reconocer a una persona entre visitas. Cada carga de página utiliza únicamente un identificador temporal en memoria para agrupar los eventos de esa visita y se descarta al cerrar o recargar la página. No se utiliza para publicidad, perfiles comerciales ni seguimiento en otras webs.</p>
 <h3>Tecnologías necesarias</h3>
@@ -6682,6 +6682,100 @@ const send=(event_name,extra={})=>{
 window.__wsdSiteAnalytics=send;
 send('page_view');
 
+const SECTION_DEFS=[
+  ['inicio','hero'],['invitados','guests'],['rsvp','rsvp'],['mesas','seating'],
+  ['pagos','payments'],['planning','planning'],['preboda','events'],['sistema','connected'],
+  ['sincronizacion','sync'],['comprar','purchase'],['contacto','contact']
+];
+const sectionsSeen=new Set();
+const sectionSeconds={};
+let currentSection='hero';
+let activeMs=0;
+let maxScrollPct=0;
+let reachedPrice=false;
+let reachedEnd=false;
+let lastTick=performance.now();
+let scrollRaf=0;
+
+function tick(){
+  const now=performance.now();
+  if(document.visibilityState==='visible'){
+    const delta=Math.max(0,Math.min(5000,now-lastTick));
+    activeMs+=delta;
+    if(currentSection){
+      sectionSeconds[currentSection]=(sectionSeconds[currentSection]||0)+delta;
+    }
+  }
+  lastTick=now;
+}
+function updatePosition(){
+  const doc=document.documentElement;
+  const maxScroll=Math.max(1,doc.scrollHeight-innerHeight);
+  maxScrollPct=Math.max(maxScrollPct,Math.min(100,Math.round((scrollY/maxScroll)*100)));
+  const mid=innerHeight*.5;
+  let best=null,bestDist=Infinity;
+  for(const [id,key] of SECTION_DEFS){
+    const el=document.getElementById(id);
+    if(!el)continue;
+    const r=el.getBoundingClientRect();
+    if(r.top<innerHeight*.76&&r.bottom>innerHeight*.24)sectionsSeen.add(key);
+    const center=(r.top+r.bottom)/2;
+    const dist=Math.abs(center-mid);
+    if(dist<bestDist){bestDist=dist;best=key}
+  }
+  if(best)currentSection=best;
+  reachedPrice=reachedPrice||sectionsSeen.has('purchase');
+  reachedEnd=reachedEnd||sectionsSeen.has('contact')||maxScrollPct>=95;
+}
+function engagementPayload(){
+  const secs={};
+  for(const [k,v] of Object.entries(sectionSeconds))secs[k]=Math.max(0,Math.round(Number(v)/1000));
+  return {
+    ...base,
+    action:'engagement',
+    active_seconds:Math.max(0,Math.round(activeMs/1000)),
+    max_scroll_pct:maxScrollPct,
+    sections_seen:[...sectionsSeen],
+    section_seconds:secs,
+    last_section:currentSection||null,
+    reached_price:reachedPrice,
+    reached_end:reachedEnd
+  };
+}
+function flushEngagement(){
+  tick();
+  updatePosition();
+  fetch(ENDPOINT,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(engagementPayload()),
+    mode:'cors',
+    credentials:'omit',
+    cache:'no-store',
+    keepalive:true
+  }).catch(()=>{});
+}
+function onScroll(){
+  if(scrollRaf)return;
+  scrollRaf=requestAnimationFrame(()=>{
+    scrollRaf=0;
+    tick();
+    updatePosition();
+  });
+}
+
+sectionsSeen.add('hero');
+updatePosition();
+flushEngagement();
+addEventListener('scroll',onScroll,{passive:true});
+addEventListener('resize',onScroll,{passive:true});
+setInterval(()=>{if(document.visibilityState==='visible')flushEngagement()},10000);
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden')flushEngagement();
+  else{lastTick=performance.now();updatePosition()}
+});
+addEventListener('pagehide',flushEngagement);
+
 document.addEventListener('click',e=>{
   const el=e.target instanceof Element
     ? e.target.closest('.action-buy,#buyOneButton,.purchase-guide-buy,#oneDemoBuy')
@@ -6693,6 +6787,7 @@ document.addEventListener('click',e=>{
   else if(el.classList.contains('purchase-guide-buy'))element='menu_buy';
   else if(el.closest('.final-topbar'))element='header_buy';
   send('buy_click',{element});
+  flushEngagement();
 },true);
 
 const attachCheckoutObserver=()=>{
@@ -6704,6 +6799,7 @@ const attachCheckoutObserver=()=>{
     if(isOpen&&!wasOpen){
       const selected=dialog.querySelector('[data-edition].selected');
       send('checkout_open',{edition:selected?.getAttribute('data-edition')||null});
+      flushEngagement();
     }
     wasOpen=isOpen;
   }).observe(dialog,{attributes:true,attributeFilter:['open']});
@@ -6723,6 +6819,7 @@ document.addEventListener('change',e=>{
   const dialog=document.getElementById('oneCheckout');
   const selected=dialog?.querySelector('[data-edition].selected');
   send('checkout_start',{edition:selected?.getAttribute('data-edition')||null});
+  flushEngagement();
 },true);
 })();
 </script>
