@@ -595,7 +595,10 @@ body:has(#app:not([hidden])){overflow:hidden}
   display:block;font-family:var(--serif);font-size:22px;font-weight:400;line-height:1;margin-top:2px
 }
 .action-card-extra{border-top:1px solid var(--line);padding:11px 14px 13px;background:rgba(247,238,229,.38)}
-.action-attribution-status{font-size:12px;line-height:1.45;color:var(--muted);font-weight:700}
+.action-attribution-status{font-size:12px;line-height:1.45;color:var(--muted);font-weight:800}
+.action-quality{
+  margin-top:7px;color:var(--muted);font-size:12.5px;line-height:1.45
+}
 .action-link-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
 .action-link{
   border:1px solid var(--line);background:var(--white);color:var(--ink);border-radius:999px;
@@ -1395,8 +1398,8 @@ function renderActions(){
     const metrics=document.createElement('div');metrics.className='action-card-metrics';
     [
       ['Visitas',r.visits??0],
+      ['Precio',r.reached_price_pct==null?'—':pct(r.reached_price_pct)],
       ['Comprar',r.buy_clicks??0],
-      ['Checkout',r.checkout_opens??0],
       ['Pago',r.checkout_starts??0]
     ].forEach(([label,value])=>{
       const box=document.createElement('div'),small=document.createElement('small'),strong=document.createElement('strong');
@@ -1406,6 +1409,19 @@ function renderActions(){
 
     const extra=document.createElement('div');extra.className='action-card-extra';
     const status=document.createElement('div');status.className='action-attribution-status';status.textContent=attributionModeText(r);
+    extra.appendChild(status);
+    const behaviorMeasured=Number(r.behavior_visits||0);
+    if(behaviorMeasured){
+      const quality=document.createElement('div');quality.className='action-quality';
+      quality.textContent='Comportamiento ('+behaviorMeasured+' medidas): '+duration(r.median_active_seconds)+' activos · '+
+        (r.median_scroll_pct==null?'—':pct(r.median_scroll_pct))+' profundidad · '+
+        (r.reached_price_pct==null?'—':pct(r.reached_price_pct))+' llegan al precio · '+
+        (r.quick_exit_pct==null?'—':pct(r.quick_exit_pct))+' salida rápida.';
+      extra.appendChild(quality);
+    }
+    const funnel=document.createElement('div');funnel.className='action-quality';
+    funnel.textContent='Después del clic: '+(r.checkout_opens??0)+' abren checkout · '+(r.checkout_starts??0)+' inician pago.';
+    extra.appendChild(funnel);
     const links=document.createElement('div');links.className='action-link-row';
 
     const copy=document.createElement('button');copy.type='button';copy.className='action-link primary';copy.textContent='Copiar enlace medible';
@@ -1426,7 +1442,7 @@ function renderActions(){
       catch{alert('No he podido eliminar la acción. Inténtalo de nuevo.')}
       finally{loading.hidden=true}
     });
-    links.append(copy,edit,del);extra.append(status,links);
+    links.append(copy,edit,del);extra.append(links);
     card.append(summary,extra);
     card.addEventListener('toggle',()=>{toggle.textContent=card.open?'Ver menos':'Ver más'});
     list.appendChild(card);
@@ -1444,7 +1460,12 @@ function buildEvolutionInsight(m){
   if(visits<30)parts.push('Muestra todavía pequeña: úsala como señal, no como conclusión.');
   parts.push(pct(coverage)+' del tráfico del mes queda atribuido a acciones.');
   if(channels[0]&&Number(channels[0].visits||0)>0){
-    parts.push(channels[0].channel+' aporta '+channels[0].visits+' visitas atribuidas y '+(channels[0].buy_clicks||0)+' clics en Comprar.');
+    let channelText=channels[0].channel+' aporta '+channels[0].visits+' visitas atribuidas y '+(channels[0].buy_clicks||0)+' clics en Comprar.';
+    if(Number(channels[0].behavior_visits||0)>0){
+      channelText+=' Entre las '+channels[0].behavior_visits+' con comportamiento medido, '+
+        (channels[0].reached_price_pct==null?'—':pct(channels[0].reached_price_pct))+' llegan al precio y el tiempo activo mediano es '+duration(channels[0].median_active_seconds)+'.';
+    }
+    parts.push(channelText);
   }
   if(Number(m.buy_clicks||0)===0)parts.push('Todavía no hay clics en Comprar.');
   else if(Number(m.checkout_starts||0)===0)parts.push('Hay clics en Comprar, pero ningún inicio de pago.');
@@ -1471,24 +1492,31 @@ function renderEvolution(){
     const metrics=document.createElement('div');metrics.className='evolution-metrics';
     [
       ['Visitas',m.visits??0],
-      ['Comprar',m.buy_clicks??0],
-      ['Ventas',m.purchases??0],
-      ['Conversión',m.conversion_pct==null?'—':pct(m.conversion_pct)]
+      ['Precio',m.reached_price_pct==null?'—':pct(m.reached_price_pct)],
+      ['Comprar',m.buy_rate_pct==null?'—':pct(m.buy_rate_pct)],
+      ['Ventas',m.purchases??0]
     ].forEach(([label,value])=>{
       const box=document.createElement('div'),small=document.createElement('small'),strong=document.createElement('strong');
       small.textContent=label;strong.textContent=value;box.append(small,strong);metrics.appendChild(box);
     });
 
     const context=document.createElement('div');context.className='evolution-context';
-    context.textContent=(m.actions??0)+' acciones · '+(m.attributed_visits??0)+' visitas atribuidas ('+
-      (m.attribution_pct==null?'—':pct(m.attribution_pct))+') · '+money(m.revenue_cents||0);
+    const behaviorContext=Number(m.behavior_visits||0)
+      ? duration(m.median_active_seconds)+' activos · '+(m.median_scroll_pct==null?'—':pct(m.median_scroll_pct))+' profundidad · '
+      : '';
+    context.textContent=behaviorContext+(m.actions??0)+' acciones · '+(m.attributed_visits??0)+' visitas atribuidas ('+
+      (m.attribution_pct==null?'—':pct(m.attribution_pct))+') · conversión '+(m.conversion_pct==null?'—':pct(m.conversion_pct))+' · '+money(m.revenue_cents||0);
 
     const channels=evolutionChannels.filter(c=>monthKey(c.month)===key).sort((a,b)=>Number(b.visits||0)-Number(a.visits||0));
     const channelList=document.createElement('div');channelList.className='evolution-channels';
     channels.forEach(c=>{
       const row=document.createElement('div');row.className='evolution-channel';
       const name=document.createElement('strong');name.textContent=c.channel;
-      const val=document.createElement('span');val.textContent=(c.visits??0)+' visitas · '+(c.buy_clicks??0)+' comprar · '+(c.checkout_starts??0)+' pago';
+      const val=document.createElement('span');
+      const quality=Number(c.behavior_visits||0)
+        ? ' · '+(c.reached_price_pct==null?'—':pct(c.reached_price_pct))+' precio · '+duration(c.median_active_seconds)
+        : '';
+      val.textContent=(c.visits??0)+' visitas · '+(c.buy_clicks??0)+' comprar · '+(c.checkout_starts??0)+' pago'+quality;
       row.append(name,val);channelList.appendChild(row);
     });
     card.append(head,metrics,context);
