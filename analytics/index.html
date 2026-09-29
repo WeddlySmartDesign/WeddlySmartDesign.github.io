@@ -399,6 +399,42 @@ body:has(#app:not([hidden])){overflow:hidden}
   .quick-read>div{padding:7px 8px}
 }
 
+
+@media(max-width:520px){
+  .details-dialog,.details-shell,.details-scroll,.details-section,.details-dialog .card,.details-dialog .table-wrap{
+    min-width:0!important;max-width:100%!important;overflow-x:hidden!important
+  }
+  .details-scroll{width:100%;touch-action:pan-y;overscroll-behavior-x:none}
+  .details-dialog .table-wrap{width:100%;touch-action:pan-y}
+  .details-dialog .detail-table,
+  .details-dialog .detail-table thead,
+  .details-dialog .detail-table tbody{
+    display:block!important;width:100%!important;min-width:0!important;max-width:100%!important
+  }
+  .details-dialog .detail-table tr{
+    display:grid!important;width:100%!important;min-width:0!important;max-width:100%!important;align-items:center
+  }
+  .details-dialog .detail-table th,
+  .details-dialog .detail-table td{
+    display:block;width:auto!important;min-width:0!important;max-width:none!important;
+    white-space:normal!important;overflow-wrap:anywhere;word-break:break-word
+  }
+  .details-dialog .behavior-table tr{
+    grid-template-columns:minmax(0,1.8fr) minmax(0,.65fr) minmax(0,.55fr) minmax(0,.8fr)
+  }
+  .details-dialog .source-table tr{
+    grid-template-columns:minmax(0,2.15fr) minmax(0,.55fr) minmax(0,.8fr) minmax(0,.6fr)
+  }
+  .details-dialog .daily-table tr{
+    grid-template-columns:minmax(0,.82fr) minmax(0,.55fr) minmax(0,.6fr) minmax(0,.52fr) minmax(0,.62fr) minmax(0,.78fr)
+  }
+  .details-dialog .behavior-table th:first-child,
+  .details-dialog .behavior-table td:first-child,
+  .details-dialog .source-table th:first-child,
+  .details-dialog .source-table td:first-child,
+  .details-dialog .daily-table th:first-child,
+  .details-dialog .daily-table td:first-child{width:auto!important}
+}
 </style>
 </head>
 <body>
