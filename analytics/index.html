@@ -516,6 +516,139 @@ body:has(#app:not([hidden])){overflow:hidden}
   .details-dialog .daily-table th:first-child,
   .details-dialog .daily-table td:first-child{width:auto!important}
 }
+
+/* Strategic Actions + Evolution */
+.actions-tabs{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 14px;padding:4px;
+  background:rgba(67,61,59,.06);border-radius:999px
+}
+.actions-tab{
+  border:0;border-radius:999px;padding:10px 12px;background:transparent;color:var(--muted);
+  font:850 13px/1 var(--sans);cursor:pointer
+}
+.actions-tab.active{background:var(--ink);color:#fff}
+.actions-intro-compact{margin-bottom:12px}
+.actions-controls{
+  display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin-bottom:10px
+}
+.actions-controls label{display:grid;gap:5px}
+.actions-controls label>span{
+  font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)
+}
+.actions-controls select{
+  width:100%;border:1px solid var(--line);border-radius:13px;background:var(--white);color:var(--ink);
+  padding:10px 11px;font:750 14px/1.2 var(--sans);outline:none
+}
+.action-new{width:auto;margin:0;padding:11px 15px;white-space:nowrap}
+.action-month-summary{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:10px 0 7px
+}
+.action-month-summary>div{
+  min-width:0;background:var(--white);border:1px solid var(--line);border-radius:15px;padding:11px
+}
+.action-month-summary small{
+  display:block;color:var(--muted);font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.06em
+}
+.action-month-summary strong{
+  display:block;font-family:var(--serif);font-size:27px;font-weight:400;line-height:1;margin-top:4px
+}
+.action-month-context{
+  margin:0 0 13px;color:var(--muted);font-size:12.5px;line-height:1.45;font-weight:700
+}
+.action-form-collapsed{margin-top:4px}
+.action-form-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.action-form-head strong{font-family:var(--serif);font-size:27px;font-weight:400}
+.action-form-tip{
+  margin-top:10px;padding:10px 11px;border-radius:13px;background:rgba(185,122,92,.08);
+  color:var(--muted);font-size:12px;line-height:1.45;font-weight:700
+}
+.actions-list{display:grid;gap:9px}
+.action-card{
+  background:var(--white);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 9px 24px rgba(52,47,45,.045);overflow:hidden
+}
+.action-card>summary{
+  list-style:none;cursor:pointer;padding:13px 14px 12px
+}
+.action-card>summary::-webkit-details-marker{display:none}
+.action-card-summary-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.action-card-identity{min-width:0}
+.action-card-date{font-family:var(--serif);font-size:23px;line-height:1}
+.action-card-channel{
+  display:inline-block;margin-top:5px;color:var(--clay);font-size:11px;font-weight:900;
+  text-transform:uppercase;letter-spacing:.08em
+}
+.action-card-toggle{color:var(--muted);font-size:11px;font-weight:900;white-space:nowrap;padding-top:2px}
+.action-card-description{
+  margin:9px 0 0;font-size:14.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical;overflow:hidden
+}
+.action-card[open] .action-card-description{-webkit-line-clamp:unset}
+.action-card-metrics{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:10px;
+  border-top:1px solid var(--line);padding-top:9px
+}
+.action-card-metrics small{
+  display:block;color:var(--muted);font-size:9.5px;font-weight:900;text-transform:uppercase;letter-spacing:.05em
+}
+.action-card-metrics strong{
+  display:block;font-family:var(--serif);font-size:22px;font-weight:400;line-height:1;margin-top:2px
+}
+.action-card-extra{border-top:1px solid var(--line);padding:11px 14px 13px;background:rgba(247,238,229,.38)}
+.action-attribution-status{font-size:12px;line-height:1.45;color:var(--muted);font-weight:800}
+.action-quality{
+  margin-top:7px;color:var(--muted);font-size:12.5px;line-height:1.45
+}
+.action-link-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.action-link{
+  border:1px solid var(--line);background:var(--white);color:var(--ink);border-radius:999px;
+  padding:8px 10px;font:850 11px/1 var(--sans)
+}
+.action-link.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.evolution-insight{
+  background:var(--ink);color:#fff;border-radius:18px;padding:14px 15px;margin-bottom:10px;
+  font-size:14px;line-height:1.5
+}
+.evolution-note{color:var(--muted);font-size:12px;line-height:1.5;margin-bottom:14px}
+.evolution-list{display:grid;gap:11px}
+.evolution-month{
+  background:var(--white);border:1px solid var(--line);border-radius:19px;padding:14px;
+  box-shadow:0 9px 24px rgba(52,47,45,.045)
+}
+.evolution-month-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.evolution-month-head h4{font-family:var(--serif);font-size:27px;font-weight:400;margin:0}
+.evolution-badge{
+  border-radius:999px;background:rgba(185,122,92,.10);color:var(--clay);
+  padding:5px 8px;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.06em
+}
+.evolution-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:10px}
+.evolution-metrics>div{min-width:0}
+.evolution-metrics small{
+  display:block;color:var(--muted);font-size:9.5px;font-weight:900;text-transform:uppercase;letter-spacing:.05em
+}
+.evolution-metrics strong{display:block;font-family:var(--serif);font-size:23px;font-weight:400;margin-top:2px}
+.evolution-context{
+  margin-top:10px;padding-top:9px;border-top:1px solid var(--line);color:var(--muted);
+  font-size:12px;line-height:1.45
+}
+.evolution-channels{display:grid;gap:6px;margin-top:10px}
+.evolution-channel{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:center;
+  padding:8px 9px;border-radius:12px;background:rgba(247,238,229,.55)
+}
+.evolution-channel strong{font-size:13px}
+.evolution-channel span{font-size:11.5px;color:var(--muted);text-align:right}
+@media(max-width:520px){
+  .actions-controls{grid-template-columns:1fr 1fr}
+  .action-new{grid-column:1/-1;width:100%}
+  .action-month-summary{gap:6px}
+  .action-month-summary>div{padding:10px 8px}
+  .action-month-summary small{font-size:9.8px}
+  .action-month-summary strong{font-size:25px}
+  .action-card-description{font-size:15px}
+  .action-card-metrics strong{font-size:21px}
+  .evolution-metrics strong{font-size:21px}
+}
 </style>
 </head>
 <body>
@@ -662,51 +795,92 @@ body:has(#app:not([hidden])){overflow:hidden}
       <button class="icon-btn" id="actionsClose" type="button">Cerrar</button>
     </header>
     <div class="details-scroll actions-scroll">
-      <section class="actions-intro">
-        <h3>Contexto, no solo fechas.</h3>
-        <p>Anota qué has hecho para poder leer después el resultado sabiendo qué acción había detrás.</p>
-        <div class="actions-attribution-info">Cada tarjeta usa la fuente detectada de esa visita. Las visitas directas o sin fuente quedan fuera de la atribución.</div>
-      </section>
+      <nav class="actions-tabs" aria-label="Vistas de acciones">
+        <button class="actions-tab active" data-actions-view="journal" type="button">Acciones</button>
+        <button class="actions-tab" data-actions-view="evolution" type="button">Evolución</button>
+      </nav>
 
-      <form class="action-form" id="actionForm">
-        <input type="hidden" id="actionId">
-        <div class="action-form-grid">
+      <section id="actionsJournalView">
+        <section class="actions-intro actions-intro-compact">
+          <h3>Qué hiciste. Qué aportó.</h3>
+          <p>Guarda cada promoción y deja que Analytics separe el resultado por canal.</p>
+        </section>
+
+        <div class="actions-controls">
           <label>
-            <span>Fecha</span>
-            <input id="actionDate" type="date" required>
+            <span>Mes</span>
+            <select id="actionMonthSelect"></select>
           </label>
           <label>
             <span>Canal</span>
-            <input id="actionChannel" type="text" maxlength="60" list="channelOptions" placeholder="TikTok" required>
-            <datalist id="channelOptions">
-              <option value="TikTok"></option>
-              <option value="Instagram"></option>
-              <option value="WhatsApp"></option>
-              <option value="Email"></option>
-              <option value="Feria / QR"></option>
-              <option value="Colaboración"></option>
-              <option value="Otro"></option>
-            </datalist>
+            <select id="actionChannelFilter"><option value="all">Todos</option></select>
           </label>
+          <button class="login-btn action-new" id="actionNew" type="button">+ Nueva</button>
         </div>
-        <label class="action-note-field">
-          <span>Qué has hecho</span>
-          <textarea id="actionDescription" maxlength="500" rows="3" placeholder="Ej.: promoción en TikTok del vídeo de Invitaciones y RSVP" required></textarea>
-        </label>
-        <div class="action-form-actions">
-          <button class="login-btn action-save" id="actionSave" type="submit">Guardar acción</button>
-          <button class="icon-btn action-cancel" id="actionCancel" type="button" hidden>Cancelar edición</button>
-        </div>
-        <div class="action-message" id="actionMessage" aria-live="polite"></div>
-      </form>
 
-      <section class="actions-history">
-        <div class="actions-history-head">
-          <h3>Historial</h3>
-          <span id="actionsCount">0 acciones</span>
-        </div>
-        <div class="actions-list" id="actionsList"></div>
-        <div class="empty" id="actionsEmpty" hidden>Aún no has anotado ninguna acción.</div>
+        <section class="action-month-summary">
+          <div><small>Acciones</small><strong id="amActions">0</strong></div>
+          <div><small>Visitas atrib.</small><strong id="amVisits">0</strong></div>
+          <div><small>Comprar</small><strong id="amBuy">0</strong></div>
+          <div><small>Pago</small><strong id="amPay">0</strong></div>
+        </section>
+        <div class="action-month-context" id="actionMonthContext">—</div>
+
+        <form class="action-form action-form-collapsed" id="actionForm" hidden>
+          <input type="hidden" id="actionId">
+          <div class="action-form-head">
+            <strong id="actionFormTitle">Nueva acción</strong>
+            <button class="action-mini" id="actionFormClose" type="button">Cerrar</button>
+          </div>
+          <div class="action-form-grid">
+            <label>
+              <span>Fecha</span>
+              <input id="actionDate" type="date" required>
+            </label>
+            <label>
+              <span>Canal</span>
+              <input id="actionChannel" type="text" maxlength="60" list="channelOptions" placeholder="TikTok" required>
+              <datalist id="channelOptions">
+                <option value="TikTok"></option>
+                <option value="Instagram"></option>
+                <option value="WhatsApp"></option>
+                <option value="Email"></option>
+                <option value="Feria / QR"></option>
+                <option value="Colaboración"></option>
+                <option value="Otro"></option>
+              </datalist>
+            </label>
+          </div>
+          <label class="action-note-field">
+            <span>Qué has hecho</span>
+            <textarea id="actionDescription" maxlength="500" rows="3" placeholder="Ej.: promoción 24 h del vídeo de Invitaciones y RSVP" required></textarea>
+          </label>
+          <div class="action-form-tip">Al guardar se crea un enlace medible único para esa acción. Si puedes usarlo en la promoción, la atribución será exacta.</div>
+          <div class="action-form-actions">
+            <button class="login-btn action-save" id="actionSave" type="submit">Guardar acción</button>
+            <button class="icon-btn action-cancel" id="actionCancel" type="button" hidden>Cancelar edición</button>
+          </div>
+          <div class="action-message" id="actionMessage" aria-live="polite"></div>
+        </form>
+
+        <section class="actions-history">
+          <div class="actions-history-head">
+            <h3>Historial</h3>
+            <span id="actionsCount">0 acciones</span>
+          </div>
+          <div class="actions-list" id="actionsList"></div>
+          <div class="empty" id="actionsEmpty" hidden>Aún no hay acciones en este filtro.</div>
+        </section>
+      </section>
+
+      <section id="actionsEvolutionView" hidden>
+        <section class="actions-intro">
+          <h3>Evolución</h3>
+          <p>Una lectura mensual para ver si las acciones traen más tráfico y si ese tráfico avanza hacia la compra.</p>
+        </section>
+        <div class="evolution-insight" id="evolutionInsight">Aún no hay suficiente histórico.</div>
+        <div class="evolution-note">Las ventas e ingresos son totales del mes. Las visitas, clics y pasos de checkout sí pueden atribuirse a acciones/canales; las compras no se vinculan a una persona concreta.</div>
+        <div class="evolution-list" id="evolutionList"></div>
       </section>
     </div>
   </div>
@@ -734,6 +908,11 @@ let currentRange='7d';
 let deferredInstallPrompt=null;
 let actionsDaily=[];
 let actionsAttribution={};
+let actionsAll=[];
+let evolutionMonths=[];
+let evolutionChannels=[];
+let selectedActionMonth='';
+let selectedActionChannel='all';
 let editingActionId='';
 
 const $=id=>document.getElementById(id);
@@ -1029,19 +1208,65 @@ $('installHelpClose').addEventListener('click',()=>installHelp.close());
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js?v=8',{scope:'./',updateViaCache:'none'})
+    navigator.serviceWorker.register('./sw.js?v=10',{scope:'./',updateViaCache:'none'})
       .then(reg=>reg.update().catch(()=>{}))
       .catch(()=>{});
   },{once:true});
 }
   navigator.serviceWorker.addEventListener('controllerchange',()=>{
-    const key='wsd_analytics_sw_v8_reload';
+    const key='wsd_analytics_sw_v10_reload';
     if(sessionStorage.getItem(key)==='1')return;
     sessionStorage.setItem(key,'1');
     location.reload();
   });
 updateInstallButton();
 const actionsPanel=$('actionsPanel');
+
+function monthKey(v){return String(v||'').slice(0,7)}
+function monthLabel(key){
+  if(!/^\d{4}-\d{2}$/.test(String(key||'')))return String(key||'');
+  const [y,m]=key.split('-').map(Number);
+  return new Date(y,m-1,1).toLocaleDateString('es-ES',{month:'long',year:'numeric'});
+}
+function currentMonthKey(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+}
+function availableActionMonths(){
+  const set=new Set([currentMonthKey()]);
+  actionsAll.forEach(a=>set.add(monthKey(a.action_date)));
+  evolutionMonths.forEach(m=>set.add(monthKey(m.month)));
+  return [...set].filter(Boolean).sort().reverse();
+}
+function channelSlug(channel){
+  const c=String(channel||'').toLowerCase();
+  if(c.includes('tiktok'))return {source:'tiktok',medium:'social'};
+  if(c.includes('instagram')||c==='ig')return {source:'instagram',medium:'social'};
+  if(c.includes('whatsapp'))return {source:'whatsapp',medium:'message'};
+  if(c.includes('email')||c.includes('mail'))return {source:'email',medium:'email'};
+  if(c.includes('feria')||c.includes('qr'))return {source:'qr',medium:'qr'};
+  if(c.includes('colabor')||c.includes('partner'))return {source:'partner',medium:'partner'};
+  return {source:'other',medium:'action'};
+}
+function campaignUrl(a){
+  const u=new URL('https://weddlysmartdesign.github.io/one.html');
+  const ch=channelSlug(a.channel);
+  u.searchParams.set('utm_source',ch.source);
+  u.searchParams.set('utm_medium',ch.medium);
+  if(a.campaign_key)u.searchParams.set('utm_campaign',a.campaign_key);
+  return u.toString();
+}
+async function copyText(value){
+  try{
+    await navigator.clipboard.writeText(value);
+    return true;
+  }catch{
+    const ta=document.createElement('textarea');
+    ta.value=value;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();
+    const ok=document.execCommand('copy');ta.remove();return ok;
+  }
+}
 function resetActionForm(){
   editingActionId='';
   $('actionId').value='';
@@ -1051,6 +1276,26 @@ function resetActionForm(){
   $('actionSave').textContent='Guardar acción';
   $('actionCancel').hidden=true;
   $('actionMessage').textContent='';
+  $('actionFormTitle').textContent='Nueva acción';
+}
+function openActionForm(action=null){
+  resetActionForm();
+  if(action){
+    editingActionId=action.id;
+    $('actionId').value=action.id;
+    $('actionDate').value=action.action_date;
+    $('actionChannel').value=action.channel;
+    $('actionDescription').value=action.description;
+    $('actionSave').textContent='Guardar cambios';
+    $('actionCancel').hidden=false;
+    $('actionFormTitle').textContent='Editar acción';
+  }
+  $('actionForm').hidden=false;
+  $('actionForm').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function closeActionForm(){
+  $('actionForm').hidden=true;
+  resetActionForm();
 }
 function dailyForAction(date){
   return actionsDaily.find(r=>String(r.day||'').slice(0,10)===date)||null;
@@ -1059,84 +1304,256 @@ function attributionForAction(id){
   const r=actionsAttribution&&typeof actionsAttribution==='object'?actionsAttribution[id]:null;
   return r&&typeof r==='object'?r:null;
 }
-function renderActions(actions){
+function evolutionMonthFor(key){
+  return evolutionMonths.find(m=>monthKey(m.month)===key)||null;
+}
+function evolutionChannelFor(key,channel){
+  return evolutionChannels.find(r=>monthKey(r.month)===key&&String(r.channel||'')===String(channel||''))||null;
+}
+function attributionModeText(r){
+  if(!r||!Number(r.visits||0))return 'Sin visitas atribuibles todavía.';
+  if(r.mode==='exact')return 'Atribución exacta mediante enlace medible.';
+  if(r.mode==='mixed')return 'Atribución mixta: enlace medible + canal/día.';
+  return 'Atribución por canal y día. Si haces dos acciones del mismo canal el mismo día, usa el enlace medible para separarlas.';
+}
+function updateMonthOptions(){
+  const select=$('actionMonthSelect');
+  const months=availableActionMonths();
+  if(!selectedActionMonth||!months.includes(selectedActionMonth))selectedActionMonth=months[0]||currentMonthKey();
+  clear(select);
+  months.forEach(key=>{
+    const o=document.createElement('option');o.value=key;o.textContent=monthLabel(key);o.selected=key===selectedActionMonth;select.appendChild(o);
+  });
+}
+function updateChannelOptions(){
+  const select=$('actionChannelFilter');
+  const channels=[...new Set(
+    actionsAll.filter(a=>monthKey(a.action_date)===selectedActionMonth).map(a=>a.channel)
+  )].sort((a,b)=>a.localeCompare(b,'es'));
+  if(selectedActionChannel!=='all'&&!channels.includes(selectedActionChannel))selectedActionChannel='all';
+  clear(select);
+  const all=document.createElement('option');all.value='all';all.textContent='Todos';select.appendChild(all);
+  channels.forEach(ch=>{const o=document.createElement('option');o.value=ch;o.textContent=ch;select.appendChild(o)});
+  select.value=selectedActionChannel;
+}
+function renderActionMonthSummary(){
+  const month=evolutionMonthFor(selectedActionMonth)||{};
+  const monthActions=actionsAll.filter(a=>monthKey(a.action_date)===selectedActionMonth);
+  let actionsCount=monthActions.length;
+  let visits=Number(month.attributed_visits||0);
+  let buy=Number(month.attributed_buy_clicks||0);
+  let pay=Number(month.attributed_checkout_starts||0);
+
+  if(selectedActionChannel!=='all'){
+    actionsCount=monthActions.filter(a=>a.channel===selectedActionChannel).length;
+    const ch=evolutionChannelFor(selectedActionMonth,selectedActionChannel)||{};
+    visits=Number(ch.visits||0);
+    buy=Number(ch.buy_clicks||0);
+    pay=Number(ch.checkout_starts||0);
+  }
+
+  $('amActions').textContent=actionsCount;
+  $('amVisits').textContent=visits;
+  $('amBuy').textContent=buy;
+  $('amPay').textContent=pay;
+
+  const totalVisits=Number(month.visits||0);
+  const attrVisits=Number(month.attributed_visits||0);
+  const coverage=totalVisits?100*attrVisits/totalVisits:null;
+  const sales=Number(month.purchases||0);
+  const revenue=Number(month.revenue_cents||0);
+  if(selectedActionChannel==='all'){
+    $('actionMonthContext').textContent=totalVisits
+      ? attrVisits+' de '+totalVisits+' visitas del mes atribuidas a acciones ('+pct(coverage)+'). Ventas totales: '+sales+' · '+money(revenue)+'.'
+      : 'Aún no hay visitas en '+monthLabel(selectedActionMonth)+'.';
+  }else{
+    $('actionMonthContext').textContent='Resultados atribuidos a '+selectedActionChannel+'. Las ventas no se asignan a un canal concreto.';
+  }
+}
+function renderActions(){
   const list=$('actionsList'),empty=$('actionsEmpty');
   clear(list);
-  $('actionsCount').textContent=actions.length+' '+(actions.length===1?'acción':'acciones');
-  empty.hidden=actions.length>0;
-  for(const a of actions){
-    const card=document.createElement('article');card.className='action-card';
-    const top=document.createElement('div');top.className='action-card-top';
-    const identity=document.createElement('div');
+  const filtered=actionsAll.filter(a=>
+    monthKey(a.action_date)===selectedActionMonth &&
+    (selectedActionChannel==='all'||a.channel===selectedActionChannel)
+  );
+  $('actionsCount').textContent=filtered.length+' '+(filtered.length===1?'acción':'acciones');
+  empty.hidden=filtered.length>0;
+
+  for(const a of filtered){
+    const r=attributionForAction(a.id)||{};
+    const card=document.createElement('details');card.className='action-card';
+    const summary=document.createElement('summary');
+
+    const top=document.createElement('div');top.className='action-card-summary-top';
+    const identity=document.createElement('div');identity.className='action-card-identity';
     const date=document.createElement('div');date.className='action-card-date';date.textContent=actionDateLabel(a.action_date);
     const channel=document.createElement('span');channel.className='action-card-channel';channel.textContent=a.channel;
     identity.append(date,channel);
-    const buttons=document.createElement('div');buttons.className='action-card-buttons';
-    const edit=document.createElement('button');edit.type='button';edit.className='action-mini';edit.textContent='Editar';
-    const del=document.createElement('button');del.type='button';del.className='action-mini danger';del.textContent='Eliminar';
-    edit.addEventListener('click',()=>{
-      editingActionId=a.id;
-      $('actionId').value=a.id;
-      $('actionDate').value=a.action_date;
-      $('actionChannel').value=a.channel;
-      $('actionDescription').value=a.description;
-      $('actionSave').textContent='Guardar cambios';
-      $('actionCancel').hidden=false;
-      $('actionMessage').textContent='Editando acción del '+actionDateLabel(a.action_date);
-      $('actionForm').scrollIntoView({behavior:'smooth',block:'start'});
+    const toggle=document.createElement('span');toggle.className='action-card-toggle';toggle.textContent='Ver más';
+    top.append(identity,toggle);
+
+    const desc=document.createElement('p');desc.className='action-card-description';desc.textContent=a.description;
+
+    const metrics=document.createElement('div');metrics.className='action-card-metrics';
+    [
+      ['Visitas',r.visits??0],
+      ['Precio',r.reached_price_pct==null?'—':pct(r.reached_price_pct)],
+      ['Comprar',r.buy_clicks??0],
+      ['Pago',r.checkout_starts??0]
+    ].forEach(([label,value])=>{
+      const box=document.createElement('div'),small=document.createElement('small'),strong=document.createElement('strong');
+      small.textContent=label;strong.textContent=value;box.append(small,strong);metrics.appendChild(box);
     });
-    del.addEventListener('click',async()=>{
+    summary.append(top,desc,metrics);
+
+    const extra=document.createElement('div');extra.className='action-card-extra';
+    const status=document.createElement('div');status.className='action-attribution-status';status.textContent=attributionModeText(r);
+    extra.appendChild(status);
+    const behaviorMeasured=Number(r.behavior_visits||0);
+    if(behaviorMeasured){
+      const quality=document.createElement('div');quality.className='action-quality';
+      quality.textContent='Comportamiento ('+behaviorMeasured+' medidas): '+duration(r.median_active_seconds)+' activos · '+
+        (r.median_scroll_pct==null?'—':pct(r.median_scroll_pct))+' profundidad · '+
+        (r.reached_price_pct==null?'—':pct(r.reached_price_pct))+' llegan al precio · '+
+        (r.quick_exit_pct==null?'—':pct(r.quick_exit_pct))+' salida rápida.';
+      extra.appendChild(quality);
+    }
+    const funnel=document.createElement('div');funnel.className='action-quality';
+    funnel.textContent='Después del clic: '+(r.checkout_opens??0)+' abren checkout · '+(r.checkout_starts??0)+' inician pago.';
+    extra.appendChild(funnel);
+    const links=document.createElement('div');links.className='action-link-row';
+
+    const copy=document.createElement('button');copy.type='button';copy.className='action-link primary';copy.textContent='Copiar enlace medible';
+    copy.addEventListener('click',async e=>{
+      e.preventDefault();e.stopPropagation();
+      const ok=await copyText(campaignUrl(a));
+      copy.textContent=ok?'Enlace copiado':'No se pudo copiar';
+      setTimeout(()=>copy.textContent='Copiar enlace medible',1600);
+    });
+    const edit=document.createElement('button');edit.type='button';edit.className='action-link';edit.textContent='Editar';
+    edit.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openActionForm(a)});
+    const del=document.createElement('button');del.type='button';del.className='action-link';del.textContent='Eliminar';
+    del.addEventListener('click',async e=>{
+      e.preventDefault();e.stopPropagation();
       if(!confirm('¿Eliminar esta acción del historial?'))return;
       loading.hidden=false;
-      try{
-        await requestAdmin('marketing_action_delete',{id:a.id});
-        await loadActions();
-      }catch{alert('No he podido eliminar la acción. Inténtalo de nuevo.')}
+      try{await requestAdmin('marketing_action_delete',{id:a.id});await loadActions()}
+      catch{alert('No he podido eliminar la acción. Inténtalo de nuevo.')}
       finally{loading.hidden=true}
     });
-    buttons.append(edit,del);top.append(identity,buttons);
-    const p=document.createElement('p');p.textContent=a.description;
-    card.append(top,p);
-
-    const day=dailyForAction(a.action_date);
-    const attributed=attributionForAction(a.id);
-    if(attributed){
-      const note=document.createElement('div');note.className='action-attribution-note';
-      const dayVisits=Number(day?.visits||0);
-      const actionVisits=Number(attributed.visits||0);
-      note.textContent=day
-        ? 'Atribución por canal · '+actionVisits+' de '+dayVisits+' visitas del día'
-        : 'Atribución por canal';
-      card.appendChild(note);
-
-      const metrics=document.createElement('div');metrics.className='action-day-metrics';
-      const vals=[
-        ['Visitas',actionVisits],
-        ['Comprar',attributed.buy_clicks??0],
-        ['Checkout',attributed.checkout_opens??0],
-        ['Pago',attributed.checkout_starts??0]
-      ];
-      for(const [label,value] of vals){
-        const box=document.createElement('div'),small=document.createElement('small'),strong=document.createElement('strong');
-        small.textContent=label;strong.textContent=value;box.append(small,strong);metrics.appendChild(box);
-      }
-      card.appendChild(metrics);
-    }else if(day){
-      const no=document.createElement('div');no.className='action-day-empty';
-      no.textContent='Hay '+(day.visits??0)+' visitas ese día, pero no puedo asignarlas automáticamente a este canal.';
-      card.appendChild(no);
-    }else{
-      const no=document.createElement('div');no.className='action-day-empty';no.textContent='Sin métricas disponibles para ese día.';card.appendChild(no);
-    }
+    links.append(copy,edit,del);extra.append(links);
+    card.append(summary,extra);
+    card.addEventListener('toggle',()=>{toggle.textContent=card.open?'Ver menos':'Ver más'});
     list.appendChild(card);
   }
+}
+function buildEvolutionInsight(m){
+  if(!m||!Number(m.visits||0))return 'Aún no hay visitas suficientes para leer la evolución.';
+  const visits=Number(m.visits||0);
+  const attr=Number(m.attributed_visits||0);
+  const coverage=visits?100*attr/visits:0;
+  const channels=evolutionChannels
+    .filter(c=>monthKey(c.month)===monthKey(m.month))
+    .sort((a,b)=>Number(b.visits||0)-Number(a.visits||0));
+  const parts=[];
+  const behaviorVisits=Number(m.behavior_visits||0);
+  if(visits<30)parts.push('Muestra todavía pequeña: úsala como señal, no como conclusión.');
+  else if(behaviorVisits>0&&behaviorVisits<30)parts.push('Hay '+visits+' visitas en el mes, pero el comportamiento detallado solo está medido en '+behaviorVisits+'; interpreta tiempo, profundidad y llegada al precio con cautela.');
+  parts.push(pct(coverage)+' del tráfico del mes queda atribuido a acciones.');
+  if(channels[0]&&Number(channels[0].visits||0)>0){
+    let channelText=channels[0].channel+' aporta '+channels[0].visits+' visitas atribuidas y '+(channels[0].buy_clicks||0)+' clics en Comprar.';
+    if(Number(channels[0].behavior_visits||0)>0){
+      channelText+=' Entre las '+channels[0].behavior_visits+' con comportamiento medido, '+
+        (channels[0].reached_price_pct==null?'—':pct(channels[0].reached_price_pct))+' llegan al precio y el tiempo activo mediano es '+duration(channels[0].median_active_seconds)+'.';
+    }
+    parts.push(channelText);
+  }
+  if(Number(m.buy_clicks||0)===0)parts.push('Todavía no hay clics en Comprar.');
+  else if(Number(m.checkout_starts||0)===0)parts.push('Hay clics en Comprar, pero ningún inicio de pago.');
+  else if(Number(m.purchases||0)===0)parts.push('Hay inicios de pago, pero aún no hay compras cerradas.');
+  else parts.push('Se han registrado '+m.purchases+' compras en el mes.');
+  return parts.join(' ');
+}
+function renderEvolution(){
+  const list=$('evolutionList');clear(list);
+  const months=[...evolutionMonths].sort((a,b)=>String(b.month).localeCompare(String(a.month)));
+  $('evolutionInsight').textContent=buildEvolutionInsight(months[0]);
+  if(!months.length){
+    const e=document.createElement('div');e.className='empty';e.textContent='Aún no hay histórico mensual.';list.appendChild(e);return;
+  }
+  months.forEach(m=>{
+    const key=monthKey(m.month);
+    const card=document.createElement('article');card.className='evolution-month';
+    const head=document.createElement('div');head.className='evolution-month-head';
+    const title=document.createElement('h4');title.textContent=monthLabel(key);
+    const badge=document.createElement('span');badge.className='evolution-badge';
+    badge.textContent=key===currentMonthKey()?'En curso':'Cerrado';
+    head.append(title,badge);
+
+    const metrics=document.createElement('div');metrics.className='evolution-metrics';
+    [
+      ['Visitas',m.visits??0],
+      ['Precio',m.reached_price_pct==null?'—':pct(m.reached_price_pct)],
+      ['Comprar',m.buy_rate_pct==null?'—':pct(m.buy_rate_pct)],
+      ['Ventas',m.purchases??0]
+    ].forEach(([label,value])=>{
+      const box=document.createElement('div'),small=document.createElement('small'),strong=document.createElement('strong');
+      small.textContent=label;strong.textContent=value;box.append(small,strong);metrics.appendChild(box);
+    });
+
+    const context=document.createElement('div');context.className='evolution-context';
+    const behaviorContext=Number(m.behavior_visits||0)
+      ? duration(m.median_active_seconds)+' activos · '+(m.median_scroll_pct==null?'—':pct(m.median_scroll_pct))+' profundidad · '
+      : '';
+    context.textContent=behaviorContext+(m.actions??0)+' acciones · '+(m.attributed_visits??0)+' visitas atribuidas ('+
+      (m.attribution_pct==null?'—':pct(m.attribution_pct))+') · conversión '+(m.conversion_pct==null?'—':pct(m.conversion_pct))+' · '+money(m.revenue_cents||0);
+
+    const channels=evolutionChannels.filter(c=>monthKey(c.month)===key).sort((a,b)=>Number(b.visits||0)-Number(a.visits||0));
+    const channelList=document.createElement('div');channelList.className='evolution-channels';
+    channels.forEach(c=>{
+      const row=document.createElement('div');row.className='evolution-channel';
+      const name=document.createElement('strong');name.textContent=c.channel;
+      const val=document.createElement('span');
+      const quality=Number(c.behavior_visits||0)
+        ? ' · '+(c.reached_price_pct==null?'—':pct(c.reached_price_pct))+' precio · '+duration(c.median_active_seconds)
+        : '';
+      val.textContent=(c.visits??0)+' visitas · '+(c.buy_clicks??0)+' comprar · '+(c.checkout_starts??0)+' pago'+quality;
+      row.append(name,val);channelList.appendChild(row);
+    });
+    card.append(head,metrics,context);
+    if(channels.length)card.appendChild(channelList);
+    list.appendChild(card);
+  });
+}
+function renderActionWorkspace(){
+  updateMonthOptions();
+  updateChannelOptions();
+  renderActionMonthSummary();
+  renderActions();
+  renderEvolution();
 }
 async function loadActions(){
   const data=await requestAdmin('marketing_actions_list');
   actionsDaily=Array.isArray(data.daily)?data.daily:[];
   actionsAttribution=data.attribution&&typeof data.attribution==='object'?data.attribution:{};
-  renderActions(Array.isArray(data.actions)?data.actions:[]);
+  actionsAll=Array.isArray(data.actions)?data.actions:[];
+  evolutionMonths=Array.isArray(data.evolution?.months)?data.evolution.months:[];
+  evolutionChannels=Array.isArray(data.evolution?.channels)?data.evolution.channels:[];
+  if(!selectedActionMonth)selectedActionMonth=currentMonthKey();
+  renderActionWorkspace();
 }
+$('actionMonthSelect').addEventListener('change',()=>{
+  selectedActionMonth=$('actionMonthSelect').value;
+  selectedActionChannel='all';
+  updateChannelOptions();renderActionMonthSummary();renderActions();
+});
+$('actionChannelFilter').addEventListener('change',()=>{
+  selectedActionChannel=$('actionChannelFilter').value;
+  renderActionMonthSummary();renderActions();
+});
+$('actionNew').addEventListener('click',()=>openActionForm());
+$('actionFormClose').addEventListener('click',closeActionForm);
 $('actionForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const payload={
@@ -1151,19 +1568,28 @@ $('actionForm').addEventListener('submit',async e=>{
   loading.hidden=false;
   try{
     await requestAdmin('marketing_action_save',payload);
-    resetActionForm();
+    closeActionForm();
+    selectedActionMonth=monthKey(payload.action_date);
+    selectedActionChannel='all';
     await loadActions();
-    $('actionMessage').textContent='Acción guardada.';
   }catch{
     $('actionMessage').textContent='No he podido guardar la acción.';
   }finally{loading.hidden=true}
 });
-$('actionCancel').addEventListener('click',resetActionForm);
+$('actionCancel').addEventListener('click',closeActionForm);
+document.querySelectorAll('[data-actions-view]').forEach(btn=>btn.addEventListener('click',()=>{
+  const view=btn.getAttribute('data-actions-view');
+  document.querySelectorAll('[data-actions-view]').forEach(x=>x.classList.toggle('active',x===btn));
+  $('actionsJournalView').hidden=view!=='journal';
+  $('actionsEvolutionView').hidden=view!=='evolution';
+}));
 $('actionsBtn').addEventListener('click',async()=>{
-  resetActionForm();
+  closeActionForm();
+  document.querySelectorAll('[data-actions-view]').forEach(x=>x.classList.toggle('active',x.getAttribute('data-actions-view')==='journal'));
+  $('actionsJournalView').hidden=false;$('actionsEvolutionView').hidden=true;
   if(typeof actionsPanel.showModal==='function'&&!actionsPanel.open)actionsPanel.showModal();
   loading.hidden=false;
-  try{await loadActions()}catch{alert('No he podido cargar el historial de acciones.')}
+  try{await loadActions()}catch{alert('No he podido cargar las acciones.')}
   finally{loading.hidden=true}
 });
 $('actionsClose').addEventListener('click',()=>actionsPanel.close());
