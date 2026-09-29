@@ -232,6 +232,7 @@ body:has(#app:not([hidden])){overflow:hidden}
 .details-dialog .list-row span{font-size:13.5px;line-height:1.4}
 .detail-logout{margin-top:8px;background:#665f5a}
 .behavior-note{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.55}
+.behavior-base{margin:10px 0 8px;color:var(--muted);font-size:12.5px;line-height:1.45;font-weight:700}
 .behavior-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}
 .behavior-cards>div,.behavior-signals>div{
   background:var(--white);border:1px solid var(--line);border-radius:15px;padding:12px
@@ -539,11 +540,13 @@ body:has(#app:not([hidden])){overflow:hidden}
           <div><small>Profundidad mediana</small><strong id="bDepth">—</strong></div>
           <div><small>Llegan al precio</small><strong id="bPrice">—</strong></div>
         </div>
+        <p class="behavior-base" id="behaviorBase">Todos los porcentajes de este bloque se calculan sobre las visitas medidas.</p>
         <div class="behavior-signals">
           <div><span>Salida rápida</span><b id="bQuickExit">—</b><small>&lt;15 s y menos del 25 % de la página</small></div>
-          <div><span>No llegan al precio</span><b id="bBeforePrice">—</b><small>Abandonan la web antes del bloque de compra</small></div>
-          <div><span>Ven precio y no pulsan</span><b id="bPriceNoBuy">—</b><small>De quienes ven el precio, no pulsan Comprar</small></div>
-          <div><span>Pulsan Comprar</span><b id="bBuyClick">—</b><small id="bBuyDetail">De quienes ven el precio</small></div>
+          <div><span>Pulsan Comprar</span><b id="bBuyClick">—</b><small>Sobre el total de visitas medidas</small></div>
+          <div><span>Abren checkout</span><b id="bCheckoutOpen">—</b><small>Sobre el total de visitas medidas</small></div>
+          <div><span>Inician pago</span><b id="bCheckoutStart">—</b><small>Sobre el total de visitas medidas</small></div>
+          <div><span>Compras</span><b id="bPurchases">—</b><small>Sobre el total de visitas medidas</small></div>
         </div>
         <div class="card behavior-table-card">
           <div class="table-wrap"><table class="detail-table behavior-table">
@@ -743,19 +746,26 @@ function render(data){
   $('bTime').textContent=duration(behavior.median_active_seconds);
   $('bDepth').textContent=behavior.median_scroll_pct==null?'—':pct(behavior.median_scroll_pct);
   $('bPrice').textContent=behavior.reached_price_pct==null?'—':pct(behavior.reached_price_pct);
-  $('bQuickExit').textContent=behavior.quick_exit_pct==null?'—':(behavior.quick_exits??0)+' · '+pct(behavior.quick_exit_pct);
   const tracked=Math.max(0,Number(behavior.tracked_visits||0));
-  const reachedPrice=Math.max(0,Number(behavior.reached_price||0));
-  const beforePrice=Math.max(0,tracked-reachedPrice);
-  const beforePricePct=tracked?100*beforePrice/tracked:null;
-  $('bBeforePrice').textContent=beforePricePct==null?'—':beforePrice+' · '+pct(beforePricePct);
-  $('bPriceNoBuy').textContent=behavior.price_without_buy_pct==null?'—':(behavior.price_without_buy??0)+' · '+pct(behavior.price_without_buy_pct);
-  $('bBuyClick').textContent=behavior.buy_click_pct_of_price==null?'—':(behavior.buy_click_visits??0)+' · '+pct(behavior.buy_click_pct_of_price);
-  const opened=Number(behavior.checkout_open_visits||0);
-  const started=Number(behavior.checkout_start_visits||0);
-  $('bBuyDetail').textContent=(behavior.buy_click_visits??0)
-    ? opened+' abren checkout · '+started+' inician pago'
-    : 'De quienes ven el precio';
+  const asTotalPct=n=>tracked?100*Math.max(0,Number(n||0))/tracked:null;
+  $('behaviorBase').textContent=tracked
+    ? 'Base: '+tracked+' visitas medidas. Todos los porcentajes de este bloque usan esa misma base.'
+    : 'Todos los porcentajes de este bloque se calculan sobre las visitas medidas.';
+  $('bQuickExit').textContent=tracked
+    ? (behavior.quick_exits??0)+' · '+pct(asTotalPct(behavior.quick_exits))
+    : '—';
+  $('bBuyClick').textContent=tracked
+    ? (behavior.buy_click_visits??0)+' · '+pct(asTotalPct(behavior.buy_click_visits))
+    : '—';
+  $('bCheckoutOpen').textContent=tracked
+    ? (behavior.checkout_open_visits??0)+' · '+pct(asTotalPct(behavior.checkout_open_visits))
+    : '—';
+  $('bCheckoutStart').textContent=tracked
+    ? (behavior.checkout_start_visits??0)+' · '+pct(asTotalPct(behavior.checkout_start_visits))
+    : '—';
+  $('bPurchases').textContent=tracked
+    ? (s.purchases??0)+' · '+pct(asTotalPct(s.purchases))
+    : '—';
   $('behaviorSince').textContent=behavior.tracking_started_at
     ? 'Comportamiento medido desde '+dateTime(behavior.tracking_started_at)+'. Las visitas anteriores no incluyen tiempo ni recorrido.'
     : 'La medición de comportamiento empieza ahora; no puede reconstruir visitas anteriores.';
