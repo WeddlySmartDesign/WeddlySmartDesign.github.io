@@ -1457,7 +1457,9 @@ function buildEvolutionInsight(m){
     .filter(c=>monthKey(c.month)===monthKey(m.month))
     .sort((a,b)=>Number(b.visits||0)-Number(a.visits||0));
   const parts=[];
+  const behaviorVisits=Number(m.behavior_visits||0);
   if(visits<30)parts.push('Muestra todavía pequeña: úsala como señal, no como conclusión.');
+  else if(behaviorVisits>0&&behaviorVisits<30)parts.push('Hay '+visits+' visitas en el mes, pero el comportamiento detallado solo está medido en '+behaviorVisits+'; interpreta tiempo, profundidad y llegada al precio con cautela.');
   parts.push(pct(coverage)+' del tráfico del mes queda atribuido a acciones.');
   if(channels[0]&&Number(channels[0].visits||0)>0){
     let channelText=channels[0].channel+' aporta '+channels[0].visits+' visitas atribuidas y '+(channels[0].buy_clicks||0)+' clics en Comprar.';
