@@ -1,4 +1,4 @@
-const CACHE='wsd-analytics-shell-v6';
+const CACHE='wsd-analytics-shell-v7';
 const SHELL=['./','./manifest.webmanifest','./icon.svg'];
 
 self.addEventListener('install',event=>{
