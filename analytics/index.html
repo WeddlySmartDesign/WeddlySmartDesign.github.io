@@ -533,12 +533,12 @@ body:has(#app:not([hidden])){overflow:hidden}
         </div>
         <div class="behavior-signals">
           <div><span>Salida rápida</span><b id="bQuickExit">—</b><small>&lt;15 s y menos del 25 % de la página</small></div>
-          <div><span>Precio sin comprar</span><b id="bPriceNoBuy">—</b><small>Llegan al precio pero no pulsan Comprar</small></div>
-          <div><span>Llegan al final</span><b id="bEnd">—</b><small>Alcanzan Contacto / final de la página</small></div>
+          <div><span>No llegan al precio</span><b id="bBeforePrice">—</b><small>Abandonan la web antes del bloque de compra</small></div>
+          <div><span>Ven precio y no pulsan</span><b id="bPriceNoBuy">—</b><small>Llegan al precio pero no pulsan Comprar</small></div>
         </div>
         <div class="card behavior-table-card">
           <div class="table-wrap"><table class="detail-table behavior-table">
-            <thead><tr><th>Sección</th><th>Llegan</th><th>%</th><th>Tiempo</th></tr></thead>
+            <thead><tr><th>Sección</th><th>Vis.</th><th>%</th><th>Tiempo</th></tr></thead>
             <tbody id="behaviorRows"></tbody>
           </table></div>
           <div class="empty" id="behaviorEmpty" hidden>Aún no hay suficientes visitas con medición de comportamiento.</div>
@@ -735,8 +735,12 @@ function render(data){
   $('bDepth').textContent=behavior.median_scroll_pct==null?'—':pct(behavior.median_scroll_pct);
   $('bPrice').textContent=behavior.reached_price_pct==null?'—':pct(behavior.reached_price_pct);
   $('bQuickExit').textContent=behavior.quick_exit_pct==null?'—':(behavior.quick_exits??0)+' · '+pct(behavior.quick_exit_pct);
+  const tracked=Math.max(0,Number(behavior.tracked_visits||0));
+  const reachedPrice=Math.max(0,Number(behavior.reached_price||0));
+  const beforePrice=Math.max(0,tracked-reachedPrice);
+  const beforePricePct=tracked?100*beforePrice/tracked:null;
+  $('bBeforePrice').textContent=beforePricePct==null?'—':beforePrice+' · '+pct(beforePricePct);
   $('bPriceNoBuy').textContent=behavior.price_without_buy_pct==null?'—':(behavior.price_without_buy??0)+' · '+pct(behavior.price_without_buy_pct);
-  $('bEnd').textContent=behavior.reached_end_pct==null?'—':(behavior.reached_end??0)+' · '+pct(behavior.reached_end_pct);
   $('behaviorSince').textContent=behavior.tracking_started_at
     ? 'Comportamiento medido desde '+dateTime(behavior.tracking_started_at)+'. Las visitas anteriores no incluyen tiempo ni recorrido.'
     : 'La medición de comportamiento empieza ahora; no puede reconstruir visitas anteriores.';
