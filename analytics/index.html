@@ -241,6 +241,10 @@ body:has(#app:not([hidden])){overflow:hidden}
   font-family:var(--serif);font-size:31px;font-weight:400;line-height:1.05;margin:0 0 7px
 }
 .actions-intro p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.actions-attribution-info{
+  margin-top:10px;padding:10px 11px;border-radius:13px;background:rgba(185,122,92,.08);
+  color:var(--muted);font-size:12px;line-height:1.45;font-weight:700
+}
 .action-form{
   background:var(--white);border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:20px
 }
@@ -288,6 +292,10 @@ body:has(#app:not([hidden])){overflow:hidden}
 .action-day-metrics div{min-width:0}
 .action-day-metrics small{display:block;color:var(--muted);font-size:9.5px;text-transform:uppercase;font-weight:900;letter-spacing:.06em}
 .action-day-metrics strong{display:block;font-family:var(--serif);font-size:22px;font-weight:400;margin-top:2px}
+.action-attribution-note{
+  border-top:1px solid var(--line);padding-top:9px;margin-top:2px;
+  color:var(--clay);font-size:11px;line-height:1.35;font-weight:900;letter-spacing:.02em
+}
 .action-day-empty{border-top:1px solid var(--line);padding-top:9px;color:var(--muted);font-size:11.5px}
 .behavior-note{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.55}
 .behavior-base{margin:10px 0 8px;color:var(--muted);font-size:12.5px;line-height:1.45;font-weight:700}
@@ -656,7 +664,8 @@ body:has(#app:not([hidden])){overflow:hidden}
     <div class="details-scroll actions-scroll">
       <section class="actions-intro">
         <h3>Contexto, no solo fechas.</h3>
-        <p>Anota qué has hecho para poder leer después visitas, clics y ventas sabiendo qué acción había detrás.</p>
+        <p>Anota qué has hecho para poder leer después el resultado sabiendo qué acción había detrás.</p>
+        <div class="actions-attribution-info">Cada tarjeta usa la fuente detectada de esa visita. Las visitas directas o sin fuente quedan fuera de la atribución.</div>
       </section>
 
       <form class="action-form" id="actionForm">
@@ -724,6 +733,7 @@ let token='';
 let currentRange='7d';
 let deferredInstallPrompt=null;
 let actionsDaily=[];
+let actionsAttribution={};
 let editingActionId='';
 
 const $=id=>document.getElementById(id);
@@ -1045,6 +1055,10 @@ function resetActionForm(){
 function dailyForAction(date){
   return actionsDaily.find(r=>String(r.day||'').slice(0,10)===date)||null;
 }
+function attributionForAction(id){
+  const r=actionsAttribution&&typeof actionsAttribution==='object'?actionsAttribution[id]:null;
+  return r&&typeof r==='object'?r:null;
+}
 function renderActions(actions){
   const list=$('actionsList'),empty=$('actionsEmpty');
   clear(list);
@@ -1085,19 +1099,32 @@ function renderActions(actions){
     card.append(top,p);
 
     const day=dailyForAction(a.action_date);
-    if(day){
+    const attributed=attributionForAction(a.id);
+    if(attributed){
+      const note=document.createElement('div');note.className='action-attribution-note';
+      const dayVisits=Number(day?.visits||0);
+      const actionVisits=Number(attributed.visits||0);
+      note.textContent=day
+        ? 'Atribución por canal · '+actionVisits+' de '+dayVisits+' visitas del día'
+        : 'Atribución por canal';
+      card.appendChild(note);
+
       const metrics=document.createElement('div');metrics.className='action-day-metrics';
       const vals=[
-        ['Visitas',day.visits??0],
-        ['Comprar',day.buy_clicks??0],
-        ['Pago',day.checkout_starts??0],
-        ['Ventas',day.purchases??0]
+        ['Visitas',actionVisits],
+        ['Comprar',attributed.buy_clicks??0],
+        ['Checkout',attributed.checkout_opens??0],
+        ['Pago',attributed.checkout_starts??0]
       ];
       for(const [label,value] of vals){
         const box=document.createElement('div'),small=document.createElement('small'),strong=document.createElement('strong');
         small.textContent=label;strong.textContent=value;box.append(small,strong);metrics.appendChild(box);
       }
       card.appendChild(metrics);
+    }else if(day){
+      const no=document.createElement('div');no.className='action-day-empty';
+      no.textContent='Hay '+(day.visits??0)+' visitas ese día, pero no puedo asignarlas automáticamente a este canal.';
+      card.appendChild(no);
     }else{
       const no=document.createElement('div');no.className='action-day-empty';no.textContent='Sin métricas disponibles para ese día.';card.appendChild(no);
     }
@@ -1107,6 +1134,7 @@ function renderActions(actions){
 async function loadActions(){
   const data=await requestAdmin('marketing_actions_list');
   actionsDaily=Array.isArray(data.daily)?data.daily:[];
+  actionsAttribution=data.attribution&&typeof data.attribution==='object'?data.attribution:{};
   renderActions(Array.isArray(data.actions)?data.actions:[]);
 }
 $('actionForm').addEventListener('submit',async e=>{
