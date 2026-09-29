@@ -210,6 +210,11 @@ body:has(#app:not([hidden])){overflow:hidden}
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis
 }
 .dashboard-footline{font-size:11.5px;color:var(--muted);text-align:center;align-self:end}
+.dashboard-foot-actions{display:flex;align-items:center;justify-content:center;gap:9px}
+.journal-open{
+  border:1px solid var(--line);background:var(--white);color:var(--ink);
+  border-radius:999px;padding:6px 10px;font:800 11px/1 var(--sans);cursor:pointer
+}
 .details-dialog{
   width:min(94vw,760px);height:min(90dvh,860px);border:0;border-radius:24px;padding:0;
   background:var(--paper);color:var(--ink);box-shadow:0 30px 90px rgba(52,47,45,.22)
@@ -231,6 +236,59 @@ body:has(#app:not([hidden])){overflow:hidden}
 .details-dialog .list-row strong{font-size:15px;line-height:1.3}
 .details-dialog .list-row span{font-size:13.5px;line-height:1.4}
 .detail-logout{margin-top:8px;background:#665f5a}
+.actions-intro{margin-bottom:16px}
+.actions-intro h3,.actions-history h3{
+  font-family:var(--serif);font-size:31px;font-weight:400;line-height:1.05;margin:0 0 7px
+}
+.actions-intro p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.action-form{
+  background:var(--white);border:1px solid var(--line);border-radius:20px;padding:15px;margin-bottom:20px
+}
+.action-form-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:10px}
+.action-form label{display:grid;gap:6px}
+.action-form label>span{
+  font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)
+}
+.action-form input,.action-form textarea{
+  width:100%;border:1px solid var(--line);border-radius:13px;background:#fffdf9;color:var(--ink);
+  padding:11px 12px;font:600 14px/1.35 var(--sans);outline:none
+}
+.action-form textarea{resize:vertical;min-height:82px}
+.action-form input:focus,.action-form textarea:focus{border-color:var(--clay);box-shadow:0 0 0 3px rgba(185,122,92,.12)}
+.action-note-field{margin-top:10px}
+.action-form-actions{display:flex;gap:8px;align-items:center;margin-top:12px}
+.action-save{width:auto;min-width:145px;margin:0;padding:11px 16px}
+.action-cancel{padding:10px 13px}
+.action-message{min-height:18px;margin-top:8px;color:var(--muted);font-size:12px}
+.actions-history-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:10px}
+.actions-history-head h3{margin:0}
+.actions-history-head span{font-size:12px;color:var(--muted);font-weight:800}
+.actions-list{display:grid;gap:10px}
+.action-card{
+  background:var(--white);border:1px solid var(--line);border-radius:18px;padding:14px;
+  box-shadow:0 9px 24px rgba(52,47,45,.045)
+}
+.action-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.action-card-date{font-family:var(--serif);font-size:25px;line-height:1}
+.action-card-channel{
+  display:inline-block;margin-top:5px;color:var(--clay);font-size:11px;font-weight:900;
+  text-transform:uppercase;letter-spacing:.08em
+}
+.action-card p{margin:10px 0 12px;font-size:14.5px;line-height:1.5}
+.action-card-buttons{display:flex;gap:6px}
+.action-mini{
+  border:1px solid var(--line);background:transparent;border-radius:999px;padding:6px 9px;
+  font:800 10.5px/1 var(--sans);color:var(--muted)
+}
+.action-mini.danger{color:#7f4338}
+.action-day-metrics{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;
+  border-top:1px solid var(--line);padding-top:10px
+}
+.action-day-metrics div{min-width:0}
+.action-day-metrics small{display:block;color:var(--muted);font-size:9.5px;text-transform:uppercase;font-weight:900;letter-spacing:.06em}
+.action-day-metrics strong{display:block;font-family:var(--serif);font-size:22px;font-weight:400;margin-top:2px}
+.action-day-empty{border-top:1px solid var(--line);padding-top:9px;color:var(--muted);font-size:11.5px}
 .behavior-note{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.55}
 .behavior-base{margin:10px 0 8px;color:var(--muted);font-size:12.5px;line-height:1.45;font-weight:700}
 .behavior-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}
@@ -363,6 +421,12 @@ body:has(#app:not([hidden])){overflow:hidden}
   .behavior-note{font-size:14px}
   .behavior-cards small,.behavior-signals small{font-size:12.5px}
   .behavior-signals span{font-size:14px}
+  .dashboard-foot-actions{gap:6px}
+  .journal-open{padding:6px 9px;font-size:10.5px}
+  .action-form-grid{grid-template-columns:1fr}
+  .action-form input,.action-form textarea{font-size:15px}
+  .action-card p{font-size:15px}
+  .action-day-metrics strong{font-size:21px}
 }
 @media(max-width:520px){
   .top{height:58px}
@@ -520,7 +584,10 @@ body:has(#app:not([hidden])){overflow:hidden}
       <div><small>Profundidad</small><strong id="quickDepth">—</strong></div>
     </section>
 
-    <div class="dashboard-footline">Datos internos · sin cookies de seguimiento</div>
+    <div class="dashboard-footline dashboard-foot-actions">
+      <span>Datos internos · sin cookies de seguimiento</span>
+      <button class="journal-open" id="actionsBtn" type="button">Acciones</button>
+    </div>
   </main>
 </div>
 
@@ -580,6 +647,62 @@ body:has(#app:not([hidden])){overflow:hidden}
   </div>
 </dialog>
 
+<dialog class="details-dialog actions-dialog" id="actionsPanel" aria-labelledby="actionsTitle">
+  <div class="details-shell">
+    <header class="details-top">
+      <div><div class="eyebrow">WeddlySmartDesign · Analytics</div><h2 id="actionsTitle">Acciones</h2></div>
+      <button class="icon-btn" id="actionsClose" type="button">Cerrar</button>
+    </header>
+    <div class="details-scroll actions-scroll">
+      <section class="actions-intro">
+        <h3>Contexto, no solo fechas.</h3>
+        <p>Anota qué has hecho para poder leer después visitas, clics y ventas sabiendo qué acción había detrás.</p>
+      </section>
+
+      <form class="action-form" id="actionForm">
+        <input type="hidden" id="actionId">
+        <div class="action-form-grid">
+          <label>
+            <span>Fecha</span>
+            <input id="actionDate" type="date" required>
+          </label>
+          <label>
+            <span>Canal</span>
+            <input id="actionChannel" type="text" maxlength="60" list="channelOptions" placeholder="TikTok" required>
+            <datalist id="channelOptions">
+              <option value="TikTok"></option>
+              <option value="Instagram"></option>
+              <option value="WhatsApp"></option>
+              <option value="Email"></option>
+              <option value="Feria / QR"></option>
+              <option value="Colaboración"></option>
+              <option value="Otro"></option>
+            </datalist>
+          </label>
+        </div>
+        <label class="action-note-field">
+          <span>Qué has hecho</span>
+          <textarea id="actionDescription" maxlength="500" rows="3" placeholder="Ej.: promoción en TikTok del vídeo de Invitaciones y RSVP" required></textarea>
+        </label>
+        <div class="action-form-actions">
+          <button class="login-btn action-save" id="actionSave" type="submit">Guardar acción</button>
+          <button class="icon-btn action-cancel" id="actionCancel" type="button" hidden>Cancelar edición</button>
+        </div>
+        <div class="action-message" id="actionMessage" aria-live="polite"></div>
+      </form>
+
+      <section class="actions-history">
+        <div class="actions-history-head">
+          <h3>Historial</h3>
+          <span id="actionsCount">0 acciones</span>
+        </div>
+        <div class="actions-list" id="actionsList"></div>
+        <div class="empty" id="actionsEmpty" hidden>Aún no has anotado ninguna acción.</div>
+      </section>
+    </div>
+  </div>
+</dialog>
+
 <dialog id="installHelp" style="border:0;border-radius:24px;padding:0;max-width:min(92vw,430px);background:#fffaf6;color:#342f2d;box-shadow:0 30px 90px rgba(52,47,45,.22)">
   <div style="padding:22px">
     <div class="eyebrow">Añadir al móvil</div>
@@ -600,6 +723,8 @@ const TRACKING_EARLIEST='2026-09-24T00:00:00+02:00';
 let token='';
 let currentRange='7d';
 let deferredInstallPrompt=null;
+let actionsDaily=[];
+let editingActionId='';
 
 const $=id=>document.getElementById(id);
 const lock=$('lock'),app=$('app'),loading=$('loading'),loginError=$('loginError');
@@ -667,6 +792,28 @@ async function requestSummary(range){
   if(r.status===403)throw new Error('unauthorized');
   if(!r.ok||!x?.ok)throw new Error(x?.error||'server_error');
   return x;
+}
+async function requestAdmin(action,payload={}){
+  const r=await fetch(ENDPOINT,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-weddly-analytics':token},
+    body:JSON.stringify({action,...payload}),
+    cache:'no-store',
+    credentials:'omit'
+  });
+  const x=await r.json().catch(()=>({}));
+  if(r.status===403)throw new Error('unauthorized');
+  if(!r.ok||!x?.ok)throw new Error(x?.error||'server_error');
+  return x;
+}
+function isoDateLocal(d=new Date()){
+  const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+function actionDateLabel(v){
+  const parts=String(v||'').split('-');
+  if(parts.length!==3)return String(v||'');
+  return parts[2]+'/'+parts[1]+'/'+parts[0];
 }
 function clear(node){while(node.firstChild)node.removeChild(node.firstChild)}
 function textCell(value){const td=document.createElement('td');td.textContent=String(value);return td}
@@ -884,6 +1031,116 @@ if('serviceWorker' in navigator){
     location.reload();
   });
 updateInstallButton();
+const actionsPanel=$('actionsPanel');
+function resetActionForm(){
+  editingActionId='';
+  $('actionId').value='';
+  $('actionDate').value=isoDateLocal();
+  $('actionChannel').value='';
+  $('actionDescription').value='';
+  $('actionSave').textContent='Guardar acción';
+  $('actionCancel').hidden=true;
+  $('actionMessage').textContent='';
+}
+function dailyForAction(date){
+  return actionsDaily.find(r=>String(r.day||'').slice(0,10)===date)||null;
+}
+function renderActions(actions){
+  const list=$('actionsList'),empty=$('actionsEmpty');
+  clear(list);
+  $('actionsCount').textContent=actions.length+' '+(actions.length===1?'acción':'acciones');
+  empty.hidden=actions.length>0;
+  for(const a of actions){
+    const card=document.createElement('article');card.className='action-card';
+    const top=document.createElement('div');top.className='action-card-top';
+    const identity=document.createElement('div');
+    const date=document.createElement('div');date.className='action-card-date';date.textContent=actionDateLabel(a.action_date);
+    const channel=document.createElement('span');channel.className='action-card-channel';channel.textContent=a.channel;
+    identity.append(date,channel);
+    const buttons=document.createElement('div');buttons.className='action-card-buttons';
+    const edit=document.createElement('button');edit.type='button';edit.className='action-mini';edit.textContent='Editar';
+    const del=document.createElement('button');del.type='button';del.className='action-mini danger';del.textContent='Eliminar';
+    edit.addEventListener('click',()=>{
+      editingActionId=a.id;
+      $('actionId').value=a.id;
+      $('actionDate').value=a.action_date;
+      $('actionChannel').value=a.channel;
+      $('actionDescription').value=a.description;
+      $('actionSave').textContent='Guardar cambios';
+      $('actionCancel').hidden=false;
+      $('actionMessage').textContent='Editando acción del '+actionDateLabel(a.action_date);
+      $('actionForm').scrollIntoView({behavior:'smooth',block:'start'});
+    });
+    del.addEventListener('click',async()=>{
+      if(!confirm('¿Eliminar esta acción del historial?'))return;
+      loading.hidden=false;
+      try{
+        await requestAdmin('marketing_action_delete',{id:a.id});
+        await loadActions();
+      }catch{alert('No he podido eliminar la acción. Inténtalo de nuevo.')}
+      finally{loading.hidden=true}
+    });
+    buttons.append(edit,del);top.append(identity,buttons);
+    const p=document.createElement('p');p.textContent=a.description;
+    card.append(top,p);
+
+    const day=dailyForAction(a.action_date);
+    if(day){
+      const metrics=document.createElement('div');metrics.className='action-day-metrics';
+      const vals=[
+        ['Visitas',day.visits??0],
+        ['Comprar',day.buy_clicks??0],
+        ['Pago',day.checkout_starts??0],
+        ['Ventas',day.purchases??0]
+      ];
+      for(const [label,value] of vals){
+        const box=document.createElement('div'),small=document.createElement('small'),strong=document.createElement('strong');
+        small.textContent=label;strong.textContent=value;box.append(small,strong);metrics.appendChild(box);
+      }
+      card.appendChild(metrics);
+    }else{
+      const no=document.createElement('div');no.className='action-day-empty';no.textContent='Sin métricas disponibles para ese día.';card.appendChild(no);
+    }
+    list.appendChild(card);
+  }
+}
+async function loadActions(){
+  const data=await requestAdmin('marketing_actions_list');
+  actionsDaily=Array.isArray(data.daily)?data.daily:[];
+  renderActions(Array.isArray(data.actions)?data.actions:[]);
+}
+$('actionForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const payload={
+    id:editingActionId||undefined,
+    action_date:$('actionDate').value,
+    channel:$('actionChannel').value.trim(),
+    description:$('actionDescription').value.trim()
+  };
+  if(!payload.action_date||!payload.channel||!payload.description){
+    $('actionMessage').textContent='Completa fecha, canal y acción.';return;
+  }
+  loading.hidden=false;
+  try{
+    await requestAdmin('marketing_action_save',payload);
+    resetActionForm();
+    await loadActions();
+    $('actionMessage').textContent='Acción guardada.';
+  }catch{
+    $('actionMessage').textContent='No he podido guardar la acción.';
+  }finally{loading.hidden=true}
+});
+$('actionCancel').addEventListener('click',resetActionForm);
+$('actionsBtn').addEventListener('click',async()=>{
+  resetActionForm();
+  if(typeof actionsPanel.showModal==='function'&&!actionsPanel.open)actionsPanel.showModal();
+  loading.hidden=false;
+  try{await loadActions()}catch{alert('No he podido cargar el historial de acciones.')}
+  finally{loading.hidden=true}
+});
+$('actionsClose').addEventListener('click',()=>actionsPanel.close());
+actionsPanel.addEventListener('click',e=>{if(e.target===actionsPanel)actionsPanel.close()});
+
 const detailsPanel=$('detailsPanel');
 $('detailsBtn').addEventListener('click',()=>{
   if(typeof detailsPanel.showModal==='function'&&!detailsPanel.open)detailsPanel.showModal();
@@ -893,6 +1150,7 @@ detailsPanel.addEventListener('click',e=>{if(e.target===detailsPanel)detailsPane
 
 $('logoutBtn').addEventListener('click',()=>{
   if(detailsPanel.open)detailsPanel.close();
+  if(actionsPanel.open)actionsPanel.close();
   localStorage.removeItem(STORAGE);token='';$('accessCode').value='';setScreen(false);
 });
 
