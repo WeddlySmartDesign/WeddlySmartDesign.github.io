@@ -843,9 +843,17 @@ $('installHelpClose').addEventListener('click',()=>installHelp.close());
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{});
+    navigator.serviceWorker.register('./sw.js?v=8',{scope:'./',updateViaCache:'none'})
+      .then(reg=>reg.update().catch(()=>{}))
+      .catch(()=>{});
   },{once:true});
 }
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    const key='wsd_analytics_sw_v8_reload';
+    if(sessionStorage.getItem(key)==='1')return;
+    sessionStorage.setItem(key,'1');
+    location.reload();
+  });
 updateInstallButton();
 const detailsPanel=$('detailsPanel');
 $('detailsBtn').addEventListener('click',()=>{
