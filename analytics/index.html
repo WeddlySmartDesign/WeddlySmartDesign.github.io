@@ -542,7 +542,8 @@ body:has(#app:not([hidden])){overflow:hidden}
         <div class="behavior-signals">
           <div><span>Salida rápida</span><b id="bQuickExit">—</b><small>&lt;15 s y menos del 25 % de la página</small></div>
           <div><span>No llegan al precio</span><b id="bBeforePrice">—</b><small>Abandonan la web antes del bloque de compra</small></div>
-          <div><span>Ven precio y no pulsan</span><b id="bPriceNoBuy">—</b><small>Llegan al precio pero no pulsan Comprar</small></div>
+          <div><span>Ven precio y no pulsan</span><b id="bPriceNoBuy">—</b><small>De quienes ven el precio, no pulsan Comprar</small></div>
+          <div><span>Pulsan Comprar</span><b id="bBuyClick">—</b><small id="bBuyDetail">De quienes ven el precio</small></div>
         </div>
         <div class="card behavior-table-card">
           <div class="table-wrap"><table class="detail-table behavior-table">
@@ -749,6 +750,12 @@ function render(data){
   const beforePricePct=tracked?100*beforePrice/tracked:null;
   $('bBeforePrice').textContent=beforePricePct==null?'—':beforePrice+' · '+pct(beforePricePct);
   $('bPriceNoBuy').textContent=behavior.price_without_buy_pct==null?'—':(behavior.price_without_buy??0)+' · '+pct(behavior.price_without_buy_pct);
+  $('bBuyClick').textContent=behavior.buy_click_pct_of_price==null?'—':(behavior.buy_click_visits??0)+' · '+pct(behavior.buy_click_pct_of_price);
+  const opened=Number(behavior.checkout_open_visits||0);
+  const started=Number(behavior.checkout_start_visits||0);
+  $('bBuyDetail').textContent=(behavior.buy_click_visits??0)
+    ? opened+' abren checkout · '+started+' inician pago'
+    : 'De quienes ven el precio';
   $('behaviorSince').textContent=behavior.tracking_started_at
     ? 'Comportamiento medido desde '+dateTime(behavior.tracking_started_at)+'. Las visitas anteriores no incluyen tiempo ni recorrido.'
     : 'La medición de comportamiento empieza ahora; no puede reconstruir visitas anteriores.';
