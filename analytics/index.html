@@ -298,6 +298,7 @@ body:has(#app:not([hidden])){overflow:hidden}
 }
 .action-day-empty{border-top:1px solid var(--line);padding-top:9px;color:var(--muted);font-size:11.5px}
 .behavior-note{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.55}
+.behavior-explainer{margin:9px 0 4px;color:var(--muted);font-size:12.5px;line-height:1.45}
 .behavior-base{margin:10px 0 8px;color:var(--muted);font-size:12.5px;line-height:1.45;font-weight:700}
 .behavior-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}
 .behavior-cards>div,.behavior-signals>div{
@@ -389,7 +390,13 @@ body:has(#app:not([hidden])){overflow:hidden}
   }
 
   .details-dialog .behavior-table tr{
-    grid-template-columns:minmax(0,1.8fr) minmax(0,.65fr) minmax(0,.55fr) minmax(0,.8fr);
+    grid-template-columns:minmax(0,1.8fr) minmax(0,.65fr) minmax(0,.62fr) minmax(0,.73fr);
+  }
+  .details-dialog .behavior-table th:nth-child(3),
+  .details-dialog .behavior-table td:nth-child(3){
+    white-space:nowrap!important;
+    overflow-wrap:normal!important;
+    word-break:normal!important;
   }
   .details-dialog .source-table tr{
     grid-template-columns:minmax(0,2.05fr) minmax(0,.55fr) minmax(0,.9fr) minmax(0,.6fr);
@@ -633,11 +640,14 @@ body:has(#app:not([hidden])){overflow:hidden}
 }
 .evolution-channels{display:grid;gap:6px;margin-top:10px}
 .evolution-channel{
-  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:center;
-  padding:8px 9px;border-radius:12px;background:rgba(247,238,229,.55)
+  display:grid;grid-template-columns:1fr;gap:3px;align-items:start;
+  padding:9px 10px;border-radius:12px;background:rgba(247,238,229,.55)
 }
-.evolution-channel strong{font-size:13px}
-.evolution-channel span{font-size:11.5px;color:var(--muted);text-align:right}
+.evolution-channel strong{font-size:13px;line-height:1.25}
+.evolution-channel span{
+  display:block;min-width:0;font-size:11.5px;line-height:1.4;color:var(--muted);
+  text-align:left;white-space:normal;overflow-wrap:anywhere
+}
 @media(max-width:520px){
   .actions-controls{grid-template-columns:1fr 1fr}
   .action-new{grid-column:1/-1;width:100%}
@@ -722,7 +732,7 @@ body:has(#app:not([hidden])){overflow:hidden}
     <section class="quick-read" aria-label="Comportamiento">
       <div><small>Tiempo activo</small><strong id="quickTime">—</strong></div>
       <div><small>Llega al precio</small><strong id="quickPrice">—</strong></div>
-      <div><small>Profundidad</small><strong id="quickDepth">—</strong></div>
+      <div><small>Recorrido</small><strong id="quickDepth">—</strong></div>
     </section>
 
     <div class="dashboard-footline dashboard-foot-actions">
@@ -745,14 +755,14 @@ body:has(#app:not([hidden])){overflow:hidden}
         <div class="behavior-cards">
           <div><small>Visitas medidas</small><strong id="bTracked">0</strong></div>
           <div><small>Tiempo activo mediano</small><strong id="bTime">—</strong></div>
-          <div><small>Profundidad mediana</small><strong id="bDepth">—</strong></div>
+          <div><small>Recorrido mediano</small><strong id="bDepth">—</strong></div>
           <div><small>Llegan al precio</small><strong id="bPrice">—</strong></div>
         </div>
+        <p class="behavior-explainer">Recorrido = hasta qué punto de la página llegaron. 100% significa que alcanzaron el final.</p>
         <p class="behavior-base" id="behaviorBase">Todos los porcentajes de este bloque se calculan sobre las visitas medidas.</p>
         <div class="behavior-signals">
           <div><span>Salida rápida</span><b id="bQuickExit">—</b><small>&lt;15 s y menos del 25 % de la página</small></div>
           <div><span>Pulsan Comprar</span><b id="bBuyClick">—</b><small>Sobre el total de visitas medidas</small></div>
-          <div><span>Abren checkout</span><b id="bCheckoutOpen">—</b><small>Sobre el total de visitas medidas</small></div>
           <div><span>Inician pago</span><b id="bCheckoutStart">—</b><small>Sobre el total de visitas medidas</small></div>
           <div><span>Compras</span><b id="bPurchases">—</b><small>Sobre el total de visitas medidas</small></div>
         </div>
@@ -939,7 +949,7 @@ function money(cents){
 }
 function pct(v){
   if(v===null||v===undefined||Number.isNaN(Number(v)))return '—';
-  return Number(v).toLocaleString('es-ES',{maximumFractionDigits:2})+' %';
+  return Number(v).toLocaleString('es-ES',{maximumFractionDigits:1})+'%';
 }
 function dateLabel(v){
   const d=new Date(v);
@@ -1093,9 +1103,6 @@ function render(data){
   $('bBuyClick').textContent=tracked
     ? (behavior.buy_click_visits??0)+' · '+pct(asTotalPct(behavior.buy_click_visits))
     : '—';
-  $('bCheckoutOpen').textContent=tracked
-    ? (behavior.checkout_open_visits??0)+' · '+pct(asTotalPct(behavior.checkout_open_visits))
-    : '—';
   $('bCheckoutStart').textContent=tracked
     ? (behavior.checkout_start_visits??0)+' · '+pct(asTotalPct(behavior.checkout_start_visits))
     : '—';
@@ -1208,13 +1215,13 @@ $('installHelpClose').addEventListener('click',()=>installHelp.close());
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js?v=10',{scope:'./',updateViaCache:'none'})
+    navigator.serviceWorker.register('./sw.js?v=11',{scope:'./',updateViaCache:'none'})
       .then(reg=>reg.update().catch(()=>{}))
       .catch(()=>{});
   },{once:true});
 }
   navigator.serviceWorker.addEventListener('controllerchange',()=>{
-    const key='wsd_analytics_sw_v10_reload';
+    const key='wsd_analytics_sw_v11_reload';
     if(sessionStorage.getItem(key)==='1')return;
     sessionStorage.setItem(key,'1');
     location.reload();
@@ -1414,13 +1421,16 @@ function renderActions(){
     if(behaviorMeasured){
       const quality=document.createElement('div');quality.className='action-quality';
       quality.textContent='Comportamiento ('+behaviorMeasured+' medidas): '+duration(r.median_active_seconds)+' activos · '+
-        (r.median_scroll_pct==null?'—':pct(r.median_scroll_pct))+' profundidad · '+
+        (r.median_scroll_pct==null?'—':pct(r.median_scroll_pct))+' recorrido · '+
         (r.reached_price_pct==null?'—':pct(r.reached_price_pct))+' llegan al precio · '+
         (r.quick_exit_pct==null?'—':pct(r.quick_exit_pct))+' salida rápida.';
       extra.appendChild(quality);
     }
     const funnel=document.createElement('div');funnel.className='action-quality';
-    funnel.textContent='Después del clic: '+(r.checkout_opens??0)+' abren checkout · '+(r.checkout_starts??0)+' inician pago.';
+    const buyClicks=Number(r.buy_clicks||0),checkoutOpens=Number(r.checkout_opens||0),paymentStarts=Number(r.checkout_starts||0);
+    funnel.textContent=buyClicks===checkoutOpens
+      ? 'Después de Comprar: '+paymentStarts+' inician pago.'
+      : 'Diagnóstico: '+buyClicks+' pulsan Comprar · '+checkoutOpens+' abren checkout · '+paymentStarts+' inician pago.';
     extra.appendChild(funnel);
     const links=document.createElement('div');links.className='action-link-row';
 
@@ -1459,7 +1469,7 @@ function buildEvolutionInsight(m){
   const parts=[];
   const behaviorVisits=Number(m.behavior_visits||0);
   if(visits<30)parts.push('Muestra todavía pequeña: úsala como señal, no como conclusión.');
-  else if(behaviorVisits>0&&behaviorVisits<30)parts.push('Hay '+visits+' visitas en el mes, pero el comportamiento detallado solo está medido en '+behaviorVisits+'; interpreta tiempo, profundidad y llegada al precio con cautela.');
+  else if(behaviorVisits>0&&behaviorVisits<30)parts.push('Hay '+visits+' visitas en el mes, pero el comportamiento detallado solo está medido en '+behaviorVisits+'; interpreta tiempo, recorrido y llegada al precio con cautela.');
   parts.push(pct(coverage)+' del tráfico del mes queda atribuido a acciones.');
   if(channels[0]&&Number(channels[0].visits||0)>0){
     let channelText=channels[0].channel+' aporta '+channels[0].visits+' visitas atribuidas y '+(channels[0].buy_clicks||0)+' clics en Comprar.';
@@ -1504,7 +1514,7 @@ function renderEvolution(){
 
     const context=document.createElement('div');context.className='evolution-context';
     const behaviorContext=Number(m.behavior_visits||0)
-      ? duration(m.median_active_seconds)+' activos · '+(m.median_scroll_pct==null?'—':pct(m.median_scroll_pct))+' profundidad · '
+      ? duration(m.median_active_seconds)+' activos · '+(m.median_scroll_pct==null?'—':pct(m.median_scroll_pct))+' recorrido · '
       : '';
     context.textContent=behaviorContext+(m.actions??0)+' acciones · '+(m.attributed_visits??0)+' visitas atribuidas ('+
       (m.attribution_pct==null?'—':pct(m.attribution_pct))+') · conversión '+(m.conversion_pct==null?'—':pct(m.conversion_pct))+' · '+money(m.revenue_cents||0);
