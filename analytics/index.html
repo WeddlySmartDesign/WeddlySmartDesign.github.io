@@ -231,6 +231,25 @@ body:has(#app:not([hidden])){overflow:hidden}
 .details-dialog .list-row strong{font-size:13px}
 .details-dialog .list-row span{font-size:12px}
 .detail-logout{margin-top:8px;background:#665f5a}
+.behavior-note{margin:0 0 12px;color:var(--muted);font-size:12.5px;line-height:1.5}
+.behavior-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.behavior-cards>div,.behavior-signals>div{
+  background:var(--white);border:1px solid var(--line);border-radius:15px;padding:12px
+}
+.behavior-cards small,.behavior-signals small{
+  display:block;color:var(--muted);font-size:10.5px;line-height:1.35
+}
+.behavior-cards strong{
+  display:block;font-family:var(--serif);font-size:29px;line-height:1;font-weight:400;margin-top:6px
+}
+.behavior-signals{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}
+.behavior-signals span{display:block;font-size:12px;font-weight:800}
+.behavior-signals b{display:block;font-family:var(--serif);font-size:25px;font-weight:400;margin:5px 0 3px}
+.behavior-table-card{margin-top:10px}
+@media(max-width:520px){
+  .behavior-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .behavior-signals{grid-template-columns:1fr}
+}
 @media(max-width:520px){
   .top{height:58px}
   .top-inner{
@@ -345,10 +364,10 @@ body:has(#app:not([hidden])){overflow:hidden}
       <div hidden><div id="barVisits"></div><div id="barBuy"></div><div id="barCheckout"></div><div id="barPurchase"></div></div>
     </section>
 
-    <section class="quick-read" aria-label="Lectura rápida">
-      <div><small>Origen principal</small><strong id="quickSource">—</strong></div>
-      <div><small>Dispositivo</small><strong id="quickDevice">—</strong></div>
-      <div><small>Edición</small><strong id="quickEdition">—</strong></div>
+    <section class="quick-read" aria-label="Comportamiento">
+      <div><small>Tiempo activo</small><strong id="quickTime">—</strong></div>
+      <div><small>Llega al precio</small><strong id="quickPrice">—</strong></div>
+      <div><small>Profundidad</small><strong id="quickDepth">—</strong></div>
     </section>
 
     <div class="dashboard-footline">Datos internos · sin cookies de seguimiento</div>
@@ -362,6 +381,28 @@ body:has(#app:not([hidden])){overflow:hidden}
       <button class="icon-btn" id="detailsClose" type="button">Cerrar</button>
     </header>
     <div class="details-scroll">
+      <section class="details-section behavior-section">
+        <h3>Comportamiento en la web</h3>
+        <p class="behavior-note" id="behaviorSince">La medición de comportamiento empieza ahora; no puede reconstruir visitas anteriores.</p>
+        <div class="behavior-cards">
+          <div><small>Visitas medidas</small><strong id="bTracked">0</strong></div>
+          <div><small>Tiempo activo mediano</small><strong id="bTime">—</strong></div>
+          <div><small>Profundidad mediana</small><strong id="bDepth">—</strong></div>
+          <div><small>Llegan al precio</small><strong id="bPrice">—</strong></div>
+        </div>
+        <div class="behavior-signals">
+          <div><span>Salida rápida</span><b id="bQuickExit">—</b><small>&lt;15 s y menos del 25 % de la página</small></div>
+          <div><span>Precio sin comprar</span><b id="bPriceNoBuy">—</b><small>Llegan al precio pero no pulsan Comprar</small></div>
+          <div><span>Llegan al final</span><b id="bEnd">—</b><small>Alcanzan Contacto / final de la página</small></div>
+        </div>
+        <div class="card behavior-table-card">
+          <div class="table-wrap"><table>
+            <thead><tr><th>Sección</th><th>Llegan</th><th>%</th><th>Tiempo med.</th></tr></thead>
+            <tbody id="behaviorRows"></tbody>
+          </table></div>
+          <div class="empty" id="behaviorEmpty" hidden>Aún no hay suficientes visitas con medición de comportamiento.</div>
+        </div>
+      </section>
       <section class="details-section">
         <h3>De dónde llegan</h3>
         <div class="card"><div class="table-wrap"><table>
@@ -440,6 +481,12 @@ function dateLabel(v){
 function dateTime(v){
   const d=new Date(v);
   return Number.isFinite(d.getTime())?d.toLocaleString('es-ES',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'—';
+}
+function duration(seconds){
+  const n=Math.max(0,Math.round(Number(seconds)||0));
+  if(!n)return '—';
+  const m=Math.floor(n/60),s=n%60;
+  return m?m+' min '+String(s).padStart(2,'0')+' s':s+' s';
 }
 function rangeDates(range){
   const now=new Date();
@@ -537,13 +584,33 @@ function render(data){
   renderList($('editionList'),Array.isArray(s.purchases_by_edition)?s.purchases_by_edition:[],'purchaseEdition');
   renderList($('checkoutEditionList'),Array.isArray(s.checkout_by_edition)?s.checkout_by_edition:[],'checkoutEdition');
 
-  const topSource=Array.isArray(s.sources)&&s.sources.length?s.sources[0]:null;
-  const topDevice=Array.isArray(s.devices)&&s.devices.length?s.devices[0]:null;
-  const topEdition=Array.isArray(s.purchases_by_edition)&&s.purchases_by_edition.length?s.purchases_by_edition[0]:null;
-  const deviceLabels={mobile:'Móvil',tablet:'Tablet',desktop:'Ordenador',unknown:'—'};
-  $('quickSource').textContent=topSource?.source||'—';
-  $('quickDevice').textContent=topDevice?deviceLabels[topDevice.device]||topDevice.device:'—';
-  $('quickEdition').textContent=topEdition?(topEdition.edition==='signature'?'Signature':'Essential'):'—';
+  const behavior=s.behavior||{};
+  $('quickTime').textContent=duration(behavior.median_active_seconds);
+  $('quickPrice').textContent=behavior.reached_price_pct==null?'—':pct(behavior.reached_price_pct);
+  $('quickDepth').textContent=behavior.median_scroll_pct==null?'—':pct(behavior.median_scroll_pct);
+
+  $('bTracked').textContent=behavior.tracked_visits??0;
+  $('bTime').textContent=duration(behavior.median_active_seconds);
+  $('bDepth').textContent=behavior.median_scroll_pct==null?'—':pct(behavior.median_scroll_pct);
+  $('bPrice').textContent=behavior.reached_price_pct==null?'—':pct(behavior.reached_price_pct);
+  $('bQuickExit').textContent=behavior.quick_exit_pct==null?'—':(behavior.quick_exits??0)+' · '+pct(behavior.quick_exit_pct);
+  $('bPriceNoBuy').textContent=behavior.price_without_buy_pct==null?'—':(behavior.price_without_buy??0)+' · '+pct(behavior.price_without_buy_pct);
+  $('bEnd').textContent=behavior.reached_end_pct==null?'—':(behavior.reached_end??0)+' · '+pct(behavior.reached_end_pct);
+  $('behaviorSince').textContent=behavior.tracking_started_at
+    ? 'Comportamiento medido desde '+dateTime(behavior.tracking_started_at)+'. Las visitas anteriores no incluyen tiempo ni recorrido.'
+    : 'La medición de comportamiento empieza ahora; no puede reconstruir visitas anteriores.';
+
+  const behaviorSections=Array.isArray(behavior.sections)?behavior.sections:[];
+  renderRows($('behaviorRows'),behaviorSections.filter(r=>Number(r.views||0)>0),r=>{
+    const tr=document.createElement('tr');
+    tr.append(
+      textCell(r.label),
+      textCell(r.views),
+      textCell(r.reach_pct==null?'—':pct(r.reach_pct)),
+      textCell(duration(r.median_seconds))
+    );
+    return tr;
+  },$('behaviorEmpty'));
 
   const daily=Array.isArray(s.daily)?[...s.daily].reverse():[];
   renderRows($('dailyRows'),daily,r=>{
