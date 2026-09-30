@@ -1,7 +1,7 @@
 (()=>{
   'use strict';
   const TOKEN='wsd_guest_access_token_v1';
-  const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-guests-state';
+  const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-state';
   const q=new URLSearchParams(location.search);
   const incoming=(q.get('access')||q.get('token')||'').trim();
   if(incoming.length>=40){try{localStorage.setItem(TOKEN,incoming)}catch{}}
