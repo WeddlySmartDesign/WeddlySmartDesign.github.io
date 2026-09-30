@@ -137,8 +137,8 @@ async function run(){
   ok(await page.locator('#activate').isVisible(),'activation control missing');
   await page.locator('#code').fill('INVALID');
   await page.locator('#activate').click();
-  await page.waitForFunction(()=>document.getElementById('msg')?.textContent.length>0);
-  ok((await page.locator('#msg').innerText()).includes('No encontramos una compra válida'),'invalid activation feedback unclear');
+  await page.waitForFunction(()=>{const t=document.getElementById('msg')?.textContent||'';return t.length>0&&t!=='Activando…'});
+  ok((await page.locator('#msg').innerText()).includes('No encontramos una compra válida'),'invalid activation feedback unclear: '+await page.locator('#msg').innerText());
   await page.goto(base+'/guest/access.html?invite=INVITE-B6-PRIMARY',{waitUntil:'domcontentloaded'});
   ok(await page.locator('#join').isVisible(),'partner join state missing');
   ok((await page.locator('#lead').innerText()).includes('dos dispositivos'),'partner join explanation missing');
