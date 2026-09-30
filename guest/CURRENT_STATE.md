@@ -44,16 +44,16 @@ Current CI status at that HEAD:
 Catering summary bug fixed.
 Print/PDF QA stabilized.
 Custom RSVP list resilience fixed.
-Active extra-event list polling migrated to guest-event-state.
-Latest regression failure was only the controlled-diff gate not yet registering that intentional divergence; gate now updated.
+Active extra-event list state API migrated to GUEST.
+Regression then exposed the same active helper still calling the ONE event-invite endpoint.
 
-Gate fix commit:
-`12f5cf945d230e916e07ad5bcb7b094ccab0b0b4`
+Product fix commit:
+`d33fd12c502ae7f9bca60312a92f764ab41076a5`
 
 Current status: CI validation pending.
 
 ## NEXT ACTION
-1. Read CI for commit `12f5cf945d230e916e07ad5bcb7b094ccab0b0b4`.
+1. Read CI for commit `d33fd12c502ae7f9bca60312a92f764ab41076a5`.
 2. If any job fails, use only its exact logged failure.
 3. If regression + B6.1 + B6.2 + B6.3 + B6.4 all PASS, create `guest/B6_4_TABLES_LISTS_QA_2026-09-30.md`, seal B6.4 and update this file to B6.5 Events extra.
 
