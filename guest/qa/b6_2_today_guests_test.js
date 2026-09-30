@@ -49,7 +49,7 @@ async function run(){
  const page=await ctx.newPage();await mock(page);
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(base+'/guest/index.html?access='+token+'#hoy',{waitUntil:'domcontentloaded'});
- const core=await coreFrame(page);
+ let core=await coreFrame(page);
  await noOverflow(core,'Hoy');
 
  // Hoy: base alerts + recent changes from remote RSVP/table-change history.
@@ -90,6 +90,8 @@ async function run(){
  ok(added.length===2,'create-list did not add both people');
  ok(added.every(g=>g.group==='Amigos Pilar'&&g.unitId==='Universidad'),'group/subgroup not preserved');
 
+ core=await coreFrame(page);
+ await core.locator('#nav button[data-go="invitados"]').click();
  await core.locator('#peopleBtn').click();
  const peopleText=await core.locator('#panel').innerText();
  ok(peopleText.includes('Marta Pérez')&&peopleText.includes('Lucía Torres'),'people manager missing created guests');
@@ -105,6 +107,8 @@ async function run(){
  ok(marta?.rsvp==='confirmed'&&marta?.meal==='Vegano'&&marta?.transport===true,'guest edit did not persist');
 
  // Declining an assigned guest must remove active seating.
+ core=await coreFrame(page);
+ await core.locator('#nav button[data-go="invitados"]').click();
  await core.locator('#peopleBtn').click();
  const carlosRow=core.locator('#panel .row').filter({hasText:'Carlos Ruiz'});
  await carlosRow.locator('[data-pedit]').click();
@@ -114,6 +118,8 @@ async function run(){
  ok(saved.guests.g3.rsvp==='declined'&&saved.guests.g3.table==='','declined guest retained active table');
 
  // Import pasted spreadsheet data and verify explicit states only.
+ core=await coreFrame(page);
+ await core.locator('#nav button[data-go="invitados"]').click();
  await core.locator('#importBtn').click();
  await core.locator('#paste').fill('Nombre\tRSVP\tMenú\tMesa\nPedro Gil\tConfirmado\tVegetariano\tMesa 2\nSara León\tPendiente\t\t');
  await core.locator('#importPaste').click();
@@ -127,6 +133,7 @@ async function run(){
  ok(sara?.rsvp==='pending','pending import was converted incorrectly');
 
  // Return to Hoy: updated local state must render without losing core alerts/counts.
+ core=await coreFrame(page);
  await core.locator('#nav button[data-go="hoy"]').click();
  await core.waitForSelector('#hoy .stats');
  const after=await core.locator('#hoy').innerText();
