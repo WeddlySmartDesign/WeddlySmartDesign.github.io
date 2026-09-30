@@ -40,13 +40,13 @@ Validated commit for B6.5:
 
 ## Exact current failure
 B6.6 active.
-The scheduler starvation defect remains fixed. The concurrency test has now been made production-faithful: simulated edits are written through the live Guests core iframe so `guests-state-integrity-v1.js` participates exactly as it does for real user edits. The concurrency assertion also waits for the merged remote state and records both devices' sync internals if it still fails.
+The scheduler starvation defect is fixed. The latest concurrency failure was traced to the QA writing arbitrary `note` fields that the frozen Guests core does not preserve as production guest data. The concurrency test now uses real persisted guest fields (`meal` and `allergy`) so state-integrity and core serialization are exercised faithfully.
 
 Latest QA commit:
-`42965c73715c39dc744e78a4c2fa76df2919b037`
+`00c82bd23bf1a0bae796dd6abbc4e9cf938f804d`
 
 ## NEXT ACTION
-Read CI for `42965c73715c39dc744e78a4c2fa76df2919b037`. If B6.6 fails, use only the exact logged diagnostics. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
+Read CI for `00c82bd23bf1a0bae796dd6abbc4e9cf938f804d`. If B6.6 fails, use only the exact logged diagnostics. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
 
 ## Working method from now on
 Every microblock has only three states:
