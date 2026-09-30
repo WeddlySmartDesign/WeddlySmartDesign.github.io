@@ -38,16 +38,18 @@ Validated functional commit for B6.4:
 `4ac9267362b5a1389b78fd6e80cb724e9c822c26`
 
 ## Exact current failure
-B6.5 active. Initial audit found two active extra-event helpers still coupled to ONE identifiers:
-- group selection used `weddly-event-state`;
-- single-photo save interception watched `weddly-event-invite`, so it would miss GUEST save requests.
-Both have been corrected and added to the regression gate.
+B6.5 active.
+Initial product audit fixes already applied:
+- group selection migrated from `weddly-event-state` to `guest-event-state`;
+- one-photo invitation interception migrated from `weddly-event-invite` to `guest-event-invite`.
 
-Latest gate commit:
-`db5ba0c4f32c5ca4a5223efbb3a381b2a86392b0`
+First B6.5 CI failure was a QA assumption, not a product fault: recipient rows are intentionally hidden until the event invitation has been configured. Test aligned with the actual UI.
+
+Latest QA commit:
+`10a6e3ec9ca99f926e16ce9119cb0b7403ae5330`
 
 ## NEXT ACTION
-Build and run B6.5 browser QA covering event creation/default activation, guest/group selection, event invitation + RSVP, extra-event list outputs, mobile usability, conflict/error handling and zero ONE backend calls. Fix only exact failures, update this file after each meaningful fix, then seal B6.5.
+Read CI for `10a6e3ec9ca99f926e16ce9119cb0b7403ae5330`. If B6.5 fails, use only the exact logged failure. Continue until regression + B6.1–B6.5 all PASS, then create the sealed B6.5 report and advance CURRENT_STATE to B6.6.
 
 ## Working method from now on
 Every microblock has only three states:
