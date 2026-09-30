@@ -101,7 +101,9 @@ async function editGuestUi(page,id,{meal,transport}={}){
   if(meal!==undefined)await frame.locator('#wpMeal').selectOption({label:meal});
   if(transport!==undefined)await frame.locator('#wpTransport').selectOption(transport?'yes':'no');
   await frame.locator('#wpSave').click();
-  await frame.waitForSelector('[data-detail="'+id+'"]',{timeout:5000});
+  // People Manager intentionally reloads the frozen core ~900 ms after a save. Wait for that handoff before the next edit.
+  await page.waitForTimeout(1150);
+  await coreFrame(page);
 }
 (async()=>{
   // Use two browser processes to model two real devices without background-tab timer throttling.
