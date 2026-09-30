@@ -69,7 +69,7 @@
   function patch(h,w,f,events=[]){
     const href=`https://fonts.googleapis.com/css2?family=${f.primaryParam}&family=${f.secondaryParam}&display=swap`;
     h=h.replace('</head>',`<link rel="stylesheet" href="${href}"><style id="wsd-signature-fonts">body,input,button{font-family:'${f.secondary}',system-ui,sans-serif!important}.display,.script,.story-quote,.t-time,.hotel-info .name,.pill{font-family:'${f.primary}',Georgia,serif!important}#brand{text-transform:none!important;letter-spacing:.02em!important;font-family:'${f.secondary}',system-ui,sans-serif!important}</style></head>`);
-    h=h.replace(/WEDDLY\s*SMART\s*DESIGN\s*·\s*GUESTS/gi,'WeddlySmartDesign · Invitados').replace(/Weddly\s*Smart\s*Design\s*·\s*Guests/gi,'WeddlySmartDesign · Invitados');
+    h=h.replace(/WEDDLY\s*SMART\s*DESIGN\s*·\s*GUESTS/gi,'GUEST · by WeddlySmartDesign').replace(/Weddly\s*Smart\s*Design\s*·\s*Guests/gi,'GUEST · by WeddlySmartDesign');
     h=h.replace(/const RSVP_ENGINE = ['"][^'"]+['"];/,"const RSVP_ENGINE = 'guests-rsvp-v108-mobile.html';");
     const wedding={p1:w.p1,p2:w.p2,date:w.date,time:w.time,city:w.city,tagline:w.tagline,heroPhoto:w.heroPhoto,storyPhoto:w.storyPhoto,storyQuote:w.storyQuote,storyText:w.storyText,contact1Name:w.contact1Name,contact1Phone:w.contact1Phone,contact2Name:w.contact2Name,contact2Phone:w.contact2Phone,whatsapp:w.whatsapp};
     const venues=(w.venues||[]).map(v=>({...v}));
