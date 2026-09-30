@@ -16,8 +16,8 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
 <iframe id="editor" src="weddly-personalizacion-essential.html?v=essential-6-rev2-20260909" title="Personalización Essential"></iframe>
 <script>
 (()=> {
-  const RSVP_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp';
-  const PERS_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-personalization';
+  const RSVP_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp';
+  const PERS_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-personalization';
   const frame=document.getElementById('editor'),bootEl=document.getElementById('boot');
   const qs=new URLSearchParams(location.search);
   const inSuite=qs.get('suite')==='1'||qs.get('_wsd_suite')==='1';
@@ -47,7 +47,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
 
   function goGuests(){
     if(inSuite&&parent!==window){try{const b=parent.document.querySelector('[data-view="guests"]');if(b){b.click();return}}catch{}}
-    location.assign('guests.html#invitados');
+    location.assign('index.html#invitados');
   }
   function goForm(){
     if(inSuite&&parent!==window){parent.postMessage({type:'wsd-suite-open',view:'guests-rsvp',url:'guests-rsvp-form.html?v=134'},location.origin);return}
@@ -193,8 +193,12 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
         const r=await fetch(B.persApi,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':B.memberToken},body:JSON.stringify({token:B.token,personalization:p})});
         const x=await r.json().catch(()=>({})); if(!r.ok||!x.ok) throw new Error(x.error||'save_failed');
         const nextCfg={...cfg,title:p.p1+' & '+p.p2,date:p.date,time:p.time,venue:[p.venue,p.city].filter(Boolean).join(', '),intro:cfg.intro||'Nos encantará celebrar este día contigo.',transportOffered:cfg.transportOffered!==false,questions:{meal:cfg.questions?.meal!==false,allergy:cfg.questions?.allergy!==false,transport:cfg.questions?.transport!==false,plusone:cfg.questions?.plusone!==false}};
-        const cr=await fetch(B.rsvpApi,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':B.memberToken},body:JSON.stringify({action:'config',token:B.token,config:nextCfg})});
-        const cx=await cr.json().catch(()=>({}));if(!cr.ok||!cx.ok)throw new Error(cx.error||'rsvp_sync_failed');
+        let rsvpSynced=false;
+        try{
+          const cr=await fetch(B.rsvpApi,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':B.memberToken},body:JSON.stringify({action:'config',token:B.token,config:nextCfg})});
+          const cx=await cr.json().catch(()=>({}));rsvpSynced=!!(cr.ok&&cx.ok);
+        }catch{}
+        if(!rsvpSynced)console.warn('GUEST: RSVP config refresh failed after personalization was saved');
         Object.assign(cfg,nextCfg);
         try{localStorage.setItem('weddly_guests_design',JSON.stringify(x.personalization||p))}catch{}
         window.__WEDDLY_BOOT.pers=x.personalization||p;
