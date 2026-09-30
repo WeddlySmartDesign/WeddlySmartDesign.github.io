@@ -1,6 +1,8 @@
-const fs=require('fs'),path=require('path'),root=path.resolve(__dirname,'..');
+const fs=require('fs'),path=require('path'),root=path.resolve(__dirname,'..'),repoRoot=path.resolve(root,'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const exists=p=>fs.existsSync(path.join(root,p));
+const readRepo=p=>fs.readFileSync(path.join(repoRoot,p),'utf8');
+const existsRepo=p=>fs.existsSync(path.join(repoRoot,p));
 const ok=(c,m)=>{if(!c)throw new Error(m)};
 const required=[
 'index.html','guests-v116-production.html','guests-v114-integrated.html','guest-settings.html','access.html','guest.webmanifest','guest-sw.js','guest-icon.svg',
@@ -70,4 +72,16 @@ for(const p of endpointFiles){if(!exists(p))continue;const body=read(p);const le
 
 const lock=JSON.parse(read('SOURCE_LOCK.json'));
 ok(lock.captured_from_commit==='6e054a21480624c7f04c6879c7ad72ed55c7307d','source lock does not point to verified latest ONE baseline');
+
+for(const p of ['guest.html','guest-checkout.html','guest-checkout-return.html','guest-order.html','guest-legal.html'])ok(existsRepo(p),'missing commercial file '+p);
+const market=readRepo('guest.html'),checkout=readRepo('guest-checkout.html'),ret=readRepo('guest-checkout-return.html'),order=readRepo('guest-order.html'),legal=readRepo('guest-legal.html');
+ok(market.includes('Vuestra invitación.')&&market.includes('Nosotros nos ocupamos.'),'invitation-first positioning missing');
+ok(market.includes('24–48 h')&&market.includes('personalización incluida'),'managed personalization promise missing');
+ok((market.match(/guests-rsvp-essential-0/g)||[]).length>=1&&market.includes('guests-signature-0'),'real design viewer missing');
+for(const body of [checkout,ret,order])ok(body.includes('/guest-stripe-checkout'),'commercial flow is not using isolated GUEST checkout');
+ok(checkout.includes('startPersonalizationConsent:true'),'personalization-start consent missing from checkout');
+ok(order.includes('Essential 06')&&order.includes('Signature 04'),'order form does not expose all design families');
+ok(order.includes("fd.has('children')")&&order.includes("fd.has('transport')")&&order.includes("fd.has('accommodation')"),'RSVP intake options missing');
+for(const body of [market,checkout,ret,order,legal])ok(!/ONE by WeddlySmartDesign|Comprar ONE|ONE Essential|ONE Signature/.test(body),'commercial GUEST page leaks ONE branding');
+
 console.log('GUEST independent regression gate: PASS');
