@@ -47,23 +47,13 @@ Validated functional commit for B7.5:
 
 ## Exact current failure
 B7.6 active.
-Global desktop/accessibility hardening has been applied across the main app, Extra Events, RSVP Operations, public RSVP and the invitation editor.
+The first accessibility QA failure was a test-modality issue, not a missing product style: Chromium does not necessarily match `:focus-visible` after programmatic `focus()`. The test now primes real keyboard modality with a trusted Tab key before checking the focused control, while keeping the same visible-outline requirement.
 
-Implemented:
-- centered desktop sheets/modals instead of stretched bottom sheets;
-- desktop max-width/composition rules;
-- visible keyboard focus rings;
-- reduced-motion support;
-- idempotent/coalesced RSVP Operations visual patch to avoid unnecessary repaints.
-
-Browser QA added:
-`guest/qa/b7_6_global_desktop_accessibility_test.js`
-
-Latest workflow commit:
-`ea406dc9e254ec5222a11db2ac4c29e73179a243`
+QA fix commit:
+`7ee19c4f0e391480b078e21c462f00f472d6d6d8`
 
 ## NEXT ACTION
-Read CI for `ea406dc9e254ec5222a11db2ac4c29e73179a243`. If B7.6 fails, use only the exact logged failure and distinguish product defects from test assumptions. Continue until the full matrix is green, then seal B7.6 and advance to B7.7 final visual QA.
+Read CI for `7ee19c4f0e391480b078e21c462f00f472d6d6d8`. If B7.6 fails again, use only the exact logged failure. Continue until the full matrix is green, then seal B7.6 and advance to B7.7 final visual QA.
 
 ## Working method from now on
 Every microblock has only three states:
