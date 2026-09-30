@@ -45,31 +45,20 @@ Validated commit for B7.3:
 
 ## Exact current failure
 B7.4 active.
-Inherited CI is now fully green after correcting two real races before visual work:
-- premium brand hierarchy now self-heals against the legacy UI repaint;
-- extra-event controlled-copy buttons are bound immediately as cards render.
+The first B7.4 CI run exposed a real visual-layer performance defect: the new Mesas/Listados patch rewrote identical text on every pass. Because its MutationObserver watched child-list changes, the layer could trigger itself repeatedly and delay unrelated async rendering (Hoy, event lists, table/list QA and even mobile visual settling).
 
-B7.4 visual layer added and loaded:
-`guest/guest-visual-tables-lists-v1.js`
+Product fix:
+- B7.4 patch is now idempotent;
+- text is only rewritten when it actually changes;
+- observer callbacks are RAF-coalesced to one pending patch.
 
-B7.4 browser QA added:
-`guest/qa/b7_4_tables_lists_visual_test.js`
+Fix commit:
+`bcbbad4d5c6f501fee708b55e99a862e64a54ca2`
 
-Current scope implemented:
-- clearer Mesas intro;
-- simplified visual-plan copy;
-- grouped table KPIs;
-- cleaner table cards and full/over-capacity states;
-- explicit unseated block with count;
-- Listados intro focused on deliverables/copy control;
-- visual classification of main-wedding, RSVP custom, extra-event and copy-history cards;
-- mobile touch/overflow rules.
-
-Latest workflow commit:
-`c856ee1563c55acfc05c22a2a4975f06cebe0887`
+Current status: CI validation pending.
 
 ## NEXT ACTION
-Read CI for `c856ee1563c55acfc05c22a2a4975f06cebe0887`. If B7.4 fails, use only its exact logged failure. Fix product code for real UX defects and the test only for proven false assumptions. Continue until regression + B6 + B7.1–B7.4 all PASS, then seal B7.4 and advance to B7.5 Eventos extra visual review.
+Read CI for `bcbbad4d5c6f501fee708b55e99a862e64a54ca2`. If inherited B6/B7 jobs return green and B7.4 alone fails, use only the exact B7.4 failure. If any inherited job still fails, first determine whether it is a real regression or a proven test timing issue. Do not seal B7.4 until the full matrix is green.
 
 ## Working method from now on
 Every microblock has only three states:
