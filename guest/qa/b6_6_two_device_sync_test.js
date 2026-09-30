@@ -117,10 +117,10 @@ async function setState(page,mutator){
 
   // A change propagates to B.
   await setState(a,s=>{s.guests.g1.group='Amigos compartidos'});
-  await a.waitForFunction(()=>document.getElementById('notice')?.textContent!=='Guardando…',null,{timeout:8000}).catch(()=>{});
+  for(let i=0;i<60&&remote.guests.g1.group!=='Amigos compartidos';i++)await sleep(150);
+  ok(remote.guests.g1.group==='Amigos compartidos','device A change did not reach backend');
   await b.bringToFront();await b.evaluate(()=>window.dispatchEvent(new Event('focus')));
   await waitLocal(b,null,'g1A');
-  ok(remote.guests.g1.group==='Amigos compartidos','device A change did not reach backend');
 
   // Concurrent non-overlapping edits must merge rather than overwrite each other.
   await Promise.all([
