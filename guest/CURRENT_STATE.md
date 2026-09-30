@@ -27,6 +27,7 @@ Resume from the exact "NEXT ACTION" below.
 - B7.3 Invitación + RSVP — PASS / CLOSED
 - B7.4 Mesas + Listados — PASS / CLOSED
 - B7.5 Eventos extra — PASS / CLOSED
+- B7.6 Coherencia global + escritorio + accesibilidad visual — PASS / CLOSED
 
 B6.3 sealed report:
 guest/B6_3_INVITATION_RSVP_QA_2026-09-30.md
@@ -34,28 +35,22 @@ Validated commit:
 099ddf75524c9e2eed3e8e9298262f8ed4fcd3e7
 
 ## Current block
-B7.6 — Coherencia global + escritorio + accesibilidad visual
+B7.7 — QA visual final + sellado de B7
 
 Current branch:
 `guest-independent`
 
-B7.5 sealed report:
-`guest/B7_5_EXTRA_EVENTS_VISUAL_QA_2026-09-30.md`
+B7.6 sealed report:
+`guest/B7_6_GLOBAL_DESKTOP_ACCESSIBILITY_QA_2026-09-30.md`
 
-Validated functional commit for B7.5:
-`3c9da498fb9b6409859a755970ea747b1a3fe74d`
+Validated functional commit for B7.6:
+`9f6afb06c5f36295fddae1f3a3792f47d5e64737`
 
 ## Exact current failure
-B7.6 active.
-The focus-visible CSS is present. The repeated RSVP Operations failure was isolated to the QA choosing the first focusable control in the document; trusted Shift+Tab leaves the document and headless Chromium does not deterministically return to that first control.
-
-No product UI change was made. The accessibility test now checks the stable second top action (`← Invitados`), preserving the same keyboard-driven `:focus-visible` requirement.
-
-QA fix commit:
-`e1d7bf7b391c997c501571641204d6cf46f9bb51`
+None. B7.6 is PASS / SEALED.
 
 ## NEXT ACTION
-Read CI on the current HEAD after `e1d7bf7b391c997c501571641204d6cf46f9bb51`. If B7.6 fails again, use only the exact logged failure. Continue until the full matrix is green, then seal B7.6 and advance to B7.7 final visual QA.
+Start B7.7 final visual QA. Scope: final cross-surface visual seal using the already validated mobile, module-specific, desktop and accessibility layers. Do not redesign or add features. Run a consolidated final visual regression across representative mobile and desktop viewports, confirm all prior B6/B7 jobs remain green, fix only objective regressions, then seal B7.
 
 ## Working method from now on
 Every microblock has only three states:
