@@ -43,10 +43,10 @@ Validated commit for B7.2:
 `6e551b901b4deb7820018268dbccea872efd9ba4`
 
 ## Exact current failure
-None. B7.2 is PASS / SEALED.
+None. B7.2 is PASS / SEALED. B7.3 is ACTIVE.
 
 ## NEXT ACTION
-Rerun B7.2 visual QA with the dynamic-section fix. If B7.2 fails again, use only the exact logged failure. When regression + B6.1–B6.6 + B7.1 + B7.2 are PASS, seal B7.2 and advance to B7.3 Invitación/RSVP.
+Audit and polish Invitation design management, RSVP operations and public RSVP visual hierarchy only. Preserve all B6.3 behavior, Essential/Signature template counts, RSVP payloads and GUEST isolation. Add dedicated B7.3 browser QA, fix only exact failures, then seal B7.3 before advancing to B7.4.
 
 ## Working method from now on
 Every microblock has only three states:
