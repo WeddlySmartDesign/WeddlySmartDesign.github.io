@@ -41,18 +41,17 @@ Current CI status at that HEAD:
 - b6-tables-lists: FAIL
 
 ## Exact current failure
-Catering TOTAL issue fixed in product code.
+Catering controlled-copy summary issue fixed in product code.
+Print/PDF output is correct; CI failure was caused by case-sensitive assertion against CSS-uppercase brand text.
 
-Current remaining issue observed in CI: print/PDF tables assertion fired before the controlled-copy popup had finished rendering.
-
-QA fix commit:
-`fa61595e96d79f47da7e243829e4d751e7fd6235`
+QA assertion fix commit:
+`1ff2e24e02b250c079daa03548961ac0b67aefac`
 
 Current status: CI validation pending.
 
 ## NEXT ACTION
-1. Read CI for commit `fa61595e96d79f47da7e243829e4d751e7fd6235`.
-2. If b6-tables-lists fails, use its exact logged failure only; do not restart B6.4.
+1. Read CI for commit `1ff2e24e02b250c079daa03548961ac0b67aefac`.
+2. If b6-tables-lists fails, use only its exact logged failure.
 3. If regression + B6.1 + B6.2 + B6.3 + B6.4 all PASS, create `guest/B6_4_TABLES_LISTS_QA_2026-09-30.md`, seal B6.4 and update this file to B6.5 Events extra.
 
 ## Working method from now on
