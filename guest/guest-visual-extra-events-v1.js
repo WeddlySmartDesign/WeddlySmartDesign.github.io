@@ -91,6 +91,18 @@ main.wrap>.lead{font-size:14px!important;max-width:610px}
   main.wrap>h1{font-size:31px!important}
   .wsd-eg-group-actions{grid-template-columns:1fr!important}
 }
+@media(min-width:760px){
+  .wrap{max-width:760px!important;padding:30px 28px 54px!important}
+  .sheet,.inviteSheet{align-items:center!important;padding:24px!important}
+  .sheetCard,.inviteSheetCard{width:min(680px,calc(100vw - 48px))!important;max-width:680px!important;margin:auto!important;border-radius:28px!important;max-height:86dvh!important}
+}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:3px solid rgba(82,92,67,.30)!important;outline-offset:2px!important
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important}
+  .btn,.eventTabs .btn,.sheetCard,.inviteSheetCard{transition:none!important;animation:none!important}
+}
 `;
 
 function style(){
