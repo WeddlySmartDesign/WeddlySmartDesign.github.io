@@ -38,12 +38,16 @@ Validated functional commit for B6.4:
 `4ac9267362b5a1389b78fd6e80cb724e9c822c26`
 
 ## Exact current failure
-None. B6.4 is PASS / SEALED.
+B6.5 active. Initial audit found two active extra-event helpers still coupled to ONE identifiers:
+- group selection used `weddly-event-state`;
+- single-photo save interception watched `weddly-event-invite`, so it would miss GUEST save requests.
+Both have been corrected and added to the regression gate.
+
+Latest gate commit:
+`db5ba0c4f32c5ca4a5223efbb3a381b2a86392b0`
 
 ## NEXT ACTION
-Start B6.5 only when continuing work.
-B6.5 scope: extra events, their guest lists, invitation/RSVP linkage, list outputs, isolation, mobile usability and error states.
-Do not reopen B6.4 unless a regression test fails.
+Build and run B6.5 browser QA covering event creation/default activation, guest/group selection, event invitation + RSVP, extra-event list outputs, mobile usability, conflict/error handling and zero ONE backend calls. Fix only exact failures, update this file after each meaningful fix, then seal B6.5.
 
 ## Working method from now on
 Every microblock has only three states:
