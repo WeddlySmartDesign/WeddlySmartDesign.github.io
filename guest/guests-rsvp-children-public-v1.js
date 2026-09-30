@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 if(window.__wsdRsvpChildrenPublic)return;window.__wsdRsvpChildrenPublic=true;
-const qs=new URLSearchParams(location.search),unitMode=!!qs.get('u'),API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',token=qs.get('t')||'';
+const qs=new URLSearchParams(location.search),unitMode=!!qs.get('u'),API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp',token=qs.get('t')||'';
 const T=(es,en)=>document.documentElement.lang==='en'?en:es;
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let patchQueued=false,settingReady=false,childrenEnabled=false;
@@ -72,7 +72,7 @@ const nativeFetch=window.fetch.bind(window);
 window.fetch=async function(input,init){
   try{
     const url=typeof input==='string'?input:input?.url||'',method=String(init?.method||(typeof input!=='string'?input?.method:'GET')||'GET').toUpperCase();
-    if(method==='POST'&&url.includes('/weddly-rsvp')&&init?.body){
+    if(method==='POST'&&url.includes('/guest-rsvp')&&init?.body){
       const body=JSON.parse(String(init.body));if(body?.action==='submit'){
         const xs=children(),target=attendanceTarget(),attach=!unitMode||String(body.guest_key||'')===String(target);
         body.children=attach?xs:[];
