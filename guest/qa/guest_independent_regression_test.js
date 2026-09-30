@@ -5,7 +5,7 @@ const readRepo=p=>fs.readFileSync(path.join(repoRoot,p),'utf8');
 const existsRepo=p=>fs.existsSync(path.join(repoRoot,p));
 const ok=(c,m)=>{if(!c)throw new Error(m)};
 const required=[
-'index.html','guests-v116-production.html','guests-v114-integrated.html','guest-settings.html','access.html','guest.webmanifest','guest-sw.js','guest-icon.svg',
+'index.html','guests-v116-production.html','guests-v114-integrated.html','guest-settings.html','access.html','guest.webmanifest','guest-sw.js','guest-icon.svg','guest-one-parity-v1.js','guests-personalizacion-essential.html','guests-personalizacion-signature-integrated.html',
 'guests-home-rsvp-status-v1.js','guests-seating-v2.js','guests-seating-sync-hotfix-v1.js','guests-rsvp-form-flow.html','guests-rsvp-form-flex.html',
 'guests-rsvp-custom-answers-v1.js','guests-rsvp-children-public-v1.js','guests-extra-event-lists-v1.js','guests-service-visibility-v1.js',
 'guests-rsvp-essential-live.html','guests-rsvp-signature-live.html','weddly-personalizacion-essential.html','weddly-personalizacion-signature.html','event-invite.html','event-invite-v2.html'
@@ -15,6 +15,7 @@ const shell=read('index.html');
 ok(shell.includes('GUEST by WeddlySmartDesign'),'shell brand missing');
 ok(shell.includes('guest.webmanifest'),'manifest not linked');
 ok(shell.includes('guest-sw.js'),'service worker not registered');
+ok(shell.includes('guest-one-parity-v1.js'),'latest ONE Guests UX parity layer not loaded');
 for(const forbidden of ['payments.html','planning.html','one.html','ONE Partner','STUDIO'])ok(!shell.includes(forbidden),'shell leaks '+forbidden);
 for(const critical of ['guests-home-rsvp-status-v1.js?v=137-table-changes','guests-extra-event-lists-v1.js','guests-seating-sync-hotfix-v1.js','guests-rsvp-plusone-core-label-v1.js','guests-state-integrity-v1.js'])ok(shell.includes(critical),'latest ONE Guests layer missing: '+critical);
 
@@ -63,12 +64,49 @@ const endpointFiles=[
 'index.html','guests-v116-production.html','guests-production-sync.js','guests-access-layer.js','guests-production-ui.js','guests-production-ops.js',
 'guests-rsvp-route-v1.js','guests-home-rsvp-status-v1.js','guests-smart-actions-v1.js','guests-v114-integrated.html',
 'guests-rsvp-operations-v2.html','guests-rsvp-operations-live.html','guests-rsvp-operations-v3.html','guests-rsvp-design-manage.html',
-'guests-rsvp-form-flow.html','guests-rsvp-form-flex.html','guests-rsvp-public-clean.html','guests-rsvp-essential-live.html','guests-rsvp-signature-live.html',
+'guests-rsvp-form-flow.html','guests-rsvp-form-flex.html','guests-rsvp-public-clean.html','guests-rsvp-essential-live.html','guests-rsvp-signature-live.html','guests-personalizacion-essential.html','guests-personalizacion-signature-integrated.html',
 'guests-events-v3.html','guests-events-v3.js','guests-events-invite-addon-v2.js','guests-events-share-composer-v1.js','event-invite.html','event-invite-v2.html',
 'guest-settings.html','access.html'
 ];
 const legacyApis=['/weddly-guests-state','/weddly-rsvp-ensure','/weddly-rsvp-single-v2','/weddly-rsvp','/weddly-personalization','/weddly-event-state','/weddly-event-invite','/weddly-test-access','/weddly-access'];
 for(const p of endpointFiles){if(!exists(p))continue;const body=read(p);const leaks=legacyApis.filter(x=>body.includes(x));ok(!leaks.length,p+' still uses shared ONE backend: '+leaks.join(', '))}
+
+
+// B5: byte-level provenance and controlled-diff gate against the exact ONE source snapshot on this branch.
+const sourceFiles=fs.readdirSync(repoRoot,{withFileTypes:true}).filter(x=>x.isFile()&&(x.name.startsWith('guests')||['weddly-personalizacion-essential.html','weddly-personalizacion-signature.html','event-invite.html','event-invite-v2.html'].includes(x.name))).map(x=>x.name).sort();
+ok(sourceFiles.length===179,'unexpected ONE Guests source inventory: '+sourceFiles.length);
+const allowedModified=new Set([
+  'event-invite-v2.html','guests-access-layer.js','guests-events-invite-addon-v2.js','guests-events-share-composer-v1.js','guests-events-v3.html','guests-events-v3.js',
+  'guests-home-rsvp-status-v1.js','guests-production-ops.js','guests-production-sync.js','guests-production-ui.js','guests-rsvp-design-manage.html','guests-rsvp-essential-live.html',
+  'guests-rsvp-form-flex.html','guests-rsvp-form-flow.html','guests-rsvp-operations-live.html','guests-rsvp-operations-v3.html','guests-rsvp-public-clean.html','guests-rsvp-signature-live.html',
+  'guests-smart-actions-v1.js','guests-v114-integrated.html','guests-v116-production.html','guests-personalizacion-essential.html','guests-personalizacion-signature-integrated.html'
+]);
+const namedFns=s=>[...new Set([...s.matchAll(/(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(/g)].map(m=>m[1]))];
+for(const p of sourceFiles){
+  ok(exists(p),'source copy missing in /guest: '+p);
+  const src=readRepo(p),dst=read(p);
+  if(!allowedModified.has(p))ok(src===dst,'unexpected modification vs latest ONE source: '+p);
+  else for(const fn of namedFns(src))ok(namedFns(dst).includes(fn),'source function lost in '+p+': '+fn);
+}
+
+// B5: ONE-shell improvements that directly affected Guests must be preserved or explicitly mapped.
+const parity=read('guest-one-parity-v1.js');
+const oneVisual=readRepo('suite-visual-coherence-v1.js'),oneSwipe=readRepo('suite-swipe-navigation-v1.js'),oneInstall=readRepo('suite-install-one-v1.js'),oneToday=readRepo('suite-today-v1.js'),oneServices=readRepo('suite-wedding-services-v1.js');
+ok(oneVisual.includes('function patchGuests'),'ONE visual Guests layer missing from source baseline');
+ok(parity.includes('min-height:48px')&&parity.includes('guestOneParityStyle'),'GUEST did not port ONE Guests visual navigation treatment');
+ok(oneSwipe.includes('function bindGuestDirect'),'ONE direct Guests swipe layer missing from source baseline');
+ok(parity.includes('guestSwipeParity')&&parity.includes('guestFastNav'),'GUEST did not port ONE Guests swipe/fast-nav behavior');
+ok(oneInstall.includes('__wsdEssentialSaveHotfix'),'ONE Essential save resilience source missing');
+const essentialEditor=read('guests-personalizacion-essential.html'),signatureEditor=read('guests-personalizacion-signature-integrated.html');
+for(const editor of [essentialEditor,signatureEditor]){
+  ok(editor.includes('/guest-rsvp')&&editor.includes('/guest-personalization'),'invitation editor still points outside isolated GUEST APIs');
+  ok(editor.includes('RSVP config refresh failed after personalization was saved'),'ONE save resilience was not preserved in GUEST invitation editor');
+  ok(!editor.includes('/weddly-rsvp')&&!editor.includes('/weddly-personalization'),'invitation editor leaks ONE APIs');
+}
+ok(oneToday.includes('guestRecentRemote')&&oneToday.includes('todaySeatChanges'),'ONE Today guest aggregation source missing');
+ok(home.includes('customChange')&&home.includes('todaySeatChanges')&&home.includes('markRecentRead'),'GUEST internal Today does not preserve guest-relevant Today behavior');
+ok(oneServices.includes('transportOffered')&&oneServices.includes('accommodationOffered'),'ONE service controls source missing');
+ok(form.includes('transportOffered')&&form.includes('accommodationOffered'),'GUEST RSVP editor lost transport/accommodation controls');
 
 const lock=JSON.parse(read('SOURCE_LOCK.json'));
 ok(lock.captured_from_commit==='6e054a21480624c7f04c6879c7ad72ed55c7307d','source lock does not point to verified latest ONE baseline');
