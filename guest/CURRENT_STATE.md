@@ -46,10 +46,24 @@ Validated functional commit for B7.5:
 `3c9da498fb9b6409859a755970ea747b1a3fe74d`
 
 ## Exact current failure
-None. B7.5 is PASS / SEALED.
+B7.6 active.
+Global desktop/accessibility hardening has been applied across the main app, Extra Events, RSVP Operations, public RSVP and the invitation editor.
+
+Implemented:
+- centered desktop sheets/modals instead of stretched bottom sheets;
+- desktop max-width/composition rules;
+- visible keyboard focus rings;
+- reduced-motion support;
+- idempotent/coalesced RSVP Operations visual patch to avoid unnecessary repaints.
+
+Browser QA added:
+`guest/qa/b7_6_global_desktop_accessibility_test.js`
+
+Latest workflow commit:
+`ea406dc9e254ec5222a11db2ac4c29e73179a243`
 
 ## NEXT ACTION
-Start B7.6 only when continuing work. Scope: global coherence, desktop behavior and visual accessibility across GUEST, including typography/spacing consistency, desktop max-width/composition, focus states, contrast-sensitive controls, touch/click targets and modal/sheet behavior. Preserve all closed B6/B7 behavior and do not add features.
+Read CI for `ea406dc9e254ec5222a11db2ac4c29e73179a243`. If B7.6 fails, use only the exact logged failure and distinguish product defects from test assumptions. Continue until the full matrix is green, then seal B7.6 and advance to B7.7 final visual QA.
 
 ## Working method from now on
 Every microblock has only three states:
