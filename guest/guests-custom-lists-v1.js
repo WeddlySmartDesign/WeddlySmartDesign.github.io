@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const G=window.__GuestsProd;if(!G)return;const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access',TOKEN='weddly_shared_wedding_token',MODE='weddly_owner_demo_mode';
+const G=window.__GuestsProd;if(!G)return;const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-access-check',TOKEN='weddly_shared_wedding_token',MODE='weddly_owner_demo_mode';
 let remote=null,busy=false,last=0;
 function demo(){try{const q=new URLSearchParams(location.search).get('ownerDemo');if(q==='es'||q==='en')return q;const m=localStorage.getItem(MODE);return m==='es'||m==='en'?m:''}catch{return''}}
 async function token(){const raw=localStorage.getItem(TOKEN)||'',m=demo();if(!m||raw.length<40)return raw;try{const k='weddly_owner_demo_token_'+m,c=localStorage.getItem(k)||'';if(c.length>=40)return c;const r=await fetch(ACCESS,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':raw},body:JSON.stringify({action:'owner_demo_token',lang:m}),cache:'no-store'}),x=await r.json().catch(()=>({}));if(r.ok&&x?.memberToken){localStorage.setItem(k,x.memberToken);return x.memberToken}}catch{}return raw}
