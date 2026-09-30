@@ -47,15 +47,15 @@ Validated functional commit for B7.5:
 
 ## Exact current failure
 B7.6 active.
-The keyboard-focus QA still failed on RSVP Operations because the previous helper moved forward then backward; the final Shift+Tab did not deterministically return focus to the original target in that document.
+The focus-visible CSS is present. The repeated RSVP Operations failure was isolated to the QA choosing the first focusable control in the document; trusted Shift+Tab leaves the document and headless Chromium does not deterministically return to that first control.
 
-No product CSS was changed. The helper now seeds the target, moves backward with trusted Shift+Tab and returns with trusted Tab, so the final transition onto the target is keyboard-driven and deterministic.
+No product UI change was made. The accessibility test now checks the stable second top action (`← Invitados`), preserving the same keyboard-driven `:focus-visible` requirement.
 
 QA fix commit:
-`89a3cd7e233776847579a760776ee83cd9c72eea`
+`e1d7bf7b391c997c501571641204d6cf46f9bb51`
 
 ## NEXT ACTION
-Read CI on the current HEAD after `89a3cd7e233776847579a760776ee83cd9c72eea`. If B7.6 fails again, use only the exact logged failure. Continue until the full matrix is green, then seal B7.6 and advance to B7.7 final visual QA.
+Read CI on the current HEAD after `e1d7bf7b391c997c501571641204d6cf46f9bb51`. If B7.6 fails again, use only the exact logged failure. Continue until the full matrix is green, then seal B7.6 and advance to B7.7 final visual QA.
 
 ## Working method from now on
 Every microblock has only three states:
