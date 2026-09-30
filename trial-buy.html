@@ -47,8 +47,8 @@ main{min-height:100dvh;max-width:720px;margin:auto;background:var(--paper);paddi
 (()=>{
 'use strict';
 const TOKEN='weddly_shared_wedding_token';
-const ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access-trial-paid-qa';
-const CHECKOUT='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-trial-paid-qa';
+const ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access';
+const CHECKOUT='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout';
 const q=new URLSearchParams(location.search),expiredHint=q.get('expired')==='1';
 const $=id=>document.getElementById(id),chooser=$('chooser'),wrap=$('checkoutWrap'),pay=$('pay'),consent=$('consent'),err=$('error');
 let config=null,edition='essential',checkoutInstance=null,stripe=null;
