@@ -115,10 +115,11 @@ async function setState(page,mutator){
   ok(await b.locator('#share').evaluate(x=>x.classList.contains('hidden')),'partner device should not expose invite action');
   await b.goto(base+'/guest/index.html',{waitUntil:'domcontentloaded'});await coreFrame(b);
 
-  // A change propagates to B.
+  // A change propagates to B. Keep the source device foregrounded, as a real edit happens on the active device.
+  await a.bringToFront();await a.evaluate(()=>window.dispatchEvent(new Event('focus')));
   await setState(a,s=>{s.guests.g1.group='Amigos compartidos'});
   for(let i=0;i<60&&remote.guests.g1.group!=='Amigos compartidos';i++)await sleep(150);
-  ok(remote.guests.g1.group==='Amigos compartidos','device A change did not reach backend');
+  if(remote.guests.g1.group!=='Amigos compartidos'){const dbg=await a.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),notice:document.getElementById('notice')?.textContent||''}));throw new Error('device A change did not reach backend '+JSON.stringify({dbg,remote,version,puts}))}
   await b.bringToFront();await b.evaluate(()=>window.dispatchEvent(new Event('focus')));
   await waitLocal(b,null,'g1A');
 
