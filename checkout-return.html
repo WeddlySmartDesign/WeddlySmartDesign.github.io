@@ -46,7 +46,7 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
 </main>
 <script>
 (()=>{
- const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-trial-paid-qa';
+ const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout';
  const q=new URLSearchParams(location.search),sessionId=q.get('session_id')||'';
  const $=id=>document.getElementById(id),title=$('title'),lead=$('lead'),status=$('status'),activate=$('activate'),saveConfirmation=$('saveConfirmation'),retry=$('retry'),back=$('back'),meta=$('meta');let purchase=null;
  async function check(attempt=0){
