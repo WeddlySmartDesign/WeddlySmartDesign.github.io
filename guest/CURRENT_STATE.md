@@ -39,13 +39,14 @@ Validated commit for B6.5:
 `ef1e1f5d714386535cf9e53ae4f4f472107fff2b`
 
 ## Exact current failure
-B6.6 active. Two-device browser QA has been created and added to CI. No product failure identified yet.
+B6.6 active.
+First CI failure was a QA timing issue: propagation was checked on device B before device A had actually completed its debounced remote write. The test now waits for the source-device backend commit before forcing B to poll.
 
-Latest workflow commit:
-`9e8d3e57f166c67b345a0d8415ca9f08b7ebefcf`
+Latest QA commit:
+`1defc65b7c9a9b373914c1589ca855439d852e1a`
 
 ## NEXT ACTION
-Read CI for `9e8d3e57f166c67b345a0d8415ca9f08b7ebefcf`. Use only the exact B6.6 logged failure. Fix product code only for real defects; adjust the test only for proven false assumptions. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6.
+Read CI for `1defc65b7c9a9b373914c1589ca855439d852e1a`. Use only the exact B6.6 logged failure. Continue until regression + B6.1–B6.6 all PASS, then create the sealed B6.6 report and close B6.
 
 ## Working method from now on
 Every microblock has only three states:
