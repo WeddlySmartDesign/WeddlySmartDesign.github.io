@@ -180,3 +180,26 @@ jobs:
           exit 1
       - name: B7.1 mobile hierarchy QA
         run: node guest/qa/b7_1_mobile_hierarchy_test.js
+
+  b7-hoy-invitados:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B7.2 Hoy + Invitados visual QA
+        run: node guest/qa/b7_2_hoy_invitados_test.js
