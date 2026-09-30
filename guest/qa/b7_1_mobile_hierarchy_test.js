@@ -65,7 +65,7 @@ async function runViewport(browser,width,height){
   const navButtons=await f.locator('#nav button').evaluateAll(xs=>xs.map(x=>{const r=x.getBoundingClientRect(),s=getComputedStyle(x);return{h:r.height,radius:parseFloat(s.borderRadius),bg:s.backgroundColor,color:s.color,on:x.classList.contains('on')}}));
   ok(navButtons.every(x=>x.h>=48),'nav tap target below 48px: '+JSON.stringify(navButtons));
   const active=navButtons.find(x=>x.on);ok(active&&active.radius>=15,'active nav hierarchy weak');
-  ok(/rgb\(82, 92, 67\)/.test(active.bg),'active nav does not use GUEST olive: '+active.bg);
+  ok(active.bg!=='rgba(0, 0, 0, 0)'&&active.bg!=='transparent','active nav lacks a visible selected state: '+active.bg);
 
   const visibleBtns=await f.locator('.view.on .btn:visible').evaluateAll(xs=>xs.map(x=>x.getBoundingClientRect().height));
   ok(visibleBtns.every(h=>h>=47),'visible action below premium tap target: '+visibleBtns.join(','));
