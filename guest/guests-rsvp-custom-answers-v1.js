@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp';
 const TOKEN_KEY='weddly_shared_wedding_token';
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').trim().toLowerCase();
