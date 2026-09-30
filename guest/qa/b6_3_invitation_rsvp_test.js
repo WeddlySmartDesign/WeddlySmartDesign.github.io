@@ -6,7 +6,9 @@ const noOverflow=async(p,label)=>{const x=await p.evaluate(()=>({sw:document.doc
 
 async function makePage(context,opts={}){
   const page=await context.newPage();
-  const calls={config:[],personalization:[],single:[],submit:[],legacy:[],sameOrigin:[]};
+  const calls={config:[],personalization:[],single:[],submit:[],legacy:[],sameOrigin:[],errors:[]};
+  page.on('pageerror',e=>calls.errors.push('pageerror: '+e.message));
+  page.on('console',m=>{if(m.type()==='error')calls.errors.push('console: '+m.text())});
   let edition=opts.edition||'essential';
   let failConfig=!!opts.failConfig;
   let config=structuredClone(opts.config||{
@@ -110,6 +112,7 @@ async function testDesign(context,edition){
   ok(await inner.locator('#wsdInvitationFlow').isVisible(),edition+' invitation stepper missing');
   const mealBefore=await inner.locator('[data-save-essential]').first().isVisible();
   ok(mealBefore,edition+' save action missing');
+  try{await page.waitForFunction(()=>document.getElementById('boot')?.classList.contains('hide'),null,{timeout:5000})}catch{const outer=await page.evaluate(()=>({boot:document.getElementById('boot')?.innerText||'',cls:document.getElementById('boot')?.className||''}));const innerState=await inner.evaluate(()=>({hasSave:typeof window.__weddlySaveEssential==='function'}));throw new Error(edition+' integration boot did not clear '+JSON.stringify({outer,innerState,errors:calls.errors}))}
   await inner.locator('[data-save-essential]').first().click();
   try{await inner.waitForFunction(()=>document.getElementById('weddlyIntegrationFeedback')?.classList.contains('ok'),null,{timeout:15000})}catch(e){const dbg=await inner.evaluate(()=>({feedback:document.getElementById('weddlyIntegrationFeedback')?.textContent||'',cls:document.getElementById('weddlyIntegrationFeedback')?.className||'',hasSave:typeof window.__weddlySaveEssential==='function'}));throw new Error(edition+' save feedback timeout '+JSON.stringify({dbg,calls:{personalization:calls.personalization.length,config:calls.config.length,legacy:calls.legacy}}))}
   ok(calls.personalization.length===1,edition+' personalization was not saved');
