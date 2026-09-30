@@ -26,6 +26,7 @@ Resume from the exact "NEXT ACTION" below.
 - B7.2 Hoy + Invitados — PASS / CLOSED
 - B7.3 Invitación + RSVP — PASS / CLOSED
 - B7.4 Mesas + Listados — PASS / CLOSED
+- B7.5 Eventos extra — PASS / CLOSED
 
 B6.3 sealed report:
 guest/B6_3_INVITATION_RSVP_QA_2026-09-30.md
@@ -33,28 +34,22 @@ Validated commit:
 099ddf75524c9e2eed3e8e9298262f8ed4fcd3e7
 
 ## Current block
-B7.5 — Eventos extra · revisión visual premium y simplificación
+B7.6 — Coherencia global + escritorio + accesibilidad visual
 
 Current branch:
 `guest-independent`
 
-B7.4 sealed report:
-`guest/B7_4_TABLES_LISTS_VISUAL_QA_2026-09-30.md`
+B7.5 sealed report:
+`guest/B7_5_EXTRA_EVENTS_VISUAL_QA_2026-09-30.md`
 
-Validated functional commit for B7.4:
-`36a0d84cc8bcbd3b2ea7bada953bbd540c029b81`
+Validated functional commit for B7.5:
+`3c9da498fb9b6409859a755970ea747b1a3fe74d`
 
 ## Exact current failure
-B7.5 active.
-Second visual QA failure was also a proven settling-time issue: after switching to an inactive event, the product updated the button text to `Activar` first and the visual layer added `guest-event-activate` on the next animation frame. The UI itself settled correctly; the test asserted too early.
-
-No product behavior change was made. QA now waits for the complete settled visual state.
-
-QA fix commit:
-`34ba134c2371db68e60e4154bf42c03b66b9876c`
+None. B7.5 is PASS / SEALED.
 
 ## NEXT ACTION
-Read CI for `34ba134c2371db68e60e4154bf42c03b66b9876c`. If B7.5 fails again, use only the exact logged failure. Continue until the full matrix is green, then seal B7.5 and advance to B7.6 global/desktop/accessibility.
+Start B7.6 only when continuing work. Scope: global coherence, desktop behavior and visual accessibility across GUEST, including typography/spacing consistency, desktop max-width/composition, focus states, contrast-sensitive controls, touch/click targets and modal/sheet behavior. Preserve all closed B6/B7 behavior and do not add features.
 
 ## Working method from now on
 Every microblock has only three states:
