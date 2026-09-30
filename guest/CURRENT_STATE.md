@@ -40,13 +40,13 @@ Validated commit for B6.5:
 
 ## Exact current failure
 B6.6 active.
-First CI failure was a QA timing issue: propagation was checked on device B before device A had actually completed its debounced remote write. The test now waits for the source-device backend commit before forcing B to poll.
+Current failure: source device A local edit was not observed at backend within the initial QA window. The test has been corrected to foreground the source device (matching real active editing) and now records local state, sync metadata, notice, remote state, version and PUT history if propagation still fails.
 
 Latest QA commit:
-`1defc65b7c9a9b373914c1589ca855439d852e1a`
+`35b08b2782f99b4f8563c74311b838a29e6aef0e`
 
 ## NEXT ACTION
-Read CI for `1defc65b7c9a9b373914c1589ca855439d852e1a`. Use only the exact B6.6 logged failure. Continue until regression + B6.1–B6.6 all PASS, then create the sealed B6.6 report and close B6.
+Read CI for `35b08b2782f99b4f8563c74311b838a29e6aef0e`. If B6.6 still fails, use the new exact sync diagnostic to determine whether the defect is product or QA. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
 
 ## Working method from now on
 Every microblock has only three states:
