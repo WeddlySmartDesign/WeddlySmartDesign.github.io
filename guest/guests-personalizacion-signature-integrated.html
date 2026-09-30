@@ -162,9 +162,10 @@ iframe{width:100%;height:100dvh;border:0;display:block}
       let ready=false;try{ready=!!w.eval('typeof state!=="undefined"&&typeof TEMPLATES!=="undefined"&&typeof FONT_PAIRS!=="undefined"&&typeof buildTemplateGrid==="function"&&typeof buildFontGrid==="function"&&typeof buildAgendaFields==="function"&&typeof buildVenueFields==="function"&&typeof buildTransporteFields==="function"&&typeof renderPreview==="function"')}catch{}
       if(!ready)return;
       await resolve();inject(d,w);
-      if(typeof w.__weddlySaveEssential!=='function')return;
+      for(let i=0;i<20&&typeof w.__weddlySaveEssential!=='function';i++)await new Promise(r=>setTimeout(r,50));
+      if(typeof w.__weddlySaveEssential!=='function')throw new Error('signature_save_runtime_unavailable');
       installed=true;bootEl.classList.add('hide');
-    }catch(e){console.error('[GUEST Signature integration]',e)}
+    }catch(e){console.error('[GUEST Signature integration]',e);if(!installed){bootEl.innerHTML='<div class="card"><h1>No se ha podido abrir Signature</h1><p>Comprueba la conexión y vuelve a intentarlo.</p></div>'}}
   }
   frame.addEventListener('load',()=>{[60,180,400,800].forEach(ms=>setTimeout(install,ms))});
   [500,1000,1800].forEach(ms=>setTimeout(install,ms));
