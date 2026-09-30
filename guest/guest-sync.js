@@ -3,7 +3,7 @@
   const G=window.__GuestsProd={};
   G.KEY='wsd_guest_state_v1';
   G.META='wsd_guest_sync_meta_v1';
-  G.API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-guests-state';
+  G.API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-state';
   G.APP='app.html?v=1';
   G.f=document.getElementById('app');G.boot=document.getElementById('boot');G.msg=document.getElementById('msg');G.retry=document.getElementById('retry');G.note=document.getElementById('notice');
   G.token='';G.ver=0;G.last='';G.pushing=false;G.remote=false;G.identity='';G.identitySyncing=false;
