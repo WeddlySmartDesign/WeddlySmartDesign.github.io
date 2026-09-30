@@ -106,6 +106,7 @@ async function testDesign(context,edition){
   await inner.waitForSelector('#weddlyIntegrationBar',{timeout:15000});
   const cards=await inner.locator('#tplGrid > *').count();
   ok(cards>=(edition==='signature'?4:6),edition+' template collection incomplete: '+cards);
+  await inner.waitForSelector('#wsdInvitationFlow',{state:'visible',timeout:5000});
   ok(await inner.locator('#wsdInvitationFlow').isVisible(),edition+' invitation stepper missing');
   const mealBefore=await inner.locator('[data-save-essential]').first().isVisible();
   ok(mealBefore,edition+' save action missing');
