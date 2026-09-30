@@ -2,10 +2,10 @@
   const G=window.__GuestsProd;if(!G)return;
   const KEY='wsd_guest_state_v1';
   const SUITE=new URLSearchParams(location.search).get('suite')==='1'||new URLSearchParams(location.search).get('_wsd_suite')==='1';
-  const OPS='guests-rsvp-operations-live.html?v=137';
-  const DESIGN='guests-rsvp-design-manage.html';
+  const OPS='rsvp-operations-live.html?v=137';
+  const DESIGN='rsvp-operations.html';
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const en=()=>{try{const x=JSON.parse(localStorage.getItem('weddly_pro_v7')||'null');if(x?.settings?.lang==='en')return true;if(x?.settings?.lang==='es')return false}catch{}try{return localStorage.getItem('weddly_access_lang')==='en'}catch{return false}};
+  const en=()=>{try{const x=JSON.parse(localStorage.getItem('wsd_guest_profile_v1')||'null');if(x?.settings?.lang==='en')return true;if(x?.settings?.lang==='es')return false}catch{}try{return localStorage.getItem('weddly_access_lang')==='en'}catch{return false}};
   function docs(){const out=[];try{let d=G.f.contentDocument;for(let i=0;i<8&&d;i++){out.push(d);const f=d.querySelector('iframe');if(!f||!f.contentDocument)break;d=f.contentDocument}}catch{}return out}
   const appDoc=()=>docs().find(d=>d.getElementById('invitados')&&d.getElementById('sheet')&&d.getElementById('panel'))||null;
   function suiteOpen(view,url){if(!SUITE)return false;try{window.parent.postMessage({type:'wsd-suite-open',view,url},location.origin);return true}catch{return false}}
