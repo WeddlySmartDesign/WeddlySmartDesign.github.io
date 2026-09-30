@@ -3395,7 +3395,7 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 .one-trial-submit:disabled{opacity:.55;cursor:wait}
 .one-trial-msg{min-height:19px;margin-top:10px;font-size:12px;line-height:1.42;color:#736f63}
 .one-trial-msg.err{color:#a34d39}.one-trial-msg.ok{color:#5f6f52;font-weight:700}
-.one-trial-privacy{margin:12px 0 0;font-size:10.5px;line-height:1.45;color:#94887f}
+.one-trial-reassure{margin:8px 2px 0;font-size:11.5px;line-height:1.45;color:#665b55}.one-trial-reassure strong{color:#3b342f}.one-trial-privacy{margin:12px 0 0;font-size:10.5px;line-height:1.45;color:#94887f}
 .one-trial-privacy button{border:0;background:none;padding:0;color:#786a62;text-decoration:underline;text-underline-offset:2px;font:inherit;cursor:pointer}
 .one-trial-existing{display:none;margin-top:12px;width:100%;min-height:48px;border:1px solid #ddd5cb;border-radius:13px;background:#fff;color:#2c2a26;font-size:13px;font-weight:800;cursor:pointer}
 </style>
@@ -6825,7 +6825,15 @@ const base={
   utm_campaign:params.get('utm_campaign'),
   device
 };
+const internalAnalyticsBrowser=()=>{
+  try{
+    if(localStorage.getItem('wsd_internal_analytics_exclude_v1')==='1')return true;
+    const t=String(localStorage.getItem('wsd_internal_analytics_token_v1')||'').trim();
+    return /^WSDAN-[A-Za-z0-9_-]{30,120}$/.test(t);
+  }catch{return false}
+};
 const send=(event_name,extra={})=>{
+  if(internalAnalyticsBrowser())return;
   const body=JSON.stringify({...base,event_name,...extra});
   fetch(ENDPOINT,{
     method:'POST',
@@ -7013,10 +7021,11 @@ function inject(){
     <p class="one-trial-lead">15 días de acceso completo a <strong>ONE Signature</strong>, sin tarjeta. Si después compráis ONE, continuaréis con esta misma boda y conservaréis lo que ya hayáis organizado.</p>
     <ul class="one-trial-points"><li>Invitados, RSVP, mesas, pagos, Planning y eventos.</li><li>6 diseños Essential + 4 diseños Signature y personalización premium.</li><li>Una boda · hasta dos personas autorizadas.</li></ul>
     <div class="one-trial-field"><label for="oneTrialEmail">Email</label><input id="oneTrialEmail" type="email" inputmode="email" autocomplete="email" maxlength="254" placeholder="vuestro@email.com"></div>
+    <p class="one-trial-reassure"><strong>Solo para enviarte la prueba.</strong> No te añadiremos a newsletters ni recibirás publicidad.</p>
     <button class="one-trial-submit" id="oneTrialStart" type="button">Empezar prueba gratuita</button>
     <button class="one-trial-existing" id="oneTrialExisting" type="button">Abrir mi ONE</button>
     <div class="one-trial-msg" id="oneTrialMsg" aria-live="polite"></div>
-    <p class="one-trial-privacy">El email se utiliza únicamente para gestionar la prueba, evitar duplicados y enviarte el enlace de acceso. No se añade a comunicaciones comerciales. <button id="oneTrialPrivacyOpen" type="button">Privacidad</button></p>
+    <p class="one-trial-privacy">Usaremos este email únicamente para el acceso, la recuperación y comunicaciones operativas relacionadas con la prueba. <button id="oneTrialPrivacyOpen" type="button">Privacidad</button></p>
   </div>`;
   document.body.appendChild(d);dialog=d;
   d.querySelector('.one-trial-close').onclick=()=>d.close();
