@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 if(window.__wsdRsvpChildrenAnswers)return;window.__wsdRsvpChildrenAnswers=true;
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',TOKEN='weddly_shared_wedding_token';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp',TOKEN='weddly_shared_wedding_token';
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').trim().toLowerCase();
 const T=(es,en)=>document.documentElement.lang==='en'?en:es;
