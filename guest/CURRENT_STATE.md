@@ -40,13 +40,14 @@ Validated commit for B6.5:
 
 ## Exact current failure
 B6.6 active.
-The scheduler starvation defect is fixed. Latest CI reached the offline/stale-edit phase, but the QA attempted a new People Manager edit during the intentional ~900 ms core reload that follows every person save. The test now waits for that production reload to complete before any next edit.
+Two-device synchronization, conflict handling, offline dirty-state recovery and retry flow all reached the end of the browser QA successfully. The remaining failure was a real visible branding defect in the inactive-access lock: it still displayed the old Weddly Smart Design heading instead of GUEST by WeddlySmartDesign.
 
-Latest QA commit:
-`ee5672e1fe45557fadb6ce9b82f8cb717edaa824`
+Product fixes:
+- inactive-access lock branded as GUEST: `24224e84441250db31a1539d4e4fd73b5c8038d4`
+- sync boot/error copy aligned from “Invitados” to “GUEST”: `fb75139774f325f742cb4af688c26b07c88f622c`
 
 ## NEXT ACTION
-Read CI for `ee5672e1fe45557fadb6ce9b82f8cb717edaa824`. If B6.6 fails, use only the exact logged failure. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
+Read CI for `fb75139774f325f742cb4af688c26b07c88f622c`. If B6.6 fails, use only the exact logged failure. If regression + B6.1–B6.6 all PASS, create the sealed B6.6 report, mark B6 fully closed, and set the next block to B7 UX/visual premium review.
 
 ## Working method from now on
 Every microblock has only three states:
