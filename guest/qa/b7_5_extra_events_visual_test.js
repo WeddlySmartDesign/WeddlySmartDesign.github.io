@@ -95,7 +95,7 @@ async function runViewport(browser,width,height){
 
   // Inactive event must read as activatable, not destructive.
   await page.locator('.eventTabs [data-tab="ev2"]').click();
-  await page.waitForFunction(()=>document.getElementById('disable')?.textContent.trim()==='Activar',null,{timeout:5000});
+  await page.waitForFunction(()=>document.getElementById('disable')?.textContent.trim()==='Activar'&&document.getElementById('disable')?.classList.contains('guest-event-activate'),null,{timeout:5000});
   ok(await page.locator('#disable').evaluate(el=>el.classList.contains('guest-event-activate')),'inactive event activation state not visually clear');
   await noOverflow(page);
 
