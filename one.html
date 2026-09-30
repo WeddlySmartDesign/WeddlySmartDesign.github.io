@@ -3421,6 +3421,89 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
   .market-one .mk-social-follow{justify-content:flex-start;flex-wrap:wrap}
 }
 </style>
+<style id="one-mobile-header-stability-2026-09-30">
+/* Mobile header stability: keep it in document flow, then stick it.
+   This avoids the Android browser viewport shift and prevents the header covering ONE. */
+@media(max-width:699px){
+  .final-topbar{
+    position:sticky!important;
+    top:0!important;
+    height:96px!important;
+    min-height:96px!important;
+  }
+  .final-topbar .final-topbar-inner{
+    height:96px!important;
+    min-height:96px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,.9fr) minmax(0,1.25fr) minmax(0,.9fr)!important;
+    grid-template-rows:28px 42px!important;
+    column-gap:6px!important;
+    row-gap:6px!important;
+    align-content:center!important;
+    padding:6px 12px 8px!important;
+  }
+  .final-topbar .brand{
+    grid-column:1 / 3!important;
+    grid-row:1!important;
+    align-self:center!important;
+    font-size:10px!important;
+  }
+  .final-topbar .primary-actions{
+    display:contents!important;
+  }
+  .final-topbar .action-demo{
+    grid-column:1!important;
+    grid-row:2!important;
+  }
+  .final-topbar .action-trial{
+    grid-column:2!important;
+    grid-row:2!important;
+  }
+  .final-topbar .action-buy{
+    grid-column:3!important;
+    grid-row:2!important;
+  }
+  .final-topbar .action-menu{
+    grid-column:3!important;
+    grid-row:1!important;
+    justify-self:end!important;
+    width:auto!important;
+    min-width:70px!important;
+    min-height:28px!important;
+    padding:0 10px!important;
+    font-size:10px!important;
+    box-shadow:none!important;
+  }
+  .final-topbar .quick-action:not(.action-menu){
+    width:100%!important;
+    min-height:42px!important;
+    padding-left:6px!important;
+    padding-right:6px!important;
+    font-size:10.5px!important;
+    white-space:nowrap!important;
+    line-height:1!important;
+  }
+  .final-topbar .action-trial{
+    font-size:10px!important;
+  }
+  .market-one .mk-hero.hero{
+    padding-top:32px!important;
+  }
+}
+@media(max-width:350px){
+  .final-topbar .final-topbar-inner{
+    grid-template-columns:minmax(0,.9fr) minmax(0,1.32fr) minmax(0,.86fr)!important;
+    padding-left:9px!important;
+    padding-right:9px!important;
+  }
+  .final-topbar .quick-action:not(.action-menu){
+    font-size:9.6px!important;
+    padding-left:4px!important;
+    padding-right:4px!important;
+  }
+  .final-topbar .action-trial{font-size:9.2px!important}
+}
+</style>
 </head>
 <body class="market-v4">
 <header class="topbar final-topbar">
