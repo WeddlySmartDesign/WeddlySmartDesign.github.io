@@ -4,6 +4,7 @@ on:
     branches: [guest-independent]
     paths:
       - 'guest/**'
+      - 'guest*.html'
       - '.github/workflows/guest-independent-qa.yml'
   workflow_dispatch:
 jobs:
