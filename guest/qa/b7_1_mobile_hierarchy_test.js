@@ -46,6 +46,7 @@ async function runViewport(browser,width,height){
   await page.goto(base+'/guest/index.html',{waitUntil:'domcontentloaded'});
   const f=await core(page);
   await f.waitForFunction(()=>document.documentElement.dataset.guestVisualPremium==='1');
+  await f.waitForFunction(()=>document.querySelector('main.wrap>.brand b')?.textContent.trim()==='GUEST'&&document.querySelector('main.wrap>.brand span')?.textContent.includes('WeddlySmartDesign'),null,{timeout:5000});
   await noOverflow(f);
 
   const brand=await f.locator('main.wrap>.brand').evaluate(el=>({
