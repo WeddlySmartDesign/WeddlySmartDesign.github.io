@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 if(window.__wsdRsvpServicesHotfix)return;window.__wsdRsvpServicesHotfix=true;
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',TOKEN='weddly_shared_wedding_token',LOCAL='weddly_wedding_services_v1';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp',TOKEN='weddly_shared_wedding_token',LOCAL='weddly_wedding_services_v1';
 function en(){try{const x=JSON.parse(localStorage.getItem('weddly_pro_v7')||'null'),v=x?.settings?.lang;if(v==='en')return true;if(v==='es')return false}catch{}return false}
 const T=(es,enText)=>en()?enText:es;
 function ensureRow(){let q=document.getElementById('accommodationQ');if(q)return q;const plus=document.getElementById('plusQ'),ref=plus?.closest('.question');if(!ref)return null;const row=document.createElement('label');row.className='question';row.innerHTML=`<div><b>${T('Alojamiento','Accommodation')}</b><span>${T('Pregunta quién se queda a dormir o necesita alojamiento.','Ask who will stay overnight or needs accommodation.')}</span></div><input id="accommodationQ" type="checkbox">`;ref.before(row);return row.querySelector('input')}
