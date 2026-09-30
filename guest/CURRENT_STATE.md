@@ -46,29 +46,15 @@ Validated functional commit for B7.4:
 
 ## Exact current failure
 B7.5 active.
-Premium visual layer for Eventos extra has been added and loaded:
-`guest/guest-visual-extra-events-v1.js`
+First visual QA failure was a proven test-assumption error: the real product intentionally keeps the event guest list collapsed behind the compact selector. The test tried to click a hidden checkbox directly.
 
-Visual QA added:
-`guest/qa/b7_5_extra_events_visual_test.js`
+No product change was made. QA now follows the visible product flow (`Mostrar invitados` → select guest).
 
-Current scope implemented:
-- premium GUEST brand hierarchy on Eventos;
-- lighter top heading/status;
-- clearer event tabs;
-- cleaner event-detail card;
-- distinct active/deactivate vs inactive/activate states;
-- simplified invited summary;
-- clearer guest-selection area and group controls;
-- invitation block and invitation sheet hierarchy;
-- mobile overflow/touch rules;
-- continued visual removal of payments/tasks from GUEST scope.
-
-Latest workflow commit:
-`156e8c29a1c2d04400dc00a571f71dfe9cc20811`
+QA fix commit:
+`d15347eca160433e6a67d0ae13becc17ec7abf65`
 
 ## NEXT ACTION
-Read CI for `156e8c29a1c2d04400dc00a571f71dfe9cc20811`. If B7.5 fails, use only the exact logged failure and distinguish product defects from test assumptions. Continue until the full matrix is green, then seal B7.5 and advance to B7.6 global/desktop/accessibility.
+Read CI for `d15347eca160433e6a67d0ae13becc17ec7abf65`. If B7.5 fails again, use only the exact logged failure. Continue until the full matrix is green, then seal B7.5 and advance to B7.6 global/desktop/accessibility.
 
 ## Working method from now on
 Every microblock has only three states:
