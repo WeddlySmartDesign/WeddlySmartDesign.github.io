@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Weddly Smart Design · Invitados personalizado</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:#f5f1ea;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#2c2a26}body{overflow:hidden}#app{width:100%;height:100%;border:0;display:block;background:#f5f1ea}.drawer{display:none;position:fixed;z-index:9999;inset:0;background:#0007;align-items:flex-end}.drawer.on{display:flex}.panel{width:100%;max-width:760px;margin:auto;background:#fff;border-radius:26px 26px 0 0;padding:22px 22px calc(24px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}.panel h2{font:500 34px Georgia,serif;margin:5px 0 6px}.small{font-size:14px;color:#706b65;line-height:1.45}.field{width:100%;padding:13px 14px;border:1px solid #cec6bc;border-radius:13px;font-size:16px;background:#fff;margin:6px 0 13px}.styles{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0 18px}.style{border:1px solid #ddd5c8;border-radius:15px;background:#fff;padding:10px;text-align:left;font-weight:800}.style.on{outline:2px solid #2c2a26}.sw{height:48px;border-radius:10px;margin-bottom:7px}.at{background:#27231f}.ol{background:#6d7b62}.si{background:#a9664b}.pe{background:#9b7184}.no{background:#252623}.li{background:#171717}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.btn{border:0;border-radius:13px;padding:13px 14px;background:#2c2a26;color:#fff;font-weight:800;font-size:15px}.btn.soft{background:#eee8df;color:#2c2a26}.photoPreview{width:100%;height:150px;border-radius:16px;object-fit:cover;background:#eee8df;margin:6px 0 12px;display:none}.photoPreview.on{display:block}@media(max-width:560px){.styles{grid-template-columns:1fr 1fr}.panel{padding:20px 18px calc(22px + env(safe-area-inset-bottom))}}
+</style>
+</head>
+<body>
+<iframe id="app" src="guests-v114-integrated.html?v=131-personal-shell" title="Weddly Smart Design Invitados"></iframe>
+<div id="drawer" class="drawer"><div class="panel" id="panel">
+  <div class="small" style="text-transform:uppercase;letter-spacing:.12em;font-weight:800">Personalización</div>
+  <h2>Hazla vuestra</h2>
+  <div class="small">La funcionalidad sigue siendo la versión v131 validada. Aquí solo cambiamos identidad y diseño.</div>
+  <div class="styles" id="styles">
+    <button class="style" data-theme="atelier"><div class="sw at"></div>Atelier</button>
+    <button class="style" data-theme="oliva"><div class="sw ol"></div>Oliva</button>
+    <button class="style" data-theme="siena"><div class="sw si"></div>Siena</button>
+    <button class="style" data-theme="perla"><div class="sw pe"></div>Perla</button>
+    <button class="style" data-theme="noche"><div class="sw no"></div>Noche</button>
+    <button class="style" data-theme="linea"><div class="sw li"></div>Línea</button>
+  </div>
+  <label>Persona 1</label><input id="p1" class="field">
+  <label>Persona 2</label><input id="p2" class="field">
+  <label>Fecha de boda</label><input id="date" type="date" class="field">
+  <label>Lugar</label><input id="place" class="field" placeholder="Murcia">
+  <label>Foto de la pareja</label><input id="photo" type="file" accept="image/*" class="field">
+  <img id="photoPreview" class="photoPreview" alt="Vista previa">
+  <div class="actions"><button id="cancel" class="btn soft">Cancelar</button><button id="save" class="btn">Guardar</button></div>
+</div></div>
+<script>
+(()=>{
+const PKEY='weddly_personalization_v1',GKEY='weddly_guests_qa_v67';
+const app=document.getElementById('app'),drawer=document.getElementById('drawer');
+const themes={
+ atelier:{bg:'#f4efe8',surface:'#fffdf9',surface2:'#ece5dc',ink:'#27231f',muted:'#746d65',line:'#ddd3c6',accent:'#27231f',accentText:'#fff',radius:'22px',title:'Georgia,serif'},
+ oliva:{bg:'#f1f0e8',surface:'#fbfbf5',surface2:'#e2e6d6',ink:'#30352d',muted:'#6f7568',line:'#d1d7c7',accent:'#6d7b62',accentText:'#fff',radius:'20px',title:'Georgia,serif'},
+ siena:{bg:'#f6eee8',surface:'#fffaf6',surface2:'#efddd1',ink:'#3b2a23',muted:'#806b60',line:'#dfc9bd',accent:'#a9664b',accentText:'#fff',radius:'24px',title:'Georgia,serif'},
+ perla:{bg:'#faf3f5',surface:'#fffafc',surface2:'#f2e4e9',ink:'#513a45',muted:'#876d79',line:'#ead5dd',accent:'#9b7184',accentText:'#fffafc',radius:'28px',title:'Georgia,serif'},
+ noche:{bg:'#1f201f',surface:'#2a2b29',surface2:'#353632',ink:'#f4efe7',muted:'#b8b2aa',line:'#444540',accent:'#e6d6bb',accentText:'#24231f',radius:'17px',title:'Georgia,serif'},
+ linea:{bg:'#f6f6f4',surface:'#fff',surface2:'#ececea',ink:'#171717',muted:'#70706d',line:'#d9d9d4',accent:'#171717',accentText:'#fff',radius:'5px',title:'system-ui,-apple-system,Segoe UI,sans-serif'}
+};
+function infer(){let s={theme:'oliva',p1:'Daniela',p2:'Sergio',date:'2027-09-12',place:'Murcia',photo:''};try{const x=JSON.parse(localStorage.getItem(GKEY)||'null'),m=x?.meta||{};if(Array.isArray(m.couple)&&m.couple[0]&&m.couple[1]){s.p1=m.couple[0];s.p2=m.couple[1]}if(m.weddingDate)s.date=m.weddingDate}catch{}return s}
+function load(){try{return {...infer(),...(JSON.parse(localStorage.getItem(PKEY)||'null')||{})}}catch{return infer()}}
+let S=load();
+function saveS(){localStorage.setItem(PKEY,JSON.stringify(S))}
+function days(){if(!S.date)return'';const a=new Date();a.setHours(0,0,0,0);const b=new Date(S.date+'T00:00:00');const n=Math.ceil((b-a)/86400000);return n>=0?`Faltan ${n} días`:`Hace ${Math.abs(n)} días`}
+function fmtDate(){if(!S.date)return'Fecha pendiente';const d=new Date(S.date+'T12:00:00');return d.toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'})}
+function css(t){return `
+:root{--wsd-bg:${t.bg};--wsd-surface:${t.surface};--wsd-surface2:${t.surface2};--wsd-ink:${t.ink};--wsd-muted:${t.muted};--wsd-line:${t.line};--wsd-accent:${t.accent};--wsd-accentText:${t.accentText};--wsd-radius:${t.radius};--wsd-title:${t.title}}
+html,body{background:var(--wsd-bg)!important;color:var(--wsd-ink)!important}.wrap{max-width:760px!important}.card,.stat,.step,.table,.panel,.choice{background:var(--wsd-surface)!important;border-color:var(--wsd-line)!important;color:var(--wsd-ink)!important;border-radius:var(--wsd-radius)!important}.small,.weddingMeta,.choice .muted,.sectiontag{color:var(--wsd-muted)!important}.btn,.stepNum{background:var(--wsd-accent)!important;color:var(--wsd-accentText)!important}.btn.soft,.pill,.nav button.on,.helper,.bulkNames,.thead{background:var(--wsd-surface2)!important;color:var(--wsd-ink)!important}.btn.line{background:var(--wsd-surface)!important;color:var(--wsd-ink)!important;border-color:var(--wsd-line)!important}.nav{background:var(--wsd-surface)!important;border-color:var(--wsd-line)!important}.nav button{color:var(--wsd-ink)!important}.planLaunch{background:var(--wsd-accent)!important;color:var(--wsd-accentText)!important;border-radius:calc(var(--wsd-radius) + 2px)!important}.planLaunchCopy,.planLaunchTag{color:var(--wsd-accentText)!important;opacity:.78}.sheet{background:#0007!important}.field{background:var(--wsd-surface)!important;color:var(--wsd-ink)!important;border-color:var(--wsd-line)!important}#wsdHero{margin:0 0 24px}#wsdHero .cover{height:300px;border-radius:calc(var(--wsd-radius) + 5px);overflow:hidden;position:relative;background:var(--wsd-accent);box-shadow:0 18px 44px #00000014}#wsdHero .cover.hasPhoto:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,18,17,.58),rgba(20,18,17,.16) 62%,rgba(20,18,17,.04))}#wsdHero img{width:100%;height:100%;object-fit:cover;display:block}#wsdHero .copy{position:absolute;z-index:2;left:26px;right:26px;bottom:24px;color:#fff}#wsdHero .copy.dark{color:var(--wsd-accentText)}#wsdHero .brandline{font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:900;margin-bottom:8px;opacity:.85}#wsdHero .names{font:500 clamp(34px,7vw,58px)/1 var(--wsd-title);letter-spacing:-.02em;margin:0 0 8px}#wsdHero .meta{font-size:14px;opacity:.9}#wsdHero .days{display:inline-block;margin-top:12px;padding:8px 11px;border-radius:999px;background:#ffffffdd;color:#2c2a26;font-weight:850;font-size:13px}#wsdHero .edit{position:absolute;z-index:3;right:16px;top:16px;border:0;background:#fffffff0;color:#2c2a26;padding:10px 12px;border-radius:999px;font-weight:850;box-shadow:0 8px 24px #0002}#wsdHero .fallback{height:100%;display:flex;align-items:flex-end;padding:26px;background:var(--wsd-accent);color:var(--wsd-accentText)}@media(max-width:560px){#wsdHero .cover{height:220px}#wsdHero .copy{left:20px;right:20px;bottom:19px}#wsdHero .names{font-size:39px}}
+`}
+function heroHTML(){const photo=S.photo?`<img src="${S.photo}" alt="Foto de ${esc(S.p1)} y ${esc(S.p2)}">`:'';const cls=S.photo?'cover hasPhoto':'cover';return `<section id="wsdHero"><div class="${cls}">${photo||'<div class="fallback"></div>'}<button class="edit" type="button">Personalizar</button><div class="copy"><div class="brandline">Weddly Smart Design · Invitados</div><div class="names">${esc(S.p1)} & ${esc(S.p2)}</div><div class="meta">${esc(fmtDate())}${S.place?' · '+esc(S.place):''}</div>${days()?`<div class="days">${esc(days())}</div>`:''}</div></div></section>`}
+function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]))}
+function installInDocument(d,w){if(!d||!w)return;let st=d.getElementById('wsd-personal-style');if(!st){st=d.createElement('style');st.id='wsd-personal-style';d.head.appendChild(st)}st.textContent=css(themes[S.theme]||themes.oliva);const isGuests=d.getElementById('coupleTitle')&&d.getElementById('hoy');if(isGuests){d.querySelector('.brand')?.classList.add('hidden');d.getElementById('coupleTitle')?.classList.add('hidden');d.getElementById('weddingMeta')?.classList.add('hidden');let h=d.getElementById('wsdHero');if(!h){const main=d.querySelector('main.wrap');if(main){const tmp=d.createElement('div');tmp.innerHTML=heroHTML();h=tmp.firstElementChild;main.insertBefore(h,d.getElementById('hoy')||main.firstChild)}}else{const tmp=d.createElement('div');tmp.innerHTML=heroHTML();h.replaceWith(tmp.firstElementChild)}d.getElementById('wsdHero')?.querySelector('.edit')?.addEventListener('click',()=>parent.postMessage({type:'wsd-personalize'},location.origin));if(!d.documentElement.dataset.wsdCapture){d.documentElement.dataset.wsdCapture='1';d.addEventListener('click',e=>{const r=e.target.closest?.('#rsvpBtn');if(r){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();const desktop=matchMedia('(hover:hover) and (pointer:fine)').matches;app.src=(desktop?'guests-rsvp-desktop-v131.html':'guests-rsvp-v105-mobile.html')+'?v=personal-shell'}},true)}}else{styleRSVP(d,w)}}
+function styleRSVP(d,w){let st=d.getElementById('wsd-rsvp-style');if(!st){st=d.createElement('style');st.id='wsd-rsvp-style';d.head.appendChild(st)}st.textContent=`${css(themes[S.theme]||themes.oliva)} body{background:var(--wsd-bg)!important}.wrap{max-width:680px!important}.hero{background:var(--wsd-surface)!important;border-color:var(--wsd-line)!important}.tab.on{background:var(--wsd-accent)!important;color:var(--wsd-accentText)!important}.answer.sel{outline-color:var(--wsd-accent)!important}.where>div,.notice{background:var(--wsd-surface2)!important}.back{color:var(--wsd-ink)!important}#wsdRsvpIdentity{margin:0 0 18px}.rsvpCover{height:250px;border-radius:var(--wsd-radius);overflow:hidden;position:relative;background:var(--wsd-accent)}.rsvpCover img{width:100%;height:100%;object-fit:cover}.rsvpCover:after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(15,13,13,.56),rgba(15,13,13,.02) 65%)}.rsvpCover .rsvpCopy{position:absolute;z-index:2;left:22px;right:22px;bottom:18px;color:#fff}.rsvpCover .rsvpNames{font:500 42px/1 var(--wsd-title);margin-bottom:6px}.rsvpCover.noPhoto:after{display:none}.rsvpCover.noPhoto .rsvpCopy{color:var(--wsd-accentText)}@media(max-width:520px){.rsvpCover{height:210px}.rsvpCover .rsvpNames{font-size:36px}}`;
+const admin=d.getElementById('admin'),pub=d.getElementById('public');if(admin&&admin.style.display!=='none'){let id=d.getElementById('wsdRsvpIdentity');if(!id){id=d.createElement('div');id.id='wsdRsvpIdentity';const tabs=admin.querySelector('.tabs');tabs?.parentNode?.insertBefore(id,tabs)}if(id)id.innerHTML=rsvpHero('Así verán vuestra invitación');const back=admin.querySelector('.back');if(back){back.href='guests-v114-integrated.html?v=131#invitados';back.onclick=e=>{e.preventDefault();app.src='guests-v114-integrated.html?v=131#invitados'}}}
+if(pub&&pub.style.display!=='none'){let id=pub.querySelector('#wsdRsvpIdentity');if(!id){id=d.createElement('div');id.id='wsdRsvpIdentity';pub.insertBefore(id,pub.firstChild)}id.innerHTML=rsvpHero('Nuestra boda')}
+const nested=d.querySelector('iframe');if(nested){try{installInDocument(nested.contentDocument,nested.contentWindow)}catch{}}
+}
+function rsvpHero(label){return `<div class="rsvpCover ${S.photo?'':'noPhoto'}">${S.photo?`<img src="${S.photo}" alt="">`:''}<div class="rsvpCopy"><div style="font-size:11px;letter-spacing:.13em;text-transform:uppercase;font-weight:850;opacity:.8">${esc(label)}</div><div class="rsvpNames">${esc(S.p1)} & ${esc(S.p2)}</div><div>${esc(fmtDate())}${S.place?' · '+esc(S.place):''}</div></div></div>`}
+function apply(){try{const d=app.contentDocument,w=app.contentWindow;if(!d||!w)return;installInDocument(d,w);const nested=d.querySelector('iframe');if(nested){try{installInDocument(nested.contentDocument,nested.contentWindow)}catch{}}}catch(e){console.warn(e)}}
+app.addEventListener('load',()=>{apply();setTimeout(apply,120);setTimeout(apply,500);setTimeout(apply,1200)});
+window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data?.type==='wsd-personalize')openDrawer()});
+function openDrawer(){S=load();document.querySelectorAll('.style').forEach(b=>b.classList.toggle('on',b.dataset.theme===S.theme));p1.value=S.p1||'';p2.value=S.p2||'';date.value=S.date||'';place.value=S.place||'';photoPreview.src=S.photo||'';photoPreview.classList.toggle('on',!!S.photo);drawer.classList.add('on')}
+function closeDrawer(){drawer.classList.remove('on')}
+document.getElementById('styles').onclick=e=>{const b=e.target.closest('[data-theme]');if(!b)return;S.theme=b.dataset.theme;document.querySelectorAll('.style').forEach(x=>x.classList.toggle('on',x===b));apply()};
+photo.onchange=()=>{const f=photo.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>{S.photo=String(r.result||'');photoPreview.src=S.photo;photoPreview.classList.add('on')};r.readAsDataURL(f)};
+cancel.onclick=closeDrawer;drawer.onclick=e=>{if(e.target===drawer)closeDrawer()};save.onclick=()=>{S.p1=p1.value.trim()||'Persona 1';S.p2=p2.value.trim()||'Persona 2';S.date=date.value;S.place=place.value.trim();saveS();closeDrawer();apply()};
+window.openWeddlyPersonalization=openDrawer;
+})();
+</script>
+</body>
+</html>
