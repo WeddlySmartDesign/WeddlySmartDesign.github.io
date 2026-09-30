@@ -177,7 +177,7 @@ async function mock(page){
 
  // Event invitation is generated per selected invitation unit.
  await page.waitForSelector('#wsdEventInviteSection',{timeout:12000});
- await page.waitForFunction(()=>document.querySelectorAll('#wsdEventInviteSection .inviteRecipient').length===1,null,{timeout:12000});
+ await page.waitForSelector('#inviteEdit',{timeout:12000});
  let rs=recipientsByEvent.get(preId)||[];
  ok(rs.length===1&&rs[0].members.length===2,'selected unit not grouped into one event invitation');
  ok(rs[0].members.some(x=>x.id==='g1')&&rs[0].members.some(x=>x.id==='g2'),'event recipient members wrong');
@@ -202,6 +202,7 @@ async function mock(page){
  const payload=invitationByEvent.get(preId)||{};
  ok(payload.title==='Cena de bienvenida'&&payload.subtitle==='Nos vemos la víspera','event invitation payload not saved');
  ok(payload.secondPhoto===''||payload.secondPhoto==null,'event invitation retained forbidden second photo');
+ await page.waitForFunction(()=>document.querySelectorAll('#wsdEventInviteSection .inviteRecipient').length===1,null,{timeout:12000});
 
  // Public event invitation + independent RSVP.
  rs=recipientsByEvent.get(preId)||[];
