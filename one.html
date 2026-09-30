@@ -3361,6 +3361,44 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
  .market-one #pagos .mk-pay-row em{max-width:82px}
 }
 </style>
+<style id="public-trial-header-css">
+.final-topbar .primary-actions{grid-template-columns:1fr 1.42fr 1fr 1fr!important}
+.final-topbar .action-trial{background:#b97a5c;border-color:#b97a5c;color:#fff;box-shadow:0 7px 16px rgba(117,76,57,.16)}
+.final-topbar.dark-ui .action-trial{background:#cba28f;border-color:#cba28f;color:#211d1a}
+@media(max-width:699px){
+  .final-topbar{min-height:122px!important}
+  .final-topbar .final-topbar-inner{min-height:122px!important;grid-template-rows:24px auto!important;gap:6px!important;padding-top:6px!important;padding-bottom:6px!important}
+  .final-topbar .primary-actions{grid-template-columns:1fr 1fr!important;grid-template-rows:38px 38px;gap:6px!important}
+  .final-topbar .quick-action{min-height:38px!important;white-space:normal!important;text-align:center;line-height:1.12!important;padding-left:7px!important;padding-right:7px!important}
+  .final-topbar .brand{font-size:9px!important}
+}
+@media(min-width:700px){
+  .final-topbar .primary-actions{grid-template-columns:105px 154px 105px 105px!important}
+}
+.one-trial-dialog{width:min(92vw,500px);max-height:min(88dvh,700px);padding:0;border:0;border-radius:24px;background:#fbf8f3;color:#2c2a26;box-shadow:0 30px 90px rgba(28,22,19,.28)}
+.one-trial-dialog::backdrop{background:rgba(33,29,26,.55);backdrop-filter:blur(5px)}
+.one-trial-shell{padding:25px 24px 23px}
+.one-trial-top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.one-trial-brand{font-family:"Caveat","Segoe Print","Bradley Hand",cursive;font-size:22px;line-height:1;color:#8e6254;font-weight:600}
+.one-trial-close{width:38px;height:38px;border-radius:50%;border:1px solid #e4ded2;background:#fff;color:#2c2a26;font-size:22px;cursor:pointer}
+.one-trial-kicker{margin-top:20px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:850;color:#9b6957}
+.one-trial-dialog h2{margin:8px 0 10px;font:500 36px/.98 Georgia,"Times New Roman",serif;letter-spacing:-.03em}
+.one-trial-lead{margin:0;color:#736f63;font-size:14px;line-height:1.58}
+.one-trial-points{margin:18px 0;padding:0;list-style:none;display:grid;gap:9px}
+.one-trial-points li{display:flex;gap:9px;align-items:flex-start;font-size:13px;line-height:1.42;color:#514b46}
+.one-trial-points li:before{content:"✓";font-weight:900;color:#9b6957}
+.one-trial-field{display:grid;gap:7px;margin-top:18px}
+.one-trial-field label{font-size:11px;font-weight:800;color:#736f63}
+.one-trial-field input{width:100%;min-height:50px;border:1px solid #ddd5cb;border-radius:13px;padding:0 13px;background:#fff;color:#2c2a26;font-size:16px}
+.one-trial-field input:focus{outline:2px solid #b97a5c;border-color:transparent}
+.one-trial-submit{width:100%;min-height:52px;margin-top:12px;border:0;border-radius:13px;background:#211d1a;color:#fff;font-size:14px;font-weight:850;cursor:pointer}
+.one-trial-submit:disabled{opacity:.55;cursor:wait}
+.one-trial-msg{min-height:19px;margin-top:10px;font-size:12px;line-height:1.42;color:#736f63}
+.one-trial-msg.err{color:#a34d39}.one-trial-msg.ok{color:#5f6f52;font-weight:700}
+.one-trial-privacy{margin:12px 0 0;font-size:10.5px;line-height:1.45;color:#94887f}
+.one-trial-privacy button{border:0;background:none;padding:0;color:#786a62;text-decoration:underline;text-underline-offset:2px;font:inherit;cursor:pointer}
+.one-trial-existing{display:none;margin-top:12px;width:100%;min-height:48px;border:1px solid #ddd5cb;border-radius:13px;background:#fff;color:#2c2a26;font-size:13px;font-weight:800;cursor:pointer}
+</style>
 </head>
 <body class="market-v4">
 <header class="topbar final-topbar">
@@ -3369,6 +3407,7 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <div aria-hidden="true" class="chapter chapter-hidden" id="chapterLabel">ONE</div>
 <nav aria-label="Accesos principales" class="quick-actions primary-actions">
 <button aria-controls="oneDemo" aria-haspopup="dialog" class="quick-action action-demo" id="oneDemoOpen" type="button">Ver demo</button>
+<button aria-controls="oneTrialDialog" aria-haspopup="dialog" class="quick-action action-trial" id="oneTrialOpen" type="button">Probar gratis 14 días</button>
 <a class="quick-action action-buy" href="#comprar">Comprar</a>
 <button aria-controls="siteMenu" aria-haspopup="dialog" class="quick-action action-menu" id="siteMenuOpen" type="button">Menú</button>
 </nav>
@@ -4131,10 +4170,12 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <span>Datos identificativos completos disponibles en el Aviso legal.</span>
 </div>
 <h3>Qué datos pueden tratarse</h3>
-<p>Según el uso del servicio, pueden tratarse datos de contacto y soporte, información necesaria para la compra o activación y la información que la pareja introduzca voluntariamente en su boda: nombres, invitados, contactos seleccionados, respuestas RSVP, mesas, opciones de menú, transporte, alojamiento, eventos, planificación, proveedores, pagos, documentos y notas.</p>
+<p>Según el uso del servicio, pueden tratarse datos de contacto y soporte, información necesaria para la compra, activación o acceso de prueba y la información que la pareja introduzca voluntariamente en su boda: nombres, invitados, contactos seleccionados, respuestas RSVP, mesas, opciones de menú, transporte, alojamiento, eventos, planificación, proveedores, pagos, documentos y notas.</p>
+<p>Cuando se solicita desde la web una prueba gratuita de ONE, se facilita un email para gestionar el acceso, evitar pruebas duplicadas y enviar el enlace operativo de la prueba. Para la comprobación de duplicados, el servidor conserva una huella criptográfica del email. El email facilitado para este fin no se incorpora por defecto a listas de comunicaciones comerciales.</p>
 <h3>Para qué se utilizan</h3>
 <ul>
 <li>atender consultas y prestar soporte;</li>
+<li>gestionar las pruebas gratuitas, evitar solicitudes duplicadas y permitir su eventual conversión al acceso adquirido;</li>
 <li>verificar la compra, activar y mantener el acceso adquirido;</li>
 <li>guardar y sincronizar la información de la boda entre las dos personas autorizadas;</li>
 <li>prestar las funciones de invitados, RSVP, mesas, pagos, eventos y planning;</li>
@@ -4152,7 +4193,7 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <h3>Pagos</h3>
 <p>Los pagos se procesan mediante Stripe. WeddlySmartDesign puede recibir los datos necesarios para verificar la operación —por ejemplo, identificador de pago, estado, importe, moneda y email asociado—, pero no necesita almacenar el número completo de la tarjeta. Stripe trata los datos de pago conforme a sus propias condiciones y política de privacidad y, según la operación, puede actuar como proveedor de servicios de tratamiento y/o como responsable respecto de determinadas funciones propias.</p>
 <h3>Proveedores tecnológicos</h3>
-<p>ONE utiliza almacenamiento técnico en el dispositivo y sincronización remota para permitir el uso compartido por la pareja. La infraestructura actual utiliza GitHub Pages para archivos estáticos y Supabase para funciones de backend, almacenamiento, sincronización y medición estadística interna, además de Stripe para el procesamiento de pagos. Estos proveedores pueden utilizar subproveedores conforme a sus propias condiciones. Cuando resulte aplicable una transferencia internacional de datos, se utilizarán los mecanismos y garantías previstos en la normativa y en los acuerdos del proveedor correspondiente.</p>
+<p>ONE utiliza almacenamiento técnico en el dispositivo y sincronización remota para permitir el uso compartido por la pareja. La infraestructura actual utiliza GitHub Pages para archivos estáticos y Supabase para funciones de backend, almacenamiento, sincronización y medición estadística interna, Stripe para el procesamiento de pagos y Resend para el envío de correos transaccionales vinculados al acceso o la compra. Estos proveedores pueden utilizar subproveedores conforme a sus propias condiciones. Cuando resulte aplicable una transferencia internacional de datos, se utilizarán los mecanismos y garantías previstos en la normativa y en los acuerdos del proveedor correspondiente.</p>
 <h3>Medición estadística interna de la web</h3>
 <p>La web registra de forma interna y agregada visitas a la página de ONE, tiempo activo de navegación, profundidad de desplazamiento, secciones alcanzadas y algunos pasos del proceso comercial —por ejemplo, pulsar «Comprar», abrir el checkout o iniciarlo— para poder analizar el rendimiento de la web y la relación entre visitas y compras. Esta medición no utiliza cookies ni identificadores persistentes del navegador y no realiza seguimiento entre sitios. En la analítica no se guardan nombres, emails, direcciones IP ni datos de la boda. Se registran únicamente datos técnicos y de interacción de esa carga de página, el dominio de procedencia cuando exista, parámetros UTM si se han utilizado, una categoría general de dispositivo y, durante el proceso de compra, la edición seleccionada.</p>
 <p>El selector de contactos del dispositivo permite elegir contactos concretos; no implica subir automáticamente la agenda completa.</p>
@@ -4197,6 +4238,9 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <p>La licencia permite compartir la misma boda entre las dos personas autorizadas. La sincronización mantiene un único espacio de boda, aunque cada dispositivo pueda conservar determinadas preferencias visuales propias.</p>
 <h3>5. Duración</h3>
 <p>El acceso operativo permanece disponible hasta 90 días naturales después de la fecha de boda indicada en ONE. Si existe un aplazamiento real, puede modificarse la fecha manteniendo la licencia vinculada a la misma boda. Después del periodo operativo puede existir una ventana técnica adicional de hasta 30 días destinada a recuperación o incidencias antes de la eliminación de los datos operativos, sin perjuicio de los plazos legales de conservación de información de compra o facturación.</p>
+<h3>5 bis. Pruebas gratuitas</h3>
+<p>Cuando la web ofrezca una prueba gratuita, su duración se mostrará antes de activarla y no exigirá tarjeta ni generará un cobro automático. La prueba queda vinculada a una única boda y a un máximo de dos personas autorizadas. Para evitar usos repetidos puede limitarse a una prueba por email.</p>
+<p>Al finalizar la prueba se bloquea el acceso temporal. La información de esa boda puede mantenerse durante la ventana técnica necesaria para permitir la conversión a una compra o resolver incidencias, conforme a la Política de privacidad. Si la persona usuaria compra ONE mediante el flujo de conversión de la prueba, se mantiene el mismo espacio de boda y la información ya introducida, sin obligación de empezar de nuevo. La prueba no obliga a comprar.</p>
 <h3>6. Precio y pago</h3>
 <p>El precio final, impuestos aplicables y cualquier otro importe se mostrarán de forma clara antes de confirmar el pago. La compra es de pago único, sin cuotas periódicas, salvo que una oferta indique de forma expresa algo distinto. El pago se procesa mediante Stripe dentro del flujo de compra de WeddlySmartDesign. WeddlySmartDesign no necesita almacenar el número completo de la tarjeta.</p>
 <h3>7. Ediciones de ONE y servicios adicionales</h3>
@@ -6827,6 +6871,88 @@ document.addEventListener('change',e=>{
   send('checkout_start',{edition:selected?.getAttribute('data-edition')||null});
   flushEngagement();
 },true);
+})();
+</script>
+
+<script id="one-public-trial">
+(()=>{
+'use strict';
+const ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-public-trial';
+const TOKEN='weddly_shared_wedding_token';
+let dialog=null,busy=false;
+function currentToken(){try{return localStorage.getItem(TOKEN)||''}catch{return''}}
+function analytics(name,extra={}){try{window.__wsdSiteAnalytics?.(name,extra)}catch{}}
+function inject(){
+  if(document.getElementById('oneTrialDialog'))return;
+  const d=document.createElement('dialog');
+  d.id='oneTrialDialog';d.className='one-trial-dialog';d.setAttribute('aria-labelledby','oneTrialTitle');
+  d.innerHTML=`<div class="one-trial-shell">
+    <div class="one-trial-top"><div class="one-trial-brand">WeddlySmartDesign</div><button class="one-trial-close" type="button" aria-label="Cerrar">×</button></div>
+    <div class="one-trial-kicker">ONE · prueba completa</div>
+    <h2 id="oneTrialTitle">Pruébalo con vuestra boda.</h2>
+    <p class="one-trial-lead">14 días de acceso completo, sin tarjeta. Si después compráis ONE, continuaréis con esta misma boda y conservaréis lo que ya hayáis organizado.</p>
+    <ul class="one-trial-points"><li>Invitados, RSVP, mesas, pagos, Planning y eventos.</li><li>Una boda · hasta dos personas autorizadas.</li><li>La misma app completa que después podéis comprar.</li></ul>
+    <div class="one-trial-field"><label for="oneTrialEmail">Email</label><input id="oneTrialEmail" type="email" inputmode="email" autocomplete="email" maxlength="254" placeholder="vuestro@email.com"></div>
+    <button class="one-trial-submit" id="oneTrialStart" type="button">Empezar prueba gratuita</button>
+    <button class="one-trial-existing" id="oneTrialExisting" type="button">Abrir mi ONE</button>
+    <div class="one-trial-msg" id="oneTrialMsg" aria-live="polite"></div>
+    <p class="one-trial-privacy">El email se utiliza únicamente para gestionar la prueba, evitar duplicados y enviarte el enlace de acceso. No se añade a comunicaciones comerciales. <button id="oneTrialPrivacyOpen" type="button">Privacidad</button></p>
+  </div>`;
+  document.body.appendChild(d);dialog=d;
+  d.querySelector('.one-trial-close').onclick=()=>d.close();
+  d.addEventListener('click',e=>{if(e.target===d)d.close()});
+  d.querySelector('#oneTrialExisting').onclick=()=>location.href='/app.html';
+  d.querySelector('#oneTrialPrivacyOpen').onclick=()=>{d.close();const p=document.getElementById('privacy-policy');if(p?.showModal&&!p.open)p.showModal()};
+  d.querySelector('#oneTrialStart').onclick=start;
+  d.querySelector('#oneTrialEmail').addEventListener('keydown',e=>{if(e.key==='Enter')start()});
+}
+function openTrial(){
+  inject();analytics('trial_open',{source:'header_14d'});
+  const active=currentToken().length>=40;
+  dialog.querySelector('.one-trial-field').style.display=active?'none':'grid';
+  dialog.querySelector('#oneTrialStart').style.display=active?'none':'block';
+  dialog.querySelector('#oneTrialExisting').style.display=active?'block':'none';
+  const msg=dialog.querySelector('#oneTrialMsg');
+  msg.textContent=active?'Este navegador ya tiene un acceso de ONE. Puedes abrirlo directamente.':'';
+  msg.className='one-trial-msg';
+  if(typeof dialog.showModal==='function'&&!dialog.open)dialog.showModal();
+  if(!active)setTimeout(()=>dialog.querySelector('#oneTrialEmail')?.focus(),80);
+}
+async function start(){
+  if(busy)return;
+  const input=dialog.querySelector('#oneTrialEmail'),email=String(input.value||'').trim().toLowerCase();
+  const msg=dialog.querySelector('#oneTrialMsg'),btn=dialog.querySelector('#oneTrialStart');
+  if(!email||!email.includes('@')||email.startsWith('@')||email.endsWith('@')){
+    msg.textContent='Introduce un email válido.';msg.className='one-trial-msg err';return;
+  }
+  let completed=false;
+  busy=true;btn.disabled=true;btn.textContent='Preparando vuestra prueba…';msg.textContent='';msg.className='one-trial-msg';
+  analytics('trial_start',{source:'header_14d'});
+  try{
+    const r=await fetch(ACCESS,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'public_trial',email}),cache:'no-store'});
+    const x=await r.json().catch(()=>({}));
+    if(!r.ok||!x?.ok)throw new Error(x?.error||'trial_unavailable');
+    if(x.created)analytics('trial_created',{source:'header_14d'});
+    if(x.alreadyExists)analytics('trial_duplicate',{source:'header_14d'});
+    msg.textContent=x.alreadyExists
+      ?'Revisa tu email. Si ya habías solicitado la prueba, usa el enlace de acceso que te enviamos. Si ha pasado un tiempo, podemos habértelo reenviado.'
+      :'Listo. Te hemos enviado por email el enlace para abrir vuestra prueba de 14 días. Revisa también la carpeta de spam.';
+    msg.className='one-trial-msg ok';
+    input.disabled=true;
+    btn.textContent='Enlace enviado';
+    btn.disabled=true;
+    completed=true;
+  }catch{
+    analytics('trial_error',{source:'header_14d'});
+    msg.textContent='No hemos podido preparar la prueba ahora mismo. Inténtalo de nuevo en unos minutos.';
+    msg.className='one-trial-msg err';
+  }finally{
+    busy=false;
+    if(!completed){btn.disabled=false;btn.textContent='Empezar prueba gratuita'}
+  }
+}
+function boot(){inject();document.getElementById('oneTrialOpen')?.addEventListener('click',openTrial)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
 </script>
 
