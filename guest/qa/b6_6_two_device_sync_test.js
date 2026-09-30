@@ -98,9 +98,10 @@ async function setState(page,mutator){
   },src);
 }
 (async()=>{
-  const browser=await chromium.launch({headless:true});
-  const ca=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
-  const cb=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+  // Use two browser processes to model two real devices without background-tab timer throttling.
+  const browserA=await chromium.launch({headless:true}),browserB=await chromium.launch({headless:true});
+  const ca=await browserA.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+  const cb=await browserB.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
   const a=await ca.newPage(),b=await cb.newPage();await mock(a,TOKENS.a);await mock(b,TOKENS.b);
 
   // Both authorized devices bootstrap from the same remote wedding.
@@ -175,14 +176,14 @@ async function setState(page,mutator){
   await a.evaluate(()=>window.dispatchEvent(new Event('focus')));await waitLocal(a,null,'recovered');
 
   // Network failure with local copy opens safely; without local copy gives explicit retry.
-  const cl=await browser.newContext({viewport:{width:390,height:844},isMobile:true});
+  const cl=await browserA.newContext({viewport:{width:390,height:844},isMobile:true});
   const localPage=await cl.newPage();await mock(localPage,TOKENS.local);offline.add(TOKENS.local);
   await localPage.addInitScript(({initial})=>localStorage.setItem('weddly_guests_qa_v67',JSON.stringify(initial)),{initial});
   await localPage.goto(base+'/guest/index.html',{waitUntil:'domcontentloaded'});
   await coreFrame(localPage);
   ok((await localPage.locator('#msg').innerText()).includes('Sin conexión'),'offline local-copy boot message missing');
 
-  const cd=await browser.newContext({viewport:{width:390,height:844},isMobile:true});
+  const cd=await browserA.newContext({viewport:{width:390,height:844},isMobile:true});
   const deadPage=await cd.newPage();await mock(deadPage,TOKENS.dead);
   await deadPage.goto(base+'/guest/index.html',{waitUntil:'domcontentloaded'});
   await deadPage.waitForSelector('#wsdAccessLock',{timeout:5000});
@@ -194,6 +195,6 @@ async function setState(page,mutator){
   ok(legacy.length===0,'ONE backend called in two-device QA: '+legacy.join(','));
   ok(errors.length===0,'browser errors: '+errors.join(' | '));
 
-  await Promise.all([ca.close(),cb.close(),cl.close(),cd.close()]);await browser.close();
+  await Promise.all([ca.close(),cb.close(),cl.close(),cd.close()]);await Promise.all([browserA.close(),browserB.close()]);
   console.log('B6.6 two-device sync and errors: PASS');
 })().catch(e=>{console.error('B6.6 FAIL:',e.stack||e);process.exit(1)});
