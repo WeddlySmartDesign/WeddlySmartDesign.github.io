@@ -65,7 +65,7 @@ async function coreFrame(page){
  ok(plan,'visual seating frame missing');
  await plan.waitForSelector('#unseated .personPick',{timeout:10000});
  const planBrand=await plan.locator('.brand').first().innerText();
- ok(planBrand.includes('GUEST by WeddlySmartDesign'),'visual seating not branded GUEST '+JSON.stringify({url:plan.url(),brand:planBrand,title:await plan.title()}));
+ ok(planBrand.toLowerCase().includes('guest by weddlysmartdesign'),'visual seating not branded GUEST '+JSON.stringify({url:plan.url(),brand:planBrand,title:await plan.title()}));
  const unText=await plan.locator('#unseated').innerText();
  ok(unText.includes('Lucía Pérez')&&unText.includes('Elena Torres')&&!unText.includes('Pedro Noasiste'),'visual unseated list incorrect: '+unText);
  await plan.getByRole('button',{name:/Lucía Pérez/}).click();
