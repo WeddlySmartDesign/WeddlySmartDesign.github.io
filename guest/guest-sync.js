@@ -136,7 +136,7 @@
   }
   Storage.prototype.setItem=function(k,v){const r=OUTER_SET.call(this,k,v);if(this===localStorage&&String(k)===G.KEY){markDirty(String(v));queue()}return r};
   setInterval(()=>{if(syncIdentityNow())return;const raw=read();if(G.remote){G.remote=false;G.last=raw;return}if(raw!==G.last){markDirty(raw);queue()}},300);
-  addEventListener('storage',e=>{if(e.key==='weddly_pro_v7')syncIdentityNow();if(e.key===G.KEY&&e.newValue!==null){markDirty(e.newValue);queue()}});
+  addEventListener('storage',e=>{if(e.key==='wsd_guest_profile_v1')syncIdentityNow();if(e.key===G.KEY&&e.newValue!==null){markDirty(e.newValue);queue()}});
   setInterval(poll,5000);addEventListener('online',()=>{syncIdentityNow();queue();poll()});addEventListener('focus',poll);addEventListener('pageshow',poll);document.addEventListener('visibilitychange',()=>{if(!document.hidden)poll()});
   start();
 })();
