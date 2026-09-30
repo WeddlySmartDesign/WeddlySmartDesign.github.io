@@ -772,7 +772,7 @@ body:has(#app:not([hidden])){overflow:hidden}
     </section>
 
     <div class="dashboard-footline dashboard-foot-actions">
-      <span>Datos internos · sin cookies de seguimiento</span>
+      <span>Datos internos · Analytics v13</span>
       <button class="journal-open" id="actionsBtn" type="button">Acciones</button>
     </div>
   </main>
@@ -1282,7 +1282,15 @@ $('loginForm').addEventListener('submit',async e=>{
 $('ranges').addEventListener('click',e=>{
   const b=e.target.closest('[data-range]');if(b)load(b.dataset.range);
 });
-$('refreshBtn').addEventListener('click',()=>load(currentRange));
+$('refreshBtn').addEventListener('click',async()=>{
+  if('serviceWorker' in navigator){
+    try{
+      const reg=await navigator.serviceWorker.getRegistration('./');
+      await reg?.update();
+    }catch(_){}
+  }
+  await load(currentRange);
+});
 
 const installBtn=$('installBtn');
 const installHelp=$('installHelp');
@@ -1327,17 +1335,25 @@ $('installHelpClose').addEventListener('click',()=>installHelp.close());
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js?v=12',{scope:'./',updateViaCache:'none'})
+    navigator.serviceWorker.register('./sw.js?v=13',{scope:'./',updateViaCache:'none'})
       .then(reg=>reg.update().catch(()=>{}))
       .catch(()=>{});
   },{once:true});
-}
+
   navigator.serviceWorker.addEventListener('controllerchange',()=>{
-    const key='wsd_analytics_sw_v12_reload';
+    const key='wsd_analytics_sw_v13_reload';
     if(sessionStorage.getItem(key)==='1')return;
     sessionStorage.setItem(key,'1');
     location.reload();
   });
+
+  document.addEventListener('visibilitychange',()=>{
+    if(document.visibilityState!=='visible')return;
+    navigator.serviceWorker.getRegistration('./')
+      .then(reg=>reg?.update())
+      .catch(()=>{});
+  });
+}
 updateInstallButton();
 const actionsPanel=$('actionsPanel');
 
