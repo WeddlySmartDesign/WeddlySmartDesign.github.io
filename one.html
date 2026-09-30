@@ -6781,11 +6781,17 @@ document.addEventListener('click',e=>{
     ? e.target.closest('.action-buy,#buyOneButton,.purchase-guide-buy,#oneDemoBuy')
     : null;
   if(!el)return;
+
+  // Capture where the visitor actually was when using the fixed header CTA.
+  tick();
+  updatePosition();
+
   let element='buy';
-  if(el.id==='buyOneButton')element='main_buy';
-  else if(el.id==='oneDemoBuy')element='demo_buy';
-  else if(el.classList.contains('purchase-guide-buy'))element='menu_buy';
-  else if(el.closest('.final-topbar'))element='header_buy';
+  if(el.id==='buyOneButton')element='price_buy';
+  else if(el.id==='oneDemoBuy')element='demo_interest';
+  else if(el.classList.contains('purchase-guide-buy'))element='guide_buy';
+  else if(el.closest('.final-topbar'))element='header_buy:'+(currentSection||'unknown');
+
   send('buy_click',{element});
   flushEngagement();
 },true);
