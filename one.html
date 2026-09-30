@@ -3393,7 +3393,7 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 .one-trial-submit{width:100%;min-height:52px;margin-top:12px;border:0;border-radius:13px;background:#211d1a;color:#fff;font-size:14px;font-weight:850;cursor:pointer}
 .one-trial-submit:disabled{opacity:.55;cursor:wait}
 .one-trial-msg{min-height:19px;margin-top:10px;font-size:12px;line-height:1.42;color:#736f63}
-.one-trial-msg.err{color:#a34d39}
+.one-trial-msg.err{color:#a34d39}.one-trial-msg.ok{color:#5f6f52;font-weight:700}
 .one-trial-privacy{margin:12px 0 0;font-size:10.5px;line-height:1.45;color:#94887f}
 .one-trial-privacy button{border:0;background:none;padding:0;color:#786a62;text-decoration:underline;text-underline-offset:2px;font:inherit;cursor:pointer}
 .one-trial-existing{display:none;margin-top:12px;width:100%;min-height:48px;border:1px solid #ddd5cb;border-radius:13px;background:#fff;color:#2c2a26;font-size:13px;font-weight:800;cursor:pointer}
@@ -6924,6 +6924,7 @@ async function start(){
   if(!email||!email.includes('@')||email.startsWith('@')||email.endsWith('@')){
     msg.textContent='Introduce un email válido.';msg.className='one-trial-msg err';return;
   }
+  let completed=false;
   busy=true;btn.disabled=true;btn.textContent='Preparando vuestra prueba…';msg.textContent='';msg.className='one-trial-msg';
   analytics('trial_start',{source:'header_14d'});
   try{
@@ -6940,13 +6941,14 @@ async function start(){
     input.disabled=true;
     btn.textContent='Enlace enviado';
     btn.disabled=true;
-    return;
+    completed=true;
   }catch{
     analytics('trial_error',{source:'header_14d'});
     msg.textContent='No hemos podido preparar la prueba ahora mismo. Inténtalo de nuevo en unos minutos.';
     msg.className='one-trial-msg err';
   }finally{
-    busy=false;btn.disabled=false;btn.textContent='Empezar prueba gratuita';
+    busy=false;
+    if(!completed){btn.disabled=false;btn.textContent='Empezar prueba gratuita'}
   }
 }
 function boot(){inject();document.getElementById('oneTrialOpen')?.addEventListener('click',openTrial)}
