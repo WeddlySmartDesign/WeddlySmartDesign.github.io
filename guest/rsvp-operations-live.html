@@ -15,7 +15,7 @@ function injectRuntime(h,effective){
   if(!h.includes('<base '))h=h.replace('<head>','<head>'+base);
   const tokenScript='<script>(()=>{const __effective='+JSON.stringify(effective)+';const __nativeGet=Storage.prototype.getItem;Storage.prototype.getItem=function(k){if(this===localStorage&&k===\"wsd_guest_access_token_v1\")return __effective;return __nativeGet.call(this,k)}})();'+close;
   h=h.replace('<body>','<body>'+tokenScript);
-  const files=['guests-rsvp-operations-polish-v1.js?v=133','guests-rsvp-segments-v1.js?v=1','guests-rsvp-operations-feedback-v1.js?v=2','guests-rsvp-share-primary-v1.js?v=3','rsvp-share-composer.js?v=3','guests-rsvp-contact-picker-v1.js?v=2','guests-rsvp-operations-clarity-v1.js?v=2','guests-rsvp-operations-flow-v1.js?v=3','guests-rsvp-custom-answers-v1.js?v=1','guests-rsvp-children-answers-v1.js?v=1','guests-rsvp-plusone-ops-v1.js?v=4','rsvp-manual-parity.js?v=1'];
+  const files=['guests-rsvp-operations-polish-v1.js?v=133','guests-rsvp-operations-feedback-v1.js?v=2','guests-rsvp-share-primary-v1.js?v=3','rsvp-share-composer.js?v=3','guests-rsvp-contact-picker-v1.js?v=2','guests-rsvp-operations-clarity-v1.js?v=2','guests-rsvp-operations-flow-v1.js?v=3','guests-rsvp-custom-answers-v1.js?v=1','guests-rsvp-children-answers-v1.js?v=1','guests-rsvp-plusone-ops-v1.js?v=4','rsvp-manual-parity.js?v=1'];
   const extras=files.map(src=>'<script src="'+src+'">'+close).join('');
   return h.replace('</body>',extras+'</body>');
 }
