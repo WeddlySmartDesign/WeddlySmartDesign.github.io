@@ -77,7 +77,9 @@ async function runViewport(browser,width,height){
   const groupTargets=await page.locator('#wsdEventGroupTools button').evaluateAll(xs=>xs.map(x=>x.getBoundingClientRect().height));
   ok(groupTargets.every(h=>h>=41),'group selection targets too small: '+groupTargets.join(','));
 
-  // Select one real guest and verify the invitation block becomes a clear next step.
+  // Select one real guest through the visible compact-list flow and verify the invitation block becomes a clear next step.
+  await page.locator('#wsdEventGuestCompact [data-wsd-eg-toggle]').click();
+  await page.waitForSelector('#guestList [data-guest="g1"]',{state:'visible',timeout:5000});
   const g1=page.locator('#guestList [data-guest="g1"]');
   await g1.check();
   await page.waitForFunction(()=>document.querySelector('#wsdEventInviteSection #inviteEdit'),null,{timeout:12000});
