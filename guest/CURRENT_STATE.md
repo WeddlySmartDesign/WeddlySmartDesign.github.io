@@ -41,13 +41,14 @@ B7.1 visual layer:
 `guest/guest-visual-premium-v1.js`
 
 ## Exact current failure
-B7.1 ACTIVE. Premium mobile hierarchy layer and dedicated browser QA are now in place. No failure identified yet.
+B7.1 ACTIVE.
+First visual QA failure was a false assumption: the active navigation color is intentionally supplied by the currently selected GUEST theme, so it must not be hard-coded to one olive value. The premium layer controls hierarchy/shape/tap targets while preserving theme color.
 
-Latest workflow commit:
-`181574c7d36ffdb935f5484075e99c25cdc8aae8`
+Latest QA commit:
+`0ce5cab63a036a11dab41edc6269e467b98d9c68`
 
 ## NEXT ACTION
-Read CI for `181574c7d36ffdb935f5484075e99c25cdc8aae8`. Fix only exact B7.1 failures. Preserve all B6 behavior. When regression + B6.1–B6.6 + B7.1 are PASS, seal B7.1 and advance to B7.2 Hoy/Invitados.
+Read CI for `0ce5cab63a036a11dab41edc6269e467b98d9c68`. Fix only exact B7.1 failures. Preserve all B6 behavior and theme selection. When regression + B6.1–B6.6 + B7.1 are PASS, seal B7.1 and advance to B7.2 Hoy/Invitados.
 
 ## Working method from now on
 Every microblock has only three states:
