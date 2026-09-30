@@ -20,6 +20,7 @@
   try{
     const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':token},body:JSON.stringify({action:'entitlement'}),cache:'no-store'});
     const x=await r.json().catch(()=>({}));
+    if(r.status===410&&x?.error==='trial_expired'&&x?.convertible!==false){location.replace('/trial-buy.html?expired=1');return}
     if(!r.ok||!x.ok){try{localStorage.removeItem(TOKEN)}catch{}location.replace('/access.html');return}
     if(x.product==='guests'){location.replace('/guests.html');return}
     if(x.product==='full'){location.replace('/app.html');return}

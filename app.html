@@ -22,31 +22,34 @@
 :root[data-theme="editorial"]{--bg:#F0ECE8;--paper:#FBF8F5;--line:#DED6D0;--soft:#EFE8E4;--accent:#6B5B52;--dark:#443833;--ink:#2A2421}
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{height:100dvh;display:flex;flex-direction:column;background:var(--bg)}.global{flex:0 0 auto;background:var(--paper);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 10px 9px}.brandrow{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;max-width:760px;margin:0 auto 8px}.brand{color:var(--dark);line-height:1}.brand b{display:block;font:700 22px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.08em}.brand span{display:block;font-family:"Caveat","Segoe Print","Bradley Hand",cursive;font-size:18px;line-height:.9;margin-top:3px;color:var(--muted);font-weight:600;letter-spacing:0;white-space:nowrap}.suiteLabel{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:750}.tabs{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:3px;padding:4px;background:var(--soft);border:1px solid var(--line);border-radius:14px}.tab{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:8px 4px;font-size:12px;font-weight:780;cursor:pointer;min-height:38px;white-space:nowrap;box-shadow:none}.tab.on{background:var(--dark);color:#fff;box-shadow:0 2px 8px rgba(44,42,38,.12)}.stage{position:relative;flex:1 1 auto;min-height:0;background:var(--bg)}.pane{position:absolute;inset:0;display:none;width:100%;height:100%;border:0;background:var(--bg)}.pane.on{display:block}.loading{position:absolute;inset:0;display:grid;place-items:center;background:var(--bg);color:var(--muted);font-size:13px;z-index:3}.loading.off{display:none}.error{display:none;position:absolute;inset:0;place-items:center;padding:28px;text-align:center;background:var(--bg);z-index:4}.error.on{display:grid}.error .card{max-width:420px;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:22px}.error button{border:0;border-radius:11px;background:var(--dark);color:#fff;padding:12px 15px;font-weight:750;margin-top:12px}.toast{position:fixed;z-index:50;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);max-width:min(520px,calc(100vw - 32px));background:var(--ink);color:#fff;border-radius:14px;padding:12px 15px;font-size:13px;line-height:1.4;box-shadow:0 10px 30px #0003;opacity:0;pointer-events:none;transition:.18s}.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(min-width:760px){.global{padding-left:20px;padding-right:20px}.tab{font-size:14px}}
+.trialNotice{position:fixed;inset:0;z-index:90;display:none;place-items:center;padding:20px;background:rgba(44,42,38,.42);backdrop-filter:blur(5px)}.trialNotice.on{display:grid}.trialCard{width:min(100%,430px);background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:0 22px 70px rgba(44,42,38,.22)}.trialEyebrow{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--accent);font-weight:850}.trialCard h2{margin:9px 0 8px;font:500 28px/1.05 Georgia,"Times New Roman",serif;color:var(--ink)}.trialCard p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}.trialActions{display:grid;grid-template-columns:1fr 1.15fr;gap:9px;margin-top:20px}.trialActions button{min-height:48px;border-radius:12px;padding:11px 12px;font-size:13px;font-weight:800;cursor:pointer}.trialLater{border:1px solid var(--line);background:transparent;color:var(--muted)}.trialBuy{border:0;background:var(--dark);color:#fff}@media(max-width:390px){.trialCard{padding:21px}.trialCard h2{font-size:26px}.trialActions{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="shell">
 <header class="global"><div class="brandrow"><div class="brand"><b>ONE</b><span>by WeddlySmartDesign</span></div><div class="suiteLabel" id="suiteLabel">Vuestra boda</div></div><nav class="tabs" aria-label="Módulos"><button class="tab" data-view="payments">Pagos</button><button class="tab" data-view="guests">Invitados</button><button class="tab" data-view="planning">Planning</button><button class="tab" data-view="settings">Ajustes</button></nav></header>
 <main class="stage"><div class="loading" id="loading">Abriendo vuestra boda…</div><iframe class="pane" id="paymentsFrame" title="ONE by WeddlySmartDesign · Pagos"></iframe><iframe class="pane" id="guestsFrame" title="ONE by WeddlySmartDesign · Invitados"></iframe><iframe class="pane" id="planningFrame" title="ONE by WeddlySmartDesign · Planning"></iframe><iframe class="pane" id="auxFrame" title="ONE by WeddlySmartDesign"></iframe><div class="error" id="error"><div class="card"><b>No hemos podido abrir este módulo.</b><div style="margin-top:7px;color:var(--muted);font-size:13px">Comprueba la conexión y vuelve a intentarlo.</div><button id="retry">Reintentar</button></div></div></main>
-</div><div class="toast" id="toast" aria-live="polite"></div>
+</div><div class="toast" id="toast" aria-live="polite"></div><div class="trialNotice" id="trialNotice" aria-hidden="true"><section class="trialCard" role="dialog" aria-modal="true" aria-labelledby="trialNoticeTitle"><div class="trialEyebrow" id="trialNoticeEyebrow">Prueba de ONE</div><h2 id="trialNoticeTitle"></h2><p id="trialNoticeText"></p><div class="trialActions"><button class="trialLater" id="trialNoticeLater" type="button">Ahora no</button><button class="trialBuy" id="trialNoticeBuy" type="button">Comprar ONE</button></div></section></div>
 <script>
 (()=>{
 'use strict';
 const TOKEN='weddly_shared_wedding_token',PAY='weddly_pro_v7',GUESTKEY='weddly_guests_qa_v67',THEME1='weddly_personal_theme_v51',THEME2='weddly_personal_theme_v20',LAST='weddly_suite_last_module',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access';
 const payFrame=document.getElementById('paymentsFrame'),guestFrame=document.getElementById('guestsFrame'),planningFrame=document.getElementById('planningFrame'),auxFrame=document.getElementById('auxFrame'),loading=document.getElementById('loading'),error=document.getElementById('error'),toast=document.getElementById('toast'),tabs=[...document.querySelectorAll('.tab')];
-let current='payments',auxMode='',theme='',installPrompt=null,toastTimer=null,identityMark='',eventsBackArmed=false,eventsReturnUrl='guests-rsvp-form-flow.html?v=6-stable-runtime';
+let current='payments',auxMode='',theme='',installPrompt=null,toastTimer=null,identityMark='',eventsBackArmed=false,eventsReturnUrl='guests-rsvp-form-flow.html?v=6-stable-runtime',accessStatus=null;
 const loaded={payments:false,guests:false,planning:false},observers=new WeakMap();
 function accessToken(){try{return localStorage.getItem(TOKEN)||''}catch{return''}}
 function hasAccess(){return accessToken().length>=40}
 function clearAccessToken(){try{localStorage.removeItem(TOKEN)}catch{}try{document.cookie='weddly_member_access=; Path=/; Max-Age=0; SameSite=Lax; Secure'}catch{}}
 async function validateAccess(){
-  const token=accessToken();if(token.length<40)return'invalid';
+  const token=accessToken();if(token.length<40)return{state:'invalid',data:null};
   try{
     const r=await fetch(ACCESS,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':token},body:JSON.stringify({action:'status'}),cache:'no-store'});
-    if(r.ok)return'valid';
-    if(r.status===401||r.status===403||r.status===410)return'invalid';
-    return'unknown';
-  }catch{return'unknown'}
+    const x=await r.json().catch(()=>({}));
+    if(r.ok&&x?.ok)return{state:'valid',data:x};
+    if(r.status===410&&x?.error==='trial_expired')return{state:'trial_expired',data:x};
+    if(r.status===401||r.status===403||r.status===410)return{state:'invalid',data:x};
+    return{state:'unknown',data:x};
+  }catch{return{state:'unknown',data:null}}
 }
 function demoMode(){try{const q=new URLSearchParams(location.search).get('ownerDemo');if(q==='es'||q==='en')return q;const m=localStorage.getItem('weddly_owner_demo_mode');return m==='es'||m==='en'?m:''}catch{return''}}
 function lang(){try{const m=demoMode(),k=m?PAY+'_owner_demo_'+m:PAY,x=JSON.parse(localStorage.getItem(k)||'null'),v=x?.settings?.lang;if(v==='es'||v==='en')return v;if(m)return m}catch{}try{const v=localStorage.getItem('weddly_access_lang');if(v==='es'||v==='en')return v}catch{}return(navigator.language||'').toLowerCase().startsWith('es')?'es':'en'}
@@ -55,6 +58,25 @@ function translate(){const c=copy[lang()];document.documentElement.lang=lang();d
 function themeRead(){try{const v=localStorage.getItem(THEME1)||localStorage.getItem(THEME2)||'nordic';return['nordic','blush','sand','slate','editorial'].includes(v)?v:'nordic'}catch{return'nordic'}}
 function applyTheme(){const v=themeRead();if(v!==theme){theme=v;document.documentElement.dataset.theme=v}}
 function showToast(text){clearTimeout(toastTimer);toast.textContent=text;toast.classList.add('on');toastTimer=setTimeout(()=>toast.classList.remove('on'),3600)}
+function trialNoticeKey(expiresAt){const d=new Date();return 'weddly_trial_notice_'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'_'+String(expiresAt||'')}
+function maybeShowTrialNotice(){
+  if(!accessStatus?.tester||!accessStatus?.expiresAt||accessStatus?.expiryRule!=='fixed'||demoMode())return;
+  const exp=new Date(accessStatus.expiresAt),now=new Date(),ms=exp-now;
+  if(!Number.isFinite(ms)||ms<=0)return;
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate()),expiryDay=new Date(exp.getFullYear(),exp.getMonth(),exp.getDate()),dayDiff=Math.round((expiryDay-today)/86400000);
+  if(dayDiff!==0&&dayDiff!==1)return;
+  const key=trialNoticeKey(accessStatus.expiresAt);
+  try{if(localStorage.getItem(key)==='dismissed')return}catch{}
+  const notice=document.getElementById('trialNotice'),title=document.getElementById('trialNoticeTitle'),textEl=document.getElementById('trialNoticeText'),later=document.getElementById('trialNoticeLater'),buy=document.getElementById('trialNoticeBuy'),eyebrow=document.getElementById('trialNoticeEyebrow');
+  const sameDay=now.getFullYear()===exp.getFullYear()&&now.getMonth()===exp.getMonth()&&now.getDate()===exp.getDate(),english=lang()==='en';
+  eyebrow.textContent=english?'ONE trial':'Prueba de ONE';
+  title.textContent=english?(sameDay?'Your trial ends today':'Your trial ends tomorrow'):(sameDay?'Tu prueba termina hoy':'Tu prueba termina mañana');
+  textEl.textContent=english?'Would you like to keep using ONE? If you buy it, this same wedding and everything you have already organised will stay in place.':'¿Quieres seguir usando ONE? Si compras, conservarás esta misma boda y todo lo que ya has organizado.';
+  later.textContent=english?'Not now':'Ahora no';buy.textContent=english?'Buy ONE':'Comprar ONE';
+  later.onclick=()=>{try{localStorage.setItem(key,'dismissed')}catch{}notice.classList.remove('on');notice.setAttribute('aria-hidden','true')};
+  buy.onclick=()=>location.assign('trial-buy.html');
+  notice.classList.add('on');notice.setAttribute('aria-hidden','false');
+}
 function addSuite(url){try{const u=new URL(url,location.href);u.searchParams.set('suite','1');u.searchParams.set('_wsd_suite','1');const demo=demoMode();if(demo)u.searchParams.set('ownerDemo',demo);return u.href}catch{return url}}
 function route(view){if(view==='payments')return addSuite('payments.html');if(view==='guests')return addSuite('guests.html');if(view==='planning')return addSuite('planning.html');return addSuite('weddly-settings.html')}
 function setActive(view){current=view;tabs.forEach(b=>b.classList.toggle('on',b.dataset.view===view));if(['payments','guests','planning'].includes(view))try{localStorage.setItem(LAST,view)}catch{}}
@@ -90,9 +112,11 @@ if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js?v=70').c
 async function boot(){
   if(!hasAccess()){location.replace('access.html');return}
   const gate=await validateAccess();
-  if(gate==='invalid'){clearAccessToken();location.replace('access.html?inactive=1');return}
+  if(gate.state==='trial_expired'){location.replace('trial-buy.html?expired=1');return}
+  if(gate.state==='invalid'){clearAccessToken();location.replace('access.html?inactive=1');return}
+  accessStatus=gate.data||null;
   document.documentElement.dataset.oneAccessValidated='1';
-  applyTheme();translate();identityMark=identitySignature();syncGuestIdentity(false);let first='payments';try{const x=localStorage.getItem(LAST);if(['payments','guests','planning'].includes(x))first=x}catch{}open(first);setTimeout(()=>{['payments','guests','planning'].filter(x=>x!==first).forEach((x,i)=>setTimeout(()=>ensure(x),i*250))},350);
+  applyTheme();translate();identityMark=identitySignature();syncGuestIdentity(false);let first='payments';try{const x=localStorage.getItem(LAST);if(['payments','guests','planning'].includes(x))first=x}catch{}open(first);setTimeout(()=>{['payments','guests','planning'].filter(x=>x!==first).forEach((x,i)=>setTimeout(()=>ensure(x),i*250))},350);setTimeout(maybeShowTrialNotice,650);
 }
 boot();
 })();

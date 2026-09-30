@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#FBF8F3">
+<title>ONE · Continuar con vuestra boda</title>
+<style>
+:root{--ink:#2C2A26;--paper:#FBF8F3;--bg:#F2EFE9;--line:#E4DED2;--muted:#736F63;--sage:#596248;--terr:#B9795E}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{min-height:100dvh;max-width:720px;margin:auto;background:var(--paper);padding:calc(28px + env(safe-area-inset-top)) 20px calc(34px + env(safe-area-inset-bottom))}
+.brand{font:600 19px/1.05 "Caveat","Segoe Print","Bradley Hand",cursive;color:var(--sage);margin-bottom:36px}.brand b{font-family:Georgia,serif;font-weight:500;font-size:27px;color:var(--ink);margin-right:7px}
+.kicker{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--terr);font-weight:850}h1{margin:9px 0 12px;font:500 clamp(34px,9vw,52px)/.98 Georgia,"Times New Roman",serif;letter-spacing:-.035em}.lead{margin:0;max-width:56ch;color:var(--muted);font-size:14px;line-height:1.6}
+.saved{margin-top:18px;padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#fff;font-size:13px;line-height:1.5}.saved strong{color:var(--sage)}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:26px}.plan{position:relative;border:1px solid var(--line);border-radius:17px;background:#fff;padding:17px;text-align:left;cursor:pointer;color:var(--ink)}.plan.on{outline:2px solid var(--sage);outline-offset:-2px}.plan small{display:block;color:var(--muted);font-size:11px;margin-bottom:7px}.plan b{display:block;font:500 23px/1 Georgia,serif}.price{display:block;margin-top:10px;font-size:22px;font-weight:850;color:var(--terr)}.desc{display:block;margin-top:8px;color:var(--muted);font-size:11.5px;line-height:1.4}
+.consent{display:flex;gap:10px;align-items:flex-start;margin-top:18px;padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff;font-size:11.5px;line-height:1.48;color:var(--muted)}.consent input{margin-top:3px;accent-color:var(--sage)}
+.pay{width:100%;min-height:54px;margin-top:12px;border:0;border-radius:13px;background:var(--ink);color:#fff;font-size:14px;font-weight:850;cursor:pointer}.pay:disabled{opacity:.45;cursor:not-allowed}
+.back{display:block;margin-top:13px;text-align:center;color:var(--muted);font-size:12px;text-decoration:none}.error{display:none;margin-top:18px;padding:13px 14px;border-radius:13px;background:#fff1ee;border:1px solid #e7c3b9;color:#8d4031;font-size:13px;line-height:1.45}.error.on{display:block}
+#checkoutWrap{display:none;margin-top:22px}#checkoutWrap.on{display:block}.checkoutHead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.checkoutHead b{font:500 20px/1.1 Georgia,serif}.checkoutHead button{border:0;background:transparent;color:var(--muted);text-decoration:underline;cursor:pointer}
+@media(max-width:520px){.plans{grid-template-columns:1fr}.brand{margin-bottom:28px}main{padding-left:17px;padding-right:17px}}
+</style>
+</head>
+<body>
+<main>
+<div class="brand"><b>ONE</b>by WeddlySmartDesign</div>
+<section id="chooser">
+  <div class="kicker" id="kicker">Tu prueba de ONE</div>
+  <h1 id="title">Seguid donde estabais.</h1>
+  <p class="lead" id="lead">Si decidís comprar ONE, esta misma boda seguirá siendo vuestra. No tendréis que volver a introducir nada.</p>
+  <div class="saved"><strong>Vuestros datos se mantienen.</strong> Invitados, RSVP, mesas, pagos, tareas, eventos y el resto de la información que ya habéis preparado seguirán en el mismo espacio.</div>
+  <div class="plans" id="plans">
+    <button class="plan on" type="button" data-edition="essential"><small>ONE</small><b>Essential</b><span class="price" id="priceEssential">—</span><span class="desc">ONE completo + 6 diseños Essential.</span></button>
+    <button class="plan" type="button" data-edition="signature"><small>ONE</small><b>Signature</b><span class="price" id="priceSignature">—</span><span class="desc">ONE completo + diseños Essential + Signature + personalización premium.</span></button>
+  </div>
+  <label class="consent"><input id="consent" type="checkbox"><span>Solicito expresamente que el suministro digital de ONE comience inmediatamente después del pago, durante el plazo de desistimiento. Sé y acepto que, una vez iniciado el suministro, perderé el derecho de desistimiento en los casos previstos legalmente. Acepto las Condiciones de contratación.</span></label>
+  <button class="pay" id="pay" type="button" disabled>Continuar al pago</button>
+  <a class="back" id="backApp" href="/app.html">Volver a ONE</a>
+  <div class="error" id="error"></div>
+</section>
+<section id="checkoutWrap">
+  <div class="checkoutHead"><b>Pago seguro</b><button id="change" type="button">Cambiar opción</button></div>
+  <div id="checkout"></div>
+</section>
+</main>
+<script>
+(()=>{
+'use strict';
+const TOKEN='weddly_shared_wedding_token';
+const ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access';
+const CHECKOUT='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout';
+const q=new URLSearchParams(location.search),expiredHint=q.get('expired')==='1';
+const $=id=>document.getElementById(id),chooser=$('chooser'),wrap=$('checkoutWrap'),pay=$('pay'),consent=$('consent'),err=$('error');
+let config=null,edition='essential',checkoutInstance=null,stripe=null;
+function token(){try{return localStorage.getItem(TOKEN)||''}catch{return''}}
+function showError(t){err.textContent=t;err.classList.add('on')}
+function money(cents){return(Number(cents||0)/100).toLocaleString('es-ES',{style:'currency',currency:'EUR'})}
+function loadStripeJs(){
+  if(window.Stripe)return Promise.resolve();
+  return new Promise((resolve,reject)=>{
+    const old=document.querySelector('script[data-wsd-stripe]');if(old){old.addEventListener('load',resolve,{once:true});old.addEventListener('error',reject,{once:true});return}
+    const s=document.createElement('script');s.src='https://js.stripe.com/clover/stripe.js';s.async=true;s.dataset.wsdStripe='1';s.onload=resolve;s.onerror=reject;document.head.appendChild(s);
+  });
+}
+async function validateTrial(){
+  const t=token();if(t.length<40)throw new Error('missing_trial');
+  const r=await fetch(ACCESS,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':t},body:JSON.stringify({action:'status'}),cache:'no-store'});
+  const x=await r.json().catch(()=>({}));
+  if(r.ok&&x?.ok){
+    if(!x.tester)throw new Error('not_trial');
+    return {expired:false,...x};
+  }
+  if(r.status===410&&x?.error==='trial_expired'&&x?.convertible!==false)return {expired:true,...x};
+  throw new Error('invalid_trial');
+}
+async function load(){
+  try{
+    const trial=await validateTrial();
+    if(trial.expired||expiredHint){
+      $('kicker').textContent='Tu prueba ha terminado';
+      $('title').textContent='Vuestra boda sigue guardada.';
+      $('lead').textContent='Si compráis ONE, recuperaréis el acceso a esta misma boda con todo lo que ya habíais organizado.';
+      $('backApp').style.display='none';
+    }
+    const r=await fetch(CHECKOUT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'config'}),cache:'no-store'});
+    const x=await r.json().catch(()=>({}));if(!r.ok||!x?.ok)throw new Error('config');
+    config=x;$('priceEssential').textContent=money(x.prices?.essential?.current);$('priceSignature').textContent=money(x.prices?.signature?.current);pay.disabled=!consent.checked;
+  }catch(e){
+    pay.disabled=true;
+    showError(e?.message==='not_trial'?'Este acceso ya no es una prueba. Abre ONE con normalidad.':'No hemos podido preparar la compra de esta prueba. Escríbenos antes de pagar para que podamos conservar vuestra boda.');
+  }
+}
+document.querySelectorAll('.plan').forEach(b=>b.onclick=()=>{edition=b.dataset.edition||'essential';document.querySelectorAll('.plan').forEach(x=>x.classList.toggle('on',x===b))});
+consent.onchange=()=>{pay.disabled=!consent.checked||!config};
+pay.onclick=async()=>{
+  if(!consent.checked||!config)return;
+  pay.disabled=true;pay.textContent='Preparando pago…';err.classList.remove('on');
+  try{
+    await loadStripeJs();
+    if(!stripe)stripe=window.Stripe(config.publishableKey);
+    const t=token();
+    checkoutInstance=await stripe.initEmbeddedCheckout({fetchClientSecret:async()=>{
+      const r=await fetch(CHECKOUT,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':t},body:JSON.stringify({action:'create',edition,immediateAccessConsent:true,requireTrialConversion:true}),cache:'no-store'});
+      const x=await r.json().catch(()=>({}));
+      if(!r.ok||!x?.ok||!x.clientSecret||x.trialConversion!==true)throw new Error('conversion_not_bound');
+      return x.clientSecret;
+    }});
+    chooser.style.display='none';wrap.classList.add('on');
+    checkoutInstance.mount('#checkout');
+  }catch{
+    try{checkoutInstance?.destroy?.()}catch{}checkoutInstance=null;
+    chooser.style.display='block';wrap.classList.remove('on');
+    showError('No hemos podido vincular el pago a vuestra prueba. No se ha cobrado nada. Inténtalo de nuevo o escríbenos.');
+    pay.disabled=false;pay.textContent='Continuar al pago';
+  }
+};
+$('change').onclick=()=>{try{checkoutInstance?.destroy?.()}catch{}checkoutInstance=null;document.getElementById('checkout').innerHTML='';wrap.classList.remove('on');chooser.style.display='block';pay.disabled=!consent.checked;pay.textContent='Continuar al pago'};
+load();
+})();
+</script>
+</body>
+</html>

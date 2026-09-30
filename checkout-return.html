@@ -58,13 +58,24 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
      const x=await r.json().catch(()=>({}));
      if(!r.ok||!x?.ok)throw new Error(x?.error||'status_failed');
      if(x.paid&&x.provisioned&&x.activationUrl){
-       title.textContent='Ya es vuestra.';
-       lead.textContent=x.edition==='signature'?'ONE Signature está preparado para vuestra boda.':'ONE Essential está preparado para vuestra boda.';
-       status.textContent=x.emailSent?'Pago confirmado · acceso preparado · email enviado.':'Pago confirmado · acceso preparado.';
-       activate.href=x.activationUrl;activate.classList.remove('hidden');
+       if(x.convertedTrial){
+         title.textContent='Seguís donde estabais.';
+         lead.textContent=(x.edition==='signature'?'ONE Signature':'ONE Essential')+' ya está activo sobre vuestra misma boda. Todo lo que habíais organizado se mantiene.';
+         status.textContent=x.emailSent?'Pago confirmado · prueba convertida · email enviado.':'Pago confirmado · prueba convertida.';
+         activate.textContent='Volver a mi ONE →';
+         activate.href='/app.html';
+         meta.textContent='No tienes que activar ni importar nada. Abre ONE y continúa exactamente donde lo dejaste.';
+       }else{
+         title.textContent='Ya es vuestra.';
+         lead.textContent=x.edition==='signature'?'ONE Signature está preparado para vuestra boda.':'ONE Essential está preparado para vuestra boda.';
+         status.textContent=x.emailSent?'Pago confirmado · acceso preparado · email enviado.':'Pago confirmado · acceso preparado.';
+         activate.textContent='Activar ONE →';
+         activate.href=x.activationUrl;
+         meta.textContent=x.emailSent?'Activa ONE en este móvil y guarda este email/confirmación como justificante de la compra.':'Activa ONE en este móvil y guarda la confirmación de compra. El acceso no depende del email.';
+       }
+       activate.classList.remove('hidden');
        purchase={...x,sessionId};
        saveConfirmation.classList.remove('hidden');
-       meta.textContent=x.emailSent?'Activa ONE en este móvil y guarda este email/confirmación como justificante de la compra.':'Activa ONE en este móvil y guarda la confirmación de compra. El acceso no depende del email.';
        history.replaceState(null,'',location.pathname+'?session_id='+encodeURIComponent(sessionId));
        return;
      }
@@ -104,9 +115,9 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
      'Pedido Stripe: '+sessionId,
      purchase.email?'Email: '+purchase.email:'',
      '',
-     'Acceso / activación:',
-     purchase.activationUrl||'',
-     purchase.activationCode?'Código de recuperación: '+purchase.activationCode:'',
+     purchase.convertedTrial?'Acceso: continúa desde la misma app de ONE.':'Acceso / activación:',
+     purchase.convertedTrial?'/app.html':(purchase.activationUrl||''),
+     (!purchase.convertedTrial&&purchase.activationCode)?'Código de activación: '+purchase.activationCode:'',
      '',
      'Consentimiento de acceso inmediato:',
      purchase.consentText||'',
