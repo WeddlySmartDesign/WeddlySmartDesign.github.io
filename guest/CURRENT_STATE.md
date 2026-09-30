@@ -43,13 +43,16 @@ Validated commit for B7.2:
 `6e551b901b4deb7820018268dbccea872efd9ba4`
 
 ## Exact current failure
-B7.3 ACTIVE. Premium visual layers for invitation design management, RSVP operations and public RSVP are loaded. Dedicated B7.3 browser QA is now in CI. No visual failure identified yet.
+B7.3 ACTIVE.
+Two QA issues identified from the first run:
+1. Regression gate rejected the intentional visual-script additions to the two public RSVP loader files; both loaders are now registered as controlled GUEST divergences.
+2. The B7.3 operations visual test opened operations directly without seeding the owner's local guest state. In production operations is entered from GUEST with that state already present. The test now seeds the validated guest state before opening operations.
 
-Latest workflow commit:
-`d5d5318d19a10c871c5ed47d2c703dcf50d15e68`
+Gate commit: `2f561a99c790abc938c4ff676e524eab2caefb4d`
+QA fix commit: `f311bdf0dfb055116dd8b1c36be7181408edfabd`
 
 ## NEXT ACTION
-Read CI for `d5d5318d19a10c871c5ed47d2c703dcf50d15e68`. Fix only exact B7.3 failures. Preserve B6.3 behavior, Essential/Signature template counts, RSVP payloads, public RSVP logic and GUEST isolation. When regression + B6.1–B6.6 + B7.1–B7.3 are PASS, seal B7.3 and advance to B7.4 Mesas/Listados.
+Rerun the full GUEST QA with B7.3. If regression or B7.3 fails, use only the exact logged failure. Preserve B6.3 behavior and all closed B7.1–B7.2 work. When all jobs through B7.3 are PASS, seal B7.3 and advance to B7.4 Mesas/Listados.
 
 ## Working method from now on
 Every microblock has only three states:
