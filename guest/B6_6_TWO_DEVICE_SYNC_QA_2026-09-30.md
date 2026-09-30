@@ -116,7 +116,27 @@ Resultados:
 - b6-extra-events: SUCCESS
 - b6-two-device-sync: SUCCESS
 
-## Criterio de cierre
+## Regresión posterior detectada durante B7.3
+
+Al repetir toda la batería durante B7.3 se detectó una carrera adicional real en la sincronización.
+
+### 4. Edición local inmediata tras recibir un cambio remoto
+
+Problema:
+Tras aplicar un estado remoto, `G.remote` indicaba al watcher de 300 ms que debía ignorar una iteración. La implementación anterior copiaba el `localStorage` actual a `G.last` y retornaba.
+
+Si la persona editaba algo en ese dispositivo justo después de recibir el cambio remoto y antes de esa iteración, el estado local ya incluía una modificación propia. Esa modificación podía quedar absorbida como si fuese parte del estado remoto y no se enviaba.
+
+Corrección:
+Al limpiar `G.remote`, solo se ignora la iteración si el estado local sigue siendo exactamente igual a `G.last`. Si ha cambiado, se trata como edición local real: se marca dirty y se programa el envío.
+
+Commit:
+`fbe380b7055fbed8f4b10c46c5812f9964fb21e2`
+
+Validación posterior:
+El job `b6-two-device-sync` volvió a SUCCESS junto con el resto de la batería en `bef69a9318c9f4af2a5a85880f4e7a5d1603bab2`.
+
+
 
 B6.6 = PASS.
 
