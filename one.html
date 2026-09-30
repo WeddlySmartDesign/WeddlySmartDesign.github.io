@@ -3395,6 +3395,7 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 .one-trial-msg{min-height:19px;margin-top:10px;font-size:12px;line-height:1.42;color:#736f63}
 .one-trial-msg.err{color:#a34d39}
 .one-trial-privacy{margin:12px 0 0;font-size:10.5px;line-height:1.45;color:#94887f}
+.one-trial-privacy button{border:0;background:none;padding:0;color:#786a62;text-decoration:underline;text-underline-offset:2px;font:inherit;cursor:pointer}
 .one-trial-existing{display:none;margin-top:12px;width:100%;min-height:48px;border:1px solid #ddd5cb;border-radius:13px;background:#fff;color:#2c2a26;font-size:13px;font-weight:800;cursor:pointer}
 </style>
 </head>
@@ -4168,10 +4169,12 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <span>Datos identificativos completos disponibles en el Aviso legal.</span>
 </div>
 <h3>Qué datos pueden tratarse</h3>
-<p>Según el uso del servicio, pueden tratarse datos de contacto y soporte, información necesaria para la compra o activación y la información que la pareja introduzca voluntariamente en su boda: nombres, invitados, contactos seleccionados, respuestas RSVP, mesas, opciones de menú, transporte, alojamiento, eventos, planificación, proveedores, pagos, documentos y notas.</p>
+<p>Según el uso del servicio, pueden tratarse datos de contacto y soporte, información necesaria para la compra, activación o acceso de prueba y la información que la pareja introduzca voluntariamente en su boda: nombres, invitados, contactos seleccionados, respuestas RSVP, mesas, opciones de menú, transporte, alojamiento, eventos, planificación, proveedores, pagos, documentos y notas.</p>
+<p>Cuando se solicita desde la web una prueba gratuita de ONE, se facilita un email para gestionar el acceso y evitar pruebas duplicadas. El servidor utiliza una huella criptográfica del email para esa comprobación; el email facilitado para este fin no se incorpora por defecto a listas de comunicaciones comerciales.</p>
 <h3>Para qué se utilizan</h3>
 <ul>
 <li>atender consultas y prestar soporte;</li>
+<li>gestionar las pruebas gratuitas, evitar solicitudes duplicadas y permitir su eventual conversión al acceso adquirido;</li>
 <li>verificar la compra, activar y mantener el acceso adquirido;</li>
 <li>guardar y sincronizar la información de la boda entre las dos personas autorizadas;</li>
 <li>prestar las funciones de invitados, RSVP, mesas, pagos, eventos y planning;</li>
@@ -4234,6 +4237,9 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <p>La licencia permite compartir la misma boda entre las dos personas autorizadas. La sincronización mantiene un único espacio de boda, aunque cada dispositivo pueda conservar determinadas preferencias visuales propias.</p>
 <h3>5. Duración</h3>
 <p>El acceso operativo permanece disponible hasta 90 días naturales después de la fecha de boda indicada en ONE. Si existe un aplazamiento real, puede modificarse la fecha manteniendo la licencia vinculada a la misma boda. Después del periodo operativo puede existir una ventana técnica adicional de hasta 30 días destinada a recuperación o incidencias antes de la eliminación de los datos operativos, sin perjuicio de los plazos legales de conservación de información de compra o facturación.</p>
+<h3>5 bis. Pruebas gratuitas</h3>
+<p>Cuando la web ofrezca una prueba gratuita, su duración se mostrará antes de activarla y no exigirá tarjeta ni generará un cobro automático. La prueba queda vinculada a una única boda y a un máximo de dos personas autorizadas. Para evitar usos repetidos puede limitarse a una prueba por email.</p>
+<p>Al finalizar la prueba se bloquea el acceso temporal. La información de esa boda puede mantenerse durante la ventana técnica necesaria para permitir la conversión a una compra o resolver incidencias, conforme a la Política de privacidad. Si la persona usuaria compra ONE mediante el flujo de conversión de la prueba, se mantiene el mismo espacio de boda y la información ya introducida, sin obligación de empezar de nuevo. La prueba no obliga a comprar.</p>
 <h3>6. Precio y pago</h3>
 <p>El precio final, impuestos aplicables y cualquier otro importe se mostrarán de forma clara antes de confirmar el pago. La compra es de pago único, sin cuotas periódicas, salvo que una oferta indique de forma expresa algo distinto. El pago se procesa mediante Stripe dentro del flujo de compra de WeddlySmartDesign. WeddlySmartDesign no necesita almacenar el número completo de la tarjeta.</p>
 <h3>7. Ediciones de ONE y servicios adicionales</h3>
@@ -6889,12 +6895,13 @@ function inject(){
     <button class="one-trial-submit" id="oneTrialStart" type="button">Empezar prueba gratuita</button>
     <button class="one-trial-existing" id="oneTrialExisting" type="button">Abrir mi ONE</button>
     <div class="one-trial-msg" id="oneTrialMsg" aria-live="polite"></div>
-    <p class="one-trial-privacy">El email se utiliza únicamente para gestionar el acceso de prueba y evitar pruebas duplicadas. No se añade a comunicaciones comerciales.</p>
+    <p class="one-trial-privacy">El email se utiliza únicamente para gestionar el acceso de prueba y evitar pruebas duplicadas. No se añade a comunicaciones comerciales. <button id="oneTrialPrivacyOpen" type="button">Privacidad</button></p>
   </div>`;
   document.body.appendChild(d);dialog=d;
   d.querySelector('.one-trial-close').onclick=()=>d.close();
   d.addEventListener('click',e=>{if(e.target===d)d.close()});
   d.querySelector('#oneTrialExisting').onclick=()=>location.href='/app.html';
+  d.querySelector('#oneTrialPrivacyOpen').onclick=()=>{d.close();const p=document.getElementById('privacy-policy');if(p?.showModal&&!p.open)p.showModal()};
   d.querySelector('#oneTrialStart').onclick=start;
   d.querySelector('#oneTrialEmail').addEventListener('keydown',e=>{if(e.key==='Enter')start()});
 }
