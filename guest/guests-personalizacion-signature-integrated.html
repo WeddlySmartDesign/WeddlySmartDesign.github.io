@@ -109,7 +109,7 @@ iframe{width:100%;height:100dvh;border:0;display:block}
       by('storyText').value=saved.storyText||'Nos hace mucha ilusión invitaros a nuestra boda y vivir juntos este día.';
       by('hotelName').value=saved.hotel?.name||'';by('hotelDesc').value=saved.hotel?.desc||'';by('hotelCode').value=saved.hotel?.code||'';by('hotelLink').value=saved.hotel?.link||'';
       by('dressNote').value=saved.dress?.note||'';by('giftText').value=saved.gift?.text||'';by('giftStrong').value=saved.gift?.strong||'';
-      by('playlistText').value=saved.playlist?.text||'';by('playlistLinkText').value=saved.playlist?.linkText||'';by('playlistLink').value=saved.playlist?.link||'';
+      by('playlistText').value=saved.playlist?.text||'';by('playlistLinkText').value=saved.playlist?.linkText||'';if(by('playlistLink'))by('playlistLink').value=saved.playlist?.link||'';
       by('infoExtraText').value=saved.infoExtra?.text||'';
       by('contact1Name').value=saved.contact1Name||saved.contactName||'';by('contact1Phone').value=saved.contact1Phone||saved.contactPhone||'';
       by('contact2Name').value=saved.contact2Name||'';by('contact2Phone').value=saved.contact2Phone||'';
@@ -134,7 +134,7 @@ iframe{width:100%;height:100dvh;border:0;display:block}
           agenda:(state.agenda||[]).map(x=>({...x})),venues:(state.venues||[]).map(x=>({...x})),transporte:(state.transporte||[]).map(x=>({...x})),galeria:[...(state.galeria||[])],
           hotel:{name:(by('hotelName').value||'').trim(),desc:(by('hotelDesc').value||'').trim(),code:(by('hotelCode').value||'').trim(),link:(by('hotelLink').value||'').trim(),photo:state.hotelPhoto||''},
           dress:{note:(by('dressNote').value||'').trim()},gift:{text:(by('giftText').value||'').trim(),strong:(by('giftStrong').value||'').trim()},
-          playlist:{text:(by('playlistText').value||'').trim(),linkText:(by('playlistLinkText').value||'').trim(),link:(by('playlistLink').value||'').trim()},
+          playlist:{text:(by('playlistText').value||'').trim(),linkText:(by('playlistLinkText').value||'').trim(),link:(by('playlistLink')?.value||'').trim()},
           infoExtra:{text:(by('infoExtraText').value||'').trim()},blocks,
           contact1Name:(by('contact1Name').value||'').trim(),contact1Phone:(by('contact1Phone').value||'').trim(),contact2Name:(by('contact2Name').value||'').trim(),contact2Phone:(by('contact2Phone').value||'').trim(),
           contactName:(by('contact1Name').value||'').trim(),contactPhone:(by('contact1Phone').value||'').trim(),whatsapp:digits?'https://wa.me/'+digits:'',
