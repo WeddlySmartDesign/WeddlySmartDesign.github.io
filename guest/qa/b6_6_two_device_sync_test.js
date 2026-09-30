@@ -91,8 +91,9 @@ async function modify(page,fn){
   },fn.toString().replace(/^\s*function\s*\w*\s*\(s\)\s*\{|^\s*s\s*=>\s*\{|\}\s*$/g,''));
 }
 async function setState(page,mutator){
-  const src=mutator.toString();
-  await page.evaluate(src=>{
+  // Real edits happen inside the frozen Guests core. Write through that frame so the integrity layer participates exactly as in production.
+  const frame=await coreFrame(page),src=mutator.toString();
+  await frame.evaluate(src=>{
     const k='weddly_guests_qa_v67',s=JSON.parse(localStorage.getItem(k)||'{}');
     const f=eval('('+src+')');f(s);localStorage.setItem(k,JSON.stringify(s));
   },src);
@@ -129,8 +130,8 @@ async function setState(page,mutator){
     setState(a,s=>{s.guests.g1.note='Cambio A'}),
     setState(b,s=>{s.guests.g2.note='Cambio B'})
   ]);
-  await sleep(1800);
-  ok(remote.guests.g1.note==='Cambio A'&&remote.guests.g2.note==='Cambio B','non-overlapping concurrent edits were not merged remotely: '+JSON.stringify(remote.guests));
+  for(let i=0;i<50&&!(remote.guests.g1.note==='Cambio A'&&remote.guests.g2.note==='Cambio B');i++)await sleep(150);
+  if(!(remote.guests.g1.note==='Cambio A'&&remote.guests.g2.note==='Cambio B')){const da=await a.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),g:window.__GuestsProd&&{ver:window.__GuestsProd.ver,last:window.__GuestsProd.last,pushing:window.__GuestsProd.pushing}})),db=await b.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),g:window.__GuestsProd&&{ver:window.__GuestsProd.ver,last:window.__GuestsProd.last,pushing:window.__GuestsProd.pushing}}));throw new Error('non-overlapping concurrent edits were not merged remotely '+JSON.stringify({remote,version,puts,da,db}))}
   await Promise.all([a.evaluate(()=>window.dispatchEvent(new Event('focus'))),b.evaluate(()=>window.dispatchEvent(new Event('focus')))]);
   await Promise.all([waitLocal(a,null,'merged'),waitLocal(b,null,'merged')]);
 
