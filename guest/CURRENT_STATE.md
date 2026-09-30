@@ -42,13 +42,14 @@ B7.2 visual layer:
 `guest/guest-visual-hoy-invitados-v1.js`
 
 ## Exact current failure
-B7.2 ACTIVE. Hoy + Invitados visual hierarchy and dedicated browser QA are now in place. No failure identified yet.
+B7.2 ACTIVE.
+First visual QA exposed a timing gap in the visual layer: `Cambios recientes` is rebuilt dynamically by the RSVP status module, so the premium class could be missing immediately after that rerender. The B7.2 visual layer now observes dynamic child changes and reapplies hierarchy in the next animation frame.
 
-Latest workflow commit:
-`cea56c7364e3bcc13bd3a622189b64d3a2aaf192`
+Product fix commit:
+`93b10e763c165c7e3abb0ab86ba81287d0ed2a5e`
 
 ## NEXT ACTION
-Read CI for `cea56c7364e3bcc13bd3a622189b64d3a2aaf192`. Fix only exact B7.2 failures. Preserve B6 functionality and B7.1 global hierarchy. When regression + B6.1–B6.6 + B7.1 + B7.2 are PASS, seal B7.2 and advance to B7.3 Invitación/RSVP.
+Rerun B7.2 visual QA with the dynamic-section fix. If B7.2 fails again, use only the exact logged failure. When regression + B6.1–B6.6 + B7.1 + B7.2 are PASS, seal B7.2 and advance to B7.3 Invitación/RSVP.
 
 ## Working method from now on
 Every microblock has only three states:
