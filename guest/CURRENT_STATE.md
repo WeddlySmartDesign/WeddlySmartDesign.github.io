@@ -40,14 +40,13 @@ Validated commit for B6.5:
 
 ## Exact current failure
 B6.6 active.
-The sync scheduler starvation defect is fixed. The next CI failure occurred in the simultaneous non-overlapping edit test because both simulated devices were tabs in one headless browser process; background-tab timer throttling delayed device B and invalidated the concurrency model.
+The scheduler starvation defect remains fixed. The concurrency test has now been made production-faithful: simulated edits are written through the live Guests core iframe so `guests-state-integrity-v1.js` participates exactly as it does for real user edits. The concurrency assertion also waits for the merged remote state and records both devices' sync internals if it still fails.
 
-QA now uses two separate Chromium processes to represent two real devices.
 Latest QA commit:
-`7fe520632fc3f2d3936ede2d99ae4f9583463674`
+`42965c73715c39dc744e78a4c2fa76df2919b037`
 
 ## NEXT ACTION
-Read CI for `7fe520632fc3f2d3936ede2d99ae4f9583463674`. If B6.6 fails, use only the exact logged failure. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
+Read CI for `42965c73715c39dc744e78a4c2fa76df2919b037`. If B6.6 fails, use only the exact logged diagnostics. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
 
 ## Working method from now on
 Every microblock has only three states:
