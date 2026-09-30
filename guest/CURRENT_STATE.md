@@ -20,6 +20,8 @@ Resume from the exact "NEXT ACTION" below.
 - B6.3 Invitation + RSVP + Essential/Signature — PASS / CLOSED
 - B6.4 Tables + lists — PASS / CLOSED
 - B6.5 Extra events — PASS / CLOSED
+- B6.6 Two-device synchronization + error states — PASS / CLOSED
+- B6 functional/mobile QA — PASS / SEALED
 
 B6.3 sealed report:
 guest/B6_3_INVITATION_RSVP_QA_2026-09-30.md
@@ -27,27 +29,28 @@ Validated commit:
 099ddf75524c9e2eed3e8e9298262f8ed4fcd3e7
 
 ## Current block
-B6.6 — Two-device synchronization + error states
+B7 — UX / visual premium review and simplification
 
 Current branch:
 `guest-independent`
 
-B6.5 sealed report:
-`guest/B6_5_EXTRA_EVENTS_QA_2026-09-30.md`
+B6.6 sealed report:
+`guest/B6_6_TWO_DEVICE_SYNC_QA_2026-09-30.md`
 
-Validated commit for B6.5:
-`ef1e1f5d714386535cf9e53ae4f4f472107fff2b`
+B6 checkpoint:
+`guest/CHECKPOINT_03_B6_SEALED_2026-09-30.md`
+
+Validated functional commit for B6:
+`d1cba6988daa14240981104eca71b1a5090bfdee`
 
 ## Exact current failure
-B6.6 active.
-Two-device synchronization, conflict handling, offline dirty-state recovery and retry flow all reached the end of the browser QA successfully. The remaining failure was a real visible branding defect in the inactive-access lock: it still displayed the old Weddly Smart Design heading instead of GUEST by WeddlySmartDesign.
-
-Product fixes:
-- inactive-access lock branded as GUEST: `24224e84441250db31a1539d4e4fd73b5c8038d4`
-- sync boot/error copy aligned from “Invitados” to “GUEST”: `fb75139774f325f742cb4af688c26b07c88f622c`
+None. B6.6 and full B6 are PASS / SEALED.
 
 ## NEXT ACTION
-Read CI for `fb75139774f325f742cb4af688c26b07c88f622c`. If B6.6 fails, use only the exact logged failure. If regression + B6.1–B6.6 all PASS, create the sealed B6.6 report, mark B6 fully closed, and set the next block to B7 UX/visual premium review.
+Start B7 only when continuing work.
+B7 scope: UX/visual premium review and simplification without adding new product features or reopening validated architecture.
+Order: B7.1 mobile hierarchy → B7.2 Hoy/Invitados → B7.3 Invitación/RSVP → B7.4 Mesas/Listados → B7.5 Eventos extra → B7.6 global/desktop/accessibility → B7.7 visual QA seal.
+Do not reopen B6 unless a regression job fails.
 
 ## Working method from now on
 Every microblock has only three states:
