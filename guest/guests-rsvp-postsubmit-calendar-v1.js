@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',q=new URLSearchParams(location.search),token=q.get('t')||'';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp',q=new URLSearchParams(location.search),token=q.get('t')||'';
 let configPromise=null,installed=false;
 function lang(){const v=q.get('lang');if(v==='es'||v==='en')return v;return(document.documentElement.lang||navigator.language||'es').toLowerCase().startsWith('en')?'en':'es'}
 const T=(es,en)=>lang()==='en'?en:es;
