@@ -98,6 +98,10 @@ function patch(){
   if(!d?.body)return;
   style(d);introHoy(d);introInvitados(d);recent(d);
   d.documentElement.dataset.guestB72='1';
+  if(d.documentElement.dataset.guestB72Observer!=='1'){
+    d.documentElement.dataset.guestB72Observer='1';
+    new MutationObserver(()=>requestAnimationFrame(patch)).observe(d.body,{childList:true,subtree:true});
+  }
 }
 G.f.addEventListener('load',()=>{[60,180,420,900].forEach(ms=>setTimeout(patch,ms))});
 addEventListener('guests-prod-open',patch);
