@@ -43,12 +43,16 @@ Validated commit for B7.2:
 `6e551b901b4deb7820018268dbccea872efd9ba4`
 
 ## Exact current failure
-B7.3 visual QA = PASS, regression gate = PASS. A closed B6.3 functional job failed once on `children opt-in was not persisted in config payload` inside `testFormFlow`. B7.3 does not load on `guests-rsvp-form-flow.html`, so this must be reproduced before changing product behavior.
+B7.3 visual QA is PASS. A clean rerun reproduced a REAL two-device race in the closed B6.6 sync layer: immediately after applying a remote update, `G.remote` caused the 300 ms watcher to copy the current localStorage into `G.last` and return. If the user made a local edit in that short window, that edit could be mistaken for the remote baseline and never be pushed.
 
-Current action: one clean full rerun without product changes to distinguish a flaky/timing failure from an actual regression.
+Minimal product fix in `guest/guests-production-sync.js`: when clearing `G.remote`, suppress only if the current raw state still equals the known remote `G.last`. If localStorage changed meanwhile, mark it dirty and queue it normally.
+
+Fix commit: `fbe380b7055fbed8f4b10c46c5812f9964fb21e2`
+
+The earlier B6.3 children assertion passed on the clean rerun, confirming that result was not a persistent product regression.
 
 ## NEXT ACTION
-Trigger one clean full QA rerun with no product change. If B6.3 passes, treat the prior result as test flake and seal B7.3 only after every job is green on the clean rerun. If B6.3 fails again on the same assertion, instrument only that test/flow and fix the exact cause before sealing B7.3.
+Run the complete QA on the sync-race fix. If all regression, B6.1–B6.6 and B7.1–B7.3 jobs pass, reseal B6.6 with this additional race fix noted, seal B7.3, and advance to B7.4 Mesas/Listados. If any job fails, use only its exact log.
 
 ## Working method from now on
 Every microblock has only three states:
