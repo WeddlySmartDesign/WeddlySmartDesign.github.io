@@ -32,11 +32,11 @@ async function waitLocal(page,pred,label,timeout=12000){
     try{
       const s=JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null');
       if(!s)return false;
-      if(label==='g1A')return s.guests?.g1?.group==='Amigos compartidos';
-      if(label==='merged')return s.guests?.g1?.meal==='Vegano'&&s.guests?.g2?.allergy==='Frutos secos';
-      if(label==='staleMerge')return s.guests?.g1?.allergy==='Gluten'&&s.guests?.g2?.transport==='Bus';
-      if(label==='conflictB')return s.guests?.g1?.group==='Familia B';
-      if(label==='recovered')return s.guests?.g2?.meal==='Vegetariano';
+      if(label==='g1A')return s.guests?.g1?.meal==='Vegano';
+      if(label==='merged')return s.guests?.g1?.transport===true&&s.guests?.g2?.meal==='Vegetariano';
+      if(label==='staleMerge')return s.guests?.g1?.transport===false&&s.guests?.g2?.meal==='Vegano';
+      if(label==='conflictB')return s.guests?.g1?.meal==='Sin lactosa';
+      if(label==='recovered')return s.guests?.g2?.transport===true;
       return false;
     }catch{return false}
   },{label},{timeout});
@@ -90,13 +90,13 @@ async function modify(page,fn){
     Function('s',src)(s);localStorage.setItem(k,JSON.stringify(s));
   },fn.toString().replace(/^\s*function\s*\w*\s*\(s\)\s*\{|^\s*s\s*=>\s*\{|\}\s*$/g,''));
 }
-async function setState(page,mutator){
-  // Real edits happen inside the frozen Guests core. Write through that frame so the integrity layer participates exactly as in production.
-  const frame=await coreFrame(page),src=mutator.toString();
-  await frame.evaluate(src=>{
-    const k='weddly_guests_qa_v67',s=JSON.parse(localStorage.getItem(k)||'{}');
-    const f=eval('('+src+')');f(s);localStorage.setItem(k,JSON.stringify(s));
-  },src);
+async function editGuestUi(page,id,{meal,transport}={}){
+  const frame=await coreFrame(page);
+  await frame.evaluate(id=>window.editGuest(id),id);
+  await frame.waitForSelector('#editSave',{timeout:5000});
+  if(meal!==undefined)await frame.locator('#eMeal').selectOption({label:meal});
+  if(transport!==undefined)await frame.locator('#eTransport').selectOption(transport?'yes':'no');
+  await frame.locator('#editSave').click();
 }
 (async()=>{
   // Use two browser processes to model two real devices without background-tab timer throttling.
@@ -117,51 +117,51 @@ async function setState(page,mutator){
   ok(await b.locator('#share').evaluate(x=>x.classList.contains('hidden')),'partner device should not expose invite action');
   await b.goto(base+'/guest/index.html',{waitUntil:'domcontentloaded'});await coreFrame(b);
 
-  // A change propagates to B. Keep the source device foregrounded, as a real edit happens on the active device.
+  // A real UI edit propagates to B.
   await a.bringToFront();await a.evaluate(()=>window.dispatchEvent(new Event('focus')));
-  await setState(a,s=>{s.guests.g1.group='Amigos compartidos'});
-  for(let i=0;i<60&&remote.guests.g1.group!=='Amigos compartidos';i++)await sleep(150);
-  if(remote.guests.g1.group!=='Amigos compartidos'){const dbg=await a.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),notice:document.getElementById('notice')?.textContent||''}));throw new Error('device A change did not reach backend '+JSON.stringify({dbg,remote,version,puts}))}
+  await editGuestUi(a,'g1',{meal:'Vegano'});
+  for(let i=0;i<60&&remote.guests.g1.meal!=='Vegano';i++)await sleep(150);
+  if(remote.guests.g1.meal!=='Vegano'){const dbg=await a.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),notice:document.getElementById('notice')?.textContent||''}));throw new Error('device A change did not reach backend '+JSON.stringify({dbg,remote,version,puts}))}
   await b.bringToFront();await b.evaluate(()=>window.dispatchEvent(new Event('focus')));
   await waitLocal(b,null,'g1A');
 
   // Concurrent non-overlapping edits must merge rather than overwrite each other.
   await Promise.all([
-    setState(a,s=>{s.guests.g1.meal='Vegano'}),
-    setState(b,s=>{s.guests.g2.allergy='Frutos secos'})
+    editGuestUi(a,'g1',{transport:true}),
+    editGuestUi(b,'g2',{meal:'Vegetariano'})
   ]);
-  for(let i=0;i<50&&!(remote.guests.g1.meal==='Vegano'&&remote.guests.g2.allergy==='Frutos secos');i++)await sleep(150);
-  if(!(remote.guests.g1.meal==='Vegano'&&remote.guests.g2.allergy==='Frutos secos')){const da=await a.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),g:window.__GuestsProd&&{ver:window.__GuestsProd.ver,last:window.__GuestsProd.last,pushing:window.__GuestsProd.pushing}})),db=await b.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),g:window.__GuestsProd&&{ver:window.__GuestsProd.ver,last:window.__GuestsProd.last,pushing:window.__GuestsProd.pushing}}));throw new Error('non-overlapping concurrent edits were not merged remotely '+JSON.stringify({remote,version,puts,da,db}))}
+  for(let i=0;i<50&&!(remote.guests.g1.transport===true&&remote.guests.g2.meal==='Vegetariano');i++)await sleep(150);
+  if(!(remote.guests.g1.transport===true&&remote.guests.g2.meal==='Vegetariano')){const da=await a.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),g:window.__GuestsProd&&{ver:window.__GuestsProd.ver,last:window.__GuestsProd.last,pushing:window.__GuestsProd.pushing}})),db=await b.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),g:window.__GuestsProd&&{ver:window.__GuestsProd.ver,last:window.__GuestsProd.last,pushing:window.__GuestsProd.pushing}}));throw new Error('non-overlapping concurrent edits were not merged remotely '+JSON.stringify({remote,version,puts,da,db}))}
   await Promise.all([a.evaluate(()=>window.dispatchEvent(new Event('focus'))),b.evaluate(()=>window.dispatchEvent(new Event('focus')))]);
   await Promise.all([waitLocal(a,null,'merged'),waitLocal(b,null,'merged')]);
 
   // Same-field conflict: deterministic second writer B must win locally and remotely, with conflict notice.
   await Promise.all([
-    setState(a,s=>{s.guests.g1.group='Familia A'}),
-    setState(b,s=>{s.guests.g1.group='Familia B'})
+    editGuestUi(a,'g1',{meal:'Celíaco'}),
+    editGuestUi(b,'g1',{meal:'Sin lactosa'})
   ]);
-  await sleep(1800);
-  ok(remote.guests.g1.group==='Familia B','same-field conflict did not preserve the second device local choice: '+remote.guests.g1.group);
+  for(let i=0;i<50&&remote.guests.g1.meal!=='Sin lactosa';i++)await sleep(150);
+  ok(remote.guests.g1.meal==='Sin lactosa','same-field conflict did not preserve the second device local choice: '+remote.guests.g1.meal);
   await a.evaluate(()=>window.dispatchEvent(new Event('focus')));await waitLocal(a,null,'conflictB');
   const conflictNotice=await b.locator('#notice').innerText().catch(()=> '');
   ok(/Cambio simultáneo|Cambios combinados/.test(conflictNotice)||puts.some(x=>x.member===TOKENS.b),'conflict resolution path did not execute');
 
   // Stale/offline device: preserve dirty local edit while A changes another field, then merge on reconnect.
   offline.add(TOKENS.b);
-  await setState(b,s=>{s.guests.g1.allergy='Gluten'});
+  await editGuestUi(b,'g1',{transport:false});
   await b.waitForFunction(()=>document.getElementById('notice')?.textContent==='Pendiente de conexión',null,{timeout:7000});
   const metaOffline=await b.evaluate(()=>JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'));
   ok(metaOffline.dirty===true,'offline edit not marked dirty');
-  ok(remote.guests.g1.allergy!=='Gluten','offline edit reached backend unexpectedly');
+  ok(remote.guests.g1.transport!==false,'offline edit reached backend unexpectedly');
 
-  await setState(a,s=>{s.guests.g2.transport='Bus'});
-  await sleep(1200);
-  ok(remote.guests.g2.transport==='Bus','online device edit did not reach backend during partner outage');
+  await editGuestUi(a,'g2',{meal:'Vegano'});
+  for(let i=0;i<50&&remote.guests.g2.meal!=='Vegano';i++)await sleep(150);
+  ok(remote.guests.g2.meal==='Vegano','online device edit did not reach backend during partner outage');
 
   offline.delete(TOKENS.b);
   await b.evaluate(()=>window.dispatchEvent(new Event('online')));
   await sleep(2200);
-  ok(remote.guests.g1.allergy==='Gluten'&&remote.guests.g2.transport==='Bus','stale-device recovery lost one side of the merge: '+JSON.stringify(remote.guests));
+  ok(remote.guests.g1.transport===false&&remote.guests.g2.meal==='Vegano','stale-device recovery lost one side of the merge: '+JSON.stringify(remote.guests));
   await Promise.all([a.evaluate(()=>window.dispatchEvent(new Event('focus'))),b.evaluate(()=>window.dispatchEvent(new Event('focus')))]);
   await Promise.all([waitLocal(a,null,'staleMerge'),waitLocal(b,null,'staleMerge')]);
   const metaRecovered=await b.evaluate(()=>JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'));
@@ -169,11 +169,11 @@ async function setState(page,mutator){
 
   // Another offline write should retry after online without requiring reload.
   offline.add(TOKENS.b);
-  await setState(b,s=>{s.guests.g2.meal='Vegetariano'});
+  await editGuestUi(b,'g2',{transport:true});
   await b.waitForFunction(()=>document.getElementById('notice')?.textContent==='Pendiente de conexión',null,{timeout:7000});
   offline.delete(TOKENS.b);await b.evaluate(()=>window.dispatchEvent(new Event('online')));
-  for(let i=0;i<50&&remote.guests.g2.meal!=='Vegetariano';i++)await sleep(150);
-  ok(remote.guests.g2.meal==='Vegetariano','online retry did not flush pending edit');
+  for(let i=0;i<50&&remote.guests.g2.transport!==true;i++)await sleep(150);
+  ok(remote.guests.g2.transport===true,'online retry did not flush pending edit');
   await a.evaluate(()=>window.dispatchEvent(new Event('focus')));await waitLocal(a,null,'recovered');
 
   // Network failure with local copy opens safely; without local copy gives explicit retry.
