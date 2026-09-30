@@ -168,6 +168,7 @@ async function testSinglePublic(context){
   ok(Array.isArray(body.children)&&body.children.length===1&&body.children[0].name==='Sofía','children details missing');
   await page.waitForSelector('.success',{timeout:10000});
   await page.waitForSelector('#wsdCalendarBtn',{timeout:10000});
+  await page.waitForSelector('#wsdCalendarDownload',{state:'visible',timeout:5000});
   ok(await page.locator('#wsdCalendarDownload').isVisible(),'secondary calendar action missing');
   ok(calls.legacy.length===0,'ONE backend called from public single RSVP: '+calls.legacy.join(','));
   await noOverflow(page,'public single RSVP');
