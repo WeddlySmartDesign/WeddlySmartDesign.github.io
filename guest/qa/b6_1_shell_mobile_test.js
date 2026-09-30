@@ -61,7 +61,8 @@ async function run(){
   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,permissions:['clipboard-read','clipboard-write']});
   const page=await context.newPage();
   page.on('pageerror',e=>errors.push('pageerror: '+e.message));
-  page.on('console',m=>{if(m.type()==='error'&&!/fonts\.googleapis|favicon/i.test(m.text()))errors.push('console: '+m.text())});
+  page.on('console',m=>{if(m.type()==='error'&&!/Failed to load resource|fonts\\.googleapis|favicon/i.test(m.text()))errors.push('console: '+m.text())});
+  page.on('response',r=>{try{const u=new URL(r.url()),b=new URL(base);if(r.status()>=400&&u.origin===b.origin&&u.pathname.startsWith('/guest/')&&!/favicon\\.ico$/.test(u.pathname))errors.push('http '+r.status()+': '+u.pathname)}catch{}});
   await mockApis(page);
 
   // Bootstrap + shell + latest ONE Guests navigation parity.
