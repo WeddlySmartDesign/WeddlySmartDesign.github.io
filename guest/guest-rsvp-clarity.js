@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 const G=window.__GuestsProd;if(!G)return;
-function lang(){try{const x=JSON.parse(localStorage.getItem('weddly_pro_v7')||'null'),v=x?.settings?.lang;if(v==='es'||v==='en')return v}catch{}try{const v=localStorage.getItem('weddly_access_lang');if(v==='es'||v==='en')return v}catch{}return'es'}
+function lang(){try{const x=JSON.parse(localStorage.getItem('wsd_guest_profile_v1')||'null'),v=x?.settings?.lang;if(v==='es'||v==='en')return v}catch{}try{const v=localStorage.getItem('weddly_access_lang');if(v==='es'||v==='en')return v}catch{}return'es'}
 const T=(es,en)=>lang()==='en'?en:es;
 const setText=(el,text)=>{if(el&&el.textContent!==text)el.textContent=text};
 function d(){try{return G.f?.contentDocument||null}catch{return null}}
