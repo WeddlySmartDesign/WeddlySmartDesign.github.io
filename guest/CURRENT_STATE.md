@@ -39,10 +39,13 @@ Validated commit for B6.5:
 `ef1e1f5d714386535cf9e53ae4f4f472107fff2b`
 
 ## Exact current failure
-None. B6.5 is PASS / SEALED.
+B6.6 active. Two-device browser QA has been created and added to CI. No product failure identified yet.
+
+Latest workflow commit:
+`9e8d3e57f166c67b345a0d8415ca9f08b7ebefcf`
 
 ## NEXT ACTION
-Start B6.6 only when continuing work. Scope: two-device synchronization, partner/joined-device behavior, concurrent edits/conflicts, stale-state recovery, offline/network failures, retry messages and data-integrity protections across the already closed B6.1–B6.5 flows. Do not reopen B6.5 unless a regression test fails.
+Read CI for `9e8d3e57f166c67b345a0d8415ca9f08b7ebefcf`. Use only the exact B6.6 logged failure. Fix product code only for real defects; adjust the test only for proven false assumptions. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6.
 
 ## Working method from now on
 Every microblock has only three states:
