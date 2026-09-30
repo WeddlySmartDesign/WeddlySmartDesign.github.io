@@ -238,7 +238,7 @@ async function mock(page){
  await page.locator('#newEventName').fill('Brunch');
  await page.locator('#newEventDate').fill('2027-09-13');
  await page.locator('#eventCreate').click();
- await page.waitForSelector('.eventTabs [data-tab].on',{timeout:8000});
+ await page.waitForFunction(()=>document.querySelectorAll('.eventTabs [data-tab]').length===2,null,{timeout:8000});
  const otherId=Object.keys(eventState.events).find(id=>id!==preId);
  ok(otherId&&eventState.events[otherId].enabled===false,'Other event must be inactive by default: '+JSON.stringify({preId,otherId,events:eventState.events}));
  ok((await page.locator('#disable').innerText())==='Activar','inactive extra event does not show Activate');
