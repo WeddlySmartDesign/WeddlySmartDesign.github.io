@@ -41,21 +41,20 @@ Current CI status at that HEAD:
 - b6-tables-lists: FAIL
 
 ## Exact current failure
-Catering summary bug fixed in product code.
+Catering summary bug fixed.
 Print/PDF QA stabilized.
 Custom RSVP list resilience fixed.
-Latest CI exposed active extra-event list polling still calling the ONE event-state endpoint during B6.4.
+Active extra-event list polling migrated to guest-event-state.
+Latest regression failure was only the controlled-diff gate not yet registering that intentional divergence; gate now updated.
 
-Product isolation fix:
-`0cc85e1990bf294f3bf1285684b58fd5cf68aca5`
-Regression gate extended:
-`42a954792da96fae65245d103d82d0624c3097fa`
+Gate fix commit:
+`12f5cf945d230e916e07ad5bcb7b094ccab0b0b4`
 
 Current status: CI validation pending.
 
 ## NEXT ACTION
-1. Read CI for commit `42a954792da96fae65245d103d82d0624c3097fa`.
-2. If b6-tables-lists fails, use only its exact logged failure.
+1. Read CI for commit `12f5cf945d230e916e07ad5bcb7b094ccab0b0b4`.
+2. If any job fails, use only its exact logged failure.
 3. If regression + B6.1 + B6.2 + B6.3 + B6.4 all PASS, create `guest/B6_4_TABLES_LISTS_QA_2026-09-30.md`, seal B6.4 and update this file to B6.5 Events extra.
 
 ## Working method from now on
