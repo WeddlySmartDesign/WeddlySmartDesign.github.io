@@ -21,9 +21,12 @@ async function centered(locator,maxWidth,label){
  ok(Math.abs(x.left-x.right)<=3,label+' not centered '+JSON.stringify(x));
 }
 async function focusVisible(locator,label){
+ // Prime Chromium's real keyboard modality with a trusted Tab key, then return focus to the target.
  await locator.focus();
- const x=await locator.evaluate(el=>{const s=getComputedStyle(el);return{style:s.outlineStyle,width:parseFloat(s.outlineWidth),offset:parseFloat(s.outlineOffset)}});
- ok(x.style!=='none'&&x.width>=2,label+' focus ring missing '+JSON.stringify(x));
+ await locator.press('Tab');
+ await locator.focus();
+ const x=await locator.evaluate(el=>{const s=getComputedStyle(el);return{focused:el===el.ownerDocument.activeElement,style:s.outlineStyle,width:parseFloat(s.outlineWidth),offset:parseFloat(s.outlineOffset)}});
+ ok(x.focused&&x.style!=='none'&&x.width>=2,label+' keyboard focus ring missing '+JSON.stringify(x));
 }
 async function makePage(context,edition='signature'){
  const page=await context.newPage();
