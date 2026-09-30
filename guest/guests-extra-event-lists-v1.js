@@ -2,7 +2,7 @@
 'use strict';
 const G=window.__GuestsProd;if(!G)return;
 const EVENT_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-event-state';
-const INVITE_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-event-invite';
+const INVITE_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-event-invite';
 const TOKEN='weddly_shared_wedding_token',GKEY=G.KEY||'weddly_guests_qa_v67';
 let reports=new Map(),busy=false,last=0,lastSig='';
 
