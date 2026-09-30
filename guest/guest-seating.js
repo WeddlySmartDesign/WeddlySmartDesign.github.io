@@ -271,7 +271,7 @@
       const doc=frame.contentDocument;
       if(!doc||!doc.documentElement||doc.documentElement.dataset[MARK])return;
       const href=String(frame.contentWindow?.location?.href||'');
-      if(!href.includes('guests-v081-visual-seating.html'))return;
+      if(!href.includes('seating.html'))return;
       doc.documentElement.dataset[MARK]='1';
       const s=doc.createElement('script');
       s.textContent='('+install.toString()+')();';
