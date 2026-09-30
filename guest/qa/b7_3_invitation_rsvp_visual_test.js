@@ -12,7 +12,7 @@ const cfg={title:'Pilar & Jorge',date:'2027-09-12',time:'18:00',venue:'Finca Los
 async function makePage(context,edition='essential'){
  const page=await context.newPage(),legacy=[],errors=[];
  let personalization={tier:edition,template:edition==='signature'?'sig01':'e01',fontPair:edition==='signature'?'moderno':'editorial',p1:'Pilar',p2:'Jorge',date:'2027-09-12',time:'18:00',venue:'Finca Los Olivos',city:'Murcia'};
- await page.addInitScript(({member})=>{localStorage.setItem('weddly_shared_wedding_token',member);localStorage.setItem('weddly_pro_v7',JSON.stringify({settings:{partner1:'Pilar',partner2:'Jorge',weddingDate:'2027-09-12',lang:'es'}}));},{member});
+ await page.addInitScript(({member,baseState})=>{localStorage.setItem('weddly_shared_wedding_token',member);localStorage.setItem('weddly_pro_v7',JSON.stringify({settings:{partner1:'Pilar',partner2:'Jorge',weddingDate:'2027-09-12',lang:'es'}}));localStorage.setItem('weddly_guests_qa_v67',JSON.stringify(baseState));},{member,baseState});
  page.on('pageerror',e=>errors.push(e.message));
  page.on('request',r=>{try{const u=new URL(r.url());if(u.hostname.includes('supabase.co')&&/\/functions\/v1\/weddly-/.test(u.pathname))legacy.push(u.pathname)}catch{}});
  await page.route('https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/**',async route=>{
