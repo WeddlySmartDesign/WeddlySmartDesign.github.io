@@ -136,7 +136,9 @@ async function coreFrame(page){
  ok(/Rev\. 1/.test(printText)&&/WSD-MES-R01-C\d{3}/.test(printText),'print/PDF table report missing controlled-copy metadata');
  await popup.close();
 
- // Custom RSVP list must remain isolated and exportable.
+ // Custom RSVP list must remain isolated and exportable. Controlled-copy metadata writes may trigger a core sync reload, so reacquire the live frame.
+ core=await coreFrame(page);
+ await core.locator('#nav button[data-go="listados"]').click();
  await core.waitForSelector('[data-wsd-q-list]',{timeout:10000});
  const qcard=core.locator('[data-wsd-q-list]').filter({hasText:'Canción favorita'}).first();
  ok(await qcard.isVisible(),'custom RSVP list missing');
