@@ -159,11 +159,15 @@ iframe{width:100%;height:100dvh;border:0;display:block}
     if(installed)return;
     try{
       const d=frame.contentDocument,w=frame.contentWindow;if(!d?.body||!d.getElementById('tplGrid'))return;
-      await resolve();installed=true;inject(d,w);bootEl.classList.add('hide');
-    }catch(e){bootEl.innerHTML='<div class="card"><h1>No se ha podido abrir Signature</h1><p>Comprueba la conexión y vuelve a intentarlo.</p></div>'}
+      let ready=false;try{ready=!!w.eval('typeof state!=="undefined"&&typeof TEMPLATES!=="undefined"&&typeof FONT_PAIRS!=="undefined"&&typeof buildTemplateGrid==="function"&&typeof buildFontGrid==="function"&&typeof buildAgendaFields==="function"&&typeof buildVenueFields==="function"&&typeof buildTransporteFields==="function"&&typeof renderPreview==="function"')}catch{}
+      if(!ready)return;
+      await resolve();inject(d,w);
+      if(typeof w.__weddlySaveEssential!=='function')return;
+      installed=true;bootEl.classList.add('hide');
+    }catch(e){console.error('[GUEST Signature integration]',e)}
   }
-  frame.addEventListener('load',()=>{setTimeout(install,60);setTimeout(install,300)});
-  setTimeout(install,800);
+  frame.addEventListener('load',()=>{[60,180,400,800].forEach(ms=>setTimeout(install,ms))});
+  [500,1000,1800].forEach(ms=>setTimeout(install,ms));
 })();
 </script>
 </body>
