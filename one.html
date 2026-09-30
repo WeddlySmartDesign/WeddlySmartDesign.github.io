@@ -6933,7 +6933,6 @@ async function start(){
     if(!r.ok||!x?.ok)throw new Error(x?.error||'trial_unavailable');
     if(x.created)analytics('trial_created',{source:'header_14d'});
     if(x.alreadyExists)analytics('trial_duplicate',{source:'header_14d'});
-    if(x.emailSent)analytics('trial_email_sent',{source:'header_14d'});
     msg.textContent=x.alreadyExists
       ?'Revisa tu email. Si ya habías solicitado la prueba, usa el enlace de acceso que te enviamos. Si ha pasado un tiempo, podemos habértelo reenviado.'
       :'Listo. Te hemos enviado por email el enlace para abrir vuestra prueba de 14 días. Revisa también la carpeta de spam.';
