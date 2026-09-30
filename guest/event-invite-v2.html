@@ -16,7 +16,7 @@
 <section id="details" class="screen"><main class="details"><div class="eyebrow" id="detailsEyebrow"></div><h1 id="eventTitle"></h1><p class="intro" id="recipientIntro"></p><div class="info" id="eventInfo"></div><div class="rsvp" id="rsvpBox"><h2 id="rsvpTitle"></h2><p class="intro" id="rsvpLead"></p><div id="members"></div><div id="note" class="note"></div><button class="btn send" id="sendBtn"></button></div><div id="success" class="success" style="display:none"><div class="successMark">✓</div><h2 id="thanksTitle"></h2><p class="intro" id="thanksText"></p><div id="answerSummary" class="summary"></div><div class="successActions"><button class="btn secondary" id="viewAgain"></button><button class="btn secondary" id="changeAnswer"></button><button class="btn" id="calendarBtn" type="button"></button></div></div></main></section>
 <script>
 (()=>{
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-event-invite';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-event-invite';
 const q=new URLSearchParams(location.search),token=q.get('t')||'';
 let lang='es',data=null,answers={};
 const $=s=>document.querySelector(s),T=(es,en)=>lang==='en'?en:es,safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
