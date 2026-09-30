@@ -7010,8 +7010,8 @@ function inject(){
     <div class="one-trial-top"><div class="one-trial-brand">WeddlySmartDesign</div><button class="one-trial-close" type="button" aria-label="Cerrar">×</button></div>
     <div class="one-trial-kicker">ONE · prueba completa</div>
     <h2 id="oneTrialTitle">Pruébalo con vuestra boda.</h2>
-    <p class="one-trial-lead">15 días de acceso completo, sin tarjeta. Si después compráis ONE, continuaréis con esta misma boda y conservaréis lo que ya hayáis organizado.</p>
-    <ul class="one-trial-points"><li>Invitados, RSVP, mesas, pagos, Planning y eventos.</li><li>Una boda · hasta dos personas autorizadas.</li><li>La misma app completa que después podéis comprar.</li></ul>
+    <p class="one-trial-lead">15 días de acceso completo a <strong>ONE Signature</strong>, sin tarjeta. Si después compráis ONE, continuaréis con esta misma boda y conservaréis lo que ya hayáis organizado.</p>
+    <ul class="one-trial-points"><li>Invitados, RSVP, mesas, pagos, Planning y eventos.</li><li>6 diseños Essential + 4 diseños Signature y personalización premium.</li><li>Una boda · hasta dos personas autorizadas.</li></ul>
     <div class="one-trial-field"><label for="oneTrialEmail">Email</label><input id="oneTrialEmail" type="email" inputmode="email" autocomplete="email" maxlength="254" placeholder="vuestro@email.com"></div>
     <button class="one-trial-submit" id="oneTrialStart" type="button">Empezar prueba gratuita</button>
     <button class="one-trial-existing" id="oneTrialExisting" type="button">Abrir mi ONE</button>
@@ -7056,7 +7056,7 @@ async function start(){
     if(x.alreadyExists)analytics('trial_duplicate',{source:'header_15d'});
     msg.textContent=x.alreadyExists
       ?'Revisa tu email. Si ya habías solicitado la prueba, usa el enlace de acceso que te enviamos. Si ha pasado un tiempo, podemos habértelo reenviado.'
-      :'Listo. Te hemos enviado por email el enlace para abrir vuestra prueba de 15 días. Revisa también la carpeta de spam.';
+      :'Listo. Te hemos enviado por email el enlace para abrir vuestra prueba Signature de 15 días. Revisa también la carpeta de spam.';
     msg.className='one-trial-msg ok';
     input.disabled=true;
     btn.textContent='Enlace enviado';
