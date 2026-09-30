@@ -44,10 +44,22 @@ Validated commit for B7.3:
 `bef69a9318c9f4af2a5a85880f4e7a5d1603bab2`
 
 ## Exact current failure
-None. B7.3 is PASS / SEALED.
+B7.4 preflight active.
+Two residual red checks from the B7.3 closing commit were inspected before touching Mesas/Listados.
+
+Real issues found and corrected:
+1. Premium brand race: `guests-production-ui.js` repainted the brand every 500 ms, while `guest-visual-premium-v1.js` only enforced the B + SPAN premium hierarchy once. The legacy repaint could therefore win later and make B7.1 intermittently fail. Premium branding now self-heals on every visual apply without unnecessary DOM churn.
+2. Extra-event controlled-copy readiness: event cards could appear before the copy-control document hook/status was guaranteed to be attached, leaving a short window where CSV click could do nothing. The controlled-copy layer now exposes `patch()`, installs earlier, and event-list rendering immediately asks it to bind the new cards.
+
+Fix commits:
+`b2f316327f1580492cabf8ed0ad57e517c0488ed`
+`ff6008ab40c432aeb30102595e873fc9717ba1e2`
+`8bd9276de0597fcda20e9ffcc8030e98853ccc2d`
+
+Current status: CI validation pending.
 
 ## NEXT ACTION
-Start B7.4 only when continuing work. Scope: visual hierarchy, clarity and simplification of Mesas + Listados, including plano launch, table cards, unseated state, controlled-copy reports and list cards. Preserve B6.4 behavior and all B7.1–B7.3 layers. Do not add features.
+Read CI on the current B7.4-preflight HEAD. If all inherited B6/B7.1–B7.3 jobs are green, begin B7.4 Mesas + Listados visual work. If one of the two residual jobs is still red, use only its exact logged failure; do not reopen closed blocks conceptually.
 
 ## Working method from now on
 Every microblock has only three states:
