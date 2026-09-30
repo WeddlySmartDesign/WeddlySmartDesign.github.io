@@ -120,7 +120,7 @@
       else{G.msg.textContent='No hemos podido abrir Invitados. Comprueba la conexión.';G.retry.textContent='Reintentar';G.retry.href=location.href;G.retry.style.display='inline-block'}
     }
   }
-  let timer=0;function queue(){clearTimeout(timer);timer=setTimeout(push,450)}
+  let timer=0;function queue(){if(timer)return;timer=setTimeout(()=>{timer=0;push()},450)}
   function syncIdentityNow(){
     if(G.identitySyncing)return false;const wanted=sharedIdentityKey();if(!wanted||wanted===G.identity)return false;
     const state=mergeSharedIdentity(parse(read()));if(!state)return false;G.identitySyncing=true;writeRaw(state);markDirty(JSON.stringify(state));G.identity=identityOf(state);reloadCore('identity');queue();setTimeout(()=>{G.identitySyncing=false},150);return true;
