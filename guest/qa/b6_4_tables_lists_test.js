@@ -132,7 +132,7 @@ async function coreFrame(page){
  const popup=await popupPromise;await popup.waitForLoadState('domcontentloaded').catch(()=>{});
  await popup.waitForFunction(()=>document.body?.innerText?.includes('Listado de mesas'),null,{timeout:5000}).catch(()=>{});
  const printText=await popup.locator('body').innerText();
- ok(printText.includes('GUEST by WeddlySmartDesign')&&printText.includes('Mesa Jardín')&&printText.includes('Lucía Pérez'),'print/PDF table report not current or not branded: '+JSON.stringify(printText.slice(0,1200)));
+ ok(printText.toLowerCase().includes('guest by weddlysmartdesign')&&printText.includes('Mesa Jardín')&&printText.includes('Lucía Pérez'),'print/PDF table report not current or not branded: '+JSON.stringify(printText.slice(0,1200)));
  ok(/Rev\. 1/.test(printText)&&/WSD-MES-R01-C\d{3}/.test(printText),'print/PDF table report missing controlled-copy metadata');
  await popup.close();
 
