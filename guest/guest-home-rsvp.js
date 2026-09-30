@@ -1,6 +1,6 @@
 (()=>{
   const G=window.__GuestsProd;if(!G)return;
-  const KEY='wsd_guest_state_v1',TOKEN_KEY='weddly_shared_wedding_token',API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp';
+  const KEY='wsd_guest_state_v1',TOKEN_KEY='wsd_guest_access_token_v1',API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp';
   let remote=null,lastFetch=0,busy=false;
   function docs(){const out=[];try{let d=G.f.contentDocument;for(let i=0;i<8&&d;i++){out.push(d);const f=d.querySelector('iframe');if(!f||!f.contentDocument)break;d=f.contentDocument}}catch{}return out}
   const appDoc=()=>docs().find(d=>d.getElementById('hoy')&&d.getElementById('invitados'))||null;
