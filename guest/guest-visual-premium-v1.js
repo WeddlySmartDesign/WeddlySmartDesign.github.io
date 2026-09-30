@@ -108,9 +108,9 @@ function addFont(d){
 }
 function brand(d){
   const el=d.querySelector('main.wrap>.brand');if(!el)return;
-  if(el.dataset.guestPremiumBrand==='1')return;
+  const good=el.children.length===2&&el.children[0]?.tagName==='B'&&el.children[0]?.textContent.trim()==='GUEST'&&el.children[1]?.tagName==='SPAN'&&el.children[1]?.textContent.includes('WeddlySmartDesign');
+  if(!good)el.innerHTML='<b>GUEST</b><span>by WeddlySmartDesign</span>';
   el.dataset.guestPremiumBrand='1';
-  el.innerHTML='<b>GUEST</b><span>by WeddlySmartDesign</span>';
 }
 function apply(){
   let d;try{d=G.f.contentDocument}catch{return}
