@@ -21,11 +21,11 @@ async function centered(locator,maxWidth,label){
  ok(Math.abs(x.left-x.right)<=3,label+' not centered '+JSON.stringify(x));
 }
 async function focusVisible(page,locator,label){
- // Focus the target, move away with a trusted keyboard event, then return with Shift+Tab.
- // This preserves keyboard modality and works for both top documents and focused iframe documents.
+ // Seed the target, move to the previous focus stop with a trusted keyboard event,
+ // then return with Tab. The final focus transition is entirely keyboard-driven.
  await locator.focus();
- await page.keyboard.press('Tab');
  await page.keyboard.press('Shift+Tab');
+ await page.keyboard.press('Tab');
  const x=await locator.evaluate(el=>{const s=getComputedStyle(el);return{focused:el===el.ownerDocument.activeElement,visible:el.matches(':focus-visible'),style:s.outlineStyle,width:parseFloat(s.outlineWidth),offset:parseFloat(s.outlineOffset)}});
  ok(x.focused&&x.visible&&x.style!=='none'&&x.width>=2,label+' keyboard focus ring missing '+JSON.stringify(x));
 }
