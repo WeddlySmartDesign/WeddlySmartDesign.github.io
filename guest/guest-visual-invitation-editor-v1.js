@@ -13,7 +13,7 @@ html[data-guest-b73-editor='1'] .weddly-intbar button{
  min-height:44px!important;border-radius:999px!important;padding:9px 12px!important;font-size:11px!important
 }
 html[data-guest-b73-editor='1'] #wsdInvitationFlow{gap:7px!important;margin:0 0 24px!important}
-html[data-guest-b73-editor='1'] #wsdInvitationFlow button{min-height:44px!important;font-size:10.5px!important;padding:9px 7px!important}
+html[data-guest-b73-editor='1'] #wsdInvitationFlow button{min-height:46px!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:10.5px!important;line-height:1.2!important;padding:9px 7px!important}
 html[data-guest-b73-editor='1'] .h1{font-size:25px!important;line-height:1.1!important;letter-spacing:-.015em}
 html[data-guest-b73-editor='1'] .h1-sub{font-size:13px!important;line-height:1.5!important;margin-bottom:25px!important}
 html[data-guest-b73-editor='1'] .section{margin-bottom:30px!important}
