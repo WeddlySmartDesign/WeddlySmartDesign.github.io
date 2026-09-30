@@ -25,6 +25,7 @@ Resume from the exact "NEXT ACTION" below.
 - B7.1 Mobile hierarchy — PASS / CLOSED
 - B7.2 Hoy + Invitados — PASS / CLOSED
 - B7.3 Invitación + RSVP — PASS / CLOSED
+- B7.4 Mesas + Listados — PASS / CLOSED
 
 B6.3 sealed report:
 guest/B6_3_INVITATION_RSVP_QA_2026-09-30.md
@@ -32,33 +33,22 @@ Validated commit:
 099ddf75524c9e2eed3e8e9298262f8ed4fcd3e7
 
 ## Current block
-B7.4 — Mesas + Listados
+B7.5 — Eventos extra · revisión visual premium y simplificación
 
 Current branch:
 `guest-independent`
 
-B7.3 sealed report:
-`guest/B7_3_INVITATION_RSVP_VISUAL_QA_2026-09-30.md`
+B7.4 sealed report:
+`guest/B7_4_TABLES_LISTS_VISUAL_QA_2026-09-30.md`
 
-Validated commit for B7.3:
-`bef69a9318c9f4af2a5a85880f4e7a5d1603bab2`
+Validated functional commit for B7.4:
+`36a0d84cc8bcbd3b2ea7bada953bbd540c029b81`
 
 ## Exact current failure
-B7.4 active.
-The first B7.4 CI run exposed a real visual-layer performance defect: the new Mesas/Listados patch rewrote identical text on every pass. Because its MutationObserver watched child-list changes, the layer could trigger itself repeatedly and delay unrelated async rendering (Hoy, event lists, table/list QA and even mobile visual settling).
-
-Product fix:
-- B7.4 patch is now idempotent;
-- text is only rewritten when it actually changes;
-- observer callbacks are RAF-coalesced to one pending patch.
-
-Fix commit:
-`bcbbad4d5c6f501fee708b55e99a862e64a54ca2`
-
-Current status: CI validation pending.
+None. B7.4 is PASS / SEALED.
 
 ## NEXT ACTION
-Read CI for `bcbbad4d5c6f501fee708b55e99a862e64a54ca2`. If inherited B6/B7 jobs return green and B7.4 alone fails, use only the exact B7.4 failure. If any inherited job still fails, first determine whether it is a real regression or a proven test timing issue. Do not seal B7.4 until the full matrix is green.
+Start B7.5 only when continuing work. Scope: visual hierarchy, clarity and simplification of Eventos extra, including empty state, event tabs, guest selection, invitation editor entry, RSVP summary, activation state and mobile layout. Preserve all B6.5 behavior and do not add features.
 
 ## Working method from now on
 Every microblock has only three states:
