@@ -44,15 +44,15 @@ Validated commit for B7.2:
 
 ## Exact current failure
 B7.3 ACTIVE.
-Two QA issues identified from the first run:
-1. Regression gate rejected the intentional visual-script additions to the two public RSVP loader files; both loaders are now registered as controlled GUEST divergences.
-2. The B7.3 operations visual test opened operations directly without seeding the owner's local guest state. In production operations is entered from GUEST with that state already present. The test now seeds the validated guest state before opening operations.
+Current exact visual failure: Signature invitation stepper rendered below the B7 touch-target threshold. The premium editor layer now enforces a 46px minimum height with centered flex alignment for all three invitation-flow steps.
 
-Gate commit: `2f561a99c790abc938c4ff676e524eab2caefb4d`
-QA fix commit: `f311bdf0dfb055116dd8b1c36be7181408edfabd`
+Regression controlled-diff gate for the public RSVP loaders is also corrected.
+
+Product visual fix: `588b349c33305151d2849b2e69370a28909973e8`
+Gate fix: `0479edd445ef690506b75772c78eb4fcd042a40c`
 
 ## NEXT ACTION
-Rerun the full GUEST QA with B7.3. If regression or B7.3 fails, use only the exact logged failure. Preserve B6.3 behavior and all closed B7.1–B7.2 work. When all jobs through B7.3 are PASS, seal B7.3 and advance to B7.4 Mesas/Listados.
+Rerun full QA. If B7.3 fails again, use only the exact logged visual failure. Do not alter RSVP behavior to satisfy visual assertions. When regression + B6.1–B6.6 + B7.1–B7.3 are PASS, seal B7.3 and advance to B7.4 Mesas/Listados.
 
 ## Working method from now on
 Every microblock has only three states:
