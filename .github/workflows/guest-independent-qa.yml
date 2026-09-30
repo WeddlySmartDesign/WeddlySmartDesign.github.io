@@ -8,6 +8,7 @@ on:
       - '.github/workflows/guest-independent-qa.yml'
   workflow_dispatch:
 jobs:
+  # B7 visual QA active
   regression:
     runs-on: ubuntu-latest
     steps:
