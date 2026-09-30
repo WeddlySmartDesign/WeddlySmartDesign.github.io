@@ -1,12 +1,12 @@
 (()=>{
 'use strict';
 const G=window.__GuestsProd;if(!G)return;
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access',TOKEN='weddly_shared_wedding_token',MODE='weddly_owner_demo_mode',LOCAL='weddly_wedding_services_v1',GKEY=G.KEY||'wsd_guest_state_v1';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-access-check',TOKEN='wsd_guest_access_token_v1',MODE='weddly_owner_demo_mode',LOCAL='weddly_wedding_services_v1',GKEY=G.KEY||'wsd_guest_state_v1';
 let services=null,loading=false;
 function demoMode(){try{const q=new URLSearchParams(location.search).get('ownerDemo');if(q==='es'||q==='en')return q;const m=localStorage.getItem(MODE);return m==='es'||m==='en'?m:''}catch{return''}}
 function localKey(){const m=demoMode();return m?LOCAL+'_'+m:LOCAL}
 async function memberToken(){const raw=localStorage.getItem(TOKEN)||'',m=demoMode();if(!m||raw.length<40)return raw;try{const cached=localStorage.getItem('weddly_owner_demo_token_'+m)||'';if(cached.length>=40)return cached;const r=await fetch(ACCESS,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':raw},body:JSON.stringify({action:'owner_demo_token',lang:m}),cache:'no-store'}),x=await r.json().catch(()=>({}));if(r.ok&&x?.memberToken){localStorage.setItem('weddly_owner_demo_token_'+m,x.memberToken);return x.memberToken}}catch{}return raw}
-function en(){try{const x=JSON.parse(localStorage.getItem('weddly_pro_v7')||'null');if(x?.settings?.lang==='en')return true;if(x?.settings?.lang==='es')return false}catch{}try{return localStorage.getItem('weddly_access_lang')==='en'}catch{return false}}
+function en(){try{const x=JSON.parse(localStorage.getItem('wsd_guest_profile_v1')||'null');if(x?.settings?.lang==='en')return true;if(x?.settings?.lang==='es')return false}catch{}try{return localStorage.getItem('weddly_access_lang')==='en'}catch{return false}}
 const T=(es,enText)=>en()?enText:es;
 function localServices(){try{const x=JSON.parse(localStorage.getItem(localKey())||'null');if(x&&typeof x.transport==='boolean')return{transport:x.transport,accommodation:!!x.accommodation}}catch{}return null}
 async function refresh(){if(loading)return;loading=true;try{const t=await memberToken();if(t){const r=await fetch(API+'?manage=1',{headers:{'x-weddly-token':t},cache:'no-store'}),x=await r.json().catch(()=>({})),c=x.forms?.[0]?.config;if(r.ok&&x.ok&&c){services={transport:c.transportOffered!==false&&c.questions?.transport!==false,accommodation:c.accommodationOffered===true};try{localStorage.setItem(localKey(),JSON.stringify({...services,updatedAt:Date.now()}))}catch{}}}}catch{}finally{loading=false;if(!services)services=localServices()||{transport:true,accommodation:false};retry()}}
