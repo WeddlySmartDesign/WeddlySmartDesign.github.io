@@ -33,7 +33,7 @@
 <script>
 (()=>{
 'use strict';
-const TOKEN='weddly_shared_wedding_token',PAY='weddly_pro_v7',GUESTKEY='weddly_guests_qa_v67',THEME1='weddly_personal_theme_v51',THEME2='weddly_personal_theme_v20',LAST='weddly_suite_last_module',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access-trial-paid-qa';
+const TOKEN='weddly_shared_wedding_token',PAY='weddly_pro_v7',GUESTKEY='weddly_guests_qa_v67',THEME1='weddly_personal_theme_v51',THEME2='weddly_personal_theme_v20',LAST='weddly_suite_last_module',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access';
 const payFrame=document.getElementById('paymentsFrame'),guestFrame=document.getElementById('guestsFrame'),planningFrame=document.getElementById('planningFrame'),auxFrame=document.getElementById('auxFrame'),loading=document.getElementById('loading'),error=document.getElementById('error'),toast=document.getElementById('toast'),tabs=[...document.querySelectorAll('.tab')];
 let current='payments',auxMode='',theme='',installPrompt=null,toastTimer=null,identityMark='',eventsBackArmed=false,eventsReturnUrl='guests-rsvp-form-flow.html?v=6-stable-runtime',accessStatus=null;
 const loaded={payments:false,guests:false,planning:false},observers=new WeakMap();
