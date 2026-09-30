@@ -3,7 +3,7 @@
 if(window.__wsdEventsGroupSelectV1)return;
 window.__wsdEventsGroupSelectV1=true;
 
-const EVENT_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-event-state';
+const EVENT_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-event-state';
 const TOKEN='weddly_shared_wedding_token';
 const GUEST='weddly_guests_qa_v67';
 let busy=false;
