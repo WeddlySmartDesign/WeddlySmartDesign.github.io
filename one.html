@@ -7039,6 +7039,8 @@ function openTrial(){
   inject();analytics('trial_open',{source:'header_15d'});
   const active=currentToken().length>=40;
   dialog.querySelector('.one-trial-field').style.display=active?'none':'grid';
+  dialog.querySelector('.one-trial-reassure').style.display=active?'none':'block';
+  dialog.querySelector('.one-trial-privacy').style.display=active?'none':'block';
   dialog.querySelector('#oneTrialStart').style.display=active?'none':'block';
   dialog.querySelector('#oneTrialExisting').style.display=active?'block':'none';
   const msg=dialog.querySelector('#oneTrialMsg');
