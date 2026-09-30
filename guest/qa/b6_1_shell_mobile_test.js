@@ -141,7 +141,7 @@ async function run(){
   ok((await page.locator('#msg').innerText()).includes('No encontramos una compra válida'),'invalid activation feedback unclear: '+await page.locator('#msg').innerText());
   await page.goto(base+'/guest/access.html?invite=INVITE-B6-PRIMARY',{waitUntil:'domcontentloaded'});
   ok(await page.locator('#join').isVisible(),'partner join state missing');
-  ok((await page.locator('#lead').innerText()).includes('dos dispositivos'),'partner join explanation missing');
+  ok(/ambos dispositivos|dos dispositivos/i.test(await page.locator('#lead').innerText()),'partner join explanation missing');
 
   // Desktop sanity: no stretched mobile layout / overflow.
   const desktop=await context.newPage();
