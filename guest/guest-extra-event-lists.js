@@ -1,13 +1,13 @@
 (()=>{
 'use strict';
 const G=window.__GuestsProd;if(!G)return;
-const EVENT_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-event-state';
-const INVITE_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-event-invite';
-const TOKEN='weddly_shared_wedding_token',GKEY=G.KEY||'wsd_guest_state_v1';
+const EVENT_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-event-state';
+const INVITE_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-event-invite';
+const TOKEN='wsd_guest_access_token_v1',GKEY=G.KEY||'wsd_guest_state_v1';
 let reports=new Map(),busy=false,last=0,lastSig='';
 
 function demo(){try{const d=new URLSearchParams(location.search).get('ownerDemo');return d==='es'||d==='en'?d:''}catch{return''}}
-function en(){if(demo())return demo()==='en';try{if(localStorage.getItem('weddly_access_lang')==='en')return true;return JSON.parse(localStorage.getItem('weddly_pro_v7')||'null')?.settings?.lang==='en'}catch{return false}}
+function en(){if(demo())return demo()==='en';try{if(localStorage.getItem('weddly_access_lang')==='en')return true;return JSON.parse(localStorage.getItem('wsd_guest_profile_v1')||'null')?.settings?.lang==='en'}catch{return false}}
 const T=(es,enText)=>en()?enText:es;
 const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function headers(){const h={'content-type':'application/json','x-weddly-token':localStorage.getItem(TOKEN)||''};if(demo())h['x-weddly-demo']=demo();return h}
