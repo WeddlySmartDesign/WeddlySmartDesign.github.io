@@ -41,17 +41,19 @@ Current CI status at that HEAD:
 - b6-tables-lists: FAIL
 
 ## Exact current failure
-Resolved in product code: controlled-copy catering export was dropping the per-table summaries and TOTAL row even though the base catering report contained them.
+Catering TOTAL issue fixed in product code.
 
-Fix commit:
-`480f82c94a0ff4a7ed771e78fa486ac9bdba7bea`
+Current remaining issue observed in CI: print/PDF tables assertion fired before the controlled-copy popup had finished rendering.
+
+QA fix commit:
+`fa61595e96d79f47da7e243829e4d751e7fd6235`
 
 Current status: CI validation pending.
 
 ## NEXT ACTION
-1. Read CI for commit `480f82c94a0ff4a7ed771e78fa486ac9bdba7bea`.
-2. If regression + B6.1 + B6.2 + B6.3 + B6.4 all PASS, create `guest/B6_4_TABLES_LISTS_QA_2026-09-30.md`.
-3. Seal B6.4 and update this file to B6.5 Events extra.
+1. Read CI for commit `fa61595e96d79f47da7e243829e4d751e7fd6235`.
+2. If b6-tables-lists fails, use its exact logged failure only; do not restart B6.4.
+3. If regression + B6.1 + B6.2 + B6.3 + B6.4 all PASS, create `guest/B6_4_TABLES_LISTS_QA_2026-09-30.md`, seal B6.4 and update this file to B6.5 Events extra.
 
 ## Working method from now on
 Every microblock has only three states:
