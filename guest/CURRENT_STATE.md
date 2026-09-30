@@ -40,13 +40,13 @@ Validated commit for B6.5:
 
 ## Exact current failure
 B6.6 active.
-The scheduler starvation defect is fixed. The previous QA attempted to call `editGuest` as a global, but that function is not exported on `window`. The test now uses the actual People Manager UI (`Ver personas` → Ficha → Guardar`) to make production-faithful guest edits.
+The scheduler starvation defect is fixed. Latest CI reached the offline/stale-edit phase, but the QA attempted a new People Manager edit during the intentional ~900 ms core reload that follows every person save. The test now waits for that production reload to complete before any next edit.
 
 Latest QA commit:
-`171f93ba3425b35c8372b699cfdd0819de6cc97e`
+`ee5672e1fe45557fadb6ce9b82f8cb717edaa824`
 
 ## NEXT ACTION
-Read CI for `171f93ba3425b35c8372b699cfdd0819de6cc97e`. If B6.6 fails, use only the exact logged diagnostics. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
+Read CI for `ee5672e1fe45557fadb6ce9b82f8cb717edaa824`. If B6.6 fails, use only the exact logged failure. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
 
 ## Working method from now on
 Every microblock has only three states:
