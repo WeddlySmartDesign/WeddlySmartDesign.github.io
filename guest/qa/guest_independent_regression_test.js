@@ -56,6 +56,18 @@ ok(manifest.name==='GUEST by WeddlySmartDesign','wrong manifest name');
 ok(manifest.start_url==='./index.html'&&manifest.scope==='./','PWA scope is not isolated');
 ok(manifest.display==='standalone','PWA is not standalone');
 
+
+const endpointFiles=[
+'index.html','guests-v116-production.html','guests-production-sync.js','guests-access-layer.js','guests-production-ui.js','guests-production-ops.js',
+'guests-rsvp-route-v1.js','guests-home-rsvp-status-v1.js','guests-smart-actions-v1.js','guests-v114-integrated.html',
+'guests-rsvp-operations-v2.html','guests-rsvp-operations-live.html','guests-rsvp-operations-v3.html','guests-rsvp-design-manage.html',
+'guests-rsvp-form-flow.html','guests-rsvp-form-flex.html','guests-rsvp-public-clean.html','guests-rsvp-essential-live.html','guests-rsvp-signature-live.html',
+'guests-events-v3.html','guests-events-v3.js','guests-events-invite-addon-v2.js','guests-events-share-composer-v1.js','event-invite.html','event-invite-v2.html',
+'guest-settings.html','access.html'
+];
+const legacyApis=['/weddly-guests-state','/weddly-rsvp-ensure','/weddly-rsvp-single-v2','/weddly-rsvp','/weddly-personalization','/weddly-event-state','/weddly-event-invite','/weddly-test-access','/weddly-access'];
+for(const p of endpointFiles){if(!exists(p))continue;const body=read(p);const leaks=legacyApis.filter(x=>body.includes(x));ok(!leaks.length,p+' still uses shared ONE backend: '+leaks.join(', '))}
+
 const lock=JSON.parse(read('SOURCE_LOCK.json'));
 ok(lock.captured_from_commit==='6e054a21480624c7f04c6879c7ad72ed55c7307d','source lock does not point to verified latest ONE baseline');
 console.log('GUEST independent regression gate: PASS');
