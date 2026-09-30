@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 if(window.__wsdRsvpPlusOnePublicV1)return;window.__wsdRsvpPlusOnePublicV1=true;
-const ENDPOINT='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp-single-v2';
+const ENDPOINT='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp-single-v2';
 const T=(es,en)=>document.documentElement.lang==='en'?en:es;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let queued=false;
@@ -69,7 +69,7 @@ const nativeFetch=window.fetch.bind(window);
 window.fetch=async function(input,init){
   try{
     const url=typeof input==='string'?input:input?.url||'',method=String(init?.method||(typeof input!=='string'?input?.method:'GET')||'GET').toUpperCase();
-    if(method==='POST'&&url.includes('/weddly-rsvp')&&init?.body){
+    if(method==='POST'&&url.includes('/guest-rsvp')&&init?.body){
       const body=JSON.parse(String(init.body));
       if(body?.action==='submit'&&body?.guest_key){
         const p=body.attend===true?plusData():null;body.plusone_details=p;
