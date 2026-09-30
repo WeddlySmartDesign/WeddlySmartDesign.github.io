@@ -112,16 +112,17 @@ async function coreFrame(page){
    return {name:d.suggestedFilename(),text:csvText(await downloadText(d))}
  }
  const tables=await csv('#wsdCsvTables');
- ok(/Mesas_Boda_principal\.csv/i.test(tables.name),'tables filename unclear: '+tables.name);
+ ok(/^MES_Rev1_C\d{3}\.csv$/i.test(tables.name),'tables controlled-copy filename unclear: '+tables.name);
+ ok(tables.text.includes('DOCUMENTO')&&tables.text.includes('REVISIÓN'),'tables CSV missing copy-control metadata');
  ok(tables.text.includes('Ana López')&&tables.text.includes('Lucía Pérez')&&tables.text.includes('Mesa Jardín'),'tables CSV missing current seating');
  ok(!tables.text.includes('Pedro Noasiste'),'declined guest leaked into tables CSV');
  const catering=await csv('#wsdCsvCatering');
- ok(/^CAT_Rev1_C\\d{3}\\.csv$/i.test(catering.name),'catering controlled-copy filename unclear: '+catering.name);
+ ok(/^CAT_Rev1_C\d{3}\.csv$/i.test(catering.name),'catering controlled-copy filename unclear: '+catering.name);
  ok(catering.text.includes('Ana López')&&catering.text.includes('Vegetariano')&&catering.text.includes('Mario Ruiz'),'catering CSV missing confirmed meals');
  ok(!catering.text.includes('Sara Sinmenú')&&!catering.text.includes('Lucía Pérez'),'catering CSV included no-menu or pending guest');
  ok(catering.text.includes('TOTAL'),'catering CSV missing total summary');
  const transport=await csv('#wsdCsvTransport');
- ok(/^TRA_Rev1_C\\d{3}\\.csv$/i.test(transport.name),'transport controlled-copy filename unclear: '+transport.name);
+ ok(/^TRA_Rev1_C\d{3}\.csv$/i.test(transport.name),'transport controlled-copy filename unclear: '+transport.name);
  ok(transport.text.includes('Ana López')&&transport.text.includes('Lucía Pérez'),'transport CSV missing active transport users');
  ok(!transport.text.includes('Pedro Noasiste'),'declined guest leaked into transport CSV');
 
@@ -131,7 +132,7 @@ async function coreFrame(page){
  const popup=await popupPromise;await popup.waitForLoadState('domcontentloaded').catch(()=>{});
  const printText=await popup.locator('body').innerText();
  ok(printText.includes('GUEST by WeddlySmartDesign')&&printText.includes('Mesa Jardín')&&printText.includes('Lucía Pérez'),'print/PDF table report not current or not branded');
- ok(/Rev\\. 1/.test(printText)&&/WSD-MES-R01-C\\d{3}/.test(printText),'print/PDF table report missing controlled-copy metadata');
+ ok(/Rev\. 1/.test(printText)&&/WSD-MES-R01-C\d{3}/.test(printText),'print/PDF table report missing controlled-copy metadata');
  await popup.close();
 
  // Custom RSVP list must remain isolated and exportable.
