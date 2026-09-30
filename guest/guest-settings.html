@@ -48,7 +48,7 @@
 </main>
 <script>
 (()=>{
-const DATA='weddly_pro_v7',THEME='weddly_personal_theme_v51',TOKEN='weddly_shared_wedding_token',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access';
+const DATA='weddly_pro_v7',THEME='weddly_personal_theme_v51',TOKEN='weddly_shared_wedding_token',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-license-access';
 const $=id=>document.getElementById(id);let accessState=null,installPrompt=null;
 function read(){try{return JSON.parse(localStorage.getItem(DATA)||'{}')||{}}catch{return{}}}
 function token(){try{return localStorage.getItem(TOKEN)||''}catch{return''}}
