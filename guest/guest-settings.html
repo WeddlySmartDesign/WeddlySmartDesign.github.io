@@ -1,6 +1,69 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>GUEST · Ajustes</title><style>
-:root{--bg:#F2EFE9;--paper:#FBF8F3;--line:#E4DED2;--ink:#2C2A26;--muted:#736F63;--dark:#525C43}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:680px;margin:auto;min-height:100vh;background:var(--paper);padding:24px 20px 44px}.brand b{display:block;font-size:24px;letter-spacing:.08em}.brand span{font-family:Caveat,"Segoe Print",cursive;font-size:20px;color:var(--muted)}h1{font:500 32px Georgia,serif;margin:36px 0 18px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin:12px 0}.field{margin:14px 0}label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:7px}input,select{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px 12px;background:#fff;font-size:16px}.btn{border:0;border-radius:12px;padding:13px 15px;background:var(--dark);color:white;font-weight:800}.line{background:#fff;color:var(--ink);border:1px solid var(--line)}.row{display:flex;gap:10px;flex-wrap:wrap}.small{font-size:12px;line-height:1.5;color:var(--muted)}a{color:var(--dark)}
-</style></head><body><main class="wrap"><div class="brand"><b>GUEST</b><span>by WeddlySmartDesign</span></div><h1>Ajustes</h1><section class="card"><div class="field"><label>Nombre 1</label><input id="p1" autocomplete="name"></div><div class="field"><label>Nombre 2</label><input id="p2" autocomplete="name"></div><div class="field"><label>Fecha de la boda</label><input id="date" type="date"></div><div class="field"><label>Estilo de GUEST</label><select id="theme"><option value="nordic">Nordic</option><option value="blush">Blush</option><option value="sand">Arena</option><option value="slate">Slate</option><option value="editorial">Editorial</option></select></div><div class="row"><button id="save" class="btn">Guardar</button><button id="back" class="btn line">Volver a GUEST</button></div><p id="msg" class="small"></p></section><section class="card"><b>Soporte</b><p class="small">Si tenéis cualquier problema con vuestra invitación, RSVP o gestión de invitados, escribidnos.</p><a href="mailto:weddlysmartdesign@gmail.com">weddlysmartdesign@gmail.com</a></section></main><script>
-(()=>{const KEY='weddly_pro_v7',THEME='weddly_personal_theme_v51';const $=id=>document.getElementById(id);function read(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch{return{}}}const x=read(),s=x.settings||{};$('p1').value=s.partner1||'';$('p2').value=s.partner2||'';$('date').value=s.weddingDate||'';$('theme').value=localStorage.getItem(THEME)||'nordic';$('save').onclick=()=>{const y=read();y.settings={...(y.settings||{}),partner1:$('p1').value.trim(),partner2:$('p2').value.trim(),weddingDate:$('date').value,lang:'es'};localStorage.setItem(KEY,JSON.stringify(y));localStorage.setItem(THEME,$('theme').value);$('msg').textContent='Cambios guardados.'};$('back').onclick=()=>location.assign('index.html')})();
-</script></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#525C43">
+<meta name="color-scheme" content="only light">
+<link rel="manifest" href="guest.webmanifest">
+<link rel="icon" href="guest-icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<title>GUEST · Ajustes</title>
+<style>
+:root{--bg:#F2EFE9;--paper:#FBF8F3;--line:#E4DED2;--soft:#EEF0E9;--ink:#2C2A26;--muted:#736F63;--dark:#525C43;--ok:#496443;--danger:#A84535}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:700px;margin:auto;min-height:100dvh;background:var(--paper);padding:calc(20px + env(safe-area-inset-top)) 18px calc(38px + env(safe-area-inset-bottom))}.top{display:flex;align-items:flex-end;justify-content:space-between;gap:14px}.brand b{display:block;font-size:23px;letter-spacing:.08em;line-height:1}.brand span{display:block;font:600 18px/1 "Caveat","Segoe Print",cursive;color:var(--muted);margin-top:4px}.back{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 12px;font-weight:750}h1{font:500 34px/1 Georgia,serif;margin:38px 0 8px}.lead{margin:0 0 22px;color:var(--muted);line-height:1.5}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:19px;margin:12px 0}.card h2{font:500 24px/1.1 Georgia,serif;margin:0 0 6px}.small{font-size:13px;line-height:1.5;color:var(--muted)}.field{margin:14px 0}.field label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:7px}.field input,.field select{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px 12px;background:#fff;color:var(--ink);font-size:16px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.btn{appearance:none;border:0;border-radius:12px;padding:13px 15px;background:var(--dark);color:#fff;font-weight:800;min-height:48px}.btn.line{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn:disabled{opacity:.45}.status{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:13px;font-weight:750;color:var(--muted)}.dot{width:9px;height:9px;border-radius:50%;background:#c6beb3}.dot.on{background:var(--ok)}.notice{min-height:18px;margin-top:10px;font-size:13px;color:var(--ok)}.notice.err{color:var(--danger)}a{color:var(--dark);font-weight:750}.hidden{display:none!important}@media(max-width:520px){.two{grid-template-columns:1fr}.actions .btn{flex:1 1 100%}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top"><div class="brand"><b>GUEST</b><span>by WeddlySmartDesign</span></div><button id="back" class="back" type="button">← Volver</button></div>
+  <h1>Ajustes</h1><p class="lead">Solo lo necesario para vuestra invitación y la gestión de invitados.</p>
+
+  <section class="card">
+    <h2>Vuestra boda</h2><p class="small">Estos datos se usan en GUEST y se mantienen sincronizados entre vuestros dispositivos.</p>
+    <div class="two"><div class="field"><label for="p1">Nombre 1</label><input id="p1" autocomplete="name"></div><div class="field"><label for="p2">Nombre 2</label><input id="p2" autocomplete="name"></div></div>
+    <div class="field"><label for="date">Fecha de la boda</label><input id="date" type="date"></div>
+    <div class="field"><label for="theme">Estilo de GUEST</label><select id="theme"><option value="nordic">Nordic</option><option value="blush">Blush</option><option value="sand">Arena</option><option value="slate">Slate</option><option value="editorial">Editorial</option></select></div>
+    <button id="save" class="btn" type="button">Guardar cambios</button><div id="saveMsg" class="notice" aria-live="polite"></div>
+  </section>
+
+  <section class="card">
+    <h2>GUEST para los dos</h2><p class="small">Podéis usar la misma boda desde dos dispositivos. Lo que cambia uno aparece en el otro.</p>
+    <div class="status"><span id="syncDot" class="dot"></span><span id="syncText">Comprobando acceso…</span></div>
+    <div class="actions"><button id="share" class="btn hidden" type="button">Invitar a mi pareja</button><button id="copy" class="btn line hidden" type="button">Copiar invitación segura</button></div>
+    <div id="shareMsg" class="notice" aria-live="polite"></div>
+  </section>
+
+  <section class="card">
+    <h2>Instalar GUEST</h2><p class="small">Podéis añadir GUEST a la pantalla de inicio y abrirlo como una app, sin buscar el enlace cada vez.</p>
+    <button id="install" class="btn line" type="button">Instalar en este dispositivo</button><div id="installMsg" class="notice" aria-live="polite"></div>
+  </section>
+
+  <section class="card">
+    <h2>Soporte</h2><p class="small">Si tenéis cualquier problema con vuestra invitación, RSVP o gestión de invitados, escribidnos.</p>
+    <a href="mailto:weddlysmartdesign@gmail.com">weddlysmartdesign@gmail.com</a>
+  </section>
+</main>
+<script>
+(()=>{
+const DATA='weddly_pro_v7',THEME='weddly_personal_theme_v51',TOKEN='weddly_shared_wedding_token',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access';
+const $=id=>document.getElementById(id);let accessState=null,installPrompt=null;
+function read(){try{return JSON.parse(localStorage.getItem(DATA)||'{}')||{}}catch{return{}}}
+function token(){try{return localStorage.getItem(TOKEN)||''}catch{return''}}
+function note(id,text,error=false){const n=$(id);n.textContent=text||'';n.classList.toggle('err',!!error)}
+const x=read(),s=x.settings||{};$('p1').value=s.partner1||'';$('p2').value=s.partner2||'';$('date').value=s.weddingDate||'';$('theme').value=localStorage.getItem(THEME)||'nordic';
+$('save').onclick=()=>{const y=read();y.settings={...(y.settings||{}),partner1:$('p1').value.trim(),partner2:$('p2').value.trim(),weddingDate:$('date').value,lang:'es'};try{localStorage.setItem(DATA,JSON.stringify(y));localStorage.setItem(THEME,$('theme').value);note('saveMsg','Cambios guardados.');setTimeout(()=>note('saveMsg',''),2200)}catch{note('saveMsg','No se han podido guardar los cambios.',true)}};
+$('back').onclick=()=>location.assign('index.html#hoy');
+async function status(){const t=token();if(t.length<40)return null;try{const r=await fetch(ACCESS,{method:'POST',headers:{'content-type':'application/json','x-weddly-member':t},body:JSON.stringify({action:'status'}),cache:'no-store'}),j=await r.json().catch(()=>({}));return r.ok&&j?.ok?j:null}catch{return null}}
+async function refreshShare(){accessState=await status();$('share').classList.add('hidden');$('copy').classList.add('hidden');$('syncDot').classList.toggle('on',!!accessState);if(!accessState){$('syncText').textContent='Acceso local';return}if(accessState.partnerJoined){$('syncText').textContent='Dos dispositivos conectados';return}$('syncText').textContent='Sincronización activa';if(accessState.role==='primary'){$('share').classList.remove('hidden');$('copy').classList.remove('hidden')}}
+async function inviteLink(){const st=accessState||await status();if(!st)throw Error('access');if(st.partnerJoined)throw Error('joined');if(st.role!=='primary')throw Error('primary');const r=await fetch(ACCESS,{method:'POST',headers:{'content-type':'application/json','x-weddly-member':token()},body:JSON.stringify({action:'invite'})}),j=await r.json().catch(()=>({}));if(!r.ok||!j.inviteCode)throw Error('invite');return new URL('access.html?invite='+encodeURIComponent(j.inviteCode),location.href).href}
+async function shareInvite(copyOnly){note('shareMsg','');try{const link=await inviteLink();if(copyOnly){try{await navigator.clipboard.writeText(link);note('shareMsg','Invitación segura copiada.')}catch{prompt('Copia este enlace',link)}}else{const names=[$('p1').value,$('p2').value].filter(Boolean).join(' & '),text='Únete '+(names?'a la boda de '+names:'a nuestra boda')+' en GUEST by WeddlySmartDesign';if(navigator.share)await navigator.share({title:'GUEST by WeddlySmartDesign',text,url:link});else{try{await navigator.clipboard.writeText(link);note('shareMsg','Invitación segura copiada.')}catch{prompt('Copia este enlace',link)}}}setTimeout(refreshShare,250)}catch(e){if(e?.name==='AbortError')return;note('shareMsg',e?.message==='joined'?'El segundo acceso ya está conectado.':e?.message==='primary'?'La invitación solo puede crearla quien activó la compra.':'No se ha podido crear la invitación ahora.',true)}}
+$('share').onclick=()=>shareInvite(false);$('copy').onclick=()=>shareInvite(true);
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e});addEventListener('appinstalled',()=>{installPrompt=null;note('installMsg','GUEST se ha instalado en este dispositivo.')});
+$('install').onclick=async()=>{const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;if(standalone){note('installMsg','GUEST ya está instalado.');return}if(installPrompt){const p=installPrompt;installPrompt=null;try{await p.prompt();await p.userChoice}catch{}return}const ios=/iPad|iPhone|iPod/.test(navigator.userAgent);note('installMsg',ios?'En Safari, pulsa Compartir y después «Añadir a pantalla de inicio».':'Abre el menú del navegador y elige «Instalar app» o «Añadir a pantalla de inicio».')};
+if('serviceWorker'in navigator)navigator.serviceWorker.register('guest-sw.js').catch(()=>{});refreshShare();
+})();
+</script>
+</body></html>
