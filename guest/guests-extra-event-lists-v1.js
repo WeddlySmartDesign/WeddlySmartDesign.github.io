@@ -34,6 +34,7 @@ function render(){
    card.innerHTML=`<b>${safe(r.title)}</b><p class="small">${safe(r.summary)}</p><div class="actions"><button class="btn" type="button" data-event-pdf="${safe(r.kind.slice(6))}">${T('Imprimir / PDF','Print / PDF')}</button><button class="btn soft" type="button" data-event-csv="${safe(r.kind.slice(6))}">Excel / CSV</button></div>`;
    hist?list.insertBefore(card,hist):list.appendChild(card);
  }
+ queueMicrotask(()=>window.__WsdCopyControl?.patch?.());
 }
 async function refresh(force=false){
  if(busy||(!force&&Date.now()-last<12000)){render();return}busy=true;
