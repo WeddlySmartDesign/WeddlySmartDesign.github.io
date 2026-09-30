@@ -22,6 +22,7 @@ Resume from the exact "NEXT ACTION" below.
 - B6.5 Extra events — PASS / CLOSED
 - B6.6 Two-device synchronization + error states — PASS / CLOSED
 - B6 functional/mobile QA — PASS / SEALED
+- B7.1 Mobile hierarchy — PASS / CLOSED
 
 B6.3 sealed report:
 guest/B6_3_INVITATION_RSVP_QA_2026-09-30.md
@@ -29,26 +30,22 @@ Validated commit:
 099ddf75524c9e2eed3e8e9298262f8ed4fcd3e7
 
 ## Current block
-B7.1 — Mobile hierarchy
+B7.2 — Hoy + Invitados
 
 Current branch:
 `guest-independent`
 
-B6 checkpoint:
-`guest/CHECKPOINT_03_B6_SEALED_2026-09-30.md`
+B7.1 sealed report:
+`guest/B7_1_MOBILE_HIERARCHY_QA_2026-09-30.md`
 
-B7.1 visual layer:
-`guest/guest-visual-premium-v1.js`
+Validated commit for B7.1:
+`392d7b8683f18ed2317de830357921020a75b0ea`
 
 ## Exact current failure
-B7.1 ACTIVE.
-First visual QA failure was a false assumption: the active navigation color is intentionally supplied by the currently selected GUEST theme, so it must not be hard-coded to one olive value. The premium layer controls hierarchy/shape/tap targets while preserving theme color.
-
-Latest QA commit:
-`0ce5cab63a036a11dab41edc6269e467b98d9c68`
+None. B7.1 is PASS / SEALED.
 
 ## NEXT ACTION
-Read CI for `0ce5cab63a036a11dab41edc6269e467b98d9c68`. Fix only exact B7.1 failures. Preserve all B6 behavior and theme selection. When regression + B6.1–B6.6 + B7.1 are PASS, seal B7.1 and advance to B7.2 Hoy/Invitados.
+Start B7.2 only when continuing work. Scope: visual hierarchy, clarity and simplification of Hoy + Invitados only. Preserve B6 functionality and B7.1 global hierarchy. Do not add features.
 
 ## Working method from now on
 Every microblock has only three states:
