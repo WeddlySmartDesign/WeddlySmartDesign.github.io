@@ -47,13 +47,15 @@ Validated functional commit for B7.5:
 
 ## Exact current failure
 B7.6 active.
-The first accessibility QA failure was a test-modality issue, not a missing product style: Chromium does not necessarily match `:focus-visible` after programmatic `focus()`. The test now primes real keyboard modality with a trusted Tab key before checking the focused control, while keeping the same visible-outline requirement.
+Second accessibility QA failure was again in the test harness, not in product CSS: the helper used programmatic focus after a Tab event, which could reset or fail to preserve keyboard `:focus-visible` modality on RSVP Operations.
+
+No UI change was made. The helper now focuses the target, moves away with a trusted Tab event and returns with trusted Shift+Tab, then verifies both `:focus-visible` and the rendered outline.
 
 QA fix commit:
-`7ee19c4f0e391480b078e21c462f00f472d6d6d8`
+`db4c2721ecfd2f937304e40b18eb47e4fd92d3ba`
 
 ## NEXT ACTION
-Read CI for `7ee19c4f0e391480b078e21c462f00f472d6d6d8`. If B7.6 fails again, use only the exact logged failure. Continue until the full matrix is green, then seal B7.6 and advance to B7.7 final visual QA.
+Read CI on the current HEAD after `db4c2721ecfd2f937304e40b18eb47e4fd92d3ba`. If B7.6 fails again, use only the exact logged failure. Continue until the full matrix is green, then seal B7.6 and advance to B7.7 final visual QA.
 
 ## Working method from now on
 Every microblock has only three states:
