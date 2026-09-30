@@ -110,3 +110,26 @@ jobs:
           exit 1
       - name: B6.4 tables and lists QA
         run: node guest/qa/b6_4_tables_lists_test.js
+
+  b6-extra-events:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B6.5 extra events QA
+        run: node guest/qa/b6_5_extra_events_test.js
