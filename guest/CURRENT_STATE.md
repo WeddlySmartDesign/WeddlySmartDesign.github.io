@@ -47,10 +47,17 @@ Validated functional commit for B7.6:
 `9f6afb06c5f36295fddae1f3a3792f47d5e64737`
 
 ## Exact current failure
-None. B7.6 is PASS / SEALED.
+B7.7 active.
+Final cross-surface visual seal test has been added. It checks the validated visual layers are present and performs a final browser sweep across mobile and desktop representative viewports for the main app, Extra Events and public RSVP, including navigation activation, brand consistency, no overflow and absence of ONE/Partner/STUDIO scope.
+
+Test:
+`guest/qa/b7_7_final_visual_seal_test.js`
+
+Workflow commit:
+`26f3743a57e97be668abc516a7a03e9b772b45b9`
 
 ## NEXT ACTION
-Start B7.7 final visual QA. Scope: final cross-surface visual seal using the already validated mobile, module-specific, desktop and accessibility layers. Do not redesign or add features. Run a consolidated final visual regression across representative mobile and desktop viewports, confirm all prior B6/B7 jobs remain green, fix only objective regressions, then seal B7.
+Read CI on the current HEAD after `26f3743a57e97be668abc516a7a03e9b772b45b9`. If B7.7 fails, use only the exact logged failure and fix only objective regressions or proven test assumptions. Require the full B6/B7 matrix green, then create the B7.7 final report and seal B7 completely.
 
 ## Working method from now on
 Every microblock has only three states:
