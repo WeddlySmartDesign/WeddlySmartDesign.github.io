@@ -13,8 +13,8 @@ main{max-width:560px;margin:auto;padding:32px}
 <main id="loading">Cargando invitación…</main>
 <script>
 (()=> {
-  const RSVP_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp';
-  const PERS_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-personalization';
+  const RSVP_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp';
+  const PERS_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-personalization';
   const qs=new URLSearchParams(location.search),token=qs.get('t')||'',unitId=qs.get('u')||'';
   const templates={
     e01:'guests-rsvp-essential-01.html',
