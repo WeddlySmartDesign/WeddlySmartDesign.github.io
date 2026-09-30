@@ -24,6 +24,7 @@ Resume from the exact "NEXT ACTION" below.
 - B6 functional/mobile QA — PASS / SEALED
 - B7.1 Mobile hierarchy — PASS / CLOSED
 - B7.2 Hoy + Invitados — PASS / CLOSED
+- B7.3 Invitación + RSVP — PASS / CLOSED
 
 B6.3 sealed report:
 guest/B6_3_INVITATION_RSVP_QA_2026-09-30.md
@@ -31,29 +32,22 @@ Validated commit:
 099ddf75524c9e2eed3e8e9298262f8ed4fcd3e7
 
 ## Current block
-B7.3 — Invitación + RSVP
+B7.4 — Mesas + Listados
 
 Current branch:
 `guest-independent`
 
-B7.2 sealed report:
-`guest/B7_2_HOY_INVITADOS_QA_2026-09-30.md`
+B7.3 sealed report:
+`guest/B7_3_INVITATION_RSVP_VISUAL_QA_2026-09-30.md`
 
-Validated commit for B7.2:
-`6e551b901b4deb7820018268dbccea872efd9ba4`
+Validated commit for B7.3:
+`bef69a9318c9f4af2a5a85880f4e7a5d1603bab2`
 
 ## Exact current failure
-B7.3 product visual behavior and the B6.6 sync-race fix are passing. The latest full run exposed two asynchronous QA races only:
-- B7.1 checked the GUEST brand structure immediately after the visual-layer marker, before the final DOM patch settled.
-- B7.3 checked Signature stepper height before all editor integration layers had settled.
-
-Both tests now wait for the actual final rendered condition rather than an earlier readiness marker.
-
-B7.1 QA stabilization: `2c916b7c349da0333b5a98b81d8e8c559b0cfb3c`
-B7.3 QA stabilization: `cac1648db53bff32cf22f52f0ca3b0ade9d7d006`
+None. B7.3 is PASS / SEALED.
 
 ## NEXT ACTION
-Run the complete QA again. Require regression + B6.1–B6.6 + B7.1–B7.3 all green on the same commit. If green, update the B6.6 sealed report with the post-remote local-edit race fix, seal B7.3, and advance to B7.4 Mesas/Listados. If not, use only the exact remaining failure.
+Start B7.4 only when continuing work. Scope: visual hierarchy, clarity and simplification of Mesas + Listados, including plano launch, table cards, unseated state, controlled-copy reports and list cards. Preserve B6.4 behavior and all B7.1–B7.3 layers. Do not add features.
 
 ## Working method from now on
 Every microblock has only three states:
