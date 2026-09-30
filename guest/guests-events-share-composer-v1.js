@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-event-invite',TOKEN='weddly_shared_wedding_token',PAY='weddly_pro_v7';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-event-invite',TOKEN='weddly_shared_wedding_token',PAY='weddly_pro_v7';
 let busy=false;
 function demo(){try{const d=new URLSearchParams(location.search).get('ownerDemo');return d==='es'||d==='en'?d:''}catch{return''}}
 function en(){if(demo())return demo()==='en';try{return JSON.parse(localStorage.getItem(PAY)||'null')?.settings?.lang==='en'}catch{return false}}
