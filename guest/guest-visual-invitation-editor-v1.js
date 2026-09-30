@@ -45,6 +45,19 @@ html[data-guest-b73-editor='1'] .weddly-save-bottom button{min-height:52px!impor
  html[data-guest-b73-editor='1'] #wsdInvitationFlow{gap:5px!important}
  html[data-guest-b73-editor='1'] #wsdInvitationFlow button{font-size:9.5px!important;padding-left:5px!important;padding-right:5px!important}
 }
+@media(min-width:760px){
+ html[data-guest-b73-editor='1'] .panel{padding:24px 24px 54px!important}
+ html[data-guest-b73-editor='1'] .weddly-intbar{top:0!important}
+}
+html[data-guest-b73-editor='1'] button:focus-visible,
+html[data-guest-b73-editor='1'] a:focus-visible,
+html[data-guest-b73-editor='1'] input:focus-visible,
+html[data-guest-b73-editor='1'] select:focus-visible,
+html[data-guest-b73-editor='1'] textarea:focus-visible{outline:3px solid rgba(82,92,67,.30)!important;outline-offset:2px!important}
+@media(prefers-reduced-motion:reduce){
+ html[data-guest-b73-editor='1'] *,html[data-guest-b73-editor='1'] *::before,html[data-guest-b73-editor='1'] *::after{scroll-behavior:auto!important}
+ html[data-guest-b73-editor='1'] button,html[data-guest-b73-editor='1'] .weddly-intbar{transition:none!important;animation:none!important}
+}
 `;
 function docs(){
  const out=[document];let f=document.getElementById('editor');
