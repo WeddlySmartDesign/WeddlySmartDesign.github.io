@@ -2,7 +2,7 @@
 'use strict';
 const G=window.__GuestsProd;if(!G)return;
 const KEY=G.KEY||'wsd_guest_state_v1';
-const isEn=()=>{try{const x=JSON.parse(localStorage.getItem('weddly_pro_v7')||'null');if(x?.settings?.lang==='en')return true;if(x?.settings?.lang==='es')return false}catch{}try{return localStorage.getItem('weddly_access_lang')==='en'}catch{return false}};
+const isEn=()=>{try{const x=JSON.parse(localStorage.getItem('wsd_guest_profile_v1')||'null');if(x?.settings?.lang==='en')return true;if(x?.settings?.lang==='es')return false}catch{}try{return localStorage.getItem('weddly_access_lang')==='en'}catch{return false}};
 const labels=()=>isEn()?{pending:'Pending',confirmed:'Confirmed',declined:'Not attending',unseated:'No table',table:'Table'}:{pending:'Pendiente',confirmed:'Confirmado',declined:'No asiste',unseated:'Sin mesa',table:'Mesa'};
 function state(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch{return{}}}
 function tableLabel(v){const L=labels(),s=String(v||'').trim();if(!s)return L.unseated;if(/^\d+$/.test(s))return`${L.table} ${Number(s)}`;return s}
