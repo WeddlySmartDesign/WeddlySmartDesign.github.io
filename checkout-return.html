@@ -58,6 +58,15 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
      const x=await r.json().catch(()=>({}));
      if(!r.ok||!x?.ok)throw new Error(x?.error||'status_failed');
      if(x.paid&&x.provisioned&&(x.activationUrl||x.upgradedTrial)){
+       if(x.upgradedTrial){
+         try{
+           const recovery=localStorage.getItem('weddly_trial_recovery_token')||'';
+           if(recovery.length>=40){
+             localStorage.setItem('weddly_shared_wedding_token',recovery);
+             localStorage.removeItem('weddly_trial_recovery_token');
+           }
+         }catch{}
+       }
        title.textContent=x.upgradedTrial?'Tu prueba ya es ONE.':'Ya es vuestra.';
        lead.textContent=x.upgradedTrial
          ?'Seguís en la misma boda. Todo lo que habíais organizado durante la prueba se mantiene.'
