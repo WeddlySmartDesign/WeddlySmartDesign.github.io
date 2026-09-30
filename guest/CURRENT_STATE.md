@@ -38,14 +38,17 @@ Current branch:
 B7.1 sealed report:
 `guest/B7_1_MOBILE_HIERARCHY_QA_2026-09-30.md`
 
-Validated commit for B7.1:
-`392d7b8683f18ed2317de830357921020a75b0ea`
+B7.2 visual layer:
+`guest/guest-visual-hoy-invitados-v1.js`
 
 ## Exact current failure
-None. B7.1 is PASS / SEALED.
+B7.2 ACTIVE. Hoy + Invitados visual hierarchy and dedicated browser QA are now in place. No failure identified yet.
+
+Latest workflow commit:
+`cea56c7364e3bcc13bd3a622189b64d3a2aaf192`
 
 ## NEXT ACTION
-Start B7.2 only when continuing work. Scope: visual hierarchy, clarity and simplification of Hoy + Invitados only. Preserve B6 functionality and B7.1 global hierarchy. Do not add features.
+Read CI for `cea56c7364e3bcc13bd3a622189b64d3a2aaf192`. Fix only exact B7.2 failures. Preserve B6 functionality and B7.1 global hierarchy. When regression + B6.1–B6.6 + B7.1 + B7.2 are PASS, seal B7.2 and advance to B7.3 Invitación/RSVP.
 
 ## Working method from now on
 Every microblock has only three states:
