@@ -23,7 +23,7 @@ ok(form.includes('accommodationOffered===true'),'accommodation opt-in behavior m
 ok(form.includes('plusone'),'plus-one config missing');
 
 const home=read('guests-home-rsvp-status-v1.js');
-ok(/table/i.test(home)&&/activity|change|recent/i.test(home),'Today table-change behavior missing');
+ok(home.includes('todaySeatChanges')&&home.includes('recentChanges'),'Today table-change behavior missing');
 const seating=read('guests-seating-v2.js');
 ok(/activity|table/i.test(seating),'seating change registration missing');
 const sync=read('guests-seating-sync-hotfix-v1.js');
