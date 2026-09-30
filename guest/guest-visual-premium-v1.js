@@ -95,8 +95,17 @@ h3{line-height:1.18}
   .nav button{font-size:12px!important}
 }
 @media(min-width:760px){
-  .wrap{padding-top:30px!important;padding-bottom:40px!important}
+  .wrap{max-width:760px!important;padding:30px 28px 44px!important}
   .nav{bottom:18px!important}
+  .sheet{align-items:center!important;padding:24px!important}
+  .panel{width:min(680px,calc(100vw - 48px))!important;max-width:680px!important;margin:auto!important;border-radius:28px!important;max-height:86dvh!important;padding-bottom:24px!important}
+}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:3px solid rgba(82,92,67,.30)!important;outline-offset:2px!important
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important}
+  .btn,.nav button,.panel{transition:none!important;animation:none!important}
 }
 `;
 
