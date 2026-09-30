@@ -4170,7 +4170,7 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 </div>
 <h3>Qué datos pueden tratarse</h3>
 <p>Según el uso del servicio, pueden tratarse datos de contacto y soporte, información necesaria para la compra, activación o acceso de prueba y la información que la pareja introduzca voluntariamente en su boda: nombres, invitados, contactos seleccionados, respuestas RSVP, mesas, opciones de menú, transporte, alojamiento, eventos, planificación, proveedores, pagos, documentos y notas.</p>
-<p>Cuando se solicita desde la web una prueba gratuita de ONE, se facilita un email para gestionar el acceso y evitar pruebas duplicadas. El servidor utiliza una huella criptográfica del email para esa comprobación; el email facilitado para este fin no se incorpora por defecto a listas de comunicaciones comerciales.</p>
+<p>Cuando se solicita desde la web una prueba gratuita de ONE, se facilita un email para gestionar el acceso, evitar pruebas duplicadas y enviar el enlace operativo de la prueba. Para la comprobación de duplicados, el servidor conserva una huella criptográfica del email. El email facilitado para este fin no se incorpora por defecto a listas de comunicaciones comerciales.</p>
 <h3>Para qué se utilizan</h3>
 <ul>
 <li>atender consultas y prestar soporte;</li>
@@ -4192,7 +4192,7 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <h3>Pagos</h3>
 <p>Los pagos se procesan mediante Stripe. WeddlySmartDesign puede recibir los datos necesarios para verificar la operación —por ejemplo, identificador de pago, estado, importe, moneda y email asociado—, pero no necesita almacenar el número completo de la tarjeta. Stripe trata los datos de pago conforme a sus propias condiciones y política de privacidad y, según la operación, puede actuar como proveedor de servicios de tratamiento y/o como responsable respecto de determinadas funciones propias.</p>
 <h3>Proveedores tecnológicos</h3>
-<p>ONE utiliza almacenamiento técnico en el dispositivo y sincronización remota para permitir el uso compartido por la pareja. La infraestructura actual utiliza GitHub Pages para archivos estáticos y Supabase para funciones de backend, almacenamiento, sincronización y medición estadística interna, además de Stripe para el procesamiento de pagos. Estos proveedores pueden utilizar subproveedores conforme a sus propias condiciones. Cuando resulte aplicable una transferencia internacional de datos, se utilizarán los mecanismos y garantías previstos en la normativa y en los acuerdos del proveedor correspondiente.</p>
+<p>ONE utiliza almacenamiento técnico en el dispositivo y sincronización remota para permitir el uso compartido por la pareja. La infraestructura actual utiliza GitHub Pages para archivos estáticos y Supabase para funciones de backend, almacenamiento, sincronización y medición estadística interna, Stripe para el procesamiento de pagos y Resend para el envío de correos transaccionales vinculados al acceso o la compra. Estos proveedores pueden utilizar subproveedores conforme a sus propias condiciones. Cuando resulte aplicable una transferencia internacional de datos, se utilizarán los mecanismos y garantías previstos en la normativa y en los acuerdos del proveedor correspondiente.</p>
 <h3>Medición estadística interna de la web</h3>
 <p>La web registra de forma interna y agregada visitas a la página de ONE, tiempo activo de navegación, profundidad de desplazamiento, secciones alcanzadas y algunos pasos del proceso comercial —por ejemplo, pulsar «Comprar», abrir el checkout o iniciarlo— para poder analizar el rendimiento de la web y la relación entre visitas y compras. Esta medición no utiliza cookies ni identificadores persistentes del navegador y no realiza seguimiento entre sitios. En la analítica no se guardan nombres, emails, direcciones IP ni datos de la boda. Se registran únicamente datos técnicos y de interacción de esa carga de página, el dominio de procedencia cuando exista, parámetros UTM si se han utilizado, una categoría general de dispositivo y, durante el proceso de compra, la edición seleccionada.</p>
 <p>El selector de contactos del dispositivo permite elegir contactos concretos; no implica subir automáticamente la agenda completa.</p>
@@ -6895,7 +6895,7 @@ function inject(){
     <button class="one-trial-submit" id="oneTrialStart" type="button">Empezar prueba gratuita</button>
     <button class="one-trial-existing" id="oneTrialExisting" type="button">Abrir mi ONE</button>
     <div class="one-trial-msg" id="oneTrialMsg" aria-live="polite"></div>
-    <p class="one-trial-privacy">El email se utiliza únicamente para gestionar el acceso de prueba y evitar pruebas duplicadas. No se añade a comunicaciones comerciales. <button id="oneTrialPrivacyOpen" type="button">Privacidad</button></p>
+    <p class="one-trial-privacy">El email se utiliza únicamente para gestionar la prueba, evitar duplicados y enviarte el enlace de acceso. No se añade a comunicaciones comerciales. <button id="oneTrialPrivacyOpen" type="button">Privacidad</button></p>
   </div>`;
   document.body.appendChild(d);dialog=d;
   d.querySelector('.one-trial-close').onclick=()=>d.close();
