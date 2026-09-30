@@ -3,7 +3,7 @@
 if(window.__wsdEventsCompactPhotoV1)return;
 window.__wsdEventsCompactPhotoV1=true;
 
-const INVITE_API='weddly-event-invite';
+const INVITE_API='guest-event-invite';
 let removeHero=false;
 let patchTimer=0;
 const $=s=>document.querySelector(s);
