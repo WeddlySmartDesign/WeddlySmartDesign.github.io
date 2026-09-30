@@ -145,7 +145,7 @@
     try{const a=await api('GET');if(!a.r.ok||!a.x.ok)return;const v=+a.x.version||0;if(v>G.ver&&a.x.state){const state=mergeSharedIdentity(structuredClone(a.x.state));writeRaw(state);G.ver=v;G.last=JSON.stringify(state);G.identity=identityOf(state);cleanMeta(state);G.remote=true;reloadCore('remote');G.notice('Actualizado con los cambios de vuestra pareja');setTimeout(G.clearNotice,2500)}}catch{}
   }
   Storage.prototype.setItem=function(k,v){const r=OUTER_SET.call(this,k,v);if(this===localStorage&&String(k)===G.KEY){markDirty(String(v));queue()}return r};
-  setInterval(()=>{if(syncIdentityNow())return;const raw=read();if(G.remote){G.remote=false;G.last=raw;return}if(raw!==G.last){markDirty(raw);queue()}},300);
+  setInterval(()=>{if(syncIdentityNow())return;const raw=read();if(G.remote){G.remote=false;if(raw===G.last)return}if(raw!==G.last){markDirty(raw);queue()}},300);
   addEventListener('storage',e=>{if(e.key==='weddly_pro_v7')syncIdentityNow();if(e.key===G.KEY&&e.newValue!==null){markDirty(e.newValue);queue()}});
   setInterval(poll,5000);addEventListener('online',()=>{syncIdentityNow();queue();poll()});addEventListener('focus',poll);addEventListener('pageshow',poll);document.addEventListener('visibilitychange',()=>{if(!document.hidden)poll()});
   start();
