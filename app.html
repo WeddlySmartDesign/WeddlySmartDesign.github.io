@@ -62,7 +62,9 @@ function trialNoticeKey(expiresAt){const d=new Date();return 'weddly_trial_notic
 function maybeShowTrialNotice(){
   if(!accessStatus?.tester||!accessStatus?.expiresAt||accessStatus?.expiryRule!=='fixed'||demoMode())return;
   const exp=new Date(accessStatus.expiresAt),now=new Date(),ms=exp-now;
-  if(!Number.isFinite(ms)||ms<=0||ms>36*60*60*1000)return;
+  if(!Number.isFinite(ms)||ms<=0)return;
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate()),expiryDay=new Date(exp.getFullYear(),exp.getMonth(),exp.getDate()),dayDiff=Math.round((expiryDay-today)/86400000);
+  if(dayDiff!==0&&dayDiff!==1)return;
   const key=trialNoticeKey(accessStatus.expiresAt);
   try{if(localStorage.getItem(key)==='dismissed')return}catch{}
   const notice=document.getElementById('trialNotice'),title=document.getElementById('trialNoticeTitle'),textEl=document.getElementById('trialNoticeText'),later=document.getElementById('trialNoticeLater'),buy=document.getElementById('trialNoticeBuy'),eyebrow=document.getElementById('trialNoticeEyebrow');
