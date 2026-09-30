@@ -208,17 +208,7 @@ jobs:
           first_status="$(printf '%s' "$first" | tail -n1)"
           first_body="$(printf '%s' "$first" | sed '$d')"
           test "$first_status" = "201"
-          FIRST_BODY="$first_body" python3 - <<'PY'
-import json,os
-x=json.loads(os.environ["FIRST_BODY"])
-assert x.get("ok") is True
-assert x.get("created") is True
-assert x.get("product")=="full"
-assert x.get("days")==14
-assert x.get("emailSent") is True
-assert "activationCode" not in x
-assert "testerLink" not in x
-PY
+          FIRST_BODY="$first_body" python3 -c 'import json,os; x=json.loads(os.environ["FIRST_BODY"]); assert x.get("ok") is True; assert x.get("created") is True; assert x.get("product")=="full"; assert x.get("days")==14; assert x.get("emailSent") is True; assert "activationCode" not in x; assert "testerLink" not in x'
 
           second="$(curl -sS -w '\n%{http_code}' \
             -H 'Origin: https://weddlysmartdesign.github.io' \
@@ -228,14 +218,7 @@ PY
           second_status="$(printf '%s' "$second" | tail -n1)"
           second_body="$(printf '%s' "$second" | sed '$d')"
           test "$second_status" = "200"
-          SECOND_BODY="$second_body" python3 - <<'PY'
-import json,os
-x=json.loads(os.environ["SECOND_BODY"])
-assert x.get("ok") is True
-assert x.get("alreadyExists") is True
-assert "activationCode" not in x
-assert "testerLink" not in x
-PY
+          SECOND_BODY="$second_body" python3 -c 'import json,os; x=json.loads(os.environ["SECOND_BODY"]); assert x.get("ok") is True; assert x.get("alreadyExists") is True; assert "activationCode" not in x; assert "testerLink" not in x'
 
           forbidden="$(curl -sS -w '\n%{http_code}' \
             -H 'Origin: https://example.com' \
