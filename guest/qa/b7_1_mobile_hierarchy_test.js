@@ -70,9 +70,11 @@ async function runViewport(browser,width,height){
   const visibleBtns=await f.locator('.view.on .btn:visible').evaluateAll(xs=>xs.map(x=>x.getBoundingClientRect().height));
   ok(visibleBtns.every(h=>h>=47),'visible action below premium tap target: '+visibleBtns.join(','));
 
-  // Sheet hierarchy: rounded, readable and not full-screen-cramped.
-  await f.locator('#editWedding').click();
-  await f.waitForSelector('#sheet.on');
+  // Sheet hierarchy: use an in-product sheet; Ajustes intentionally navigates to its own screen.
+  await f.locator('#nav button[data-go="invitados"]').click();
+  await f.waitForSelector('#createBtn',{timeout:5000});
+  await f.locator('#createBtn').click();
+  await f.waitForSelector('#sheet.on',{timeout:5000});
   const panel=await f.locator('#panel').evaluate(el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return{w:r.width,h:r.height,radius:parseFloat(s.borderTopLeftRadius),maxHeight:s.maxHeight,pad:parseFloat(s.paddingLeft)}});
   ok(panel.radius>=27&&panel.w<=width+1&&panel.pad>=17,'premium sheet hierarchy missing: '+JSON.stringify(panel));
   await noOverflow(f);
