@@ -189,6 +189,16 @@ body:has(#app:not([hidden])){overflow:hidden}
 .funnel-flow small{display:block;font-size:11.5px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.06em}
 .funnel-flow strong{display:block;font-family:var(--serif);font-size:27px;line-height:1.05;font-weight:400;margin-top:2px}
 .funnel-flow>b{font-size:14px;color:var(--clay)}
+.trial-period-note{
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:10.5px;
+  line-height:1.35;
+}
+.trial-funnel .funnel-flow small{font-size:10.5px}
+.trial-funnel .funnel-flow strong{font-size:25px}
+.trial-detail-section .demo-interest-strip{margin-top:10px}
+
 .quick-read{
   display:grid;
   grid-template-columns:1.35fr .85fr .9fr;
@@ -769,6 +779,17 @@ body:has(#app:not([hidden])){overflow:hidden}
       <div hidden><div id="barVisits"></div><div id="barBuy"></div><div id="barCheckout"></div><div id="barPurchase"></div></div>
     </section>
 
+    <section class="compact-funnel trial-funnel" aria-label="Prueba gratuita">
+      <div class="funnel-title">Prueba gratuita</div>
+      <div class="funnel-flow">
+        <div><small>Abren</small><strong id="tOpen">0</strong></div><b>→</b>
+        <div><small>Solicitan</small><strong id="tRequest">0</strong></div><b>→</b>
+        <div><small>Creadas</small><strong id="tCreated">0</strong></div><b>→</b>
+        <div class="last"><small>Compran después</small><strong id="tPaid">0</strong></div>
+      </div>
+      <p class="trial-period-note">“Compran después” cuenta compras realizadas en el periodo por bodas que empezaron como prueba; no es una tasa de cohorte.</p>
+    </section>
+
     <section class="quick-read" aria-label="Comportamiento">
       <div><small>Tiempo activo</small><strong id="quickTime">—</strong></div>
       <div><small>Llega al precio</small><strong id="quickPrice">—</strong></div>
@@ -776,7 +797,7 @@ body:has(#app:not([hidden])){overflow:hidden}
     </section>
 
     <div class="dashboard-footline dashboard-foot-actions">
-      <span>Datos internos · Analytics v14</span>
+      <span>Datos internos · Analytics v15</span>
       <button class="journal-open" id="actionsBtn" type="button">Acciones</button>
     </div>
   </main>
@@ -789,6 +810,26 @@ body:has(#app:not([hidden])){overflow:hidden}
       <button class="icon-btn" id="detailsClose" type="button">Cerrar</button>
     </header>
     <div class="details-scroll">
+      <section class="details-section trial-detail-section">
+        <h3>Prueba gratuita</h3>
+        <p class="behavior-note">Mide el nuevo recorrido de 14 días. Las compras desde prueba se cuentan cuando se pagan, aunque la prueba se hubiera creado antes del periodo seleccionado.</p>
+        <div class="behavior-cards">
+          <div><small>Abren la prueba</small><strong id="tdOpen">0</strong></div>
+          <div><small>Solicitan</small><strong id="tdRequest">0</strong></div>
+          <div><small>Pruebas creadas</small><strong id="tdCreated">0</strong></div>
+          <div><small>Compras desde prueba</small><strong id="tdPaid">0</strong></div>
+        </div>
+        <div class="behavior-signals">
+          <div><span>Abren → solicitan</span><b id="tdRequestRate">—</b><small>Sobre quienes abren el modal.</small></div>
+          <div><span>Solicitan → creadas</span><b id="tdCreationRate">—</b><small>Pruebas creadas en servidor frente a solicitudes.</small></div>
+          <div><span>Incidencias</span><b id="tdIssues">0</b><small id="tdIssueDetail">0 duplicadas · 0 errores</small></div>
+        </div>
+        <div class="demo-interest-strip">
+          <div><span>Ingresos desde prueba</span><small>Pagos del periodo procedentes de una boda que empezó como trial.</small></div>
+          <strong id="tdRevenue">0 €</strong>
+        </div>
+      </section>
+
       <section class="details-section behavior-section">
         <h3>Comportamiento medido</h3>
         <p class="behavior-note" id="behaviorSince">La medición de comportamiento empieza ahora; no puede reconstruir visitas anteriores.</p>
@@ -1207,6 +1248,22 @@ function render(data){
   renderList($('editionList'),Array.isArray(s.purchases_by_edition)?s.purchases_by_edition:[],'purchaseEdition');
   renderList($('checkoutEditionList'),Array.isArray(s.checkout_by_edition)?s.checkout_by_edition:[],'checkoutEdition');
 
+  const trial=s.trial||{};
+  $('tOpen').textContent=trial.opened??0;
+  $('tRequest').textContent=trial.requested??0;
+  $('tCreated').textContent=trial.created??0;
+  $('tPaid').textContent=trial.purchases_from_trial??0;
+  $('tdOpen').textContent=trial.opened??0;
+  $('tdRequest').textContent=trial.requested??0;
+  $('tdCreated').textContent=trial.created??0;
+  $('tdPaid').textContent=trial.purchases_from_trial??0;
+  $('tdRequestRate').textContent=trial.request_rate_pct==null?'—':pct(trial.request_rate_pct);
+  $('tdCreationRate').textContent=trial.creation_rate_pct==null?'—':pct(trial.creation_rate_pct);
+  const trialDuplicates=Math.max(0,Number(trial.duplicates||0)),trialErrors=Math.max(0,Number(trial.errors||0));
+  $('tdIssues').textContent=trialDuplicates+trialErrors;
+  $('tdIssueDetail').textContent=trialDuplicates+' duplicadas · '+trialErrors+' errores';
+  $('tdRevenue').textContent=money(trial.revenue_from_trial_cents||0);
+
   const behavior=s.behavior||{};
   $('quickTime').textContent=duration(behavior.median_active_seconds);
   $('quickPrice').textContent=behavior.reached_price_pct==null?'—':pct(behavior.reached_price_pct);
@@ -1344,7 +1401,7 @@ $('installHelpClose').addEventListener('click',()=>installHelp.close());
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js?v=14',{scope:'./',updateViaCache:'none'})
+    navigator.serviceWorker.register('./sw.js?v=15',{scope:'./',updateViaCache:'none'})
       .then(reg=>reg.update().catch(()=>{}))
       .catch(()=>{});
   },{once:true});
