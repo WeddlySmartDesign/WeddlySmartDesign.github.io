@@ -115,7 +115,7 @@ async function testOperations(browser){
  await page.waitForFunction(()=>document.documentElement.dataset.guestB73Ops==='1',null,{timeout:12000});
  await page.waitForSelector('#metrics .metric',{timeout:10000});
  await centered(page.locator('.app'),760,'operations app');await noOverflow(page,'operations desktop');
- await focusVisible(page,page.locator('.topActions .btn').first(),'operations top action');
+ await focusVisible(page,page.locator('#back'),'operations back action');
  await context.close();
 }
 async function testPublic(browser){
