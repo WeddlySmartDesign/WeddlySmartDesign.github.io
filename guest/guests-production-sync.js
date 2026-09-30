@@ -101,7 +101,7 @@
   async function start(){
     try{G.token=localStorage.getItem('weddly_shared_wedding_token')||''}catch{}
     let local=mergeSharedIdentity(parse(read()));if(local)writeRaw(local);
-    if(!G.token){G.msg.textContent='Este dispositivo todavía no tiene acceso a vuestra boda.';G.retry.style.display='inline-block';return}
+    if(!G.token){G.msg.textContent='Este dispositivo todavía no tiene acceso a vuestro GUEST.';G.retry.style.display='inline-block';return}
     try{
       const a=await api('GET');if(!a.r.ok||!a.x.ok)throw 0;const remote=a.x.state?mergeSharedIdentity(structuredClone(a.x.state)):null;G.ver=+a.x.version||0;let meta=readMeta();
       if(!meta.dirty&&local&&meta.lastHash&&hash(JSON.stringify(local))!==meta.lastHash){meta={dirty:true,baseVersion:Number(meta.version||0),startedAt:new Date().toISOString(),pendingHash:hash(JSON.stringify(local))};writeMeta(meta)}
@@ -117,7 +117,7 @@
       open();
     }catch{
       if(has(local)){G.last=G.last||'';G.identity=identityOf(local);G.msg.textContent='Sin conexión. Abriendo la copia guardada…';setTimeout(open,400)}
-      else{G.msg.textContent='No hemos podido abrir Invitados. Comprueba la conexión.';G.retry.textContent='Reintentar';G.retry.href=location.href;G.retry.style.display='inline-block'}
+      else{G.msg.textContent='No hemos podido abrir GUEST. Comprueba la conexión.';G.retry.textContent='Reintentar';G.retry.href=location.href;G.retry.style.display='inline-block'}
     }
   }
   let timer=0;function queue(){if(timer)return;timer=setTimeout(()=>{timer=0;push()},450)}
