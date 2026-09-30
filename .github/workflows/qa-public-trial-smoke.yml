@@ -1,0 +1,83 @@
+name: QA Public Trial Smoke
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "one.html"
+      - ".github/workflows/qa-public-trial-smoke.yml"
+
+jobs:
+  public-trial-smoke:
+    if: github.head_ref == 'qa/public-trial-14d'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Exercise self-service trial flow
+        shell: bash
+        run: |
+          set -euo pipefail
+          EMAIL="qa-public-trial-${GITHUB_RUN_ID}@example.invalid"
+          QA_ACCESS="https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access-public-trial-qa"
+          ACCESS="https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access"
+          ENTITLE="https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access"
+
+          first="$(curl -sS -w '\n%{http_code}' -H 'Content-Type: application/json' -d "{\"action\":\"public_trial\",\"email\":\"$EMAIL\"}" "$QA_ACCESS")"
+          first_status="$(printf '%s' "$first" | tail -n1)"
+          first_body="$(printf '%s' "$first" | sed '$d')"
+          test "$first_status" = "201"
+          CODE="$(FIRST_BODY="$first_body" python3 - <<'PY'
+import json,os
+x=json.loads(os.environ["FIRST_BODY"])
+assert x.get("ok") is True
+assert x.get("product")=="full"
+assert x.get("days")==14
+code=x.get("activationCode","")
+assert code.startswith("WSDF-")
+print(code)
+PY
+)"
+          LICENSE_ID="$(FIRST_BODY="$first_body" python3 - <<'PY'
+import json,os
+print(json.loads(os.environ["FIRST_BODY"])["licenseId"])
+PY
+)"
+          echo "QA_EMAIL=$EMAIL"
+          echo "QA_LICENSE_ID=$LICENSE_ID"
+
+          second="$(curl -sS -w '\n%{http_code}' -H 'Content-Type: application/json' -d "{\"action\":\"public_trial\",\"email\":\"$EMAIL\"}" "$QA_ACCESS")"
+          second_status="$(printf '%s' "$second" | tail -n1)"
+          second_body="$(printf '%s' "$second" | sed '$d')"
+          test "$second_status" = "409"
+          SECOND_BODY="$second_body" python3 - <<'PY'
+import json,os
+x=json.loads(os.environ["SECOND_BODY"])
+assert x.get("error")=="trial_already_claimed"
+PY
+
+          activated="$(curl -sS -w '\n%{http_code}' -H 'Content-Type: application/json' -d "{\"action\":\"activate\",\"activationCode\":\"$CODE\"}" "$ACCESS")"
+          activated_status="$(printf '%s' "$activated" | tail -n1)"
+          activated_body="$(printf '%s' "$activated" | sed '$d')"
+          test "$activated_status" = "201"
+          MEMBER="$(ACTIVATED_BODY="$activated_body" python3 - <<'PY'
+import json,os
+x=json.loads(os.environ["ACTIVATED_BODY"])
+assert x.get("ok") is True
+m=x.get("memberToken","")
+assert len(m)>=40
+print(m)
+PY
+)"
+
+          entitlement="$(curl -sS -w '\n%{http_code}' -H 'Content-Type: application/json' -H "x-weddly-member: $MEMBER" -d '{"action":"entitlement"}' "$ENTITLE")"
+          entitlement_status="$(printf '%s' "$entitlement" | tail -n1)"
+          entitlement_body="$(printf '%s' "$entitlement" | sed '$d')"
+          test "$entitlement_status" = "200"
+          ENTITLEMENT_BODY="$entitlement_body" python3 - <<'PY'
+import json,os
+x=json.loads(os.environ["ENTITLEMENT_BODY"])
+assert x.get("ok") is True
+assert x.get("product")=="full"
+assert x.get("tester") is True
+assert x.get("trialDays")==14
+print("SELF_SERVICE_TRIAL_SMOKE_OK")
+PY
