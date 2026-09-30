@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#F2EFE9"><title>GUEST · Ajustes</title>
+<style>
+:root{--ink:#2C2A26;--accent:#525C43;--soft:#EEF0E9;--paper:#FBF8F3;--line:#E4DED2;--muted:#736F63;--bg:#F2EFE9}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:620px;min-height:100vh;margin:auto;background:var(--paper);padding:22px 20px 44px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:15px}.brand b{font:500 27px Georgia,serif;color:var(--accent)}.brand span{display:block;font:500 15px Georgia,serif;color:var(--accent);margin-top:2px}.back{border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 13px;text-decoration:none;color:var(--ink);font-weight:750}
+h1{font:500 36px Georgia,serif;margin:34px 0 8px}h2{font-size:19px;margin:0 0 7px}.small{font-size:13px;color:var(--muted);line-height:1.5}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:14px}.field{width:100%;padding:13px;border:1px solid #ccc5bb;border-radius:12px;background:#fff;font-size:16px;margin:6px 0 12px}.btn{border:0;border-radius:12px;padding:12px 14px;background:var(--ink);color:#fff;font-weight:800;font-size:14px}.btn.soft{background:var(--soft);color:var(--ink)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.themes{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.theme{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff;text-align:left;font-weight:750}.theme.on{outline:2px solid var(--accent)}.ok{min-height:20px;color:#496443;font-size:13px;margin-top:9px}
+</style></head><body><main>
+<div class="top"><div class="brand"><b>GUEST</b><span>by WeddlySmartDesign</span></div><a class="back" href="index.html">← Volver</a></div>
+<h1>Ajustes</h1><p class="small">Los datos de GUEST son independientes del resto de productos de WeddlySmartDesign.</p>
+<section class="card"><h2>Vuestra boda</h2><label>Persona 1</label><input id="p1" class="field" autocomplete="off"><label>Persona 2</label><input id="p2" class="field" autocomplete="off"><label>Fecha de boda</label><input id="date" class="field" type="date"><button class="btn" id="save">Guardar</button><div class="ok" id="saved"></div></section>
+<section class="card"><h2>Apariencia</h2><p class="small">El tema solo afecta a este GUEST.</p><div class="themes" id="themes"></div></section>
+<section class="card"><h2>Copia de seguridad</h2><p class="small">Puedes guardar una copia local de invitados, mesas, RSVP y configuración.</p><div class="actions"><button class="btn soft" id="export">Exportar copia</button><label class="btn soft" style="cursor:pointer">Importar copia<input id="import" type="file" accept=".json,application/json" hidden></label></div><div class="ok" id="backupMsg"></div></section>
+<section class="card"><h2>Soporte</h2><p class="small">Si tienes cualquier problema con GUEST, escríbenos.</p><a href="mailto:weddlysmartdesign@gmail.com">weddlysmartdesign@gmail.com</a></section>
+<script>
+(()=>{const KEY='wsd_guest_state_v1',THEME='wsd_guest_theme_v1',names={nordic:'Nordic',blush:'Blush',sand:'Arena',slate:'Slate',editorial:'Editorial'};
+const read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch{return{}}},write=s=>localStorage.setItem(KEY,JSON.stringify(s));
+let s=read();s.meta=s.meta||{};const c=Array.isArray(s.meta.couple)?s.meta.couple:['',''];p1.value=c[0]||'';p2.value=c[1]||'';date.value=s.meta.weddingDate||'';
+save.onclick=()=>{const a=p1.value.trim(),b=p2.value.trim();if(!a||!b){saved.textContent='Indica los dos nombres.';return}s=read();s.meta=s.meta||{};s.meta.couple=[a,b];s.meta.weddingDate=date.value||'';write(s);saved.textContent='Guardado';setTimeout(()=>saved.textContent='',1800)};
+const cur=localStorage.getItem(THEME)||'nordic';themes.innerHTML=Object.entries(names).map(([k,v])=>'<button class="theme '+(k===cur?'on':'')+'" data-t="'+k+'">'+v+'</button>').join('');
+themes.onclick=e=>{const b=e.target.closest('[data-t]');if(!b)return;localStorage.setItem(THEME,b.dataset.t);themes.querySelectorAll('.theme').forEach(x=>x.classList.toggle('on',x===b));};
+export.onclick=()=>{const payload={product:'GUEST by WeddlySmartDesign',version:1,exportedAt:new Date().toISOString(),state:read(),theme:localStorage.getItem(THEME)||'nordic'};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='GUEST-copia-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+import.onchange=async()=>{const f=import.files?.[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!x||typeof x.state!=='object')throw 0;write(x.state);if(x.theme&&names[x.theme])localStorage.setItem(THEME,x.theme);backupMsg.textContent='Copia importada correctamente. Vuelve a GUEST para verla.'}catch{backupMsg.textContent='La copia no es válida.'}finally{import.value=''}};
+})();
+</script></main></body></html>
