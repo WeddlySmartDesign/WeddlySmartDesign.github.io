@@ -40,13 +40,17 @@ Validated commit for B6.5:
 
 ## Exact current failure
 B6.6 active.
-Current failure: source device A local edit was not observed at backend within the initial QA window. The test has been corrected to foreground the source device (matching real active editing) and now records local state, sync metadata, notice, remote state, version and PUT history if propagation still fails.
+A REAL product defect was confirmed in the sync scheduler: every 300 ms the dirty-state watcher called `queue()`, and `queue()` cleared/restarted a 450 ms debounce timer. A dirty local state could therefore postpone `push()` indefinitely and never reach the backend.
 
-Latest QA commit:
-`35b08b2782f99b4f8563c74311b838a29e6aef0e`
+Product fix:
+`guest/guests-production-sync.js`
+Commit:
+`b3047ee612247ba639776190218d4d4c2a003e4e`
+
+The scheduler now uses a non-starving pending timer: once a sync is queued, later dirty checks no longer postpone it.
 
 ## NEXT ACTION
-Read CI for `35b08b2782f99b4f8563c74311b838a29e6aef0e`. If B6.6 still fails, use the new exact sync diagnostic to determine whether the defect is product or QA. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
+Read CI for `b3047ee612247ba639776190218d4d4c2a003e4e`. If B6.6 fails again, use only the exact logged failure. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
 
 ## Working method from now on
 Every microblock has only three states:
