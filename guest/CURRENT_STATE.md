@@ -43,16 +43,17 @@ Validated commit for B7.2:
 `6e551b901b4deb7820018268dbccea872efd9ba4`
 
 ## Exact current failure
-B7.3 visual QA is PASS. A clean rerun reproduced a REAL two-device race in the closed B6.6 sync layer: immediately after applying a remote update, `G.remote` caused the 300 ms watcher to copy the current localStorage into `G.last` and return. If the user made a local edit in that short window, that edit could be mistaken for the remote baseline and never be pushed.
+B7.3 product visual behavior and the B6.6 sync-race fix are passing. The latest full run exposed two asynchronous QA races only:
+- B7.1 checked the GUEST brand structure immediately after the visual-layer marker, before the final DOM patch settled.
+- B7.3 checked Signature stepper height before all editor integration layers had settled.
 
-Minimal product fix in `guest/guests-production-sync.js`: when clearing `G.remote`, suppress only if the current raw state still equals the known remote `G.last`. If localStorage changed meanwhile, mark it dirty and queue it normally.
+Both tests now wait for the actual final rendered condition rather than an earlier readiness marker.
 
-Fix commit: `fbe380b7055fbed8f4b10c46c5812f9964fb21e2`
-
-The earlier B6.3 children assertion passed on the clean rerun, confirming that result was not a persistent product regression.
+B7.1 QA stabilization: `2c916b7c349da0333b5a98b81d8e8c559b0cfb3c`
+B7.3 QA stabilization: `cac1648db53bff32cf22f52f0ca3b0ade9d7d006`
 
 ## NEXT ACTION
-Run the complete QA on the sync-race fix. If all regression, B6.1–B6.6 and B7.1–B7.3 jobs pass, reseal B6.6 with this additional race fix noted, seal B7.3, and advance to B7.4 Mesas/Listados. If any job fails, use only its exact log.
+Run the complete QA again. Require regression + B6.1–B6.6 + B7.1–B7.3 all green on the same commit. If green, update the B6.6 sealed report with the post-remote local-edit race fix, seal B7.3, and advance to B7.4 Mesas/Listados. If not, use only the exact remaining failure.
 
 ## Working method from now on
 Every microblock has only three states:
