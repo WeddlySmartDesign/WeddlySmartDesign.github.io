@@ -18,6 +18,7 @@ Resume from the exact "NEXT ACTION" below.
 - B6.1 shell / install / navigation / settings — PASS / CLOSED
 - B6.2 Today + Guests — PASS / CLOSED
 - B6.3 Invitation + RSVP + Essential/Signature — PASS / CLOSED
+- B6.4 Tables + lists — PASS / CLOSED
 
 B6.3 sealed report:
 guest/B6_3_INVITATION_RSVP_QA_2026-09-30.md
@@ -25,37 +26,24 @@ Validated commit:
 099ddf75524c9e2eed3e8e9298262f8ed4fcd3e7
 
 ## Current block
-B6.4 — Tables + lists
+B6.5 — Extra events
 
 Current branch:
-guest-independent
+`guest-independent`
 
-Current HEAD when this checkpoint was written:
-dd1795eb290601b92e10826ce29226f0da7b6921
+B6.4 sealed report:
+`guest/B6_4_TABLES_LISTS_QA_2026-09-30.md`
 
-Current CI status at that HEAD:
-- regression: PASS
-- b6-shell-mobile: PASS
-- b6-today-guests: PASS
-- b6-invitation-rsvp: PASS
-- b6-tables-lists: FAIL
+Validated functional commit for B6.4:
+`4ac9267362b5a1389b78fd6e80cb724e9c822c26`
 
 ## Exact current failure
-Catering summary bug fixed.
-Print/PDF QA stabilized.
-Custom RSVP list resilience fixed.
-Active extra-event list state API migrated to GUEST.
-Regression then exposed the same active helper still calling the ONE event-invite endpoint.
-
-Product fix commit:
-`d33fd12c502ae7f9bca60312a92f764ab41076a5`
-
-Current status: CI validation pending.
+None. B6.4 is PASS / SEALED.
 
 ## NEXT ACTION
-1. Read CI for commit `d33fd12c502ae7f9bca60312a92f764ab41076a5`.
-2. If any job fails, use only its exact logged failure.
-3. If regression + B6.1 + B6.2 + B6.3 + B6.4 all PASS, create `guest/B6_4_TABLES_LISTS_QA_2026-09-30.md`, seal B6.4 and update this file to B6.5 Events extra.
+Start B6.5 only when continuing work.
+B6.5 scope: extra events, their guest lists, invitation/RSVP linkage, list outputs, isolation, mobile usability and error states.
+Do not reopen B6.4 unless a regression test fails.
 
 ## Working method from now on
 Every microblock has only three states:
