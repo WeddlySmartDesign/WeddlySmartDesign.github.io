@@ -1,5 +1,5 @@
 (()=>{
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-event-state',TOKEN='weddly_shared_wedding_token',GUEST='weddly_guests_qa_v67',PAY='weddly_pro_v7';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-event-state',TOKEN='weddly_shared_wedding_token',GUEST='weddly_guests_qa_v67',PAY='weddly_pro_v7';
 const $=s=>document.querySelector(s),safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let state={schema:1,events:{},updatedAt:new Date(0).toISOString()},version=0,current='',busy=false;
 function demo(){try{const q=new URLSearchParams(location.search).get('ownerDemo');if(q==='es'||q==='en')return q;const x=localStorage.getItem('weddly_owner_demo_mode');return x==='es'||x==='en'?x:''}catch{return''}}
