@@ -20,13 +20,14 @@ async function centered(locator,maxWidth,label){
  ok(x.w<=maxWidth+2,label+' too wide '+JSON.stringify(x));
  ok(Math.abs(x.left-x.right)<=3,label+' not centered '+JSON.stringify(x));
 }
-async function focusVisible(locator,label){
- // Prime Chromium's real keyboard modality with a trusted Tab key, then return focus to the target.
+async function focusVisible(page,locator,label){
+ // Focus the target, move away with a trusted keyboard event, then return with Shift+Tab.
+ // This preserves keyboard modality and works for both top documents and focused iframe documents.
  await locator.focus();
- await locator.press('Tab');
- await locator.focus();
- const x=await locator.evaluate(el=>{const s=getComputedStyle(el);return{focused:el===el.ownerDocument.activeElement,style:s.outlineStyle,width:parseFloat(s.outlineWidth),offset:parseFloat(s.outlineOffset)}});
- ok(x.focused&&x.style!=='none'&&x.width>=2,label+' keyboard focus ring missing '+JSON.stringify(x));
+ await page.keyboard.press('Tab');
+ await page.keyboard.press('Shift+Tab');
+ const x=await locator.evaluate(el=>{const s=getComputedStyle(el);return{focused:el===el.ownerDocument.activeElement,visible:el.matches(':focus-visible'),style:s.outlineStyle,width:parseFloat(s.outlineWidth),offset:parseFloat(s.outlineOffset)}});
+ ok(x.focused&&x.visible&&x.style!=='none'&&x.width>=2,label+' keyboard focus ring missing '+JSON.stringify(x));
 }
 async function makePage(context,edition='signature'){
  const page=await context.newPage();
@@ -84,7 +85,7 @@ async function testMain(browser){
  const p=await panel.evaluate(el=>{const r=el.getBoundingClientRect();return{w:r.width,left:r.left,right:innerWidth-r.right,top:r.top,bottom:innerHeight-r.bottom,radius:parseFloat(getComputedStyle(el).borderRadius)}});
  ok(p.w<=682&&Math.abs(p.left-p.right)<=3&&p.top>20&&p.bottom>20&&p.radius>=27,'desktop sheet not centered/premium '+JSON.stringify(p));
  await f.locator('#sheet').click({position:{x:5,y:5}});
- await focusVisible(f.locator('#createBtn'),'main create button');
+ await focusVisible(page,f.locator('#createBtn'),'main create button');
  await context.close();
 
  const reduced=await browser.newContext({viewport:{width:1024,height:800},reducedMotion:'reduce'});
@@ -101,7 +102,7 @@ async function testEvents(browser){
  await page.goto(base+'/guest/guests-events-v3.html',{waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>document.documentElement.dataset.guestB75==='1',null,{timeout:10000});
  await centered(page.locator('.wrap'),760,'events wrap');await noOverflow(page,'events desktop');
- await focusVisible(page.locator('.eventTabs [data-tab="ev1"]'),'event tab');
+ await focusVisible(page,page.locator('.eventTabs [data-tab="ev1"]'),'event tab');
  await page.locator('#addEvent').click();await page.waitForSelector('#sheet.on');
  const sh=await page.locator('#sheetCard').evaluate(el=>{const r=el.getBoundingClientRect();return{w:r.width,left:r.left,right:innerWidth-r.right,top:r.top,bottom:innerHeight-r.bottom,radius:parseFloat(getComputedStyle(el).borderRadius)}});
  ok(sh.w<=682&&Math.abs(sh.left-sh.right)<=3&&sh.top>20&&sh.bottom>20&&sh.radius>=27,'event desktop sheet not centered '+JSON.stringify(sh));
@@ -114,7 +115,7 @@ async function testOperations(browser){
  await page.waitForFunction(()=>document.documentElement.dataset.guestB73Ops==='1',null,{timeout:12000});
  await page.waitForSelector('#metrics .metric',{timeout:10000});
  await centered(page.locator('.app'),760,'operations app');await noOverflow(page,'operations desktop');
- await focusVisible(page.locator('.topActions .btn').first(),'operations top action');
+ await focusVisible(page,page.locator('.topActions .btn').first(),'operations top action');
  await context.close();
 }
 async function testPublic(browser){
@@ -124,7 +125,7 @@ async function testPublic(browser){
  await page.waitForFunction(()=>document.documentElement.dataset.guestB73Public==='1',null,{timeout:12000});
  await page.waitForSelector('#yes',{timeout:10000});
  await centered(page.locator('.wrap'),660,'public RSVP wrap');await noOverflow(page,'public RSVP desktop');
- await focusVisible(page.locator('#yes'),'public RSVP yes');
+ await focusVisible(page,page.locator('#yes'),'public RSVP yes');
  const colors=await page.locator('.lead').evaluate(el=>{const s=getComputedStyle(el),bg=getComputedStyle(document.body);return{fg:s.color,bg:bg.backgroundColor}});
  ok(contrast(rgb(colors.fg),rgb(colors.bg))>=4.5,'public RSVP muted contrast below AA '+JSON.stringify(colors));
  await context.close();
@@ -137,7 +138,7 @@ async function testEditor(browser){
  await f.waitForFunction(()=>document.documentElement.dataset.guestB73Editor==='1',null,{timeout:10000});
  await f.waitForSelector('.weddly-save-bottom [data-save-essential]',{timeout:10000});
  await noOverflow(f,'editor desktop');
- await focusVisible(f.locator('.weddly-save-bottom [data-save-essential]'),'editor save');
+ await focusVisible(page,f.locator('.weddly-save-bottom [data-save-essential]'),'editor save');
  await context.close();
 }
 (async()=>{
