@@ -15,7 +15,7 @@
 <script src="/access-cookie-bridge-v1.js?v=1"></script>
 <script>
 (()=>{
-const ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access';
+const ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access-trial-upgrade-qa';
 const TOKEN_KEY='weddly_shared_wedding_token';
 const params=new URLSearchParams(location.search),invite=params.get('invite')||'',purchaseSource=(params.get('purchase')||'').toLowerCase(),forcedLang=(params.get('lang')||'').toLowerCase(),repairMode=(params.get('repair')||'').toLowerCase(),repair=repairMode==='1'||repairMode==='hard',inactive=params.get('inactive')==='1';
 const hashParams=new URLSearchParams(location.hash.startsWith('#')?location.hash.slice(1):location.hash),tester=hashParams.get('tester')||'',purchaseCodeFromLink=hashParams.get('code')||'';
@@ -76,14 +76,30 @@ if(repair){
 }
 render();
 if(inactive){
-  $('title').textContent=lang==='es'?'Este acceso ya no está activo':'This access is no longer active';
-  $('lead').textContent=lang==='es'?'El acceso a esta boda ha finalizado. Los datos de la boda no se borran.':'Access to this wedding has ended. The wedding data has not been deleted.';
   document.querySelector('#codeMode .field').style.display='none';
   $('etsySwitch').style.display='none';
-  $('activate').textContent=lang==='es'?'Abrir acceso':'Open access';
-  $('activate').onclick=()=>location.replace('access.html');
-  $('note').textContent=lang==='es'?'Si necesitas acceder con otra compra o código válido, pulsa «Abrir acceso».':'If you need to use another valid purchase or access code, choose “Open access”.';
   $('msg').textContent='';
+  const recovery=(()=>{try{return localStorage.getItem('weddly_trial_recovery_token')||''}catch{return''}})();
+  const renderInactive=()=>{
+    $('title').textContent=lang==='es'?'Este acceso ya no está activo':'This access is no longer active';
+    $('lead').textContent=lang==='es'?'El acceso a esta boda ha finalizado. Los datos de la boda no se borran.':'Access to this wedding has ended. The wedding data has not been deleted.';
+    $('activate').textContent=lang==='es'?'Abrir acceso':'Open access';
+    $('activate').onclick=()=>location.replace('access.html');
+    $('note').textContent=lang==='es'?'Si necesitas acceder con otra compra o código válido, pulsa «Abrir acceso».':'If you need to use another valid purchase or access code, choose “Open access”.';
+  };
+  const renderExpiredTrial=()=>{
+    $('title').textContent=lang==='es'?'Tu prueba ha terminado':'Your trial has ended';
+    $('lead').textContent=lang==='es'?'Tu boda sigue guardada. Si compras ONE, recuperarás el acceso con todo lo que ya habías organizado.':'Your wedding is still saved. If you buy ONE, you will regain access with everything you already organised.';
+    $('activate').textContent=lang==='es'?'Comprar ONE':'Buy ONE';
+    $('activate').onclick=()=>location.replace('/one.html?trial=1#comprar');
+    $('note').textContent=lang==='es'?'No tendrás que empezar de nuevo: la compra mantiene esta misma boda y sus datos.':'You will not need to start again: the purchase keeps this same wedding and its data.';
+  };
+  if(recovery.length>=40){
+    fetch(ACCESS,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':recovery},body:JSON.stringify({action:'trial_status'}),cache:'no-store'})
+      .then(r=>r.json().then(x=>({ok:r.ok,x})))
+      .then(({ok,x})=>{if(ok&&x?.ok&&x?.tester&&x?.expired)renderExpiredTrial();else renderInactive()})
+      .catch(renderInactive);
+  }else renderInactive();
   return;
 }
 if(purchaseCodeFromLink&&!isInvite&&!isTester){
