@@ -41,16 +41,15 @@ Validated functional commit for B6.4:
 B6.5 active.
 Current product fixes already applied:
 - group selection uses `guest-event-state`;
-- one-photo save interception watches `guest-event-invite`.
+- one-photo invitation interception watches `guest-event-invite`.
 
-Current failing assertion: `Other event must be inactive by default`.
-Source code appears to pass `enabled=false` for generic events, so the test has been instrumented to print the actual persisted event state before changing product behavior.
+The 'Other event inactive by default' failure was a QA timing bug: the assertion ran before the second event had finished persisting. Diagnostic proved only the original Preboda existed at assertion time. Test now waits for two event tabs before checking the new event state.
 
-Diagnostic commit:
-`7c9543bff6d39d28d2aa897635948423ae703ea2`
+Latest QA commit:
+`7b0e1a134935b45a6528ad67fdb2a434bcf628b7`
 
 ## NEXT ACTION
-Read CI for `7c9543bff6d39d28d2aa897635948423ae703ea2`. Use the persisted-state diagnostic from the exact B6.5 failure to decide whether this is a product defect or a test-selection error. Change only the responsible code/test, then continue until regression + B6.1–B6.5 all PASS. Seal B6.5 and advance CURRENT_STATE to B6.6.
+Read CI for `7b0e1a134935b45a6528ad67fdb2a434bcf628b7`. If B6.5 fails, use only the exact logged failure. Continue until regression + B6.1–B6.5 all PASS, then create the sealed B6.5 report and advance CURRENT_STATE to B6.6.
 
 ## Working method from now on
 Every microblock has only three states:
