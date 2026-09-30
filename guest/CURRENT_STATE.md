@@ -43,15 +43,18 @@ Current CI status at that HEAD:
 ## Exact current failure
 Catering summary bug fixed in product code.
 Print/PDF QA stabilized.
-Latest CI exposed a real resilience bug: custom RSVP list cards could be removed when the Listados view was rebuilt, while the cached signature prevented them from being recreated.
+Custom RSVP list resilience fixed.
+Latest CI exposed active extra-event list polling still calling the ONE event-state endpoint during B6.4.
 
-Product fix commit:
-`ddd058ebf9bd94d8f6e4f4bcb7f3919e4dc424ee`
+Product isolation fix:
+`0cc85e1990bf294f3bf1285684b58fd5cf68aca5`
+Regression gate extended:
+`42a954792da96fae65245d103d82d0624c3097fa`
 
 Current status: CI validation pending.
 
 ## NEXT ACTION
-1. Read CI for commit `ddd058ebf9bd94d8f6e4f4bcb7f3919e4dc424ee`.
+1. Read CI for commit `42a954792da96fae65245d103d82d0624c3097fa`.
 2. If b6-tables-lists fails, use only its exact logged failure.
 3. If regression + B6.1 + B6.2 + B6.3 + B6.4 all PASS, create `guest/B6_4_TABLES_LISTS_QA_2026-09-30.md`, seal B6.4 and update this file to B6.5 Events extra.
 
