@@ -22,5 +22,23 @@
     "weddly-personalizacion-signature.html": "703d03f2586ee83fe2aaf3169031bf0f1a68a42a",
     "event-invite.html": "f432d0a06699a6b47b07096dc437732849467a0a",
     "event-invite-v2.html": "14a8a19aed2663ab48be0bbf32432c57b85f7481"
+  },
+  "source_inventory_count": 179,
+  "one_shell_guest_layers": {
+    "app.html": "910566cd2e0d10f995125a9e62b10a6a7d054065",
+    "suite-visual-coherence-v1.js": "f93aa9dca89d146c465c45d6edd7334b15a31926",
+    "suite-swipe-navigation-v1.js": "541b33e92acd24254e032f09517f138f7b32185d",
+    "suite-install-one-v1.js": "d856aeb66cf2b8534d94c86690c87829005de185",
+    "suite-today-v1.js": "95a03e02f56e438fa0e367e01348325ca400d3f0",
+    "suite-wedding-services-v1.js": "1ea0ffd873b55d728321b1c51d4a4b55fdd872dd",
+    "suite-settings-backup-integrity-v1.js": "cdcb37385dee11a4b6957226687b650d07693e56"
+  },
+  "b5_mapping": {
+    "suite-visual-coherence-v1.js": "ported into guest/guest-one-parity-v1.js without replacing GUEST branding",
+    "suite-swipe-navigation-v1.js": "ported into guest/guest-one-parity-v1.js",
+    "suite-install-one-v1.js": "Essential/Signature save-resilience ported directly into GUEST personalization wrappers; ONE install UI replaced by GUEST PWA",
+    "suite-today-v1.js": "ONE cross-module dashboard not copied; guest-relevant recent RSVP/custom-answer/table-change/read behavior verified in GUEST internal Today",
+    "suite-wedding-services-v1.js": "ONE Settings duplicate not copied; transport/accommodation controls remain in GUEST RSVP editor and service-visibility layer",
+    "suite-settings-backup-integrity-v1.js": "ONE cross-module Guests+Payments backup is not part of independent GUEST runtime"
   }
 }
