@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 if(window.__wsdRsvpPlusOneOpsV1)return;window.__wsdRsvpPlusOneOpsV1=true;
-const GAPI='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-guests-state',KEY='weddly_guests_qa_v67',TOKEN='weddly_shared_wedding_token',SAFE_PATCH_WRITE='wsd-safe-patch-write-v1';
+const GAPI='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-state',KEY='weddly_guests_qa_v67',TOKEN='weddly_shared_wedding_token',SAFE_PATCH_WRITE='wsd-safe-patch-write-v1';
 function local(){try{const x=JSON.parse(localStorage.getItem(KEY)||'null');return x&&typeof x==='object'?x:{guests:{}}}catch{return{guests:{}}}}
 function same(a,b){try{return JSON.stringify(a??null)===JSON.stringify(b??null)}catch{return false}}
 function writeLatestPlusGuests(remote){
