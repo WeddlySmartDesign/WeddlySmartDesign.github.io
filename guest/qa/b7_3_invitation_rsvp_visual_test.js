@@ -74,8 +74,10 @@ async function testEditor(context,edition){
  const f=await editorFrame(page,filename);
  await f.waitForSelector('#weddlyIntegrationBar',{timeout:15000});
  await f.waitForFunction(()=>document.documentElement.dataset.guestB73Editor==='1',null,{timeout:10000});
+ await f.waitForSelector('#wsdInvitationFlow',{state:'visible',timeout:10000});
+ await f.waitForFunction(()=>{const xs=[...document.querySelectorAll('#wsdInvitationFlow button')];return xs.length===3&&xs.every(x=>x.getBoundingClientRect().height>=43)},null,{timeout:5000});
  await noOverflow(f,edition+' editor');
- const stepper=await f.locator('#wsdInvitationFlow button').evaluateAll(xs=>xs.map(x=>x.getBoundingClientRect().height));ok(stepper.length===3&&stepper.every(h=>h>=43),edition+' editor stepper too small');
+ const stepper=await f.locator('#wsdInvitationFlow button').evaluateAll(xs=>xs.map(x=>x.getBoundingClientRect().height));ok(stepper.length===3&&stepper.every(h=>h>=43),edition+' editor stepper too small: '+stepper.join(','));
  const cards=await f.locator('#tplGrid > *').count();ok(cards>=(edition==='signature'?4:6),edition+' template collection changed');
  const save=await f.locator('.weddly-save-bottom [data-save-essential]').evaluate(el=>({h:el.getBoundingClientRect().height,r:parseFloat(getComputedStyle(el).borderRadius)}));
  ok(save.h>=51&&save.r>=13,edition+' bottom CTA hierarchy weak: '+JSON.stringify(save));
