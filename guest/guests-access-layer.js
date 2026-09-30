@@ -1,5 +1,5 @@
 (()=>{
-  const BASE='weddly_guests_qa_v67',PAY='weddly_pro_v7',TOKEN='weddly_shared_wedding_token',MODE='weddly_owner_demo_mode',TRACK='weddly_guests_local_mode_v1',GUEST_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-guests-state';
+  const BASE='weddly_guests_qa_v67',PAY='weddly_pro_v7',TOKEN='weddly_shared_wedding_token',MODE='weddly_owner_demo_mode',TRACK='weddly_guests_local_mode_v1',GUEST_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-state';
   const rawGet=Storage.prototype.getItem,rawSet=Storage.prototype.setItem,rawRemove=Storage.prototype.removeItem;
   const params=new URLSearchParams(location.search),incoming=(params.get('ownerDemo')||'').toLowerCase();
   if(incoming==='es'||incoming==='en'){try{rawSet.call(localStorage,MODE,incoming)}catch{}}
@@ -15,5 +15,5 @@
   const nativeFetch=window.fetch.bind(window);let confirming=false,denyEpoch=0;
   const wait=ms=>new Promise(r=>setTimeout(r,ms));
   async function confirmInactive(){if(confirming)return;confirming=true;const epoch=++denyEpoch,token=effectiveToken();try{if(token.length<40)return;for(const delay of [180,650]){await wait(delay);if(epoch!==denyEpoch||token!==effectiveToken())return;let r;try{const h={'x-weddly-token':token};if(demo&&demoToken().length<40)h['x-weddly-demo']=demo;r=await nativeFetch(GUEST_API,{method:'GET',headers:h,cache:'no-store'})}catch{return}if(r.ok){denyEpoch++;document.getElementById('wsdAccessLock')?.remove();return}if(r.status!==401&&r.status!==403)return}if(epoch===denyEpoch&&token===effectiveToken())lock()}finally{confirming=false}}
-  window.fetch=async function(input,init){let url='';try{url=typeof input==='string'?input:input?.url||''}catch{}if(url.includes('/weddly-guests-state')&&demo&&demoToken().length<40){init={...(init||{})};const h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});h.set('x-weddly-demo',demo);init.headers=h}const r=await nativeFetch(input,init);if(url.includes('/weddly-guests-state')){if(r.ok){denyEpoch++;document.getElementById('wsdAccessLock')?.remove()}else if(r.status===401||r.status===403)setTimeout(confirmInactive,0)}return r};
+  window.fetch=async function(input,init){let url='';try{url=typeof input==='string'?input:input?.url||''}catch{}if(url.includes('/guest-state')&&demo&&demoToken().length<40){init={...(init||{})};const h=new Headers(init.headers||(typeof input!=='string'?input.headers:undefined)||{});h.set('x-weddly-demo',demo);init.headers=h}const r=await nativeFetch(input,init);if(url.includes('/guest-state')){if(r.ok){denyEpoch++;document.getElementById('wsdAccessLock')?.remove()}else if(r.status===401||r.status===403)setTimeout(confirmInactive,0)}return r};
 })();
