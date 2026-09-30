@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',TOKEN='weddly_shared_wedding_token',GKEY='weddly_guests_qa_v67';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp',TOKEN='weddly_shared_wedding_token',GKEY='weddly_guests_qa_v67';
 let publicToken='';
 function language(){try{const x=JSON.parse(localStorage.getItem('weddly_pro_v7')||'null'),v=x?.settings?.lang;if(v==='es'||v==='en')return v}catch{}try{const v=localStorage.getItem('weddly_access_lang');if(v==='es'||v==='en')return v}catch{}return (navigator.language||'').toLowerCase().startsWith('en')?'en':'es'}
 const T=(es,en)=>language()==='en'?en:es;
