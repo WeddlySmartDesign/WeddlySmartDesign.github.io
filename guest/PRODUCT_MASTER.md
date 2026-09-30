@@ -55,3 +55,23 @@ Public product name: GUEST
 Signature: by WeddlySmartDesign
 Public language for Spain: Spanish.
 Do not present GUEST as a module of ONE.
+
+
+## Commercial personalization boundary
+Included in the base GUEST order:
+- selection of one included Essential/Signature design according to edition;
+- replacement/adaptation of couple names, wedding date, times, venues and invitation copy;
+- activation/deactivation of RSVP questions supported by GUEST;
+- insertion of the design's intended image fields when applicable;
+- one reasonable correction round for factual/text errors or small adjustments inside the chosen design.
+
+Not included in the base order:
+- redesigning the chosen template from scratch;
+- unlimited design revisions;
+- creating a new bespoke visual identity;
+- custom development outside validated GUEST capabilities.
+
+The customer is buying a finished result, not access to a design editor.
+
+## Delivery rule
+The 24–48 h delivery window starts when WeddlySmartDesign has received all information/assets required for the selected design. Missing information or required photos pauses the delivery window until supplied.
