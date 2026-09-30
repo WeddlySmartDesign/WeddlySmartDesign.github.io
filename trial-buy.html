@@ -6,7 +6,6 @@
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="theme-color" content="#FBF8F3">
 <title>ONE · Continuar con vuestra boda</title>
-<script src="https://js.stripe.com/v3/"></script>
 <style>
 :root{--ink:#2C2A26;--paper:#FBF8F3;--bg:#F2EFE9;--line:#E4DED2;--muted:#736F63;--sage:#596248;--terr:#B9795E}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -52,10 +51,17 @@ const ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-acces
 const CHECKOUT='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout-trial-paid-qa';
 const q=new URLSearchParams(location.search),expiredHint=q.get('expired')==='1';
 const $=id=>document.getElementById(id),chooser=$('chooser'),wrap=$('checkoutWrap'),pay=$('pay'),consent=$('consent'),err=$('error');
-let config=null,edition='essential',checkoutInstance=null;
+let config=null,edition='essential',checkoutInstance=null,stripe=null;
 function token(){try{return localStorage.getItem(TOKEN)||''}catch{return''}}
 function showError(t){err.textContent=t;err.classList.add('on')}
 function money(cents){return(Number(cents||0)/100).toLocaleString('es-ES',{style:'currency',currency:'EUR'})}
+function loadStripeJs(){
+  if(window.Stripe)return Promise.resolve();
+  return new Promise((resolve,reject)=>{
+    const old=document.querySelector('script[data-wsd-stripe]');if(old){old.addEventListener('load',resolve,{once:true});old.addEventListener('error',reject,{once:true});return}
+    const s=document.createElement('script');s.src='https://js.stripe.com/clover/stripe.js';s.async=true;s.dataset.wsdStripe='1';s.onload=resolve;s.onerror=reject;document.head.appendChild(s);
+  });
+}
 async function validateTrial(){
   const t=token();if(t.length<40)throw new Error('missing_trial');
   const r=await fetch(ACCESS,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':t},body:JSON.stringify({action:'status'}),cache:'no-store'});
@@ -90,15 +96,20 @@ pay.onclick=async()=>{
   if(!consent.checked||!config)return;
   pay.disabled=true;pay.textContent='Preparando pago…';err.classList.remove('on');
   try{
+    await loadStripeJs();
+    if(!stripe)stripe=window.Stripe(config.publishableKey);
     const t=token();
-    const r=await fetch(CHECKOUT,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':t},body:JSON.stringify({action:'create',edition,immediateAccessConsent:true,requireTrialConversion:true}),cache:'no-store'});
-    const x=await r.json().catch(()=>({}));
-    if(!r.ok||!x?.ok||!x.clientSecret||x.trialConversion!==true)throw new Error('conversion_not_bound');
+    checkoutInstance=await stripe.initEmbeddedCheckout({fetchClientSecret:async()=>{
+      const r=await fetch(CHECKOUT,{method:'POST',headers:{'Content-Type':'application/json','x-weddly-member':t},body:JSON.stringify({action:'create',edition,immediateAccessConsent:true,requireTrialConversion:true}),cache:'no-store'});
+      const x=await r.json().catch(()=>({}));
+      if(!r.ok||!x?.ok||!x.clientSecret||x.trialConversion!==true)throw new Error('conversion_not_bound');
+      return x.clientSecret;
+    }});
     chooser.style.display='none';wrap.classList.add('on');
-    const stripe=Stripe(config.publishableKey);
-    checkoutInstance=await stripe.initEmbeddedCheckout({clientSecret:x.clientSecret});
     checkoutInstance.mount('#checkout');
   }catch{
+    try{checkoutInstance?.destroy?.()}catch{}checkoutInstance=null;
+    chooser.style.display='block';wrap.classList.remove('on');
     showError('No hemos podido vincular el pago a vuestra prueba. No se ha cobrado nada. Inténtalo de nuevo o escríbenos.');
     pay.disabled=false;pay.textContent='Continuar al pago';
   }
