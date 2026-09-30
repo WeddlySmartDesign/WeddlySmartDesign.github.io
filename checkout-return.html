@@ -46,7 +46,7 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
 </main>
 <script>
 (()=>{
- const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout';
+ const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-trial-upgrade-qa';
  const q=new URLSearchParams(location.search),sessionId=q.get('session_id')||'';
  const $=id=>document.getElementById(id),title=$('title'),lead=$('lead'),status=$('status'),activate=$('activate'),saveConfirmation=$('saveConfirmation'),retry=$('retry'),back=$('back'),meta=$('meta');let purchase=null;
  async function check(attempt=0){
@@ -57,14 +57,20 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
      const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'status',sessionId}),cache:'no-store'});
      const x=await r.json().catch(()=>({}));
      if(!r.ok||!x?.ok)throw new Error(x?.error||'status_failed');
-     if(x.paid&&x.provisioned&&x.activationUrl){
-       title.textContent='Ya es vuestra.';
-       lead.textContent=x.edition==='signature'?'ONE Signature está preparado para vuestra boda.':'ONE Essential está preparado para vuestra boda.';
-       status.textContent=x.emailSent?'Pago confirmado · acceso preparado · email enviado.':'Pago confirmado · acceso preparado.';
-       activate.href=x.activationUrl;activate.classList.remove('hidden');
+     if(x.paid&&x.provisioned&&(x.activationUrl||x.upgradedTrial)){
+       title.textContent=x.upgradedTrial?'Tu prueba ya es ONE.':'Ya es vuestra.';
+       lead.textContent=x.upgradedTrial
+         ?'Seguís en la misma boda. Todo lo que habíais organizado durante la prueba se mantiene.'
+         :(x.edition==='signature'?'ONE Signature está preparado para vuestra boda.':'ONE Essential está preparado para vuestra boda.');
+       status.textContent=x.emailSent?'Pago confirmado · acceso actualizado · email enviado.':'Pago confirmado · acceso actualizado.';
+       activate.href=x.upgradedTrial?(x.continueUrl||'/app.html'):x.activationUrl;
+       activate.textContent=x.upgradedTrial?'Seguir en ONE →':'Activar ONE →';
+       activate.classList.remove('hidden');
        purchase={...x,sessionId};
        saveConfirmation.classList.remove('hidden');
-       meta.textContent=x.emailSent?'Activa ONE en este móvil y guarda este email/confirmación como justificante de la compra.':'Activa ONE en este móvil y guarda la confirmación de compra. El acceso no depende del email.';
+       meta.textContent=x.upgradedTrial
+         ?'No tienes que volver a activar nada. Esta compra mantiene la misma boda y sus datos.'
+         :(x.emailSent?'Activa ONE en este móvil y guarda este email/confirmación como justificante de la compra.':'Activa ONE en este móvil y guarda la confirmación de compra. El acceso no depende del email.');
        history.replaceState(null,'',location.pathname+'?session_id='+encodeURIComponent(sessionId));
        return;
      }
@@ -104,8 +110,8 @@ a,button{min-height:55px;border-radius:14px;border:0;font:800 14px/1 system-ui;t
      'Pedido Stripe: '+sessionId,
      purchase.email?'Email: '+purchase.email:'',
      '',
-     'Acceso / activación:',
-     purchase.activationUrl||'',
+     purchase.upgradedTrial?'Continuidad de la prueba: misma boda y mismos datos.':'Acceso / activación:',
+     purchase.upgradedTrial?(purchase.continueUrl||''):purchase.activationUrl||'',
      purchase.activationCode?'Código de recuperación: '+purchase.activationCode:'',
      '',
      'Consentimiento de acceso inmediato:',
