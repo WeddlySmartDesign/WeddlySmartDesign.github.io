@@ -92,11 +92,16 @@ async function modify(page,fn){
 }
 async function editGuestUi(page,id,{meal,transport}={}){
   const frame=await coreFrame(page);
-  await frame.evaluate(id=>window.editGuest(id),id);
-  await frame.waitForSelector('#editSave',{timeout:5000});
-  if(meal!==undefined)await frame.locator('#eMeal').selectOption({label:meal});
-  if(transport!==undefined)await frame.locator('#eTransport').selectOption(transport?'yes':'no');
-  await frame.locator('#editSave').click();
+  await frame.locator('#nav button[data-go="invitados"]').click();
+  await frame.waitForSelector('#peopleBtn',{timeout:5000});
+  await frame.locator('#peopleBtn').click();
+  await frame.waitForSelector('[data-detail="'+id+'"]',{timeout:5000});
+  await frame.locator('[data-detail="'+id+'"]').click();
+  await frame.waitForSelector('#wpSave',{timeout:5000});
+  if(meal!==undefined)await frame.locator('#wpMeal').selectOption({label:meal});
+  if(transport!==undefined)await frame.locator('#wpTransport').selectOption(transport?'yes':'no');
+  await frame.locator('#wpSave').click();
+  await frame.waitForSelector('[data-detail="'+id+'"]',{timeout:5000});
 }
 (async()=>{
   // Use two browser processes to model two real devices without background-tab timer throttling.
