@@ -90,7 +90,7 @@ if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js?v=70').c
 async function boot(){
   if(!hasAccess()){location.replace('access.html');return}
   const gate=await validateAccess();
-  if(gate==='invalid'){clearAccessToken();location.replace('access.html?inactive=1');return}
+  if(gate==='invalid'){try{const t=accessToken();if(t.length>=40)localStorage.setItem('weddly_trial_recovery_token',t)}catch{}clearAccessToken();location.replace('access.html?inactive=1');return}
   document.documentElement.dataset.oneAccessValidated='1';
   applyTheme();translate();identityMark=identitySignature();syncGuestIdentity(false);let first='payments';try{const x=localStorage.getItem(LAST);if(['payments','guests','planning'].includes(x))first=x}catch{}open(first);setTimeout(()=>{['payments','guests','planning'].filter(x=>x!==first).forEach((x,i)=>setTimeout(()=>ensure(x),i*250))},350);
 }
@@ -100,4 +100,5 @@ boot();
 <script src="suite-install-one-v1.js?v=1"></script>
 <script src="suite-today-v1.js?v=10-planning-read-fit"></script>
 <script src="suite-one-continuity-v1.js?v=4-observer"></script>
+<script src="suite-trial-conversion-v1.js?v=1"></script>
 </body></html>
