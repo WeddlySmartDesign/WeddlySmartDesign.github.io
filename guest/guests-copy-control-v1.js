@@ -8,7 +8,7 @@ const P=x=>Object.entries(x.guests||{}),T=x=>Object.entries(x.tables||{}),active
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function rows(kind,x){
  if(kind==='tables'){const r=[];T(x).forEach(([,t])=>P(x).filter(([,g])=>active(g)&&g.table===t.name).forEach(([,g])=>r.push([t.name,g.name||'',g.rsvp==='confirmed'?'Confirmado':'Pendiente'])));P(x).filter(([,g])=>active(g)&&!g.table).forEach(([,g])=>r.push(['SIN MESA',g.name||'',g.rsvp==='confirmed'?'Confirmado':'Pendiente']));return r}
- if(kind==='catering'){const r=[];T(x).forEach(([,t])=>P(x).filter(([,g])=>confirmed(g)&&g.table===t.name&&g.mealRequired!==false).forEach(([,g])=>r.push([t.name,g.name||'',g.meal||'PENDIENTE'])));return r}
+ if(kind==='catering'){const r=[],total={};T(x).forEach(([,t])=>{const ps=P(x).filter(([,g])=>confirmed(g)&&g.table===t.name&&g.mealRequired!==false).map(([,g])=>g),sum={};ps.forEach(g=>{const m=g.meal||'PENDIENTE';sum[m]=(sum[m]||0)+1;total[m]=(total[m]||0)+1;r.push([t.name,g.name||'',m])});if(ps.length)r.push([t.name+' · RESUMEN',ps.length+' personas',Object.entries(sum).map(([k,v])=>v+' '+k).join(' · ')])});r.push(['TOTAL','',Object.entries(total).map(([k,v])=>v+' '+k).join(' · ')]);return r}
  if(kind==='transport')return P(x).filter(([,g])=>active(g)&&g.transport).map(([,g])=>[g.name||'',g.phone||'',g.table||'']);
  if(kind==='accommodation')return P(x).filter(([,g])=>active(g)&&g.accommodation===true).map(([,g])=>[g.name||'',g.group||'',g.unitId||'',g.table||'']);
  return[];
