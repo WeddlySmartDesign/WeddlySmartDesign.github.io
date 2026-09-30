@@ -29,28 +29,25 @@ Validated commit:
 099ddf75524c9e2eed3e8e9298262f8ed4fcd3e7
 
 ## Current block
-B7 — UX / visual premium review and simplification
+B7.1 — Mobile hierarchy
 
 Current branch:
 `guest-independent`
 
-B6.6 sealed report:
-`guest/B6_6_TWO_DEVICE_SYNC_QA_2026-09-30.md`
-
 B6 checkpoint:
 `guest/CHECKPOINT_03_B6_SEALED_2026-09-30.md`
 
-Validated functional commit for B6:
-`d1cba6988daa14240981104eca71b1a5090bfdee`
+B7.1 visual layer:
+`guest/guest-visual-premium-v1.js`
 
 ## Exact current failure
-None. B6.6 and full B6 are PASS / SEALED.
+B7.1 ACTIVE. Premium mobile hierarchy layer and dedicated browser QA are now in place. No failure identified yet.
+
+Latest workflow commit:
+`181574c7d36ffdb935f5484075e99c25cdc8aae8`
 
 ## NEXT ACTION
-Start B7 only when continuing work.
-B7 scope: UX/visual premium review and simplification without adding new product features or reopening validated architecture.
-Order: B7.1 mobile hierarchy → B7.2 Hoy/Invitados → B7.3 Invitación/RSVP → B7.4 Mesas/Listados → B7.5 Eventos extra → B7.6 global/desktop/accessibility → B7.7 visual QA seal.
-Do not reopen B6 unless a regression job fails.
+Read CI for `181574c7d36ffdb935f5484075e99c25cdc8aae8`. Fix only exact B7.1 failures. Preserve all B6 behavior. When regression + B6.1–B6.6 + B7.1 are PASS, seal B7.1 and advance to B7.2 Hoy/Invitados.
 
 ## Working method from now on
 Every microblock has only three states:
