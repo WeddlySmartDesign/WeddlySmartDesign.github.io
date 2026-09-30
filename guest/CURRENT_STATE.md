@@ -23,6 +23,7 @@ Resume from the exact "NEXT ACTION" below.
 - B6.6 Two-device synchronization + error states — PASS / CLOSED
 - B6 functional/mobile QA — PASS / SEALED
 - B7.1 Mobile hierarchy — PASS / CLOSED
+- B7.2 Hoy + Invitados — PASS / CLOSED
 
 B6.3 sealed report:
 guest/B6_3_INVITATION_RSVP_QA_2026-09-30.md
@@ -30,23 +31,19 @@ Validated commit:
 099ddf75524c9e2eed3e8e9298262f8ed4fcd3e7
 
 ## Current block
-B7.2 — Hoy + Invitados
+B7.3 — Invitación + RSVP
 
 Current branch:
 `guest-independent`
 
-B7.1 sealed report:
-`guest/B7_1_MOBILE_HIERARCHY_QA_2026-09-30.md`
+B7.2 sealed report:
+`guest/B7_2_HOY_INVITADOS_QA_2026-09-30.md`
 
-B7.2 visual layer:
-`guest/guest-visual-hoy-invitados-v1.js`
+Validated commit for B7.2:
+`6e551b901b4deb7820018268dbccea872efd9ba4`
 
 ## Exact current failure
-B7.2 ACTIVE.
-First visual QA exposed a timing gap in the visual layer: `Cambios recientes` is rebuilt dynamically by the RSVP status module, so the premium class could be missing immediately after that rerender. The B7.2 visual layer now observes dynamic child changes and reapplies hierarchy in the next animation frame.
-
-Product fix commit:
-`93b10e763c165c7e3abb0ab86ba81287d0ed2a5e`
+None. B7.2 is PASS / SEALED.
 
 ## NEXT ACTION
 Rerun B7.2 visual QA with the dynamic-section fix. If B7.2 fails again, use only the exact logged failure. When regression + B6.1–B6.6 + B7.1 + B7.2 are PASS, seal B7.2 and advance to B7.3 Invitación/RSVP.
