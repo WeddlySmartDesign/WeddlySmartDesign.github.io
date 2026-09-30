@@ -110,7 +110,7 @@ async function testDesign(context,edition){
   const mealBefore=await inner.locator('[data-save-essential]').first().isVisible();
   ok(mealBefore,edition+' save action missing');
   await inner.locator('[data-save-essential]').first().click();
-  await inner.waitForFunction(()=>document.getElementById('weddlyIntegrationFeedback')?.classList.contains('ok'),null,{timeout:15000});
+  try{await inner.waitForFunction(()=>document.getElementById('weddlyIntegrationFeedback')?.classList.contains('ok'),null,{timeout:15000})}catch(e){const dbg=await inner.evaluate(()=>({feedback:document.getElementById('weddlyIntegrationFeedback')?.textContent||'',cls:document.getElementById('weddlyIntegrationFeedback')?.className||'',hasSave:typeof window.__weddlySaveEssential==='function'}));throw new Error(edition+' save feedback timeout '+JSON.stringify({dbg,calls:{personalization:calls.personalization.length,config:calls.config.length,legacy:calls.legacy}}))}
   ok(calls.personalization.length===1,edition+' personalization was not saved');
   ok(calls.personalization[0].personalization?.tier===edition,edition+' saved wrong tier');
   ok(calls.config.length===1,edition+' did not attempt RSVP config refresh');
