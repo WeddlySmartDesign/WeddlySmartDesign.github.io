@@ -43,10 +43,13 @@ Validated commit for B7.2:
 `6e551b901b4deb7820018268dbccea872efd9ba4`
 
 ## Exact current failure
-None. B7.2 is PASS / SEALED. B7.3 is ACTIVE.
+B7.3 ACTIVE. Premium visual layers for invitation design management, RSVP operations and public RSVP are loaded. Dedicated B7.3 browser QA is now in CI. No visual failure identified yet.
+
+Latest workflow commit:
+`d5d5318d19a10c871c5ed47d2c703dcf50d15e68`
 
 ## NEXT ACTION
-Audit and polish Invitation design management, RSVP operations and public RSVP visual hierarchy only. Preserve all B6.3 behavior, Essential/Signature template counts, RSVP payloads and GUEST isolation. Add dedicated B7.3 browser QA, fix only exact failures, then seal B7.3 before advancing to B7.4.
+Read CI for `d5d5318d19a10c871c5ed47d2c703dcf50d15e68`. Fix only exact B7.3 failures. Preserve B6.3 behavior, Essential/Signature template counts, RSVP payloads, public RSVP logic and GUEST isolation. When regression + B6.1–B6.6 + B7.1–B7.3 are PASS, seal B7.3 and advance to B7.4 Mesas/Listados.
 
 ## Working method from now on
 Every microblock has only three states:
