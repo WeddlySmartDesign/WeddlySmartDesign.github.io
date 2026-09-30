@@ -46,15 +46,15 @@ Validated functional commit for B7.4:
 
 ## Exact current failure
 B7.5 active.
-First visual QA failure was a proven test-assumption error: the real product intentionally keeps the event guest list collapsed behind the compact selector. The test tried to click a hidden checkbox directly.
+Second visual QA failure was also a proven settling-time issue: after switching to an inactive event, the product updated the button text to `Activar` first and the visual layer added `guest-event-activate` on the next animation frame. The UI itself settled correctly; the test asserted too early.
 
-No product change was made. QA now follows the visible product flow (`Mostrar invitados` → select guest).
+No product behavior change was made. QA now waits for the complete settled visual state.
 
 QA fix commit:
-`d15347eca160433e6a67d0ae13becc17ec7abf65`
+`34ba134c2371db68e60e4154bf42c03b66b9876c`
 
 ## NEXT ACTION
-Read CI for `d15347eca160433e6a67d0ae13becc17ec7abf65`. If B7.5 fails again, use only the exact logged failure. Continue until the full matrix is green, then seal B7.5 and advance to B7.6 global/desktop/accessibility.
+Read CI for `34ba134c2371db68e60e4154bf42c03b66b9876c`. If B7.5 fails again, use only the exact logged failure. Continue until the full matrix is green, then seal B7.5 and advance to B7.6 global/desktop/accessibility.
 
 ## Working method from now on
 Every microblock has only three states:
