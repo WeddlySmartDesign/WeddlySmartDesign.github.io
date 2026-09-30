@@ -44,15 +44,12 @@ Validated commit for B7.2:
 
 ## Exact current failure
 B7.3 ACTIVE.
-Current exact visual failure: Signature invitation stepper rendered below the B7 touch-target threshold. The premium editor layer now enforces a 46px minimum height with centered flex alignment for all three invitation-flow steps.
+The dedicated B7.3 visual job is now PASS together with every B6 functional job and B7.1–B7.2. The only remaining failure was the parity gate because the first gate edit accidentally modified the earlier endpoint inventory occurrence instead of the `allowedModified` set. The correct controlled-diff set now explicitly includes both public RSVP loader files.
 
-Regression controlled-diff gate for the public RSVP loaders is also corrected.
-
-Product visual fix: `588b349c33305151d2849b2e69370a28909973e8`
-Gate fix: `0479edd445ef690506b75772c78eb4fcd042a40c`
+Correct gate fix commit: `db3123013591fd157e9623d099b1b1359708f60b`
 
 ## NEXT ACTION
-Rerun full QA. If B7.3 fails again, use only the exact logged visual failure. Do not alter RSVP behavior to satisfy visual assertions. When regression + B6.1–B6.6 + B7.1–B7.3 are PASS, seal B7.3 and advance to B7.4 Mesas/Listados.
+Read CI for `db3123013591fd157e9623d099b1b1359708f60b`. If regression and all B6/B7.1–B7.3 jobs are PASS, seal B7.3 and advance to B7.4 Mesas/Listados. Otherwise use only the exact remaining failure.
 
 ## Working method from now on
 Every microblock has only three states:
