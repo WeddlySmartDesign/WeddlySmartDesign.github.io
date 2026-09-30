@@ -10,8 +10,8 @@
 <main id="loading">Cargando invitación…</main>
 <script>
 (()=> {
-  const RSVP_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp';
-  const PERS_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-personalization';
+  const RSVP_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp';
+  const PERS_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-personalization';
   const qs=new URLSearchParams(location.search),token=qs.get('t')||'',unitId=qs.get('u')||'';
   const templates={sig01:'guests-signature-01.html',sig02:'guests-signature-02.html',sig03:'guests-signature-03.html',sig04:'guests-signature-04.html'};
   const fonts=[
