@@ -1,0 +1,26 @@
+{
+  "captured_from_branch": "main",
+  "captured_from_commit": "6e054a21480624c7f04c6879c7ad72ed55c7307d",
+  "captured_at": "2026-09-30",
+  "note": "Reference SHAs for the latest ONE Guests runtime used to seed independent GUEST. Changes inside /guest after extraction are intentional product isolation/rebranding changes.",
+  "files": {
+    "guests.html": "38ef93394b5458daf1f03654e4df8961f16261b2",
+    "guests-v116-production.html": "9a25a4b375c6d6880e81d66411d809aff5ff83cb",
+    "guests-v114-integrated.html": "751160d817d95437b7d17812a4c158b7f5457d21",
+    "guests-home-rsvp-status-v1.js": "5d31d3d784e9ff14399909b819de366e97559852",
+    "guests-seating-v2.js": "9235db5d5a43b759fd84e140d479e3dc0ee0a4a8",
+    "guests-seating-sync-hotfix-v1.js": "f3c7a033e56f2ec76126ba39d078118f08297ffc",
+    "guests-rsvp-form-flow.html": "4bd7bbbc06cb988536978f6050f3542ebefedd68",
+    "guests-rsvp-form-flex.html": "26c1139bcf6f3f697ae8de2be32c21be2e08d105",
+    "guests-rsvp-custom-answers-v1.js": "e5bf472bea7112c3283157f956c06eb990f959e5",
+    "guests-rsvp-children-public-v1.js": "a8d81e50c638b0387501d63c3e9e11c8f937f557",
+    "guests-extra-event-lists-v1.js": "b1b4a1bc44e56b0979602e010061cb51bcdf211b",
+    "guests-service-visibility-v1.js": "f98b70aae484411a59fc3b5acfd81dda5e537136",
+    "guests-rsvp-essential-live.html": "9531c35aaba3081abd968d322676f7b29eae587d",
+    "guests-rsvp-signature-live.html": "31249b8428846f71158037ba1256fb3933392f09",
+    "weddly-personalizacion-essential.html": "0f4e31f83eab165f1cf3822d5a41c83b1a0364e8",
+    "weddly-personalizacion-signature.html": "703d03f2586ee83fe2aaf3169031bf0f1a68a42a",
+    "event-invite.html": "f432d0a06699a6b47b07096dc437732849467a0a",
+    "event-invite-v2.html": "14a8a19aed2663ab48be0bbf32432c57b85f7481"
+  }
+}
