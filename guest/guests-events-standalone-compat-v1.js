@@ -23,7 +23,7 @@
         const b=document.createElement('button');b.type='button';b.id='wsdEventsBack';b.className='btn secondary small';
         const lang=(()=>{try{const p=JSON.parse(localStorage.getItem(PAY)||'null'),v=p?.settings?.lang;if(v==='en')return'en'}catch{}try{if(localStorage.getItem('wsd_guest_lang_v1')==='en')return'en'}catch{}return'es'})();
         b.textContent=lang==='en'?'← Back to RSVP':'← Volver al RSVP';
-        b.onclick=()=>{const target='guests-rsvp-form-flow.html?v=6-stable-runtime';if(embedded&&parent!==window){try{parent.postMessage({type:'wsd-suite-open',view:'guests-rsvp',url:target},location.origin);return}catch{}}const u=new URL(target,location.href);const demo=q.get('ownerDemo');if(demo)u.searchParams.set('ownerDemo',demo);location.assign(u.href)};
+        b.onclick=()=>{const target='rsvp-operations.html';if(embedded&&parent!==window){try{parent.postMessage({type:'wsd-suite-open',view:'guests-rsvp',url:target},location.origin);return}catch{}}const u=new URL(target,location.href);const demo=q.get('ownerDemo');if(demo)u.searchParams.set('ownerDemo',demo);location.assign(u.href)};
         box.appendChild(b);main.insertBefore(box,main.firstChild);
       }
     }
