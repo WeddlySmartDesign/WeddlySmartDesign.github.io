@@ -84,7 +84,7 @@ async function load(){
     }
     const r=await fetch(CHECKOUT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'config'}),cache:'no-store'});
     const x=await r.json().catch(()=>({}));if(!r.ok||!x?.ok)throw new Error('config');
-    config=x;$('priceEssential').textContent=money(x.prices?.essential?.current);$('priceSignature').textContent=money(x.prices?.signature?.current);
+    config=x;$('priceEssential').textContent=money(x.prices?.essential?.current);$('priceSignature').textContent=money(x.prices?.signature?.current);pay.disabled=!consent.checked;
   }catch(e){
     pay.disabled=true;
     showError(e?.message==='not_trial'?'Este acceso ya no es una prueba. Abre ONE con normalidad.':'No hemos podido preparar la compra de esta prueba. Escríbenos antes de pagar para que podamos conservar vuestra boda.');
