@@ -3399,6 +3399,28 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 .one-trial-privacy button{border:0;background:none;padding:0;color:#786a62;text-decoration:underline;text-underline-offset:2px;font:inherit;cursor:pointer}
 .one-trial-existing{display:none;margin-top:12px;width:100%;min-height:48px;border:1px solid #ddd5cb;border-radius:13px;background:#fff;color:#2c2a26;font-size:13px;font-weight:800;cursor:pointer}
 </style>
+<style id="one-social-follow-2026-09-30">
+/* Social follow · cierre de contacto. Mantiene WhatsApp/Email como CTA principal. */
+.market-one .mk-contact-links{display:grid;gap:13px}
+.market-one .mk-social-follow{
+  display:flex;align-items:center;justify-content:flex-end;gap:10px;
+  color:#7b6d66;
+}
+.market-one .mk-social-follow>span{
+  font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+}
+.market-one .mk-social-follow>div{display:flex;align-items:center;gap:7px}
+.market-one .mk-social-follow a{
+  color:#6e5146;text-decoration:none;font-size:12px;font-weight:780;
+  border-bottom:1px solid rgba(110,81,70,.28);padding:3px 1px;
+}
+.market-one .mk-social-follow a:hover,
+.market-one .mk-social-follow a:focus-visible{color:#3f302a;border-bottom-color:currentColor}
+@media(max-width:520px){
+  .market-one .mk-contact .mk-shell{align-items:flex-start}
+  .market-one .mk-social-follow{justify-content:flex-start;flex-wrap:wrap}
+}
+</style>
 </head>
 <body class="market-v4">
 <header class="topbar final-topbar">
@@ -3693,9 +3715,18 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <section class="mk-contact" data-chapter="CONTACTO" id="contacto">
 <div class="mk-shell">
 <div><small>WeddlySmartDesign</small><h2>¿Te queda una duda?</h2><p>Escríbenos. Sin formularios eternos.</p></div>
+<div class="mk-contact-links">
 <div class="mk-contact-actions">
 <a data-contact-channel="whatsapp" href="https://wa.me/34620843264?text=Hola%2C%20he%20visto%20ONE%20y%20me%20gustar%C3%ADa%20saber%20m%C3%A1s." rel="noopener" target="_blank">WhatsApp</a>
 <a data-contact-channel="email" href="mailto:weddlysmartdesign@gmail.com?subject=Duda%20sobre%20ONE&amp;body=Hola%2C%0D%0A%0D%0AHe%20visto%20ONE%20y%20me%20gustar%C3%ADa%20saber%20m%C3%A1s.%0D%0A">Email</a>
+</div>
+<div class="mk-social-follow" aria-label="Redes sociales de WeddlySmartDesign">
+<span>Síguenos</span>
+<div>
+<a aria-label="WeddlySmartDesign en Instagram" href="https://www.instagram.com/weddlysmartdesign/" rel="noopener noreferrer" target="_blank">Instagram</a>
+<a aria-label="WeddlySmartDesign en TikTok" href="https://www.tiktok.com/@weddlysmartdesign" rel="noopener noreferrer" target="_blank">TikTok</a>
+</div>
+</div>
 </div>
 </div>
 </section>
