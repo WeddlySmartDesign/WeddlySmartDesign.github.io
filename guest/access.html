@@ -21,7 +21,7 @@
 <script>
 (()=>{
 'use strict';
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-access',TOKEN='weddly_shared_wedding_token';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-license-access',TOKEN='weddly_shared_wedding_token';
 const q=new URLSearchParams(location.search),invite=q.get('invite')||'',hash=new URLSearchParams(location.hash.startsWith('#')?location.hash.slice(1):location.hash),prefill=hash.get('code')||'',tester=hash.get('tester')||'';
 const $=id=>document.getElementById(id),msg=$('msg');
 function show(t,err=false){msg.textContent=t||'';msg.className='msg'+(err?' err':'')}
