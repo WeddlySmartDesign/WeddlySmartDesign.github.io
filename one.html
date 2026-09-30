@@ -3407,7 +3407,7 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <div aria-hidden="true" class="chapter chapter-hidden" id="chapterLabel">ONE</div>
 <nav aria-label="Accesos principales" class="quick-actions primary-actions">
 <button aria-controls="oneDemo" aria-haspopup="dialog" class="quick-action action-demo" id="oneDemoOpen" type="button">Ver demo</button>
-<button aria-controls="oneTrialDialog" aria-haspopup="dialog" class="quick-action action-trial" id="oneTrialOpen" type="button">Probar gratis 14 días</button>
+<button aria-controls="oneTrialDialog" aria-haspopup="dialog" class="quick-action action-trial" id="oneTrialOpen" type="button">Probar gratis 15 días</button>
 <a class="quick-action action-buy" href="#comprar">Comprar</a>
 <button aria-controls="siteMenu" aria-haspopup="dialog" class="quick-action action-menu" id="siteMenuOpen" type="button">Menú</button>
 </nav>
@@ -3694,8 +3694,8 @@ body.market-motion .mk-sync-stage.is-on .mk-phone-a{animation:mkPhoneFloatA 4.8s
 <div class="mk-shell">
 <div><small>WeddlySmartDesign</small><h2>¿Te queda una duda?</h2><p>Escríbenos. Sin formularios eternos.</p></div>
 <div class="mk-contact-actions">
-<a href="https://wa.me/34620843264?text=Hola%2C%20tengo%20una%20duda%20antes%20de%20comprar%20ONE%20by%20WeddlySmartDesign." rel="noopener" target="_blank">WhatsApp</a>
-<a href="mailto:weddlysmartdesign@gmail.com?subject=Duda%20antes%20de%20comprar%20ONE&amp;body=Hola%2C%0D%0A%0D%0ATengo%20una%20duda%20antes%20de%20comprar%20ONE%20by%20WeddlySmartDesign.%0D%0A">Email</a>
+<a data-contact-channel="whatsapp" href="https://wa.me/34620843264?text=Hola%2C%20he%20visto%20ONE%20y%20me%20gustar%C3%ADa%20saber%20m%C3%A1s." rel="noopener" target="_blank">WhatsApp</a>
+<a data-contact-channel="email" href="mailto:weddlysmartdesign@gmail.com?subject=Duda%20sobre%20ONE&amp;body=Hola%2C%0D%0A%0D%0AHe%20visto%20ONE%20y%20me%20gustar%C3%ADa%20saber%20m%C3%A1s.%0D%0A">Email</a>
 </div>
 </div>
 </section>
@@ -6726,6 +6726,12 @@ const send=(event_name,extra={})=>{
 window.__wsdSiteAnalytics=send;
 send('page_view');
 
+document.addEventListener('click',e=>{
+  const el=e.target instanceof Element?e.target.closest('[data-contact-channel]'):null;
+  if(!el)return;
+  send('contact_click',{element:el.getAttribute('data-contact-channel')||'unknown'});
+},true);
+
 const SECTION_DEFS=[
   ['inicio','hero'],['invitados','guests'],['rsvp','rsvp'],['mesas','seating'],
   ['pagos','payments'],['planning','planning'],['preboda','events'],['sistema','connected'],
@@ -6890,7 +6896,7 @@ function inject(){
     <div class="one-trial-top"><div class="one-trial-brand">WeddlySmartDesign</div><button class="one-trial-close" type="button" aria-label="Cerrar">×</button></div>
     <div class="one-trial-kicker">ONE · prueba completa</div>
     <h2 id="oneTrialTitle">Pruébalo con vuestra boda.</h2>
-    <p class="one-trial-lead">14 días de acceso completo, sin tarjeta. Si después compráis ONE, continuaréis con esta misma boda y conservaréis lo que ya hayáis organizado.</p>
+    <p class="one-trial-lead">15 días de acceso completo, sin tarjeta. Si después compráis ONE, continuaréis con esta misma boda y conservaréis lo que ya hayáis organizado.</p>
     <ul class="one-trial-points"><li>Invitados, RSVP, mesas, pagos, Planning y eventos.</li><li>Una boda · hasta dos personas autorizadas.</li><li>La misma app completa que después podéis comprar.</li></ul>
     <div class="one-trial-field"><label for="oneTrialEmail">Email</label><input id="oneTrialEmail" type="email" inputmode="email" autocomplete="email" maxlength="254" placeholder="vuestro@email.com"></div>
     <button class="one-trial-submit" id="oneTrialStart" type="button">Empezar prueba gratuita</button>
@@ -6907,7 +6913,7 @@ function inject(){
   d.querySelector('#oneTrialEmail').addEventListener('keydown',e=>{if(e.key==='Enter')start()});
 }
 function openTrial(){
-  inject();analytics('trial_open',{source:'header_14d'});
+  inject();analytics('trial_open',{source:'header_15d'});
   const active=currentToken().length>=40;
   dialog.querySelector('.one-trial-field').style.display=active?'none':'grid';
   dialog.querySelector('#oneTrialStart').style.display=active?'none':'block';
@@ -6927,23 +6933,23 @@ async function start(){
   }
   let completed=false;
   busy=true;btn.disabled=true;btn.textContent='Preparando vuestra prueba…';msg.textContent='';msg.className='one-trial-msg';
-  analytics('trial_start',{source:'header_14d'});
+  analytics('trial_start',{source:'header_15d'});
   try{
     const r=await fetch(ACCESS,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'public_trial',email}),cache:'no-store'});
     const x=await r.json().catch(()=>({}));
     if(!r.ok||!x?.ok)throw new Error(x?.error||'trial_unavailable');
-    if(x.created)analytics('trial_created',{source:'header_14d'});
-    if(x.alreadyExists)analytics('trial_duplicate',{source:'header_14d'});
+    if(x.created)analytics('trial_created',{source:'header_15d'});
+    if(x.alreadyExists)analytics('trial_duplicate',{source:'header_15d'});
     msg.textContent=x.alreadyExists
       ?'Revisa tu email. Si ya habías solicitado la prueba, usa el enlace de acceso que te enviamos. Si ha pasado un tiempo, podemos habértelo reenviado.'
-      :'Listo. Te hemos enviado por email el enlace para abrir vuestra prueba de 14 días. Revisa también la carpeta de spam.';
+      :'Listo. Te hemos enviado por email el enlace para abrir vuestra prueba de 15 días. Revisa también la carpeta de spam.';
     msg.className='one-trial-msg ok';
     input.disabled=true;
     btn.textContent='Enlace enviado';
     btn.disabled=true;
     completed=true;
   }catch{
-    analytics('trial_error',{source:'header_14d'});
+    analytics('trial_error',{source:'header_15d'});
     msg.textContent='No hemos podido preparar la prueba ahora mismo. Inténtalo de nuevo en unos minutos.';
     msg.className='one-trial-msg err';
   }finally{
