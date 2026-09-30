@@ -44,22 +44,32 @@ Validated commit for B7.3:
 `bef69a9318c9f4af2a5a85880f4e7a5d1603bab2`
 
 ## Exact current failure
-B7.4 preflight active.
-Two residual red checks from the B7.3 closing commit were inspected before touching Mesas/Listados.
+B7.4 active.
+Inherited CI is now fully green after correcting two real races before visual work:
+- premium brand hierarchy now self-heals against the legacy UI repaint;
+- extra-event controlled-copy buttons are bound immediately as cards render.
 
-Real issues found and corrected:
-1. Premium brand race: `guests-production-ui.js` repainted the brand every 500 ms, while `guest-visual-premium-v1.js` only enforced the B + SPAN premium hierarchy once. The legacy repaint could therefore win later and make B7.1 intermittently fail. Premium branding now self-heals on every visual apply without unnecessary DOM churn.
-2. Extra-event controlled-copy readiness: event cards could appear before the copy-control document hook/status was guaranteed to be attached, leaving a short window where CSV click could do nothing. The controlled-copy layer now exposes `patch()`, installs earlier, and event-list rendering immediately asks it to bind the new cards.
+B7.4 visual layer added and loaded:
+`guest/guest-visual-tables-lists-v1.js`
 
-Fix commits:
-`b2f316327f1580492cabf8ed0ad57e517c0488ed`
-`ff6008ab40c432aeb30102595e873fc9717ba1e2`
-`8bd9276de0597fcda20e9ffcc8030e98853ccc2d`
+B7.4 browser QA added:
+`guest/qa/b7_4_tables_lists_visual_test.js`
 
-Current status: CI validation pending.
+Current scope implemented:
+- clearer Mesas intro;
+- simplified visual-plan copy;
+- grouped table KPIs;
+- cleaner table cards and full/over-capacity states;
+- explicit unseated block with count;
+- Listados intro focused on deliverables/copy control;
+- visual classification of main-wedding, RSVP custom, extra-event and copy-history cards;
+- mobile touch/overflow rules.
+
+Latest workflow commit:
+`c856ee1563c55acfc05c22a2a4975f06cebe0887`
 
 ## NEXT ACTION
-Read CI on the current B7.4-preflight HEAD. If all inherited B6/B7.1–B7.3 jobs are green, begin B7.4 Mesas + Listados visual work. If one of the two residual jobs is still red, use only its exact logged failure; do not reopen closed blocks conceptually.
+Read CI for `c856ee1563c55acfc05c22a2a4975f06cebe0887`. If B7.4 fails, use only its exact logged failure. Fix product code for real UX defects and the test only for proven false assumptions. Continue until regression + B6 + B7.1–B7.4 all PASS, then seal B7.4 and advance to B7.5 Eventos extra visual review.
 
 ## Working method from now on
 Every microblock has only three states:
