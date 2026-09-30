@@ -87,8 +87,8 @@ function introTables(d){
   const launch=v.querySelector('#planBtn');
   if(launch){
     const copy=launch.querySelector('.planLaunchCopy'),action=launch.querySelector('.planLaunchAction');
-    if(copy)copy.textContent='Colocad mesas e invitados en el plano y ajustad capacidad, forma y posición.';
-    if(action)action.textContent='Abrir plano →';
+    if(copy&&copy.textContent!=='Colocad mesas e invitados en el plano y ajustad capacidad, forma y posición.')copy.textContent='Colocad mesas e invitados en el plano y ajustad capacidad, forma y posición.';
+    if(action&&action.textContent!=='Abrir plano →')action.textContent='Abrir plano →';
     const k=launch.nextElementSibling;
     if(k&&k.querySelector?.('.pill'))k.classList.add('guest-table-kpis');
   }
@@ -112,7 +112,7 @@ function tables(d){
       b.replaceWith(head);
     }else{
       const n=card.querySelectorAll(':scope > .row').length;
-      const p=card.querySelector(':scope > .guest-unseated-head .pill');if(p)p.textContent=n+' por colocar';
+      const p=card.querySelector(':scope > .guest-unseated-head .pill'),txt=n+' por colocar';if(p&&p.textContent!==txt)p.textContent=txt;
     }
   }
 }
@@ -125,7 +125,7 @@ function tag(card,d,label,cls){
   if(cls)card.classList.add(cls);
   let t=card.querySelector(':scope > .guest-report-tag');
   if(!t){t=d.createElement('span');t.className='guest-report-tag';card.insertBefore(t,card.firstChild)}
-  t.textContent=label;
+  if(t.textContent!==label)t.textContent=label;
 }
 function lists(d){
   const v=d.getElementById('listados');if(!v)return;
@@ -146,7 +146,7 @@ function patch(){
   d.documentElement.dataset.guestB74='1';
   if(d.documentElement.dataset.guestB74Observer!=='1'){
     d.documentElement.dataset.guestB74Observer='1';
-    new MutationObserver(()=>requestAnimationFrame(patch)).observe(d.body,{childList:true,subtree:true});
+    let raf=0;new MutationObserver(()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;patch()})}).observe(d.body,{childList:true,subtree:true});
   }
 }
 G.f.addEventListener('load',()=>{[60,180,420,900].forEach(ms=>setTimeout(patch,ms))});
