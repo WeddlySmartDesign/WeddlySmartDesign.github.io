@@ -52,14 +52,28 @@ html[data-guest-b73-ops='1'] .wsd-flow button{min-height:43px!important}
  html[data-guest-b73-ops='1'] .metric{padding:11px 8px}
  html[data-guest-b73-ops='1'] .metric span{font-size:9px}
 }
+@media(min-width:760px){
+ html[data-guest-b73-ops='1'] .app{max-width:760px;padding:30px 28px 54px}
+ html[data-guest-b73-ops='1'] .sheet{align-items:center;padding:24px}
+ html[data-guest-b73-ops='1'] .panel{width:min(680px,calc(100vw - 48px));max-width:680px;margin:auto;border-radius:28px;max-height:86dvh}
+}
+html[data-guest-b73-ops='1'] button:focus-visible,
+html[data-guest-b73-ops='1'] a:focus-visible,
+html[data-guest-b73-ops='1'] input:focus-visible,
+html[data-guest-b73-ops='1'] select:focus-visible,
+html[data-guest-b73-ops='1'] textarea:focus-visible{outline:3px solid rgba(82,92,67,.30);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){
+ html[data-guest-b73-ops='1'] *,html[data-guest-b73-ops='1'] *::before,html[data-guest-b73-ops='1'] *::after{scroll-behavior:auto!important}
+ html[data-guest-b73-ops='1'] .btn,html[data-guest-b73-ops='1'] .panel{transition:none!important;animation:none!important}
+}
 `;
 function patch(){
  if(!document.head||!document.body)return;
  let s=document.getElementById('guestB73OpsStyle');if(!s){s=document.createElement('style');s.id='guestB73OpsStyle';s.textContent=CSS;document.head.appendChild(s)}
  document.documentElement.dataset.guestB73Ops='1';
- const lead=document.querySelector('.app>.lead');if(lead&&document.documentElement.lang!=='en')lead.textContent='Selecciona destinatarios, envía la invitación y revisa las respuestas desde un mismo sitio.';
+ const lead=document.querySelector('.app>.lead'),copy='Selecciona destinatarios, envía la invitación y revisa las respuestas desde un mismo sitio.';if(lead&&document.documentElement.lang!=='en'&&lead.textContent!==copy)lead.textContent=copy;
  const brand=document.querySelector('.brand');if(brand&&!brand.querySelector('span')?.textContent?.includes('WeddlySmartDesign'))brand.innerHTML='<b>GUEST</b><span>by WeddlySmartDesign</span>';
 }
-new MutationObserver(()=>requestAnimationFrame(patch)).observe(document.documentElement,{childList:true,subtree:true});
+let raf=0;new MutationObserver(()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;patch()})}).observe(document.documentElement,{childList:true,subtree:true});
 patch();
 })();
