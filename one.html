@@ -5104,7 +5104,7 @@ if(mesasVideo){
 <script>
 (()=>{
 'use strict';
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-trial-upgrade-qa';
 let dialog=null,embedded=null,stripe=null,config=null,edition='essential',busy=false;
 
 const euro=cents=>(Number(cents||0)/100).toLocaleString('es-ES',{style:'currency',currency:'EUR'});
@@ -5149,7 +5149,9 @@ function inject(){
   });
 }
 async function api(body){
-  const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});
+  let member='';try{member=localStorage.getItem('weddly_shared_wedding_token')||localStorage.getItem('weddly_trial_recovery_token')||''}catch{}
+  const headers={'Content-Type':'application/json'};if(member.length>=40)headers['x-weddly-member']=member;
+  const r=await fetch(API,{method:'POST',headers,body:JSON.stringify(body),cache:'no-store'});
   const x=await r.json().catch(()=>({}));if(!r.ok||!x?.ok)throw new Error(x?.error||'checkout_unavailable');return x;
 }
 async function loadConfig(){
@@ -5201,7 +5203,7 @@ async function mount(){
     st.textContent=e?.message==='consent_required'?'Necesitamos tu confirmación de acceso inmediato antes de abrir el pago.':'Stripe todavía no está listo en esta versión. Tu selección no se ha cobrado.';
   }finally{busy=false}
 }
-function boot(){inject()}
+function boot(){inject();if(new URLSearchParams(location.search).get('trial')==='1')setTimeout(()=>open(),120)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
 </script>
