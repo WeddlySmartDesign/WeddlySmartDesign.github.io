@@ -96,12 +96,12 @@ async function run(){
  const peopleText=await core.locator('#panel').innerText();
  ok(peopleText.includes('Marta Pérez')&&peopleText.includes('Lucía Torres'),'people manager missing created guests');
  ok(!peopleText.includes('No hay personas activas'),'people list unexpectedly empty');
- const martaRow=core.locator('#panel .row').filter({hasText:'Marta Pérez'});
- await martaRow.locator('[data-pedit]').click();
- await core.locator('#eRsvp').selectOption('confirmed');
- await core.locator('#eMeal').selectOption({label:'Vegano'});
- await core.locator('#eTransport').selectOption('yes');
- await core.locator('#editSave').click();
+ const martaRow=core.locator('#wsdPeopleList .wsd-person-row').filter({hasText:'Marta Pérez'});
+ await martaRow.locator('[data-detail]').click();
+ await core.locator('#wpRsvp').selectOption('confirmed');
+ await core.locator('#wpMeal').selectOption({label:'Vegano'});
+ await core.locator('#wpTransport').selectOption('yes');
+ await core.locator('#wpSave').click();
  saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'{}'));
  const marta=Object.values(saved.guests).find(g=>g.name==='Marta Pérez');
  ok(marta?.rsvp==='confirmed'&&marta?.meal==='Vegano'&&marta?.transport===true,'guest edit did not persist');
@@ -110,10 +110,10 @@ async function run(){
  core=await coreFrame(page);
  await core.locator('#nav button[data-go="invitados"]').click();
  await core.locator('#peopleBtn').click();
- const carlosRow=core.locator('#panel .row').filter({hasText:'Carlos Ruiz'});
- await carlosRow.locator('[data-pedit]').click();
- await core.locator('#eRsvp').selectOption('declined');
- await core.locator('#editSave').click();
+ const carlosRow=core.locator('#wsdPeopleList .wsd-person-row').filter({hasText:'Carlos Ruiz'});
+ await carlosRow.locator('[data-detail]').click();
+ await core.locator('#wpRsvp').selectOption('declined');
+ await core.locator('#wpSave').click();
  saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'{}'));
  ok(saved.guests.g3.rsvp==='declined'&&saved.guests.g3.table==='','declined guest retained active table');
 
