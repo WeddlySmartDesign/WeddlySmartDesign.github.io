@@ -1027,6 +1027,7 @@ body:has(#app:not([hidden])){overflow:hidden}
 'use strict';
 const ENDPOINT='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-site-analytics-admin';
 const STORAGE='wsd_internal_analytics_token_v1';
+const INTERNAL_EXCLUDE='wsd_internal_analytics_exclude_v1';
 const TRACKING_EARLIEST='2026-09-24T00:00:00+02:00';
 let token='';
 let currentRange='7d';
@@ -1328,6 +1329,7 @@ async function load(range=currentRange,{quiet=false}={}){
   if(!quiet)loading.hidden=false;
   try{
     const data=await requestSummary(range);
+    try{localStorage.setItem(INTERNAL_EXCLUDE,'1')}catch{}
     setScreen(true);render(data);loginError.textContent='';
   }catch(e){
     if(e?.message==='unauthorized'){
@@ -1403,13 +1405,13 @@ $('installHelpClose').addEventListener('click',()=>installHelp.close());
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js?v=15',{scope:'./',updateViaCache:'none'})
+    navigator.serviceWorker.register('./sw.js?v=16',{scope:'./',updateViaCache:'none'})
       .then(reg=>reg.update().catch(()=>{}))
       .catch(()=>{});
   },{once:true});
 
   navigator.serviceWorker.addEventListener('controllerchange',()=>{
-    const key='wsd_analytics_sw_v14_reload';
+    const key='wsd_analytics_sw_v16_reload';
     if(sessionStorage.getItem(key)==='1')return;
     sessionStorage.setItem(key,'1');
     location.reload();
