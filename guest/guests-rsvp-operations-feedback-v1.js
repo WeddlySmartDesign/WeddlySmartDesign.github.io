@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',TOKEN_KEY='weddly_shared_wedding_token',GKEY='weddly_guests_qa_v67';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp',TOKEN_KEY='weddly_shared_wedding_token',GKEY='weddly_guests_qa_v67';
 let publicToken='',query='',manageData=null,manageLoading=null;
 const norm=s=>String(s||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
