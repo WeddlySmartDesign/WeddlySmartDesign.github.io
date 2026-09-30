@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 const G=window.__GuestsProd;if(!G)return;
-const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-test-access',TOKEN='weddly_shared_wedding_token',MODE='weddly_owner_demo_mode',LOCAL='weddly_wedding_services_v1',GKEY=G.KEY||'weddly_guests_qa_v67';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp',ACCESS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-access-check',TOKEN='weddly_shared_wedding_token',MODE='weddly_owner_demo_mode',LOCAL='weddly_wedding_services_v1',GKEY=G.KEY||'weddly_guests_qa_v67';
 let services=null,loading=false;
 function demoMode(){try{const q=new URLSearchParams(location.search).get('ownerDemo');if(q==='es'||q==='en')return q;const m=localStorage.getItem(MODE);return m==='es'||m==='en'?m:''}catch{return''}}
 function localKey(){const m=demoMode();return m?LOCAL+'_'+m:LOCAL}
