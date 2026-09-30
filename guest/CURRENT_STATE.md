@@ -43,13 +43,12 @@ Validated commit for B7.2:
 `6e551b901b4deb7820018268dbccea872efd9ba4`
 
 ## Exact current failure
-B7.3 ACTIVE.
-The dedicated B7.3 visual job is now PASS together with every B6 functional job and B7.1–B7.2. The only remaining failure was the parity gate because the first gate edit accidentally modified the earlier endpoint inventory occurrence instead of the `allowedModified` set. The correct controlled-diff set now explicitly includes both public RSVP loader files.
+B7.3 visual QA = PASS, regression gate = PASS. A closed B6.3 functional job failed once on `children opt-in was not persisted in config payload` inside `testFormFlow`. B7.3 does not load on `guests-rsvp-form-flow.html`, so this must be reproduced before changing product behavior.
 
-Correct gate fix commit: `db3123013591fd157e9623d099b1b1359708f60b`
+Current action: one clean full rerun without product changes to distinguish a flaky/timing failure from an actual regression.
 
 ## NEXT ACTION
-Read CI for `db3123013591fd157e9623d099b1b1359708f60b`. If regression and all B6/B7.1–B7.3 jobs are PASS, seal B7.3 and advance to B7.4 Mesas/Listados. Otherwise use only the exact remaining failure.
+Trigger one clean full QA rerun with no product change. If B6.3 passes, treat the prior result as test flake and seal B7.3 only after every job is green on the clean rerun. If B6.3 fails again on the same assertion, instrument only that test/flow and fix the exact cause before sealing B7.3.
 
 ## Working method from now on
 Every microblock has only three states:
