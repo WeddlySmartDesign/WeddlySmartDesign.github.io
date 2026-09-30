@@ -40,13 +40,13 @@ Validated commit for B6.5:
 
 ## Exact current failure
 B6.6 active.
-The scheduler starvation defect is fixed. The latest concurrency failure was traced to the QA writing arbitrary `note` fields that the frozen Guests core does not preserve as production guest data. The concurrency test now uses real persisted guest fields (`meal` and `allergy`) so state-integrity and core serialization are exercised faithfully.
+The scheduler starvation defect is fixed. Previous concurrency failures were caused by QA injecting storage fields directly while the frozen core could legitimately reserialize its in-memory state. The B6.6 test now performs edits through the actual guest-edit UI (`editGuest` + Guardar), which is the real production path.
 
 Latest QA commit:
-`00c82bd23bf1a0bae796dd6abbc4e9cf938f804d`
+`70ae40973216155e540cbc5be714a20a9048728f`
 
 ## NEXT ACTION
-Read CI for `00c82bd23bf1a0bae796dd6abbc4e9cf938f804d`. If B6.6 fails, use only the exact logged diagnostics. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
+Read CI for `70ae40973216155e540cbc5be714a20a9048728f`. If B6.6 fails, use only the exact logged diagnostics. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
 
 ## Working method from now on
 Every microblock has only three states:
