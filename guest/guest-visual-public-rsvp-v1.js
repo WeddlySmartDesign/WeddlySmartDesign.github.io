@@ -36,6 +36,18 @@ html[data-guest-b73-public='1'] .postActions{margin-top:16px!important}
  html[data-guest-b73-public='1'] .wrap{padding-left:11px!important;padding-right:11px!important}
  html[data-guest-b73-public='1'] .choice{font-size:13px!important}
 }
+@media(min-width:760px){
+ html[data-guest-b73-public='1'] .wrap{max-width:660px!important;padding:34px 24px 70px!important}
+}
+html[data-guest-b73-public='1'] button:focus-visible,
+html[data-guest-b73-public='1'] a:focus-visible,
+html[data-guest-b73-public='1'] input:focus-visible,
+html[data-guest-b73-public='1'] select:focus-visible,
+html[data-guest-b73-public='1'] textarea:focus-visible{outline:3px solid rgba(82,92,67,.30)!important;outline-offset:2px!important}
+@media(prefers-reduced-motion:reduce){
+ html[data-guest-b73-public='1'] *,html[data-guest-b73-public='1'] *::before,html[data-guest-b73-public='1'] *::after{scroll-behavior:auto!important}
+ html[data-guest-b73-public='1'] .btn,html[data-guest-b73-public='1'] .choice{transition:none!important;animation:none!important}
+}
 `;
 function patch(){
  if(!document.head||!document.body)return;
