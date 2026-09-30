@@ -40,17 +40,14 @@ Validated commit for B6.5:
 
 ## Exact current failure
 B6.6 active.
-A REAL product defect was confirmed in the sync scheduler: every 300 ms the dirty-state watcher called `queue()`, and `queue()` cleared/restarted a 450 ms debounce timer. A dirty local state could therefore postpone `push()` indefinitely and never reach the backend.
+The sync scheduler starvation defect is fixed. The next CI failure occurred in the simultaneous non-overlapping edit test because both simulated devices were tabs in one headless browser process; background-tab timer throttling delayed device B and invalidated the concurrency model.
 
-Product fix:
-`guest/guests-production-sync.js`
-Commit:
-`b3047ee612247ba639776190218d4d4c2a003e4e`
-
-The scheduler now uses a non-starving pending timer: once a sync is queued, later dirty checks no longer postpone it.
+QA now uses two separate Chromium processes to represent two real devices.
+Latest QA commit:
+`7fe520632fc3f2d3936ede2d99ae4f9583463674`
 
 ## NEXT ACTION
-Read CI for `b3047ee612247ba639776190218d4d4c2a003e4e`. If B6.6 fails again, use only the exact logged failure. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
+Read CI for `7fe520632fc3f2d3936ede2d99ae4f9583463674`. If B6.6 fails, use only the exact logged failure. Continue until regression + B6.1–B6.6 all PASS, then seal B6.6 and close B6.
 
 ## Working method from now on
 Every microblock has only three states:
