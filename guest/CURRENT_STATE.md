@@ -42,16 +42,16 @@ Current CI status at that HEAD:
 
 ## Exact current failure
 Catering summary bug fixed in product code.
-Print/PDF brand assertion corrected.
-Latest CI failure was a stale-frame QA issue after controlled-copy metadata triggered a core sync reload; product output remained correct.
+Print/PDF QA stabilized.
+Latest CI exposed a real resilience bug: custom RSVP list cards could be removed when the Listados view was rebuilt, while the cached signature prevented them from being recreated.
 
-QA fix commit:
-`ab2554489c01bb6f0c682cd67f4d75281603a9c7`
+Product fix commit:
+`ddd058ebf9bd94d8f6e4f4bcb7f3919e4dc424ee`
 
 Current status: CI validation pending.
 
 ## NEXT ACTION
-1. Read CI for commit `ab2554489c01bb6f0c682cd67f4d75281603a9c7`.
+1. Read CI for commit `ddd058ebf9bd94d8f6e4f4bcb7f3919e4dc424ee`.
 2. If b6-tables-lists fails, use only its exact logged failure.
 3. If regression + B6.1 + B6.2 + B6.3 + B6.4 all PASS, create `guest/B6_4_TABLES_LISTS_QA_2026-09-30.md`, seal B6.4 and update this file to B6.5 Events extra.
 
