@@ -19,6 +19,7 @@ Resume from the exact "NEXT ACTION" below.
 - B6.2 Today + Guests — PASS / CLOSED
 - B6.3 Invitation + RSVP + Essential/Signature — PASS / CLOSED
 - B6.4 Tables + lists — PASS / CLOSED
+- B6.5 Extra events — PASS / CLOSED
 
 B6.3 sealed report:
 guest/B6_3_INVITATION_RSVP_QA_2026-09-30.md
@@ -26,30 +27,22 @@ Validated commit:
 099ddf75524c9e2eed3e8e9298262f8ed4fcd3e7
 
 ## Current block
-B6.5 — Extra events
+B6.6 — Two-device synchronization + error states
 
 Current branch:
 `guest-independent`
 
-B6.4 sealed report:
-`guest/B6_4_TABLES_LISTS_QA_2026-09-30.md`
+B6.5 sealed report:
+`guest/B6_5_EXTRA_EVENTS_QA_2026-09-30.md`
 
-Validated functional commit for B6.4:
-`4ac9267362b5a1389b78fd6e80cb724e9c822c26`
+Validated commit for B6.5:
+`ef1e1f5d714386535cf9e53ae4f4f472107fff2b`
 
 ## Exact current failure
-B6.5 active.
-Current product fixes already applied:
-- group selection uses `guest-event-state`;
-- one-photo invitation interception watches `guest-event-invite`.
-
-The 'Other event inactive by default' failure was a QA timing bug: the assertion ran before the second event had finished persisting. Diagnostic proved only the original Preboda existed at assertion time. Test now waits for two event tabs before checking the new event state.
-
-Latest QA commit:
-`7b0e1a134935b45a6528ad67fdb2a434bcf628b7`
+None. B6.5 is PASS / SEALED.
 
 ## NEXT ACTION
-Read CI for `7b0e1a134935b45a6528ad67fdb2a434bcf628b7`. If B6.5 fails, use only the exact logged failure. Continue until regression + B6.1–B6.5 all PASS, then create the sealed B6.5 report and advance CURRENT_STATE to B6.6.
+Start B6.6 only when continuing work. Scope: two-device synchronization, partner/joined-device behavior, concurrent edits/conflicts, stale-state recovery, offline/network failures, retry messages and data-integrity protections across the already closed B6.1–B6.5 flows. Do not reopen B6.5 unless a regression test fails.
 
 ## Working method from now on
 Every microblock has only three states:
