@@ -11,7 +11,7 @@ function harden(h){
   return h.replace(oldLoad,newLoad);
 }
 function injectRuntime(h,effective){
-  const base='<base href="./">',close='</'+'script>';
+  const runtimeBase=new URL('./',location.href).href,base='<base href="'+runtimeBase+'">',close='</'+'script>';
   if(!h.includes('<base '))h=h.replace('<head>','<head>'+base);
   const tokenScript='<script>(()=>{const __effective='+JSON.stringify(effective)+';const __nativeGet=Storage.prototype.getItem;Storage.prototype.getItem=function(k){if(this===localStorage&&k===\"weddly_shared_wedding_token\")return __effective;return __nativeGet.call(this,k)}})();'+close;
   h=h.replace('<body>','<body>'+tokenScript);
