@@ -33,7 +33,7 @@ async function waitLocal(page,pred,label,timeout=12000){
       const s=JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null');
       if(!s)return false;
       if(label==='g1A')return s.guests?.g1?.group==='Amigos compartidos';
-      if(label==='merged')return s.guests?.g1?.note==='Cambio A'&&s.guests?.g2?.note==='Cambio B';
+      if(label==='merged')return s.guests?.g1?.meal==='Vegano'&&s.guests?.g2?.allergy==='Frutos secos';
       if(label==='staleMerge')return s.guests?.g1?.allergy==='Gluten'&&s.guests?.g2?.transport==='Bus';
       if(label==='conflictB')return s.guests?.g1?.group==='Familia B';
       if(label==='recovered')return s.guests?.g2?.meal==='Vegetariano';
@@ -127,11 +127,11 @@ async function setState(page,mutator){
 
   // Concurrent non-overlapping edits must merge rather than overwrite each other.
   await Promise.all([
-    setState(a,s=>{s.guests.g1.note='Cambio A'}),
-    setState(b,s=>{s.guests.g2.note='Cambio B'})
+    setState(a,s=>{s.guests.g1.meal='Vegano'}),
+    setState(b,s=>{s.guests.g2.allergy='Frutos secos'})
   ]);
-  for(let i=0;i<50&&!(remote.guests.g1.note==='Cambio A'&&remote.guests.g2.note==='Cambio B');i++)await sleep(150);
-  if(!(remote.guests.g1.note==='Cambio A'&&remote.guests.g2.note==='Cambio B')){const da=await a.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),g:window.__GuestsProd&&{ver:window.__GuestsProd.ver,last:window.__GuestsProd.last,pushing:window.__GuestsProd.pushing}})),db=await b.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),g:window.__GuestsProd&&{ver:window.__GuestsProd.ver,last:window.__GuestsProd.last,pushing:window.__GuestsProd.pushing}}));throw new Error('non-overlapping concurrent edits were not merged remotely '+JSON.stringify({remote,version,puts,da,db}))}
+  for(let i=0;i<50&&!(remote.guests.g1.meal==='Vegano'&&remote.guests.g2.allergy==='Frutos secos');i++)await sleep(150);
+  if(!(remote.guests.g1.meal==='Vegano'&&remote.guests.g2.allergy==='Frutos secos')){const da=await a.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),g:window.__GuestsProd&&{ver:window.__GuestsProd.ver,last:window.__GuestsProd.last,pushing:window.__GuestsProd.pushing}})),db=await b.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}'),g:window.__GuestsProd&&{ver:window.__GuestsProd.ver,last:window.__GuestsProd.last,pushing:window.__GuestsProd.pushing}}));throw new Error('non-overlapping concurrent edits were not merged remotely '+JSON.stringify({remote,version,puts,da,db}))}
   await Promise.all([a.evaluate(()=>window.dispatchEvent(new Event('focus'))),b.evaluate(()=>window.dispatchEvent(new Event('focus')))]);
   await Promise.all([waitLocal(a,null,'merged'),waitLocal(b,null,'merged')]);
 
