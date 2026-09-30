@@ -91,19 +91,31 @@ async function modify(page,fn){
   },fn.toString().replace(/^\s*function\s*\w*\s*\(s\)\s*\{|^\s*s\s*=>\s*\{|\}\s*$/g,''));
 }
 async function editGuestUi(page,id,{meal,transport}={}){
-  const frame=await coreFrame(page);
-  await frame.locator('#nav button[data-go="invitados"]').click();
-  await frame.waitForSelector('#peopleBtn',{timeout:5000});
-  await frame.locator('#peopleBtn').click();
-  await frame.waitForSelector('[data-detail="'+id+'"]',{timeout:5000});
-  await frame.locator('[data-detail="'+id+'"]').click();
-  await frame.waitForSelector('#wpSave',{timeout:5000});
-  if(meal!==undefined)await frame.locator('#wpMeal').selectOption({label:meal});
-  if(transport!==undefined)await frame.locator('#wpTransport').selectOption(transport?'yes':'no');
-  await frame.locator('#wpSave').click();
-  // People Manager intentionally reloads the frozen core ~900 ms after a save. Wait for that handoff before the next edit.
-  await page.waitForTimeout(1150);
-  await coreFrame(page);
+  let last;
+  for(let attempt=0;attempt<3;attempt++){
+    try{
+      let frame=await coreFrame(page);
+      await frame.locator('#nav button[data-go="invitados"]').click();
+      await frame.waitForSelector('#peopleBtn',{timeout:5000});
+      await frame.locator('#peopleBtn').click();
+      frame=await coreFrame(page);
+      const detail=frame.locator('[data-detail="'+id+'"]');
+      await detail.waitFor({state:'visible',timeout:5000});
+      await detail.click();
+      await frame.waitForSelector('#wpSave',{timeout:5000});
+      if(meal!==undefined)await frame.locator('#wpMeal').selectOption({label:meal});
+      if(transport!==undefined)await frame.locator('#wpTransport').selectOption(transport?'yes':'no');
+      await frame.locator('#wpSave').click();
+      // People Manager intentionally reloads the frozen core ~900 ms after a save.
+      await page.waitForTimeout(1150);
+      await coreFrame(page);
+      return;
+    }catch(e){
+      last=e;
+      await page.waitForTimeout(350);
+    }
+  }
+  throw last;
 }
 (async()=>{
   // Use two browser processes to model two real devices without background-tab timer throttling.
