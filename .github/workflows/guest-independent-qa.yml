@@ -249,3 +249,26 @@ jobs:
           exit 1
       - name: B7.4 Mesas and Listados visual QA
         run: node guest/qa/b7_4_tables_lists_visual_test.js
+
+  b7-extra-events-visual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/guests-events-v3.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B7.5 Extra Events visual QA
+        run: node guest/qa/b7_5_extra_events_visual_test.js
