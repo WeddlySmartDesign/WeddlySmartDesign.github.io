@@ -1,5 +1,5 @@
 # GUEST by WeddlySmartDesign — CURRENT STATE
-Updated: 2026-09-30
+Updated: 2026-10-01
 
 ## Continuity rule
 This file is the FIRST file to read before doing any further GUEST work.
@@ -28,36 +28,47 @@ Resume from the exact "NEXT ACTION" below.
 - B7.4 Mesas + Listados — PASS / CLOSED
 - B7.5 Eventos extra — PASS / CLOSED
 - B7.6 Coherencia global + escritorio + accesibilidad visual — PASS / CLOSED
+- B7.7 QA visual final — PASS / CLOSED
+- B7 UX/visual premium — PASS / SEALED
 
-B6.3 sealed report:
-guest/B6_3_INVITATION_RSVP_QA_2026-09-30.md
-Validated commit:
-099ddf75524c9e2eed3e8e9298262f8ed4fcd3e7
+B7 final sealed report:
+`guest/B7_7_FINAL_VISUAL_SEAL_QA_2026-10-01.md`
+
+Validated B7 HEAD:
+`4728b6ff8cf78d904c94cfb11927cea4624ffbba`
+
+Validated GitHub Actions run:
+`36733355182` — 14/14 jobs `success`
 
 ## Current block
-B7.7 — QA visual final + sellado de B7
+B8.1 — QA flujo comercial: landing → selección → checkout
 
 Current branch:
 `guest-independent`
 
-B7.6 sealed report:
-`guest/B7_6_GLOBAL_DESKTOP_ACCESSIBILITY_QA_2026-09-30.md`
+## B8 scope
+B8 = QA del flujo comercial completo, sin rediseñar el producto funcional ya sellado.
 
-Validated functional commit for B7.6:
-`9f6afb06c5f36295fddae1f3a3792f47d5e64737`
+Microbloques:
+- B8.1 landing comercial → selección Essential/Signature → entrada a checkout
+- B8.2 checkout → pago → retorno y preservación de pedido
+- B8.3 recogida de datos/personalización tras compra
+- B8.4 activación/entrega y acceso real al producto
+- B8.5 estados de error, cancelación, reintento y duplicidad
+- B8.6 regresión comercial móvil/escritorio + sellado final de B8
 
 ## Exact current failure
-B7.7 active.
-Final cross-surface visual seal test has been added. It checks the validated visual layers are present and performs a final browser sweep across mobile and desktop representative viewports for the main app, Extra Events and public RSVP, including navigation activation, brand consistency, no overflow and absence of ONE/Partner/STUDIO scope.
+None yet. B8.1 is ACTIVE and must be audited against the real commercial files before any change is made.
 
-Test:
-`guest/qa/b7_7_final_visual_seal_test.js`
-
-Workflow commit:
-`26f3743a57e97be668abc516a7a03e9b772b45b9`
+Commercial files already present:
+- `guest/guest.html`
+- `guest/guest-checkout.html`
+- `guest/guest-checkout-return.html`
+- `guest/guest-order.html`
+- `guest/guest-legal.html`
 
 ## NEXT ACTION
-Read CI on the current HEAD after `26f3743a57e97be668abc516a7a03e9b772b45b9`. If B7.7 fails, use only the exact logged failure and fix only objective regressions or proven test assumptions. Require the full B6/B7 matrix green, then create the B7.7 final report and seal B7 completely.
+Audit B8.1 on the real `guest-independent` files: verify that every commercial CTA and package choice on `guest/guest.html` routes to the correct GUEST checkout with the intended Essential/Signature choice preserved, no ONE/Partner/STUDIO dependency, no dead path and coherent behavior on mobile/desktop. Add an automated B8.1 gate, run the full existing QA matrix, fix only proven commercial-flow defects, then seal B8.1.
 
 ## Working method from now on
 Every microblock has only three states:
