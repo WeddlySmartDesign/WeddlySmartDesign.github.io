@@ -30,6 +30,7 @@ Resume from the exact "NEXT ACTION" below.
 - B7.6 Coherencia global + escritorio + accesibilidad visual — PASS / CLOSED
 - B7.7 QA visual final — PASS / CLOSED
 - B7 UX/visual premium — PASS / SEALED
+- B8.1 landing → selección → checkout — PASS / CLOSED
 
 B7 final sealed report:
 `guest/B7_7_FINAL_VISUAL_SEAL_QA_2026-10-01.md`
@@ -41,7 +42,7 @@ Validated GitHub Actions run:
 `36733355182` — 14/14 jobs `success`
 
 ## Current block
-B8.1 — QA flujo comercial: landing → selección → checkout
+B8.2 — QA checkout → pago → retorno y preservación de pedido
 
 Current branch:
 `guest-independent`
@@ -58,17 +59,14 @@ Microbloques:
 - B8.6 regresión comercial móvil/escritorio + sellado final de B8
 
 ## Exact current failure
-None yet. B8.1 is ACTIVE and must be audited against the real commercial files before any change is made.
+B8.1 is PASS / SEALED.
 
-Commercial files already present:
-- `guest/guest.html`
-- `guest/guest-checkout.html`
-- `guest/guest-checkout-return.html`
-- `guest/guest-order.html`
-- `guest/guest-legal.html`
+B8.2 has one objective resilience gap under audit: the live `guest-stripe-checkout` function provisions the purchase and sends the post-payment email when the browser calls `status` after returning from Stripe, but the current function source has no Stripe webhook handler. A paid session therefore depends on the customer reaching the return/status flow for automatic provisioning.
+
+This is not yet marked fixed until the GUEST backend has an idempotent signed-webhook path and the corresponding Stripe webhook endpoint/signing secret are verified.
 
 ## NEXT ACTION
-Audit B8.1 on the real `guest-independent` files: verify that every commercial CTA and package choice on `guest/guest.html` routes to the correct GUEST checkout with the intended Essential/Signature choice preserved, no ONE/Partner/STUDIO dependency, no dead path and coherent behavior on mobile/desktop. Add an automated B8.1 gate, run the full existing QA matrix, fix only proven commercial-flow defects, then seal B8.1.
+Audit and harden B8.2 only in GUEST: add automated checkout/return contract QA; port an idempotent signed Stripe webhook handler into `guest-stripe-checkout` without touching ONE; preserve the existing browser-return fallback; verify the deployed GUEST function; then verify or explicitly record the remaining Stripe endpoint configuration dependency before sealing B8.2.
 
 ## Working method from now on
 Every microblock has only three states:
