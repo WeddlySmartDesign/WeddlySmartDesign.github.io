@@ -409,3 +409,26 @@ jobs:
           exit 1
       - name: B8.4 activation delivery access QA
         run: node guest/qa/b8_4_activation_delivery_access_test.js
+
+  b8-fulfillment-admin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST fulfillment manager
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest-orders-admin.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B8.4 fulfillment admin QA
+        run: node guest/qa/b8_4_fulfillment_admin_test.js
