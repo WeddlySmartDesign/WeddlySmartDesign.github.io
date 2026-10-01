@@ -175,5 +175,5 @@ Deno.serve(async req=>{
   }
   if(action==='submit_order'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await submitOrder(session,b.details||{}))}
   return json({ok:false,error:'invalid_action'},400)
- }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design'].includes(m))return json({ok:false,error:m},400);if(m==='stripe_not_configured'||m==='webhook_not_configured')return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
+ }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','order_not_submitted','invalid_delivery_token','already_activated'].includes(m))return json({ok:false,error:m},400);if(m==='delivery_email_failed')return json({ok:false,error:m},502);if(m==='stripe_not_configured'||m==='webhook_not_configured')return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
 });
