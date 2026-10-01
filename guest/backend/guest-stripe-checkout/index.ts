@@ -105,8 +105,18 @@ async function submitOrder(session:any,raw:any){
 }
 
 
+async function guestWebhookSecret(){
+ const direct=env('GUEST_STRIPE_WEBHOOK_SECRET');if(direct)return direct;
+ const url=env('SUPABASE_URL'),key=env('SUPABASE_SERVICE_ROLE_KEY');
+ if(!url||!key)return '';
+ try{
+  const r=await fetch(url+'/rest/v1/rpc/guest_webhook_secret',{method:'POST',headers:{'apikey':key,'Authorization':'Bearer '+key,'Content-Type':'application/json'},body:'{}'});
+  if(!r.ok)return '';
+  const x=await r.json().catch(()=>null);return typeof x==='string'?x:''
+ }catch{return ''}
+}
 async function verifyWebhook(raw:string,header:string){
- const secret=env('GUEST_STRIPE_WEBHOOK_SECRET');
+ const secret=await guestWebhookSecret();
  if(!secret)throw new Error('webhook_not_configured');
  const parts=header.split(',').map(x=>x.trim());
  const ts=parts.find(x=>x.startsWith('t='))?.slice(2)||'';
