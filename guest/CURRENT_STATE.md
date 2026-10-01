@@ -221,3 +221,12 @@ NEXT ACTION:
 2. Real-device inspect Essential 01–06 with photos and realistic content.
 3. Correct model-specific composition defects found in that visual pass; do not reseal from static checks alone.
 4. Only after all six pass, freeze Essential visual contract and resume GUEST.
+
+
+### Essential visual QA gate — PASS
+- Added `guest/qa/essential_visual_contract_test.js`.
+- Added isolated workflow `.github/workflows/guest-essential-visual-qa.yml`; it watches only Essential/GUEST visual files.
+- First run: 36874972761 — SUCCESS.
+- The gate protects minimum mobile typography, responsive agenda reflow, per-model photo geometry, shared preview/delivery CSS and the Essential 05 whitespace correction.
+- No ONE/ONE Partner/STUDIO runtime files are part of this gate.
+Current status: Essential redesign ACTIVE; automated structural gate PASS; real-device visual approval still required.
