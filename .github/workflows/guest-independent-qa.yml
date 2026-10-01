@@ -532,3 +532,13 @@ jobs:
           node-version: '22'
       - name: B9.8 aggregate release preparation seal
         run: node guest/qa/b9_8_final_release_preparation_seal_test.js
+
+  b9-safe-promotion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.9 safe production promotion QA
+        run: node guest/qa/b9_9_safe_promotion_test.js
