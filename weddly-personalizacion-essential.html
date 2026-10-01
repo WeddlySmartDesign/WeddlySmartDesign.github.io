@@ -320,6 +320,9 @@ function renderPreview() {
   const tpl = TEMPLATES[state.template];
   const pairing = FONT_PAIRS.find(f => f.id === state.fontPair);
   let html = b64ToUtf8(tpl.b64);
+  const premiumClass = 'one-essential-premium ' + state.template.replace(/^e/, 'essential-');
+  html = html.replace('</head>', '<link rel="stylesheet" href="guests-essential-one-v4.css?v=20261001a"></head>');
+  html = html.replace('<body>', '<body class="' + premiumClass + '">');
 
   const googleHref = `https://fonts.googleapis.com/css2?family=${pairing.primaryParam}&family=${pairing.secondaryParam}&display=swap`;
   html = html.split('__GOOGLE_FONTS_HREF__').join(googleHref);
