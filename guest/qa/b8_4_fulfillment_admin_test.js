@@ -50,7 +50,7 @@ async function setup(page){
    if(auth!=='v1.qa.manager')return route.fulfill({status:403,contentType:'application/json',body:JSON.stringify({ok:false,error:'manager_required'})});
    if(b.action==='status')return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,expiresAt:'2026-11-01T00:00:00Z'})});
    if(b.action==='list'){const x=sample(state);x.invitationUrl=url;return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,orders:[x]})})}
-   if(b.action==='prepare'){state='preparing';return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,weddingId:'wed_b84',memberToken:'t'.repeat(64),prepUrl:base+'/guest/index.html?access='+('t'.repeat(64))+'&prep=1'})}
+   if(b.action==='prepare'){state='preparing';return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,weddingId:'wed_b84',memberToken:'t'.repeat(64),prepUrl:base+'/guest/index.html?access='+('t'.repeat(64))+'&prep=1'})})}
    if(b.action==='set_invitation_url'){url=b.invitationUrl||'';return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,invitationUrl:url})})}
    if(b.action==='set_status'&&b.status==='ready'){state='ready';return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,status:'ready'})})}
    if(b.action==='send_delivery'){state='delivered';return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,status:'delivered',deliveredAt:'2026-10-01T06:30:00Z'})})}
