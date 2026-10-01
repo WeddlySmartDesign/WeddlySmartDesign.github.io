@@ -13,7 +13,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
 </head>
 <body>
 <div id="boot">Cargando personalización…</div>
-<iframe id="editor" src="weddly-personalizacion-essential.html?v=one-essential-premium-v4-20261001" title="Personalización Essential"></iframe>
+<iframe id="editor" src="weddly-personalizacion-essential.html?v=essential-07-08-20261001" title="Personalización Essential"></iframe>
 <script>
 (()=> {
   const RSVP_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp';
@@ -128,7 +128,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
       by('contactName').value=saved.contactName||'Ana';
       by('contactPhone').value=saved.contactPhone||'';
       by('whatsapp').value=digits(saved.whatsapp||'');
-      buildTemplateGrid(); buildFontGrid(); buildAgendaFields(); buildLocationFields(); renderPreview();
+      buildTemplateGrid(); buildFontGrid(); if(typeof syncTemplateFields==='function')syncTemplateFields();else buildAgendaFields(); buildLocationFields(); renderPreview();
 
       function setupPhotoControls(){
         const inputs=[...document.querySelectorAll('input[type="file"]')];
