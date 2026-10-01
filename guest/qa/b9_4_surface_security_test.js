@@ -9,6 +9,6 @@ ok(admin.includes('x-weddly-manager'),'private manager does not send manager ses
 const stripe=fs.readFileSync(path.join(root,'guest','backend','guest-stripe-checkout','index.ts'),'utf8');
 ok(!/sk_live_[A-Za-z0-9]+/.test(stripe),'hard-coded live Stripe secret in repository backend');
 ok(!/whsec_[A-Za-z0-9]+/.test(stripe),'hard-coded webhook signing secret in repository backend');
-ok(stripe.includes('Deno.env.get(\'STRIPE_SECRET_KEY\')'),'Stripe secret must come from environment');
+ok(stripe.includes("env('STRIPE_SECRET_KEY')")&&stripe.includes('Deno.env.get(n)'),'Stripe secret must come from environment');
 ok(stripe.includes('guestWebhookSecret()'),'webhook secret must be resolved server-side');
 console.log('B9.4 public/private surface security: PASS');
