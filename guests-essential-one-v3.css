@@ -1,0 +1,75 @@
+/* ONE Essential 01 — isolated visual redesign QA 2026-10-01
+   QA-only stylesheet. No RSVP/data behavior. */
+html{scroll-padding-top:24px}
+body.one-essential-redesign{font-size:16px}
+body.one-essential-redesign .invite{width:100%;max-width:560px}
+body.one-essential-redesign section{scroll-margin-top:24px}
+
+/* Essential 01: Romantic editorial direction. */
+body.one-essential-redesign.essential-01 section{padding-left:28px!important;padding-right:28px!important}
+body.one-essential-redesign.essential-01 #hero{padding-top:54px!important;padding-bottom:62px!important}
+body.one-essential-redesign.essential-01 .kicker{font-size:clamp(42px,11vw,54px)!important;line-height:1.05!important;margin:8px 0 10px!important}
+body.one-essential-redesign.essential-01 .subtitle{font-size:clamp(14px,3.8vw,16px)!important;line-height:1.5!important;letter-spacing:.025em!important;max-width:30ch!important;margin:0 auto 24px!important}
+body.one-essential-redesign.essential-01 .askline{font-size:13px!important;line-height:1.45!important;letter-spacing:.055em!important;margin-bottom:22px!important}
+body.one-essential-redesign.essential-01 .photo-wrap{width:min(66vw,258px)!important;margin:4px auto 26px!important}
+body.one-essential-redesign.essential-01 .names{font-size:clamp(46px,12vw,58px)!important;line-height:1.02!important;margin:0 0 24px!important}
+body.one-essential-redesign.essential-01 .facts{gap:12px!important;margin:0 auto 23px!important;max-width:430px}
+body.one-essential-redesign.essential-01 .fact{font-size:13px!important;line-height:1.38!important;gap:7px!important}
+body.one-essential-redesign.essential-01 .fact svg{width:21px!important;height:21px!important}
+body.one-essential-redesign.essential-01 .fact-div{height:42px!important;margin-top:7px!important}
+body.one-essential-redesign.essential-01 .waiting{font-size:13px!important;line-height:1.35!important;letter-spacing:.085em!important}
+body.one-essential-redesign.essential-01 .city{font-size:13px!important;line-height:1.4!important}
+
+/* Story becomes a real editorial spread rather than another small card. */
+body.one-essential-redesign.essential-01 #historia{padding-top:68px!important;padding-bottom:72px!important}
+body.one-essential-redesign.essential-01 #historia>.eyebrow{font-size:12px!important;margin-bottom:14px!important}
+body.one-essential-redesign.essential-01 #historia .script.center{font-size:clamp(38px,10vw,48px)!important;line-height:1.08!important;max-width:11ch!important;margin:0 auto 24px!important}
+body.one-essential-redesign.essential-01 .historia-grid{gap:30px!important}
+body.one-essential-redesign.essential-01 .historia-text{font-size:clamp(17px,4.5vw,19px)!important;line-height:1.7!important;max-width:32ch!important;margin:0 auto!important}
+body.one-essential-redesign.essential-01 .historia-photo-wrap{width:min(78vw,310px)!important;aspect-ratio:4/5!important;margin:4px auto 0!important}
+body.one-essential-redesign.essential-01 .historia-photo-wrap .heart-photo{clip-path:none!important;border-radius:48% 48% 14px 14px!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 42%!important;box-shadow:0 0 0 1px var(--line)!important}
+body.one-essential-redesign.essential-01 .caption{right:2px!important;bottom:-12px!important;font-size:20px!important}
+body.one-essential-redesign.essential-01 .divider{margin-top:38px!important}
+
+/* Agenda: one continuous editorial timeline, robust for 3–5 moments. */
+body.one-essential-redesign.essential-01 #agendaSection{padding-top:68px!important;padding-bottom:72px!important}
+body.one-essential-redesign.essential-01 #agendaSection>.eyebrow{font-size:12px!important;margin-bottom:12px!important}
+body.one-essential-redesign.essential-01 #agendaSection>.script{font-size:clamp(40px,10.5vw,50px)!important;line-height:1.08!important;margin:0 0 38px!important}
+body.one-essential-redesign.essential-01 .agenda-row{display:flex!important;flex-direction:column!important;gap:0!important;max-width:410px!important;margin:0 auto!important;text-align:left!important}
+body.one-essential-redesign.essential-01 .agenda-sep{display:none!important}
+body.one-essential-redesign.essential-01 .agenda-node{display:grid!important;grid-template-columns:78px minmax(0,1fr)!important;grid-template-areas:"ring time" "ring title" "ring place"!important;column-gap:18px!important;row-gap:2px!important;align-items:start!important;text-align:left!important;padding:0 0 34px!important;position:relative!important;font-size:16px!important;width:100%!important}
+body.one-essential-redesign.essential-01 .agenda-node:last-child{padding-bottom:0!important}
+body.one-essential-redesign.essential-01 .agenda-node:not(:last-of-type)::after{content:""!important;position:absolute!important;left:33px!important;top:66px!important;bottom:-2px!important;width:1px!important;background:var(--line)!important}
+body.one-essential-redesign.essential-01 .agenda-node .ring{grid-area:ring!important;width:66px!important;height:66px!important;margin:0!important;border:1px solid var(--line)!important;background:#fffdf9!important}
+body.one-essential-redesign.essential-01 .agenda-node svg{width:25px!important;height:25px!important}
+body.one-essential-redesign.essential-01 .agenda-time{grid-area:time!important;font-size:14px!important;font-weight:600!important;line-height:1.2!important;letter-spacing:.08em!important;color:var(--gold)!important;margin-top:3px!important}
+body.one-essential-redesign.essential-01 .agenda-title{grid-area:title!important;font-size:clamp(27px,7vw,33px)!important;line-height:1.06!important;margin:2px 0 2px!important;hyphens:none!important;overflow-wrap:normal!important}
+body.one-essential-redesign.essential-01 .agenda-place{grid-area:place!important;font-size:13.5px!important;line-height:1.45!important;letter-spacing:.035em!important;margin:0!important;hyphens:none!important;overflow-wrap:anywhere!important}
+
+/* Location + RSVP + contact keep the same product behavior, with stronger visual hierarchy. */
+body.one-essential-redesign.essential-01 #donde,
+body.one-essential-redesign.essential-01 #confirmacion,
+body.one-essential-redesign.essential-01 #contacto{padding-top:66px!important;padding-bottom:68px!important}
+body.one-essential-redesign.essential-01 #donde>.eyebrow,
+body.one-essential-redesign.essential-01 #confirmacion>.eyebrow,
+body.one-essential-redesign.essential-01 #contacto>.eyebrow{font-size:12px!important;margin-bottom:12px!important}
+body.one-essential-redesign.essential-01 #donde>.script,
+body.one-essential-redesign.essential-01 #confirmacion>.script,
+body.one-essential-redesign.essential-01 #contacto>.script{font-size:clamp(38px,10vw,46px)!important;line-height:1.08!important;margin:0 0 24px!important}
+body.one-essential-redesign.essential-01 .cards{gap:18px!important;margin-top:12px!important}
+body.one-essential-redesign.essential-01 .card{padding:24px 20px!important;border-radius:20px!important}
+body.one-essential-redesign.essential-01 .card-eyebrow{font-size:31px!important;line-height:1.08!important}
+body.one-essential-redesign.essential-01 .card-detail{font-size:13px!important;line-height:1.45!important}
+body.one-essential-redesign.essential-01 .card-btn{font-size:13px!important;padding:11px 21px!important}
+body.one-essential-redesign.essential-01 .lead{font-size:16px!important;line-height:1.6!important;max-width:31ch!important}
+body.one-essential-redesign.essential-01 .cta{font-size:15px!important;padding:15px 18px!important;border-radius:14px!important}
+body.one-essential-redesign.essential-01 .contact-row{font-size:14.5px!important;line-height:1.45!important}
+body.one-essential-redesign.essential-01 .footer-name{font-size:12px!important}
+body.one-essential-redesign.essential-01 .footer-thanks{font-size:12px!important;line-height:1.45!important}
+
+@media(max-width:360px){
+ body.one-essential-redesign.essential-01 section{padding-left:22px!important;padding-right:22px!important}
+ body.one-essential-redesign.essential-01 .agenda-node{grid-template-columns:70px minmax(0,1fr)!important;column-gap:14px!important}
+ body.one-essential-redesign.essential-01 .agenda-node:not(:last-of-type)::after{left:30px!important}
+ body.one-essential-redesign.essential-01 .agenda-node .ring{width:60px!important;height:60px!important}
+}
