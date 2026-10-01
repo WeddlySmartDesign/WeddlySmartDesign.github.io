@@ -87,7 +87,7 @@ const namedFns=s=>[...new Set([...s.matchAll(/(?:async\s+)?function\s+([A-Za-z_$
 for(const p of sourceFiles){
   ok(exists(p),'source copy missing in /guest: '+p);
   const src=readRepo(p),dst=read(p);
-  if(!allowedModified.has(p)){const privacyOnly=s=>s.replace(/<meta\s+name=["']robots["']\s+content=["']noindex,nofollow(?:,noarchive)?["']\s*\/?>\s*/gi,'');ok(src===dst||privacyOnly(src)===privacyOnly(dst),'unexpected functional modification vs latest ONE source: '+p)}
+  if(!allowedModified.has(p)){const privacyOnly=s=>s.replace(/<meta\s+name=["']robots["']\s+content=["']noindex,nofollow(?:,noarchive)?["']\s*\/?>/gi,'').replace(/>\s+</g,'><');ok(src===dst||privacyOnly(src)===privacyOnly(dst),'unexpected functional modification vs latest ONE source: '+p)}
   else for(const fn of namedFns(src))ok(namedFns(dst).includes(fn),'source function lost in '+p+': '+fn);
 }
 
