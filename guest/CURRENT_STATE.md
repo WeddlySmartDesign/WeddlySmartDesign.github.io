@@ -44,7 +44,7 @@ Validated GitHub Actions run:
 `36733355182` — 14/14 jobs `success`
 
 ## Current block
-B8.4 fulfillment QA syntax fixed after CI run 36827484796 isolated the only failure; B8.5/B8.6/B9.1 green in that run; B9.1–B9.8 release preparation implemented, awaiting a canonical post-fix CI
+B8.4 fulfillment QA syntax fixed after CI run 36827484796 isolated the only failure; B8.5/B8.6/B9.1 green in that run; B9.1–B9.9 release preparation implemented, awaiting a canonical post-fix CI
 
 Current branch:
 `guest-independent`
@@ -113,6 +113,8 @@ B9.7:
 4. When B8.4–B8.6 are green, write the B8 final seal and mark B8 PASS / SEALED.
 5. When B9.1–B9.7 + aggregate gate are green, write the B9 final release-preparation seal.
 6. Only after both seals exist may GUEST be considered ready for an explicit publication step. Do not merge/publish to `main` automatically.
+7. Production promotion MUST follow `B9_9_SAFE_PROMOTION_STRATEGY_2026-10-01.md`: start from current `main` and allowlist GUEST files; never wholesale-merge the diverged branch.
+8. For the first release, preserve the validated isolated `/guest/**` tree rather than pruning historical copied files; dynamic RSVP/event dependencies make late pruning riskier than inert isolated files. Cleanup can be a post-release task.
 
 ## Working method from now on
 Every microblock has only three states:
