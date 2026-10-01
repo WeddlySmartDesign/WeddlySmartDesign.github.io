@@ -85,7 +85,7 @@ main{max-width:560px;margin:auto;padding:32px}
     h=h.replace("const RSVP_ENGINE = 'guests-rsvp-v105-mobile.html';","const RSVP_ENGINE = 'guests-rsvp-v108-mobile.html';");
     h=replaceConst(h,'wedding',{
       p1:w.p1,p2:w.p2,date:w.date,time:w.time,venue:w.venue,city:w.city,
-      heroPhoto:w.heroPhoto||'',storyPhoto:w.storyPhoto||'',
+      heroPhoto:modern?(w.heroPhoto||''):'',storyPhoto:'',
       storyTitle:w.storyTitle||'',storyText:w.storyText||'',
       contactName:w.contactName||'',contactPhone:w.contactPhone||'',whatsapp:w.whatsapp||''
     },'object');

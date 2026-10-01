@@ -580,7 +580,7 @@ body.font-caligrafico .rsvp-flourish{font-size:40px;line-height:1.05}
     <p class="rsvp-flourish">¿Vienes?</p>
     <h2 class="rsvp-title">Queremos contar <span class="accent-text">contigo.</span></h2>
     <p class="rsvp-copy">Confírmanos tu asistencia y responde a las preguntas que hemos preparado para organizarlo todo contigo.</p>
-    <button class="rsvp-action" id="rsvpBtn" type="button"><span>Confirmar asistencia</span><span>→</span></button>
+    <a class="rsvp-action" id="ctaBtn" href="#" style="text-decoration:none"><span>Confirmar asistencia</span><span>→</span></a>
   </section>
 
   <section class="contact reveal">
@@ -594,8 +594,6 @@ body.font-caligrafico .rsvp-flourish{font-size:40px;line-height:1.05}
     <div class="footer-date" id="footerDate">12 · 09 · 2027</div>
   </footer>
 </main>
-
-<div class="toast" id="toast">Vista de diseño. En ONE, esta acción abrirá el RSVP Essential configurado por la pareja.</div>
 
 <script>
 (()=>{
@@ -636,15 +634,6 @@ body.font-caligrafico .rsvp-flourish{font-size:40px;line-height:1.05}
     if(img.complete)classifyPhoto(img);
     else img.addEventListener('load',()=>classifyPhoto(img),{once:true});
   });
-
-  const btn=document.getElementById('rsvpBtn');
-  const toast=document.getElementById('toast');
-  let t;
-  btn.addEventListener('click',()=>{
-    toast.classList.add('on');
-    clearTimeout(t);
-    t=setTimeout(()=>toast.classList.remove('on'),3200);
-  });
 })();
 </script>
 <script id="weddly-essential-data">
@@ -677,6 +666,7 @@ const locations = [
   document.getElementById('timeline').innerHTML=(agenda||[]).map(x=>'<div class="moment"><div class="moment-time">'+esc(x.time)+'</div><div class="moment-track" aria-hidden="true"><span class="moment-dot"></span></div><div class="moment-content"><h3 class="moment-name">'+esc(x.title)+'</h3><div class="moment-place">'+esc(x.place)+'</div></div></div>').join('');
   const ls=(locations&&locations.length)?locations:[{title:'Celebración',time:wedding.time,place:wedding.venue,address:[wedding.venue,wedding.city].filter(Boolean).join(', ')}];
   document.getElementById('locationsList').innerHTML=ls.map((x,i)=>'<div class="location-item"><p class="location-kicker">'+esc(x.title||('Lugar '+(i+1)))+(x.time?' · '+esc(x.time):'')+'</p><h2 class="location-place">'+esc(x.place||wedding.venue)+'</h2><div class="location-rule"></div><p class="location-copy">'+esc(wedding.city||'')+'</p><a class="location-link" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(x.address||x.place||wedding.venue)+'" target="_blank" rel="noopener">Ver ubicación <span aria-hidden="true">↗</span></a></div>').join('');
+  const cta=document.getElementById('ctaBtn');if(cta){const qp=new URLSearchParams(location.search);cta.href=qp.toString()?'guests-rsvp-v108-mobile.html?'+qp.toString():'guests-rsvp-v108-mobile.html'}
   const wa=String(wedding.whatsapp||'').replace(/^https?:\/\/wa\.me\//i,'').replace(/\D/g,'');const cl=document.getElementById('contactLink');if(wa){cl.href='https://wa.me/'+wa}else if(wedding.contactPhone){cl.href='tel:'+String(wedding.contactPhone).replace(/\s+/g,'')}else{cl.style.display='none'}
 })();
 </script>
