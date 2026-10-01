@@ -8,7 +8,10 @@ ok(!stripe.includes("action==='deliver'"),'public checkout still exposes manual 
 ok(orders.includes("managerContext"),'delivery is not manager authenticated');
 ok(orders.includes("action==='send_delivery'"),'managed delivery missing');
 ok(orders.includes("guest_personalization_status||'')!=='ready'"),'delivery not gated by ready state');
-for(const job of ['b8-commercial-entry','b8-checkout-return','b8-order-personalization','b8-activation-delivery-access','b8-fulfillment-admin','b8-error-retry-duplicate'])ok(workflow.includes(job+':'),'B8 gate missing '+job);
+for(const job of ['b8-commercial-entry','b8-checkout-return','b8-order-personalization','b8-activation-delivery-access','b8-fulfillment-admin','b8-error-retry-duplicate','b8-commercial-final-seal'])ok(workflow.includes(job+':'),'B8 gate missing '+job);
 const joined=files.filter(f=>f.endsWith('.html')).map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
 ok(!/ONE Partner|STUDIO/i.test(joined),'foreign product branding in B8 commercial surfaces');
+const checkout=fs.readFileSync(path.join(root,'guest-checkout.html'),'utf8'),ret=fs.readFileSync(path.join(root,'guest-checkout-return.html'),'utf8');
+ok(checkout.includes('Reintentar pago'),'checkout retry control missing');
+ok(ret.includes('Reintentar comprobación'),'payment verification retry missing');
 console.log('B8.6 commercial final seal: PASS');
