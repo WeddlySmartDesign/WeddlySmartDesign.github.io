@@ -69,3 +69,21 @@ body.essential-premium #donde{padding-top:56px!important;padding-bottom:56px!imp
  body.essential-premium .agenda-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}
  body.essential-premium .agenda-node:last-child:nth-child(odd){grid-column:auto;max-width:none}
 }
+
+
+/* Model-specific cover rhythm — remove poster-like empty areas and preserve each art direction. */
+body.essential-premium .cover-kicker{white-space:normal!important}
+body.essential-02 .cover-content{padding-top:32%!important;padding-bottom:46px!important}
+body.essential-03 .cover-content{padding-top:34%!important;padding-bottom:18%!important}
+body.essential-04 .cover-content{padding-top:32%!important;padding-bottom:18%!important}
+body.essential-05 .cover-content{padding-top:28%!important;padding-bottom:16%!important}
+body.essential-06 .cover-content{padding-top:20%!important;padding-bottom:18%!important}
+
+/* Keep title and story copy visibly separated from viewport/section edges. */
+body.essential-premium #historia > .eyebrow{margin-top:4px!important}
+body.essential-premium #historia .script.center{margin-left:auto!important;margin-right:auto!important;max-width:12ch!important;line-height:1.18!important}
+body.essential-premium #agendaSection > .script,
+body.essential-premium #donde > .script{line-height:1.18!important;margin-bottom:24px!important}
+
+/* Venue/date line must wrap as a deliberate block, not a compressed caption. */
+body.essential-premium .cover-datevenue{display:block!important;text-wrap:balance!important}
