@@ -1,0 +1,11 @@
+const fs=require('fs'),path=require('path');const ok=(x,m)=>{if(!x)throw new Error(m)};const root=path.resolve(__dirname,'..','..');
+const idx=fs.readFileSync(path.join(root,'guest','index.html'),'utf8'),man=JSON.parse(fs.readFileSync(path.join(root,'guest','guest.webmanifest'),'utf8')),sw=fs.readFileSync(path.join(root,'guest','guest-sw.js'),'utf8');
+ok(man.start_url==='./index.html','PWA start_url must stay inside /guest');
+ok(man.scope==='./','PWA scope must stay inside /guest');
+ok(idx.includes('guest.webmanifest')&&idx.includes('guest-sw.js'),'canonical app shell is not wired to GUEST PWA');
+for(const f of ['./index.html','./access.html','./guests-v116-production.html','./guest-settings.html','./guest.webmanifest','./guests-access-layer.js','./guests-production-sync.js'])ok(sw.includes("'"+f+"'"),'offline core missing '+f);
+ok(sw.includes("u.origin!==location.origin"),'service worker must not intercept external origins');
+ok(sw.includes("guest-shell-v2"),'B9 cache version not bumped');
+const forbidden=/ONE Partner|STUDIO|\/one\.html|partner\.html/i;
+ok(!forbidden.test(idx+JSON.stringify(man)+sw),'foreign product dependency in PWA release shell');
+console.log('B9.1 deployment PWA isolation: PASS');
