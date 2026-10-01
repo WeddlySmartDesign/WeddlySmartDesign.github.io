@@ -92,20 +92,46 @@ a,button{font:inherit}
   margin:8px 0 0;font-size:10px;line-height:1.5;letter-spacing:.13em;
   text-transform:uppercase;color:var(--muted);
 }
-.hero-photo-wrap{
-  width:min(74vw,280px);height:365px;margin:34px auto -108px;
-  overflow:hidden;border-radius:150px 150px 18px 18px;
-  border:7px solid var(--paper);box-shadow:0 18px 46px rgba(46,64,87,.18);
-  background:var(--mist);
-}
-.hero-photo-wrap img{display:block;width:100%;height:100%;object-fit:cover}
+.hero-photo-wrap{display:none}
 .hero-photo-wrap[hidden]{display:none}
+
+/* FOTO — integrada, sin forma, marco ni recorte */
+.photo-flow{
+  position:relative;
+  margin:0;
+  background:var(--paper);
+  overflow:hidden;
+}
+.photo-flow[hidden]{display:none}
+.photo-flow img{
+  display:block;
+  width:100%;
+  height:auto;
+  max-width:none;
+}
+.photo-flow::before,
+.photo-flow::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;
+  height:34px;
+  z-index:1;
+  pointer-events:none;
+}
+.photo-flow::before{
+  top:0;
+  background:linear-gradient(180deg,rgba(250,249,246,.50),rgba(250,249,246,0));
+}
+.photo-flow::after{
+  bottom:0;
+  background:linear-gradient(0deg,rgba(255,253,249,.82),rgba(255,253,249,0));
+}
 
 /* INTRO */
 .intro{
-  padding:145px 30px 72px;text-align:center;background:var(--paper);
+  padding:68px 30px 72px;text-align:center;background:var(--paper);
 }
-.intro.no-photo{padding-top:70px}
+.intro.no-photo{padding-top:68px}
 .floral-mark{
   width:48px;height:48px;margin:0 auto 20px;color:var(--gold);
 }
@@ -250,7 +276,6 @@ a,button{font:inherit}
   .hero{padding-left:17px;padding-right:17px}
   .hero-card{padding-left:18px;padding-right:18px}
   .hero-names{font-size:54px}
-  .hero-photo-wrap{height:335px}
   .agenda{padding-left:22px;padding-right:22px}
 }
 @media(min-width:720px){
@@ -271,11 +296,15 @@ a,button{font:inherit}
       <div class="hero-rule"></div>
       <p class="hero-date" id="heroDate">12 de septiembre de 2027</p>
       <p class="hero-place"><span id="heroVenue">Finca La Alquería</span> · <span id="heroCity">Murcia</span></p>
-      <figure class="hero-photo-wrap reveal" id="heroPhotoWrap" hidden>
+      <figure class="hero-photo-wrap" id="heroPhotoWrap" hidden>
         <img id="heroPhoto" src="" alt="Fotografía de la pareja">
       </figure>
     </div>
   </section>
+
+  <figure class="photo-flow reveal" id="photoFlow">
+    <img id="heroPhotoFull" alt="Fotografía de la pareja">
+  </figure>
 
   <section class="intro reveal" id="introSection">
     <div class="floral-mark" aria-hidden="true">
@@ -371,11 +400,14 @@ const locations = [
 
   var pw=document.getElementById('heroPhotoWrap');
   var ph=document.getElementById('heroPhoto');
+  var pf=document.getElementById('photoFlow');
+  var pfull=document.getElementById('heroPhotoFull');
+  pw.hidden=true;
   if(wedding.heroPhoto){
-    ph.src=wedding.heroPhoto;
-    pw.hidden=false;
+    pfull.src=wedding.heroPhoto;
+    pf.hidden=false;
   }else{
-    pw.hidden=true;
+    pf.hidden=true;
     document.getElementById('introSection').classList.add('no-photo');
   }
 
