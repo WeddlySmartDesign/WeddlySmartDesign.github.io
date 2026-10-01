@@ -53,10 +53,10 @@ h3{line-height:1.18}
   outline:3px solid rgba(82,92,67,.28)!important;outline-offset:2px!important
 }
 .nav{
-  left:50%!important;right:auto!important;bottom:calc(20px + env(safe-area-inset-bottom))!important;
+  left:50%!important;right:auto!important;bottom:calc(18px + env(safe-area-inset-bottom))!important;
   transform:translateX(-50%)!important;width:calc(100% - 20px)!important;max-width:520px!important;
   border:1px solid rgba(221,213,200,.92)!important;border-radius:22px!important;
-  padding:6px!important;background:rgba(255,255,255,.94)!important;
+  padding:6px 6px calc(6px + env(safe-area-inset-bottom))!important;background:rgba(255,255,255,.94)!important;
   box-shadow:0 14px 38px rgba(44,42,38,.14)!important;
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)
 }
