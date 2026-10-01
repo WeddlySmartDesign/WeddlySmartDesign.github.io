@@ -95,7 +95,7 @@
       <input type="text" id="city" value="Murcia">
     </div>
 
-    <div class="section">
+    <div class="section" id="photoSection">
       <p class="step-label">3 · Foto (opcional)</p>
       <div class="photo-input" id="heroPhotoBlock">
         <label style="margin-bottom:8px">Foto principal (portada)</label>
@@ -266,8 +266,12 @@ function replaceTemplateConst(h,name,value,kind){
 }
 function syncTemplateFields(){
   const modern=state.template==='e07'||state.template==='e08';
+  const photoSection=document.getElementById('photoSection');
+  const heroPhoto=document.getElementById('heroPhotoBlock');
   const storyPhoto=document.getElementById('storyPhotoBlock');
-  if(storyPhoto)storyPhoto.style.display=modern?'none':'';
+  if(photoSection)photoSection.style.display=modern?'':'none';
+  if(heroPhoto)heroPhoto.style.display=modern?'':'none';
+  if(storyPhoto)storyPhoto.style.display='none';
   buildAgendaFields();
 }
 const EXTERNAL_TEMPLATE_CACHE={};
@@ -376,8 +380,8 @@ async function renderPreview() {
     time: document.getElementById('time').value || '18:00',
     venue: document.getElementById('venue').value || 'Lugar de la ceremonia',
     city: document.getElementById('city').value || '',
-    heroPhoto: state.heroPhoto,
-    storyPhoto: state.storyPhoto,
+    heroPhoto: modern ? state.heroPhoto : '',
+    storyPhoto: '',
     storyTitle: document.getElementById('storyTitle').value || '',
     storyText: document.getElementById('storyText').value || '',
     contactName: document.getElementById('contactName').value || '',
