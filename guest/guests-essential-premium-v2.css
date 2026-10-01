@@ -50,7 +50,7 @@ body.essential-premium .agenda-time{font-size:15px!important;line-height:1.35!im
 body.essential-premium .agenda-title{font-size:20px!important;line-height:1.2!important;margin-top:4px!important;hyphens:none!important;overflow-wrap:normal!important}
 body.essential-premium .agenda-place{font-size:13px!important;line-height:1.4!important;margin-top:5px!important;hyphens:none!important;overflow-wrap:break-word!important;letter-spacing:.015em!important}
 body.essential-premium .agenda-sep{display:none!important}
-body.essential-premium .agenda-node:last-child:nth-child(odd){grid-column:1/-1;max-width:190px;width:100%;justify-self:center}
+body.essential-premium .agenda-node:last-child:nth-child(4n+1){grid-column:1/-1;max-width:190px;width:100%;justify-self:center}
 
 /* Facts need to remain readable with real venue names. */
 body.essential-premium .facts{gap:10px!important}
@@ -67,7 +67,7 @@ body.essential-premium #donde{padding-top:56px!important;padding-bottom:56px!imp
 
 @media (min-width:480px){
  body.essential-premium .agenda-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}
- body.essential-premium .agenda-node:last-child:nth-child(odd){grid-column:auto;max-width:none}
+ body.essential-premium .agenda-node:last-child:nth-child(4n+1){grid-column:auto;max-width:none}
 }
 
 
@@ -87,3 +87,8 @@ body.essential-premium #donde > .script{line-height:1.18!important;margin-bottom
 
 /* Venue/date line must wrap as a deliberate block, not a compressed caption. */
 body.essential-premium .cover-datevenue{display:block!important;text-wrap:balance!important}
+
+
+/* Agenda parity fix: separator divs remain in the legacy markup. Their DOM positions make every
+   final agenda-node an odd child, so :nth-child(odd) incorrectly centered the 4th item on its own row.
+   4n+1 matches only 1/3/5 agenda-node counts in this alternating node/separator structure. */

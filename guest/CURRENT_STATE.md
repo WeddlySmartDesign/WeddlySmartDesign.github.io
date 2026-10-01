@@ -230,3 +230,21 @@ NEXT ACTION:
 - The gate protects minimum mobile typography, responsive agenda reflow, per-model photo geometry, shared preview/delivery CSS and the Essential 05 whitespace correction.
 - No ONE/ONE Partner/STUDIO runtime files are part of this gate.
 Current status: Essential redesign ACTIVE; automated structural gate PASS; real-device visual approval still required.
+
+
+### Essential 01 real-device agenda defect — FIXED IN CODE, pending user visual recheck
+Evidence: user screenshot on mobile showed 4 agenda moments laid out as 2 + 1 + 1, leaving an artificial empty column and excessive vertical gap.
+Root cause: legacy markup alternates `.agenda-node` and `.agenda-sep`. The premium CSS used `.agenda-node:last-child:nth-child(odd)`, so the final node was always considered an odd DOM child even when the agenda contained 4 moments.
+GUEST-only correction:
+- final-node centering now uses `:nth-child(4n+1)`, which matches odd agenda counts (1/3/5) in the alternating node/separator markup but not 2/4;
+- 4 moments therefore render as a balanced 2×2 mobile grid;
+- 3 or 5 moments still center the final unmatched item;
+- preview and delivered invitations use the same shared CSS version `20261001c`;
+- Essential customizer iframe cache key bumped to force the corrected source;
+- static visual contract now explicitly guards against reintroducing the `:nth-child(odd)` regression.
+No ONE, ONE Partner or STUDIO files or runtime code touched.
+Status: ACTIVE until user rechecks Essential 01 on a real mobile.
+NEXT ACTION:
+1. Let Pages deploy this GUEST-only agenda correction.
+2. Reopen Essential 01 preview on mobile and verify the 4 moments render 2×2 without the empty third row.
+3. Continue Essential 01 section-by-section QA (cover → photo → story → agenda → location → RSVP → contact) before moving to Essential 02.

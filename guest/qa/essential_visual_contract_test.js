@@ -10,6 +10,8 @@ assert(/\.agenda-row\{[\s\S]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/.
 assert(/\.agenda-title\{font-size:20px!important/.test(css),'agenda title >= 20px');
 assert(/\.agenda-place\{font-size:13px!important/.test(css),'agenda place >= 13px');
 assert(/\.agenda-sep\{display:none!important/.test(css),'compressed horizontal agenda separators removed');
+assert(/\.agenda-node:last-child:nth-child\(4n\+1\)/.test(css),'odd agenda counts alone may center the final node');
+assert(!/\.agenda-node:last-child:nth-child\(odd\)/.test(css),'four-item agenda cannot be misclassified as odd because of separator nodes');
 assert(/essential-05 \.cover-content\{padding-top:28%!important;padding-bottom:16%!important/.test(css),'Essential 05 excessive cover whitespace removed');
 
 const shapes=[
@@ -27,13 +29,13 @@ for(const [id,radius] of shapes){
 for(let n=1;n<=6;n++){
  const id=String(n).padStart(2,'0');
  const html=read('guest/guests-rsvp-essential-'+id+'.html');
- assert(html.includes('guests-essential-premium-v2.css?v=20261001b'),'Essential '+id+' loads current premium CSS');
+ assert(html.includes('guests-essential-premium-v2.css?v=20261001c'),'Essential '+id+' loads current premium CSS');
  assert(html.includes('essential-premium essential-'+id),'Essential '+id+' has scoped model class');
 }
 
 const customizer=read('guest/weddly-personalizacion-essential.html');
 assert(customizer.includes("premiumClass = 'essential-premium '"),'customizer preview applies scoped premium model class');
-assert(customizer.includes('guests-essential-premium-v2.css?v=20261001b'),'customizer preview shares delivered invitation CSS');
+assert(customizer.includes('guests-essential-premium-v2.css?v=20261001c'),'customizer preview shares delivered invitation CSS');
 
 if(process.exitCode) process.exit(process.exitCode);
 console.log('Essential visual contract static gate passed.');
