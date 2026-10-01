@@ -13,6 +13,13 @@ function staticAudit(){
   ok(checkout.includes('/functions/v1/guest-stripe-checkout'),'checkout not using GUEST endpoint');
   ok(ret.includes("action:'status'"),'return status action missing');
   ok(ret.includes("guest-order.html?session_id="),'return → order route missing');
+  const backend=fs.readFileSync(path.join(repoRoot,'guest','backend','guest-stripe-checkout','index.ts'),'utf8');
+  ok(backend.includes("handleWebhook"),'signed webhook handler missing');
+  ok(backend.includes("env('GUEST_STRIPE_WEBHOOK_SECRET')"),'dedicated GUEST webhook secret missing');
+  ok(!backend.includes("GUEST_STRIPE_WEBHOOK_SECRET')||env('STRIPE_WEBHOOK_SECRET"),'GUEST must not fall back to ONE/shared webhook secret');
+  ok(backend.includes("checkout.session.completed")&&backend.includes("checkout.session.async_payment_succeeded"),'paid webhook events incomplete');
+  ok(backend.includes("if(action==='status')"),'browser return/status fallback missing');
+  ok(backend.includes("pk_live_"),'live publishable-key fallback missing');
   ok(!/weddly-stripe-checkout|checkout-return\.html\?session_id=/i.test(checkout.replace(/guest-checkout-return\.html/g,'')),'foreign ONE checkout route detected');
 }
 
