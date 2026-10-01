@@ -44,7 +44,7 @@ Validated GitHub Actions run:
 `36733355182` — 14/14 jobs `success`
 
 ## Current block
-B8.4–B8.6 awaiting canonical CI seal; B9.1–B9.2 deployment preparation ACTIVE in parallel
+B8.4–B8.6 awaiting canonical CI seal; B9.1–B9.7 release preparation implemented, awaiting canonical CI
 
 Current branch:
 `guest-independent`
@@ -78,16 +78,41 @@ B9.1:
 - offline navigation fallback is restricted to canonical app routes, so broken invitation/access HTML cannot silently open the app shell.
 
 B9.2:
-- public release route gate exists and checks purchase → return → order → activation → app routes;
-- customer surfaces are forbidden from exposing `guest-orders-admin.html` or discarded `guest-deliver.html`;
+- public release route gate checks purchase → return → order → activation → app routes;
+- customer surfaces cannot expose the private orders manager or discarded delivery route;
 - required internal release targets are checked for existence.
 
+B9.3:
+- pre-release hold explicitly prevents declaring/releasing GUEST before B8+B9 are sealed;
+- GUEST customer release artifacts remain absent from `main`.
+
+B9.4:
+- public/private surface security gate forbids Stripe/webhook/service-role secrets and admin capabilities on customer pages;
+- private order manager remains authenticated and separate.
+
+B9.5:
+- independent commercial identity is now `product=guest` in Stripe session, PaymentIntent validation and license metadata;
+- LIVE `guest-stripe-checkout` deployed with this identity;
+- existing Stripe licenses checked: no prior GUEST purchase required migration.
+
+B9.6:
+- Supabase GUEST security audit PASS at design/permission level;
+- GUEST tables inspected have RLS enabled;
+- `guest_webhook_secret`, `provision_weddly_license` and `activate_weddly_license` are service-role-only;
+- shared-project advisories belonging to ONE/Partner/other products are documented but deliberately untouched.
+
+B9.7:
+- canonical app, Guests engine, settings, access, RSVP and event invitation surfaces are protected with `noindex,nofollow,noarchive`;
+- sensitive root checkout/return/order/admin surfaces are also non-indexable;
+- invitation links remain usable; noindex only prevents search-engine discovery.
+
 ## NEXT ACTION
-1. Inspect the first completed canonical CI run containing B8.4/B8.5/B8.6 + B9.1/B9.2.
-2. If any job fails, fix ONLY that exact failure; do not reopen B6/B7.
-3. If B8.4/B8.5/B8.6 are all green, write B8 final seal and mark B8 PASS / SEALED.
-4. If B9.1/B9.2 are green, continue B9 release gates from the next untested release risk (live public deployment/release surface), without touching ONE/Partner/STUDIO.
-5. Do not declare GUEST release-ready until B8 is sealed and the full B9 release gate is green.
+1. Do not create more scattered release gates. Create one B9 final aggregate release-seal test that requires B9.1–B9.7 contracts and the B8.6 commercial seal test to exist/pass locally.
+2. Inspect the first completed canonical CI run containing B8.4–B8.6 and B9.1–B9.7.
+3. If any job fails, fix ONLY that exact failure; do not reopen B6/B7.
+4. When B8.4–B8.6 are green, write the B8 final seal and mark B8 PASS / SEALED.
+5. When B9.1–B9.7 + aggregate gate are green, write the B9 final release-preparation seal.
+6. Only after both seals exist may GUEST be considered ready for an explicit publication step. Do not merge/publish to `main` automatically.
 
 ## Working method from now on
 Every microblock has only three states:
