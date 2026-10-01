@@ -180,13 +180,9 @@ a,button{font:inherit}
 }
 .moment:last-child{padding-bottom:0}
 .moment-dot{
-  position:relative;z-index:1;width:34px;height:34px;margin:0 0 0 14px;
-  display:grid;place-items:center;background:var(--ivory);
-  font-family:var(--display);font-size:14px;line-height:1;color:var(--gold);
-}
-.moment-dot::after{
-  content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;
-  transform:translate(-50%,15px) rotate(45deg);background:var(--gold-soft);
+  position:relative;z-index:1;width:8px;height:8px;margin:8px 0 0 27px;
+  background:var(--gold);transform:rotate(45deg);
+  box-shadow:0 0 0 4px var(--ivory);
 }
 .moment-time{
   display:block;margin-bottom:3px;font-size:10px;letter-spacing:.15em;
@@ -222,8 +218,10 @@ a,button{font:inherit}
 }
 .location-detail{margin:9px 0 0;font-size:12.5px;color:var(--muted)}
 .location-link{
-  display:inline-flex;align-items:center;gap:7px;margin-top:18px;color:var(--blue-deep);
-  text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:3px;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-height:44px;margin-top:18px;padding:11px 17px;color:var(--blue-deep);
+  text-decoration:none;border:1px solid var(--blue-deep);border-radius:2px;
+  background:rgba(255,255,255,.30);
   font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
 }
 
@@ -259,8 +257,10 @@ a,button{font:inherit}
   margin:0;font-family:var(--display);font-size:30px;line-height:1;font-weight:500
 }
 .contact-link{
-  display:inline-block;margin-top:16px;color:var(--blue-deep);text-decoration:none;
-  border-bottom:1px solid currentColor;padding-bottom:3px;font-size:12px;
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;margin-top:16px;padding:11px 17px;color:var(--blue-deep);text-decoration:none;
+  border:1px solid var(--blue-deep);border-radius:2px;background:rgba(255,255,255,.24);
+  font-size:11.5px;font-weight:600;letter-spacing:.04em;
 }
 .footer{
   padding:25px 24px 31px;display:flex;justify-content:space-between;gap:20px;
@@ -414,9 +414,8 @@ const locations = [
   }
 
   var cleanAgenda=(agenda||[]).filter(function(x){return x&&(x.time||x.title||x.place)});
-  document.getElementById('agendaList').innerHTML=cleanAgenda.map(function(x,i){
-    var n=String(i+1).padStart(2,'0');
-    return '<article class="moment"><div class="moment-dot">'+n+'</div><div><span class="moment-time">'+esc(x.time||'')+'</span><h3 class="moment-name">'+esc(x.title||'')+'</h3><div class="moment-place">'+esc(x.place||'')+'</div></div></article>';
+  document.getElementById('agendaList').innerHTML=cleanAgenda.map(function(x){
+    return '<article class="moment"><div class="moment-dot" aria-hidden="true"></div><div><span class="moment-time">'+esc(x.time||'')+'</span><h3 class="moment-name">'+esc(x.title||'')+'</h3><div class="moment-place">'+esc(x.place||'')+'</div></div></article>';
   }).join('');
 
   var ls=(locations&&locations.length)?locations:[{title:'Celebración',time:wedding.time,place:wedding.venue,address:[wedding.venue,wedding.city].filter(Boolean).join(', ')}];
