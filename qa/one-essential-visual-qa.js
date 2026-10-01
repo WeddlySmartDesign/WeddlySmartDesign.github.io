@@ -94,7 +94,7 @@ const photoSvg='data:image/svg+xml;base64,'+Buffer.from(`<svg xmlns="http://www.
    assert(m.cardDetail>=12.9,`E${id} ${width}px card detail >=13px (${m.cardDetail})`);
    assert(m.visibleName&&m.visibleStory,`E${id} ${width}px key copy remains inside viewport width`);
    assert(m.photo&&m.photo.w>=200,`E${id} ${width}px photo has editorial presence (${m.photo&&m.photo.w})`);
-   if(id!=='01') assert(!/^50%/.test(m.photoRadius),`E${id} cover photo is not generic circle (${m.photoRadius})`);
+   if(id!=='01') assert(!/^50%(?:\\s+50%){0,3}$/.test(m.photoRadius.trim()),`E${id} cover photo is not generic circle (${m.photoRadius})`);
    assert(m.nodes.length>=5,`E${id} ${width}px renders 5 agenda moments for stress test`);
    if(id==='01'){
       const xs=m.nodes.map(n=>Math.round(n.x));
