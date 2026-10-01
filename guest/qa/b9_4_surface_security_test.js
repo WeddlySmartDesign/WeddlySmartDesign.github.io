@@ -1,0 +1,14 @@
+const fs=require('fs'),path=require('path');const ok=(x,m)=>{if(!x)throw new Error(m)};const root=path.resolve(__dirname,'..','..');
+const publicFiles=['guest.html','guest-checkout.html','guest-checkout-return.html','guest-order.html','guest-legal.html','guest/access.html','guest/index.html','guest/guest-settings.html'];
+const publicText=publicFiles.map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
+for(const secret of ['sk_live_','whsec_','service_role','GUEST_STRIPE_WEBHOOK_SECRET','STRIPE_SECRET_KEY'])ok(!publicText.includes(secret),'secret marker exposed on public surface: '+secret);
+for(const admin of ['guest-orders-admin','weddly-owner-manager','x-weddly-manager','weddly_owner_manager_token_v1'])ok(!publicText.includes(admin),'admin capability exposed on public surface: '+admin);
+const admin=fs.readFileSync(path.join(root,'guest-orders-admin.html'),'utf8');
+ok(admin.includes('weddly-owner-manager')&&admin.includes('guest-orders-admin'),'private manager is not wired to authenticated admin backends');
+ok(admin.includes('x-weddly-manager'),'private manager does not send manager session');
+const stripe=fs.readFileSync(path.join(root,'guest','backend','guest-stripe-checkout','index.ts'),'utf8');
+ok(!/sk_live_[A-Za-z0-9]+/.test(stripe),'hard-coded live Stripe secret in repository backend');
+ok(!/whsec_[A-Za-z0-9]+/.test(stripe),'hard-coded webhook signing secret in repository backend');
+ok(stripe.includes('Deno.env.get(\'STRIPE_SECRET_KEY\')'),'Stripe secret must come from environment');
+ok(stripe.includes('guestWebhookSecret()'),'webhook secret must be resolved server-side');
+console.log('B9.4 public/private surface security: PASS');
