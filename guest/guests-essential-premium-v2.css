@@ -1,0 +1,71 @@
+/* GUEST Essential — premium mobile readability pass 2026-10-01
+   Presentation only. No RSVP/data behavior. */
+html{scroll-padding-top:24px}
+body.essential-premium{font-size:16px}
+body.essential-premium .invite{width:100%;max-width:560px}
+body.essential-premium section{scroll-margin-top:24px}
+
+/* Never shrink core invitation information below comfortable mobile sizes. */
+body.essential-premium .cover-sub{font-size:clamp(14px,3.8vw,16px)!important;line-height:1.45!important;letter-spacing:.025em!important;max-width:32ch;margin-left:auto!important;margin-right:auto!important}
+body.essential-premium .cover-datevenue{font-size:clamp(14px,3.6vw,16px)!important;line-height:1.45!important;letter-spacing:.015em!important;max-width:30ch;margin-left:auto!important;margin-right:auto!important}
+body.essential-premium .cover-waiting{font-size:clamp(22px,6vw,28px)!important;line-height:1.2!important}
+body.essential-premium .historia-text{font-size:clamp(17px,4.4vw,19px)!important;line-height:1.65!important;max-width:34ch;margin-left:auto!important;margin-right:auto!important}
+body.essential-premium .eyebrow{font-size:12px!important;line-height:1.4!important}
+
+/* Editorial cover photographs: Essential remains simple, never generic. */
+body.essential-02 .cover-photo-wrap,
+body.essential-03 .cover-photo-wrap,
+body.essential-04 .cover-photo-wrap,
+body.essential-05 .cover-photo-wrap,
+body.essential-06 .cover-photo-wrap{
+ width:min(58vw,232px)!important;height:auto!important;aspect-ratio:4/5!important;
+ overflow:hidden!important;margin:12px auto 24px!important;border:0!important;
+ box-shadow:none!important;background:#fff!important
+}
+body.essential-02 .cover-photo-wrap{border-radius:48% 48% 14px 14px!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 65%,transparent)!important}
+body.essential-03 .cover-photo-wrap{border-radius:120px 120px 8px 8px!important;padding:5px!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--sage-deep) 55%,transparent)!important}
+body.essential-04 .cover-photo-wrap{border-radius:8px 86px 8px 86px!important;padding:4px!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 55%,transparent)!important}
+body.essential-05 .cover-photo-wrap{width:min(66vw,264px)!important;aspect-ratio:5/4!important;border-radius:4px 56px 4px 56px!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--sage-deep) 45%,transparent)!important}
+body.essential-06 .cover-photo-wrap{width:min(56vw,224px)!important;aspect-ratio:3/4!important;border-radius:112px 112px 10px 10px!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 45%,transparent)!important}
+body.essential-premium .cover-photo-wrap img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 42%!important;border-radius:inherit!important}
+
+/* Restore breathing room: content height follows content, never a poster crop. */
+body.essential-02 .cover-content,
+body.essential-03 .cover-content,
+body.essential-04 .cover-content,
+body.essential-05 .cover-content,
+body.essential-06 .cover-content{padding-left:10%!important;padding-right:10%!important}
+body.essential-premium .cover-names{font-size:clamp(34px,9vw,44px)!important;line-height:1.05!important;margin-bottom:16px!important}
+
+/* Agenda: responsive editorial grid instead of five compressed columns. */
+body.essential-premium .agenda-row{
+ display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:26px 18px!important;align-items:start!important;justify-content:center!important;
+ max-width:440px!important;margin:26px auto 0!important
+}
+body.essential-premium .agenda-node{font-size:14px!important;min-width:0!important;padding:0 4px!important}
+body.essential-premium .agenda-node .ring{width:64px!important;height:64px!important;margin-bottom:12px!important}
+body.essential-premium .agenda-node svg{width:24px!important;height:24px!important}
+body.essential-premium .agenda-time{font-size:15px!important;line-height:1.35!important}
+body.essential-premium .agenda-title{font-size:20px!important;line-height:1.2!important;margin-top:4px!important;hyphens:none!important;overflow-wrap:normal!important}
+body.essential-premium .agenda-place{font-size:13px!important;line-height:1.4!important;margin-top:5px!important;hyphens:none!important;overflow-wrap:break-word!important;letter-spacing:.015em!important}
+body.essential-premium .agenda-sep{display:none!important}
+body.essential-premium .agenda-node:last-child:nth-child(odd){grid-column:1/-1;max-width:190px;width:100%;justify-self:center}
+
+/* Facts need to remain readable with real venue names. */
+body.essential-premium .facts{gap:10px!important}
+body.essential-premium .fact{font-size:13px!important;line-height:1.35!important}
+body.essential-premium .fact svg{width:21px!important;height:21px!important}
+body.essential-premium .city{font-size:13px!important}
+
+/* Story image remains editorial, with enough separation from copy. */
+body.essential-premium .historia-grid{gap:26px!important}
+body.essential-premium .historia-photo-wrap{width:min(76vw,300px)!important}
+body.essential-premium #historia,
+body.essential-premium #agendaSection,
+body.essential-premium #donde{padding-top:56px!important;padding-bottom:56px!important}
+
+@media (min-width:480px){
+ body.essential-premium .agenda-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ body.essential-premium .agenda-node:last-child:nth-child(odd){grid-column:auto;max-width:none}
+}
