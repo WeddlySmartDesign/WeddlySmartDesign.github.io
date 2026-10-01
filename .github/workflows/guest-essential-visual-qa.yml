@@ -1,0 +1,27 @@
+name: GUEST Essential Visual QA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'guest/guests-rsvp-essential-*.html'
+      - 'guest/guests-essential-premium-v2.css'
+      - 'guest/guests-personalizacion-essential.html'
+      - 'guest/weddly-personalizacion-essential.html'
+      - 'guest/qa/essential_visual_contract_test.js'
+      - '.github/workflows/guest-essential-visual-qa.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  essential-visual-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - name: Guard Essential mobile visual contract
+        run: node guest/qa/essential_visual_contract_test.js
