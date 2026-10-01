@@ -462,3 +462,13 @@ jobs:
           node-version: '22'
       - name: B9.1 deployment PWA isolation QA
         run: node guest/qa/b9_1_deployment_pwa_isolation_test.js
+
+  b9-public-release-routes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.2 public release routes QA
+        run: node guest/qa/b9_2_public_release_routes_test.js
