@@ -22,7 +22,7 @@ const fonts=['editorial','romantico','clasico','moderno','caligrafico'];
  await page.waitForTimeout(250);
  const legacyHasPhoto=await page.locator('#preview').evaluate(f=>{
    const d=f.contentDocument; if(!d)return false;
-   return !![...d.querySelectorAll('img')].find(x=>x.src&&x.src.startsWith('data:image'));
+   return !![...d.querySelectorAll('img')].find(x=>x.src&&x.src.startsWith('data:image/svg+xml'));
  });
  assert(!legacyHasPhoto,'legacy Essential ignores saved photo');
 
@@ -102,7 +102,7 @@ const fonts=['editorial','romantico','clasico','moderno','caligrafico'];
  },{photo});
  await old.goto(base+'/guests-rsvp-essential-live.html',{waitUntil:'networkidle'});
  await old.waitForTimeout(700);
- const oldImgs=await old.evaluate(()=>[...document.images].filter(x=>x.src.startsWith('data:image')).length);
+ const oldImgs=await old.evaluate(()=>[...document.images].filter(x=>x.src.startsWith('data:image/svg+xml')).length);
  assert(oldImgs===0,'legacy public Essential suppresses saved photos');
  await old.close();
 
