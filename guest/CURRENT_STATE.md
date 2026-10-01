@@ -196,3 +196,28 @@ Essential redesign rules:
 NEXT ACTION:
 - Audit Essential 01–06 model-by-model and implement a first premium visual pass on GUEST copies only.
 - Then run visual/functional regression before resuming GUEST product-flow work.
+
+
+### Essential premium pass A — IMPLEMENTED, pending real-device visual validation
+Files:
+- `guest/guests-essential-premium-v2.css`
+- `guest/guests-rsvp-essential-01.html` … `06.html`
+
+Changes:
+- all six Essential templates opt into isolated premium/readability CSS;
+- Essential 02–06 no longer use the same 150x150 circular cover-photo presentation: each receives a distinct editorial photo geometry;
+- Essential 01 keeps its differentiated heart treatment;
+- cover/subtitle/date text minimum visual sizes increased;
+- story copy increased for real-mobile reading;
+- agenda no longer forces five moments into one row: 2-column mobile grid, 3-column wider layout;
+- agenda place/title/time sizes raised; CSS !important prevents old JS fit logic from shrinking them below the new visual contract;
+- section spacing and facts readability improved;
+- no RSVP/data logic changed.
+
+Static integration check: PASS 6/6 templates linked and model-scoped.
+Status remains ACTIVE until visual inspection on the user's real mobile proves each model individually.
+NEXT ACTION:
+1. Wait for Pages deployment of current main.
+2. Real-device inspect Essential 01–06 with photos and realistic content.
+3. Correct model-specific composition defects found in that visual pass; do not reseal from static checks alone.
+4. Only after all six pass, freeze Essential visual contract and resume GUEST.
