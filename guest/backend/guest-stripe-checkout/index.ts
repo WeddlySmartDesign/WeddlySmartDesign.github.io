@@ -21,7 +21,6 @@ function amountFor(e:string){return e==='signature'?4990:3990}
 function normalFor(e:string){return e==='signature'?5990:4990}
 function labelFor(e:string){return e==='signature'?'GUEST Signature':'GUEST Essential'}
 function descriptionFor(e:string){return e==='signature'?'Invitación digital Signature personalizada + RSVP + gestión GUEST':'Invitación digital Essential personalizada + RSVP + gestión GUEST'}
-function secretToken(){return crypto.randomUUID().replaceAll('-','')+crypto.randomUUID().replaceAll('-','')}
 function activationCode(){const a=crypto.randomUUID().replaceAll('-','').toUpperCase(),b=crypto.randomUUID().replaceAll('-','').toUpperCase();return `WSD-GUEST-${a.slice(0,8)}-${a.slice(8,16)}-${b.slice(0,8)}`}
 function normalizeCode(v:string){return String(v||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'')}
 async function stripeRequest(path:string,init:RequestInit={}){
@@ -96,31 +95,15 @@ async function submitOrder(session:any,raw:any){
  const {data:l,error}=await db.from('licenses').select('metadata').eq('id',p.licenseId).single();if(error)throw error;
  if(l.metadata?.guest_order_submitted_at)return {ok:true,submittedAt:l.metadata.guest_order_submitted_at,edition:p.edition,email:p.buyerEmail,alreadySubmitted:true};
  const details=cleanDetails(raw,p.edition);if(!details.design)throw new Error('invalid_design');if(!details.couple1||!details.couple2||!details.weddingDate)throw new Error('missing_order_fields');
- const now=new Date().toISOString(),deliveryToken=secretToken();
- const metadata={...(l.metadata||{}),guest_personalization_status:'details_received',guest_order:details,guest_order_submitted_at:now,guest_delivery_token_hash:await sha256(deliveryToken)};
+ const now=new Date().toISOString();
+ const metadata={...(l.metadata||{}),guest_personalization_status:'details_received',guest_order:details,guest_order_submitted_at:now};
  const {error:ue}=await db.from('licenses').update({metadata,updated_at:now}).eq('id',p.licenseId);if(ue)throw ue;
- const internal=`<div style="font-family:Arial,sans-serif;color:#222"><h2>NUEVO PEDIDO GUEST · ${esc(p.edition.toUpperCase())}</h2><p><b>Cliente:</b> ${esc(p.buyerEmail)}<br><b>Pedido:</b> ${esc(session.id)}</p><p><b>Pareja:</b> ${esc(details.couple1)} &amp; ${esc(details.couple2)}<br><b>Fecha:</b> ${esc(details.weddingDate)}<br><b>Teléfono:</b> ${esc(details.contactPhone)}<br><b>Diseño:</b> ${esc(details.design)}</p><p><b>Ceremonia:</b> ${esc(details.ceremonyTime)} · ${esc(details.ceremonyVenue)}<br><b>Celebración:</b> ${esc(details.celebrationTime)} · ${esc(details.celebrationVenue)}</p><p><b>Texto:</b><br>${esc(details.invitationText).replaceAll('\n','<br>')}</p><p><b>RSVP hasta:</b> ${esc(details.rsvpDeadline)}<br><b>Transporte:</b> ${details.transport?'Sí':'No'} · <b>Alojamiento:</b> ${details.accommodation?'Sí':'No'} · <b>Niños:</b> ${details.children?'Sí':'No'} · <b>Menú:</b> ${details.menu?'Sí':'No'} · <b>Alergias:</b> ${details.allergies?'Sí':'No'}</p><p><b>Eventos extra:</b><br>${esc(details.extraEvents).replaceAll('\n','<br>')}</p><p><b>Notas:</b><br>${esc(details.notes).replaceAll('\n','<br>')}</p><p><b>License ID:</b> ${esc(p.licenseId)}</p><p><a href="${esc(origin()+'/guest-deliver.html?session_id='+encodeURIComponent(String(session.id))+'&token='+encodeURIComponent(deliveryToken))}">Cuando la invitación esté lista: enviar acceso GUEST a la pareja</a></p></div>`;
+ const internal=`<div style="font-family:Arial,sans-serif;color:#222"><h2>NUEVO PEDIDO GUEST · ${esc(p.edition.toUpperCase())}</h2><p><b>Cliente:</b> ${esc(p.buyerEmail)}<br><b>Pedido:</b> ${esc(session.id)}</p><p><b>Pareja:</b> ${esc(details.couple1)} &amp; ${esc(details.couple2)}<br><b>Fecha:</b> ${esc(details.weddingDate)}<br><b>Teléfono:</b> ${esc(details.contactPhone)}<br><b>Diseño:</b> ${esc(details.design)}</p><p><b>Ceremonia:</b> ${esc(details.ceremonyTime)} · ${esc(details.ceremonyVenue)}<br><b>Celebración:</b> ${esc(details.celebrationTime)} · ${esc(details.celebrationVenue)}</p><p><b>Texto:</b><br>${esc(details.invitationText).replaceAll('\n','<br>')}</p><p><b>RSVP hasta:</b> ${esc(details.rsvpDeadline)}<br><b>Transporte:</b> ${details.transport?'Sí':'No'} · <b>Alojamiento:</b> ${details.accommodation?'Sí':'No'} · <b>Niños:</b> ${details.children?'Sí':'No'} · <b>Menú:</b> ${details.menu?'Sí':'No'} · <b>Alergias:</b> ${details.allergies?'Sí':'No'}</p><p><b>Eventos extra:</b><br>${esc(details.extraEvents).replaceAll('\n','<br>')}</p><p><b>Notas:</b><br>${esc(details.notes).replaceAll('\n','<br>')}</p><p><b>License ID:</b> ${esc(p.licenseId)}</p></div>`;
  await resend({idempotencyKey:'guest-order-internal/'+session.id,body:{to:['weddlysmartdesign@gmail.com'],subject:'Nuevo pedido GUEST · '+details.couple1+' & '+details.couple2,html:internal}});
  await resend({idempotencyKey:'guest-order-confirm/'+session.id,body:{to:[p.buyerEmail],subject:'Ya tenemos los datos de vuestra invitación GUEST',html:`<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#2C2A26"><h1 style="font-family:Georgia,serif;font-weight:400">Ya estamos con vuestra invitación.</h1><p>Hemos recibido los datos de <strong>${esc(details.couple1)} &amp; ${esc(details.couple2)}</strong>.</p><p>Prepararemos vuestra ${esc(labelFor(p.edition))} y os enviaremos la entrega por email. El plazo previsto es de 24–48 h.</p><p>Si el diseño necesita fotografías, os indicaremos cómo enviarlas respondiendo a este correo.</p><p style="color:#736F63;font-size:13px">WeddlySmartDesign · weddlysmartdesign@gmail.com</p></div>`}});
  return {ok:true,submittedAt:now,edition:p.edition,email:p.buyerEmail}
 }
 
-
-async function deliverAccess(session:any,operatorToken:string){
- const p=await provision(session),db=admin();
- const {data:l,error}=await db.from('licenses').select('id,status,wedding_id,metadata').eq('id',p.licenseId).single();if(error)throw error;
- if(!l?.metadata?.guest_order_submitted_at)throw new Error('order_not_submitted');
- const expected=String(l.metadata?.guest_delivery_token_hash||'');if(!expected||!operatorToken||!secureEqual(expected,await sha256(operatorToken)))throw new Error('invalid_delivery_token');
- if(l.metadata?.guest_access_delivered_at)return {ok:true,alreadyDelivered:true,deliveredAt:l.metadata.guest_access_delivered_at,email:p.buyerEmail};
- if(l.wedding_id)throw new Error('already_activated');
- const code=activationCode(),hash=await sha256(normalizeCode(code)),now=new Date().toISOString();
- const link=origin()+'/guest/access.html#code='+encodeURIComponent(code);
- const next={...(l.metadata||{}),guest_personalization_status:'delivered',guest_access_delivered_at:now};
- const {error:ue}=await db.from('licenses').update({purchase_hash:hash,metadata:next,updated_at:now}).eq('id',p.licenseId).is('wedding_id',null);if(ue)throw ue;
- const sent=await resend({idempotencyKey:'guest-access-delivery/'+session.id,body:{to:[p.buyerEmail],subject:'Vuestro GUEST ya está listo',html:`<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#2C2A26"><h1 style="font-family:Georgia,serif;font-weight:400">Vuestro GUEST ya está listo.</h1><p>Ya podéis abrir vuestra invitación y empezar a gestionar invitados, RSVP, mesas, listados y eventos.</p><p><a href="${esc(link)}" style="display:inline-block;background:#2C2A26;color:#fff;text-decoration:none;padding:13px 18px;border-radius:10px">Activar vuestro GUEST</a></p><p>También podéis introducir este código manualmente:</p><p style="font-family:monospace;font-size:16px;font-weight:700">${esc(code)}</p><p>Guardad este correo. El acceso principal se activa una vez y, desde GUEST, podréis conectar el segundo dispositivo autorizado.</p><p style="color:#736F63;font-size:13px">WeddlySmartDesign · weddlysmartdesign@gmail.com</p></div>`}});
- if(!sent){await db.from('licenses').update({metadata:{...(l.metadata||{}),guest_personalization_status:'details_received'},updated_at:new Date().toISOString()}).eq('id',p.licenseId);throw new Error('delivery_email_failed')}
- return {ok:true,alreadyDelivered:false,deliveredAt:now,email:p.buyerEmail}
-}
 
 async function guestWebhookSecret(){
  const direct=env('GUEST_STRIPE_WEBHOOK_SECRET');if(direct)return direct;
@@ -168,12 +151,11 @@ Deno.serve(async req=>{
    return json({ok:true,publishableKey:pk,launch:true,prices:{essential:{current:amountFor('essential'),normal:normalFor('essential')},signature:{current:amountFor('signature'),normal:normalFor('signature')}}})
   }
   if(action==='create'){const edition=editionOf(b.edition),session=await createSession(edition,b.startPersonalizationConsent===true);return json({ok:true,clientSecret:session.client_secret,sessionId:session.id,edition})}
-  if(action==='deliver'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await deliverAccess(session,String(b.operatorToken||'')))}
   if(action==='status'){
    const session=await retrieveSession(String(b.sessionId||'')),paid=session.status==='complete'&&session.payment_status==='paid';let p=null;if(paid)p=await provision(session);
    return json({ok:true,status:session.status,paymentStatus:session.payment_status,paid,provisioned:!!p,edition:editionOf(session.metadata?.edition),amountTotal:session.amount_total||null,currency:session.currency||'eur',email:p?.buyerEmail||session.customer_details?.email||null,orderSubmittedAt:p?.metadata?.guest_order_submitted_at||null})
   }
   if(action==='submit_order'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await submitOrder(session,b.details||{}))}
   return json({ok:false,error:'invalid_action'},400)
- }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','order_not_submitted','invalid_delivery_token','already_activated'].includes(m))return json({ok:false,error:m},400);if(m==='delivery_email_failed')return json({ok:false,error:m},502);if(m==='stripe_not_configured'||m==='webhook_not_configured')return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
+ }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design'].includes(m))return json({ok:false,error:m},400);if(m==='stripe_not_configured'||m==='webhook_not_configured')return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
 });
