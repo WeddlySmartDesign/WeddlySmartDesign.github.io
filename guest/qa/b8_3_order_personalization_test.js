@@ -46,6 +46,7 @@ async function orderCase(browser,edition,alreadySubmitted=false){
  await page.locator('[name=couple2]').fill('Jorge');
  await page.locator('[name=weddingDate]').fill('2027-09-12');
  await page.locator('[name=contactPhone]').fill('600000000');
+ await page.locator('#design').selectOption({label:edition==='signature'?'Signature 01':'Essential 01'});
  await page.locator('[name=ceremonyVenue]').fill('Iglesia');
  await page.locator('[name=celebrationVenue]').fill('Finca');
  await page.locator('#form').evaluate(form=>form.requestSubmit());
