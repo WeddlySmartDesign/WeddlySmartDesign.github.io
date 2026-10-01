@@ -28,8 +28,9 @@ async function stripeRequest(path:string,init:RequestInit={}){
  const r=await fetch('https://api.stripe.com/v1'+path,{...init,headers:{Authorization:'Bearer '+secret,...(init.headers||{})}});
  const x=await r.json().catch(()=>({}));if(!r.ok){console.warn('stripe_error',r.status,x);if(r.status===404)throw new Error('session_not_found');if(r.status===401||r.status===403)throw new Error('stripe_not_configured');if(r.status===429)throw new Error('stripe_temporarily_unavailable');throw new Error('stripe_request_failed')}return x
 }
-async function createSession(edition:string,consent:boolean){
+async function createSession(edition:string,consent:boolean,attempt:any){
  if(!consent)throw new Error('consent_required');
+ const key=String(attempt||'').trim();if(!/^[A-Za-z0-9-]{16,100}$/.test(key))throw new Error('invalid_checkout_attempt');
  const amount=amountFor(edition),base=origin(),p=new URLSearchParams();
  p.set('ui_mode','embedded_page');p.set('mode','payment');p.set('locale','es');p.set('submit_type','pay');
  p.set('billing_address_collection','auto');p.set('customer_creation','always');p.set('redirect_on_completion','always');
@@ -44,7 +45,7 @@ async function createSession(edition:string,consent:boolean){
  p.set('payment_intent_data[metadata][product]','guests');p.set('payment_intent_data[metadata][edition]',edition);
  p.set('custom_text[submit][message]','Al pagar confirmas tu pedido GUEST. Después completarás los datos para que personalicemos vuestra invitación.');
  if(['1','true','on','yes'].includes(env('WEDDLY_STRIPE_AUTOMATIC_TAX').toLowerCase()))p.set('automatic_tax[enabled]','true');
- return await stripeRequest('/checkout/sessions',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:p.toString()})
+ return await stripeRequest('/checkout/sessions',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Idempotency-Key':'guest-checkout/'+key},body:p.toString()})
 }
 async function retrieveSession(id:string){
  if(!/^cs_(test_|live_)?[A-Za-z0-9_]+$/.test(id))throw new Error('invalid_session');
@@ -150,12 +151,12 @@ Deno.serve(async req=>{
    const pk=env('STRIPE_PUBLISHABLE_KEY')||'pk_live_51UHSpGGsLCo0tfLrCEFrbgR8GuH08Ug3czX35u4W2HUoCjKQSvzOC3ZfRleCXg67h05eytwFeE31ycgw7ozHHLvK00CPs5ZG8P';if(!pk)return json({ok:false,error:'stripe_not_configured'},503);
    return json({ok:true,publishableKey:pk,launch:true,prices:{essential:{current:amountFor('essential'),normal:normalFor('essential')},signature:{current:amountFor('signature'),normal:normalFor('signature')}}})
   }
-  if(action==='create'){const edition=editionOf(b.edition),session=await createSession(edition,b.startPersonalizationConsent===true);return json({ok:true,clientSecret:session.client_secret,sessionId:session.id,edition})}
+  if(action==='create'){const edition=editionOf(b.edition),session=await createSession(edition,b.startPersonalizationConsent===true,b.checkoutAttemptId);return json({ok:true,clientSecret:session.client_secret,sessionId:session.id,edition})}
   if(action==='status'){
    const session=await retrieveSession(String(b.sessionId||'')),paid=session.status==='complete'&&session.payment_status==='paid';let p=null;if(paid)p=await provision(session);
    return json({ok:true,status:session.status,paymentStatus:session.payment_status,paid,provisioned:!!p,edition:editionOf(session.metadata?.edition),amountTotal:session.amount_total||null,currency:session.currency||'eur',email:p?.buyerEmail||session.customer_details?.email||null,orderSubmittedAt:p?.metadata?.guest_order_submitted_at||null})
   }
   if(action==='submit_order'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await submitOrder(session,b.details||{}))}
   return json({ok:false,error:'invalid_action'},400)
- }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
+ }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
 });
