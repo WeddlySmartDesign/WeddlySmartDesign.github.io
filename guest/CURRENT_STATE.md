@@ -44,7 +44,7 @@ Validated GitHub Actions run:
 `36733355182` — 14/14 jobs `success`
 
 ## Current block
-B8.4–B8.6 awaiting canonical CI seal; B9.1 deployment/PWA isolation ACTIVE in parallel
+B8.4–B8.6 awaiting canonical CI seal; B9.1–B9.2 deployment preparation ACTIVE in parallel
 
 Current branch:
 `guest-independent`
@@ -80,9 +80,10 @@ B8.5 in progress:
 ## NEXT ACTION
 1. Do not wait idly for queued B8 CI. Continue B9 work only where independent from B8 seal.
 2. B9.1 ACTIVE: deployment/PWA isolation QA added; service-worker cache bumped to `guest-shell-v2` and critical access/sync/runtime files added to offline core.
-3. When the canonical B8.4/B8.5/B8.6 run completes, inspect exact jobs and seal B8 only if green.
-4. Continue B9 with public-route/release-surface audit without modifying sealed B6/B7 functionality or ONE/Partner/STUDIO.
-5. Do not declare release-ready until both B8 final seal and B9 release gates pass.
+3. B9.2 ACTIVE: public release route QA added for landing → edition checkout → return → order → activation → canonical app; public customer surfaces must not expose the internal order manager.
+4. When the canonical B8.4/B8.5/B8.6 run completes, inspect exact jobs and seal B8 only if green.
+5. Continue B9 with release-surface/deployment audit without modifying sealed B6/B7 functionality or ONE/Partner/STUDIO.
+6. Do not declare release-ready until both B8 final seal and B9 release gates pass.
 
 ## Working method from now on
 Every microblock has only three states:
