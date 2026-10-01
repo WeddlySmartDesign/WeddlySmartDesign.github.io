@@ -432,3 +432,13 @@ jobs:
           exit 1
       - name: B8.4 fulfillment admin QA
         run: node guest/qa/b8_4_fulfillment_admin_test.js
+
+  b8-error-retry-duplicate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B8.5 error retry duplicate QA
+        run: node guest/qa/b8_5_error_retry_duplicate_test.js
