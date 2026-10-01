@@ -1,0 +1,41 @@
+name: Essential Trial Hotfix QA
+on:
+  push:
+    branches:
+      - integrate-essential-07-08-2026-10-01
+    paths:
+      - 'weddly-personalizacion-essential.html'
+      - 'guests-personalizacion-essential.html'
+      - 'guests-rsvp-essential-live.html'
+      - 'guests-rsvp-essential-07.html'
+      - 'guests-rsvp-essential-08.html'
+      - 'qa/essential_trial_hotfix_test.js'
+      - '.github/workflows/essential-trial-hotfix-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright-core@1.55.0
+      - name: Locate Chrome
+        run: |
+          if command -v google-chrome >/dev/null 2>&1; then echo "CHROME_BIN=$(command -v google-chrome)" >> "$GITHUB_ENV"; else echo "CHROME_BIN=$(command -v chromium)" >> "$GITHUB_ENV"; fi
+      - name: Start server
+        run: |
+          python3 -m http.server 8765 >/tmp/http.log 2>&1 &
+          sleep 2
+      - name: Run hotfix QA
+        run: node qa/essential_trial_hotfix_test.js
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: essential-trial-hotfix
+          path: qa-artifacts/essential-hotfix/
+          if-no-files-found: warn
