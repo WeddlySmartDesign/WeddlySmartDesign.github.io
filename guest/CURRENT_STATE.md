@@ -106,6 +106,14 @@ B9.7:
 - sensitive root checkout/return/order/admin surfaces are also non-indexable;
 - invitation links remain usable; noindex only prevents search-engine discovery.
 
+## CI historical-failure triage (2026-10-01)
+- Runs 323–326 are historical and must not be treated as current regressions.
+- Repeated `b8-fulfillment-admin` failure = SyntaxError in the QA test itself; fixed at `1960a9bf9adf491ce56c326a345abd478adadd21`.
+- Historical `b8-error-retry-duplicate` failure expected deleted `guest-deliver.html`; later QA was aligned to canonical manager delivery.
+- Historical `b9-public-release-routes` failure used an earlier rigid checkout-return route assertion; later B9.2 gate was corrected.
+- Historical `b7-mobile-hierarchy` “active nav hierarchy weak” is superseded by validated B7 run `36733355182`, where all 14 B6/B7 jobs, including `b7-mobile-hierarchy`, passed.
+- Therefore do NOT reopen B6/B7 from these queued historical runs. Only a failure reproduced at/after the post-fix canonical commit is actionable.
+
 ## NEXT ACTION
 1. Wait for/inspect the first completed CI run at or after commit `1960a9bf9adf491ce56c326a345abd478adadd21` (B8.4 QA syntax fix).
 2. Require B8.4 fulfillment admin, B8.5, B8.6 and B9.1–B9.8 to be green in a post-fix canonical run.
