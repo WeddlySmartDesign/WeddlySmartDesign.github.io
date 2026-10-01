@@ -407,7 +407,7 @@ body.font-caligrafico .pullquote{font-size:38px!important;line-height:1.08!impor
     <p class="section-no">04 · CONFIRMACIÓN</p>
     <h2 class="section-title">¿Vienes?</h2>
     <p class="rsvp-copy">Confírmanos tu asistencia y responde a las preguntas que hemos preparado para organizarlo todo contigo.</p>
-    <button class="rsvp-button" id="rsvpBtn" type="button">Confirmar asistencia</button>
+    <a class="rsvp-button" id="ctaBtn" href="#" style="display:flex;text-decoration:none">Confirmar asistencia</a>
   </section>
 
   <section class="contact reveal">
@@ -425,8 +425,6 @@ body.font-caligrafico .pullquote{font-size:38px!important;line-height:1.08!impor
     <div class="footer-date" id="footerDate">12 · 09 · 2027</div>
   </footer>
 </main>
-
-<div class="toast" id="toast">Vista de diseño. En ONE, este botón abrirá el RSVP Essential con la configuración de la pareja.</div>
 
 <script>
 (()=>{
@@ -457,15 +455,6 @@ body.font-caligrafico .pullquote{font-size:38px!important;line-height:1.08!impor
   document.querySelectorAll('.photo img').forEach(img=>{
     if(img.complete)classifyPhoto(img);
     else img.addEventListener('load',()=>classifyPhoto(img),{once:true});
-  });
-
-  const btn=document.getElementById('rsvpBtn');
-  const toast=document.getElementById('toast');
-  let t;
-  btn.addEventListener('click',()=>{
-    toast.classList.add('on');
-    clearTimeout(t);
-    t=setTimeout(()=>toast.classList.remove('on'),3200);
   });
 })();
 </script>
@@ -498,6 +487,7 @@ const locations = [
   document.getElementById('agendaList').innerHTML=(agenda||[]).map(x=>'<div class="agenda-row"><div class="agenda-time">'+esc(x.time)+'</div><div><h3 class="agenda-name">'+esc(x.title)+'</h3><div class="agenda-place">'+esc(x.place)+'</div></div></div>').join('');
   const ls=(locations&&locations.length)?locations:[{title:'Celebración',time:wedding.time,place:wedding.venue,address:[wedding.venue,wedding.city].filter(Boolean).join(', ')}];
   document.getElementById('locationsList').innerHTML=ls.map((x,i)=>'<div class="place-item"><p class="place-kicker">'+esc(x.title||('Lugar '+(i+1)))+(x.time?' · '+esc(x.time):'')+'</p><h2 class="place-name">'+esc(x.place||wedding.venue)+'</h2><p class="place-copy">'+esc(wedding.city||'')+'</p><a class="text-link" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(x.address||x.place||wedding.venue)+'" target="_blank" rel="noopener">Ver ubicación <span aria-hidden="true">↗</span></a></div>').join('');
+  const cta=document.getElementById('ctaBtn');if(cta){const qp=new URLSearchParams(location.search);cta.href=qp.toString()?'guests-rsvp-v108-mobile.html?'+qp.toString():'guests-rsvp-v108-mobile.html'}
   const wa=String(wedding.whatsapp||'').replace(/^https?:\/\/wa\.me\//i,'').replace(/\D/g,'');const cl=document.getElementById('contactLink');if(wa){cl.href='https://wa.me/'+wa}else if(wedding.contactPhone){cl.href='tel:'+String(wedding.contactPhone).replace(/\s+/g,'')}else{cl.style.display='none'}
 })();
 </script>
