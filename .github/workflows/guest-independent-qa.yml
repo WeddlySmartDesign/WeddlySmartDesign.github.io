@@ -512,3 +512,13 @@ jobs:
           node-version: '22'
       - name: B9.6 Supabase security isolation QA
         run: node guest/qa/b9_6_supabase_security_isolation_test.js
+
+  b9-privacy-indexing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.7 privacy indexing QA
+        run: node guest/qa/b9_7_privacy_indexing_test.js
