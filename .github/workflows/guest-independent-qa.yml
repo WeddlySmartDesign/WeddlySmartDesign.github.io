@@ -452,3 +452,13 @@ jobs:
           node-version: '22'
       - name: B8.6 commercial final seal
         run: node guest/qa/b8_6_commercial_final_seal_test.js
+
+  b9-deployment-pwa-isolation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.1 deployment PWA isolation QA
+        run: node guest/qa/b9_1_deployment_pwa_isolation_test.js
