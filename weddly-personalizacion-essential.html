@@ -117,6 +117,7 @@
 
     <div class="section">
       <p class="step-label">5 · Agenda del día</p>
+      <p class="hint">El momento 1 es obligatorio. Los momentos 2–5 son opcionales: deja vacíos los que no necesites.</p>
       <div id="agendaFields"></div>
     </div>
 
@@ -176,9 +177,10 @@ let state = {
   storyPhoto: '',
   agenda: [
     { time:'18:00', title:'Ceremonia', place:'FINCA LOS OLIVOS', icon:'ring' },
-    { time:'19:00', title:'Cóctel',    place:'JARDÍN NORTE',     icon:'glass' },
-    { time:'21:00', title:'Cena',      place:'SALÓN PRINCIPAL',  icon:'fork' },
-    { time:'00:00', title:'Fiesta',    place:'HASTA EL AMANECER',icon:'note' },
+    { time:'', title:'', place:'', icon:'glass' },
+    { time:'', title:'', place:'', icon:'fork' },
+    { time:'', title:'', place:'', icon:'note' },
+    { time:'', title:'', place:'', icon:'note' },
   ],
   locations: [
     { title:'Ceremonia',   time:'18:00', place:'Finca Los Olivos', address:'Finca Los Olivos, Murcia' },
@@ -193,24 +195,40 @@ const ICON_OPTIONS = [
   { id:'note', label:'Fiesta (nota musical)' },
 ];
 
+function agendaForOutput() {
+  return (state.agenda || []).slice(0, 5).map((item, i) => ({
+    time: String(item?.time || '').trim(),
+    title: String(item?.title || '').trim(),
+    place: String(item?.place || '').trim(),
+    icon: item?.icon || ICON_OPTIONS[Math.min(i, ICON_OPTIONS.length - 1)]?.id || 'note'
+  })).filter(item => item.title);
+}
+
 function buildAgendaFields() {
   const wrap = document.getElementById('agendaFields');
   const simple = state.template === 'e07' || state.template === 'e08';
+  const suggestions = [
+    { time:'18:00', title:'Ceremonia', place:'Finca Los Olivos' },
+    { time:'19:00', title:'Cóctel', place:'Jardín' },
+    { time:'21:00', title:'Cena', place:'Salón principal' },
+    { time:'00:00', title:'Fiesta', place:'Zona de baile' },
+    { time:'', title:'Otro momento', place:'Lugar' }
+  ];
   wrap.innerHTML = state.agenda.map((item, i) => `
     <div class="repeat-card">
-      <p class="repeat-title">MOMENTO ${i + 1}</p>
+      <p class="repeat-title">MOMENTO ${i + 1} · ${i === 0 ? 'OBLIGATORIO' : 'OPCIONAL'}</p>
       <div class="${simple ? '' : 'row2'}">
-        <div><label>Hora</label><input type="text" class="agenda-time" data-i="${i}" value="${item.time}"></div>
+        <div><label>Hora</label><input type="text" class="agenda-time" data-i="${i}" value="${item.time}" placeholder="${suggestions[i]?.time || ''}"></div>
         ${simple ? '' : `<div><label>Icono</label>
           <select class="agenda-icon" data-i="${i}" style="width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13px;font-family:inherit;background:var(--panel);color:var(--ink)">
             ${ICON_OPTIONS.map(o => `<option value="${o.id}" ${o.id === item.icon ? 'selected' : ''}>${o.label}</option>`).join('')}
           </select>
         </div>`}
       </div>
-      <label>Título</label>
-      <input type="text" class="agenda-title-input" data-i="${i}" value="${item.title}">
+      <label>Título${i === 0 ? ' · obligatorio' : ''}</label>
+      <input type="text" class="agenda-title-input" data-i="${i}" value="${item.title}" placeholder="${suggestions[i]?.title || ''}">
       <label>Lugar</label>
-      <input type="text" class="agenda-place" data-i="${i}" value="${item.place}">
+      <input type="text" class="agenda-place" data-i="${i}" value="${item.place}" placeholder="${suggestions[i]?.place || ''}">
     </div>`).join('');
 
   wrap.querySelectorAll('input,select').forEach(el => {
@@ -391,11 +409,11 @@ async function renderPreview() {
 
   if(modern){
     html=replaceTemplateConst(html,'wedding',wedding,'object');
-    html=replaceTemplateConst(html,'agenda',state.agenda,'array');
+    html=replaceTemplateConst(html,'agenda',agendaForOutput(),'array');
     html=replaceTemplateConst(html,'locations',state.locations,'array');
   }else{
     html = html.split('__WEDDING_JSON__').join(JSON.stringify(wedding));
-    html = html.split('__AGENDA_JSON__').join(JSON.stringify(state.agenda));
+    html = html.split('__AGENDA_JSON__').join(JSON.stringify(agendaForOutput()));
     html = html.split('__LOCATIONS_JSON__').join(JSON.stringify(state.locations));
   }
 
