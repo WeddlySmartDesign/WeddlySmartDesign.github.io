@@ -74,10 +74,10 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
       .weddly-photo-meta{min-width:0}
       .weddly-photo-status{font:600 12px 'Jost',system-ui,sans-serif;color:var(--ink);margin:0 0 8px}
       .weddly-photo-actions{display:flex;gap:8px;flex-wrap:wrap}
-      .weddly-photo-actions button{border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);padding:8px 10px;font:600 11px 'Jost',system-ui,sans-serif;cursor:pointer}
+      .weddly-photo-actions button,.weddly-photo-actions .weddly-photo-pick{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);padding:8px 10px;font:600 11px 'Jost',system-ui,sans-serif;cursor:pointer;margin:0;letter-spacing:0}
       .weddly-photo-empty{margin-top:10px}
-      .weddly-photo-empty button{border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);padding:9px 12px;font:600 11px 'Jost',system-ui,sans-serif;cursor:pointer}
-      input[type=file]{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+      .weddly-photo-empty .weddly-photo-pick{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);padding:9px 12px;font:600 11px 'Jost',system-ui,sans-serif;cursor:pointer;margin:0;letter-spacing:0}
+      input[type=file]{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;clip-path:inset(50%)!important;overflow:hidden!important;white-space:nowrap!important}
     `;
     d.head.appendChild(st);
     const bar=d.createElement('div'); bar.id='weddlyIntegrationBar'; bar.className='weddly-intbar';
@@ -147,10 +147,9 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
             const src=state[def.key]||'';
             ui.className=src?'weddly-photo-card':'weddly-photo-empty';
             ui.innerHTML=src
-              ? '<img class="weddly-photo-thumb" alt="Vista previa"><div class="weddly-photo-meta"><div class="weddly-photo-status">'+def.label+'</div><div class="weddly-photo-actions"><button type="button" data-change>Cambiar foto</button><button type="button" data-remove>Eliminar foto</button></div></div>'
-              : '<button type="button" data-change>Elegir foto</button>';
+              ? '<img class="weddly-photo-thumb" alt="Vista previa"><div class="weddly-photo-meta"><div class="weddly-photo-status">'+def.label+'</div><div class="weddly-photo-actions"><label class="weddly-photo-pick" for="'+def.input.id+'">Cambiar foto</label><button type="button" data-remove>Eliminar foto</button></div></div>'
+              : '<label class="weddly-photo-pick" for="'+def.input.id+'">Elegir foto</label>';
             if(src){const im=ui.querySelector('img');if(im)im.src=src}
-            const change=ui.querySelector('[data-change]'); if(change) change.onclick=()=>def.input.click();
             const remove=ui.querySelector('[data-remove]'); if(remove) remove.onclick=()=>{state[def.key]='';try{def.input.value=''}catch{}renderPreview();redraw()};
           };
           def.input.addEventListener('change',()=>setTimeout(redraw,60));
