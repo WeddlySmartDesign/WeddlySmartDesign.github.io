@@ -40,9 +40,9 @@ async function createSession(edition:string,consent:boolean,attempt:any){
  p.set('line_items[0][price_data][unit_amount]',String(amount));
  p.set('line_items[0][price_data][product_data][name]',labelFor(edition)+' by WeddlySmartDesign');
  p.set('line_items[0][price_data][product_data][description]',descriptionFor(edition));
- p.set('metadata[product]','guests');p.set('metadata[edition]',edition);p.set('metadata[pricing]','launch');
+ p.set('metadata[product]','guest');p.set('metadata[edition]',edition);p.set('metadata[pricing]','launch');
  p.set('metadata[amount_cents]',String(amount));p.set('metadata[start_personalization_consent]','true');
- p.set('payment_intent_data[metadata][product]','guests');p.set('payment_intent_data[metadata][edition]',edition);
+ p.set('payment_intent_data[metadata][product]','guest');p.set('payment_intent_data[metadata][edition]',edition);
  p.set('custom_text[submit][message]','Al pagar confirmas tu pedido GUEST. Después completarás los datos para que personalicemos vuestra invitación.');
  if(['1','true','on','yes'].includes(env('WEDDLY_STRIPE_AUTOMATIC_TAX').toLowerCase()))p.set('automatic_tax[enabled]','true');
  return await stripeRequest('/checkout/sessions',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Idempotency-Key':'guest-checkout/'+key},body:p.toString()})
@@ -53,7 +53,7 @@ async function retrieveSession(id:string){
 }
 function validatePaid(session:any){
  const edition=editionOf(session?.metadata?.edition);
- if(String(session?.metadata?.product||'')!=='guests')throw new Error('invalid_checkout_session');
+ if(String(session?.metadata?.product||'')!=='guest')throw new Error('invalid_checkout_session');
  if(session?.status!=='complete'||session?.payment_status!=='paid')throw new Error('not_paid');
  if(Number(session?.amount_total||0)!==amountFor(edition)||String(session?.currency||'').toLowerCase()!=='eur')throw new Error('invalid_checkout_session');
  return edition
@@ -78,7 +78,7 @@ async function provision(session:any){
    return {licenseId:String(existing.id),edition,buyerEmail:buyer,metadata:existing.metadata||{}}
  }
  const code=activationCode(),hash=await sha256(normalizeCode(code)),created=new Date((Number(session.created)||Math.floor(Date.now()/1000))*1000).toISOString();
- const metadata={product:'guests',edition,access_kind:'paid',payment_provider:'stripe',stripe_session_id:sessionId,stripe_payment_intent:typeof session.payment_intent==='string'?session.payment_intent:null,amount_total:Number(session.amount_total||amountFor(edition)),currency:'eur',pricing:'launch',guest_personalization_status:'awaiting_details',purchased_at:created};
+ const metadata={product:'guest',edition,access_kind:'paid',payment_provider:'stripe',stripe_session_id:sessionId,stripe_payment_intent:typeof session.payment_intent==='string'?session.payment_intent:null,amount_total:Number(session.amount_total||amountFor(edition)),currency:'eur',pricing:'launch',guest_personalization_status:'awaiting_details',purchased_at:created};
  const {data,error}=await db.rpc('provision_weddly_license',{p_source:'stripe',p_source_order_id:sessionId,p_buyer_email:buyer,p_product_ref:'guest_'+edition,p_metadata:metadata,p_activation_code:code,p_purchase_hash:hash});if(error)throw error;
  const row=data?.[0];if(!row?.license_id)throw new Error('license_provision_failed');
  const sent=await startEmail(buyer,sessionId,edition);
