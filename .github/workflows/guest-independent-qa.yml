@@ -522,3 +522,13 @@ jobs:
           node-version: '22'
       - name: B9.7 privacy indexing QA
         run: node guest/qa/b9_7_privacy_indexing_test.js
+
+  b9-final-release-preparation-seal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.8 aggregate release preparation seal
+        run: node guest/qa/b9_8_final_release_preparation_seal_test.js
