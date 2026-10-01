@@ -140,3 +140,32 @@ Every microblock has only three states:
 
 After every meaningful fix that changes the unresolved failure, update this file before continuing.
 If a chat/tool session is interrupted, re-read this file and resume from NEXT ACTION.
+
+
+## Post-release product architecture revision — 2026-10-01
+The user identified a product-model correction after live testing:
+- GUEST must NOT inherit ONE's product flow.
+- The customer journey starts with the invitation, not with a generic management dashboard.
+- The couple chooses a closed invitation model and supplies content; WeddlySmartDesign prepares/publishes it.
+- After delivery, GUEST becomes the couple's management surface for invitation sharing, RSVP responses, guests, tables and lists.
+- Reuse the validated GUEST/ONE-derived engines underneath, but redesign the GUEST customer journey and navigation around this invitation-first flow.
+- Do NOT reopen or modify ONE, ONE Partner or STUDIO.
+- Essential and Signature MUST have separate, closed capability contracts. Standardization means a predictable process, not identical feature sets.
+- Essential remains intentionally simpler; Signature may include richer blocks such as countdown, dress code and other premium modules.
+- No full personalized preview before delivery: show a model demo plus a complete content summary, preserving the "prepared by WeddlySmartDesign" reveal.
+- Target operator effort: normal invitation fulfillment should require only review → publish → deliver, with no manual layout work.
+
+### Current live incident / unblocker
+Essential photo selection became unreliable on mobile because the integration hid native file inputs and triggered them through JavaScript buttons inside nested iframes.
+Minimal GUEST-only hotfix on main:
+- commit `057a8b095c095be7214ef6e25094090bdfc615a8`
+- file: `guest/guests-personalizacion-essential.html`
+- changed photo triggers to native label/file-input activation for better mobile reliability.
+- no invitation designs, RSVP logic, guest engine, ONE, Partner or STUDIO modified.
+
+## NEXT ACTION — revised
+1. Let the Essential photo-picker hotfix deploy.
+2. User tests photo upload on mobile.
+3. Once upload works, inspect the user's screenshots/video showing Essential layout failures with real photos.
+4. Before rebuilding GUEST navigation or invitation workflow, define and freeze two separate content/capability contracts: Essential and Signature.
+5. Then redesign only the GUEST customer journey around invitation-first flow while preserving validated underlying engines.
