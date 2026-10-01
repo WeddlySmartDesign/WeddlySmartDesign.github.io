@@ -472,3 +472,13 @@ jobs:
           node-version: '22'
       - name: B9.2 public release routes QA
         run: node guest/qa/b9_2_public_release_routes_test.js
+
+  b9-pre-release-hold:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.3 pre-release hold QA
+        run: node guest/qa/b9_3_pre_release_hold_test.js
