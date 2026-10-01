@@ -87,13 +87,15 @@ async function provision(session:any){
 function text(v:any,max=500){return String(v??'').trim().slice(0,max)}
 function cleanDetails(x:any,edition:string){
  const designs=edition==='signature'?['Signature 01','Signature 02','Signature 03','Signature 04','Essential 01','Essential 02','Essential 03','Essential 04','Essential 05','Essential 06']:['Essential 01','Essential 02','Essential 03','Essential 04','Essential 05','Essential 06'];
- const design=designs.includes(String(x?.design||''))?String(x.design):designs[0];
+ const design=designs.includes(String(x?.design||''))?String(x.design):'';
  return {couple1:text(x?.couple1,100),couple2:text(x?.couple2,100),weddingDate:text(x?.weddingDate,20),contactPhone:text(x?.contactPhone,40),design,ceremonyTime:text(x?.ceremonyTime,30),ceremonyVenue:text(x?.ceremonyVenue,220),celebrationTime:text(x?.celebrationTime,30),celebrationVenue:text(x?.celebrationVenue,220),invitationText:text(x?.invitationText,1600),rsvpDeadline:text(x?.rsvpDeadline,20),transport:x?.transport===true,accommodation:x?.accommodation===true,children:x?.children===true,menu:x?.menu!==false,allergies:x?.allergies!==false,extraEvents:text(x?.extraEvents,900),notes:text(x?.notes,1800)}
 }
 async function submitOrder(session:any,raw:any){
- const p=await provision(session),details=cleanDetails(raw,p.edition);if(!details.couple1||!details.couple2||!details.weddingDate)throw new Error('missing_order_fields');
- const db=admin(),now=new Date().toISOString();
+ const p=await provision(session),db=admin();
  const {data:l,error}=await db.from('licenses').select('metadata').eq('id',p.licenseId).single();if(error)throw error;
+ if(l.metadata?.guest_order_submitted_at)return {ok:true,submittedAt:l.metadata.guest_order_submitted_at,edition:p.edition,email:p.buyerEmail,alreadySubmitted:true};
+ const details=cleanDetails(raw,p.edition);if(!details.design)throw new Error('invalid_design');if(!details.couple1||!details.couple2||!details.weddingDate)throw new Error('missing_order_fields');
+ const now=new Date().toISOString();
  const metadata={...(l.metadata||{}),guest_personalization_status:'details_received',guest_order:details,guest_order_submitted_at:now};
  const {error:ue}=await db.from('licenses').update({metadata,updated_at:now}).eq('id',p.licenseId);if(ue)throw ue;
  const internal=`<div style="font-family:Arial,sans-serif;color:#222"><h2>NUEVO PEDIDO GUEST · ${esc(p.edition.toUpperCase())}</h2><p><b>Cliente:</b> ${esc(p.buyerEmail)}<br><b>Pedido:</b> ${esc(session.id)}</p><p><b>Pareja:</b> ${esc(details.couple1)} &amp; ${esc(details.couple2)}<br><b>Fecha:</b> ${esc(details.weddingDate)}<br><b>Teléfono:</b> ${esc(details.contactPhone)}<br><b>Diseño:</b> ${esc(details.design)}</p><p><b>Ceremonia:</b> ${esc(details.ceremonyTime)} · ${esc(details.ceremonyVenue)}<br><b>Celebración:</b> ${esc(details.celebrationTime)} · ${esc(details.celebrationVenue)}</p><p><b>Texto:</b><br>${esc(details.invitationText).replaceAll('\n','<br>')}</p><p><b>RSVP hasta:</b> ${esc(details.rsvpDeadline)}<br><b>Transporte:</b> ${details.transport?'Sí':'No'} · <b>Alojamiento:</b> ${details.accommodation?'Sí':'No'} · <b>Niños:</b> ${details.children?'Sí':'No'} · <b>Menú:</b> ${details.menu?'Sí':'No'} · <b>Alergias:</b> ${details.allergies?'Sí':'No'}</p><p><b>Eventos extra:</b><br>${esc(details.extraEvents).replaceAll('\n','<br>')}</p><p><b>Notas:</b><br>${esc(details.notes).replaceAll('\n','<br>')}</p><p><b>License ID:</b> ${esc(p.licenseId)}</p></div>`;
@@ -145,5 +147,5 @@ Deno.serve(async req=>{
   }
   if(action==='submit_order'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await submitOrder(session,b.details||{}))}
   return json({ok:false,error:'invalid_action'},400)
- }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_session','invalid_checkout_session','not_paid','missing_order_fields'].includes(m))return json({ok:false,error:m},400);if(m==='stripe_not_configured'||m==='webhook_not_configured')return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
+ }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design'].includes(m))return json({ok:false,error:m},400);if(m==='stripe_not_configured'||m==='webhook_not_configured')return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
 });
