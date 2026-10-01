@@ -44,7 +44,7 @@ Validated GitHub Actions run:
 `36733355182` — 14/14 jobs `success`
 
 ## Current block
-B8.4 + B8.5 — entrega/activación y estados de error/reintento
+B8.4–B8.6 awaiting canonical CI seal; B9.1 deployment/PWA isolation ACTIVE in parallel
 
 Current branch:
 `guest-independent`
@@ -78,11 +78,11 @@ B8.5 in progress:
 - Stripe retrieval failures are being normalized so missing/temporary failures are not exposed as generic server errors.
 
 ## NEXT ACTION
-1. Wait for latest B8.4/B8.5 CI and inspect exact assertions.
-2. Deploy latest Stripe error normalization if CI is green.
-3. Probe LIVE invalid-session behavior and confirm no delivery occurs.
-4. Seal B8.4 only after latest controlled-delivery QA is green; seal B8.5 only after error/retry/duplicate QA is green.
-5. Then proceed to the next B8 commercial gate without reopening B7/B6.
+1. Do not wait idly for queued B8 CI. Continue B9 work only where independent from B8 seal.
+2. B9.1 ACTIVE: deployment/PWA isolation QA added; service-worker cache bumped to `guest-shell-v2` and critical access/sync/runtime files added to offline core.
+3. When the canonical B8.4/B8.5/B8.6 run completes, inspect exact jobs and seal B8 only if green.
+4. Continue B9 with public-route/release-surface audit without modifying sealed B6/B7 functionality or ONE/Partner/STUDIO.
+5. Do not declare release-ready until both B8 final seal and B9 release gates pass.
 
 ## Working method from now on
 Every microblock has only three states:
