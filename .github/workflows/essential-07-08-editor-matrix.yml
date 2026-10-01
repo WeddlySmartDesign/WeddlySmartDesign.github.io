@@ -1,0 +1,53 @@
+name: Essential 07-08 Editor Matrix QA
+
+on:
+  push:
+    branches:
+      - integrate-essential-07-08-2026-10-01
+    paths:
+      - 'guests-rsvp-essential-07.html'
+      - 'guests-rsvp-essential-08.html'
+      - 'weddly-personalizacion-essential.html'
+      - 'guests-personalizacion-essential.html'
+      - 'guests-rsvp-essential-live.html'
+      - 'guests-rsvp-public-clean.html'
+      - 'qa/essential_07_08_editor_matrix_test.js'
+      - '.github/workflows/essential-07-08-editor-matrix.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  editor-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser driver
+        run: npm install --no-save playwright-core@1.55.0
+      - name: Locate Chrome
+        run: |
+          if command -v google-chrome >/dev/null 2>&1; then
+            echo "CHROME_BIN=$(command -v google-chrome)" >> "$GITHUB_ENV"
+          elif command -v chromium >/dev/null 2>&1; then
+            echo "CHROME_BIN=$(command -v chromium)" >> "$GITHUB_ENV"
+          else
+            echo "No Chrome/Chromium found" >&2
+            exit 1
+          fi
+      - name: Start local server
+        run: |
+          python3 -m http.server 8765 >/tmp/e0708-http.log 2>&1 &
+          sleep 2
+      - name: Run 2 x 5 x 2 matrix
+        run: node qa/essential_07_08_editor_matrix_test.js
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: essential-07-08-editor-matrix
+          path: qa-artifacts/essential-07-08-matrix/
+          if-no-files-found: warn
