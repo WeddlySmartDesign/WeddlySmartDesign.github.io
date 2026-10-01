@@ -128,7 +128,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
       by('contactName').value=saved.contactName||'Ana';
       by('contactPhone').value=saved.contactPhone||'';
       by('whatsapp').value=digits(saved.whatsapp||'');
-      buildTemplateGrid(); buildFontGrid(); buildAgendaFields(); buildLocationFields(); renderPreview();
+      buildTemplateGrid(); buildFontGrid(); if(typeof syncTemplateFields==='function')syncTemplateFields();else buildAgendaFields(); buildLocationFields(); renderPreview();
 
       function setupPhotoControls(){
         const inputs=[...document.querySelectorAll('input[type="file"]')];
