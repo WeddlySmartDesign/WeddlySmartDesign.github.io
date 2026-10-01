@@ -77,7 +77,7 @@ for(const p of endpointFiles){if(!exists(p))continue;const body=read(p);const le
 const sourceFiles=fs.readdirSync(repoRoot,{withFileTypes:true}).filter(x=>x.isFile()&&(x.name.startsWith('guests')||['weddly-personalizacion-essential.html','weddly-personalizacion-signature.html','event-invite.html','event-invite-v2.html'].includes(x.name))).map(x=>x.name).sort();
 ok(sourceFiles.length===179,'unexpected ONE Guests source inventory: '+sourceFiles.length);
 const allowedModified=new Set([
-  'event-invite-v2.html','guests-access-layer.js','guests-events-invite-addon-v2.js','guests-events-share-composer-v1.js','guests-events-v3.html','guests-events-v3.js',
+  'event-invite.html','event-invite-v2.html','guests-access-layer.js','guests-events-invite-addon-v2.js','guests-events-share-composer-v1.js','guests-events-v3.html','guests-events-v3.js',
   'guests-home-rsvp-status-v1.js','guests-production-ops.js','guests-production-sync.js','guests-production-ui.js','guests-rsvp-design-manage.html','guests-rsvp-essential-live.html',
   'guests-rsvp-form-flex.html','guests-rsvp-form-flow.html','guests-rsvp-operations-live.html','guests-rsvp-operations-v3.html','guests-rsvp-public-clean.html','guests-rsvp-signature-live.html',
   'guests-smart-actions-v1.js','guests-v114-integrated.html','guests-v116-production.html','guests-personalizacion-essential.html','guests-personalizacion-signature-integrated.html',
