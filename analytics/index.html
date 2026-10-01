@@ -496,12 +496,12 @@ body:has(#app:not([hidden])){overflow:hidden}
 @media(max-width:520px){
   .top{height:58px}
   .top-inner{
-    min-height:58px;display:flex;grid-template-columns:none;gap:8px;padding:0
+    min-height:58px;display:flex;grid-template-columns:none;gap:6px;padding:0
   }
   .brand{flex:1;min-width:0}
-  .brand strong{font-size:18px}
-  .top-actions{display:flex;width:auto;gap:5px}
-  .icon-btn{padding:8px 9px;font-size:11px}
+  .brand strong{font-size:17px}
+  .top-actions{display:flex;width:auto;gap:4px;min-width:0}
+  .icon-btn{min-width:0;padding:8px 7px;font-size:10.5px;white-space:nowrap}
   #installBtn[hidden]{display:none!important}
   .dashboard-main{
     height:calc(100dvh - 58px);
@@ -709,6 +709,12 @@ body:has(#app:not([hidden])){overflow:hidden}
   .action-card-metrics strong{font-size:21px}
   .evolution-metrics strong{font-size:21px}
 }
+
+@media(max-width:390px){
+  #app:not([hidden]) .brand strong{font-size:15.5px}
+  #app:not([hidden]) .top-actions{gap:3px}
+  #app:not([hidden]) .icon-btn{padding-left:6px;padding-right:6px;font-size:9.8px}
+}
 </style>
 </head>
 <body>
@@ -736,6 +742,7 @@ body:has(#app:not([hidden])){overflow:hidden}
       <div class="top-actions">
         <button class="icon-btn" id="installBtn" type="button">Añadir al móvil</button>
         <button class="icon-btn" id="refreshBtn" type="button">Actualizar</button>
+        <button class="icon-btn" id="actionsBtn" type="button">Acciones</button>
         <button class="icon-btn" id="detailsBtn" type="button">Detalles</button>
       </div>
     </div>
@@ -798,8 +805,7 @@ body:has(#app:not([hidden])){overflow:hidden}
     </section>
 
     <div class="dashboard-footline dashboard-foot-actions">
-      <span>Datos internos · Analytics v16</span>
-      <button class="journal-open" id="actionsBtn" type="button">Acciones</button>
+      <span>Datos internos · Analytics v17</span>
     </div>
   </main>
 </div>
@@ -1405,13 +1411,13 @@ $('installHelpClose').addEventListener('click',()=>installHelp.close());
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js?v=16',{scope:'./',updateViaCache:'none'})
+    navigator.serviceWorker.register('./sw.js?v=17',{scope:'./',updateViaCache:'none'})
       .then(reg=>reg.update().catch(()=>{}))
       .catch(()=>{});
   },{once:true});
 
   navigator.serviceWorker.addEventListener('controllerchange',()=>{
-    const key='wsd_analytics_sw_v16_reload';
+    const key='wsd_analytics_sw_v17_reload';
     if(sessionStorage.getItem(key)==='1')return;
     sessionStorage.setItem(key,'1');
     location.reload();
