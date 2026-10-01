@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#525C43">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<link rel="manifest" href="guest.webmanifest">
+<link rel="icon" href="guest-icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<title>GUEST by WeddlySmartDesign · Acceso</title>
+<style>
+:root{--bg:#F2EFE9;--paper:#FBF8F3;--line:#E4DED2;--ink:#2C2A26;--muted:#736F63;--dark:#525C43;--danger:#A84535}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.shell{min-height:100dvh;max-width:600px;margin:auto;background:var(--paper);padding:calc(30px + env(safe-area-inset-top)) 22px calc(38px + env(safe-area-inset-bottom))}.brand b{display:block;font-size:27px;letter-spacing:.08em;line-height:1}.brand span{display:block;font:600 20px/1.05 "Caveat","Segoe Print",cursive;color:var(--muted);margin-top:5px}.card{margin-top:68px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:23px;box-shadow:0 12px 34px rgba(44,42,38,.05)}h1{font:500 31px/1.08 Georgia,serif;margin:0 0 10px}.lead{font-size:14px;line-height:1.55;color:var(--muted);margin:0 0 22px}.field{margin:0 0 15px}label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:7px}input{width:100%;padding:15px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-size:16px;text-transform:uppercase;letter-spacing:.04em}input:focus{outline:2px solid var(--dark);border-color:transparent}.btn{width:100%;border:0;border-radius:12px;padding:15px 16px;background:var(--dark);color:#fff;font-size:15px;font-weight:800}.btn:disabled{opacity:.45}.msg{min-height:20px;margin-top:13px;font-size:13px;line-height:1.45;color:var(--muted)}.msg.err{color:var(--danger)}.note{border-top:1px solid var(--line);margin-top:18px;padding-top:15px;font-size:12px;line-height:1.5;color:var(--muted)}a{color:var(--dark);font-weight:750}
+</style>
+</head>
+<body>
+<main class="shell"><div class="brand"><b>GUEST</b><span>by WeddlySmartDesign</span></div><section class="card"><h1 id="title">Activa vuestro GUEST</h1><p id="lead" class="lead">Tu compra está lista. Introduce el código de acceso para abrir vuestra invitación y la gestión de invitados.</p><div id="codeBox"><div class="field"><label for="code">Código de acceso</label><input id="code" autocomplete="one-time-code" maxlength="80" spellcheck="false" placeholder="WSD-XXXX-XXXX-XXXX"></div><button id="activate" class="btn" type="button">Activar GUEST</button></div><div id="inviteBox" style="display:none"><button id="join" class="btn" type="button">Unirme a este GUEST</button></div><div id="testerBox" style="display:none"><button id="testerBtn" class="btn" type="button">Abrir acceso de prueba</button></div><div id="msg" class="msg" aria-live="polite"></div><div class="note">El acceso queda guardado en este dispositivo. Para ayuda: <a href="mailto:weddlysmartdesign@gmail.com">weddlysmartdesign@gmail.com</a></div></section></main>
+<script>
+(()=>{
+'use strict';
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-license-access',TOKEN='weddly_shared_wedding_token';
+const q=new URLSearchParams(location.search),invite=q.get('invite')||'',hash=new URLSearchParams(location.hash.startsWith('#')?location.hash.slice(1):location.hash),prefill=hash.get('code')||'',tester=hash.get('tester')||'';
+const $=id=>document.getElementById(id),msg=$('msg');
+function show(t,err=false){msg.textContent=t||'';msg.className='msg'+(err?' err':'')}
+function remember(t){localStorage.setItem(TOKEN,t)}
+async function post(body,token=''){const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json',...(token?{'x-weddly-member':token}:{})},body:JSON.stringify(body),cache:'no-store'}),j=await r.json().catch(()=>({}));return{r,j}}
+async function current(){let t='';try{t=localStorage.getItem(TOKEN)||''}catch{}if(t.length<40)return false;try{const {r,j}=await post({action:'status'},t);return r.ok&&j?.ok}catch{return false}}
+function done(t){remember(t);history.replaceState(null,'',location.pathname);show('Acceso listo. Abriendo GUEST…');setTimeout(()=>location.replace('index.html'),180)}
+async function activateCode(code,button){if(!code){show('Introduce un código de acceso válido.',true);return}button.disabled=true;show('Activando…');try{const {r,j}=await post({action:'activate',activationCode:code});if(r.status===201&&j?.memberToken)return done(j.memberToken);if(j?.error==='already_activated')show('Este código ya se ha utilizado para crear un GUEST.',true);else if(j?.error==='license_expired'||j?.error==='license_inactive')show('Este acceso ya no está activo.',true);else show('No encontramos una compra válida con ese código.',true)}catch{show('No se ha podido completar el acceso. Inténtalo de nuevo.',true)}finally{button.disabled=false}}
+async function boot(){if(await current()){location.replace('index.html');return}if(invite){$('title').textContent='Compartid el mismo GUEST';$('lead').textContent='Te han invitado como segunda persona autorizada. Los cambios se mantendrán sincronizados en ambos dispositivos.';$('codeBox').style.display='none';$('inviteBox').style.display='block';return}if(tester){$('title').textContent='Acceso de prueba a GUEST';$('lead').textContent='Este acceso es temporal y está preparado para validar GUEST.';$('codeBox').style.display='none';$('testerBox').style.display='block';return}if(prefill){$('code').value=prefill;setTimeout(()=>$('activate').click(),80)}}
+$('activate').onclick=()=>activateCode($('code').value.trim(),$('activate'));$('code').addEventListener('keydown',e=>{if(e.key==='Enter')$('activate').click()});
+$('join').onclick=async()=>{const b=$('join');b.disabled=true;show('Conectando…');try{const {r,j}=await post({action:'join',inviteCode:invite});if(r.status===201&&j?.memberToken)return done(j.memberToken);show('Esta invitación no es válida o ya se ha utilizado.',true)}catch{show('No se ha podido completar el acceso. Inténtalo de nuevo.',true)}finally{b.disabled=false}};
+$('testerBtn').onclick=()=>activateCode(tester,$('testerBtn'));if('serviceWorker'in navigator)navigator.serviceWorker.register('guest-sw.js').catch(()=>{});boot();
+})();
+</script>
+</body></html>

@@ -1,0 +1,11 @@
+const fs=require('fs'),path=require('path');
+const ok=(x,m)=>{if(!x)throw new Error(m)};
+const root=path.resolve(__dirname,'..','..');
+const state=fs.readFileSync(path.join(root,'guest','CURRENT_STATE.md'),'utf8');
+const release=['guest.html','guest-checkout.html','guest-checkout-return.html','guest-order.html','guest-legal.html','guest/index.html','guest/access.html','guest/guest.webmanifest','guest/guest-sw.js'];
+for(const f of release)ok(fs.existsSync(path.join(root,f)),'release artifact missing '+f);
+ok(/B8 commercial QA — PASS \/ SEALED/i.test(state),'B8 final seal missing from checkpoint');
+ok(/B9 release preparation — PASS \/ SEALED/i.test(state),'B9 final seal missing from checkpoint');
+ok(/Only after both seals exist may GUEST be considered ready for an explicit publication step/i.test(state),'release hold rule missing from checkpoint');
+ok(/Publication remains a separate explicit step and MUST NOT happen automatically/i.test(state),'explicit publication hold missing');
+console.log('B9.3 sealed release hold contract: PASS');

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Weddly Smart Design · RSVP desktop v131</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f5f1ea}
+iframe{display:block;width:100%;height:100%;border:0;background:#f5f1ea}
+</style>
+</head>
+<body>
+<iframe id="rsvp" src="guests-rsvp-v105-mobile.html?v=131-desktop-base" title="RSVP"></iframe>
+<script>
+(()=>{
+  const frame=document.getElementById('rsvp');
+  const GKEY='weddly_guests_qa_v67';
+  const TOKEN_KEY='weddly_shared_wedding_token';
+  const CURRENT='guests-v114-integrated.html?v=131#invitados';
+  const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function localGuests(){
+    try{
+      const s=JSON.parse(localStorage.getItem(GKEY))||{};
+      return Object.entries(s.guests||{}).map(([id,g])=>({id,...g}));
+    }catch{return[]}
+  }
+  function hasSharedAccess(){
+    try{return (localStorage.getItem(TOKEN_KEY)||'').length>20}catch{return false}
+  }
+  function patch(){
+    try{
+      const d=frame.contentDocument,w=frame.contentWindow;
+      if(!d||!w)return;
+      const back=d.querySelector('.back');
+      if(back){
+        if(window.parent!==window){
+          back.style.display='none';
+        }else{
+          back.href=CURRENT;
+          back.target='_top';
+          back.onclick=e=>{e.preventDefault();location.href=CURRENT};
+        }
+      }
+      if(hasSharedAccess())return;
+
+      const tabSend=d.getElementById('tabSend');
+      const refresh=d.getElementById('refresh');
+      const showLocal=e=>{
+        if(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation?.()}
+        d.getElementById('tabForm')?.classList.remove('on');
+        tabSend?.classList.add('on');
+        d.getElementById('paneForm')?.classList.remove('on');
+        d.getElementById('paneSend')?.classList.add('on');
+        renderLocal(d);
+      };
+      if(tabSend&&!tabSend.dataset.desktopLocal){
+        tabSend.dataset.desktopLocal='1';
+        tabSend.addEventListener('click',showLocal,true);
+      }
+      if(refresh&&!refresh.dataset.desktopLocal){
+        refresh.dataset.desktopLocal='1';
+        refresh.addEventListener('click',showLocal,true);
+      }
+    }catch(e){console.warn('RSVP desktop bridge',e)}
+  }
+  function renderLocal(d){
+    const gs=localGuests();
+    const confirmed=gs.filter(g=>g.rsvp==='confirmed').length;
+    const declined=gs.filter(g=>g.rsvp==='declined').length;
+    const pending=gs.length-confirmed-declined;
+    const fb=d.getElementById('adminFb');
+    if(fb){
+      fb.className='feedback on';
+      fb.style.background='#f7f3ed';
+      fb.style.color='#625b54';
+      fb.innerHTML='<b>Este PC está en modo local.</b><br>La lista de invitados se carga correctamente. Las respuestas online se sincronizarán aquí cuando este navegador tenga acceso compartido a la boda.';
+    }
+    const metrics=d.getElementById('metrics');
+    if(metrics)metrics.innerHTML=`<div class="metrics"><div class="metric"><b>${gs.length}</b><div class="small">invitados</div></div><div class="metric"><b>${confirmed}</b><div class="small">confirmados</div></div><div class="metric"><b>${pending}</b><div class="small">pendientes</div></div></div>`;
+    const notice=d.querySelector('.notice');
+    if(notice)notice.innerHTML='<b>Vista de escritorio</b><br>Estás viendo la información guardada en este navegador. El móvil continúa usando la sincronización compartida sin cambios.';
+    const recipients=d.getElementById('recipients');
+    if(recipients){
+      recipients.innerHTML=gs.map(g=>{
+        const status=g.rsvp==='confirmed'?'Confirmado':g.rsvp==='declined'?'No asiste':'Pendiente';
+        const contact=g.phone||g.email||'Sin contacto';
+        const meta=[status,g.table||'Sin mesa',g.meal||''].filter(Boolean).join(' · ');
+        return `<div class="recipient"><div class="rhead"><div><b>${esc(g.name||'Sin nombre')}</b><div class="contactline">${esc(contact)}</div></div></div><span class="chip ${g.rsvp==='confirmed'?'ok':''}">${esc(meta)}</span></div>`;
+      }).join('')||'<p class="small">Aún no hay invitados en este navegador.</p>';
+    }
+  }
+  frame.addEventListener('load',()=>{patch();setTimeout(patch,250)});
+})();
+</script>
+</body>
+</html>
