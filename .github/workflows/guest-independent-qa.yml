@@ -8,7 +8,6 @@ on:
       - '.github/workflows/guest-independent-qa.yml'
   workflow_dispatch:
 jobs:
-  # B7.3 invitation + RSVP visual QA active
   regression:
     runs-on: ubuntu-latest
     steps:
@@ -318,3 +317,26 @@ jobs:
           exit 1
       - name: B7.7 final visual seal
         run: node guest/qa/b7_7_final_visual_seal_test.js
+
+  b8-commercial-entry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST commercial flow
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B8.1 commercial entry flow QA
+        run: node guest/qa/b8_1_commercial_entry_flow_test.js
