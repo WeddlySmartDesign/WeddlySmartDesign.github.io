@@ -75,7 +75,8 @@ button,a{font:inherit}
 }
 .photo{
   margin:0;
-  background:#d9d4cc;
+  background:transparent;
+  transition:padding .35s ease;
 }
 .photo img{
   display:block;
@@ -83,6 +84,10 @@ button,a{font:inherit}
   height:auto;
   max-height:none;
 }
+.photo.photo--portrait{padding:0 8%}
+.photo.photo--square{padding:0 4%}
+.photo.photo--landscape{padding:0}
+.photo.photo--very-tall{padding:0 10%}
 .photo-meta{
   display:grid;
   grid-template-columns:1.25fr .75fr;
@@ -92,17 +97,18 @@ button,a{font:inherit}
 }
 .meta-block small{
   display:block;
-  font-size:9px;
-  letter-spacing:.18em;
+  font-size:10px;
+  line-height:1.35;
+  letter-spacing:.16em;
   text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:5px;
+  color:#5a5650;
+  margin-bottom:6px;
 }
 .meta-block strong{
   display:block;
   font-family:"Cormorant Garamond",serif;
-  font-size:19px;
-  line-height:1.15;
+  font-size:20px;
+  line-height:1.16;
   font-weight:500;
 }
 .meta-block:last-child{text-align:right}
@@ -111,8 +117,9 @@ button,a{font:inherit}
   border-bottom:1px solid var(--line);
 }
 .section-no{
-  font-size:9px;
-  letter-spacing:.2em;
+  font-size:10px;
+  line-height:1.35;
+  letter-spacing:.18em;
   color:var(--accent);
   margin:0 0 22px;
 }
@@ -162,8 +169,9 @@ button,a{font:inherit}
 }
 .agenda-row:last-child{border-bottom:1px solid var(--line)}
 .agenda-time{
-  font-size:12px;
-  letter-spacing:.08em;
+  font-size:13px;
+  line-height:1.35;
+  letter-spacing:.07em;
   font-weight:600;
   padding-top:5px;
 }
@@ -175,11 +183,11 @@ button,a{font:inherit}
   font-weight:400;
 }
 .agenda-place{
-  font-size:11px;
+  font-size:12.5px;
   line-height:1.5;
-  letter-spacing:.04em;
+  letter-spacing:.025em;
   text-transform:uppercase;
-  color:var(--muted);
+  color:#514d47;
 }
 .place-section{
   background:var(--paper-2);
@@ -193,9 +201,9 @@ button,a{font:inherit}
 }
 .place-copy{
   margin:0;
-  font-size:13px;
-  line-height:1.65;
-  color:var(--muted);
+  font-size:14.5px;
+  line-height:1.66;
+  color:#514d47;
 }
 .text-link{
   display:inline-flex;
@@ -206,7 +214,7 @@ button,a{font:inherit}
   color:var(--ink);
   text-decoration:none;
   border-bottom:1px solid currentColor;
-  font-size:12px;
+  font-size:13px;
   font-weight:600;
 }
 .rsvp{
@@ -218,25 +226,26 @@ button,a{font:inherit}
 .rsvp .section-title{margin-bottom:22px}
 .rsvp-copy{
   font-family:"Cormorant Garamond",serif;
-  font-size:20px;
+  font-size:21px;
   line-height:1.5;
-  color:rgba(251,250,247,.78);
-  margin:0 0 36px;
+  color:rgba(251,250,247,.86);
+  margin:0 0 38px;
   max-width:28ch;
 }
 .rsvp-button{
   width:100%;
-  min-height:54px;
-  border:1px solid rgba(251,250,247,.8);
-  background:transparent;
-  color:var(--white);
-  font-size:12px;
+  min-height:58px;
+  border:0;
+  background:var(--paper);
+  color:var(--dark);
+  font-size:12.5px;
   font-weight:600;
-  letter-spacing:.08em;
+  letter-spacing:.07em;
   text-transform:uppercase;
   cursor:pointer;
-  transition:.25s ease;
+  transition:transform .2s ease,background .2s ease;
 }
+.rsvp-button:hover{background:#fff}
 .rsvp-button:active{transform:scale(.992)}
 .contact{
   padding:62px 28px 44px;
@@ -256,15 +265,15 @@ button,a{font:inherit}
 }
 .contact-copy{
   margin:12px 0 0;
-  font-size:12px;
+  font-size:13.5px;
   line-height:1.6;
-  color:var(--muted);
+  color:#514d47;
 }
 .contact-link{
   color:var(--ink);
   text-decoration:none;
   border-bottom:1px solid currentColor;
-  font-size:11px;
+  font-size:12.5px;
   font-weight:600;
   padding-bottom:4px;
   white-space:nowrap;
@@ -430,6 +439,22 @@ button,a{font:inherit}
     els.forEach(x=>io.observe(x));
   }
   requestAnimationFrame(()=>document.querySelector('.hero-copy')?.classList.add('in'));
+
+  const classifyPhoto=img=>{
+    if(!img||!img.naturalWidth||!img.naturalHeight)return;
+    const ratio=img.naturalWidth/img.naturalHeight;
+    const host=img.closest('.photo');
+    if(!host)return;
+    host.classList.remove('photo--very-tall','photo--portrait','photo--square','photo--landscape');
+    if(ratio<0.62)host.classList.add('photo--very-tall');
+    else if(ratio<0.86)host.classList.add('photo--portrait');
+    else if(ratio<1.16)host.classList.add('photo--square');
+    else host.classList.add('photo--landscape');
+  };
+  document.querySelectorAll('.photo img').forEach(img=>{
+    if(img.complete)classifyPhoto(img);
+    else img.addEventListener('load',()=>classifyPhoto(img),{once:true});
+  });
 
   const btn=document.getElementById('rsvpBtn');
   const toast=document.getElementById('toast');
