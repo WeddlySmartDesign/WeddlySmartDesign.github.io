@@ -33,6 +33,12 @@ Resume from the exact "NEXT ACTION" below.
 - B8.1 landing → selección → checkout — PASS / CLOSED
 - B8.2 checkout → pago → retorno + webhook resiliente — PASS / CLOSED
 - B8.3 datos/personalización tras compra — PASS / CLOSED
+- B8.4 activación/entrega y acceso real — PASS / CLOSED
+- B8.5 error/cancelación/reintento/duplicidad — PASS / CLOSED
+- B8.6 regresión comercial + sellado final — PASS / CLOSED
+- B8 commercial QA — PASS / SEALED
+- B9.1–B9.9 release preparation — PASS / CLOSED
+- B9 release preparation — PASS / SEALED
 
 B7 final sealed report:
 `guest/B7_7_FINAL_VISUAL_SEAL_QA_2026-10-01.md`
@@ -44,10 +50,13 @@ Validated GitHub Actions run:
 `36733355182` — 14/14 jobs `success`
 
 ## Current block
-B8.4 fulfillment QA syntax fixed after CI run 36827484796 isolated the only failure; B8.5/B8.6/B9.1 green in that run; B9.1–B9.9 release preparation implemented, awaiting a canonical post-fix CI
+B8 and B9 are PASS / SEALED. Canonical pre-seal validated commit: `dac667cffa863fadb65411f6abef7e72ddf04f59`. Canonical CI run: `36836190260` (run 371), all jobs success. Publication remains a separate explicit step and MUST NOT happen automatically.
 
-Current branch:
-`guest-independent`
+B8 final sealed report:
+`guest/B8_FINAL_COMMERCIAL_SEAL_QA_2026-10-01.md`
+
+B9 final sealed report:
+`guest/B9_FINAL_RELEASE_PREPARATION_SEAL_2026-10-01.md`
 
 ## B8 scope
 B8 = QA del flujo comercial completo, sin rediseñar el producto funcional ya sellado.
@@ -115,14 +124,13 @@ B9.7:
 - Therefore do NOT reopen B6/B7 from these queued historical runs. Only a failure reproduced at/after the post-fix canonical commit is actionable.
 
 ## NEXT ACTION
-1. Wait for/inspect the first completed CI run at or after commit `1960a9bf9adf491ce56c326a345abd478adadd21` (B8.4 QA syntax fix).
-2. Require B8.4 fulfillment admin, B8.5, B8.6 and B9.1–B9.8 to be green in a post-fix canonical run.
-3. If any job fails, fix ONLY that exact failure; do not reopen B6/B7.
-4. When B8.4–B8.6 are green, write the B8 final seal and mark B8 PASS / SEALED.
-5. When B9.1–B9.7 + aggregate gate are green, write the B9 final release-preparation seal.
-6. Only after both seals exist may GUEST be considered ready for an explicit publication step. Do not merge/publish to `main` automatically.
-7. Production promotion MUST follow `B9_9_SAFE_PROMOTION_STRATEGY_2026-10-01.md`: start from current `main` and allowlist GUEST files; never wholesale-merge the diverged branch.
-8. For the first release, preserve the validated isolated `/guest/**` tree rather than pruning historical copied files; dynamic RSVP/event dependencies make late pruning riskier than inert isolated files. Cleanup can be a post-release task.
+1. GUEST is technically ready for an explicit publication step; do not publish automatically.
+2. On explicit publication authorization, query the latest `main` HEAD immediately before promotion.
+3. Build the production candidate from that current `main` using only the B9.9 GUEST allowlist; never wholesale-merge `guest-independent`.
+4. Preserve the validated isolated `/guest/**` runtime tree for first release.
+5. Verify the candidate diff contains no ONE, ONE Partner, STUDIO or root legacy `guests-*` changes.
+6. Run release smoke/gates on the candidate before production promotion.
+7. After deployment, perform live non-paying smoke checks for landing → Stripe session creation, return/status, access and PWA behavior.
 
 ## Working method from now on
 Every microblock has only three states:
