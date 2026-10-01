@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173B57">
+<title>Ana & Carlos · Invitación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Beau+Rivage&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Jost:wght@400;500;600&family=Marcellus&family=Mrs+Saint+Delafield&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --shell:#fbf4e8;
+  --ink:#172129;
+  --cobalt:#173b57;
+  --cobalt-deep:#102b40;
+  --tomato:#d96b52;
+  --butter:#f0cf7b;
+  --powder:#c9dde1;
+  --white:#fffdfa;
+  --line:rgba(23,33,41,.18);
+  --font-display:"Cormorant Garamond",serif;
+  --font-body:"Jost",sans-serif;
+  --font-accent:"Cormorant Garamond",serif;
+  --display-weight:500;
+  --body-size:15px;
+  --body-line:1.68;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:#d7d0c3}
+body{
+  margin:0;
+  color:var(--ink);
+  background:#d7d0c3;
+  font-family:var(--font-body),system-ui,-apple-system,Segoe UI,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+body.font-editorial{
+  --font-display:"Cormorant Garamond",serif;
+  --font-body:"Jost",sans-serif;
+  --font-accent:"Cormorant Garamond",serif;
+  --display-weight:500;
+  --body-size:15px;
+}
+body.font-romantico{
+  --font-display:"Cormorant Garamond",serif;
+  --font-body:"Cormorant Garamond",serif;
+  --font-accent:"Mrs Saint Delafield",cursive;
+  --display-weight:500;
+  --body-size:17px;
+}
+body.font-clasico{
+  --font-display:"Playfair Display",serif;
+  --font-body:"EB Garamond",serif;
+  --font-accent:"Playfair Display",serif;
+  --display-weight:500;
+  --body-size:17px;
+}
+body.font-moderno{
+  --font-display:"Fraunces",serif;
+  --font-body:"Work Sans",sans-serif;
+  --font-accent:"Fraunces",serif;
+  --display-weight:500;
+  --body-size:15px;
+}
+body.font-caligrafico{
+  --font-display:"Marcellus",serif;
+  --font-body:"Marcellus",serif;
+  --font-accent:"Beau Rivage",cursive;
+  --display-weight:400;
+  --body-size:15.5px;
+}
+a,button{font:inherit}
+.invite{
+  width:100%;
+  max-width:560px;
+  margin:0 auto;
+  min-height:100vh;
+  overflow:hidden;
+  background:var(--shell);
+  box-shadow:0 0 0 1px rgba(0,0,0,.05);
+}
+
+/* HERO — bold colour-block composition, deliberately unlike 07/08 */
+.hero{
+  position:relative;
+  min-height:680px;
+  background:var(--butter);
+  overflow:hidden;
+}
+.hero-top{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  padding:22px 24px;
+  background:var(--cobalt);
+  color:var(--white);
+  font-size:10px;
+  line-height:1.4;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.hero-stage{
+  position:relative;
+  min-height:538px;
+  padding:54px 26px 80px;
+}
+.hero-stage::before{
+  content:"";
+  position:absolute;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  right:-105px;
+  top:24px;
+  background:var(--tomato);
+}
+.hero-stage::after{
+  content:"";
+  position:absolute;
+  width:122px;
+  height:122px;
+  left:-58px;
+  bottom:26px;
+  background:var(--powder);
+  transform:rotate(18deg);
+}
+.hero-kicker{
+  position:relative;
+  z-index:1;
+  margin:0 0 38px;
+  display:inline-block;
+  padding:8px 10px 7px;
+  background:var(--tomato);
+  color:var(--white);
+  font-size:10px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.hero-names{
+  position:relative;
+  z-index:1;
+  margin:0;
+  max-width:5.7ch;
+  font-family:var(--font-display);
+  font-size:clamp(72px,20vw,108px);
+  line-height:.77;
+  font-weight:var(--display-weight);
+  letter-spacing:-.055em;
+}
+.hero-names .and{
+  display:block;
+  width:max-content;
+  margin:.08em 0 .08em 1.25ch;
+  font-family:var(--font-accent);
+  font-size:.46em;
+  line-height:1;
+  letter-spacing:0;
+  color:var(--tomato);
+}
+.hero-copy{
+  position:relative;
+  z-index:1;
+  max-width:27ch;
+  margin:44px 0 0 auto;
+  padding-left:26px;
+  border-left:5px solid var(--cobalt);
+  font-size:var(--body-size);
+  line-height:1.62;
+}
+.hero-bottom{
+  position:absolute;
+  z-index:2;
+  left:0;
+  right:0;
+  bottom:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+.hero-chip{
+  min-height:62px;
+  padding:14px 18px 13px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.hero-chip:first-child{
+  background:var(--tomato);
+  color:var(--white);
+}
+.hero-chip:last-child{
+  background:var(--cobalt);
+  color:var(--white);
+  text-align:right;
+}
+.hero-chip small{
+  font-size:9px;
+  line-height:1.3;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  opacity:.78;
+  margin-bottom:3px;
+}
+.hero-chip strong{
+  font-family:var(--font-display);
+  font-size:20px;
+  line-height:1;
+  font-weight:var(--display-weight);
+}
+
+/* PHOTO — uncropped, with a strong caption bar instead of a soft frame */
+.photo{
+  margin:0;
+  background:var(--cobalt);
+}
+.photo img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+.photo-caption{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:18px;
+  align-items:center;
+  padding:17px 22px 18px;
+  background:var(--cobalt);
+  color:var(--white);
+}
+.photo-caption strong{
+  font-family:var(--font-display);
+  font-size:20px;
+  line-height:1.05;
+  font-weight:var(--display-weight);
+}
+.photo-caption span{
+  font-size:9.5px;
+  line-height:1.4;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+/* STORY — dark field, asymmetric editorial quote */
+.story{
+  position:relative;
+  padding:82px 27px 88px;
+  background:var(--cobalt-deep);
+  color:var(--white);
+  overflow:hidden;
+}
+.story::after{
+  content:"09";
+  position:absolute;
+  right:-14px;
+  bottom:-34px;
+  font-family:var(--font-display);
+  font-size:190px;
+  line-height:.72;
+  color:rgba(255,255,255,.06);
+}
+.label{
+  margin:0 0 24px;
+  font-size:10px;
+  line-height:1.4;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+}
+.story .label{color:var(--butter)}
+.story-title{
+  position:relative;
+  z-index:1;
+  margin:0;
+  max-width:9.6ch;
+  font-family:var(--font-display);
+  font-size:clamp(48px,13.4vw,68px);
+  line-height:.92;
+  font-weight:var(--display-weight);
+  letter-spacing:-.035em;
+}
+.story-title .hot{color:var(--butter)}
+.story-copy{
+  position:relative;
+  z-index:1;
+  max-width:31ch;
+  margin:42px 0 0 auto;
+  font-size:var(--body-size);
+  line-height:var(--body-line);
+  color:#edf1f2;
+}
+.story-note{
+  position:relative;
+  z-index:1;
+  margin:44px 0 0;
+  max-width:18ch;
+  font-family:var(--font-accent);
+  font-size:32px;
+  line-height:1.08;
+  color:var(--tomato);
+}
+
+/* AGENDA — numbered blocks, no timeline */
+.agenda{
+  padding:76px 22px 80px;
+  background:var(--shell);
+}
+.agenda .label{color:var(--tomato);margin-left:6px}
+.agenda-title{
+  margin:0 6px 42px;
+  max-width:10ch;
+  font-family:var(--font-display);
+  font-size:clamp(46px,13vw,66px);
+  line-height:.9;
+  font-weight:var(--display-weight);
+  letter-spacing:-.035em;
+}
+.moments{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.moment{
+  display:grid;
+  grid-template-columns:68px minmax(0,1fr) auto;
+  gap:14px;
+  align-items:center;
+  min-height:92px;
+  padding:16px 15px 16px 0;
+  border:1px solid rgba(23,33,41,.16);
+  background:var(--white);
+}
+.moment-no{
+  align-self:stretch;
+  display:grid;
+  place-items:center;
+  background:var(--butter);
+  font-family:var(--font-display);
+  font-size:29px;
+  line-height:1;
+}
+.moment:nth-child(even) .moment-no{
+  background:var(--powder);
+}
+.moment-name{
+  margin:0 0 5px;
+  font-family:var(--font-display);
+  font-size:28px;
+  line-height:1;
+  font-weight:var(--display-weight);
+}
+.moment-place{
+  font-size:12.5px;
+  line-height:1.45;
+  color:#5c6468;
+}
+.moment-time{
+  align-self:start;
+  padding-top:5px;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.08em;
+  color:var(--tomato);
+  white-space:nowrap;
+}
+
+/* LOCATION — graphic split card */
+.location{
+  display:grid;
+  grid-template-columns:34% 66%;
+  min-height:390px;
+}
+.location-side{
+  position:relative;
+  background:var(--tomato);
+  overflow:hidden;
+}
+.location-side::before{
+  content:"";
+  position:absolute;
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  left:-86px;
+  top:68px;
+  border:28px solid var(--butter);
+}
+.location-side span{
+  position:absolute;
+  left:18px;
+  bottom:24px;
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  font-size:9px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--white);
+}
+.location-main{
+  padding:68px 26px 58px;
+  background:var(--powder);
+}
+.location-main .label{color:var(--cobalt);margin-bottom:18px}
+.location-name{
+  margin:0;
+  font-family:var(--font-display);
+  font-size:clamp(44px,12vw,60px);
+  line-height:.88;
+  font-weight:var(--display-weight);
+  letter-spacing:-.035em;
+}
+.location-copy{
+  margin:30px 0 0;
+  max-width:25ch;
+  font-size:var(--body-size);
+  line-height:var(--body-line);
+}
+.location-link{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  margin-top:28px;
+  padding:10px 0 6px;
+  color:var(--ink);
+  text-decoration:none;
+  border-bottom:3px solid var(--tomato);
+  font-size:12px;
+  font-weight:600;
+}
+
+/* RSVP — solid colour closing statement */
+.rsvp{
+  padding:82px 27px 84px;
+  background:var(--tomato);
+  color:var(--white);
+}
+.rsvp .label{color:var(--butter)}
+.rsvp-title{
+  margin:0;
+  max-width:7.7ch;
+  font-family:var(--font-display);
+  font-size:clamp(55px,15.5vw,78px);
+  line-height:.82;
+  font-weight:var(--display-weight);
+  letter-spacing:-.045em;
+}
+.rsvp-title .accent{
+  display:block;
+  margin:12px 0 0 .8ch;
+  color:var(--butter);
+}
+.rsvp-copy{
+  max-width:31ch;
+  margin:34px 0 0 auto;
+  font-size:var(--body-size);
+  line-height:var(--body-line);
+}
+.rsvp-action{
+  width:100%;
+  margin-top:38px;
+  min-height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  border:0;
+  background:var(--cobalt);
+  color:var(--white);
+  cursor:pointer;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.rsvp-action b{
+  font-family:var(--font-display);
+  font-size:26px;
+  line-height:1;
+  font-weight:400;
+}
+.contact{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:end;
+  gap:18px;
+  padding:38px 24px;
+  background:var(--butter);
+}
+.contact small{
+  display:block;
+  margin-bottom:7px;
+  font-size:9px;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+}
+.contact strong{
+  display:block;
+  font-family:var(--font-display);
+  font-size:27px;
+  line-height:1;
+  font-weight:var(--display-weight);
+}
+.contact a{
+  color:var(--ink);
+  text-decoration:none;
+  border-bottom:2px solid var(--cobalt);
+  padding-bottom:4px;
+  font-size:11px;
+  font-weight:600;
+}
+.footer{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  padding:25px 24px 29px;
+  background:var(--cobalt);
+  color:var(--white);
+}
+.footer span:first-child{
+  font-family:var(--font-display);
+  font-size:18px;
+}
+.footer span:last-child{
+  font-size:9px;
+  line-height:1.4;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+/* optical tuning for the five real editor font choices */
+body.font-editorial .hero-names{font-size:clamp(74px,20.5vw,110px)}
+body.font-editorial .hero-names .and{font-style:italic;font-size:.42em}
+body.font-romantico .hero-names{font-size:clamp(70px,19.3vw,102px);line-height:.8}
+body.font-romantico .hero-names .and{font-size:.61em;margin:.03em 0 .04em 1.15ch}
+body.font-romantico .story-note{font-size:39px}
+body.font-clasico .hero-names{font-size:clamp(66px,18vw,96px);line-height:.84}
+body.font-clasico .hero-names .and{font-style:italic;font-size:.35em}
+body.font-clasico .story-note{font-family:var(--font-accent);font-style:italic;font-size:29px}
+body.font-moderno .hero-names{font-size:clamp(65px,18vw,94px);line-height:.84}
+body.font-moderno .hero-names .and{font-style:italic;font-size:.36em}
+body.font-moderno .story-note{font-style:italic;font-size:29px}
+body.font-caligrafico .hero-names{font-size:clamp(58px,16.2vw,86px);line-height:.93;letter-spacing:-.025em}
+body.font-caligrafico .hero-names .and{font-size:.68em;margin:.04em 0 .05em 1.1ch}
+body.font-caligrafico .story-title,
+body.font-caligrafico .agenda-title,
+body.font-caligrafico .location-name,
+body.font-caligrafico .rsvp-title{letter-spacing:0}
+body.font-caligrafico .story-note{font-size:39px}
+
+/* motion is directional, reinforcing the graphic layout */
+.reveal{
+  opacity:0;
+  transform:translateY(14px);
+  transition:opacity .65s cubic-bezier(.2,.7,.2,1),transform .65s cubic-bezier(.2,.7,.2,1);
+}
+.reveal.from-left{transform:translateX(-18px)}
+.reveal.from-right{transform:translateX(18px)}
+.reveal.in{opacity:1;transform:none}
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:22px;
+  transform:translate(-50%,20px);
+  width:min(calc(100% - 32px),500px);
+  background:#fff;
+  color:#222;
+  border:1px solid rgba(0,0,0,.12);
+  box-shadow:0 14px 44px rgba(0,0,0,.15);
+  padding:14px 16px;
+  font-size:12px;
+  line-height:1.45;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s ease;
+  z-index:20;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:360px){
+  .hero-stage{padding-left:21px;padding-right:21px}
+  .agenda{padding-left:17px;padding-right:17px}
+  .story,.rsvp{padding-left:22px;padding-right:22px}
+  .moment{grid-template-columns:60px minmax(0,1fr) auto;gap:11px}
+  .moment-name{font-size:25px}
+  .moment-place{font-size:12px}
+  .location{grid-template-columns:29% 71%}
+  .location-main{padding-left:21px;padding-right:18px}
+}
+@media(min-width:720px){
+  body{padding:28px 0}
+  .invite{min-height:calc(100vh - 56px)}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal,.reveal.from-left,.reveal.from-right{opacity:1;transform:none;transition:none}
+}
+</style>
+</head>
+<body class="font-editorial">
+<main class="invite">
+  <section class="hero reveal">
+    <div class="hero-top">
+      <span>12 · 09 · 2027</span>
+      <span>Murcia</span>
+    </div>
+    <div class="hero-stage">
+      <p class="hero-kicker">Nos casamos</p>
+      <h1 class="hero-names">Ana<span class="and">&amp;</span>Carlos</h1>
+      <p class="hero-copy">Una fecha, nuestra gente y una celebración que queremos recordar para siempre.</p>
+    </div>
+    <div class="hero-bottom">
+      <div class="hero-chip"><small>Comienza</small><strong>18:00</strong></div>
+      <div class="hero-chip"><small>Lugar</small><strong>La Alquería</strong></div>
+    </div>
+  </section>
+
+  <figure class="photo reveal from-right">
+    <img src="https://images.unsplash.com/photo-1768508660104-4730eafda23a?auto=format&fit=max&fm=jpg&q=82&w=1600" alt="Pareja el día de su boda">
+    <figcaption class="photo-caption">
+      <strong>Nosotros, justo antes del gran día.</strong>
+      <span>12 / 09 / 2027</span>
+    </figcaption>
+  </figure>
+
+  <section class="story reveal from-left">
+    <p class="label">Nuestra historia</p>
+    <h2 class="story-title">Todo empezó mucho antes de <span class="hot">este sí.</span></h2>
+    <p class="story-copy">Después de tantos planes, viajes y días normales que acabaron siendo importantes, queremos celebrar el siguiente capítulo con vosotros.</p>
+    <p class="story-note">Que vengáis es parte de la historia.</p>
+  </section>
+
+  <section class="agenda reveal">
+    <p class="label">Así será el día</p>
+    <h2 class="agenda-title">Cuatro momentos. Una sola fiesta.</h2>
+    <div class="moments">
+      <article class="moment">
+        <div class="moment-no">01</div>
+        <div><h3 class="moment-name">Ceremonia</h3><div class="moment-place">Finca La Alquería</div></div>
+        <div class="moment-time">18:00</div>
+      </article>
+      <article class="moment">
+        <div class="moment-no">02</div>
+        <div><h3 class="moment-name">Cóctel</h3><div class="moment-place">Jardín principal</div></div>
+        <div class="moment-time">19:00</div>
+      </article>
+      <article class="moment">
+        <div class="moment-no">03</div>
+        <div><h3 class="moment-name">Cena</h3><div class="moment-place">Salón principal</div></div>
+        <div class="moment-time">21:00</div>
+      </article>
+      <article class="moment">
+        <div class="moment-no">04</div>
+        <div><h3 class="moment-name">Fiesta</h3><div class="moment-place">Hasta que el cuerpo aguante</div></div>
+        <div class="moment-time">00:00</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="location reveal from-right">
+    <div class="location-side"><span>Murcia · España</span></div>
+    <div class="location-main">
+      <p class="label">Dónde</p>
+      <h2 class="location-name">Finca<br>La Alquería</h2>
+      <p class="location-copy">Ceremonia y celebración en el mismo espacio. Te recomendamos llegar unos minutos antes.</p>
+      <a class="location-link" href="https://maps.google.com" target="_blank" rel="noopener">Ver ubicación <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+
+  <section class="rsvp reveal from-left">
+    <p class="label">Confirmación</p>
+    <h2 class="rsvp-title">¿Vienes?<span class="accent">Te esperamos.</span></h2>
+    <p class="rsvp-copy">Confírmanos tu asistencia y responde a las preguntas que hemos preparado para organizarlo todo contigo.</p>
+    <button class="rsvp-action" id="rsvpBtn" type="button"><span>Confirmar asistencia</span><b>→</b></button>
+  </section>
+
+  <section class="contact reveal">
+    <div>
+      <small>Contacto</small>
+      <strong>¿Alguna duda?</strong>
+    </div>
+    <a href="https://wa.me/34600123123">WhatsApp ↗</a>
+  </section>
+
+  <footer class="footer">
+    <span>Ana &amp; Carlos</span>
+    <span>12 · 09 · 2027</span>
+  </footer>
+</main>
+
+<div class="toast" id="toast">Vista de diseño. En la invitación final, este botón abrirá el formulario de confirmación.</div>
+
+<script>
+(()=>{
+  const allowedFonts=['editorial','romantico','clasico','moderno','caligrafico'];
+  const requested=new URLSearchParams(location.search).get('font') || 'editorial';
+  document.body.className='font-' + (allowedFonts.includes(requested) ? requested : 'editorial');
+
+  const els=[...document.querySelectorAll('.reveal')];
+  if(!('IntersectionObserver' in window)){
+    els.forEach(x=>x.classList.add('in'));
+  }else{
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    },{threshold:.1,rootMargin:'0px 0px -5% 0px'});
+    els.forEach(x=>io.observe(x));
+  }
+  requestAnimationFrame(()=>document.querySelector('.hero')?.classList.add('in'));
+
+  const btn=document.getElementById('rsvpBtn');
+  const toast=document.getElementById('toast');
+  let t;
+  btn.addEventListener('click',()=>{
+    toast.classList.add('on');
+    clearTimeout(t);
+    t=setTimeout(()=>toast.classList.remove('on'),3200);
+  });
+})();
+</script>
+</body>
+</html>
