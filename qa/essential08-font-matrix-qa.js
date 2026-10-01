@@ -20,6 +20,7 @@ const assert=(v,m)=>{if(!v)throw new Error(m)};
    const errors=[]; page.on('pageerror',e=>errors.push(String(e)));
    await page.goto(`http://127.0.0.1:8765/preview-essential-08-modernist.html?font=${mode}`,{waitUntil:'networkidle'});
    await page.evaluate(async()=>{await document.fonts.ready;
+     document.querySelectorAll('.reveal').forEach(e=>e.classList.add('in'));
      const names=document.querySelector('.hero-names');
      names.innerHTML='Alejandra<span class="and">&amp;</span>Maximiliano';
      document.querySelector('.hero-line').textContent='Hay días que se recuerdan toda la vida. Queremos que formes parte del nuestro y compartir contigo cada momento de esta celebración.';
