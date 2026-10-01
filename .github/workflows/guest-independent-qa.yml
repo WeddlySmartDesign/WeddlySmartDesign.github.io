@@ -492,3 +492,23 @@ jobs:
           node-version: '22'
       - name: B9.4 public private surface security QA
         run: node guest/qa/b9_4_surface_security_test.js
+
+  b9-commercial-identity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.5 independent commercial identity QA
+        run: node guest/qa/b9_5_commercial_identity_test.js
+
+  b9-supabase-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.6 Supabase security isolation QA
+        run: node guest/qa/b9_6_supabase_security_isolation_test.js
