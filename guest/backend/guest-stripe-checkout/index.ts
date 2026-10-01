@@ -26,7 +26,7 @@ function normalizeCode(v:string){return String(v||'').trim().toUpperCase().repla
 async function stripeRequest(path:string,init:RequestInit={}){
  const secret=env('STRIPE_SECRET_KEY');if(!secret)throw new Error('stripe_not_configured');
  const r=await fetch('https://api.stripe.com/v1'+path,{...init,headers:{Authorization:'Bearer '+secret,...(init.headers||{})}});
- const x=await r.json().catch(()=>({}));if(!r.ok){console.warn('stripe_error',r.status,x);throw new Error('stripe_request_failed')}return x
+ const x=await r.json().catch(()=>({}));if(!r.ok){console.warn('stripe_error',r.status,x);if(r.status===404)throw new Error('session_not_found');if(r.status===401||r.status===403)throw new Error('stripe_not_configured');if(r.status===429)throw new Error('stripe_temporarily_unavailable');throw new Error('stripe_request_failed')}return x
 }
 async function createSession(edition:string,consent:boolean){
  if(!consent)throw new Error('consent_required');
