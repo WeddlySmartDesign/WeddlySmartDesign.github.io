@@ -63,27 +63,31 @@ Microbloques:
 ## Exact current failure
 B8.3 is PASS / CLOSED. CI run 36826525955 completed successfully after correcting QA-only defects.
 
-B8.4:
-- activation / second-device / invalid-code job is green;
-- controlled customer delivery was added after audit found the activation code was generated but never delivered;
-- delivery now uses a per-order operator token stored only as SHA-256 hash;
-- customer receives activation link + manual code only when WeddlySmartDesign deliberately releases the prepared invitation;
-- hardened GUEST Stripe backend is LIVE (v15 at last probe);
-- LIVE config remains HTTP 200 with launch prices intact.
+B8.4–B8.6:
+- canonical delivery path is now ONLY the manager-authenticated `guest-orders-admin.html` → `guest-orders-admin` backend;
+- duplicate `guest-deliver.html` surface was removed;
+- Stripe checkout backend no longer exposes a duplicate manual delivery action;
+- final delivery requires status `ready`, records `delivered`, and uses email idempotency;
+- B8.5 adds explicit checkout/verification retry plus Stripe checkout-attempt idempotency;
+- LIVE probes: config 200; nonexistent Stripe session 404 `session_not_found`; unauthenticated orders admin 403 `manager_required`;
+- B8.6 final seal exists, but B8 is NOT declared sealed until the canonical CI run is green.
 
-B8.5 in progress:
-- order submission and delivery are idempotent;
-- duplicate clicks are guarded;
-- recoverable commercial errors are being classified;
-- Stripe retrieval failures are being normalized so missing/temporary failures are not exposed as generic server errors.
+B9.1:
+- GUEST PWA remains scoped to `/guest/`;
+- cache bumped to `guest-shell-v3`;
+- offline navigation fallback is restricted to canonical app routes, so broken invitation/access HTML cannot silently open the app shell.
+
+B9.2:
+- public release route gate exists and checks purchase → return → order → activation → app routes;
+- customer surfaces are forbidden from exposing `guest-orders-admin.html` or discarded `guest-deliver.html`;
+- required internal release targets are checked for existence.
 
 ## NEXT ACTION
-1. Do not wait idly for queued B8 CI. Continue B9 work only where independent from B8 seal.
-2. B9.1 ACTIVE: deployment/PWA isolation QA added; service-worker cache bumped to `guest-shell-v2` and critical access/sync/runtime files added to offline core.
-3. B9.2 ACTIVE: public release route QA added for landing → edition checkout → return → order → activation → canonical app; public customer surfaces must not expose the internal order manager.
-4. When the canonical B8.4/B8.5/B8.6 run completes, inspect exact jobs and seal B8 only if green.
-5. Continue B9 with release-surface/deployment audit without modifying sealed B6/B7 functionality or ONE/Partner/STUDIO.
-6. Do not declare release-ready until both B8 final seal and B9 release gates pass.
+1. Inspect the first completed canonical CI run containing B8.4/B8.5/B8.6 + B9.1/B9.2.
+2. If any job fails, fix ONLY that exact failure; do not reopen B6/B7.
+3. If B8.4/B8.5/B8.6 are all green, write B8 final seal and mark B8 PASS / SEALED.
+4. If B9.1/B9.2 are green, continue B9 release gates from the next untested release risk (live public deployment/release surface), without touching ONE/Partner/STUDIO.
+5. Do not declare GUEST release-ready until B8 is sealed and the full B9 release gate is green.
 
 ## Working method from now on
 Every microblock has only three states:
