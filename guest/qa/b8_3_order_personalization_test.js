@@ -29,7 +29,7 @@ async function orderCase(browser,edition,alreadySubmitted=false){
    return route.fulfill({status:400,contentType:'application/json',body:JSON.stringify({ok:false,error:'unexpected'})});
  });
  await page.goto(base+'/guest-order.html?session_id='+session,{waitUntil:'domcontentloaded'});
- await page.waitForFunction(()=>document.querySelector('#edition')?.textContent.includes('GUEST')||document.querySelector('#done')?.classList.contains('on'));
+ await page.waitForFunction(()=>document.querySelector('#edition')?.textContent.includes('GUEST')||document.querySelector('#done')?.classList.contains('on')||document.querySelector('#msg')?.textContent.length>0);
  if(alreadySubmitted){
    ok(await page.locator('#done').evaluate(el=>el.classList.contains('on')),'submitted order not recognized');
    ok(await page.locator('#form').evaluate(el=>el.classList.contains('off')),'submitted order form still visible');
