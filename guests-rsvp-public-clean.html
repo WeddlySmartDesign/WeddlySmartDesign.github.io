@@ -80,11 +80,11 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
       d.querySelectorAll('#brand,.brand,.pill,.weddly-extra-events').forEach(x=>x.remove());
       const nav=d.querySelector('.nav');if(nav)nav.style.justifyContent='flex-end';
       cleanText(d);readable(d);
-      const cta=d.getElementById('ctaBtn');if(cta)cta.href=target;
+      const cta=d.getElementById('ctaBtn')||d.getElementById('rsvpBtn');if(cta){if('href' in cta)cta.href=target;}
       if(installed!==d){
         observer?.disconnect();observer=null;installed=d;
         d.addEventListener('click',e=>{
-          const el=e.target?.closest?.('#ctaBtn,#menuBtn');if(!el)return;
+          const el=e.target?.closest?.('#ctaBtn,#rsvpBtn,#menuBtn');if(!el)return;
           e.preventDefault();e.stopImmediatePropagation();location.assign(target);
         },true);
         observer=new MutationObserver(schedule);
