@@ -43,7 +43,7 @@ Validated GitHub Actions run:
 `36733355182` — 14/14 jobs `success`
 
 ## Current block
-B8.3 — QA recogida de datos/personalización tras compra
+B8.3 + B8.4 — personalización y entrega/activación
 
 Current branch:
 `guest-independent`
@@ -62,19 +62,29 @@ Microbloques:
 ## Exact current failure
 B8.2 is PASS / CLOSED.
 
-Verified LIVE:
-- GUEST Stripe webhook endpoint is enabled and independent from ONE.
-- Events: `checkout.session.completed` and `checkout.session.async_payment_succeeded`.
-- GUEST webhook signing secret is stored encrypted in Supabase Vault.
-- `guest-stripe-checkout` v12 reads the GUEST secret without exposing it in GitHub/code.
-- Live config returns HTTP 200 with Essential 39.90 EUR and Signature 49.90 EUR.
-- Invalid webhook signature returns HTTP 400 `invalid_signature`.
-- Browser-return provisioning remains as a fallback.
+B8.3 product flow has not shown a product defect so far. Two red runs were QA defects:
+1. wait condition did not account for already-submitted orders;
+2. QA attempted to submit without selecting the required design.
+Both test defects are corrected. Latest B8.3 rerun is pending.
 
-B8.3 first automated run failed due to a QA wait-condition defect, not a confirmed product defect. The test waited for a GUEST edition label in an already-submitted simulated order; that state legitimately goes directly to the completion panel. QA wait condition corrected in commit `414979c5152b796dc35350cd61ad8069d4d2dde1`.
+B8.4 audit found one real product gap: paid provisioning generated an activation code but no customer-facing delivery path used it, so a buyer could complete personalization without receiving a usable GUEST activation.
+
+Fix implemented on branch:
+- controlled `deliver` action in GUEST Stripe backend;
+- per-order operator token stored only as SHA-256 hash;
+- internal order email receives the delivery link;
+- `guest-deliver.html` sends access only when WeddlySmartDesign deliberately releases the prepared invitation;
+- customer delivery email contains activation link + manual activation code;
+- delivery is recorded idempotently with `guest_access_delivered_at`;
+- B8.4 QA covers activation, partner join, invalid code and controlled-delivery invariants.
+
+Important: hardened backend commit is in GitHub, but its latest deployment attempt was blocked by tool safety controls. The previous live checkout backend remains active. Do not claim B8.4 production PASS until the hardened version is deployed and probed.
 
 ## NEXT ACTION
-Run B8.3 order-personalization QA again. If green, seal B8.3 and proceed directly to B8.4 activation/delivery and real product access. If red, inspect the exact failing assertion before changing product code.
+1. Resolve the latest B8.3 CI result; seal B8.3 only if green.
+2. Get B8.4 CI green.
+3. Deploy the hardened GUEST checkout backend containing controlled delivery, then probe LIVE config/signature without triggering a real customer delivery.
+4. Only then seal B8.4 and proceed to B8.5 error/cancel/retry/duplicate states.
 
 ## Working method from now on
 Every microblock has only three states:
