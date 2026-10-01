@@ -169,3 +169,30 @@ Minimal GUEST-only hotfix on main:
 3. Once upload works, inspect the user's screenshots/video showing Essential layout failures with real photos.
 4. Before rebuilding GUEST navigation or invitation workflow, define and freeze two separate content/capability contracts: Essential and Signature.
 5. Then redesign only the GUEST customer journey around invitation-first flow while preserving validated underlying engines.
+
+
+## ESSENTIAL DESIGN REOPEN — 2026-10-01
+Status: ACTIVE. GUEST functional redesign is PAUSED until Essential invitation quality is corrected.
+
+User mobile evidence exposed a serious visual-quality issue before further sales:
+- cover hierarchy/text can feel clipped or visually lost in the in-app preview;
+- Essential 02–05 use essentially the same fixed 150x150 circular cover-photo treatment, which is not premium enough;
+- agenda typography is too small for real mobile use (places 9.5px; titles ~12.5px; some fitting logic can reduce further);
+- several cover texts are ~10.5–11px;
+- five agenda moments are forced into one row, producing poor legibility and awkward word breaks;
+- story/section transitions need proper mobile breathing room;
+- the ONE sticky-header overlap visible in supplied screenshots is a preview-shell issue and must not be mistaken for the standalone public invitation layout. ONE remains frozen and MUST NOT be modified.
+
+Essential redesign rules:
+1. Work ONLY on isolated GUEST Essential copies. Never modify ONE/ONE Partner/STUDIO.
+2. Essential stays intentionally simpler than Signature; do not add Signature-only modules (countdown, dress code, etc.).
+3. Simpler does NOT mean lower visual quality. Essential must still feel editorial, deliberate and premium.
+4. No essential informational text below a comfortable real-mobile reading size. Do not solve overflow by shrinking text.
+5. Agenda must reflow responsively instead of forcing five items into one row.
+6. Essential 02–06 circular cover photo treatment must be replaced by a more editorial treatment appropriate to each model; do not homogenize all six.
+7. Preserve all validated RSVP/data behavior while redesigning presentation.
+8. Validate with realistic long names/venues and 3–5 agenda moments at narrow mobile width before resealing.
+
+NEXT ACTION:
+- Audit Essential 01–06 model-by-model and implement a first premium visual pass on GUEST copies only.
+- Then run visual/functional regression before resuming GUEST product-flow work.
