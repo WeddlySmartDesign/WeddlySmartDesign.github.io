@@ -135,7 +135,7 @@ Deno.serve(async req=>{
   if(!b)return json({ok:false,error:'invalid_json'},400);
   const action=String(b.action||'');
   if(action==='config'){
-   const pk=env('STRIPE_PUBLISHABLE_KEY');if(!pk)return json({ok:false,error:'stripe_not_configured'},503);
+   const pk=env('STRIPE_PUBLISHABLE_KEY')||'pk_live_51UHSpGGsLCo0tfLrCEFrbgR8GuH08Ug3czX35u4W2HUoCjKQSvzOC3ZfRleCXg67h05eytwFeE31ycgw7ozHHLvK00CPs5ZG8P';if(!pk)return json({ok:false,error:'stripe_not_configured'},503);
    return json({ok:true,publishableKey:pk,launch:true,prices:{essential:{current:amountFor('essential'),normal:normalFor('essential')},signature:{current:amountFor('signature'),normal:normalFor('signature')}}})
   }
   if(action==='create'){const edition=editionOf(b.edition),session=await createSession(edition,b.startPersonalizationConsent===true);return json({ok:true,clientSecret:session.client_secret,sessionId:session.id,edition})}
