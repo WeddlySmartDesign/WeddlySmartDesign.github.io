@@ -1,0 +1,14 @@
+const fs=require('fs'),path=require('path');const ok=(x,m)=>{if(!x)throw new Error(m)};const root=path.resolve(__dirname,'..','..');
+const files=['guest.html','guest-checkout.html','guest-checkout-return.html','guest-order.html','guest-orders-admin.html','guest-legal.html','guest/access.html','guest/backend/guest-stripe-checkout/index.ts','guest/backend/guest-orders-admin/index.ts'];
+for(const f of files)ok(fs.existsSync(path.join(root,f)),'missing B8 canonical file '+f);
+const stripe=fs.readFileSync(path.join(root,'guest/backend/guest-stripe-checkout/index.ts'),'utf8');
+const orders=fs.readFileSync(path.join(root,'guest/backend/guest-orders-admin/index.ts'),'utf8');
+const workflow=fs.readFileSync(path.join(root,'.github/workflows/guest-independent-qa.yml'),'utf8');
+ok(!stripe.includes("action==='deliver'"),'public checkout still exposes manual delivery');
+ok(orders.includes("managerContext"),'delivery is not manager authenticated');
+ok(orders.includes("action==='send_delivery'"),'managed delivery missing');
+ok(orders.includes("guest_personalization_status||'')!=='ready'"),'delivery not gated by ready state');
+for(const job of ['b8-commercial-entry','b8-checkout-return','b8-order-personalization','b8-activation-delivery-access','b8-fulfillment-admin','b8-error-retry-duplicate'])ok(workflow.includes(job+':'),'B8 gate missing '+job);
+const joined=files.filter(f=>f.endsWith('.html')).map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
+ok(!/ONE Partner|STUDIO/i.test(joined),'foreign product branding in B8 commercial surfaces');
+console.log('B8.6 commercial final seal: PASS');
