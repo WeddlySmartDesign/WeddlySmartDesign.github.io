@@ -11,7 +11,7 @@ function ensureStyle(d){
     .wrap{max-width:680px!important;padding-top:20px!important}
     h1{font-family:ui-serif,Georgia,Cambria,"Times New Roman",serif!important;font-weight:500!important}
     .card,.stat,.step{border-radius:20px!important}
-    .nav{background:#fff!important;padding:8px 6px calc(8px + env(safe-area-inset-bottom))!important;gap:4px!important}
+    .nav{background:#fff!important;gap:4px!important}
     .nav button{min-height:48px!important;border-radius:13px!important;color:#2c2a26!important}
     .nav button.on{background:#eef0e9!important;color:#525c43!important}
     .guest-swipe-live{will-change:transform!important;animation:none!important;transition:none!important;backface-visibility:hidden!important}
