@@ -1,0 +1,167 @@
+/* ONE Essential — premium visual correction
+   2026-10-01 · scoped to invitation presentation only.
+   RSVP/data behavior intentionally untouched. */
+
+html{scroll-padding-top:24px}
+body.one-essential-premium{font-size:16px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body.one-essential-premium .invite{width:100%;max-width:560px;overflow-x:hidden}
+body.one-essential-premium section{scroll-margin-top:24px}
+body.one-essential-premium .brand{font-size:11px!important;line-height:1.35!important}
+body.one-essential-premium .eyebrow{font-size:12px!important;line-height:1.4!important}
+body.one-essential-premium .lead{font-size:16px!important;line-height:1.6!important;max-width:32ch!important;margin-left:auto!important;margin-right:auto!important}
+body.one-essential-premium .card-detail{font-size:13.5px!important;line-height:1.5!important}
+body.one-essential-premium .contact-row{font-size:14.5px!important;line-height:1.45!important}
+body.one-essential-premium .footer-name{font-size:12px!important}
+body.one-essential-premium .footer-thanks{font-size:12px!important;line-height:1.45!important}
+body.one-essential-premium .card-btn,
+body.one-essential-premium .cta{font-size:14px!important;min-height:44px!important;align-items:center!important;justify-content:center!important}
+body.one-essential-premium input,
+body.one-essential-premium textarea,
+body.one-essential-premium select,
+body.one-essential-premium .field{font-size:16px!important;line-height:1.35!important}
+body.one-essential-premium .burger{width:40px!important;height:40px!important;padding:12px 10px!important}
+body.one-essential-premium .burger span{width:100%!important;flex:0 0 auto!important}
+
+/* ---------- Essential 01 · romantic editorial ---------- */
+body.one-essential-premium.essential-01 section{padding-left:28px!important;padding-right:28px!important}
+body.one-essential-premium.essential-01 #hero{padding-top:54px!important;padding-bottom:62px!important}
+body.one-essential-premium.essential-01 .kicker{font-size:clamp(42px,11vw,54px)!important;line-height:1.05!important;margin:8px 0 10px!important}
+body.one-essential-premium.essential-01 .subtitle{font-size:clamp(14px,3.8vw,16px)!important;line-height:1.5!important;letter-spacing:.025em!important;max-width:30ch!important;margin:0 auto 24px!important}
+body.one-essential-premium.essential-01 .askline{font-size:13px!important;line-height:1.45!important;letter-spacing:.055em!important;margin-bottom:22px!important;color:var(--ink)!important}
+body.one-essential-premium.essential-01 .photo-wrap{width:min(66vw,258px)!important;margin:4px auto 26px!important}
+body.one-essential-premium.essential-01 .heart-photo{object-position:center 42%!important}
+body.one-essential-premium.essential-01 .names{font-size:clamp(46px,12vw,58px)!important;line-height:1.02!important;margin:0 0 24px!important;text-wrap:balance!important}
+body.one-essential-premium.essential-01 .facts{gap:12px!important;margin:0 auto 23px!important;max-width:430px}
+body.one-essential-premium.essential-01 .fact{font-size:13px!important;line-height:1.38!important;gap:7px!important}
+body.one-essential-premium.essential-01 .fact svg{width:21px!important;height:21px!important}
+body.one-essential-premium.essential-01 .fact-div{height:42px!important;margin-top:7px!important}
+body.one-essential-premium.essential-01 .waiting{font-size:13px!important;line-height:1.35!important;letter-spacing:.085em!important}
+body.one-essential-premium.essential-01 .city{font-size:13px!important;line-height:1.4!important;color:var(--ink)!important}
+
+body.one-essential-premium.essential-01 #historia{padding-top:68px!important;padding-bottom:72px!important}
+body.one-essential-premium.essential-01 #historia>.eyebrow{margin-bottom:14px!important}
+body.one-essential-premium.essential-01 #historia .script.center{font-size:clamp(38px,10vw,48px)!important;line-height:1.08!important;max-width:11ch!important;margin:0 auto 24px!important}
+body.one-essential-premium.essential-01 .historia-grid{gap:30px!important}
+body.one-essential-premium.essential-01 .historia-text{font-size:clamp(17px,4.5vw,19px)!important;line-height:1.7!important;max-width:32ch!important;margin:0 auto!important}
+body.one-essential-premium.essential-01 .historia-photo-wrap{width:min(78vw,310px)!important;aspect-ratio:4/5!important;margin:4px auto 0!important}
+body.one-essential-premium.essential-01 .historia-photo-wrap .heart-photo{clip-path:none!important;border-radius:48% 48% 14px 14px!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 42%!important;box-shadow:0 0 0 1px var(--line)!important}
+body.one-essential-premium.essential-01 .caption{right:2px!important;bottom:-12px!important;font-size:20px!important;text-shadow:0 1px 4px rgba(255,255,255,.82)}
+body.one-essential-premium.essential-01 .divider{margin-top:38px!important}
+
+body.one-essential-premium.essential-01 #agendaSection{padding-top:68px!important;padding-bottom:72px!important}
+body.one-essential-premium.essential-01 #agendaSection>.script{font-size:clamp(40px,10.5vw,50px)!important;line-height:1.08!important;margin:0 0 38px!important}
+body.one-essential-premium.essential-01 .agenda-row{display:flex!important;flex-direction:column!important;gap:0!important;max-width:410px!important;margin:0 auto!important;text-align:left!important}
+body.one-essential-premium.essential-01 .agenda-sep{display:none!important}
+body.one-essential-premium.essential-01 .agenda-node{display:grid!important;grid-template-columns:78px minmax(0,1fr)!important;grid-template-areas:"ring time" "ring title" "ring place"!important;column-gap:18px!important;row-gap:2px!important;align-items:start!important;text-align:left!important;padding:0 0 34px!important;position:relative!important;width:100%!important;min-width:0!important}
+body.one-essential-premium.essential-01 .agenda-node:last-child{padding-bottom:0!important}
+body.one-essential-premium.essential-01 .agenda-node:not(:last-of-type)::after{content:""!important;position:absolute!important;left:33px!important;top:66px!important;bottom:-2px!important;width:1px!important;background:var(--line)!important}
+body.one-essential-premium.essential-01 .agenda-node .ring{grid-area:ring!important;width:66px!important;height:66px!important;margin:0!important;border:1px solid var(--line)!important;background:#fffdf9!important}
+body.one-essential-premium.essential-01 .agenda-node svg{width:25px!important;height:25px!important}
+body.one-essential-premium.essential-01 .agenda-time{grid-area:time!important;font-size:14px!important;font-weight:600!important;line-height:1.2!important;letter-spacing:.08em!important;color:var(--gold)!important;margin-top:3px!important}
+body.one-essential-premium.essential-01 .agenda-title{grid-area:title!important;font-size:clamp(27px,7vw,33px)!important;line-height:1.06!important;margin:2px 0!important;hyphens:none!important;overflow-wrap:normal!important}
+body.one-essential-premium.essential-01 .agenda-place{grid-area:place!important;font-size:13.5px!important;line-height:1.45!important;letter-spacing:.025em!important;margin:0!important;color:var(--ink)!important;hyphens:none!important;overflow-wrap:anywhere!important}
+
+/* ---------- Essentials 02–06 · shared readable editorial system ---------- */
+body.one-essential-premium:not(.essential-01) .cover-sub{
+  font-size:clamp(14px,3.8vw,16px)!important;line-height:1.45!important;letter-spacing:.025em!important;
+  max-width:32ch!important;margin-left:auto!important;margin-right:auto!important
+}
+body.one-essential-premium:not(.essential-01) .cover-datevenue{
+  display:block!important;font-size:clamp(14px,3.6vw,16px)!important;line-height:1.45!important;
+  letter-spacing:.015em!important;max-width:30ch!important;margin-left:auto!important;margin-right:auto!important;
+  text-wrap:balance!important;color:var(--ink)!important
+}
+body.one-essential-premium:not(.essential-01) .cover-waiting{font-size:clamp(22px,6vw,28px)!important;line-height:1.2!important}
+body.one-essential-premium:not(.essential-01) .cover-names{
+  font-size:clamp(34px,9vw,46px)!important;line-height:1.05!important;margin-bottom:16px!important;
+  text-wrap:balance!important;overflow-wrap:break-word!important
+}
+body.one-essential-premium:not(.essential-01) .cover-kicker{white-space:normal!important}
+body.one-essential-premium:not(.essential-01) .cover-content{padding-left:10%!important;padding-right:10%!important}
+body.one-essential-premium:not(.essential-01) .cover-photo-wrap{
+  height:auto!important;overflow:hidden!important;margin:12px auto 24px!important;border:0!important;background:#fff!important
+}
+body.one-essential-premium:not(.essential-01) .cover-photo-wrap img{
+  width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 42%!important;border-radius:inherit!important
+}
+body.one-essential-premium:not(.essential-01) .facts{gap:10px!important}
+body.one-essential-premium:not(.essential-01) .fact{font-size:13px!important;line-height:1.35!important}
+body.one-essential-premium:not(.essential-01) .fact svg{width:21px!important;height:21px!important}
+body.one-essential-premium:not(.essential-01) .city{font-size:13px!important;color:var(--ink)!important}
+
+body.one-essential-premium:not(.essential-01) #historia,
+body.one-essential-premium:not(.essential-01) #agendaSection,
+body.one-essential-premium:not(.essential-01) #donde,
+body.one-essential-premium:not(.essential-01) #confirmacion,
+body.one-essential-premium:not(.essential-01) #contacto{padding-top:58px!important;padding-bottom:60px!important}
+body.one-essential-premium:not(.essential-01) .historia-grid{gap:28px!important}
+body.one-essential-premium:not(.essential-01) .historia-text{
+  font-size:clamp(17px,4.4vw,19px)!important;line-height:1.68!important;max-width:34ch!important;margin-left:auto!important;margin-right:auto!important
+}
+body.one-essential-premium:not(.essential-01) .historia-photo-wrap{width:min(76vw,300px)!important;aspect-ratio:4/5!important}
+body.one-essential-premium:not(.essential-01) .historia-photo-wrap img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center 42%!important}
+body.one-essential-premium:not(.essential-01) #historia .script.center{margin-left:auto!important;margin-right:auto!important;max-width:12ch!important;line-height:1.14!important}
+body.one-essential-premium:not(.essential-01) #agendaSection>.script,
+body.one-essential-premium:not(.essential-01) #donde>.script{line-height:1.14!important;margin-bottom:24px!important}
+
+body.one-essential-premium:not(.essential-01) .agenda-row{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:30px 18px!important;align-items:start!important;justify-content:center!important;
+  max-width:440px!important;margin:28px auto 0!important
+}
+body.one-essential-premium:not(.essential-01) .agenda-sep{display:none!important}
+body.one-essential-premium:not(.essential-01) .agenda-node{
+  display:flex!important;flex-direction:column!important;align-items:center!important;text-align:center!important;
+  font-size:14px!important;min-width:0!important;padding:0 4px!important;width:100%!important
+}
+body.one-essential-premium:not(.essential-01) .agenda-node .ring{width:64px!important;height:64px!important;margin:0 auto 12px!important}
+body.one-essential-premium:not(.essential-01) .agenda-node svg{width:24px!important;height:24px!important}
+body.one-essential-premium:not(.essential-01) .agenda-time{font-size:15px!important;line-height:1.35!important}
+body.one-essential-premium:not(.essential-01) .agenda-title{
+  font-size:20px!important;line-height:1.2!important;margin-top:4px!important;hyphens:none!important;overflow-wrap:normal!important
+}
+body.one-essential-premium:not(.essential-01) .agenda-place{
+  font-size:13px!important;line-height:1.4!important;margin-top:5px!important;color:var(--ink)!important;
+  hyphens:none!important;overflow-wrap:break-word!important;letter-spacing:.015em!important
+}
+body.one-essential-premium:not(.essential-01) .agenda-node:last-child:nth-child(4n+1){
+  grid-column:1/-1!important;max-width:200px!important;width:100%!important;justify-self:center!important
+}
+
+/* ---------- model-specific art direction ---------- */
+/* 02 · soft arch */
+body.one-essential-premium.essential-02 .cover-content{padding-top:32%!important;padding-bottom:46px!important}
+body.one-essential-premium.essential-02 .cover-photo-wrap{width:min(60vw,238px)!important;aspect-ratio:4/5!important;border-radius:50% 50% 16px 16px!important;box-shadow:0 0 0 1px var(--gold)!important}
+body.one-essential-premium.essential-02 .historia-photo-wrap{border-radius:16px 88px 16px 88px!important;overflow:hidden!important}
+
+/* 03 · botanical column */
+body.one-essential-premium.essential-03 .cover-content{padding-top:34%!important;padding-bottom:18%!important}
+body.one-essential-premium.essential-03 .cover-photo-wrap{width:min(58vw,230px)!important;aspect-ratio:3/4!important;border-radius:116px 116px 8px 8px!important;padding:5px!important;box-shadow:0 0 0 1px var(--sage-deep)!important}
+body.one-essential-premium.essential-03 .historia-photo-wrap{border-radius:120px 120px 12px 12px!important;overflow:hidden!important}
+
+/* 04 · asymmetric editorial */
+body.one-essential-premium.essential-04 .cover-content{padding-top:32%!important;padding-bottom:18%!important}
+body.one-essential-premium.essential-04 .cover-photo-wrap{width:min(62vw,246px)!important;aspect-ratio:4/5!important;border-radius:10px 88px 10px 88px!important;padding:4px!important;box-shadow:0 0 0 1px var(--gold)!important}
+body.one-essential-premium.essential-04 .historia-photo-wrap{border-radius:86px 12px 86px 12px!important;overflow:hidden!important}
+
+/* 05 · landscape magazine */
+body.one-essential-premium.essential-05 .cover-content{padding-top:28%!important;padding-bottom:16%!important}
+body.one-essential-premium.essential-05 .cover-photo-wrap{width:min(72vw,286px)!important;aspect-ratio:5/4!important;border-radius:5px 58px 5px 58px!important;box-shadow:0 0 0 1px var(--sage-deep)!important}
+body.one-essential-premium.essential-05 .historia-photo-wrap{width:min(82vw,326px)!important;aspect-ratio:5/4!important;border-radius:6px 46px 6px 46px!important;overflow:hidden!important}
+
+/* 06 · tall minimal arch */
+body.one-essential-premium.essential-06 .cover-content{padding-top:20%!important;padding-bottom:18%!important}
+body.one-essential-premium.essential-06 .cover-photo-wrap{width:min(56vw,224px)!important;aspect-ratio:3/4!important;border-radius:112px 112px 10px 10px!important;box-shadow:0 0 0 1px var(--gold)!important}
+body.one-essential-premium.essential-06 .historia-photo-wrap{width:min(70vw,278px)!important;aspect-ratio:3/4!important;border-radius:140px 140px 12px 12px!important;overflow:hidden!important}
+
+@media (min-width:480px){
+  body.one-essential-premium:not(.essential-01) .agenda-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  body.one-essential-premium:not(.essential-01) .agenda-node:last-child:nth-child(4n+1){grid-column:auto!important;max-width:none!important}
+}
+@media (max-width:360px){
+  body.one-essential-premium.essential-01 section{padding-left:22px!important;padding-right:22px!important}
+  body.one-essential-premium.essential-01 .agenda-node{grid-template-columns:70px minmax(0,1fr)!important;column-gap:14px!important}
+  body.one-essential-premium.essential-01 .agenda-node:not(:last-of-type)::after{left:30px!important}
+  body.one-essential-premium.essential-01 .agenda-node .ring{width:60px!important;height:60px!important}
+  body.one-essential-premium:not(.essential-01) .cover-content{padding-left:8%!important;padding-right:8%!important}
+}
