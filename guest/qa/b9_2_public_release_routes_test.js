@@ -8,4 +8,17 @@ ok(landing.includes('guest-checkout.html?edition=essential')&&landing.includes('
 ok(checkout.includes('guest-checkout-return.html'),'checkout return route missing');
 ok(access.includes("location.replace('index.html')"),'activation does not route into canonical app');
 ok(!joined.includes('guest-orders-admin.html'),'public customer surfaces expose internal order manager');
+const requiredInternal=[
+ ['guest.html','guest-checkout.html'],['guest.html','guest-legal.html'],
+ ['guest-checkout.html','guest.html'],['guest-checkout.html','guest-legal.html'],
+ ['guest-checkout-return.html','guest-order.html'],['guest-checkout-return.html','guest.html'],
+ ['guest-order.html','guest.html'],['guest-legal.html','guest.html'],
+ ['guest/index.html','guest/access.html'],['guest/index.html','guest/guest-settings.html']
+];
+for(const [from,to] of requiredInternal){
+ ok(fs.existsSync(path.join(root,to)),'broken internal release target '+from+' -> '+to);
+}
+ok(!joined.includes('guest-deliver.html'),'discarded delivery surface leaked into public release');
+ok(fs.existsSync(path.join(root,'guest-orders-admin.html')),'private fulfillment manager missing from release artifact');
+
 console.log('B9.2 public release routes: PASS');
