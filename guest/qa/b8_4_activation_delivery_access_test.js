@@ -6,17 +6,22 @@ const TOKEN='m'.repeat(64),INV='i'.repeat(64),CODE='WSD-GUEST-12345678-12345678-
 function staticAudit(){
  const access=fs.readFileSync(path.join(root,'guest','access.html'),'utf8');
  const stripe=fs.readFileSync(path.join(root,'guest','backend','guest-stripe-checkout','index.ts'),'utf8');
+ const orders=fs.readFileSync(path.join(root,'guest','backend','guest-orders-admin','index.ts'),'utf8');
+ const manager=fs.readFileSync(path.join(root,'guest-orders-admin.html'),'utf8');
  ok(access.includes("guest-license-access"),'activation page uses wrong backend');
  ok(access.includes("localStorage.setItem(TOKEN"),'member token is not persisted');
  ok(access.includes("location.replace('index.html')"),'activation does not enter GUEST');
  ok(stripe.includes("activationCode()"),'paid provisioning does not create activation code');
  ok(stripe.includes("source_order_id"),'paid provisioning is not bound to Stripe session');
- ok(stripe.includes("action==='deliver'"),'controlled delivery action missing');
- ok(stripe.includes("guest_delivery_token_hash"),'delivery operator token is not hashed');
- ok(stripe.includes("guest_access_delivered_at"),'delivery is not idempotently recorded');
- const delivery=fs.readFileSync(path.join(root,'guest-deliver.html'),'utf8');
- ok(delivery.includes("operatorToken"),'delivery screen does not submit operator token');
- ok(delivery.includes("guest-stripe-checkout"),'delivery screen uses wrong backend');
+ ok(!stripe.includes("action==='deliver'"),'Stripe backend must not expose duplicate manual delivery action');
+ ok(orders.includes("managerContext"),'delivery admin is not manager-authenticated');
+ ok(orders.includes("action==='send_delivery'"),'controlled delivery action missing');
+ ok(orders.includes("guest_personalization_status||'')!=='ready'"),'delivery is not gated by ready status');
+ ok(orders.includes("guest_personalization_status:'delivered'"),'delivery completion is not recorded');
+ ok(orders.includes("guest/access.html#code="),'delivery email does not include activation access');
+ ok(manager.includes("guest-orders-admin"),'delivery manager uses wrong backend');
+ ok(manager.includes("action:'send_delivery'"),'delivery manager cannot trigger final delivery');
+ ok(!fs.existsSync(path.join(root,'guest-deliver.html')),'duplicate guest-deliver surface still exists');
 }
 async function activation(browser){
  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
