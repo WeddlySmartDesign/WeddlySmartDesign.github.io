@@ -59,14 +59,23 @@ Microbloques:
 - B8.6 regresión comercial móvil/escritorio + sellado final de B8
 
 ## Exact current failure
-B8.1 is PASS / SEALED.
+B8.2 frontend/backend contract is green and the live GUEST Stripe checkout can create LIVE sessions.
 
-B8.2 has one objective resilience gap under audit: the live `guest-stripe-checkout` function provisions the purchase and sends the post-payment email when the browser calls `status` after returning from Stripe, but the current function source has no Stripe webhook handler. A paid session therefore depends on the customer reaching the return/status flow for automatic provisioning.
+Objective remaining failure:
+Stripe LIVE currently has only the ONE webhook endpoint:
+`https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-stripe-checkout`
 
-This is not yet marked fixed until the GUEST backend has an idempotent signed-webhook path and the corresponding Stripe webhook endpoint/signing secret are verified.
+There is no enabled Stripe webhook endpoint yet for:
+`https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-stripe-checkout`
+
+The GUEST Edge Function v5 already contains signed, idempotent webhook handling and preserves browser-return provisioning as fallback. A fake signature is rejected with HTTP 400 `invalid_signature`.
+
+The connected Stripe credential has `webhook_read` but not `webhook_write`, so the missing endpoint cannot be created from the current connection without an explicit Stripe permission change.
 
 ## NEXT ACTION
-Audit and harden B8.2 only in GUEST: add automated checkout/return contract QA; port an idempotent signed Stripe webhook handler into `guest-stripe-checkout` without touching ONE; preserve the existing browser-return fallback; verify the deployed GUEST function; then verify or explicitly record the remaining Stripe endpoint configuration dependency before sealing B8.2.
+Create the Stripe LIVE webhook endpoint for `guest-stripe-checkout` with at least `checkout.session.completed` and `checkout.session.async_payment_succeeded`, then store that endpoint's signing secret as `GUEST_STRIPE_WEBHOOK_SECRET` in the Supabase project and verify a signed delivery. Until then B8.2 remains FAIL / BLOCKED BY STRIPE CONFIGURATION, not sealed.
+
+B8.3 may proceed independently; do not reopen B8.1 or B7.
 
 ## Working method from now on
 Every microblock has only three states:
