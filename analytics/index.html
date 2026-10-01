@@ -225,6 +225,14 @@ body:has(#app:not([hidden])){overflow:hidden}
   border:1px solid var(--line);background:var(--white);color:var(--ink);
   border-radius:999px;padding:6px 10px;font:800 11px/1 var(--sans);cursor:pointer
 }
+.status-right{display:flex;align-items:center;justify-content:flex-end;gap:7px;min-width:0}
+.notifications-top{padding:6px 9px;white-space:nowrap;flex:0 0 auto}
+@media(max-width:520px){
+  .compact-status{align-items:center}
+  .compact-status>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .status-right>#updatedAt{display:none}
+  .notifications-top{font-size:10.5px;padding:6px 8px}
+}
 .details-dialog{
   width:min(94vw,760px);height:min(90dvh,860px);border:0;border-radius:24px;padding:0;
   background:var(--paper);color:var(--ink);box-shadow:0 30px 90px rgba(52,47,45,.22)
@@ -762,7 +770,7 @@ body:has(#app:not([hidden])){overflow:hidden}
       </div>
       <div class="status-row compact-status">
         <span><i class="status-dot"></i><span id="trackingSince">Medición activa</span></span>
-        <span id="updatedAt">—</span>
+        <span class="status-right"><span id="updatedAt">—</span><button class="journal-open notifications-top" id="notificationsBtn" type="button">Activar avisos</button></span>
       </div>
     </section>
 
@@ -805,8 +813,7 @@ body:has(#app:not([hidden])){overflow:hidden}
     </section>
 
     <div class="dashboard-footline dashboard-foot-actions">
-      <span>Datos internos · Analytics v18</span>
-      <button class="journal-open" id="notificationsBtn" type="button">Activar avisos</button>
+      <span>Datos internos · Analytics v19</span>
     </div>
   </main>
 </div>
@@ -1481,13 +1488,13 @@ $('installHelpClose').addEventListener('click',()=>installHelp.close());
 
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js?v=18',{scope:'./',updateViaCache:'none'})
+    navigator.serviceWorker.register('./sw.js?v=19',{scope:'./',updateViaCache:'none'})
       .then(reg=>reg.update().catch(()=>{}))
       .catch(()=>{});
   },{once:true});
 
   navigator.serviceWorker.addEventListener('controllerchange',()=>{
-    const key='wsd_analytics_sw_v18_reload';
+    const key='wsd_analytics_sw_v19_reload';
     if(sessionStorage.getItem(key)==='1')return;
     sessionStorage.setItem(key,'1');
     location.reload();
