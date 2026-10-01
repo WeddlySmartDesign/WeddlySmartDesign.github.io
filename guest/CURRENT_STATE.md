@@ -44,7 +44,7 @@ Validated GitHub Actions run:
 `36733355182` — 14/14 jobs `success`
 
 ## Current block
-B8.4–B8.6 awaiting canonical CI seal; B9.1–B9.7 release preparation implemented, awaiting canonical CI
+B8.4 fulfillment QA syntax fixed after CI run 36827484796 isolated the only failure; B8.5/B8.6/B9.1 green in that run; B9.1–B9.8 release preparation implemented, awaiting a canonical post-fix CI
 
 Current branch:
 `guest-independent`
@@ -107,8 +107,8 @@ B9.7:
 - invitation links remain usable; noindex only prevents search-engine discovery.
 
 ## NEXT ACTION
-1. Do not create more scattered release gates. Create one B9 final aggregate release-seal test that requires B9.1–B9.7 contracts and the B8.6 commercial seal test to exist/pass locally.
-2. Inspect the first completed canonical CI run containing B8.4–B8.6 and B9.1–B9.7.
+1. Wait for/inspect the first completed CI run at or after commit `1960a9bf9adf491ce56c326a345abd478adadd21` (B8.4 QA syntax fix).
+2. Require B8.4 fulfillment admin, B8.5, B8.6 and B9.1–B9.8 to be green in a post-fix canonical run.
 3. If any job fails, fix ONLY that exact failure; do not reopen B6/B7.
 4. When B8.4–B8.6 are green, write the B8 final seal and mark B8 PASS / SEALED.
 5. When B9.1–B9.7 + aggregate gate are green, write the B9 final release-preparation seal.
