@@ -11,6 +11,12 @@ function staticAudit(){
  ok(access.includes("location.replace('index.html')"),'activation does not enter GUEST');
  ok(stripe.includes("activationCode()"),'paid provisioning does not create activation code');
  ok(stripe.includes("source_order_id"),'paid provisioning is not bound to Stripe session');
+ ok(stripe.includes("action==='deliver'"),'controlled delivery action missing');
+ ok(stripe.includes("guest_delivery_token_hash"),'delivery operator token is not hashed');
+ ok(stripe.includes("guest_access_delivered_at"),'delivery is not idempotently recorded');
+ const delivery=fs.readFileSync(path.join(root,'guest-deliver.html'),'utf8');
+ ok(delivery.includes("operatorToken"),'delivery screen does not submit operator token');
+ ok(delivery.includes("guest-stripe-checkout"),'delivery screen uses wrong backend');
 }
 async function activation(browser){
  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
