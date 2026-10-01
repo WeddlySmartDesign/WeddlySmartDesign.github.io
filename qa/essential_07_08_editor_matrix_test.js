@@ -58,7 +58,7 @@ const svg=Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="900" heigh
         agendaCount:document.querySelectorAll(agenda).length,
         locationCount:document.querySelectorAll(locations).length,
         text:document.body.innerText,
-        cta:!!q('#rsvpBtn'),
+        cta:!!q('#ctaBtn'),
         photoDisplay:cs('#heroPhotoWrap').display,
         photoClip:cs('#heroPhoto').clipPath,
         targetDisplay:expected[font].display,targetBody:expected[font].body
