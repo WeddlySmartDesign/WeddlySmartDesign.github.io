@@ -104,7 +104,7 @@ async function submitOrder(session:any,raw:any){
 
 
 async function verifyWebhook(raw:string,header:string){
- const secret=env('GUEST_STRIPE_WEBHOOK_SECRET')||env('STRIPE_WEBHOOK_SECRET');
+ const secret=env('GUEST_STRIPE_WEBHOOK_SECRET');
  if(!secret)throw new Error('webhook_not_configured');
  const parts=header.split(',').map(x=>x.trim());
  const ts=parts.find(x=>x.startsWith('t='))?.slice(2)||'';
