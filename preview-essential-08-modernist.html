@@ -7,7 +7,7 @@
 <title>Ana & Carlos · Invitación</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&family=Parisienne&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Beau+Rivage&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Jost:wght@400;500;600&family=Marcellus&family=Mrs+Saint+Delafield&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --paper:#f7f4ef;
@@ -22,6 +22,12 @@
   --text-soft:#5f5852;
   --text-muted:#7a736d;
   --white:#fffdfa;
+  --font-display:"Cormorant Garamond",serif;
+  --font-body:"Jost",sans-serif;
+  --font-accent:"Cormorant Garamond",serif;
+  --display-weight:500;
+  --body-size:15px;
+  --body-line:1.72;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:#dad6cf}
@@ -29,8 +35,45 @@ body{
   margin:0;
   background:#dad6cf;
   color:var(--ink);
-  font-family:"DM Sans",system-ui,-apple-system,Segoe UI,sans-serif;
+  font-family:var(--font-body),system-ui,-apple-system,Segoe UI,sans-serif;
   -webkit-font-smoothing:antialiased;
+}
+
+/* Exact typography options offered by the Essential editor */
+body.font-editorial{
+  --font-display:"Cormorant Garamond",serif;
+  --font-body:"Jost",sans-serif;
+  --font-accent:"Cormorant Garamond",serif;
+  --display-weight:500;
+  --body-size:15px;
+}
+body.font-romantico{
+  --font-display:"Cormorant Garamond",serif;
+  --font-body:"Cormorant Garamond",serif;
+  --font-accent:"Mrs Saint Delafield",cursive;
+  --display-weight:500;
+  --body-size:17px;
+}
+body.font-clasico{
+  --font-display:"Playfair Display",serif;
+  --font-body:"EB Garamond",serif;
+  --font-accent:"Playfair Display",serif;
+  --display-weight:500;
+  --body-size:17px;
+}
+body.font-moderno{
+  --font-display:"Fraunces",serif;
+  --font-body:"Work Sans",sans-serif;
+  --font-accent:"Fraunces",serif;
+  --display-weight:500;
+  --body-size:15px;
+}
+body.font-caligrafico{
+  --font-display:"Marcellus",serif;
+  --font-body:"Marcellus",serif;
+  --font-accent:"Beau Rivage",cursive;
+  --display-weight:400;
+  --body-size:15.5px;
 }
 a,button{font:inherit}
 .invite{
@@ -65,32 +108,33 @@ a,button{font:inherit}
   place-items:center;
   border-top:1px solid var(--champagne);
   border-bottom:1px solid var(--champagne);
-  font-family:"Italiana",serif;
+  font-family:var(--font-display);
   font-size:17px;
   letter-spacing:.02em;
 }
 .hero-names{
   margin:0;
-  font-family:"Italiana",serif;
+  font-family:var(--font-display);
   font-size:clamp(54px,15.5vw,78px);
   line-height:.92;
-  font-weight:400;
+  font-weight:var(--display-weight);
   letter-spacing:-.035em;
 }
 .hero-names .and{
   display:block;
   margin:-2px 0 -4px;
-  font-family:"Parisienne",cursive;
+  font-family:var(--font-accent);
   font-size:.55em;
   color:var(--sage);
   letter-spacing:0;
 }
 .hero-line{
   margin:28px auto 0;
-  max-width:28ch;
-  font-family:"Italiana",serif;
-  font-size:20px;
-  line-height:1.42;
+  max-width:31ch;
+  font-family:var(--font-body);
+  font-size:clamp(16px,4.3vw,18px);
+  line-height:1.62;
+  font-weight:400;
   color:#4f4944;
 }
 .hero-meta{
@@ -157,25 +201,25 @@ a,button{font:inherit}
   margin:0 auto;
   max-width:9ch;
   text-align:center;
-  font-family:"Italiana",serif;
+  font-family:var(--font-display);
   font-size:clamp(43px,12vw,60px);
   line-height:.98;
-  font-weight:400;
+  font-weight:var(--display-weight);
   letter-spacing:-.025em;
 }
 .story-copy{
   margin:38px auto 0;
   max-width:32ch;
   text-align:center;
-  font-size:15px;
-  line-height:1.78;
+  font-size:var(--body-size);
+  line-height:var(--body-line);
   color:var(--text-soft);
 }
 .story-note{
   margin:40px auto 0;
   max-width:23ch;
   text-align:center;
-  font-family:"Parisienne",cursive;
+  font-family:var(--font-accent);
   font-size:30px;
   line-height:1.1;
   color:var(--sage);
@@ -188,10 +232,10 @@ a,button{font:inherit}
 .agenda-title{
   margin:0 auto 44px;
   text-align:center;
-  font-family:"Italiana",serif;
+  font-family:var(--font-display);
   font-size:clamp(41px,11.5vw,56px);
   line-height:1;
-  font-weight:400;
+  font-weight:var(--display-weight);
   color:var(--ink);
 }
 .accent-text{color:var(--sage-strong)}
@@ -209,7 +253,7 @@ a,button{font:inherit}
 .moment + .moment{margin-top:8px}
 .moment-time{
   padding-top:2px;
-  font-family:"Italiana",serif;
+  font-family:var(--font-display);
   font-size:24px;
   line-height:1;
   color:var(--sage-strong);
@@ -246,15 +290,16 @@ a,button{font:inherit}
 .moment-content{padding-bottom:24px}
 .moment-name{
   margin:0 0 6px;
-  font-family:"Italiana",serif;
+  font-family:var(--font-display);
   font-size:27px;
   line-height:1.02;
-  font-weight:400;
+  font-weight:var(--display-weight);
   color:var(--ink);
 }
 .moment-place{
   font-size:13px;
-  line-height:1.5;
+  line-height:1.55;
+  font-family:var(--font-body);
   color:var(--text-soft);
 }
 
@@ -269,10 +314,10 @@ a,button{font:inherit}
 }
 .location-place{
   margin:0;
-  font-family:"Italiana",serif;
+  font-family:var(--font-display);
   font-size:clamp(47px,13vw,66px);
   line-height:.94;
-  font-weight:400;
+  font-weight:var(--display-weight);
   letter-spacing:-.03em;
 }
 .location-rule{
@@ -284,8 +329,8 @@ a,button{font:inherit}
 .location-copy{
   margin:0 auto;
   max-width:29ch;
-  font-size:14.5px;
-  line-height:1.7;
+  font-size:var(--body-size);
+  line-height:var(--body-line);
   color:var(--text-soft);
 }
 .location-link{
@@ -298,6 +343,7 @@ a,button{font:inherit}
   text-decoration:none;
   border-bottom:1px solid currentColor;
   font-size:12.5px;
+  font-family:var(--font-body);
   font-weight:600;
 }
 
@@ -309,7 +355,7 @@ a,button{font:inherit}
 }
 .rsvp-flourish{
   margin:0 auto 22px;
-  font-family:"Parisienne",cursive;
+  font-family:var(--font-accent);
   font-size:38px;
   color:var(--sage);
   line-height:1;
@@ -317,16 +363,16 @@ a,button{font:inherit}
 .rsvp-title{
   margin:0 auto;
   max-width:9ch;
-  font-family:"Italiana",serif;
+  font-family:var(--font-display);
   font-size:clamp(46px,13vw,64px);
   line-height:.96;
-  font-weight:400;
+  font-weight:var(--display-weight);
 }
 .rsvp-copy{
   margin:28px auto 34px;
   max-width:30ch;
-  font-size:15px;
-  line-height:1.7;
+  font-size:var(--body-size);
+  line-height:var(--body-line);
   color:var(--text-soft);
 }
 .rsvp-action{
@@ -350,7 +396,7 @@ a,button{font:inherit}
   text-transform:uppercase;
 }
 .rsvp-action span:last-child{
-  font-family:"Italiana",serif;
+  font-family:var(--font-display);
   font-size:22px;
   line-height:1;
   color:var(--sage-strong);
@@ -373,10 +419,10 @@ a,button{font:inherit}
 }
 .contact-title{
   margin:0;
-  font-family:"Italiana",serif;
+  font-family:var(--font-display);
   font-size:32px;
   line-height:1.05;
-  font-weight:400;
+  font-weight:var(--display-weight);
 }
 .contact-link{
   display:inline-block;
@@ -398,7 +444,7 @@ a,button{font:inherit}
   border-top:1px solid var(--line);
 }
 .footer-names{
-  font-family:"Italiana",serif;
+  font-family:var(--font-display);
   font-size:17px;
 }
 .footer-date{
@@ -408,6 +454,48 @@ a,button{font:inherit}
   text-transform:uppercase;
   color:var(--text-muted);
 }
+
+
+/* Pair-specific tuning: same layout, different optical metrics */
+body.font-editorial .hero-names{font-size:clamp(56px,16vw,80px);line-height:.92}
+body.font-editorial .hero-names .and{font-style:italic;font-size:.50em}
+body.font-editorial .story-title,
+body.font-editorial .agenda-title,
+body.font-editorial .location-place,
+body.font-editorial .rsvp-title{letter-spacing:-.02em}
+
+body.font-romantico .hero-names{font-size:clamp(54px,15vw,74px);line-height:.94}
+body.font-romantico .hero-names .and{font-size:.68em;margin:2px 0 0}
+body.font-romantico .hero-line{font-size:18px;max-width:29ch}
+body.font-romantico .story-note,
+body.font-romantico .rsvp-flourish{font-size:40px;line-height:1.05}
+body.font-romantico .moment-place{font-size:14px}
+
+body.font-clasico .hero-names{font-size:clamp(50px,14.2vw,70px);line-height:.98}
+body.font-clasico .hero-names .and{font-family:var(--font-accent);font-style:italic;font-size:.42em}
+body.font-clasico .hero-line{font-size:18px;max-width:29ch}
+body.font-clasico .story-title,
+body.font-clasico .agenda-title,
+body.font-clasico .location-place,
+body.font-clasico .rsvp-title{letter-spacing:-.02em}
+body.font-clasico .story-note,
+body.font-clasico .rsvp-flourish{font-family:var(--font-accent);font-style:italic;font-size:30px}
+
+body.font-moderno .hero-names{font-size:clamp(50px,14vw,70px);line-height:.96}
+body.font-moderno .hero-names .and{font-style:italic;font-size:.42em}
+body.font-moderno .hero-line{font-size:16px;max-width:31ch}
+body.font-moderno .story-note,
+body.font-moderno .rsvp-flourish{font-style:italic;font-size:29px}
+
+body.font-caligrafico .hero-names{font-size:clamp(46px,13vw,64px);line-height:1.02;letter-spacing:-.02em}
+body.font-caligrafico .hero-names .and{font-size:.76em;margin:4px 0 2px}
+body.font-caligrafico .hero-line{font-size:15.5px;line-height:1.7;max-width:31ch}
+body.font-caligrafico .story-title,
+body.font-caligrafico .agenda-title,
+body.font-caligrafico .location-place,
+body.font-caligrafico .rsvp-title{letter-spacing:0}
+body.font-caligrafico .story-note,
+body.font-caligrafico .rsvp-flourish{font-size:40px;line-height:1.05}
 
 /* restrained motion */
 .reveal{
@@ -456,7 +544,7 @@ a,button{font:inherit}
 }
 </style>
 </head>
-<body>
+<body class="font-editorial">
 <main class="invite">
   <section class="hero reveal">
     <p class="hero-kicker">Nos casamos</p>
@@ -545,6 +633,11 @@ a,button{font:inherit}
 
 <script>
 (()=>{
+  const allowedFonts=['editorial','romantico','clasico','moderno','caligrafico'];
+  const requested=new URLSearchParams(location.search).get('font') || 'editorial';
+  const fontMode=allowedFonts.includes(requested) ? requested : 'editorial';
+  document.body.className='font-' + fontMode;
+
   const els=[...document.querySelectorAll('.reveal')];
   if(!('IntersectionObserver' in window)){
     els.forEach(x=>x.classList.add('in'));
