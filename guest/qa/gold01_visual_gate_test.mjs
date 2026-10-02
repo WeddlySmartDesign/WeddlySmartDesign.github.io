@@ -123,11 +123,11 @@ try{
           await page.screenshot({path:path.join(out,`${variant}-06b-closing-motion-0450-390x844.png`),fullPage:false});
           await page.waitForTimeout(1100);
           const closing=await frame.evaluate(()=>({
-            in:document.querySelector('.closing')?.classList.contains('in'),
+            gateCloseIn:document.querySelector('.closing')?.classList.contains('gate-close-in'),
             final:document.querySelector('.final-text')?.textContent?.trim(),
             ctaHidden:document.querySelector('.gate-closing-cta')?.hidden
           }));
-          ok(closing.in,'closing reveal did not trigger');
+          ok(closing.gateCloseIn,'dedicated closing reveal did not trigger');
           ok(closing.ctaHidden===true,'closing RSVP CTA must hide after confirmation');
           rec.checks.closing=closing;
           await page.screenshot({path:path.join(out,`${variant}-07-closing-390x844.png`),fullPage:false});
