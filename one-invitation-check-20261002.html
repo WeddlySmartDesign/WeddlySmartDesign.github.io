@@ -36,7 +36,8 @@
     const u=new URL(location.href);u.search='';u.searchParams.set('child','1');u.searchParams.set('kind',kind);u.searchParams.set('suite','1');u.searchParams.set('_wsd_suite','1');u.searchParams.set('collection',collection);if(kind==='owner')u.searchParams.set('ownerDemo','es');frame.src=u.href;
   }
   addEventListener('message',e=>{
-    if(e.origin!==location.origin||e.source!==frame.contentWindow)return;
+    if(e.origin!==location.origin)return;
+    const editor=frame.contentDocument?.querySelector('#editor');if(e.source!==frame.contentWindow&&e.source!==editor?.contentWindow)return;
     if(e.data?.type==='wsd-suite-open'&&e.data.view==='guests-design'){const u=new URL(e.data.url);openCase(kind,u.searchParams.get('collection')||'signature')}
     if(e.data?.type==='qa-save')out.textContent='Guardado comprobado: '+e.data.tier+' · '+e.data.template;
   });
