@@ -42,7 +42,11 @@
     if(e.data?.type==='qa-save')out.textContent='Guardado comprobado: '+e.data.tier+' · '+e.data.template;
   });
   for(const next of ['signature','owner','essential'])document.getElementById(next).onclick=()=>openCase(next);
-  frame.addEventListener('load',()=>{if(!out.textContent.startsWith('Guardado'))out.textContent='Editor cargado · solicitudes del servidor simuladas'});
+  frame.addEventListener('load',()=>{
+    const editor=frame.contentDocument?.querySelector('#editor');
+    if(editor){const patch=()=>{if(editor.contentWindow)editor.contentWindow.fetch=frame.contentWindow.fetch};editor.addEventListener('load',patch);patch()}
+    if(!out.textContent.startsWith('Guardado'))out.textContent='Editor cargado · solicitudes del servidor simuladas';
+  });
   openCase('signature');
 })();
 </script></body></html>
