@@ -56,16 +56,20 @@ See `guest/GUEST_REAL_INVITATION_CONTENT_MOTION_REQUIREMENTS_2026-10-02.md`.
 The system must support names/date, premium opening, cover/hero, cover/sub-cover couple photography, venue/location, RSVP CTA into existing GUEST RSVP and designed closing. Countdown, agenda, couple-story text, secondary photography and final swipe gallery are configurable/optional blocks.
 Motion remains NOT YET VALIDATED and is now a separate gate.
 
-## Motion gate — GATE 01 FAIL / GATE 02 FAIL / GATE 03 REQUIRED
+## Motion gate — GATE 01 FAIL / GATE 02 FAIL / GATE 03 ACTIVE
 `GUEST_MOTION_GATE_01.html` failed Android review because the cover behaved mainly like a moving raster/block and the gallery felt like web UI.
 `GUEST_MOTION_GATE_02_LAYERED.html` also failed Android review on 2026-10-02. Root cause: it attempted to simulate depth by clipping and independently moving regions copied from one flattened raster. Real-device motion exposed hard seams, duplicated image regions, rectangular fragments and broken continuity.
 
 Technical conclusion: premium object-led motion CANNOT be built reliably by slicing a flattened JPG/PNG after generation. The visual assets must be authored/exported as true independent layers from the beginning.
 Required source planes for the next test: clean background plate; transparent veil/silk; transparent pearls/ornament; transparent foreground floral/object layer; optional particles/light overlay; typography kept native in HTML/CSS.
 
+## Motion Gate 03 candidate
+Conversation artifact: `GUEST_MOTION_GATE_03_TRUE_LAYERS.html`.
+This test intentionally contains NO raster image sliced into regions. The motion planes are genuine independent DOM/SVG layers: background plate, veil, two silk planes, pearl strands with individual beads, foreground florals, atmospheric particles/light and native typography.
+Scope is intentionally only opening + short hero depth state. Gallery/closing are excluded until this passes Android.
+Static/structural QA: HTML parse PASS; JavaScript syntax PASS; no external assets or `/mnt/data` runtime references; responsive viewport + reduced-motion fallback present.
+
 ## Exact NEXT ACTION
-1. Do not patch Motion Gate 02.
-2. Build Motion Gate 03 only after creating genuine separate visual assets with transparency/clean plate.
-3. Test only opening + short hero depth interaction first. Do not build gallery/closing until real layered opening passes Android.
-4. If genuine-layer motion passes, then test gallery swipe and closing with the same motion grammar.
-5. Only after motion passes should the first restrained real catalog direction be built.
+1. Owner opens `GUEST_MOTION_GATE_03_TRUE_LAYERS.html` on Android and judges ONLY the motion/depth, not final catalog art direction.
+2. If PASS, proceed to a separate gallery-swipe + closing motion test using the same true-layer principle.
+3. If FAIL, do not start the real catalog direction; diagnose the motion language/technology itself before continuing.
