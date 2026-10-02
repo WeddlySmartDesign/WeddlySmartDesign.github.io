@@ -59,3 +59,35 @@ Before building the complete real invitation:
 
 ## Current next action
 Define the first restrained REAL catalog direction with these capabilities in mind, then run the motion gate before expanding to the full invitation.
+
+
+## Signature parity — mandatory options
+GUEST must never expose fewer invitation-content options than current Signature.
+
+The invitation system must support, as configurable/optional modules:
+- bus / transport information and CTA;
+- hotel / accommodation information and CTA;
+- dress code;
+- gift / contribution information;
+- playlist / song-request CTA;
+- one shared venue for ceremony + celebration OR two separate ceremony/celebration locations;
+- configurable agenda / moments of the day;
+- configurable typography family / font style;
+- countdown;
+- story;
+- couple photos;
+- final gallery;
+- RSVP CTA into the existing GUEST RSVP.
+
+These modules may be visually reinterpreted per catalog design; they must not become generic repeated cards by default. Each catalog direction should preserve its own art direction while retaining feature parity.
+
+## Motion beyond cover
+Premium motion is not limited to opening/hero/closing.
+Interior sections should use purposeful interaction/motion where appropriate:
+- agenda/moments: progressive timeline, staged reveals, or other coherent movement;
+- celebration/story photography: restrained parallax/depth or reveal;
+- locations: clear interactive state when there are two venues;
+- optional information: scroll-snap / staged modular presentation when useful;
+- gallery: native-feeling swipe.
+
+Avoid motion everywhere; use a coherent rhythm with 2–3 interior dynamic moments.
