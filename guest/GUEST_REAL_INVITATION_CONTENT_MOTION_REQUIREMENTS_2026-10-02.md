@@ -91,3 +91,23 @@ Interior sections should use purposeful interaction/motion where appropriate:
 - gallery: native-feeling swipe.
 
 Avoid motion everywhere; use a coherent rhythm with 2–3 interior dynamic moments.
+
+
+## Voice and mobile legibility
+The invitation is written by the couple to people close to them.
+Required voice:
+- warm, familiar, natural, affectionate;
+- elegant without sounding corporate, editorial or institutional;
+- avoid brand/landing-page language;
+- practical information should sound like the couple helping their guests, not product documentation.
+
+Mobile legibility is non-negotiable:
+- informational body copy must remain comfortably readable on mobile;
+- do not use ultra-small uppercase labels for important information;
+- decorative typefaces are for headlines/moments, not functional copy;
+- contrast must win over aesthetic subtlety;
+- buttons and interactive controls must look unambiguously tappable.
+
+Interior dynamism must feel designed, not like generic scroll-reveal:
+- use image-led transitions, progressive stages, scale/line changes, and scene rhythm;
+- maintain calmness, but never confuse restraint with visual flatness.
