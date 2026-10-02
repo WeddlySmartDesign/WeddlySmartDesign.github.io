@@ -208,3 +208,36 @@ Static QA:
 - opening no longer repeats large couple names before hero.
 
 Next: Android owner review of V3. Evaluate readability, warmth/familiarity, interior dynamism and premium continuity.
+
+
+## Design 01 — VEIL LIGHT — V3 REJECTED
+Android review 2026-10-02. V3 is rejected and must NOT be used as the next baseline.
+
+Observed failures:
+- opening photo treatment clashes with the approved VEIL LIGHT hero instead of leading into it;
+- hero date/location lose legibility because of tiny low-contrast type;
+- ceremony image immediately after hero is visually muddy and badly integrated;
+- story photo crop is off-center;
+- display serif used for multiple headings is too thin/fragile on mobile and reduces readability;
+- agenda became longer and more editorial than V2, with weak rhythm;
+- after agenda, several optional-information blocks break the grid and wrap copy into narrow unreadable columns;
+- closing secondary copy/date/location is too faint/small despite the names remaining attractive.
+
+Rollback rule:
+- V2 is the last valid structural baseline.
+- Do NOT patch V3.
+- Build V4 from V2, carrying over ONLY the useful product requirements learned after V2: warmer couple voice, larger functional text, real ceremony/venue imagery, Signature feature parity and interior dynamism.
+- Preserve V2 strengths: coherent opening/hero relationship, shorter agenda, cleaner alignment, gallery, RSVP and closing composition.
+
+V4 correction priorities:
+1. opening must share VEIL LIGHT material/light grammar and reveal the hero rather than compete with it;
+2. increase hero metadata size/contrast;
+3. integrate ceremony/celebration image later and intentionally, not immediately below hero;
+4. recrop story photo around the couple;
+5. replace fragile display heading face with a more readable elegant serif;
+6. keep agenda compact and dynamic — never a long editorial chapter;
+7. rebuild optional modules on a robust single-column/mobile grid; no narrow text columns;
+8. make all interactive elements unmistakable buttons without arrow decoration;
+9. raise closing secondary-copy contrast/size.
+
+Do not start Design 02 until V4 of VEIL LIGHT passes Android.
