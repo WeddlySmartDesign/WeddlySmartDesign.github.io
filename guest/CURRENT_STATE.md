@@ -56,9 +56,14 @@ See `guest/GUEST_REAL_INVITATION_CONTENT_MOTION_REQUIREMENTS_2026-10-02.md`.
 The system must support names/date, premium opening, cover/hero, cover/sub-cover couple photography, venue/location, RSVP CTA into existing GUEST RSVP and designed closing. Countdown, agenda, couple-story text, secondary photography and final swipe gallery are configurable/optional blocks.
 Motion remains NOT YET VALIDATED and is now a separate gate.
 
+## Motion gate — ACTIVE
+Candidate prepared: `GUEST_MOTION_GATE_01.html` as a self-contained conversation artifact using the rejected `gold` visual direction only as a motion test bed.
+Scope is intentionally limited to: premium opening gesture, opening→hero transition, native swipe gallery, and designed closing. No venue, RSVP, countdown, agenda, GUEST branding or WeddlySmartDesign branding.
+Internal 390x844 controlled-browser QA: no JavaScript errors and no horizontal overflow.
+
 ## Exact NEXT ACTION
-1. Define the first deliberately restrained REAL catalog direction with one dominant visual language.
-2. Before building the whole invitation, run the motion gate: premium opening + hero transition + gallery swipe + closing.
-3. Owner reviews that finished Android motion pilot.
-4. Only if art direction + motion pass, assemble the full modular invitation including optional countdown, agenda, story, photography, venue and RSVP CTA.
-5. Do not integrate the GUEST engine or expand the catalog until that complete visual shell is approved.
+1. Owner opens `GUEST_MOTION_GATE_01.html` on Android and reviews the four motion moments only.
+2. Decide PASS / FAIL for motion independently of the rejected `gold` art direction.
+3. If PASS, start the first restrained REAL catalog direction knowing the motion language is viable.
+4. If FAIL, revise motion itself before any new catalog art direction is built.
+5. Do not integrate the GUEST engine or expand the catalog until art direction + motion both pass.
