@@ -3,14 +3,7 @@
 <header><b>Datos de prueba · sin acceso a producción</b><button id="signature">Signature</button><button id="owner">Propietaria</button><button id="essential">Essential</button><span id="result">Abriendo…</span></header><iframe id="case" title="Editor de prueba"></iframe>
 <script>
 (()=> {
-  const out=document.getElementById('result'),frame=document.getElementById('case');
-  async function openCase(kind) {
-    out.textContent='Abriendo '+kind+'…';
-    const url='guests-rsvp-design-manage.html?v=browser-reproduction-20261002';
-    const response=await fetch(url,{cache:'no-store'}),html=await response.text();
-    const code='('+setup.toString()+')('+JSON.stringify(kind)+');';
-    frame.srcdoc=html.replace('<script>','<script>'+code+'<\/script><script>');
-  }
+  const qs=new URLSearchParams(location.search);
   function setup(kind) {
     const nativeFetch=window.fetch.bind(window),nativeGet=Storage.prototype.getItem;
     const member='qa_member_not_a_real_credential_20261002'.padEnd(64,'x'),demo='qa_demo_not_a_real_credential_20261002'.padEnd(64,'x');
@@ -23,14 +16,32 @@
         if(url.pathname.endsWith('/weddly-test-access'))return ok(body.action==='owner_demo_token'?{ok:true,memberToken:demo}:{ok:true,product:'full',edition:kind==='essential'?'essential':'signature',owner:kind==='owner'});
         if(url.pathname.endsWith('/weddly-rsvp-ensure'))return ok({ok:true,publicToken:token});
         if(url.pathname.endsWith('/weddly-rsvp'))return ok(body.action==='config'?{ok:true}:{ok:true,forms:[{public_token:token,config:{title:'Ana QA & Leo QA',date:'2027-09-12',time:'18:00',venue:'Lugar de prueba, Murcia'}}]});
-        if(url.pathname.endsWith('/weddly-personalization'))return ok({ok:true,personalization:body.personalization||null});
+        if(url.pathname.endsWith('/weddly-personalization')){
+          if(body.personalization)parent.postMessage({type:'qa-save',tier:body.personalization.tier,template:body.personalization.template},location.origin);
+          return ok({ok:true,personalization:body.personalization||null});
+        }
         return ok({ok:false,error:'qa_backend_blocked'});
       }
       return nativeFetch(input,opt);
     };
   }
-  for(const kind of ['signature','owner','essential'])document.getElementById(kind).onclick=()=>openCase(kind);
-  frame.addEventListener('load',()=>{out.textContent='Editor cargado · solicitudes del servidor simuladas'});
+  if(qs.get('child')==='1'){
+    setup(qs.get('kind')||'signature');
+    fetch('guests-rsvp-design-manage.html?v=4-collections-editor-ready-20261002',{cache:'no-store'}).then(r=>r.text()).then(html=>{document.open();document.write(html);document.close()});
+    return;
+  }
+  const out=document.getElementById('result'),frame=document.getElementById('case');let kind='signature';
+  function openCase(next,collection='signature'){
+    kind=next;out.textContent='Abriendo '+kind+' · '+collection+'…';
+    const u=new URL(location.href);u.search='';u.searchParams.set('child','1');u.searchParams.set('kind',kind);u.searchParams.set('suite','1');u.searchParams.set('_wsd_suite','1');u.searchParams.set('collection',collection);if(kind==='owner')u.searchParams.set('ownerDemo','es');frame.src=u.href;
+  }
+  addEventListener('message',e=>{
+    if(e.origin!==location.origin||e.source!==frame.contentWindow)return;
+    if(e.data?.type==='wsd-suite-open'&&e.data.view==='guests-design'){const u=new URL(e.data.url);openCase(kind,u.searchParams.get('collection')||'signature')}
+    if(e.data?.type==='qa-save')out.textContent='Guardado comprobado: '+e.data.tier+' · '+e.data.template;
+  });
+  for(const next of ['signature','owner','essential'])document.getElementById(next).onclick=()=>openCase(next);
+  frame.addEventListener('load',()=>{if(!out.textContent.startsWith('Guardado'))out.textContent='Editor cargado · solicitudes del servidor simuladas'});
   openCase('signature');
 })();
 </script></body></html>

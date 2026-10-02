@@ -81,7 +81,7 @@ html,body{margin:0;background:#f6f4f0;font-family:system-ui;color:#5f5a54}main{m
       const preferred=['essential','signature'].includes(requested)?requested:remembered;
       const collection=signature&&preferred!=='essential'?'signature':'essential';
       const editorUrl=collection==='signature'
-        ?'guests-personalizacion-signature-integrated.html?v=3-included-collections-20261002'
+        ?'guests-personalizacion-signature-integrated.html?v=4-collections-editor-ready-20261002'
         :'guests-personalizacion-essential.html?v=139-included-collections-20261002';
       const r=await fetch(editorUrl,{cache:'no-store'});
       if(!r.ok)throw new Error('editor_load');
