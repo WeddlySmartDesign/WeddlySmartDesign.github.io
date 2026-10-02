@@ -1,0 +1,60 @@
+name: GUEST GOLD 01 visual gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - guest-independent
+    paths:
+      - 'guest/gold-01-gate-candidate.html'
+      - 'guest/gold-01-gate-overlay.css'
+      - 'guest/gold-01-gate-overlay.js'
+      - 'guest/qa/gold01_visual_gate_test.mjs'
+      - '.github/workflows/guest-gold01-visual-gate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  visual-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout isolated GUEST branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+
+      - name: Start isolated static server
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/gold01-http.log 2>&1 &
+          echo $! > /tmp/gold01-http.pid
+          for i in {1..20}; do
+            if curl -fsS http://127.0.0.1:8765/guest/gold-01-gate-candidate.html >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/gold01-http.log
+          exit 1
+
+      - name: Run GOLD 01 browser gate
+        env:
+          GOLD01_BASE_URL: http://127.0.0.1:8765/guest/gold-01-gate-candidate.html
+          GOLD01_ARTIFACT_DIR: guest/qa/gold01-artifacts
+        run: node guest/qa/gold01_visual_gate_test.mjs
+
+      - name: Upload visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: guest-gold01-visual-gate
+          path: guest/qa/gold01-artifacts
+          if-no-files-found: warn
+          retention-days: 7
