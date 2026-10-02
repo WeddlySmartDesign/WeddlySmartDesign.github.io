@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Comprobación técnica de invitaciones · WeddlySmartDesign</title><style>body{margin:0;font:14px system-ui;background:#ddd;color:#222}header{padding:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}button{padding:9px;border:1px solid #999;background:#fff;border-radius:8px}iframe{display:block;width:min(390px,100%);height:calc(100dvh - 95px);border:0;margin:auto;background:#fff}#result{font-size:12px}</style></head><body>
+<header><b>Datos de prueba · sin acceso a producción</b><button id="signature">Signature</button><button id="owner">Propietaria</button><button id="essential">Essential</button><span id="result">Abriendo…</span></header><iframe id="case" title="Editor de prueba"></iframe>
+<script>
+(()=> {
+  const out=document.getElementById('result'),frame=document.getElementById('case');
+  async function openCase(kind) {
+    out.textContent='Abriendo '+kind+'…';
+    const url='guests-rsvp-design-manage.html?v=browser-reproduction-20261002';
+    const response=await fetch(url,{cache:'no-store'}),html=await response.text();
+    const code='('+setup.toString()+')('+JSON.stringify(kind)+');';
+    frame.srcdoc=html.replace('<script>','<script>'+code+'<\/script><script>');
+  }
+  function setup(kind) {
+    const nativeFetch=window.fetch.bind(window),nativeGet=Storage.prototype.getItem;
+    const member='qa_member_not_a_real_credential_20261002'.padEnd(64,'x'),demo='qa_demo_not_a_real_credential_20261002'.padEnd(64,'x');
+    Storage.prototype.getItem=function(key){if(this===localStorage&&key==='weddly_shared_wedding_token')return member;if(this===localStorage&&key==='weddly_owner_demo_mode')return kind==='owner'?'es':'';return nativeGet.call(this,key)};
+    const ok=data=>Promise.resolve(new Response(JSON.stringify(data),{status:200,headers:{'content-type':'application/json'}}));
+    window.fetch=(input,opt={})=>{
+      const url=new URL(String(input),document.baseURI);
+      if(url.hostname==='dnjsxequwgtyyauuofxj.supabase.co'){
+        const body=opt.body?JSON.parse(opt.body):{},token='qa_public_invitation_not_real_20261002';
+        if(url.pathname.endsWith('/weddly-test-access'))return ok(body.action==='owner_demo_token'?{ok:true,memberToken:demo}:{ok:true,product:'full',edition:kind==='essential'?'essential':'signature',owner:kind==='owner'});
+        if(url.pathname.endsWith('/weddly-rsvp-ensure'))return ok({ok:true,publicToken:token});
+        if(url.pathname.endsWith('/weddly-rsvp'))return ok(body.action==='config'?{ok:true}:{ok:true,forms:[{public_token:token,config:{title:'Ana QA & Leo QA',date:'2027-09-12',time:'18:00',venue:'Lugar de prueba, Murcia'}}]});
+        if(url.pathname.endsWith('/weddly-personalization'))return ok({ok:true,personalization:body.personalization||null});
+        return ok({ok:false,error:'qa_backend_blocked'});
+      }
+      return nativeFetch(input,opt);
+    };
+  }
+  for(const kind of ['signature','owner','essential'])document.getElementById(kind).onclick=()=>openCase(kind);
+  frame.addEventListener('load',()=>{out.textContent='Editor cargado · solicitudes del servidor simuladas'});
+  openCase('signature');
+})();
+</script></body></html>
