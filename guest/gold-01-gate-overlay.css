@@ -95,14 +95,14 @@ body.entered .hero-photo{transform:scale(1)!important}
 /* closing mirrors the opening instead of ending in a tilted card */
 .closing{min-height:100svh!important;padding:0!important;display:flex!important;align-items:flex-end!important;background:#191614!important;color:#fff!important;overflow:hidden!important}
 .gate-closing-bg{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,7,7,.18),rgba(8,7,7,.74)),var(--gate-hero) center/cover no-repeat;transform:scale(1.05);transition:transform 1.6s ease}
-.closing.in .gate-closing-bg{transform:scale(1)}
+.closing.gate-close-in .gate-closing-bg{transform:scale(1)}
 .gate-closing-shutters{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);z-index:2;pointer-events:none}
 .gate-closing-shutters i{background:#171513;display:block;transition:transform 1.25s cubic-bezier(.72,0,.16,1)}
-.closing.in .gate-closing-shutters i:nth-child(1){transform:translateY(103%)}
-.closing.in .gate-closing-shutters i:nth-child(2){transform:translateY(-103%);transition-delay:.13s}
-.closing.in .gate-closing-shutters i:nth-child(3){transform:translateY(103%);transition-delay:.26s}
+.closing.gate-close-in .gate-closing-shutters i:nth-child(1){transform:translateY(103%)}
+.closing.gate-close-in .gate-closing-shutters i:nth-child(2){transform:translateY(-103%);transition-delay:.13s}
+.closing.gate-close-in .gate-closing-shutters i:nth-child(3){transform:translateY(103%);transition-delay:.26s}
 .final-card{position:relative!important;z-index:3!important;width:100%!important;aspect-ratio:auto!important;background:transparent!important;box-shadow:none!important;padding:40px 30px max(52px,env(safe-area-inset-bottom))!important;min-height:auto!important;transform:translateY(14px)!important;opacity:0!important;color:#fff!important;transition:opacity .7s 1.05s ease,transform .7s 1.05s ease!important}
-.closing.in .final-card{opacity:1!important;transform:none!important}
+.closing.gate-close-in .final-card{opacity:1!important;transform:none!important}
 .final-mark{font-size:18px!important;letter-spacing:.08em!important;margin-bottom:28px!important}
 .final-text{font-size:clamp(48px,14vw,67px)!important;line-height:.96!important;max-width:430px!important;margin:0 0 30px!important}
 .final-foot{font-size:11px!important;line-height:1.5!important;color:#fff!important;border-top:1px solid rgba(255,255,255,.42);padding-top:18px!important}
