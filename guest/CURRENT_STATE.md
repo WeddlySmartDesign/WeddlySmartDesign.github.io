@@ -180,3 +180,31 @@ Important product rule now sealed in requirements:
 GUEST cannot provide fewer invitation options than Signature.
 
 Next: Android owner review of V2. Evaluate opening, interior dynamism, location clarity, agenda alignment, optional-module presentation, and overall premium continuity.
+
+
+## Design 01 — VEIL LIGHT — V3 HUMAN + DYNAMIC
+Prepared 2026-10-02.
+Conversation artifact: `GUEST_VEIL_LIGHT_DESIGN_01_V3_HUMAN_DYNAMIC.html`.
+
+Owner feedback incorporated:
+- copy must sound like a couple writing to loved ones: warm, familiar, natural; never corporate/editorial;
+- mobile legibility increased across labels, functional copy and buttons;
+- ceremony/celebration real photo integrated to reduce abstraction;
+- opening rebuilt as an intimate photo-led prelude rather than a duplicate cover;
+- story rebuilt as image-led rather than book/editorial page;
+- locations use real imagery and explicit tappable controls;
+- agenda rebuilt into large progressive moment stages instead of a conventional web timeline;
+- optional Signature-parity modules are no longer repeated carousel cards; they use varied stacked treatments;
+- RSVP wording made warmer and more personal;
+- approved hero/gallery/closing language retained where possible.
+
+Static QA:
+- standalone HTML;
+- HTML parse PASS;
+- JavaScript syntax PASS;
+- no external runtime media dependencies;
+- no visible GUEST/WeddlySmartDesign branding;
+- real ceremony photo embedded;
+- opening no longer repeats large couple names before hero.
+
+Next: Android owner review of V3. Evaluate readability, warmth/familiarity, interior dynamism and premium continuity.
