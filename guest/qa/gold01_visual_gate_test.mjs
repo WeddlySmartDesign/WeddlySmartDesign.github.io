@@ -96,6 +96,15 @@ try{
         const overflowAfter=await frame.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
         ok(overflowAfter<=1,`horizontal overflow after open: ${overflowAfter}px`);
         if(vpName==='390x844')await page.screenshot({path:path.join(out,`${variant}-02-hero-390x844.png`),fullPage:false});
+        if(variant==='a'&&vpName==='desktop'){
+          await page.screenshot({path:path.join(out,'a-desktop-01-hero-1440x1000.png'),fullPage:false});
+          for(const [n,sel] of [['02-interlude','.gate-interlude'],['03-venue','.venue'],['04-program','.program'],['05-rsvp','.rsvp']]){
+            await frame.locator(sel).scrollIntoViewIfNeeded();await page.waitForTimeout(650);
+            await page.screenshot({path:path.join(out,`a-desktop-${n}-1440x1000.png`),fullPage:false});
+          }
+          await frame.locator('.closing').scrollIntoViewIfNeeded();await page.waitForTimeout(1550);
+          await page.screenshot({path:path.join(out,'a-desktop-06-closing-1440x1000.png'),fullPage:false});
+        }
 
         if(vpName==='390x844'){
           for(const [n,sel] of [['03-interlude','.gate-interlude'],['04-venue','.venue'],['05-program','.program'],['06-rsvp','.rsvp']]){
