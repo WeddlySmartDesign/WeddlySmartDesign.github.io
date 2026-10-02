@@ -51,11 +51,14 @@ Its value is proof that the asset-generation method works.
 6. GUEST engine remains untouched until the real invitation direction is approved.
 7. Owner intervention remains limited to opening finished mobile versions and light feedback.
 
+## REAL invitation functional/visual requirements
+See `guest/GUEST_REAL_INVITATION_CONTENT_MOTION_REQUIREMENTS_2026-10-02.md`.
+The system must support names/date, premium opening, cover/hero, cover/sub-cover couple photography, venue/location, RSVP CTA into existing GUEST RSVP and designed closing. Countdown, agenda, couple-story text, secondary photography and final swipe gallery are configurable/optional blocks.
+Motion remains NOT YET VALIDATED and is now a separate gate.
+
 ## Exact NEXT ACTION
-Start the REAL catalog-direction pilot from a deliberately restrained visual concept:
-- select one dominant visual system;
-- generate only the minimum assets needed;
-- assemble a complete mobile invitation shell around those assets;
-- include a CTA to the existing GUEST RSVP rather than an inline form;
-- omit all visible WeddlySmartDesign/GUEST branding;
-- owner reviews the finished Android candidate before catalog expansion or engine integration.
+1. Define the first deliberately restrained REAL catalog direction with one dominant visual language.
+2. Before building the whole invitation, run the motion gate: premium opening + hero transition + gallery swipe + closing.
+3. Owner reviews that finished Android motion pilot.
+4. Only if art direction + motion pass, assemble the full modular invitation including optional countdown, agenda, story, photography, venue and RSVP CTA.
+5. Do not integrate the GUEST engine or expand the catalog until that complete visual shell is approved.
