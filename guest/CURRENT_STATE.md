@@ -73,9 +73,20 @@ Technical conclusion after Gates 01–03:
 - do not manually reconstruct rich AI art as simplified DOM/SVG layers.
 The next viable motion route is image-to-video on the actual premium still using a dedicated generative video model, then integrating the resulting video/loop with native HTML text and interaction.
 
+## Image-to-video motion — PASS
+Owner created and approved a 6-second premium image-to-video clip from the `gold` still on 2026-10-02. Independent review confirms the clip preserves composition while adding coherent fabric/ornament/light motion without the artifact failures seen in Gates 01–03.
+This validates the production architecture: premium generated still → dedicated image-to-video motion → native HTML/CSS typography/interactions/CTA layered on top.
+Do not return to handcrafted layered-motion experiments.
+
+## Launch master plan
+See `guest/GUEST_30_DAY_LAUNCH_MASTER_PLAN_2026-10-02.md`.
+Launch deadline: 30 days.
+Launch catalog minimum: 5 premium designs; target: 6.
+From this checkpoint ChatGPT takes project direction/execution control; owner interaction is limited to finished mobile review and necessary external UI actions.
+
 ## Exact NEXT ACTION
-1. Test ONE 5–8 second vertical image-to-video clip from the approved `gold` opening/hero still using a dedicated video model (Recraft Studio supports Sora, Veo, Seedance and other image-to-video models).
-2. Prompt motion only: subtle independent movement in silk/veil, pearls, florals/light, and a restrained camera push; preserve composition and negative space.
-3. Owner reviews the raw clip itself before any HTML integration.
-4. If the raw clip is not premium, stop the motion route before real catalog design.
-5. If it passes, integrate video as the art-motion layer with native typography/CTA on top, then separately test gallery and closing.
+1. Start REAL catalog Design 01 — VEIL LIGHT.
+2. Keep one dominant language only: translucent veil + warm light; remove pearls as a primary cue and keep florals minimal/absent.
+3. Approve the static direction first, then create one image-to-video motion clip using the validated motion method.
+4. Build the complete modular invitation shell only after static + motion pass.
+5. Then scale the validated production system across the remaining launch catalog lines.
