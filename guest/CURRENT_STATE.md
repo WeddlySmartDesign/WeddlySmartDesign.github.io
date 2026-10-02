@@ -56,14 +56,15 @@ See `guest/GUEST_REAL_INVITATION_CONTENT_MOTION_REQUIREMENTS_2026-10-02.md`.
 The system must support names/date, premium opening, cover/hero, cover/sub-cover couple photography, venue/location, RSVP CTA into existing GUEST RSVP and designed closing. Countdown, agenda, couple-story text, secondary photography and final swipe gallery are configurable/optional blocks.
 Motion remains NOT YET VALIDATED and is now a separate gate.
 
-## Motion gate — ACTIVE
-Candidate prepared: `GUEST_MOTION_GATE_01.html` as a self-contained conversation artifact using the rejected `gold` visual direction only as a motion test bed.
-Scope is intentionally limited to: premium opening gesture, opening→hero transition, native swipe gallery, and designed closing. No venue, RSVP, countdown, agenda, GUEST branding or WeddlySmartDesign branding.
-Internal 390x844 controlled-browser QA: no JavaScript errors and no horizontal overflow.
+## Motion gate — GATE 01 FAIL / GATE 02 ACTIVE
+`GUEST_MOTION_GATE_01.html` failed Android review on 2026-10-02.
+Failure is not the rejected `gold` art direction itself; it is the motion architecture: the cover moved primarily as one raster/block, opening lacked true depth, gallery behaved like a web UI component, and scene transitions did not feel object-led.
+
+Motion requirement learned from owner review: visually rich covers must be decomposed into multiple moving planes. At minimum: background, veil/silk, pearls/ornament, foreground florals, atmospheric particles/light, and typography. These planes need different amplitudes/easing so the invitation has spatial depth rather than a moving screenshot.
 
 ## Exact NEXT ACTION
-1. Owner opens `GUEST_MOTION_GATE_01.html` on Android and reviews the four motion moments only.
-2. Decide PASS / FAIL for motion independently of the rejected `gold` art direction.
-3. If PASS, start the first restrained REAL catalog direction knowing the motion language is viable.
-4. If FAIL, revise motion itself before any new catalog art direction is built.
-5. Do not integrate the GUEST engine or expand the catalog until art direction + motion both pass.
+1. Build isolated Motion Gate 02 on the same rejected `gold` art only as a test bed.
+2. Opening/hero must use multiple independently moving layers; do not animate the image as a single block.
+3. Gallery motion must feel photographic and tactile rather than a generic web carousel.
+4. Closing must use the same spatial/motion language as opening.
+5. Owner reviews on Android. Only a PASS permits starting the real restrained catalog direction.
