@@ -1,142 +1,60 @@
 # GUEST by WeddlySmartDesign — CURRENT STATE
-Updated: 2026-10-01
+Updated: 2026-10-02
 
 ## Continuity rule
-This file is the FIRST file to read before doing any further GUEST work.
-Never resume from chat text alone.
-Never restart a closed block.
-Never infer the current block from the user's last visible message.
-Resume from the exact "NEXT ACTION" below.
+This is the first file to read before any further GUEST work.
+Do not resume from chat text alone.
+Do not reopen sealed competitive research.
+Do not touch ONE, ONE Partner or STUDIO.
+Do not publish GUEST automatically.
 
-## Closed blocks
-- B0 extraction independent — CLOSED
-- B1 standalone GUEST shell/product — CLOSED
-- B2 technical isolation — CLOSED
-- B3 commercial base flow — CLOSED
-- B4 automatic QA base — CLOSED
-- B5 latest-ONE parity audit — PASS / SEALED
-- B6.1 shell / install / navigation / settings — PASS / CLOSED
-- B6.2 Today + Guests — PASS / CLOSED
-- B6.3 Invitation + RSVP + Essential/Signature — PASS / CLOSED
-- B6.4 Tables + lists — PASS / CLOSED
-- B6.5 Extra events — PASS / CLOSED
-- B6.6 Two-device synchronization + error states — PASS / CLOSED
-- B6 functional/mobile QA — PASS / SEALED
-- B7.1 Mobile hierarchy — PASS / CLOSED
-- B7.2 Hoy + Invitados — PASS / CLOSED
-- B7.3 Invitación + RSVP — PASS / CLOSED
-- B7.4 Mesas + Listados — PASS / CLOSED
-- B7.5 Eventos extra — PASS / CLOSED
-- B7.6 Coherencia global + escritorio + accesibilidad visual — PASS / CLOSED
-- B7.7 QA visual final — PASS / CLOSED
-- B7 UX/visual premium — PASS / SEALED
-- B8.1 landing → selección → checkout — PASS / CLOSED
-- B8.2 checkout → pago → retorno + webhook resiliente — PASS / CLOSED
-- B8.3 datos/personalización tras compra — PASS / CLOSED
-- B8.4 activación/entrega y acceso real — PASS / CLOSED
-- B8.5 error/cancelación/reintento/duplicidad — PASS / CLOSED
-- B8.6 regresión comercial + sellado final — PASS / CLOSED
-- B8 commercial QA — PASS / SEALED
-- B9.1–B9.9 release preparation — PASS / CLOSED
-- B9 release preparation — PASS / SEALED
+## Product/technical track — SEALED
+The independent GUEST product, engine and commercial/release-preparation track completed B0–B9 QA on `guest-independent`.
+Canonical pre-design release-preparation baseline: `dac667cffa863fadb65411f6abef7e72ddf04f59`.
+Canonical CI run: `36836190260`, all jobs success.
+B8 final report: `guest/B8_FINAL_COMMERCIAL_SEAL_QA_2026-10-01.md`.
+B9 final report: `guest/B9_FINAL_RELEASE_PREPARATION_SEAL_2026-10-01.md`.
+Publication remains ON HOLD because the invitation art direction is not approved.
+The GUEST management engine remains in standby unless visual integration later requires an adapter.
 
-B7 final sealed report:
-`guest/B7_7_FINAL_VISUAL_SEAL_QA_2026-10-01.md`
+## Invitation design track
+### SEALED
+- Microblock 01 market map — SEALED.
+- Microblock 02 best-of + market gap — SEALED.
+- Microblock 03 technical/operational baseline — SEALED.
+- Microblock 04 GOLD STANDARD pilot specification — SEALED.
 
-Validated B7 HEAD:
-`4728b6ff8cf78d904c94cfb11927cea4624ffbba`
+Primary checkpoints:
+- `guest/GUEST_COMPETITIVE_DIRECTION_CHECKPOINT_2026-10-02.md`
+- `guest/GUEST_DIRECTION_CHECKPOINT_2026-10-02.md`
+- `guest/GUEST_GOLD_STANDARD_PILOT_01_2026-10-02.md`
 
-Validated GitHub Actions run:
-`36733355182` — 14/14 jobs `success`
+### GOLD 01 — REJECTED
+Candidate: `guest/gold-01-gate-candidate.html`.
+Technical/automated QA: PASS (run `36992651725`, HEAD `c147cf705776bb4f531a9352b2b08bd1288f1a84`).
+Android real-device visual gate: FAIL on 2026-10-02.
 
-## Current block
-B8 and B9 are PASS / SEALED. Canonical pre-seal validated commit: `dac667cffa863fadb65411f6abef7e72ddf04f59`. Canonical CI run: `36836190260` (run 371), all jobs success. Publication remains a separate explicit step and MUST NOT happen automatically.
+Reason: corporate/editorial luxury language; weak inherent wedding identity; interior below Signature; motion did not compensate for a Canva-reproducible base composition. Opening and closing mechanics were acceptable but not exceptional.
+Do not cosmetically iterate GOLD 01.
 
-B8 final sealed report:
-`guest/B8_FINAL_COMMERCIAL_SEAL_QA_2026-10-01.md`
+### GOLD 02 — ACTIVE
+Direction checkpoint:
+`guest/GUEST_GOLD_01_REJECTION_GOLD_02_DIRECTION_2026-10-02.md`
 
-B9 final sealed report:
-`guest/B9_FINAL_RELEASE_PREPARATION_SEAL_2026-10-01.md`
+Candidate files:
+- `guest/gold-02-gate-candidate.html`
+- `guest/gold-02-wedding-vellum.css`
+- `guest/gold-02-wedding-vellum.js`
 
-## B8 scope
-B8 = QA del flujo comercial completo, sin rediseñar el producto funcional ya sellado.
+Internal direction: WEDDING VELLUM — physical wedding stationery comes alive digitally.
+Design rules: full-bleed photos; vellum opening; calligraphic gesture; botanical linework; venue illustration; warmer wedding palette; continuous emotional/photo journey; celebration route; visually native RSVP; designed closing.
+Forbidden regression: corporate editorial chapters, beige/black brochure blocks, giant fashion-editorial headings as dominant language, photo arches/frames, scrapbook/washi effects, generic end-form.
 
-Microbloques:
-- B8.1 landing comercial → selección Essential/Signature → entrada a checkout
-- B8.2 checkout → pago → retorno y preservación de pedido
-- B8.3 recogida de datos/personalización tras compra
-- B8.4 activación/entrega y acceso real al producto
-- B8.5 estados de error, cancelación, reintento y duplicidad
-- B8.6 regresión comercial móvil/escritorio + sellado final de B8
+Internal static QA: PASS.
+Offline in-memory Chromium composition/interactions at 390x844: no JS errors and no horizontal overflow. This does not replace Android real-device validation.
 
-## Exact current failure
-B8.3 is PASS / CLOSED. CI run 36826525955 completed successfully after correcting QA-only defects.
-
-B8.4–B8.6:
-- canonical delivery path is now ONLY the manager-authenticated `guest-orders-admin.html` → `guest-orders-admin` backend;
-- duplicate `guest-deliver.html` surface was removed;
-- Stripe checkout backend no longer exposes a duplicate manual delivery action;
-- final delivery requires status `ready`, records `delivered`, and uses email idempotency;
-- B8.5 adds explicit checkout/verification retry plus Stripe checkout-attempt idempotency;
-- LIVE probes: config 200; nonexistent Stripe session 404 `session_not_found`; unauthenticated orders admin 403 `manager_required`;
-- B8.6 final seal exists, but B8 is NOT declared sealed until the canonical CI run is green.
-
-B9.1:
-- GUEST PWA remains scoped to `/guest/`;
-- cache bumped to `guest-shell-v3`;
-- offline navigation fallback is restricted to canonical app routes, so broken invitation/access HTML cannot silently open the app shell.
-
-B9.2:
-- public release route gate checks purchase → return → order → activation → app routes;
-- customer surfaces cannot expose the private orders manager or discarded delivery route;
-- required internal release targets are checked for existence.
-
-B9.3:
-- pre-release hold explicitly prevents declaring/releasing GUEST before B8+B9 are sealed;
-- GUEST customer release artifacts remain absent from `main`.
-
-B9.4:
-- public/private surface security gate forbids Stripe/webhook/service-role secrets and admin capabilities on customer pages;
-- private order manager remains authenticated and separate.
-
-B9.5:
-- independent commercial identity is now `product=guest` in Stripe session, PaymentIntent validation and license metadata;
-- LIVE `guest-stripe-checkout` deployed with this identity;
-- existing Stripe licenses checked: no prior GUEST purchase required migration.
-
-B9.6:
-- Supabase GUEST security audit PASS at design/permission level;
-- GUEST tables inspected have RLS enabled;
-- `guest_webhook_secret`, `provision_weddly_license` and `activate_weddly_license` are service-role-only;
-- shared-project advisories belonging to ONE/Partner/other products are documented but deliberately untouched.
-
-B9.7:
-- canonical app, Guests engine, settings, access, RSVP and event invitation surfaces are protected with `noindex,nofollow,noarchive`;
-- sensitive root checkout/return/order/admin surfaces are also non-indexable;
-- invitation links remain usable; noindex only prevents search-engine discovery.
-
-## CI historical-failure triage (2026-10-01)
-- Runs 323–326 are historical and must not be treated as current regressions.
-- Repeated `b8-fulfillment-admin` failure = SyntaxError in the QA test itself; fixed at `1960a9bf9adf491ce56c326a345abd478adadd21`.
-- Historical `b8-error-retry-duplicate` failure expected deleted `guest-deliver.html`; later QA was aligned to canonical manager delivery.
-- Historical `b9-public-release-routes` failure used an earlier rigid checkout-return route assertion; later B9.2 gate was corrected.
-- Historical `b7-mobile-hierarchy` “active nav hierarchy weak” is superseded by validated B7 run `36733355182`, where all 14 B6/B7 jobs, including `b7-mobile-hierarchy`, passed.
-- Therefore do NOT reopen B6/B7 from these queued historical runs. Only a failure reproduced at/after the post-fix canonical commit is actionable.
-
-## NEXT ACTION
-1. GUEST is technically ready for an explicit publication step; do not publish automatically.
-2. On explicit publication authorization, query the latest `main` HEAD immediately before promotion.
-3. Build the production candidate from that current `main` using only the B9.9 GUEST allowlist; never wholesale-merge `guest-independent`.
-4. Preserve the validated isolated `/guest/**` runtime tree for first release.
-5. Verify the candidate diff contains no ONE, ONE Partner, STUDIO or root legacy `guests-*` changes.
-6. Run release smoke/gates on the candidate before production promotion.
-7. After deployment, perform live non-paying smoke checks for landing → Stripe session creation, return/status, access and PWA behavior.
-
-## Working method from now on
-Every microblock has only three states:
-- ACTIVE
-- PASS / SEALED
-- FAIL with one exact NEXT ACTION
-
-After every meaningful fix that changes the unresolved failure, update this file before continuing.
-If a chat/tool session is interrupted, re-read this file and resume from NEXT ACTION.
+## Exact NEXT ACTION
+1. Finish committing GOLD 02 isolated candidate to `guest-independent` only.
+2. Owner opens GOLD 02 on Android and reviews opening → interior → venue/program → RSVP → closing.
+3. Pass requires GOLD 02 to read unmistakably as a premium wedding invitation even beyond the photographs and to sit clearly above Signature as a whole.
+4. If it still feels Canva-reproducible or not clearly above Signature, do not build catalog or publish. Make one final material direction decision under the previously agreed stop condition.
