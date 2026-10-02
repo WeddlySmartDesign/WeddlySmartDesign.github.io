@@ -90,3 +90,18 @@ From this checkpoint ChatGPT takes project direction/execution control; owner in
 3. Approve the static direction first, then create one image-to-video motion clip using the validated motion method.
 4. Build the complete modular invitation shell only after static + motion pass.
 5. Then scale the validated production system across the remaining launch catalog lines.
+
+
+## Design 01 — VEIL LIGHT — STATIC HERO PASS
+Reviewed 2026-10-02.
+Approved static hero: translucent couture bridal veil in warm ivory/champagne light, with subtle architectural depth and generous negative space.
+Why it passes:
+- one dominant material language;
+- unmistakably bridal once paired with native names/date;
+- premium depth without decorative overload;
+- no pearls/floral dependency;
+- strong motion potential;
+- visually distinct from rejected `gold`.
+
+Next gate: ONE 5–8 second image-to-video clip from this exact hero. Preserve composition; animate veil planes + ambient light only; restrained push-in; no new objects or morphing.
+Do not build the rest of VEIL LIGHT until motion passes.
