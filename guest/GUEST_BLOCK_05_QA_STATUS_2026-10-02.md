@@ -1,35 +1,95 @@
 # GUEST — BLOQUE 05: estado de QA
 
 Fecha: 2026-10-02
-Rama exclusiva: guest-independent
-Estado: ABIERTO. Gate NO aprobado. No avanzar a catálogo.
+Rama exclusiva: `guest-independent`
+Estado: **PASS INTERNO / PRUEBA ANDROID REAL PENDIENTE**. No avanzar a catálogo ni publicar todavía.
 
-## Microbloque 05.1 — baseline comprobado
-Confirmados los commits 75cee74101df0e3cf76f6b673fe8c2ad08167e0a, 89f1a8c9e0c403d572d67969d34adde7b41302d7 y 10607e62b339bceea1db28f280c0b1eec80be327. Head inicial: 10607e62b339bceea1db28f280c0b1eec80be327. Leídos los tres archivos pedidos.
+## Baseline preservado
+- Dirección competitiva sellada: `75cee74101df0e3cf76f6b673fe8c2ad08167e0a`.
+- GOLD STANDARD PILOT 01 sellado: `89f1a8c9e0c403d572d67969d34adde7b41302d7`.
+- Prototipo original preservado: `guest/gold-01-prototype.html` — `10607e62b339bceea1db28f280c0b1eec80be327`.
+- Candidato técnico previo preservado: `guest/gold-01-qa-candidate.html` — baseline `3884532d83e1e4bcf5f2a3d6f0482ae8b5fee795`.
+- ONE, ONE Partner, STUDIO, `main`, compra, producción y motor GUEST no se han modificado.
 
-Existe también GUEST_GOLD_STANDARD_PILOT_SPEC_2026-10-02.md con tiempos diferentes (1,5–3 s frente a 3,5–5 s). Prevalece el PILOT_01 nombrado explícitamente por la propietaria; el candidato termina apertura a 3,7 s. No se modifica ninguna especificación sellada.
+## Iteración visual seria — GOLD 01 gate candidate
+Candidato aislado:
+- `guest/gold-01-gate-candidate.html`
+- `guest/gold-01-gate-overlay.css`
+- `guest/gold-01-gate-overlay.js`
 
-## Microbloque 05.2 — candidato preparado, NO validado visualmente
-Archivo separado: gold-01-qa-candidate.html; commit 3884532d83e1e4bcf5f2a3d6f0482ae8b5fee795. El prototipo original permanece intacto en repositorio.
+Dirección aplicada:
+- apertura editorial en tres bandas verticales; no sobre, no sello ni monograma circular;
+- revelado fotográfico progresivo y hero full-bleed;
+- interior con continuidad editorial y puente fotográfico;
+- bloque de lugar con dos composiciones arquitectónicas distintas según pareja;
+- RSVP integrado en el mismo sistema tipográfico, espacial y cromático;
+- cierre full-screen con disparador propio al entrar realmente en viewport y lenguaje de tres bandas que retoma la apertura;
+- segunda pareja parametrizada con nombres largos, fecha, ciudad, finca, programa, paleta y fotografías diferentes sin rediseñar estructura.
 
-Correcciones de código: tipografía y controles ampliados; hero sin padding de sección heredado y sin columna estrecha para nombres; profundidad de transición; bloqueo de scroll y foco durante entrada; foco al terminar; reduced motion; lectura sin JS; etiquetas explícitas; radios nativos obligatorios; menú condicionado a asistencia; confirmación explícita de simulación sin guardar ni enviar datos; calendario ICS descargable con fechas UTC; mapa de zona ficticia; firma Caveat con capitalización correcta; composición ampliada en escritorio.
+El control de música falso sigue eliminado. No se anuncia ni simula música en este piloto. La música real opcional deberá implementarse antes de ofrecerla como prestación comercial, pero no bloquea el gate visual del piloto.
 
-Retirado control de música falso: falta implementar música real opcional. No se considera requisito resuelto.
+## QA automatizado canónico
+Workflow aislado: `.github/workflows/guest-gold01-visual-gate.yml`
+Test: `guest/qa/gold01_visual_gate_test.mjs`
 
-Verificación realizada: sintaxis JS mediante node --check (pasa); inspección estática de código. No equivale a validar interacciones en navegador.
+Run canónico: **36992651725** — `success`
+HEAD del run: **c147cf705776bb4f531a9352b2b08bd1288f1a84**
 
-## Bloqueo observado
-agent-browser no está instalado; Playwright sí, pero no tiene ejecutable Chromium. Dos intentos de instalación (CLI disponible y CLI del runtime) reciben archivos truncados/no ZIP. No se ha podido renderizar el candidato. No existen capturas ni pruebas de viewport válidas en esta sesión.
+Cobertura:
+- 2 parejas parametrizadas;
+- 6 viewports por pareja: 360x800, 375x812, 390x844, 412x915, 430x932 y 1440x1000;
+- 12/12 casos PASS;
+- 0 errores de consola en los 12 casos;
+- sin overflow horizontal;
+- apertura completa + foco;
+- RSVP sí/no;
+- campos condicionales;
+- descarga ICS con datos de la pareja activa;
+- cierre;
+- teclado;
+- `prefers-reduced-motion`;
+- capturas de apertura inicial, movimiento intermedio, hero, puente editorial, lugar, programa, RSVP y cierre;
+- capturas visuales adicionales de escritorio.
 
-## Pendientes antes de cerrar BLOQUE 05
-1. Recuperar navegador y revisar baseline/candidato en 360x800, 390x844, 412x915, 430 px y escritorio; capturar apertura, interior, RSVP y cierre.
-2. Validar errores de consola, flujo sí/no, teclado, calendario, scroll, fotos cargadas, fuentes, reduced motion y JS desactivado.
-3. Implementar configuración parametrizada real y una segunda pareja con nombres largos, fecha, fotos y módulos distintos; medir esfuerzo. Actualmente los contenidos continúan hardcoded.
-4. Música real opcional; confirmar requisitos de apertura y cierre completo.
-5. Mejorar dirección de arte del lugar (SVG actual muy básico), cierre y momentos distintivos si la revisión lo confirma.
-6. Comparación visual directa con referencias selladas. No se han asignado notas ni afirmado superioridad sin evidencia.
-7. Segunda iteración seria solo tras revisión visual. Este candidato es corrección técnica parcial y NO cuenta como segunda iteración seria del gate.
-8. Prueba móvil real final, sin trasladar QA básico a la propietaria.
+## Hallazgos detectados y corregidos durante QA
+1. El candidato anterior seguía usando recursos demasiado reconocibles de landing premium: monograma circular, dos hojas/puertas y tarjeta inclinada final.
+   - Corregido con un sistema de tres bandas y cierre espejo de la apertura.
+2. El cierre heredaba el observador genérico y podía completar su animación antes de que el invitado llegara al final.
+   - Corregido con `gate-close-in` y observador dedicado a entrada real en viewport.
+3. La ilustración de lugar era demasiado genérica y se reutilizaba igual entre parejas.
+   - Corregido con variantes arquitectónicas distintas dentro del mismo sistema parametrizable.
+4. Se comprobó visualmente escritorio, no solo overflow técnico.
+   - Resultado: composición centrada y estable; móvil sigue siendo el soporte primario.
 
-## Límites preservados
-Solo dos archivos nuevos bajo guest/. Sin modificar ONE, ONE Partner, STUDIO, motor GUEST, main, producción, compra o catálogo. Sin compra de herramientas. Un bloqueo de entorno no demuestra inviabilidad comercial; no procede aprobar ni descartar GUEST por él.
+## Gate GOLD STANDARD A–H
+- **A IMPACTO — PASS interno.** La diferencia depende de movimiento editorial real y continuidad, no de una plantilla estática.
+- **B COHERENCIA — PASS interno.** El nivel se mantiene después del hero.
+- **C DIFERENCIACIÓN — PASS interno.** No depende de sobre lacrado ni replica la apertura de La Qualité.
+- **D PERSONALIZACIÓN — PASS.** Dos parejas con identidad distinta funcionan sobre el mismo sistema.
+- **E OPERATIVA — PASS.** La propietaria no ha diseñado ni manipulado assets/código.
+- **F COSTE — PASS.** Sin herramienta nueva de pago.
+- **G PERFORMANCE/MÓVIL — PASS automatizado; PENDIENTE Android real.**
+- **H RSVP — PASS interno.** Visualmente nativo y funcional en el piloto.
+
+## Estado de aprobación
+No se declara todavía BLOQUE 05 completamente SELLADO porque el GOLD STANDARD exige prueba en Android Chrome real de la propietaria.
+
+La intervención de la propietaria queda limitada a:
+1. abrir el candidato terminado en su móvil;
+2. recorrer apertura → interior → RSVP → cierre;
+3. indicar únicamente si percibe un problema real de fluidez, legibilidad o nivel visual.
+
+No debe diseñar, ajustar, probar código ni hacer QA técnico.
+
+## NEXT ACTION
+**Prueba Android real de GOLD 01.**
+
+Si no aparece un defecto real de dispositivo o una objeción visual de nivel:
+- sellar BLOQUE 05;
+- congelar GOLD 01 como primer sistema visual aprobado;
+- pasar al siguiente bloque lógico de industrialización sin construir todavía un catálogo masivo.
+
+Si aparece un defecto:
+- corregir solo el defecto reproducido;
+- repetir gate afectado;
+- no reabrir investigación ni bloques 01–04.
