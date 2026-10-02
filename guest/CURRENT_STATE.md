@@ -153,3 +153,30 @@ Static QA before owner review:
 - RSVP is CTA only, no inline form.
 
 NEXT: owner Android review of the full candidate. Do not start Design 02 until VEIL LIGHT visual system passes or receives bounded corrections.
+
+
+## Design 01 — VEIL LIGHT — V2 DYNAMIC + SIGNATURE PARITY CANDIDATE
+Prepared 2026-10-02.
+Conversation artifact: `GUEST_VEIL_LIGHT_DESIGN_01_V2_DYNAMIC_FULL.html`.
+
+Changes from first full candidate:
+- opening rebuilt: full-screen moving veil; removed split translucent web-curtain effect;
+- hero retained because it passed owner review;
+- removed the two overly editorial/book-like intermediate pages;
+- added immersive celebration photo section with restrained scroll depth + live countdown;
+- story retains real couple photo with designed reveal;
+- venue rebuilt as an interactive one-or-two-location system:
+  - ceremony and celebration can be separate;
+  - if only one venue is used, the second state can be hidden;
+  - actions are explicit pill buttons (Maps / calendar), no ambiguous arrows;
+- agenda rebuilt and realigned as a progressive moments timeline with scroll activation and line progression;
+- optional Signature-parity modules included: bus, hotel, dress code, gift, playlist;
+- configurable font-family support implemented via internal font presets;
+- gallery remains native horizontal swipe with four real couple photos;
+- RSVP CTA retains button affordance but removes arrow;
+- closing retained.
+
+Important product rule now sealed in requirements:
+GUEST cannot provide fewer invitation options than Signature.
+
+Next: Android owner review of V2. Evaluate opening, interior dynamism, location clarity, agenda alignment, optional-module presentation, and overall premium continuity.
