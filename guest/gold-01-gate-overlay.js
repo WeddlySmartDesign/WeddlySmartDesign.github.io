@@ -8,7 +8,7 @@
       day:'18',month:'Septiembre',year:'2027',time:'17:30',city:'Madrid',
       venue:'Finca El Olivar',address:'Carretera de Colmenar, Madrid',
       map:'https://www.google.com/maps/search/?api=1&query=Colmenar+Madrid',
-      accent:'#6e3036',paper:'#f2ede5',paper2:'#ddd2c6',
+      accent:'#6e3036',paper:'#f2ede5',paper2:'#ddd2c6',venueArt:'finca',
       hero:'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1400&q=88',
       story:'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1400&q=86',
       countTitle:'Hay días que empiezan mucho antes de llegar.',
@@ -30,7 +30,7 @@
       day:'27',month:'Mayo',year:'2028',time:'18:00',city:'Valencia',
       venue:'Masía de la Luz',address:'Bétera, Valencia',
       map:'https://www.google.com/maps/search/?api=1&query=Betera+Valencia',
-      accent:'#35584e',paper:'#f0eee6',paper2:'#d6d9cc',
+      accent:'#35584e',paper:'#f0eee6',paper2:'#d6d9cc',venueArt:'masia',
       hero:'https://images.unsplash.com/photo-1777353245032-6b9286800d62?auto=format&fit=crop&w=1400&q=86',
       story:'https://images.unsplash.com/photo-1507501336603-6e31db2be093?auto=format&fit=crop&w=1400&q=84',
       countTitle:'Un día para celebrar todo lo que nos trajo hasta aquí.',
@@ -104,25 +104,33 @@
     const title=venue.querySelector('.h2'),copy=venue.querySelector('.copy'),card=venue.querySelector('.venue-card');
     if(title)title.textContent=d.venueTitle;if(copy)copy.textContent=d.venueCopy;
     const art=venue.querySelector('.venue-art svg');
-    if(art)art.innerHTML=`
-      <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ded6cc"/><stop offset="1" stop-color="#c5b9ac"/></linearGradient>
-        <filter id="soft"><feGaussianBlur stdDeviation="6"/></filter>
-      </defs>
-      <rect width="520" height="360" fill="url(#sky)"/>
-      <circle cx="390" cy="82" r="42" fill="#f3eee6" opacity=".72" filter="url(#soft)"/>
-      <g fill="none" stroke="#4c4540" stroke-width="1.15" opacity=".82">
-        <path d="M28 282 C96 248 132 258 182 244 S285 250 344 234 S429 239 498 206"/>
-        <path d="M111 263 C121 214 137 177 158 145 M409 258 C400 209 385 176 362 142"/>
-        <path d="M151 244 V137 H371 V244 M174 244 V161 H348 V244"/>
-        <path d="M262 161 V111 L337 161 M262 111 L187 161"/>
-        <path d="M205 244 V190 H240 V244 M282 244 V190 H318 V244"/>
-        <path d="M188 178 H238 M285 178 H335"/>
-        <path d="M78 281 C92 252 108 246 126 281 M390 278 C407 248 429 246 450 278"/>
-        <path d="M94 262 q12-29 25 0 q12-32 27 0 M379 260 q12-30 25 0 q14-31 29 0"/>
-        <path d="M57 300 H468"/>
-      </g>
-      <g fill="#756b62" opacity=".24"><circle cx="120" cy="218" r="32"/><circle cx="405" cy="215" r="36"/><circle cx="77" cy="250" r="22"/><circle cx="455" cy="247" r="24"/></g>`;
+    if(art){
+      const defs=`<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ded6cc"/><stop offset="1" stop-color="#c5b9ac"/></linearGradient><filter id="soft"><feGaussianBlur stdDeviation="6"/></filter></defs><rect width="520" height="360" fill="url(#sky)"/><circle cx="398" cy="70" r="40" fill="#f4efe7" opacity=".75" filter="url(#soft)"/>`;
+      art.innerHTML=d.venueArt==='masia'?defs+`
+        <g fill="none" stroke="#4c4540" stroke-width="1.18" opacity=".84">
+          <path d="M32 292 C92 268 145 271 197 258 S315 261 376 247 S449 246 497 226"/>
+          <path d="M116 277 V128 H405 V277 M145 277 V157 H378 V277"/>
+          <path d="M116 128 L196 92 L278 128 L346 103 L405 128"/>
+          <path d="M190 277 V214 Q190 184 220 184 Q250 184 250 214 V277"/>
+          <path d="M281 277 V214 Q281 184 311 184 Q341 184 341 214 V277"/>
+          <path d="M162 179 H202 M329 179 H368"/>
+          <path d="M74 283 Q88 214 110 174 M438 281 Q424 214 404 174"/>
+          <path d="M64 302 H469"/>
+        </g>
+        <g fill="#69735f" opacity=".27"><circle cx="88" cy="227" r="34"/><circle cx="430" cy="230" r="38"/><circle cx="67" cy="264" r="24"/><circle cx="455" cy="264" r="24"/></g>
+        <g fill="#6d665e" opacity=".46"><circle cx="76" cy="217" r="3"/><circle cx="92" cy="239" r="3"/><circle cx="424" cy="214" r="3"/><circle cx="445" cy="238" r="3"/></g>`:defs+`
+        <g fill="none" stroke="#4c4540" stroke-width="1.18" opacity=".84">
+          <path d="M30 293 C92 261 137 270 188 251 S292 260 348 243 S437 249 498 218"/>
+          <path d="M128 277 V135 H390 V277 M155 277 V161 H363 V277"/>
+          <path d="M128 135 L200 104 L260 135 L326 96 L390 135"/>
+          <path d="M260 135 V96 M326 96 V135"/>
+          <path d="M194 277 V198 H235 V277 M286 277 V198 H328 V277"/>
+          <path d="M177 181 H237 M284 181 H346"/>
+          <path d="M91 285 Q103 213 132 166 M429 284 Q414 214 387 168"/>
+          <path d="M63 303 H470"/>
+        </g>
+        <g fill="#756b62" opacity=".24"><circle cx="105" cy="231" r="34"/><circle cx="417" cy="230" r="38"/><circle cx="70" cy="266" r="25"/><circle cx="461" cy="264" r="23"/></g>`;
+    }
     if(card){
       const name=card.querySelector('b'),p=card.querySelector('p'),map=card.querySelector('.chip');
       if(name)name.textContent=d.venue;if(p)p.textContent=`${d.address} · ${d.time}`;
@@ -156,6 +164,11 @@
     if(card&&!card.querySelector('.gate-closing-cta')){
       const a=document.createElement('a');a.className='gate-closing-cta';a.href='#rsvp-form';a.textContent='Confirmar asistencia';card.append(a);
     }
+    closing.classList.remove('gate-close-in');
+    const closeObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+      if(entry.isIntersecting&&entry.intersectionRatio>=.38){closing.classList.add('gate-close-in');closeObserver.unobserve(closing)}
+    }),{threshold:[.38,.5],rootMargin:'0px 0px -6% 0px'});
+    closeObserver.observe(closing);
   }
 
   const calendar=document.getElementById('calendar');
