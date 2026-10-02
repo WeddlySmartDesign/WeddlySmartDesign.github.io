@@ -56,20 +56,26 @@ See `guest/GUEST_REAL_INVITATION_CONTENT_MOTION_REQUIREMENTS_2026-10-02.md`.
 The system must support names/date, premium opening, cover/hero, cover/sub-cover couple photography, venue/location, RSVP CTA into existing GUEST RSVP and designed closing. Countdown, agenda, couple-story text, secondary photography and final swipe gallery are configurable/optional blocks.
 Motion remains NOT YET VALIDATED and is now a separate gate.
 
-## Motion gate — GATE 01 FAIL / GATE 02 FAIL / GATE 03 ACTIVE
+## Motion gate — GATE 01 FAIL / GATE 02 FAIL / GATE 03 FAIL
 `GUEST_MOTION_GATE_01.html` failed Android review because the cover behaved mainly like a moving raster/block and the gallery felt like web UI.
 `GUEST_MOTION_GATE_02_LAYERED.html` also failed Android review on 2026-10-02. Root cause: it attempted to simulate depth by clipping and independently moving regions copied from one flattened raster. Real-device motion exposed hard seams, duplicated image regions, rectangular fragments and broken continuity.
 
 Technical conclusion: premium object-led motion CANNOT be built reliably by slicing a flattened JPG/PNG after generation. The visual assets must be authored/exported as true independent layers from the beginning.
 Required source planes for the next test: clean background plate; transparent veil/silk; transparent pearls/ornament; transparent foreground floral/object layer; optional particles/light overlay; typography kept native in HTML/CSS.
 
-## Motion Gate 03 candidate
-Conversation artifact: `GUEST_MOTION_GATE_03_TRUE_LAYERS.html`.
-This test intentionally contains NO raster image sliced into regions. The motion planes are genuine independent DOM/SVG layers: background plate, veil, two silk planes, pearl strands with individual beads, foreground florals, atmospheric particles/light and native typography.
-Scope is intentionally only opening + short hero depth state. Gallery/closing are excluded until this passes Android.
-Static/structural QA: HTML parse PASS; JavaScript syntax PASS; no external assets or `/mnt/data` runtime references; responsive viewport + reduced-motion fallback present.
+## Motion Gate 03 — FAIL
+`GUEST_MOTION_GATE_03_TRUE_LAYERS.html` was reviewed on Android on 2026-10-02 and failed the premium-motion gate.
+Unlike Gate 02, the failure was not artifact seams. The DOM/SVG reconstruction was visually simplified and the resulting depth motion was too weak/basic to represent the premium generated artwork. It proved that rebuilding rich generative art as hand-authored web layers is the wrong production method.
+
+Technical conclusion after Gates 01–03:
+- do not animate the flattened still as one block;
+- do not fake depth by clipping copies of the still;
+- do not manually reconstruct rich AI art as simplified DOM/SVG layers.
+The next viable motion route is image-to-video on the actual premium still using a dedicated generative video model, then integrating the resulting video/loop with native HTML text and interaction.
 
 ## Exact NEXT ACTION
-1. Owner opens `GUEST_MOTION_GATE_03_TRUE_LAYERS.html` on Android and judges ONLY the motion/depth, not final catalog art direction.
-2. If PASS, proceed to a separate gallery-swipe + closing motion test using the same true-layer principle.
-3. If FAIL, do not start the real catalog direction; diagnose the motion language/technology itself before continuing.
+1. Test ONE 5–8 second vertical image-to-video clip from the approved `gold` opening/hero still using a dedicated video model (Recraft Studio supports Sora, Veo, Seedance and other image-to-video models).
+2. Prompt motion only: subtle independent movement in silk/veil, pearls, florals/light, and a restrained camera push; preserve composition and negative space.
+3. Owner reviews the raw clip itself before any HTML integration.
+4. If the raw clip is not premium, stop the motion route before real catalog design.
+5. If it passes, integrate video as the art-motion layer with native typography/CTA on top, then separately test gallery and closing.
