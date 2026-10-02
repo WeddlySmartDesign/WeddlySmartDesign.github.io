@@ -121,3 +121,35 @@ The preview camera push is stronger than desired for final typography-safe use. 
 
 VEIL LIGHT is now approved in static + motion direction.
 NEXT: build the real modular invitation implementation for Design 01 before generating final 720p motion.
+
+
+## Design 01 — VEIL LIGHT — FULL DESIGN CANDIDATE
+Conversation artifact prepared 2026-10-02: `GUEST_VEIL_LIGHT_DESIGN_01_CANDIDATE.html`.
+
+Scope:
+- full mobile-first invitation composition;
+- premium opening;
+- approved VEIL LIGHT motion used as hero/closing art layer;
+- dramatic typography + high-contrast date moment;
+- countdown;
+- story module;
+- venue/location module;
+- agenda;
+- swipe gallery treatment;
+- CTA-only RSVP;
+- designed closing;
+- no visible GUEST/WeddlySmartDesign branding.
+
+Important review note:
+- the current 480p motion is intentionally retained as the validated preview asset; do not spend final 720p credits until typography/crop is approved;
+- couple-photo/gallery content is represented with VEIL LIGHT art crops for this design gate because no real couple photo set is attached. Review composition, rhythm, hierarchy and motion; real photos will replace those art crops through the configured photo system.
+
+Static QA before owner review:
+- standalone HTML;
+- JavaScript syntax PASS;
+- one embedded WebP art asset + one embedded MP4 motion asset;
+- no external runtime image/video paths;
+- no visible GUEST/WeddlySmartDesign brand copy;
+- RSVP is CTA only, no inline form.
+
+NEXT: owner Android review of the full candidate. Do not start Design 02 until VEIL LIGHT visual system passes or receives bounded corrections.
