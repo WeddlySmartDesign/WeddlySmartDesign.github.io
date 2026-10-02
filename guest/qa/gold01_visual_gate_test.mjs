@@ -75,7 +75,15 @@ try{
         if(vpName==='390x844')await page.screenshot({path:path.join(out,`${variant}-01-opening-390x844.png`),fullPage:false});
 
         await frame.locator('#enter').click();
-        await page.waitForTimeout(3850);
+        if(vpName==='390x844'){
+          await page.waitForTimeout(750);
+          await page.screenshot({path:path.join(out,`${variant}-01b-opening-motion-0750-390x844.png`),fullPage:false});
+          await page.waitForTimeout(850);
+          await page.screenshot({path:path.join(out,`${variant}-01c-opening-motion-1600-390x844.png`),fullPage:false});
+          await page.waitForTimeout(2250);
+        }else{
+          await page.waitForTimeout(3850);
+        }
         const opened=await frame.evaluate(()=>({
           done:document.getElementById('intro')?.classList.contains('done'),
           inert:document.getElementById('invitation')?.inert,
@@ -110,7 +118,10 @@ try{
           ok(ics.includes('BEGIN:VCALENDAR'),'calendar payload invalid');
           rec.checks.calendar={filename:download.suggestedFilename(),valid:true};
 
-          await frame.locator('.closing').scrollIntoViewIfNeeded();await page.waitForTimeout(1550);
+          await frame.locator('.closing').scrollIntoViewIfNeeded();
+          await page.waitForTimeout(450);
+          await page.screenshot({path:path.join(out,`${variant}-06b-closing-motion-0450-390x844.png`),fullPage:false});
+          await page.waitForTimeout(1100);
           const closing=await frame.evaluate(()=>({
             in:document.querySelector('.closing')?.classList.contains('in'),
             final:document.querySelector('.final-text')?.textContent?.trim(),
