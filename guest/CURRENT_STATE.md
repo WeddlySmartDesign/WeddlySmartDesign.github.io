@@ -105,3 +105,19 @@ Why it passes:
 
 Next gate: ONE 5–8 second image-to-video clip from this exact hero. Preserve composition; animate veil planes + ambient light only; restrained push-in; no new objects or morphing.
 Do not build the rest of VEIL LIGHT until motion passes.
+
+
+## Design 01 — VEIL LIGHT — MOTION PASS
+Reviewed 2026-10-02 from 480p image-to-video test.
+Motion gate PASS.
+Observed:
+- veil planes move with convincing independent depth;
+- material remains coherent;
+- ambient light motion feels premium;
+- no obvious clipping/seam failures or destructive morphing;
+- motion quality is sufficient to validate the production method.
+
+The preview camera push is stronger than desired for final typography-safe use. Do NOT spend credits on a 720p final yet. Final motion render should be generated only after native typography placement/crop is locked, with a more restrained or locked camera so the text safe area remains stable.
+
+VEIL LIGHT is now approved in static + motion direction.
+NEXT: build the real modular invitation implementation for Design 01 before generating final 720p motion.
