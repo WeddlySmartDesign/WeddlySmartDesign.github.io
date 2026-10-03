@@ -405,3 +405,32 @@ NEXT: owner Android review. Evaluate specifically:
 5. practical-info design and scanability;
 6. overall warmth/familiarity;
 7. close continuity.
+
+
+## Design 01 — VEIL LIGHT — V5 REJECTED
+Owner Android review 2026-10-03. V5 does not pass the catalog gate.
+
+Full-video findings:
+- opening transition is structurally wrong: closed-door screen fades to an empty beige intermediate state before hero appears. It must feel as if the door physically reveals the already-moving hero behind it with NO blank intermediate frame;
+- 03/04 remain the quality valley;
+- numeric section labels (01/02/03/04/05/06) make the invitation feel like a book/editorial chapter system and must be removed everywhere;
+- interior must flow as one continuous wedding invitation, not stacked numbered sections;
+- current iconography is too generic/basic and reads like UI icon set rather than premium art direction;
+- practical information still feels like product/service cards even without accordions;
+- too much copy appears in repeated blocks without enough visual rhythm or designed transitions;
+- celebration/venue text must never sit at insufficient contrast over photography;
+- strong hero/gallery/closing still prove the direction works when scale, photography and motion are present.
+
+V6 structural rules:
+1. NO numbered sections anywhere.
+2. NO chapter/editorial labels such as 01/02/03/04.
+3. NO generic circular UI icons.
+4. Build one continuous visual flow; transitions should visually connect adjacent moments.
+5. Door opening must reveal the live hero directly underneath; no fade to blank / no separate intermediate opening video.
+6. Interior design must use bespoke lightweight iconography/illustration or typographic symbols that belong to VEIL LIGHT, not app-style icons.
+7. Agenda and practical info must be concise, visual and in motion, but never card-dashboard UI.
+8. Use real photography/material transitions to carry energy through the middle.
+9. Keep copy warm and family-like, but shorten it further where design is carrying meaning.
+10. V6 should be treated as a compositional redesign of the middle, not another skin over V5.
+
+Do not start Design 02 until VEIL LIGHT passes.
