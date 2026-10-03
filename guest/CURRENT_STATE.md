@@ -241,3 +241,21 @@ V4 correction priorities:
 9. raise closing secondary-copy contrast/size.
 
 Do not start Design 02 until V4 of VEIL LIGHT passes Android.
+
+
+## Design 01 — VEIL LIGHT — OPENING MOTION PASS
+Reviewed 2026-10-03 from the 5s Recraft image-to-video opening test.
+
+PASS:
+- ivory monogram panel slides laterally in a restrained, premium way;
+- reveal visually belongs to the approved VEIL LIGHT world;
+- opening does not compete with hero;
+- monogram remains attached to the panel and exits naturally;
+- motion is calm and readable.
+
+Integration note:
+- final video frame still contains the architectural opening frame / a small residual panel edge, so do NOT treat the video end as the hero itself.
+- In V4, crossfade/cut during the last ~0.3–0.5s into the approved hero motion so the frame disappears and the opening feels like one continuous reveal.
+- Do not spend credits regenerating this opening unless Android integration exposes a problem.
+
+NEXT: build VEIL LIGHT V4 from V2 baseline using this opening motion and the previously sealed V4 correction priorities.
