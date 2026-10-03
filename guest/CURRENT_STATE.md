@@ -347,3 +347,61 @@ V5 pre-build rules from video:
 10. Quality curve must remain high from hero through RSVP; photography cannot be the only thing that restores premium feel.
 
 Do not build V5 from V4 blindly. Reuse only V4 strengths and explicitly redesign the weak middle around these rules.
+
+
+## Design 01 — VEIL LIGHT — V5 CANDIDATE
+Prepared 2026-10-03 after full V4 Android video review.
+
+Conversation artifact: `GUEST_VEIL_LIGHT_DESIGN_01_V5_CANDIDATE.html`.
+
+V5 redesign decisions:
+- opening is now a fully CLOSED two-panel ivory door over the already-playing approved VEIL LIGHT hero;
+- opening uses one centered monogram and opens directly onto the moving hero; no partially-open raster opening state;
+- hero visual grammar preserved; date/place metadata kept large and high-contrast;
+- story is photo-led with warmer couple voice and centered real couple photography;
+- compact countdown retained as a visual bridge;
+- venue/celebration uses the real ceremony image with a protected ivory reading plane, so copy never competes directly with visual noise;
+- agenda rebuilt as a compact four-moment icon-led progressive timeline with a visibly filling line and staged activation;
+- practical section completely rebuilt:
+  - NO accordions;
+  - NO plus signs;
+  - bus, hotel, dress code, gift and playlist are visible at a glance;
+  - each module has clear iconography, short warm copy and direct button where an action exists;
+  - dress code uses a contrasting full-width treatment to break repetition;
+  - playlist has restrained ambient icon motion;
+- gallery, RSVP and closing retain the strong visual grammar from prior approved areas;
+- all important functional copy uses larger/darker mobile-readable typography.
+
+Product parity retained:
+- bus;
+- hotel;
+- dress code;
+- gift;
+- playlist;
+- one shared location or optional separate ceremony/celebration location template;
+- agenda/moments;
+- countdown;
+- story;
+- gallery;
+- RSVP CTA;
+- configurable typography support remains a product requirement.
+
+Internal static QA before owner review:
+- standalone HTML;
+- HTML parse PASS;
+- JavaScript syntax PASS;
+- no /mnt/data runtime paths;
+- no external runtime image/video dependencies;
+- opening, hero and closing reuse one embedded hero-motion source;
+- real couple + ceremony imagery embedded.
+
+Browser screenshot automation was unavailable in the execution environment for this pass, so the decisive QA remains owner Android review. Do not call V5 approved until that review passes.
+
+NEXT: owner Android review. Evaluate specifically:
+1. closed-door -> moving-hero reveal;
+2. whether the middle now maintains the hero's quality level;
+3. venue copy readability;
+4. agenda alignment + felt movement;
+5. practical-info design and scanability;
+6. overall warmth/familiarity;
+7. close continuity.
