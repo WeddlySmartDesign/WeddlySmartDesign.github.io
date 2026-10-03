@@ -259,3 +259,34 @@ Integration note:
 - Do not spend credits regenerating this opening unless Android integration exposes a problem.
 
 NEXT: build VEIL LIGHT V4 from V2 baseline using this opening motion and the previously sealed V4 correction priorities.
+
+
+## Design 01 — VEIL LIGHT — V4 CANDIDATE
+Prepared 2026-10-03 from V2 baseline. V3 remains rejected.
+
+Conversation artifact: `GUEST_VEIL_LIGHT_DESIGN_01_V4_CANDIDATE.html`.
+
+V4 changes:
+- integrates the approved Recraft monogram-panel opening video;
+- opening crossfades during the final ~0.5s into the approved VEIL LIGHT hero rather than using the opening end frame as hero;
+- hero visual language retained; date/location/kicker enlarged and contrast increased for mobile;
+- removes the immediate post-hero ceremony-photo block that failed in V3;
+- story rebuilt from V2 with readable Playfair Display headings, larger body copy and a centered real couple photo;
+- countdown retained as a compact bridge, not an editorial chapter;
+- location rebuilt as a full-bleed real ceremony/venue image with explicit Maps + calendar buttons;
+- current sample uses one shared venue; hidden structural template preserves support for separate ceremony/celebration locations;
+- agenda rebuilt as a compact four-moment progressive timeline with short, familiar copy;
+- bus/hotel/dress code/gift/playlist rebuilt as expandable single-column rows, not repeated carousel cards;
+- RSVP copy made warmer and larger;
+- closing composition retained with larger, higher-contrast secondary text.
+
+Internal mobile QA before owner review:
+- viewport 390x844;
+- document scrollWidth == clientWidth (no horizontal overflow);
+- opening completes and unlocks body;
+- hero video is playing after opening transition;
+- 5 optional modules render as functional expandable rows;
+- first accordion opens without layout overflow;
+- JavaScript page errors: none.
+
+NEXT: owner Android review of V4. Judge coherence of new opening → hero transition, mobile legibility, story crop, location realism, agenda compactness/dynamism, optional-module presentation and overall premium/familiar feel.
