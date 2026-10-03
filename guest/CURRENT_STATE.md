@@ -434,3 +434,43 @@ V6 structural rules:
 10. V6 should be treated as a compositional redesign of the middle, not another skin over V5.
 
 Do not start Design 02 until VEIL LIGHT passes.
+
+
+## Design 01 — VEIL LIGHT — V6 FLUID CANDIDATE
+Prepared 2026-10-03 after V5 rejection.
+
+Conversation artifact: `GUEST_VEIL_LIGHT_DESIGN_01_V6_FLUID.html`.
+
+Structural redesign:
+- all numbered/chapter labels removed;
+- no 01/02/03/04/05/06 section system;
+- opening rebuilt as a real closed two-panel overlay directly above the already-playing hero video;
+- no blank/fade intermediate state between opening and hero;
+- story flows directly from hero with short warm copy + real couple photo;
+- countdown treated as a material bridge rather than a chapter;
+- venue uses full real ceremony image, then a separate protected ivory copy plane with clear action buttons;
+- agenda rebuilt as one flowing route with a hand-drawn path that animates and four concise moments; no generic icon circles;
+- practical information rebuilt as one continuous composition, not cards/accordions:
+  - bus, hotel, dress code, gift and playlist always visible;
+  - bespoke thin line-art illustrations integrated as large watermarks;
+  - alternating composition for rhythm;
+  - direct CTA only where needed;
+  - no plus signs / no hidden information;
+- gallery uses all four real couple photos;
+- RSVP and closing retain the strong visual language.
+
+Structural QA:
+- standalone HTML;
+- HTML parse PASS;
+- JavaScript syntax PASS;
+- no duplicate IDs;
+- no /mnt/data runtime paths;
+- no external image/video runtime paths;
+- no numbered chapter labels;
+- no accordion behavior.
+
+Decisive QA remains Android owner review, especially:
+1. true closed-door -> live hero reveal;
+2. whether agenda now feels like invitation motion rather than editorial timeline;
+3. whether practical information remains premium despite information density;
+4. whether the quality curve stays high through the middle.
