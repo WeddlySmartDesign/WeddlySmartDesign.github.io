@@ -312,3 +312,38 @@ Strong opening -> premium hero -> emotional/photo-led story -> immersive venue/c
 The quality curve must stay high throughout; no flat “utility” valley.
 
 Do not start Design 02 until VEIL LIGHT V5 passes Android.
+
+
+## V4 VIDEO REVIEW — PRE-V5
+Reviewed from full Android recordings on 2026-10-03 before any V5 work.
+
+What the video confirms:
+- Opening is coherent in palette but still feels like a partial opening state: the panel is already ajar and the reveal does not deliver a clean closed-door -> moving-veil payoff.
+- Hero is one of the strongest moments. Preserve art direction and motion. Metadata is more readable than earlier versions but still visually secondary.
+- Story/photo section is acceptable but still typography-led; it does not create a new visual high point after the hero.
+- Venue/celebration photo improves realism, but overlay copy competes with a very busy image and loses legibility. Buttons are readable but the whole section still feels layered on top of a photo rather than art-directed with the photo.
+- Agenda is compact and aligned, but reads mainly as a dark editorial timeline. Motion/progression is too subtle to become a memorable invitation moment.
+- Practical information section (BJS/hotel/dress code/gift/playlist) is the weakest area:
+  - accordions/+ hide information and add unnecessary taps;
+  - no iconography;
+  - too much repeated text hierarchy;
+  - long cream page with little visual rhythm;
+  - repeated rows make it feel like settings/help UI, not a wedding invitation;
+  - expanded states become long text blocks and flatten the experience further.
+- Gallery restores energy immediately because photography + large scale + horizontal movement create emotion again.
+- Core pattern: premium hero -> increasingly flat utility middle -> photography restores premium feeling.
+- V5 must eliminate the utility valley, not merely restyle it.
+
+V5 pre-build rules from video:
+1. Opening starts fully CLOSED. One monogram only. On interaction, rigid panel(s) move away and reveal the actual already-playing VEIL LIGHT hero behind them. Do not use a partially open raster as the opening state.
+2. Preserve hero and closing visual grammar.
+3. Every middle section must have a visual device beyond text: image, iconography, timeline movement, spatial composition, or material transition.
+4. Venue/celebration: redesign around the real image, with protected text zone / controlled gradient / separated copy plane so text never sits directly over visual noise.
+5. Agenda: max four moments, compact; use clear icons and a progress/reveal system that is visibly dynamic, not a long chapter.
+6. Practical modules: NO accordions, NO plus signs. All essential info visible at a glance. Use distinct icon-led modules with short copy and direct buttons where needed.
+7. Practical modules should vary composition/rhythm while remaining one coherent system; no repeated identical cards/rows.
+8. Maintain mobile legibility: functional copy larger, darker, shorter.
+9. Dynamic moments inside invitation: at least venue/celebration, agenda, and practical-info transition must visibly respond to scroll/tap without becoming a generic web animation.
+10. Quality curve must remain high from hero through RSVP; photography cannot be the only thing that restores premium feel.
+
+Do not build V5 from V4 blindly. Reuse only V4 strengths and explicitly redesign the weak middle around these rules.
