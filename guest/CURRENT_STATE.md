@@ -290,3 +290,25 @@ Internal mobile QA before owner review:
 - JavaScript page errors: none.
 
 NEXT: owner Android review of V4. Judge coherence of new opening → hero transition, mobile legibility, story crop, location realism, agenda compactness/dynamism, optional-module presentation and overall premium/familiar feel.
+
+
+## Design 01 — VEIL LIGHT — V4 REJECTED
+Owner review 2026-10-03. V4 improves coherence and legibility but still fails the premium catalog gate.
+
+Core failure:
+The invitation starts strongly, loses visual energy through the middle, then ends well. Interior sections feel too flat/text-led compared with the hero and closing.
+
+Owner feedback / V5 rules:
+- opening concept improves but must become a fully closed door/panel first; when it opens, the already-moving VEIL LIGHT hero should be visible immediately behind it;
+- no accordion/+ interactions for practical information: guests should not have to tap repeatedly just to read basic wedding information;
+- practical modules must be visible, concise and designed, using iconography, hierarchy and purposeful movement rather than blocks of text;
+- interior sections need 2–3 clear dynamic/design moments so the invitation does not deflate after the hero;
+- celebration copy currently lacks sufficient contrast/readability and must be fixed;
+- text-heavy sections still require art direction: typography, icons, spatial composition, rhythm and motion must carry design even when information density is high;
+- V5 should preserve the strong hero/gallery/RSVP/closing language while rebuilding the weak middle.
+
+V5 narrative objective:
+Strong opening -> premium hero -> emotional/photo-led story -> immersive venue/celebration -> compact animated agenda -> designed practical information -> gallery -> RSVP -> strong close.
+The quality curve must stay high throughout; no flat “utility” valley.
+
+Do not start Design 02 until VEIL LIGHT V5 passes Android.
