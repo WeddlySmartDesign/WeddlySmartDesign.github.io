@@ -855,15 +855,19 @@ Verified existing RSVP behavior:
 - +1 already owns independent menu, allergies/intolerances, high-chair, transport/accommodation when enabled and custom answers.
 - Children already support count + per-child name/age/menu/allergies, but child high-chair was missing.
 
-Production defect found:
+Production defects found:
 - Essential and Signature personalization save code rebuilt `config.questions` from only meal/allergy/transport/plusone.
-- This silently dropped `questions.children` after RSVP had been configured.
-- Public child rendering explicitly requires `config.questions.children === true`, so the dropped key explains why enabling Children could disappear in the received invitation.
+- More importantly, the ONE production Edge Function `weddly-rsvp` sanitized config with the same reduced key set, so even a direct RSVP save with Children ON returned without `questions.children`.
+- That server-side sanitizer explains the reproduced symptom: check Children -> save -> reopen -> Children is unchecked again.
+- Public child rendering explicitly requires `config.questions.children === true`.
+- Child payload sanitization also omitted per-child high-chair.
 
-Surgical fix applied:
+Surgical fixes applied:
 - ONE/root Essential + Signature now merge/preserve the full questions object.
-- GUEST guest-independent Essential + Signature receive the same regression fix.
-- Child high-chair is now collected in public RSVP, shown in operations and editable in manual-response parity, in both ONE/root and GUEST branch.
+- ONE production `weddly-rsvp` v19 now preserves `questions.children`, gates child payloads on that setting and preserves per-child `highchair`.
+- GUEST `guest-rsvp` v4 preserves per-child `highchair`; its children config key was already correct.
+- GUEST guest-independent Essential + Signature receive the same frontend regression protection.
+- Child high-chair is collected in public RSVP, shown in operations and editable in manual-response parity.
 - wrapper asset versions were bumped to avoid stale cached child/operations scripts.
 
 Mandatory next verification:
