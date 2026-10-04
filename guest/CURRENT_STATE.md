@@ -697,3 +697,15 @@ QA:
 - hotel link field present;
 - gallery per-photo fit/orientation system present;
 - one swipe cue only.
+
+
+## VEIL LIGHT V8.11 FAIL — scalability attempt rejected
+Owner review 2026-10-04.
+V8.11 worsened two areas while trying to make them more generic:
+- “Nuestra historia” used full-image adaptation and lost the immersive premium impact of the previous version.
+- the ceremony + celebration solution became an oversized information card that covered too much of the venue image and read like app/web UI.
+
+Rollback rule:
+- V8.10 remains the visual baseline for these areas.
+- Story scalability must be handled by configuration (crop/full + focal point), not by forcing every image into a weak full-width presentation.
+- Location scalability must support 1 or 2 places with compact rows over the venue image, not a large white card.
