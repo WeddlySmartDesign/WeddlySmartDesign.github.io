@@ -425,3 +425,136 @@ Each section offers an Edit action.
 Before submission the couple confirms that they have reviewed the information and that it is correct.
 
 This final resolved review exists to reduce misunderstandings and post-delivery disputes.
+
+
+---
+
+## QUESTIONNAIRE UX V3 — CONTEXT WITHOUT SELF-DESIGN
+
+This section supersedes any earlier UI behavior that made the couple feel they were previewing/designing the finished invitation.
+
+### Brand header
+Always render:
+- **GUEST**
+- **by WeddlySmartDesign** immediately associated with it;
+- “by WeddlySmartDesign” uses Caveat in the product UI.
+
+Never show “GUEST” without the full brand lockup in the questionnaire header.
+
+### Progress
+Do NOT show “1/6”, “2/6”, etc.
+Use:
+- a quiet progress bar;
+- the human section name only.
+
+Reason: the form is fast, but a visible multi-page count makes it feel longer.
+
+### Context reference, not finished preview
+At the top of each section show a **static contextual reference of the chosen template** so the couple understands where the requested information belongs.
+
+The reference:
+- explains *which area of the invitation* is being completed;
+- may use the chosen template’s art direction and generic/sample content;
+- must NOT render a polished live final invitation using the couple’s own entered data;
+- must NOT expose crop/layout/design controls;
+- must preserve the sense that WeddlySmartDesign performs the design work.
+
+Couple experience:
+“I know exactly what information you are asking me for and where it will appear.”
+NOT:
+“I am building/designing my invitation myself.”
+
+### Real file uploads
+All questionnaire upload actions must use real file inputs and show:
+- uploaded filename;
+- thumbnail when useful;
+- replace/remove action.
+
+Required uploads:
+- Story photo when enabled;
+- one optional celebration/venue photo in Locations;
+- 1–4 Gallery photos.
+
+Location-photo rule:
+- ask for **one optional photo of the celebration venue/place**;
+- if none is uploaded, the selected template uses its default collection visual;
+- never require a separate ceremony photo.
+
+### Agenda automatic chronological ordering
+Moments are data, not manually positioned design elements.
+
+Rules:
+- after add/edit/remove, moments automatically sort by time;
+- times after midnight that logically belong to the wedding night (00:00–05:59) sort after late-evening times;
+- example: 19:00 Cóctel, add 19:30 Fotos, 00:00 Fiesta -> order becomes 19:00 / 19:30 / 00:00 automatically;
+- blank times remain after timed moments until completed;
+- max 5 moments.
+
+### Practical copy
+Never use internal/project language in couple-facing text such as “Practical”, “module”, “layout”, “renderer” or explanations written for the product team.
+
+Use natural prompts such as:
+“¿Necesitáis contarles algo más a vuestros invitados?”
+
+### Bus
+When Bus is enabled:
+- questionnaire collects informational data only: stop(s), outbound time(s), return time(s), optional note/map;
+- DO NOT ask whether RSVP should ask about bus usage;
+- selecting Bus automatically configures the existing confirmation flow to ask the relevant transport question(s);
+- invitation remains informational.
+
+### Gift — required structured details
+If Gift is enabled, first choose:
+- Bank transfer;
+- Bizum;
+- External gift list/link;
+- Short custom message.
+
+Then collect the actual destination:
+- BANK: account holder + IBAN; optional BIC/SWIFT;
+- BIZUM: phone number / recipient reference;
+- EXTERNAL_LINK: URL + optional label;
+- SHORT_TEXT: message.
+
+The final review shows the exact supplied details.
+
+### Confirmation of attendance — existing product, configured here
+The couple-facing questionnaire must NOT say “RSVP de GUEST” as if the customer is expected to know product terminology.
+
+Use:
+- **Confirmación de asistencia**;
+- explain simply: “Estas son las preguntas que recibirán vuestros invitados al confirmar.”
+
+This questionnaire configures the existing confirmation system already built into the product. It does not create a second RSVP.
+
+Show/configure the relevant existing options:
+- attendance: always;
+- menu choice: optional/configurable;
+- allergies / intolerances / dietary information: optional/configurable;
+- +1: optional;
+- children: optional;
+- transport: automatically derived when Bus is enabled;
+- accommodation: automatically derived when the accommodation mode needs a guest response;
+- existing custom questions capability.
+
+Do NOT mention “Añadir al calendario” in the questionnaire UI.
+
+### Final review — contractual clarity
+The final screen must show the **exact content/data supplied**, not only a list of selected features.
+
+Review includes, as applicable:
+- exact names/date/optional cover place/time;
+- exact Story preset text or exact custom text;
+- uploaded Story filename;
+- exact location names, times, addresses, links and optional venue-photo filename;
+- exact Agenda moments in their automatically sorted order;
+- exact Bus information;
+- exact accommodation mode and values;
+- exact Gift destination/details;
+- exact Playlist URL/prompt;
+- exact confirmation questions/options;
+- exact Gallery filenames/order;
+- exact closing text where custom.
+
+Each section has Edit.
+Final checkbox confirms the couple has reviewed the information before submission.
