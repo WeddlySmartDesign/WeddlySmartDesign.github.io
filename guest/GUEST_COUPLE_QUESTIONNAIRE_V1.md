@@ -558,3 +558,57 @@ Review includes, as applicable:
 
 Each section has Edit.
 Final checkbox confirms the couple has reviewed the information before submission.
+
+
+---
+
+## RSVP PARITY CONTRACT — MUST MATCH EXISTING PRODUCT
+
+The questionnaire configures the existing confirmation-of-attendance engine. It must not create a reduced RSVP.
+
+### Main invited person
+When enabled by configuration, the attending person answers:
+- attendance;
+- menu;
+- allergies / intolerances;
+- high chair when the selected menu requires/uses it;
+- transport;
+- accommodation;
+- custom questions.
+
+### Accompanying guest / +1
+If +1 is enabled and an accompanying guest is added, that person has **their own independent response fields**, not one shared answer:
+- name;
+- menu;
+- allergies / intolerances;
+- high chair when applicable;
+- transport when enabled;
+- accommodation when enabled;
+- custom questions when configured.
+
+The +1 response is stored independently in the RSVP payload and guest-management flow.
+
+### Children
+If Children is enabled, the public confirmation asks:
+1. whether children are coming;
+2. number of children;
+3. for each child:
+   - name;
+   - age;
+   - menu;
+   - allergies / intolerances;
+   - whether a high chair is needed.
+
+These fields are repeated per child and saved per child.
+
+### Configuration semantics
+- Children OFF: no child question appears.
+- Children ON: the child block must appear in the public invitation confirmation.
+- Bus/transport: invitation is informational; the confirmation question is enabled automatically from the transport configuration.
+- Accommodation: confirmation behavior is derived from accommodation mode.
+- Custom questions: use the existing configurable question engine.
+- Extra event questions/responses remain existing product behavior and are not recreated by the invitation questionnaire.
+
+### Regression rule
+Saving or editing the invitation must NEVER overwrite unrelated RSVP question keys.
+When invitation data is synchronized back to RSVP, the existing `questions` object is merged/preserved rather than reconstructed from a subset of keys.
