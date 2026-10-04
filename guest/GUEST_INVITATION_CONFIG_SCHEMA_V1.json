@@ -295,7 +295,9 @@
         "ctaLabel",
         "plusOneEnabled",
         "childrenEnabled",
-        "customQuestions"
+        "customQuestions",
+        "menu",
+        "dietary"
       ],
       "properties": {
         "ctaLabel": {
@@ -322,6 +324,46 @@
           "items": {
             "type": "string",
             "maxLength": 160
+          }
+        },
+        "menu": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled",
+            "options"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "options": {
+              "type": "array",
+              "maxItems": 8,
+              "items": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
+          }
+        },
+        "dietary": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enabled"
+          ],
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "prompt": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 160
+            }
           }
         }
       }
@@ -706,6 +748,48 @@
             "null"
           ],
           "format": "uri"
+        },
+        "accountHolder": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "iban": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 42
+        },
+        "bicSwift": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 20
+        },
+        "bizumPhone": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 30
+        },
+        "bizumRecipient": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 80
+        },
+        "linkLabel": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 80
         }
       }
     },
