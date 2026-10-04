@@ -361,3 +361,67 @@ Free-text is deliberately limited to:
 - optional closing line.
 
 Operational data remains structured.
+
+
+## Preview-first questionnaire UX
+
+The questionnaire is not shown as a generic multi-step form.
+
+Core UX:
+- no visible “1/6”, “2/6”… counters;
+- show only a subtle progress bar and the human-facing section name;
+- each step displays a live preview of the selected invitation template section before the questions;
+- preview uses the couple's current answers where available;
+- section names use guest-facing language, never internal terms such as Story, Practical, module count, fit or schema.
+
+Suggested step labels:
+- Portada.
+- Nuestra historia.
+- Lugares.
+- Momentos.
+- Detalles.
+- Fotos y RSVP.
+- Revisar.
+
+Purpose:
+- the couple always understands what they are configuring because they see the exact place in the invitation;
+- they should never have to imagine what “agenda” or “practical” means;
+- the questionnaire must feel like “tell us about your wedding”, not “design your invitation”.
+
+### RSVP presentation inside questionnaire
+
+The questionnaire does NOT create a second RSVP product.
+
+It configures the existing GUEST RSVP.
+
+Show a small preview of the GUEST RSVP and explain this explicitly.
+
+Ask only the settings that cannot be derived from prior answers:
+- +1 enabled yes/no;
+- children enabled yes/no;
+- optional custom RSVP questions.
+
+Derived automatically:
+- transport question(s) from Bus answers;
+- accommodation question(s) from Accommodation mode/settings;
+- add-to-calendar remains part of the GUEST RSVP/product and is not duplicated as a questionnaire design choice.
+
+### Final review / acceptance
+
+The last screen must show the exact resolved content, not only a summary of selected modules.
+
+At minimum it displays:
+- exact cover names/date/place/time choices;
+- exact selected Story preset text or custom text;
+- exact location names, times and addresses;
+- exact agenda moments;
+- exact Bus/Accommodation/Gift/Playlist data;
+- exact RSVP settings and derived questions;
+- gallery enabled/count/order metadata;
+- other relevant optional details.
+
+Each section offers an Edit action.
+
+Before submission the couple confirms that they have reviewed the information and that it is correct.
+
+This final resolved review exists to reduce misunderstandings and post-delivery disputes.
