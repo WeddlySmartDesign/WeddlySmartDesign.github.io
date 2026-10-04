@@ -874,3 +874,10 @@ Mandatory next verification:
 - owner repeats ONE test: enable Children -> save -> send/reopen invitation -> child block appears;
 - child block: count + name + age + menu + allergies/intolerances + high-chair;
 - +1: independent menu + allergies/intolerances + high-chair and applicable service/custom answers.
+
+
+## VALIDATION — 2026-10-04
+- ONE RSVP Children persistence fix: OWNER-VALIDATED on real device. Sequence Children ON -> Save -> reopen now retains Children.
+- GUEST couple questionnaire V5 contextual/template-first approach: OWNER APPROVED as current baseline.
+- Questionnaire direction remains: contextual references without finished live preview; simple couple-facing language; exact final review; full RSVP parity.
+- Do not regress to step-count UI, internal template names, self-service design controls, or reduced RSVP behavior.
