@@ -847,3 +847,26 @@ Owner review of V3:
 - audit all mobile text sizes: no important explanatory/input/option text may be tiny;
 - desktop must have a deliberate wider two-column composition where appropriate, not merely a stretched mobile card;
 - mobile and desktop are both first-class QA targets.
+
+
+## RSVP CHILDREN / +1 PARITY + ONE BUGFIX — 2026-10-04
+
+Verified existing RSVP behavior:
+- +1 already owns independent menu, allergies/intolerances, high-chair, transport/accommodation when enabled and custom answers.
+- Children already support count + per-child name/age/menu/allergies, but child high-chair was missing.
+
+Production defect found:
+- Essential and Signature personalization save code rebuilt `config.questions` from only meal/allergy/transport/plusone.
+- This silently dropped `questions.children` after RSVP had been configured.
+- Public child rendering explicitly requires `config.questions.children === true`, so the dropped key explains why enabling Children could disappear in the received invitation.
+
+Surgical fix applied:
+- ONE/root Essential + Signature now merge/preserve the full questions object.
+- GUEST guest-independent Essential + Signature receive the same regression fix.
+- Child high-chair is now collected in public RSVP, shown in operations and editable in manual-response parity, in both ONE/root and GUEST branch.
+- wrapper asset versions were bumped to avoid stale cached child/operations scripts.
+
+Mandatory next verification:
+- owner repeats ONE test: enable Children -> save -> send/reopen invitation -> child block appears;
+- child block: count + name + age + menu + allergies/intolerances + high-chair;
+- +1: independent menu + allergies/intolerances + high-chair and applicable service/custom answers.
