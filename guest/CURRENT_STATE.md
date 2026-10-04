@@ -795,3 +795,24 @@ Exact next:
 1. Owner reviews questionnaire UX/wording.
 2. Apply owner feedback to canonical questionnaire before building VEIL LIGHT renderer.
 3. Then implement the VEIL LIGHT template against the locked config/schema.
+
+
+## QUESTIONNAIRE UX V2 — PREVIEW-FIRST
+
+Owner review of V1 found a UX problem: couples know which catalog design they bought, but they should not have to understand internal sections such as Story, Practical or Agenda.
+
+Locked direction:
+- each questionnaire step shows a live preview of the corresponding section in the selected template;
+- remove visible numeric step count such as 1/6;
+- show only progress + human-facing section label;
+- questionnaire asks for wedding information, not design/layout decisions;
+- RSVP step configures the existing GUEST RSVP, not a new/second RSVP;
+- transport/accommodation RSVP questions are derived automatically from prior answers;
+- final review shows exact resolved data/text, section by section, with Edit actions and an explicit confirmation checkbox.
+
+Conversation prototype:
+- GUEST_COUPLE_QUESTIONNAIRE_UI_V2_PREVIEW_FIRST.html
+
+Next:
+- owner reviews V2 questionnaire UX;
+- after questionnaire/config is sealed, implement the real VEIL LIGHT renderer against the canonical schema and QA matrix.
