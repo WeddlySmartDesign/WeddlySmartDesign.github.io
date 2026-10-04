@@ -165,3 +165,23 @@ Invitation copy renders from structured fields, not from arbitrary free text by 
 
 ### Product rule
 Practical modules must be optional and reflow automatically. The invitation must remain visually complete with none, some or all practical modules enabled. No empty gaps, no fixed positions reserved for missing modules, and no redesign required per couple.
+
+
+## Hotel website link rule
+If an accommodation/hotel module is shown and the hotel has a public website, the invitation should expose a direct “Ver hotel” / hotel website link even when booking/room-choice is handled through RSVP or by phone.
+
+Rationale:
+- the invitation informs guests which hotel it is and lets them inspect it;
+- RSVP remains the place to collect accommodation choice when the couple needs that response;
+- the website link is informational/navigation, not a duplicate “reserve” action.
+
+The questionnaire must therefore capture:
+- hotel/venue website URL (optional but requested whenever accommodation is enabled);
+- booking phone/contact method where relevant;
+- code/couple name/discount details;
+- whether booking is external, by phone, on-site, or couple-managed.
+
+Rendering rule:
+- show hotel website link when URL exists;
+- show external booking CTA only when booking truly happens externally;
+- otherwise keep reservation/occupancy decisions inside RSVP.
