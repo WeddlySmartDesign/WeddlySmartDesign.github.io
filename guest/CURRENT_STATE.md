@@ -660,3 +660,40 @@ Pending owner Android review:
 2. practical density with 5 modules;
 3. gallery crop of all four demo photos;
 4. verify transition quality before further cosmetic refinement.
+
+
+## Design 01 — VEIL LIGHT — V8.6 SCALABLE CANDIDATE
+Prepared 2026-10-04 from the latest owner-reviewed baseline.
+
+Artifact: `GUEST_VEIL_LIGHT_DESIGN_01_V8_6_SCALABLE.html`.
+
+Changes limited to Practical + Gallery:
+- Practical uses the approved subtle VEIL LIGHT background with lighter wash so the art remains visible.
+- Practical layout is configuration-driven and reflows automatically for 1–5 enabled modules:
+  - 1 centered;
+  - 2 balanced pair;
+  - 3 = 2 + centered 1;
+  - 4 = 2x2;
+  - 5 = 2–1–2.
+- Bus remains information-only when RSVP collects transport choice.
+- Hotel remains information-only but includes a configurable “Ver hotel” website link.
+- Gift / playlist actions remain optional only when the couple uses them.
+- No empty reserved spaces for disabled modules.
+
+Gallery:
+- mixed-aspect template;
+- per-photo mode can be FULL (no crop) or CROP (focus point configurable);
+- photo orientation is detected automatically (landscape / portrait / square);
+- demo photos use FULL mode to guarantee no person or landscape is lost;
+- blurred derived background makes landscape photos immersive without forcing a vertical crop;
+- only one swipe cue is shown.
+
+Template rule reaffirmed:
+The visual design must remain complete and premium with any valid combination of optional modules and with mixed photo orientations. Personalization must be data/configuration driven, not manual redesign per wedding.
+
+QA:
+- JavaScript syntax PASS;
+- practical 1–5 reflow logic present;
+- hotel link field present;
+- gallery per-photo fit/orientation system present;
+- one swipe cue only.
