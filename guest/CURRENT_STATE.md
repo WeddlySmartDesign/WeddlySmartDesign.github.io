@@ -507,3 +507,26 @@ V7 direction:
 - if interior visual depth cannot be achieved with HTML alone, create one or two additional VEIL LIGHT art assets in Recraft specifically for the middle instead of compensating with generic interface illustration.
 
 Do not start Design 02 until VEIL LIGHT passes Android.
+
+
+## Design 01 — VEIL LIGHT — V7 REJECTED
+Owner Android review 2026-10-04. V7 is fully rejected and must not be used as a baseline.
+
+Critical failures:
+- assistant accidentally exposed internal design/development notes as guest-facing copy (examples: explaining what the section “can” do, what “the idea is”, what a button “would” do, or how the gallery “can” work);
+- this made the invitation read like a product demo/sales page rather than a couple inviting their loved ones;
+- the approved Recraft opening-door artwork was abandoned and replaced by a new HTML/CSS-built door, which changed the visual language and violated the agreed direction;
+- agenda/practical copy was written as implementation commentary, not invitation copy;
+- practical section again became a sequence of product-like information cards;
+- V7 therefore failed both product voice and art-direction continuity.
+
+Non-negotiable rollback rules for the next version:
+1. Use the ACTUAL approved Recraft opening-door asset/motion. Do not redraw/rebuild the door in HTML/CSS.
+2. Guest-facing copy must contain ZERO implementation/product/demo language. Every line must sound like the couple speaking to their guests.
+3. Before any next candidate is sent, perform a copy audit searching for meta phrases such as “aquí”, “puede”, “la idea”, “botón”, “sección”, “bloque”, “GUEST”, “RSVP conectado”, “mostrar”, “opción”, “template”, “puede incluirse” when they are being used as implementation commentary.
+4. Keep the two new Recraft interior assets approved, but design around them with genuine invitation copy only.
+5. Do not use generic card grids to solve practical information.
+6. V7 is not a visual or copy baseline. Rebuild from the last approved visual pieces: approved Recraft door + approved hero + real couple/ceremony photos + approved agenda asset + approved practical-info asset + approved closing language.
+7. Next candidate must be reviewed internally as a real invitation from start to finish before owner Android review.
+
+Do not start Design 02 until VEIL LIGHT passes.
