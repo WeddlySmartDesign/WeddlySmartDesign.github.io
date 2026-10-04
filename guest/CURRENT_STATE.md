@@ -570,3 +570,25 @@ NEXT: owner Android review of V8. Focus on:
 3. whether practical info reads as an invitation rather than product UI;
 4. mobile copy legibility;
 5. overall quality curve through the middle.
+
+
+## Design 01 — VEIL LIGHT — V8 TECHNICAL REVIEW
+Owner Android recording reviewed 2026-10-04 before aesthetic/detail review.
+
+Technical failures found in V8:
+- wrong poster image before opening: couple photo was shown before Canva entry video started;
+- very tall sticky-scroll agenda/practical sections caused Android blank/beige frames and unreliable compositing during scroll;
+- sticky progression made the middle feel broken because content temporarily disappeared while scrolling;
+- body unlocked too early relative to the full Canva entry/cover transition.
+
+Corrective candidate created: `GUEST_VEIL_LIGHT_DESIGN_01_V8_1_TECH_FIXED.html`.
+
+V8.1 technical corrections:
+- poster replaced with actual first frame of Canva entry video;
+- original Canva playback speed preserved;
+- cover copy appears at ~5s; body unlock delayed slightly to let transition settle;
+- agenda rebuilt in normal document flow (no sticky / no 330svh spacer);
+- practical section rebuilt in normal document flow (no sticky / no 410svh spacer);
+- sticky scroll controller JS removed;
+- JavaScript syntax PASS;
+- next review should focus first on whether technical failures are gone, then on visual/detail refinements.
