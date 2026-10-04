@@ -640,3 +640,23 @@ Changes:
 - gallery captions removed so photography dominates.
 
 Next: owner Android review of V8.3 focusing on agenda density, practical-section calmness/scalability and gallery crops.
+
+
+## Design 01 — VEIL LIGHT — V8.4 REFINED
+Prepared 2026-10-04 from the technically stable V8.3.1.
+
+Localized corrections only:
+- agenda remains one visual screen and now integrates its heading inside the same scene;
+- agenda content is reduced to hour + moment only;
+- bus/hotel are informational in the invitation: reservation/selection belongs to GUEST RSVP when enabled;
+- practical section uses the subtle approved VEIL LIGHT background and reflows automatically for 1–5 enabled modules;
+- no bus/hotel CTA duplication;
+- practical copy is shorter and more structured for scalable personalization;
+- gallery is shorter/larger-width to preserve more of landscape photos while remaining clearly swipeable;
+- each gallery image has an independent focal point, intended to become a configurable per-photo property in personalization.
+
+Pending owner Android review:
+1. agenda visual balance;
+2. practical density with 5 modules;
+3. gallery crop of all four demo photos;
+4. verify transition quality before further cosmetic refinement.
