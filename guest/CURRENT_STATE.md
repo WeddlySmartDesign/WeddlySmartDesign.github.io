@@ -592,3 +592,31 @@ V8.1 technical corrections:
 - sticky scroll controller JS removed;
 - JavaScript syntax PASS;
 - next review should focus first on whether technical failures are gone, then on visual/detail refinements.
+
+
+## Design 01 — VEIL LIGHT — V8.2 AGENDA/GALLERY ITERATION
+Prepared 2026-10-04 after V8.1 technical pass.
+
+Conversation artifact: `GUEST_VEIL_LIGHT_DESIGN_01_V8_2_AGENDA_GALLERY.html`.
+
+Changes:
+- agenda keeps ONE fixed VEIL LIGHT background image;
+- only the four moments move horizontally over that background;
+- no repeated background screen per moment;
+- no agenda icons by default in VEIL LIGHT; Canva/SVG icon assets remain optional if a later design gate proves they add value;
+- agenda has explicit swipe affordance + progress dots.
+
+Gallery:
+- now reads unmistakably as a carousel;
+- each slide occupies ~90% width and ~82svh height;
+- next-slide edge remains visible;
+- swipe label + progress dots added;
+- each image has configurable focal-point variables for scalable per-couple cropping;
+- last sample image uses contain-over-blurred-background to preserve both partners rather than crop one person out.
+
+Scalability rule reaffirmed:
+- optional modules (bus/hotel/dress code/gift/playlist) must be removable independently without creating layout holes;
+- gallery image focus/crop must be configurable per uploaded photo rather than hard-coded to one sample couple;
+- invitation must remain visually complete even when optional modules are absent.
+
+Next: Android owner review of V8.2, focusing specifically on agenda behavior and gallery clarity/cropping before further aesthetic refinement.
