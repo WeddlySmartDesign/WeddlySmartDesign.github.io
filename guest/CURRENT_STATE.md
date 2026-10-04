@@ -775,3 +775,23 @@ Exact next:
 2. implement every template state from the contract;
 3. run automated configuration QA cases;
 4. only after PASS, send owner a finished VEIL LIGHT template review.
+
+
+## QUESTIONNAIRE V1 REFINEMENT — 2026-10-04
+
+Owner refinement implemented:
+- Cover fixed content: “Nos casamos” + names + date.
+- Cover location and time are independent optional fields.
+- Story title is fixed by template.
+- Story offers five approved preset texts plus custom free text.
+- Location block no longer includes Save date; calendar action belongs to GUEST RSVP.
+- Section titles are fixed by the catalog template and are not editable by the couple.
+- Typography choice is simplified to one global display-style selection from template-approved visual options; no font names or per-section font choices.
+- Couple questionnaire principle: the couple supplies content, not design. Conditional questions only appear when relevant; design/crop/layout terminology is hidden.
+- Canonical questionnaire, master matrix, schema and VEIL LIGHT contract were updated to reflect these decisions.
+- Conversation artifact created for owner review: GUEST_COUPLE_QUESTIONNAIRE_UI_V1.html.
+
+Exact next:
+1. Owner reviews questionnaire UX/wording.
+2. Apply owner feedback to canonical questionnaire before building VEIL LIGHT renderer.
+3. Then implement the VEIL LIGHT template against the locked config/schema.
