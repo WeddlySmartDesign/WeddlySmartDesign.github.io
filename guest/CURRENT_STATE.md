@@ -620,3 +620,23 @@ Scalability rule reaffirmed:
 - invitation must remain visually complete even when optional modules are absent.
 
 Next: Android owner review of V8.2, focusing specifically on agenda behavior and gallery clarity/cropping before further aesthetic refinement.
+
+
+## Design 01 — VEIL LIGHT — V8.3 REFINED
+Prepared 2026-10-04 after V8.1 technical pass and V8.2 visual review.
+
+Conversation artifact: `GUEST_VEIL_LIGHT_DESIGN_01_V8_3_REFINED.html`.
+
+Changes:
+- agenda simplified to one atmospheric background and one-screen composition;
+- agenda copy reduced to hour + moment only;
+- agenda rows enter progressively but remain all visible together;
+- practical information now uses the newly approved subtle Recraft VEIL LIGHT background;
+- practical modules no longer use cards; they sit directly on the soft background with short copy + understated links;
+- practical module layout auto-reflows according to visible item count (1–5), so removing hotel/bus/dress code/gift/playlist does not leave dead gaps;
+- practical title contrast/legibility increased;
+- gallery remains an explicit horizontal carousel with visible next-card peek + progress dots;
+- all four gallery images now use individual focal points so both members of the couple stay visible where possible;
+- gallery captions removed so photography dominates.
+
+Next: owner Android review of V8.3 focusing on agenda density, practical-section calmness/scalability and gallery crops.
