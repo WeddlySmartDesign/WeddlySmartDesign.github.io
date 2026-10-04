@@ -530,3 +530,43 @@ Non-negotiable rollback rules for the next version:
 7. Next candidate must be reviewed internally as a real invitation from start to finish before owner Android review.
 
 Do not start Design 02 until VEIL LIGHT passes.
+
+
+## Design 01 — VEIL LIGHT — V8 CANDIDATE
+Prepared 2026-10-04 after V7 rejection.
+
+Conversation artifact: `GUEST_VEIL_LIGHT_DESIGN_01_V8_CANDIDATE.html`.
+
+New production split:
+- owner-created Canva opening/cover video is used intact at its native timing; DO NOT speed it up because shortening it destroys the fluid transition;
+- the opening + cover now remain one continuous media piece;
+- native editable names/date/location appear over the cover phase;
+- the two approved Recraft interior assets are used for agenda and practical information;
+- owner demonstrated she can create simple premium agenda icon/motion assets in Canva if a later gate proves they materially improve the result. Do not delegate routine design work to owner.
+
+V8 structure:
+- no numbered chapters;
+- no product/demo/implementation copy;
+- warm couple-to-guests voice throughout;
+- story + real couple photography;
+- real ceremony/venue photography;
+- agenda rebuilt as a cinematic sticky scene: each moment appears individually over the Recraft agenda artwork while scrolling;
+- practical information rebuilt as one cinematic sticky scene: bus/hotel/dress code/gift/playlist appear sequentially over the Recraft hospitality artwork, with no accordion and no repeated cards;
+- gallery swipe with real couple photos;
+- direct RSVP CTA;
+- motion closing retained.
+
+QA before owner review:
+- standalone/self-contained HTML;
+- all media embedded as data URIs;
+- HTML parse PASS;
+- JavaScript syntax PASS;
+- copy audit confirms no implementation/demo language in guest-facing text;
+- attempted automated Chromium visual QA was blocked by environment browser policy, so Android owner review remains decisive.
+
+NEXT: owner Android review of V8. Focus on:
+1. Canva opening/cover continuity;
+2. whether agenda now feels cinematic rather than editorial;
+3. whether practical info reads as an invitation rather than product UI;
+4. mobile copy legibility;
+5. overall quality curve through the middle.
