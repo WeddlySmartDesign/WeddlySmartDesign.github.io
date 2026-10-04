@@ -185,3 +185,28 @@ Rendering rule:
 - show hotel website link when URL exists;
 - show external booking CTA only when booking truly happens externally;
 - otherwise keep reservation/occupancy decisions inside RSVP.
+
+
+## Story photo scalability
+The “Nuestra historia” photo must be safe-by-default for arbitrary couple photography.
+
+Rules:
+- Default rendering mode is FULL, not destructive cover-crop.
+- Horizontal, square and vertical source images must be supported without redesign.
+- The template detects source orientation and adapts the media container.
+- Portrait images may be height-capped and centered; landscape/square images may use their natural aspect ratio.
+- Optional crop mode is allowed only as a reviewed override with explicit focus X/Y values.
+- The default must never sacrifice one member of the couple merely to fill a fixed decorative viewport.
+- Story-photo configuration therefore includes: source, fit mode (full/crop), focusX, focusY and alt text.
+
+## Ceremony / celebration location scalability
+Location rendering must support one shared venue or two separate locations from the same component.
+
+Rules:
+- One location: render one large location entry; no empty second slot.
+- Two locations: render Ceremony and Celebration as two ordered entries, each with its own time, name, address and map URL.
+- Each location map link is independent.
+- Dress code remains an optional micro-detail and disappears cleanly if unused.
+- Calendar/save-date is global, not duplicated per location.
+- The visual treatment must not require a second venue photograph; one main venue image is sufficient.
+- Questionnaire/config fields must support location count, type, time, venue name, address and map URL for each entry.
