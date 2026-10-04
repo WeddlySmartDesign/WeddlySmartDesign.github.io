@@ -736,3 +736,42 @@ Exact next step:
 3. Define layout behavior and QA cases for every variant.
 4. Only then return to VEIL LIGHT and implement the template once against that system.
 5. Owner should review finished template variants, not experimental one-off demos.
+
+
+## TEMPLATE-FIRST SYSTEM V1 — LOCKED 2026-10-04
+
+Created and canonical on guest-independent:
+- guest/GUEST_INVITATION_MASTER_CONFIGURATION_MATRIX_V1.md
+- guest/GUEST_COUPLE_QUESTIONNAIRE_V1.md
+- guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json
+- guest/GUEST_TEMPLATE_QA_MATRIX_V1.md
+- guest/GUEST_VEIL_LIGHT_TEMPLATE_CONTRACT_V1.md
+
+Key decisions:
+- catalog designs are configuration systems, never demo-first one-offs;
+- target personalization time is minutes;
+- Cover: names + date + short place always;
+- Story: off/text/text+photo; crop/full + focal configuration;
+- Locations: 1 shared or 2 separate;
+- Agenda: 0–5 moments;
+- Practical: 0–4 modules (Bus, Accommodation, Gift, Playlist);
+- Dress code is a location/event micro-detail, not a fifth Practical module;
+- Accommodation includes ON_SITE / ROOM_BLOCK / COUPLE_MANAGED / RECOMMENDED / EXTERNAL_BOOKING;
+- RSVP decisions are derived from the same config and are not duplicated inside the invitation;
+- Gallery: 0–4 photos with per-photo CROP/FULL + focus;
+- typography is limited to template-approved variants;
+- every template must pass the canonical QA matrix before owner visual approval.
+
+VEIL LIGHT:
+- V8.x artifacts remain visual references only;
+- do not keep patching demos;
+- next implementation is config renderer + explicit state layouts per GUEST_VEIL_LIGHT_TEMPLATE_CONTRACT_V1.md;
+- opening personalization must not require Canva/Recraft editing per couple; reusable art/motion and dynamic initials/names must be separated.
+
+Schema parse check: PASS
+
+Exact next:
+1. implement a reusable config renderer/test harness for VEIL LIGHT;
+2. implement every template state from the contract;
+3. run automated configuration QA cases;
+4. only after PASS, send owner a finished VEIL LIGHT template review.
