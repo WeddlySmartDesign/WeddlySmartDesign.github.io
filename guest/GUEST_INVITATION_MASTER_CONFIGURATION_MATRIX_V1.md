@@ -374,3 +374,26 @@ A template may enter the catalog only after:
 - Android mobile QA PASS;
 - copy/legibility PASS;
 - no supported scenario requires bespoke redesign.
+
+
+## 16. Fixed-title policy
+
+Section titles are owned by the catalog template and are not editable by the couple.
+
+Reason:
+- they are part of the art direction;
+- their length affects composition;
+- fixed titles keep the questionnaire simple;
+- fixed titles make personalization deterministic and fast.
+
+Example VEIL LIGHT title set:
+- Cover phrase: “Nos casamos”.
+- Story: “Nuestra historia”.
+- Locations: “Dónde nos vemos”.
+- Agenda: “Así será el día”.
+- Practical: “Para que lo tengáis fácil”.
+- Gallery: collection-approved fixed label.
+- RSVP context/title: collection-approved fixed wording.
+- Closing: collection-defined.
+
+Couple-written text remains limited to approved fields such as custom Story, short notes and optional closing line.
