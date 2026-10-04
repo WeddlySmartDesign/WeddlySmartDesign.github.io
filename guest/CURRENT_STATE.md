@@ -816,3 +816,24 @@ Conversation prototype:
 Next:
 - owner reviews V2 questionnaire UX;
 - after questionnaire/config is sealed, implement the real VEIL LIGHT renderer against the canonical schema and QA matrix.
+
+
+## COUPLE QUESTIONNAIRE V3 DIRECTION — LOCKED 2026-10-04
+Owner review of questionnaire V2 identified the correct UX boundary:
+- show enough of the selected invitation to explain what is being requested;
+- do NOT show a polished live finished version with the couple's data, because WeddlySmartDesign remains the designer;
+- questionnaire is contextual data collection, not a self-service invitation builder.
+
+Locked corrections:
+- header brand always “GUEST by WeddlySmartDesign”; by WeddlySmartDesign in Caveat;
+- no visible step fraction such as 1/6;
+- restore global approved typography-style choice on Cover;
+- real Story / venue / Gallery upload controls;
+- optional celebration-venue photo, with template default if absent;
+- Agenda auto-sorts chronologically after every edit/add/remove, treating 00:00–05:59 as next-day wedding-night times;
+- Bus questionnaire is informational only; transport RSVP behavior is derived automatically;
+- Gift modes collect actual bank/Bizum/link/message destination details;
+- confirmation section configures the existing attendance flow and includes menu, allergies/dietary, +1, children, derived transport/accommodation and custom questions;
+- couple-facing UI does not assume the customer knows the term GUEST/RSVP;
+- do not mention Add to calendar in questionnaire;
+- final review shows exact supplied content and uploaded filenames, not only selected module names.
