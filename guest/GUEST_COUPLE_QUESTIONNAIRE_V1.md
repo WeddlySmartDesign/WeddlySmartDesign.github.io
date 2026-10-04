@@ -3,296 +3,361 @@
 Status: CANONICAL INPUT SPECIFICATION
 Date: 2026-10-04
 
-Purpose: collect exactly the structured information needed to generate a GUEST invitation in minutes.
+Purpose: collect only the information needed to generate a premium GUEST invitation in minutes.
 
-The couple should never see implementation language such as fit, focal point, schema, module count or layout state. Those are internal configuration decisions.
+## Experience rule
 
-## A. Your invitation
+The couple must feel that they are **telling us their information**, not designing the invitation.
 
-1. Which invitation design have you chosen?
-- catalog template ID / name.
+Therefore:
+- no layout decisions;
+- no crop/focus terminology;
+- no font names;
+- no module-count terminology;
+- no design controls;
+- conditional questions appear only when relevant;
+- most choices are simple cards/toggles;
+- free text is kept to a minimum.
 
-2. Which typography option do you prefer?
-- show only the typography variants approved for that template.
+The visual titles/section names of each catalog template are fixed by WeddlySmartDesign and are not editable by the couple. This preserves art direction, hierarchy and scalability.
 
-## B. The two of you
+The only typography choice exposed is a **single global display-style choice** from the pre-approved options of the selected template. Body/functional typography remains fixed.
 
-3. Name 1 exactly as you want it to appear.
-4. Name 2 exactly as you want it to appear.
-5. Wedding date.
-6. Short place to show on the cover.
-Examples: Madrid, Murcia, Cartagena, La Manga.
-7. Main contact email for the preview/delivery.
+---
+
+## A. Vosotros
+
+1. Nombre 1 exactamente como queréis que aparezca.
+2. Nombre 2 exactamente como queréis que aparezca.
+3. Fecha de la boda.
+
+### Portada
+The cover always renders:
+- **“Nos casamos”**;
+- names;
+- date.
+
+Optional cover fields:
+4. ¿Queréis que aparezca el lugar en portada?
+- No.
+- Sí -> short place/city.
+
+5. ¿Queréis que aparezca la hora en portada?
+- No.
+- Sí -> time.
 
 Validation:
 - names hard max 30 characters each;
-- cover place hard max 36.
+- cover place hard max 36;
+- cover time short format.
 
-## C. Countdown
+6. Elige el estilo de letra para vuestros nombres.
+Show visual cards only, never font names.
+Example template labels:
+- Clásica.
+- Romántica.
+- Contemporánea.
 
-8. Do you want a countdown?
-- Yes / No.
+Only template-approved variants are shown.
 
-If Yes:
-- wedding time if needed;
-- timezone is derived from location unless manually corrected.
+---
 
-## D. Your story
+## B. Nuestra historia
 
-9. Do you want to include 'Nuestra historia'?
+7. ¿Queréis incluir “Nuestra historia”?
 - No.
-- Yes, text only.
-- Yes, text + photo.
+- Sí.
 
-If Yes:
-10. Tell us your story in a few lines.
-Guidance shown to couple: 'A short, natural paragraph is enough. We will adapt punctuation/line breaks without changing your voice.'
-- hard max 450 characters.
+If Yes, show six simple cards:
 
-11. Optional short heading.
-- leave blank to use the collection default;
-- hard max 45.
+### Texto 1 — Cotidiano
+“Llevamos años compartiendo planes, viajes, domingos tranquilos y muchas risas. Ahora nos hace muchísima ilusión celebrar el siguiente capítulo con vosotros.”
 
-If photo:
-12. Upload one photo.
-No instruction about portrait/landscape is necessary; the template supports all approved orientations.
+### Texto 2 — Alegre
+“No sabemos exactamente cuándo empezó todo, pero sí sabemos que desde entonces la vida es mucho más divertida juntos. Y este día no tendría sentido sin vosotros.”
 
-Internal after upload:
-- derive width/height/orientation;
-- choose crop/full;
-- set focusX/focusY when crop is used;
-- visual QA that neither partner/important background is lost.
+### Texto 3 — Cercano
+“Entre planes improvisados, viajes, cenas que se alargan y días de sofá, hemos ido construyendo lo nuestro. Ahora toca celebrarlo con nuestra gente.”
 
-## E. Where are we celebrating?
+### Texto 4 — Emotivo
+“Después de tantos momentos compartidos, ha llegado uno que queremos vivir rodeados de las personas que forman parte de nuestra historia: vosotros.”
 
-13. Is ceremony and celebration in the same place?
-- Yes, everything is in one place.
-- No, ceremony and celebration are in different places.
+### Texto 5 — Sencillo
+“Nos elegimos hace tiempo y seguimos eligiéndonos cada día. Ahora queremos celebrarlo como más nos gusta: con nuestra familia y amigos cerca.”
+
+### Texto libre
+“Prefiero escribirlo yo.”
+
+If free text:
+- hard max 450 characters;
+- guidance: one short natural paragraph is enough.
+
+8. ¿Queréis añadir una foto a vuestra historia?
+- No.
+- Sí -> upload one photo.
+
+The couple is not asked about orientation/crop.
+Internal production chooses crop/full + focus when needed.
+
+---
+
+## C. Dónde nos vemos
+
+9. ¿Ceremonia y celebración son en el mismo lugar?
+- Sí, todo es en el mismo sitio.
+- No, son en sitios diferentes.
 
 ### If one place
-Ask:
-- place/venue name;
+Ask only:
+- venue/place name;
 - start time;
 - address;
-- Google Maps link (recommended);
-- venue website (optional).
+- Google Maps link;
+- venue website optional.
 
 ### If two places
 Ceremony:
 - name;
-- ceremony time;
+- time;
 - address;
 - Google Maps link;
 - website optional.
 
 Celebration:
 - name;
-- start time;
+- time;
 - address;
 - Google Maps link;
 - website optional.
 
-14. Do you want to include a dress code?
+10. ¿Queréis incluir dress code?
 - No.
-- Yes -> exact short wording, hard max 60 characters.
+- Sí -> short wording, hard max 60.
 
-15. Do you want guests to be able to add the wedding to their calendar?
-- Yes / No.
+11. Optional venue image.
+- upload 0 or 1 image;
+- never require two images.
 
-16. Optional venue image.
-- 0 or 1 image.
-- Never request two images as a requirement.
+**Removed:** “Guardar fecha” from Locations. Add-to-calendar belongs to the GUEST RSVP experience and is not duplicated in the invitation location block.
 
-## F. Moments of the day
+---
 
-17. Do you want to show an agenda / moments?
+## D. Así será el día
+
+12. ¿Queréis mostrar los momentos del día?
 - No.
-- Yes.
+- Sí.
 
 If Yes:
-18. How many moments?
-- 1 / 2 / 3 / 4 / 5.
+13. Add between 1 and 5 moments.
 
-For each moment:
+For each:
 - time;
 - short label.
 
-Suggested labels:
-Ceremonia, Cóctel, Cena, Fiesta, Recena, Brunch, Preboda, Otro.
+Suggested labels shown as quick picks:
+- Ceremonia
+- Cóctel
+- Cena
+- Fiesta
+- Recena
+- Brunch
+- Preboda
+- Otro
 
 Hard max:
 - label 28 characters.
 
-## G. Practical information
+The couple does not choose layout/order style; the template handles 1–5 automatically.
 
-19. Which of these do you want to include?
-Multi-select, maximum 4:
-- Bus / transport.
-- Accommodation.
-- Gift.
+---
+
+## E. Para que lo tengáis fácil
+
+14. ¿Queréis añadir alguna información práctica?
+Show four cards; select 0–4:
+- Bus / transporte.
+- Alojamiento.
+- Regalo.
 - Playlist.
 
 If none:
-- Practical section is omitted completely.
+- the whole Practical section disappears.
 
-### G1. Bus / transport
+### E1. Bus / transporte
 
-Ask:
+Ask only what applies:
 - pickup point(s), 1–3;
 - outbound time(s), 1–3;
 - return time(s), 0–4;
 - optional short note, max 120 chars;
 - optional maps link for pickup;
-- Do you need guests to tell you in RSVP whether they will use the bus? Yes/No.
-- If several routes/stops exist, do you need route choice? Yes/No.
-- If several return times exist, do you need return-time choice? Yes/No.
+- ¿Necesitáis saber en el RSVP quién usará el bus? Yes/No.
+- if several routes/stops: ¿Necesitáis saber cuál? Yes/No.
+- if several return times: ¿Necesitáis saber qué vuelta prefiere cada invitado? Yes/No.
 
 Invitation:
-- informational only;
-- optional 'Cómo llegar';
-- no bus reservation button when RSVP collects the choice.
+- information only;
+- optional “Cómo llegar”;
+- no reservation button when RSVP collects the choice.
 
-### G2. Accommodation
+### E2. Alojamiento
 
-20. How have you organised accommodation?
-Choose ONE:
-- Rooms at the finca/venue.
-- Rooms pre-reserved in a hotel.
-- We will organise/assign rooms ourselves.
-- We only want to recommend a hotel/accommodation.
-- Guests book directly through an external website.
+First ask one beautiful choice screen:
 
-Then collect common information:
+**¿Cómo habéis organizado el alojamiento?**
+- Hay habitaciones en la propia finca/lugar.
+- Tenemos habitaciones pre-reservadas en un hotel.
+- Nosotros organizaremos/asignaremos las habitaciones.
+- Solo queremos recomendar un alojamiento.
+- Los invitados reservan directamente en una web.
+
+Then reveal only the relevant fields.
+
+Common:
 - accommodation/hotel name;
 - address;
 - public website URL;
 - phone/contact;
 - optional Google Maps link.
 
-Conditional questions:
+#### Rooms at finca/venue
+- do guests tell you in RSVP if they want to stay?
+- nights?
+- number of people / occupancy?
+- optional short price/note.
 
-Rooms at finca/venue:
-- should guests tell you in RSVP if they want to stay?
-- do you need nights?
-- do you need number of people / occupancy?
-- optional price / short note.
-
-Pre-reserved hotel block:
+#### Pre-reserved hotel block
 - reservation under what name?
 - booking/discount code?
 - special rate/discount text?
 - deadline?
-- should guests book by phone, hotel website or another method?
-- do you also need them to tell you in RSVP whether they will stay?
+- book by phone / hotel website / other?
+- do you also need RSVP confirmation of who will stay?
 
-Couple-managed rooms:
+#### Couple-managed rooms
 - should guests request accommodation in RSVP?
-- which nights are available?
-- do you need occupancy/number of people?
+- available nights?
+- occupancy/number of people?
 
-Recommended only:
+#### Recommended only
 - no accommodation RSVP question by default.
 
-External booking:
+#### External booking
 - booking URL;
 - code/discount if applicable;
 - deadline if applicable;
-- whether you still want to know in RSVP if guests booked/stay there.
+- whether you still want to know in RSVP if guests will stay.
 
 Invitation rendering:
-- 'Ver hotel' when website exists;
-- 'Reservar' only when the guest truly books externally;
-- otherwise accommodation choices stay in RSVP.
+- “Ver hotel” when website exists;
+- “Reservar” only when booking genuinely happens externally;
+- otherwise accommodation choices remain in RSVP.
 
-### G3. Gift
+### E3. Regalo
 
-21. Do you want to include gift information?
-- No.
+Ask:
+- No gift information.
 - Bank transfer.
 - Bizum.
-- External gift list/link.
+- External gift-list link.
 - Short custom message.
 
-Collect only fields relevant to selected mode.
-Invitation shows concise wording and, when needed, an action such as 'Ver datos'.
+Collect only the relevant fields.
+Invitation uses concise wording + “Ver datos”/external link when needed.
 
-### G4. Playlist
+### E4. Playlist
 
-22. Do you want guests to suggest songs?
+Ask:
 - No.
-- Yes.
+- Yes -> target/link + optional short prompt.
 
-If Yes:
-- target/link;
-- optional short prompt, max 100 chars.
+---
 
-## H. RSVP
+## F. Confirmación de asistencia
 
-23. Allow +1?
+The invitation always shows one GUEST RSVP CTA.
+
+15. ¿Permitís acompañante (+1)?
 - Yes / No.
 
-24. Ask about children?
+16. ¿Queréis preguntar por niños?
 - Yes / No.
 
 Transport questions:
-- automatically derived from Bus answers.
+- derived automatically from Bus settings.
 
 Accommodation questions:
-- automatically derived from Accommodation mode/answers.
+- derived automatically from Accommodation settings.
 
-25. Any additional custom RSVP questions?
-- use existing GUEST custom-question capability.
+17. Additional custom RSVP questions?
+- existing GUEST custom-question capability.
 
-The invitation itself always contains one CTA:
-- default: 'Confirmar asistencia'.
+The couple does not configure “Add to calendar” here as a design choice; GUEST RSVP already provides the calendar action where defined by the product.
 
-## I. Gallery
+---
 
-26. Do you want a final photo gallery?
+## G. Fotos
+
+18. ¿Queréis una galería final?
 - No.
-- Yes.
+- Sí.
 
 If Yes:
-27. Upload between 1 and 4 photos and put them in your preferred order.
+19. Upload 1–4 photos and put them in preferred order.
 
-The couple does NOT need to choose crop mode.
-Internal personalization:
-- derive orientation;
-- choose crop/full per photo;
-- set focusX/focusY if cropped;
-- verify both people / important environment remain visible.
+The couple does NOT choose crop mode.
+Internal production:
+- derives orientation;
+- chooses crop/full per photo;
+- adjusts focus if cropped;
+- verifies both people / important environment remain visible.
 
-## J. Closing
+---
 
-28. Closing line:
+## H. Cierre
+
+The closing title/visual language is fixed by the selected catalog template.
+
+20. Closing line:
 - use collection default; OR
 - optional custom short line, hard max 80 characters.
 
-Names/date are already reused from the main form.
+Names/date are reused automatically.
 
-## K. Final check shown to couple
+---
 
-Before submission show a compact summary:
-- names;
-- date;
-- cover place;
-- one/two locations;
-- agenda count;
-- selected practical options;
-- gallery photo count;
-- RSVP options.
+## Fixed-title policy
 
-Couple confirms: 'Everything is correct.'
+The couple does NOT edit section titles.
+
+Each template owns its titles, for example in VEIL LIGHT:
+- Cover: “Nos casamos”.
+- Story: “Nuestra historia”.
+- Locations: “Dónde nos vemos”.
+- Agenda: “Así será el día”.
+- Practical: “Para que lo tengáis fácil”.
+- Gallery: “Un poco de nosotros” / collection-approved fixed label.
+- RSVP: collection-approved fixed title/CTA context.
+- Closing: collection-defined.
+
+Reason:
+- titles are part of the art direction;
+- title length affects composition;
+- fixed titles make personalization fast and predictable;
+- the invitation should feel professionally designed, not self-authored in a builder.
+
+---
 
 ## Internal generation output
 
-The questionnaire does NOT generate arbitrary prose blocks.
-It maps to the canonical GUEST invitation config.
+The questionnaire maps directly to the canonical GUEST invitation config.
 
-Free-text fields are deliberately limited:
-- story;
+Free-text is deliberately limited to:
+- optional story custom text;
 - optional short notes;
-- optional closing line;
-- optional playlist/gift wording.
+- optional dress code wording;
+- optional gift/playlist wording;
+- optional closing line.
 
-All operational information is structured.
+Operational data remains structured.
