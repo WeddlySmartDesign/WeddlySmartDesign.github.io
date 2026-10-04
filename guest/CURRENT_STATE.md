@@ -837,3 +837,13 @@ Locked corrections:
 - couple-facing UI does not assume the customer knows the term GUEST/RSVP;
 - do not mention Add to calendar in questionnaire;
 - final review shows exact supplied content and uploaded filenames, not only selected module names.
+
+
+## COUPLE QUESTIONNAIRE V4 POLISH — 2026-10-04
+Owner review of V3:
+- remove all internal catalog/template names (e.g. VEIL LIGHT) from couple-facing questionnaire; customer already chose an invitation and does not need internal design names;
+- keep contextual section references, but they are explanatory references only, never a finished live preview;
+- Moments reference had insufficient contrast/legibility;
+- audit all mobile text sizes: no important explanatory/input/option text may be tiny;
+- desktop must have a deliberate wider two-column composition where appropriate, not merely a stretched mobile card;
+- mobile and desktop are both first-class QA targets.
