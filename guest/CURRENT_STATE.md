@@ -474,3 +474,36 @@ Decisive QA remains Android owner review, especially:
 2. whether agenda now feels like invitation motion rather than editorial timeline;
 3. whether practical information remains premium despite information density;
 4. whether the quality curve stays high through the middle.
+
+
+## Design 01 — VEIL LIGHT — V6 REJECTED
+Owner Android recording reviewed 2026-10-04. V6 improves continuity but still does not pass the premium catalog gate.
+
+What improved:
+- fully closed opening now reads as a true threshold;
+- direct center-slit reveal into the live hero is materially better than V4/V5 and removes the blank transition;
+- removal of numbered chapters improves flow;
+- venue photography and gallery keep the invitation grounded and emotional;
+- overall layout is cleaner and less app-like than V5.
+
+Why it still fails:
+- opening reveal is still slightly mechanical: the narrow slit exposes fragments of hero copy before the door clears; the opening should clear faster and reveal the hero as a full visual payoff;
+- story still falls back into a large serif editorial/book composition on a pale page;
+- countdown is clean but visually passive;
+- venue image is strong, but its information block below remains mostly utility layout rather than an art-directed continuation;
+- agenda remains a dark editorial timeline with a decorative path; it is better aligned but still reads like a designed article rather than a cinematic wedding moment;
+- practical information remains the main quality valley: despite removing accordions, it is still a sequence of rectangular information rows with basic line illustrations and repeated button patterns;
+- bespoke line illustrations are not yet premium enough and feel like interface icons at larger scale;
+- interior motion is too subtle to change the perceived flatness;
+- gallery and close again recover energy, proving the middle still depends too heavily on static text/information structures.
+
+V7 direction:
+- keep the closed-door concept and hero, but shorten the slit phase and clear panels rapidly enough that the hero arrives as a full reveal;
+- remove large editorial heading compositions from story/agenda/practical sections;
+- stop solving practical content as rows/cards/icons;
+- use a continuous spatial composition with fewer words and stronger visual anchors;
+- practical modules should read as one designed wedding-information scene, not five independent UI blocks;
+- agenda should use scale, motion and rhythm rather than a standard vertical timeline;
+- if interior visual depth cannot be achieved with HTML alone, create one or two additional VEIL LIGHT art assets in Recraft specifically for the middle instead of compensating with generic interface illustration.
+
+Do not start Design 02 until VEIL LIGHT passes Android.
