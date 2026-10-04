@@ -191,3 +191,51 @@ Each catalog design gets:
 - PASS / FAIL.
 
 No visual approval can override a FAIL in the configuration matrix.
+
+
+## 6. RSVP parity regression suite
+
+Mandatory before release:
+
+RP1 — Children OFF
+- save RSVP;
+- save invitation afterwards;
+- open a newly generated guest invitation;
+- child question must remain absent.
+
+RP2 — Children ON
+- enable Children;
+- save RSVP;
+- save/edit invitation afterwards;
+- open a newly generated guest invitation;
+- child question must still be present.
+
+RP3 — Child detail
+- answer with 2 children;
+- verify each child separately stores name, age, menu, allergies/intolerances and high-chair status.
+
+RP4 — +1 detail
+- enable +1;
+- add accompanying guest;
+- verify +1 has independent menu, allergies/intolerances, high-chair, transport/accommodation when enabled and custom answers.
+
+RP5 — Config preservation
+- enable a non-core question key such as Children;
+- save Essential/Signature personalization;
+- reload RSVP management;
+- verify the key remains unchanged.
+
+RP6 — Mixed configuration
+- menu ON;
+- allergies ON;
+- transport ON;
+- accommodation ON;
+- children ON;
+- +1 ON;
+- custom question ON;
+- verify public confirmation renders all applicable fields and submission persists them.
+
+RP7 — Existing invitation link
+- change RSVP settings after an invitation has already been shared;
+- reopen the same invitation link;
+- verify it reads the latest saved RSVP configuration rather than a stale embedded copy.
