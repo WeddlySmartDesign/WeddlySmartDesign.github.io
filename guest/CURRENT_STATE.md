@@ -709,3 +709,30 @@ Rollback rule:
 - V8.10 remains the visual baseline for these areas.
 - Story scalability must be handled by configuration (crop/full + focal point), not by forcing every image into a weak full-width presentation.
 - Location scalability must support 1 or 2 places with compact rows over the venue image, not a large white card.
+
+
+## TEMPLATE-FIRST RESET — 2026-10-04
+Owner correction: GUEST catalog work must be template-first, not demo-first.
+
+Non-negotiable:
+- Every invitation design is a reusable configuration system.
+- Do not approve or present a visual solution that only works for the current demo data/photos.
+- Personalization target: minutes, not redesign.
+- Build and validate the configuration matrix BEFORE further visual polishing.
+
+Minimum variant matrix for every catalog design:
+- Cover: names + date + place always.
+- Story: optional; arbitrary portrait/landscape/square photo; safe focal/fit handling.
+- Locations: 1 shared location OR 2 locations (ceremony + celebration).
+- Agenda: 1–5 moments.
+- Practical: 0–4 modules, with accommodation/transport sub-modes already defined.
+- RSVP: one CTA to GUEST; no duplicated transport/accommodation decision UI.
+- Gallery: 1–4 photos, mixed orientations, per-photo fit/focus.
+- Closing: remains coherent regardless of omitted optional sections.
+
+Exact next step:
+1. STOP visual iteration on VEIL LIGHT.
+2. Build the master GUEST invitation configuration matrix and questionnaire/data schema.
+3. Define layout behavior and QA cases for every variant.
+4. Only then return to VEIL LIGHT and implement the template once against that system.
+5. Owner should review finished template variants, not experimental one-off demos.
