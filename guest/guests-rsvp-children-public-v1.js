@@ -27,15 +27,15 @@ function meals(selected='Infantil'){
 }
 function currentRows(block){
   return [...block.querySelectorAll('.wsd-child')].map(row=>({
-    name:row.querySelector('[data-k="name"]')?.value||'',age:row.querySelector('[data-k="age"]')?.value||'',meal:row.querySelector('[data-k="meal"]')?.value||'Infantil',allergy:row.querySelector('[data-k="allergy"]')?.value||''
+    name:row.querySelector('[data-k="name"]')?.value||'',age:row.querySelector('[data-k="age"]')?.value||'',meal:row.querySelector('[data-k="meal"]')?.value||'Infantil',allergy:row.querySelector('[data-k="allergy"]')?.value||'',highchair:!!row.querySelector('[data-k="highchair"]')?.checked
   }));
 }
 function drawRows(block){
   const host=block.querySelector('.wsd-kids-rows'),n=Math.max(1,Math.min(8,Number(block.querySelector('.wsd-kids-count')?.value)||1)),old=currentRows(block);
-  host.innerHTML=Array.from({length:n},(_,i)=>{const x=old[i]||{};return `<div class="wsd-child"><b>${T('Niño/a','Child')} ${i+1}</b><label>${T('Nombre','Name')} *</label><input class="field" data-k="name" maxlength="180" value="${safe(x.name||'')}"><label>${T('Edad','Age')}</label><input class="field" data-k="age" type="number" min="0" max="17" inputmode="numeric" value="${safe(x.age||'')}"><label>${T('Menú','Meal')}</label><select class="field" data-k="meal">${meals(x.meal||'Infantil')}</select><label>${T('Alergias o intolerancias','Allergies or intolerances')}</label><input class="field" data-k="allergy" maxlength="600" value="${safe(x.allergy||'')}"></div>`}).join('');
+  host.innerHTML=Array.from({length:n},(_,i)=>{const x=old[i]||{};return `<div class="wsd-child"><b>${T('Niño/a','Child')} ${i+1}</b><label>${T('Nombre','Name')} *</label><input class="field" data-k="name" maxlength="180" value="${safe(x.name||'')}"><label>${T('Edad','Age')}</label><input class="field" data-k="age" type="number" min="0" max="17" inputmode="numeric" value="${safe(x.age||'')}"><label>${T('Menú','Meal')}</label><select class="field" data-k="meal">${meals(x.meal||'Infantil')}</select><label class="wsd-kids-toggle"><span>${T('Necesita trona','Needs a high chair')}</span><input data-k="highchair" type="checkbox"${x.highchair?' checked':''}></label><label>${T('Alergias o intolerancias','Allergies or intolerances')}</label><input class="field" data-k="allergy" maxlength="600" value="${safe(x.allergy||'')}"></div>`}).join('');
 }
 function blockHtml(){
-  return `<div class="wsd-kids${unitMode?' unit':''}" data-wsd-kids><label class="wsd-kids-toggle"><span>${unitMode?T('¿Vendrán niños con vosotros?','Will any children be coming with you?'):T('¿Vendrán niños contigo?','Will any children be coming with you?')}</span><input class="wsd-kids-check" type="checkbox"></label><div class="wsd-kids-body"><div class="wsd-kids-help">${T('Indica sus datos para que la pareja pueda organizar menú y catering.','Add their details so the couple can plan meals and catering.')}</div><label>${T('Número de niños','Number of children')}</label><input class="field wsd-kids-count" type="number" min="1" max="8" value="1" inputmode="numeric"><div class="wsd-kids-rows"></div></div></div>`;
+  return `<div class="wsd-kids${unitMode?' unit':''}" data-wsd-kids><label class="wsd-kids-toggle"><span>${unitMode?T('¿Vendrán niños con vosotros?','Will any children be coming with you?'):T('¿Vendrán niños contigo?','Will any children be coming with you?')}</span><input class="wsd-kids-check" type="checkbox"></label><div class="wsd-kids-body"><div class="wsd-kids-help">${T('Indica edad, menú, alergias y si necesitan trona para que la pareja pueda organizarlo todo.','Add their details so the couple can plan meals and catering.')}</div><label>${T('Número de niños','Number of children')}</label><input class="field wsd-kids-count" type="number" min="1" max="8" value="1" inputmode="numeric"><div class="wsd-kids-rows"></div></div></div>`;
 }
 function attendanceTarget(){
   if(!unitMode)return document.getElementById('yes')?.classList.contains('sel')?(qs.get('g')||'single'):'';
@@ -59,7 +59,7 @@ function patch(){
 function schedulePatch(){if(patchQueued)return;patchQueued=true;queueMicrotask(patch)}
 function children(){
   const b=block(),target=attendanceTarget();if(!b||!target||!b.querySelector('.wsd-kids-check')?.checked)return[];
-  return [...b.querySelectorAll('.wsd-child')].map(row=>{const meal=row.querySelector('[data-k="meal"]')?.value||'Infantil';return{name:(row.querySelector('[data-k="name"]')?.value||'').trim(),age:row.querySelector('[data-k="age"]')?.value===''?null:Number(row.querySelector('[data-k="age"]')?.value),meal_required:meal!=='Sin menú',meal:meal==='Sin menú'?'':meal,allergy:(row.querySelector('[data-k="allergy"]')?.value||'').trim()}});
+  return [...b.querySelectorAll('.wsd-child')].map(row=>{const meal=row.querySelector('[data-k="meal"]')?.value||'Infantil';return{name:(row.querySelector('[data-k="name"]')?.value||'').trim(),age:row.querySelector('[data-k="age"]')?.value===''?null:Number(row.querySelector('[data-k="age"]')?.value),meal_required:meal!=='Sin menú',meal:meal==='Sin menú'?'':meal,allergy:(row.querySelector('[data-k="allergy"]')?.value||'').trim(),highchair:!!row.querySelector('[data-k="highchair"]')?.checked}});
 }
 function hashKids(xs){const data=JSON.stringify(xs);let h=2166136261;for(let i=0;i<data.length;i++){h^=data.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(36)}
 function validate(){
