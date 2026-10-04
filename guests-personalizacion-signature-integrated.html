@@ -142,7 +142,7 @@ iframe{width:100%;height:100dvh;border:0;display:block}
         };
         const r=await fetch(B.persApi,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':B.memberToken},body:JSON.stringify({token:B.token,personalization:p})});
         const x=await r.json().catch(()=>({}));if(!r.ok||!x.ok)throw new Error(x.error||'save_failed');
-        const first=p.venues?.[0]||{},nextCfg={...cfg,title:p.p1+' & '+p.p2,date:p.date,time:p.time,venue:[first.name||p.venue,p.city].filter(Boolean).join(', '),intro:cfg.intro||'Nos encantará celebrar este día contigo.',transportOffered:cfg.transportOffered!==false,questions:{meal:cfg.questions?.meal!==false,allergy:cfg.questions?.allergy!==false,transport:cfg.questions?.transport!==false,plusone:cfg.questions?.plusone!==false}};
+        const first=p.venues?.[0]||{},nextCfg={...cfg,title:p.p1+' & '+p.p2,date:p.date,time:p.time,venue:[first.name||p.venue,p.city].filter(Boolean).join(', '),intro:cfg.intro||'Nos encantará celebrar este día contigo.',transportOffered:cfg.transportOffered!==false,questions:{...(cfg.questions||{}),meal:cfg.questions?.meal!==false,allergy:cfg.questions?.allergy!==false,transport:cfg.questions?.transport!==false,plusone:cfg.questions?.plusone!==false}};
         const cr=await fetch(B.rsvpApi,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':B.memberToken},body:JSON.stringify({action:'config',token:B.token,config:nextCfg})});
         const cx=await cr.json().catch(()=>({}));if(!cr.ok||!cx.ok)throw new Error(cx.error||'rsvp_sync_failed');
         Object.assign(cfg,nextCfg);try{localStorage.setItem('weddly_guests_design',JSON.stringify(x.personalization||p))}catch{}
