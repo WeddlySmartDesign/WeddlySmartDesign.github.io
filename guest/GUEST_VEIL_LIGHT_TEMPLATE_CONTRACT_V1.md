@@ -38,21 +38,29 @@ If the current Canva opening contains fixed I&H artwork, it is reference-only an
 ## 3. Cover
 
 Always:
+- fixed phrase “Nos casamos”;
 - name1;
 - name2;
-- date;
-- short place.
+- date.
+
+Optional:
+- short place;
+- time.
 
 VEIL LIGHT behavior:
+- “Nos casamos” is fixed collection copy;
 - veil hero remains the main visual;
 - cover copy is HTML/CSS/native content, never baked into art;
+- place and time can be independently hidden;
 - typography automatically scales between collection-defined min/max;
 - deterministic name line-break rules.
 
 States to build:
 - short names;
 - long names;
-- long supported place;
+- place OFF / ON;
+- time OFF / ON;
+- both optional fields ON;
 - optional cover photo OFF by default for this collection.
 
 ## 4. Countdown
@@ -72,8 +80,14 @@ OFF:
 
 States:
 - OFF;
+- one of five approved preset story texts;
+- custom story text;
 - text only;
 - text + photo.
+
+Title:
+- fixed “Nuestra historia”;
+- not editable by the couple.
 
 VEIL LIGHT photo presentations:
 
@@ -112,7 +126,7 @@ Shared venue state:
 - map link;
 - optional website;
 - optional Dress code micro-detail;
-- global Save date.
+
 
 Split venue state:
 - same visual component, two compact ordered entries;
@@ -121,7 +135,7 @@ Split venue state:
 - each map link independent;
 - optional website link per place when useful;
 - optional Dress code remains a micro-detail, not a third card/section;
-- global Save date appears once.
+
 
 Photography:
 - 0 or 1 location hero photo.
@@ -323,3 +337,20 @@ Build in this order:
 ## 14. Approval gate
 
 VEIL LIGHT is not catalog-ready until every state above passes the master QA matrix with no custom CSS or redesign.
+
+
+## 15. Fixed VEIL LIGHT titles
+
+The couple does not edit titles.
+
+Canonical VEIL LIGHT labels:
+- Cover phrase: “Nos casamos”.
+- Story: “Nuestra historia”.
+- Locations: “Dónde nos vemos”.
+- Agenda: “Así será el día”.
+- Practical: “Para que lo tengáis fácil”.
+- Gallery: “Un poco de nosotros”.
+- RSVP: fixed collection wording around the CTA.
+- Closing: fixed collection closing structure.
+
+These labels may be changed only by a future template version, not during couple personalization.
