@@ -111,3 +111,57 @@ Mobile legibility is non-negotiable:
 Interior dynamism must feel designed, not like generic scroll-reveal:
 - use image-led transitions, progressive stages, scale/line changes, and scene rhythm;
 - maintain calmness, but never confuse restraint with visual flatness.
+
+
+## Transport / hotel scalability model
+GUEST invitation and RSVP must be configuration-driven, not manually redesigned per couple.
+
+### Bus / transport
+Invitation purpose: INFORMATION ONLY.
+Display when enabled:
+- pickup location(s);
+- outbound departure time(s);
+- return time(s);
+- short note if needed;
+- optional map/directions action only when location clarity requires it.
+
+Do NOT use a “reserve bus” button inside the invitation when the couple has enabled transport questions in the GUEST RSVP. Attendance/transport selections belong to RSVP.
+
+Couple questionnaire must capture:
+- transport enabled yes/no;
+- pickup point(s);
+- outbound time(s);
+- return time(s);
+- whether guests must confirm bus use;
+- whether route/return-time choice is required;
+- optional notes;
+- optional map/location.
+
+RSVP must conditionally expose the corresponding bus question(s).
+
+### Hotel / accommodation
+Invitation purpose: INFORMATION ONLY unless an external booking action is genuinely required.
+Accommodation must support multiple modes because couples organize lodging differently:
+1. On-site accommodation / finca rooms — couple needs to know whether guests will stay.
+2. Pre-reserved room block at named hotel — guests book with hotel using couple name/code/discount.
+3. Couple-managed allocation — couple assigns/reserves rooms after guests request accommodation in RSVP.
+4. Recommended accommodation only — informational, no RSVP lodging question unless the couple explicitly wants one.
+5. External booking link — show direct booking CTA only when the hotel requires guests to book externally.
+
+Couple questionnaire must capture:
+- accommodation enabled yes/no;
+- accommodation mode;
+- venue/hotel name;
+- address;
+- booking/contact method;
+- reservation code / couple name / discount code if applicable;
+- deadline if applicable;
+- price/discount text if the couple wants it shown;
+- whether guest accommodation choice must be collected in RSVP;
+- optional occupancy/nights questions where applicable;
+- optional external booking URL.
+
+Invitation copy renders from structured fields, not from arbitrary free text by default. RSVP questions are enabled from the same configuration.
+
+### Product rule
+Practical modules must be optional and reflow automatically. The invitation must remain visually complete with none, some or all practical modules enabled. No empty gaps, no fixed positions reserved for missing modules, and no redesign required per couple.
