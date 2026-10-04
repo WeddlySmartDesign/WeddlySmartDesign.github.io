@@ -188,16 +188,17 @@ Rendering rule:
 
 
 ## Story photo scalability
-The “Nuestra historia” photo must be safe-by-default for arbitrary couple photography.
+The “Nuestra historia” photo must be safe for arbitrary couple photography without forcing a weak universal presentation.
 
 Rules:
-- Default rendering mode is FULL, not destructive cover-crop.
 - Horizontal, square and vertical source images must be supported without redesign.
-- The template detects source orientation and adapts the media container.
-- Portrait images may be height-capped and centered; landscape/square images may use their natural aspect ratio.
-- Optional crop mode is allowed only as a reviewed override with explicit focus X/Y values.
-- The default must never sacrifice one member of the couple merely to fill a fixed decorative viewport.
-- Story-photo configuration therefore includes: source, fit mode (full/crop), focusX, focusY and alt text.
+- Every template must implement BOTH supported presentation modes: immersive crop and full-image.
+- The collection may define a preferred mode, but personalization may switch mode in one action when the supplied photo requires it.
+- Crop mode always exposes explicit focus X/Y values; it is never a blind center-crop.
+- Full mode must still belong to the collection art direction and may not look like a generic image dropped into a webpage.
+- The reviewer chooses fit/focus during the minute-level personalization pass; this is configuration, not redesign.
+- No approved output may sacrifice one member of the couple or essential background merely to fill a fixed viewport.
+- Story-photo configuration includes: source, orientation (derived), fit mode (crop/full), focusX, focusY and alt text.
 
 ## Ceremony / celebration location scalability
 Location rendering must support one shared venue or two separate locations from the same component.
