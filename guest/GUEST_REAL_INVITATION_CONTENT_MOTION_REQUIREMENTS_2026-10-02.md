@@ -210,3 +210,116 @@ Rules:
 - Calendar/save-date is global, not duplicated per location.
 - The visual treatment must not require a second venue photograph; one main venue image is sufficient.
 - Questionnaire/config fields must support location count, type, time, venue name, address and map URL for each entry.
+
+
+## TEMPLATE-FIRST PRINCIPLE — NON-NEGOTIABLE
+GUEST catalog designs are templates/products, not one-off demos.
+
+The order of work is mandatory:
+1. Define the complete configuration model and allowed variants.
+2. Define layout behavior for every supported combination.
+3. Define validation limits for copy, links, image ratios and optional data.
+4. Only then design the visual template.
+5. A catalog design is not approvable until every supported configuration keeps the same visual quality without manual redesign.
+
+Primary commercial objective:
+- after the couple completes the questionnaire, personalization should take only a few minutes;
+- personalization means mapping structured data/photos into a validated template, not redesigning the invitation;
+- no template may rely on a specific number of modules, one specific photo ratio, one venue topology, or one amount of text.
+
+### Core configuration matrix that every catalog template must support
+
+#### Cover
+Always:
+- couple names;
+- wedding date;
+- location / city or agreed short place label.
+Optional:
+- cover/sub-cover couple photo where the collection supports it.
+Rules:
+- text remains legible across supported name lengths;
+- cover art cannot depend on a particular couple photo.
+
+#### Story
+Config:
+- enabled yes/no;
+- heading / short story copy within validated limits;
+- 0 or 1 main story photo;
+- photo orientation: portrait / landscape / square;
+- fit policy: crop with explicit focal point OR full;
+- optional secondary photo only where the template explicitly supports it.
+Rules:
+- no person may be unintentionally cut;
+- composition must remain premium with or without the photo.
+
+#### Locations
+Config:
+- 1 shared location OR 2 separate locations (ceremony + celebration);
+- for each location: type, time, venue name, address, map URL;
+- optional website where relevant;
+- optional dress code as a micro-detail;
+- global save-date action.
+Rules:
+- no empty second slot;
+- one-location and two-location variants are both first-class layouts, not fallbacks;
+- design cannot require two venue photographs.
+
+#### Agenda / moments
+Config:
+- 1 to 5 moments;
+- each moment: time + label; optional short detail only if the catalog template explicitly supports it.
+Rules:
+- layout reflows for 1/2/3/4/5;
+- no fixed empty positions;
+- no manual repositioning per couple.
+
+#### Practical information
+Config:
+- 0 to 4 visible practical modules in the invitation;
+- modules may include bus/transport, accommodation, gift, playlist and other approved practical modules;
+- accommodation has the previously defined sub-modes;
+- transport has the previously defined sub-modes;
+- actions only appear where the action is genuinely external/informational (e.g. hotel website, gift details, playlist link), not when the decision belongs in RSVP.
+Rules:
+- 0 modules: section disappears completely and adjacent sections join naturally;
+- 1/2/3/4 modules: each has a deliberate premium composition;
+- structured short fields preferred over unrestricted paragraphs;
+- no redesign per couple.
+
+#### RSVP
+Config:
+- one CTA into the existing GUEST RSVP;
+- questionnaire/RSVP fields are derived from the same invitation configuration;
+- no duplicate bus/hotel decision flow inside the invitation.
+
+#### Gallery
+Config:
+- 1 to 4 photos;
+- each photo can be portrait / landscape / square;
+- per-photo crop/focal configuration where needed;
+- full-image mode where crop would destroy composition.
+Rules:
+- 1/2/3/4 photos all look intentional;
+- carousel affordance remains clear when >1 photo;
+- no guest-visible broken crop, missing partner, or loss of essential background;
+- personalization should require only choosing fit/focus, not redesigning slides.
+
+#### Closing
+Always:
+- couple names or approved closing signature;
+- wedding date / short closing line as defined by collection.
+Optional:
+- collection-specific closing motion/art.
+Rules:
+- must remain coherent regardless of which optional interior sections were omitted.
+
+### Approval gate
+Before any visual version is shown to the owner, the template must be internally checked against a configuration test matrix that includes at minimum:
+- locations: 1 and 2;
+- agenda: 1, 3 and 5 moments;
+- practical: 0, 1, 2, 3 and 4 modules;
+- gallery: 1 and 4 photos, including mixed orientations;
+- story photo: portrait and landscape;
+- long/short names and representative copy lengths.
+
+If any supported combination requires bespoke design work, the template is not finished.
