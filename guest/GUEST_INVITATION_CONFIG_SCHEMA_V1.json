@@ -106,8 +106,21 @@
       "properties": {
         "photo": {
           "$ref": "#/$defs/photoOrNull"
+        },
+        "showPlace": {
+          "type": "boolean",
+          "default": true
+        },
+        "showTime": {
+          "type": "boolean",
+          "default": false
         }
-      }
+      },
+      "required": [
+        "showPlace",
+        "showTime",
+        "photo"
+      ]
     },
     "countdown": {
       "type": "object",
@@ -126,6 +139,7 @@
       "additionalProperties": false,
       "required": [
         "enabled",
+        "textMode",
         "body",
         "photo"
       ],
@@ -133,19 +147,35 @@
         "enabled": {
           "type": "boolean"
         },
-        "heading": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "maxLength": 45
-        },
         "body": {
           "type": "string",
           "maxLength": 450
         },
         "photo": {
           "$ref": "#/$defs/photoOrNull"
+        },
+        "textMode": {
+          "enum": [
+            "preset",
+            "custom",
+            "none"
+          ]
+        },
+        "presetId": {
+          "anyOf": [
+            {
+              "enum": [
+                "story-01",
+                "story-02",
+                "story-03",
+                "story-04",
+                "story-05"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       }
     },
@@ -155,8 +185,7 @@
       "required": [
         "mode",
         "items",
-        "dressCode",
-        "saveDate"
+        "dressCode"
       ],
       "properties": {
         "mode": {
@@ -194,9 +223,6 @@
               "maxLength": 60
             }
           }
-        },
-        "saveDate": {
-          "type": "boolean"
         }
       }
     },
