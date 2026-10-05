@@ -1235,3 +1235,36 @@ QA:
 Status:
 - pending owner Android visual review;
 - NOT published.
+
+
+## VEIL LIGHT V10.8 — STORY/LOCATION CONTINUITY + TRUE SPLIT TONAL PARITY 2026-10-05
+Owner Android review of V10.7 from recordings 1000094130.mp4, 1000094132.mp4 and 1000094134.mp4:
+- the tonal band between Ceremony and Celebration remained perceptible, especially on the bright/green photo;
+- Story photography is optional, so the template must not depend on a photo to avoid a visually empty section;
+- owner proposed reusing the Practical material image more subtly in Story-without-photo to preserve VEIL LIGHT continuity.
+
+Important technical finding:
+- Story text-only was already using the exact same embedded material asset as Practical, but as a full-strength background rather than as an intentionally subdued material layer.
+
+V10.8 correction:
+- one-location and two-location venue states now use the exact same continuous tonal gradient; split mode no longer changes the tonal field;
+- secondary venue overlay remains disabled;
+- split rows explicitly carry no background, border or shadow, so Ceremony/Celebration separation is typographic/spatial only;
+- Story-without-photo keeps the Practical material asset but is muted beneath an ivory veil overlay and reduced to a more compact 55–58svh composition;
+- Story OFF still removes the whole section and reserves no space;
+- no changes to opening, cover, Story-with-photo composition, photographic Agenda, Practical, Gallery or final RSVP/Closing.
+
+Artifacts:
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_8_CONTINUITY_STORY_VENUE.html
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_8_TWO_LOCATIONS_QA.html
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_8_TWO_LOCATIONS_GREEN_PHOTO_QA.html
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_8_STORY_NO_PHOTO_QA.html
+
+QA:
+- JavaScript syntax PASS on all four artifacts;
+- explicit no-photo Story artifact forces the canonical story-text state for real-device review;
+- explicit green-photo two-location artifact retained for band/contrast validation.
+
+Status:
+- pending owner Android visual review;
+- NOT published.
