@@ -881,3 +881,30 @@ Mandatory next verification:
 - GUEST couple questionnaire V5 contextual/template-first approach: OWNER APPROVED as current baseline.
 - Questionnaire direction remains: contextual references without finished live preview; simple couple-facing language; exact final review; full RSVP parity.
 - Do not regress to step-count UI, internal template names, self-service design controls, or reduced RSVP behavior.
+
+
+## VEIL LIGHT REAL TEMPLATE V1 — 2026-10-05
+A first configuration-driven VEIL LIGHT renderer has been built from the master matrix/questionnaire.
+
+No more V8.x patching.
+
+Implemented:
+- dynamic scalable opening/cover;
+- cover optional place/time;
+- typography variants;
+- countdown;
+- story OFF/text/photo CROP/FULL;
+- 1/2 locations;
+- agenda 1–5 with automatic chronological sort;
+- Practical 0–4;
+- RSVP CTA only;
+- gallery 1–4 with per-photo fit/focus;
+- independent closing.
+
+27 configuration-rule tests PASS.
+
+Checkpoint:
+guest/GUEST_VEIL_LIGHT_TEMPLATE_V1_IMPLEMENTATION_CHECKPOINT_2026-10-05.md
+
+Current gate:
+owner visual/mobile review of the real renderer. It is not published and not catalog-approved yet.
