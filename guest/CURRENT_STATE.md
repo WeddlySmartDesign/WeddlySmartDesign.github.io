@@ -1043,3 +1043,35 @@ Applied without redesigning protected premium master blocks:
 - Protected blocks remain protected: opening, cover motion, photographic agenda, gallery structure, animated closing.
 Candidate artifact: GUEST_VEIL_LIGHT_TEMPLATE_V10_RHYTHM_MASTER.html
 Status: awaiting owner full-mobile review; not published.
+
+
+## VEIL LIGHT V10.1 — RHYTHM FINISH 2026-10-05
+Full mobile experience reviewed from owner recording 1000094090.mp4 against canonical visual master 1000094067.mp4 before further code changes.
+
+Diagnosis:
+- protected premium grammar remains intact; no redesign is required;
+- the remaining rhythm issue before Story is excess travel from countdown into the first photograph;
+- the final act still reads too much as separate Gallery -> RSVP -> Closing blocks instead of one continuous material transition.
+
+Bounded correction:
+- countdown -> Story/photo travel compacted while preserving V8.10 Story typography and composition;
+- Gallery -> RSVP -> Closing rebuilt as one continuous final act using the approved closing veil video itself behind both RSVP and Closing;
+- the large post-CTA dead space was removed and the RSVP-to-closing horizontal seam was eliminated with one continuous tonal overlay across the whole final act;
+- protected opening, cover motion, venue, photographic Agenda, Practical language, dark Gallery and closing typography remain unchanged;
+- Agenda OFF and Gallery OFF renderer cleanup fixed so dynamic template state changes do not retain stale DOM from a prior configuration.
+
+QA before owner review:
+- JavaScript syntax PASS;
+- canonical 390x844 plus 26 configuration/state checks PASS with zero horizontal overflow after fixes;
+- edge mobile checks at 360x800 and 430x932 PASS for canonical/critical variants, including long names;
+- Agenda 0-5, Practical 0-4, Story off/text/photo/full, split/shared locations, cover optional metadata and Gallery off/1/2/3/4 behavior exercised;
+- Gallery 1 removes carousel affordance; Gallery 2+ retains swipe cue/progress;
+- opening interaction verified: door layer hides, entry video plays, hero reveal completes and scroll unlocks;
+- final-act CTA-to-closing spacing is compact and responsive; closing veil is already present behind RSVP.
+
+Candidate artifact:
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_1_RHYTHM_FINISH.html
+
+Status:
+- pending owner Android visual approval;
+- NOT published.
