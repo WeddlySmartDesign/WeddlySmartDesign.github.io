@@ -1200,3 +1200,38 @@ Artifacts:
 Status:
 - pending owner Android visual review;
 - NOT published.
+
+
+## VEIL LIGHT V10.7 — PHOTO ROBUST VENUE 2026-10-05
+Owner supplied three Android recordings of V10.6:
+- 1000094123.mp4 — one-location/default;
+- 1000094125.mp4 — two-location/default;
+- 1000094128.mp4 — two-location with bright green venue photo.
+
+Independent full-video review:
+- V10.6 reduced the original hard tonal band but did NOT fully solve the venue system;
+- a large blank beige pause remains between Story and Locations because the hidden venue heading still reserves roughly 100px of vertical space;
+- on the bright/green photo the lower venue area still reads as a separate dark block because two tonal pseudo-elements overlap and the split layout retains visual row separation;
+- the bright test also proves small venue metadata loses contrast earlier than the main headings;
+- Location -> Agenda remains coherent and should not be redesigned.
+
+V10.7 bounded correction:
+- Story -> Locations blank spacer reduced to a short 30–34px material pause;
+- venue uses exactly one continuous tonal gradient per state (one-location or split), and the second pseudo-element overlay is disabled;
+- split-location row divider lines removed so the image is not visually segmented into bands;
+- venue text receives controlled shadow support for photo-agnostic readability;
+- no changes to opening, cover, Story content, photographic Agenda, Practical, Gallery or final RSVP/Closing.
+
+Artifacts:
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_7_PHOTO_ROBUST_VENUE.html
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_7_TWO_LOCATIONS_QA.html
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_7_TWO_LOCATIONS_GREEN_PHOTO_QA.html
+
+QA:
+- JavaScript syntax PASS on all three artifacts;
+- no new layout widths or card backgrounds introduced;
+- explicit green-photo QA state retained for real-device validation.
+
+Status:
+- pending owner Android visual review;
+- NOT published.
