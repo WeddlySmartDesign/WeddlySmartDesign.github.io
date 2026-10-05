@@ -986,3 +986,29 @@ Internal visual/functional checks completed before owner review:
 Exact next:
 - owner reviews only the canonical default invitation on Android.
 - if canonical parity passes, continue systematic configuration stress QA; do not redesign the default master.
+
+
+## VEIL LIGHT — OWNER VIDEO REVIEW AFTER V7
+Owner supplied real-device recording 1000094083.mp4 of V7.
+
+Internal review against canonical master 1000094067.mp4:
+- opening/cover motion: visually aligned;
+- welcome/countdown: aligned;
+- one-location treatment: aligned;
+- agenda: aligned and remains one of the strongest sections;
+- Practical 4-state default: aligned;
+- gallery/carousel: aligned; final landscape photo preserves couple + environment;
+- RSVP section: aligned;
+- animated closing: aligned and readable.
+
+Regression found by internal review:
+- default Story asset no longer matched the canonical master. V7 used the vineyard seated photo, while the approved master uses the standing garden couple photo.
+- This also made the groom more vulnerable to edge cropping in the default Story.
+
+Correction:
+- V8_MASTER_LOCKED restores the exact approved Story master photo while keeping the scalable crop/full/focus system underneath.
+- No other visual grammar was changed.
+
+Rule:
+- Default catalog preview must visually reproduce the canonical master exactly.
+- Stress-test assets belong only in internal QA cases, never in the owner-facing default preview.
