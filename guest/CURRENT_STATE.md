@@ -938,3 +938,13 @@ New implementation direction:
 Artifact created for owner review:
 - GUEST_VEIL_LIGHT_TEMPLATE_V2_PREMIUM_MASTER.html
 - preserves the original V8.10 entry video, cover reveal timing, agenda styling and closing video while adding configuration states.
+
+## VEIL LIGHT — CANONICAL VISUAL MASTER CLARIFIED
+Owner clarification after reviewing the real mobile recording:
+- The invitation shown in owner-supplied recording 1000094067.mp4 is the visual master that must be scaled.
+- This corresponds to the premium V8.10-era composition/direction: door opening with initials, veil-led moving cover, editorial story, premium venue treatment, photographic agenda with overlaid moments, dark immersive gallery, RSVP section and animated veil closing.
+- Any scalable implementation that materially changes, simplifies or removes those visual/motion decisions is INVALID even if its configuration logic is correct.
+- V1 template rewrite is rejected.
+- V2 is not automatically accepted merely because it reused V8.10 code; visual parity must be proven against this mobile recording, section by section.
+- Scaling rule: parametrize content/state beneath the canonical visual master. Do not redesign the master to make state handling easier.
+- Before owner review, every state implementation must be compared against the canonical mobile master for premium feel, motion, typography, spacing, imagery and transitions.
