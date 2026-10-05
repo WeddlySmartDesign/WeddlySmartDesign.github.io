@@ -1030,3 +1030,16 @@ Applied against the locked V8.10 visual master:
 
 Current artifact: GUEST_VEIL_LIGHT_TEMPLATE_V9_COHESION_PREMIUM.html
 Status: internal static/JS QA PASS; pending owner mobile visual gate.
+
+## VEIL LIGHT V10 — GLOBAL RHYTHM PASS 2026-10-05
+Owner requested full-invitation correction after V9 holistic review.
+Applied without redesigning protected premium master blocks:
+- Qué ilusión reduced to a short emotional interlude (~half viewport) instead of a full editorial page.
+- Story now hands directly into venue imagery; no beige/text-only pause between Story photo and location scene.
+- Location heading/intro is overlaid on the venue photograph; copy shortened so imagery stays dominant.
+- Functional mobile copy floor increased for location/practical/gallery metadata and actions.
+- Gallery renderer now removes a repeated Story photo when other gallery photos are available; QA exposes a duplicateStoryPhoto warning.
+- RSVP now acts as a transition from the dark gallery into the animated closing, using the VEIL LIGHT material language and matching warm bottom tone.
+- Protected blocks remain protected: opening, cover motion, photographic agenda, gallery structure, animated closing.
+Candidate artifact: GUEST_VEIL_LIGHT_TEMPLATE_V10_RHYTHM_MASTER.html
+Status: awaiting owner full-mobile review; not published.
