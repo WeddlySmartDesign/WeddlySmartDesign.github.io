@@ -1107,3 +1107,31 @@ Candidate artifact:
 Status:
 - pending owner Android visual review;
 - NOT published.
+
+
+## VEIL LIGHT V10.3 — SCALABLE FLOW FINISH 2026-10-05
+Owner Android review of V10.2 (recording 1000094097.mp4 + screenshot 1000094098.jpg) identified three remaining coherence/scalability issues:
+- hard visual cut between Story photography and Locations;
+- two-location behavior needed explicit visual proof, not only renderer support;
+- RSVP CTA and farewell still behaved like stacked screens, forcing unnecessary scroll after the action point.
+
+Bounded correction:
+- Story -> Locations now uses a real photographic overlap/fade when Story ends in a photo: Locations overlaps the final 64-72px of Story and fades from transparent to opaque, with the existing VEIL LIGHT veil material crossing the handoff. The venue background becomes transparent only in this state so the previous photograph genuinely shows through during the blend. If Story has no photo/off, this transition is not applied.
+- one-location and two-location states share the exact same edge-to-edge editorial lower-third grammar. Two locations expand as two typographic rows (ceremony / celebration) inside the same lower-third, never as duplicated cards.
+- RSVP + farewell are now one structural final screen over the approved moving veil. CSS grid allocates the RSVP zone and farewell zone inside one viewport, so the guest sees the button and the closing without a second mandatory scroll. Wrapped/long couple names receive a bounded smaller close-name treatment.
+- no redesign of opening, cover, Story grammar, photographic Agenda, Practical, Gallery or the approved moving closing veil.
+
+QA:
+- JavaScript syntax PASS for canonical V10.3 and explicit two-location QA artifact.
+- static structural QA at 360x800, 390x844 and 430x932: zero horizontal overflow in one-location and two-location states.
+- two-location lower-third renders 2 rows without overflow at all three target sizes.
+- at 390x844 the single-screen final act places CTA at approximately y=442-494 and farewell at y=672-818 within the same 844px viewport, with no overlap.
+- Story/venue overlap tested with transparent venue root so the mask reveals the preceding Story photograph rather than a dark section background.
+
+Candidate artifacts:
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_3_SCALABLE_FLOW_FINISH.html
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_3_TWO_LOCATIONS_QA.html
+
+Status:
+- pending owner Android visual review;
+- NOT published.
