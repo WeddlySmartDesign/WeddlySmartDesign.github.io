@@ -1012,3 +1012,21 @@ Correction:
 Rule:
 - Default catalog preview must visually reproduce the canonical master exactly.
 - Stress-test assets belong only in internal QA cases, never in the owner-facing default preview.
+
+
+## VEIL LIGHT V9 — COHESION / PREMIUM CONTINUITY PASS
+Owner requested a full-invitation correction after mobile review.
+
+Applied against the locked V8.10 visual master:
+- "Qué ilusión" elevated from plain informational block to an emotional VEIL LIGHT transition using the same veil material language, integrated countdown and restrained ambient movement.
+- Removed the white seam after "Nuestra historia"; Story now hands off directly into Locations.
+- Story pre-photo area compacted so the photograph arrives sooner without changing the approved Story grammar.
+- Locations continuity tightened without redesigning the approved venue treatment.
+- Practical keeps the approved no-card composition but gains stronger veil depth, larger/clearer typography and earlier-readable reveal behavior.
+- Gallery heading is readable immediately; it no longer depends on a late reveal to become visible.
+- RSVP elevated into the VEIL LIGHT material language while remaining quieter than cover/closing.
+- Reveal system changed from near-invisible until 16% intersection to readable-by-default + early 4% trigger; fast scrolling must not make key text disappear.
+- Opening, cover, approved photographic Agenda, Gallery structure and animated closing remain protected.
+
+Current artifact: GUEST_VEIL_LIGHT_TEMPLATE_V9_COHESION_PREMIUM.html
+Status: internal static/JS QA PASS; pending owner mobile visual gate.
