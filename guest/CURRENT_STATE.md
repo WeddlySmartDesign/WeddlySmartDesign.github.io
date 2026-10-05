@@ -1169,3 +1169,34 @@ QA before owner review:
 Status:
 - pending owner Android visual review;
 - NOT published.
+
+
+## VEIL LIGHT V10.6 — PHOTO-AGNOSTIC VENUE TONAL SYSTEM 2026-10-05
+Owner identified a visible tonal band in the two-location venue state and correctly required that the template work with arbitrary couple-supplied venue photography, not only the current warm master image.
+
+Root cause:
+- V10.5 used two independent tonal systems over the venue photograph: the photograph pseudo-element darkening plus a second gradient background on the text/copy layer;
+- on the warm default image their boundary was subtle, but on bright/green or differently toned photographs it became visible as a horizontal colour band.
+
+Correction:
+- venue now uses one continuous neutral tonal field across the whole photograph;
+- the text/copy layer is fully transparent and adds no independent background;
+- split/two-location mode uses a continuous gradient that begins slightly earlier for readability but has no hard tonal boundary;
+- two-location date is rendered once for the whole scene instead of being repeated under each location;
+- one-location and two-location layouts keep the same cinematic architecture;
+- no redesign outside Locations.
+
+Photo robustness QA:
+- tested against four tonal families derived from the owner-supplied bright green venue photo: bright/green, very light/desaturated, warm, and dark/cool;
+- both one-location and two-location lower text zones preserve readable white-text contrast under the continuous field;
+- the original horizontal band mechanism is eliminated because there is no longer a separate copy-background layer;
+- owner-supplied green photo also embedded into an explicit two-location QA artifact for real-device review.
+
+Artifacts:
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_6_ADAPTIVE_TONAL_VENUE.html
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_6_TWO_LOCATIONS_QA.html
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_6_TWO_LOCATIONS_GREEN_PHOTO_QA.html
+
+Status:
+- pending owner Android visual review;
+- NOT published.
