@@ -1268,3 +1268,35 @@ QA:
 Status:
 - pending owner Android visual review;
 - NOT published.
+
+
+## VEIL LIGHT V10.9 — UNIFORM PHOTO FIELD + STRONGER TEXT-ONLY STORY 2026-10-05
+Owner supplied four mobile recordings after V10.8 and requested a careful full review.
+
+Video findings:
+- Story without a couple photo is too visually weak: the reused Practical veil asset is technically present, but the ivory overlay suppresses it until the section reads almost like a plain beige page.
+- In the bright/green two-location state, a horizontal rectangular tonal change is still visible exactly where Celebration begins. This is unacceptable for a scalable template.
+- The venue band must not be solved by another vertical gradient because any vertical tonal transition can align with a location row and read as a strip on arbitrary photography.
+
+V10.9 architecture:
+- Locations no longer use a vertical tonal gradient at all.
+- The entire venue photograph receives one uniform neutral dark field; a very soft radial warm lift is allowed because it does not create a horizontal boundary.
+- For supplied venue photos, JS samples image luminance and selects a bounded overlay strength automatically (dark photos stay lighter; bright photos receive more protection). Fallback remains safe if sampling fails.
+- Venue copy, both split rows and their wrappers are explicitly transparent with no border, shadow or backdrop-filter, so Ceremony/Celebration separation is purely typographic/spatial.
+- Story-without-photo keeps the same Practical material asset but exposes it much more strongly toward the right/bottom while preserving an ivory reading field under the text.
+- Story with photo and Story OFF behavior remain unchanged.
+
+Photo-adaptation QA:
+- sample luminance logic tested on the owner-supplied green image plus bright/pale, warm and dark variants;
+- resulting overlay strengths stay bounded from 0.28 to 0.40 in those tests;
+- JavaScript syntax PASS on all V10.9 artifacts.
+
+Artifacts:
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_9_ADAPTIVE_UNIFORM_VENUE.html
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_9_TWO_LOCATIONS_QA.html
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_9_TWO_LOCATIONS_GREEN_PHOTO_QA.html
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_9_STORY_NO_PHOTO_QA.html
+
+Status:
+- pending owner Android visual review;
+- NOT published.
