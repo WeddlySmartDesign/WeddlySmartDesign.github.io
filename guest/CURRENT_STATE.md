@@ -1075,3 +1075,35 @@ Candidate artifact:
 Status:
 - pending owner Android visual approval;
 - NOT published.
+
+
+## VEIL LIGHT V10.2 — HOLISTIC UNITY 2026-10-05
+Owner supplied full Android recording 1000094095.mp4 and requested that the invitation be judged as one design rather than section by section.
+
+Holistic diagnosis:
+- opening/cover, countdown/Story, photographic Agenda, Practical, dark Gallery and the new shared RSVP/closing veil all belong to one coherent VEIL LIGHT language;
+- the dark Gallery remains an intentional dramatic contrast and should not be flattened into the beige material system;
+- Locations was the remaining visual outlier: the venue photograph plus rounded floating information card read as a separate visual system even though the section worked in isolation;
+- the closing concept itself is now stronger, but a CSS regression changed close-copy positioning from absolute to relative, causing the final names/copy to intrude into the RSVP transition.
+
+Bounded correction:
+- preserve the venue photograph and photo-led location treatment;
+- reuse the existing VEIL LIGHT veil material subtly over the venue photo;
+- convert the floating rounded location card into an edge-to-edge editorial lower-third using the invitation's warm neutral material language;
+- keep the approved heading/venue copy/buttons/dress-code content and one/two-location renderer behavior;
+- restore closing copy to absolute bottom anchoring inside the closing section; do not redesign the new shared moving-veil final act.
+
+QA:
+- JavaScript syntax PASS;
+- canonical 360x800, 390x844 and 430x932: zero horizontal overflow;
+- closing copy computed position is absolute at all three target sizes and no longer overlaps RSVP content;
+- shared one-location, split two-location and no-custom-photo fallback states render with zero horizontal overflow;
+- venue veil material remains present in all tested location states;
+- no page errors in the tested canonical/configuration states.
+
+Candidate artifact:
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_2_HOLISTIC_UNITY.html
+
+Status:
+- pending owner Android visual review;
+- NOT published.
