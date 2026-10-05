@@ -1135,3 +1135,37 @@ Candidate artifacts:
 Status:
 - pending owner Android visual review;
 - NOT published.
+
+
+## VEIL LIGHT V10.4 REJECTED / V10.5 CINEMATIC VENUE 2026-10-05
+Owner Android review of V10.4 from recording 1000094105.mp4: REJECTED.
+
+Why V10.4 fails:
+- it still behaves like web UI: beige heading block -> rounded venue image -> information block;
+- the location becomes a card/ficha inside the invitation rather than part of VEIL LIGHT;
+- visual energy drops immediately after Story despite improved spacing;
+- the architecture is wrong, so further patching V10.4 is prohibited.
+
+V10.5 direction:
+- discard the web-card grammar completely;
+- use a deliberate short VEIL LIGHT material pause after Story, then a full-bleed cinematic venue photograph;
+- no large pre-heading, no rounded image container, no beige lower card;
+- integrate location name, time, address, actions and optional dress code directly over the photograph with a dark tonal fade + veil material;
+- one-location state: venue name is the single visual focal point;
+- two-location state: the same full-bleed scene contains two typographic entries (Ceremony / Celebration), not duplicated cards or duplicated mini-sections;
+- max one venue photo remains respected; two locations do not require two images;
+- opening, cover, Story grammar, photographic Agenda, Practical, Gallery and final RSVP/closing screen remain untouched.
+
+Artifacts:
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_5_CINEMATIC_VENUE.html
+- GUEST_VEIL_LIGHT_TEMPLATE_V10_5_TWO_LOCATIONS_QA.html
+
+QA before owner review:
+- JavaScript syntax PASS on both artifacts;
+- HTML structural checks PASS;
+- one/two-location renderer keeps a single location section and toggles split-mode only for layout sizing;
+- no redesign outside Locations.
+
+Status:
+- pending owner Android visual review;
+- NOT published.
