@@ -908,3 +908,33 @@ guest/GUEST_VEIL_LIGHT_TEMPLATE_V1_IMPLEMENTATION_CHECKPOINT_2026-10-05.md
 
 Current gate:
 owner visual/mobile review of the real renderer. It is not published and not catalog-approved yet.
+
+
+## VEIL LIGHT TEMPLATE V1 REJECTED / VISUAL MASTER LOCK — 2026-10-05
+
+Owner review of GUEST_VEIL_LIGHT_TEMPLATE_V1_REAL.html: REJECTED.
+
+Failure:
+- scalability was achieved by simplifying the approved visual language;
+- premium opening/cover transition was lost;
+- premium cover motion was reduced;
+- approved agenda character was flattened;
+- premium closing motion/video was removed;
+- result behaved like a generic configurable invitation rather than VEIL LIGHT.
+
+Non-negotiable correction:
+- V8.10 is now the VISUAL MASTER for VEIL LIGHT.
+- Scalability must be implemented underneath the approved visual/motion system, never by simplifying it.
+- Opening video, cover reveal/motion, agenda art direction, practical art direction, gallery language and animated closing are visual assets/behaviors to preserve unless a replacement is demonstrably better.
+- Template engineering may change data binding, optional-state rendering, reflow and configuration, but not the approved art direction.
+
+New implementation direction:
+- rebuild from the literal V8.10 HTML/CSS/motion baseline;
+- inject canonical config into that baseline;
+- support Story on/off/text/photo crop/full, Locations 1/2, Agenda 1-5, Practical 0-4, Gallery 1-4, optional cover place/time and approved typography variants;
+- default visual state should remain materially indistinguishable from V8.10;
+- internal QA variants must not leak generic visual fallbacks into the customer-facing default.
+
+Artifact created for owner review:
+- GUEST_VEIL_LIGHT_TEMPLATE_V2_PREMIUM_MASTER.html
+- preserves the original V8.10 entry video, cover reveal timing, agenda styling and closing video while adding configuration states.
