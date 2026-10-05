@@ -948,3 +948,41 @@ Owner clarification after reviewing the real mobile recording:
 - V2 is not automatically accepted merely because it reused V8.10 code; visual parity must be proven against this mobile recording, section by section.
 - Scaling rule: parametrize content/state beneath the canonical visual master. Do not redesign the master to make state handling easier.
 - Before owner review, every state implementation must be compared against the canonical mobile master for premium feel, motion, typography, spacing, imagery and transitions.
+
+
+## VEIL LIGHT TEMPLATE — CANONICAL SCALING PASS 2026-10-05
+
+Current review artifact:
+- GUEST_VEIL_LIGHT_TEMPLATE_V7_MASTER_SCALABLE_QA.html
+- local/sandbox review artifact only; NOT published.
+
+Method:
+- visual master remains the exact approved V8.10 / owner-recorded invitation.
+- default visual state is preserved; scalability is implemented beneath it.
+- no replacement of opening, hero motion, Agenda art direction, Practical art direction, Gallery treatment or animated closing.
+
+Implemented state handling:
+- Cover: mandatory “Nos casamos” + names + date; optional place/time; long-name class; approved name-style variants.
+- Opening: approved door/video sequence preserved; initials can be replaced for non-I&H couples without rebuilding the invitation.
+- Story: off / text only / crop / full-image states.
+- Locations: 1 shared place / 2 separate places; optional celebration photo; default master photo if absent; independent map/site actions; optional dress code.
+- Agenda: 1–5 moments, automatic chronological ordering including post-midnight wedding-night times.
+- Practical: 0–4 modules, count-driven layout, structured Bus/Hotel/Gift/Playlist rendering.
+- Gallery: 1–4 photos, crop/full per photo; single-photo state removes carousel affordance.
+- RSVP CTA: one link into existing confirmation system.
+- Closing: approved animated master preserved with dynamic names/date/closing copy.
+
+Internal visual/functional checks completed before owner review:
+- canonical default at 390x844 retains the master composition.
+- Agenda 1 and Agenda 5 states visually checked and pass.
+- Practical 3 state visually checked and pass.
+- Gallery 1 landscape/full state visually checked and pass without fake carousel affordance.
+- Long names visually checked and remain inside the cover composition.
+- Story full-image state visually checked.
+- Split ceremony + celebration state visually checked; readability was reinforced without touching the canonical one-location design.
+- desktop default checked at 1366x900 with no horizontal overflow.
+- JavaScript syntax check PASS.
+
+Exact next:
+- owner reviews only the canonical default invitation on Android.
+- if canonical parity passes, continue systematic configuration stress QA; do not redesign the default master.
