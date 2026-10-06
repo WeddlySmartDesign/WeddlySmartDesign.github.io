@@ -1463,3 +1463,64 @@ New canonical scalable artifact:
 This artifact supersedes GUEST_VEIL_LIGHT_VISUAL_MASTER_LOCKED_2026-10-06.html for subsequent configuration/QA work. The previous master stays preserved as rollback reference.
 
 Audit updated in commit f9739ee3c8f0d6e74705d420157e4e9f299e8d8b.
+
+
+## GUEST — END-TO-END ORDER WORKFLOW PILOT READY 2026-10-06
+Owner explicitly stopped further catalog-design work until the complete real operating flow has been tested on mobile and desktop.
+
+Scope now:
+- questionnaire UX;
+- receiving/managing orders;
+- applying the selected configuration to the approved scalable template;
+- couple review / change request;
+- final delivery;
+- email handoffs.
+
+Do NOT return to VEIL LIGHT scalability QA; it is already closed.
+
+Backend implemented in Weddly Smart Design VENDORS Supabase:
+- new service-role-only table: public.guest_invitation_orders;
+- status model: draft -> submitted -> designing -> review_ready -> review_sent -> changes_requested/approved -> delivered;
+- private upload bucket guest-invitation-uploads;
+- public final-delivery bucket guest-invitation-public;
+- new Edge Function guest-invitation-flow, deployed v2;
+- custom hashed questionnaire/review/public capability tokens;
+- existing Weddly owner-manager token reused for private operational actions.
+
+guest-invitation-flow implements:
+- questionnaire load/save/upload/remove/submit;
+- real Story/venue/Gallery uploads;
+- canonical VEIL LIGHT config generation;
+- internal + couple submission emails;
+- owner list/detail/start-design/config/review-ready/note actions;
+- couple review approve/change-request;
+- final delivery with private->public image handoff;
+- production GUEST access link when a paid license exists;
+- test-safe review/delivery emails so the pilot never sends a broken production URL.
+
+Two isolated test orders now exist:
+- MOBILE questionnaire UX pilot;
+- PC questionnaire UX pilot.
+
+Conversation/sandbox pilot artifacts:
+- GUEST_QUESTIONNAIRE_TEST_MOBILE.html
+- GUEST_QUESTIONNAIRE_TEST_PC.html
+- guest-orders-admin-v2.html
+- GUEST_VEIL_LIGHT_PRODUCTION_WORKBENCH.html
+- GUEST_REVIEW_TEST_MOBILE.html
+- GUEST_REVIEW_TEST_PC.html
+- GUEST_FINAL_TEST_MOBILE.html
+- GUEST_FINAL_TEST_PC.html
+
+Design workbench/review/final harnesses are built directly from:
+- GUEST_VEIL_LIGHT_VISUAL_MASTER_SCALABLE_LOCKED_2026-10-06.html
+and apply resolved order config through VEIL_APPLY_CONFIG, so the pilot evaluates the actual approved invitation rather than a simplified preview.
+
+Operational specification:
+- guest/GUEST_END_TO_END_ORDER_WORKFLOW_V1_2026-10-06.md
+- commit: 82b54a2885bd4a3056031d913c582be4c3cf86e1
+
+Production-boundary rule:
+- do NOT switch the live GUEST Stripe/checkout handoff yet;
+- first complete this real pilot and correct questionnaire/operations defects once;
+- after owner accepts the pilot, host commercial questionnaire/review/final surfaces, wire guest-stripe-checkout to the new order workflow, connect production RSVP/access, retire old guest-order.html, and only then start Design 02.
