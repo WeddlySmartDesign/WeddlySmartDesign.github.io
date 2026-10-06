@@ -355,3 +355,45 @@ Persistent Library:
 - /GUEST/END_TO_END_PILOT_2026-10-06/
 
 Do not reuse V4/V4.1 or the previous Review/Final pilot artifacts after this checkpoint.
+
+
+## REAL MOBILE PILOT — V4.3 AGENDA SCALE + INITIALS HARD FIX 2026-10-06
+
+Owner reported after V4.2:
+- master/test initials still appeared briefly around the opening/closing transition;
+- Agenda typography with 5 moments no longer matched the approved Agenda scale.
+
+Root causes:
+1. Agenda:
+- scalable master contained a count-5 override:
+  - time = 20px
+  - label = 23px
+- approved base Agenda uses:
+  - time = 35px
+  - label = 28px
+- the special 5-item font shrink changed the approved visual language unnecessarily.
+
+V4.3 correction:
+- 5-item Agenda now retains exact approved base font scale 35px / 28px;
+- only row vertical padding remains compacted so 5 moments still fit one screen;
+- no changes to Agenda image, heading, grid, lines, animation or positioning model.
+
+2. Test initials:
+- timing-only suppression was not robust enough;
+- V4.3 now cuts the opening source to the clean veil segment at ~4.58 s, before any contaminated master-initial frames can show;
+- custom initials masking remains until the clean segment;
+- cover receives opening-complete and the initials overlay is physically display:none after opening;
+- final-act intersection also forces opening-complete, so the overlay cannot reappear later in the flow.
+
+Applied consistently to:
+- GUEST_PRODUCTION_MANAGER_V4_3.html
+- GUEST_REVIEW_TEST_MOBILE_V2_3.html / PC_V2_3
+- GUEST_FINAL_TEST_MOBILE_V2_3.html / PC_V2_3
+
+Persistent Library:
+- /GUEST/END_TO_END_PILOT_2026-10-06/
+
+QA:
+- JavaScript syntax PASS for all V4.3/V2.3 files.
+
+Continue the existing Pilar & Jorge order; do not restart questionnaire.
