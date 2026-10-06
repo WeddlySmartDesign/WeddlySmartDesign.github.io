@@ -1555,3 +1555,30 @@ Resume rule:
 - do not start Design 02;
 - do not repeat VEIL LIGHT scalability QA;
 - do not wire production Stripe/checkout until the pilot is completed and accepted.
+
+
+## GUEST — FIRST REAL MOBILE PILOT DEFECT FIXED 2026-10-06
+
+Real mobile pilot reached owner production and exposed a workflow/navigation defect:
+- old guest-orders-admin-v2.html “Preparar diseño” only advanced backend state;
+- it did not show/open the invitation;
+- owner became blocked and accidentally advanced the order to review_ready while trying to continue.
+
+Action taken:
+- mobile test order 68a0b0d0-5bea-40e7-bcfb-84e795a1cb39 reset to designing;
+- guest-orders-admin-v2.html retired for the production step;
+- new persistent owner production surface:
+  /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_PRODUCTION_MANAGER_V3.html
+- this file contains the real frozen scalable VEIL LIGHT master and the private production panel together;
+- primary action is now “Preparar y ver invitación” and immediately applies the order config to the real master;
+- same surface continues review-ready, send-review and final-delivery actions.
+
+Email correction discovered during the same pilot:
+- GUEST emails were displaying ONE as sender name.
+- guest-invitation-flow redeployed v3 so GUEST emails use display name “GUEST by WeddlySmartDesign”.
+- test internal-order email no longer exposes the not-yet-hosted old manager link.
+
+Pilot continuation:
+- DO NOT restart questionnaire.
+- Continue existing mobile order from GUEST_PRODUCTION_MANAGER_V3.html.
+- Once mobile owner/review/delivery flow is completed, run PC questionnaire pilot.
