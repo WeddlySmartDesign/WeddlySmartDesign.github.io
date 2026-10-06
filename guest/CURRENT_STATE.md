@@ -1300,3 +1300,41 @@ Artifacts:
 Status:
 - pending owner Android visual review;
 - NOT published.
+
+
+## VEIL LIGHT — CONTROLLED ROLLBACK / APPROVED AGENDA LOCK 2026-10-06
+Owner stopped the iteration after V10.11/V10.12 because attempts to soften transitions modified the already-approved Agenda composition and still failed to remove the visible venue bands.
+
+Mandatory rollback decision:
+- V10.11 and V10.12 are REJECTED as working bases.
+- Recovery baseline is V10.10, the last artifact before Agenda CSS/layout was altered.
+- Agenda is now HARD-LOCKED: do not modify its markup, image, heading/list positions, row geometry, typography, animation or CSS while solving Locations/transitions.
+- No further version-number churn for this correction; work from a recovery artifact until the venue issue is actually solved.
+
+Root cause of the regression:
+- V10.11/V10.12 introduced Agenda-position overrides while trying to blend Venue -> Agenda, changing approved absolute heading/list positioning into relative flow.
+- V10.10 also contained row-level pseudo-elements in Locations that visually reinforced horizontal bands instead of hiding them.
+
+Recovery correction is Venue-only:
+- remove every Ceremony/Celebration row pseudo-layer, border and independent background;
+- use one continuous photo-wide tonal field with a monotonic darkening toward the bottom for legibility across arbitrary venue photography;
+- recover white-copy contrast using text shadow, not cards/bands;
+- remove the hard Dress-code rule;
+- fade the bottom of the Venue photograph into the same dark tonal family used by the approved Agenda, using only Venue masking/background so Agenda itself stays untouched;
+- retain the stronger Story-without-photo material fallback from V10.10.
+
+Recovery artifacts:
+- GUEST_VEIL_LIGHT_RECOVERY_APPROVED_AGENDA.html
+- GUEST_VEIL_LIGHT_RECOVERY_TWO_LOCATIONS_QA.html
+- GUEST_VEIL_LIGHT_RECOVERY_TWO_LOCATIONS_GREEN_PHOTO_QA.html
+- GUEST_VEIL_LIGHT_RECOVERY_STORY_NO_PHOTO_QA.html
+
+Validation:
+- recovery artifacts are generated from V10.10, not V10.11/V10.12;
+- recovery override contains no active Agenda selector; all corrections are scoped to #venue;
+- JavaScript syntax PASS;
+- no publication.
+
+Status:
+- pending one owner mobile validation of the recovery build;
+- Agenda remains frozen regardless of further Venue feedback.
