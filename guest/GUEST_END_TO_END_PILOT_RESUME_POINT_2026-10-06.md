@@ -560,3 +560,21 @@ Second-order gate:
 - offline harness QA reaches Review correctly with no client validation/page errors.
 
 Do not start Design 02 and do not declare VEIL LIGHT 100% frozen until this second order renders through V5.2 without per-order design/code intervention.
+
+
+## PC SCALE-GATE AUTOFILL V3 — 2026-10-06
+
+V2 opened empty because its separate helper script could not access the questionnaire's lexical `loaded` flag. The wait condition therefore never became true and the autofill never started.
+
+V3 fixes the test harness structurally:
+- autofill runs inside the questionnaire's own script scope;
+- it is invoked only after the real order load completes and `loaded=true`;
+- it then fills the actual controls, advances through the normal validations/saves and stops on Review;
+- a final self-check verifies the intended stress configuration before allowing the owner to submit.
+
+The existing PC test order was reset to a clean draft before V3.
+
+Use:
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_QUESTIONNAIRE_PC_SCALE_GATE_AUTOFILL_V3.html
+
+Retire V1 and V2.
