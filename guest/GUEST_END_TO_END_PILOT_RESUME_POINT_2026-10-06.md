@@ -211,3 +211,60 @@ Correction:
 - test-mode internal order email no longer points to a not-yet-hosted production manager link; it tells the owner to use GUEST_PRODUCTION_MANAGER_V3.html.
 
 Do NOT restart the questionnaire. Continue the existing mobile test order from designing using GUEST_PRODUCTION_MANAGER_V3.html.
+
+
+## REAL MOBILE PILOT — VIDEO 1000094342 FIXES CLOSED 2026-10-06
+
+The owner reviewed the real VEIL LIGHT result generated from the first mobile questionnaire and reported four concrete defects plus a blocked return path.
+
+Root causes and corrections:
+
+1. Opening initials flash
+- The reusable custom initials overlay was correct, but the underlying canonical entry video still contains the original I&H pixels near the end of the door animation.
+- After the custom initials had moved away, those baked master initials could flash for a fraction of a second.
+- Fix: cut/crossfade from the entry video to the real configured hero at ~4.55 s and pause the video before the baked I&H frames become visible.
+- The door animation remains; only the contaminated tail is removed.
+
+2. Wrong countdown
+- Real order date: 2027-10-23.
+- The displayed 347 days came from the frozen master date 2027-09-18.
+- Root cause: renderCountdown() created a timer for the master, then VEIL_APPLY_CONFIG() created a second timer for the real order without clearing the first; both timers kept writing to the same DOM.
+- Fix: clear window.__veilTimer before starting the current config timer.
+
+3. Agenda visually empty
+- The real questionnaire correctly contained 5 moments.
+- renderAgenda() correctly replaced the DOM rows, but setupMotion() had attached its reveal observer only to the original master rows.
+- Newly generated rows stayed at their pre-animation opacity and therefore looked empty.
+- Fix: reusable bindAgendaReveal() is called after every dynamic agenda render and after VEIL_APPLY_CONFIG().
+
+4. Couple cropped in Story / Gallery
+- Questionnaire uploads had no manual crop/focal editor (by design), while buildConfig forced every uploaded Story/Gallery image to crop at 50/50.
+- This can cut one member of the couple on landscape or strongly mismatched photos.
+- Fix: photo configs now carry autoFrame=true. The renderer measures the real image ratio and only when the approved crop would be severe it switches that image to VEIL LIGHT's already-approved full-photo state. This preserves both people without introducing manual design work.
+- Venue image remains cover/crop because it is environmental, not a couple portrait.
+
+5. Return to the test
+- Existing mobile order remains alive; questionnaire must NOT be restarted.
+- Order 68a0b0d0-5bea-40e7-bcfb-84e795a1cb39 is in status designing.
+- Continue through GUEST_PRODUCTION_MANAGER_V4.html.
+
+Persistent pilot artifacts added:
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_PRODUCTION_MANAGER_V4.html
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_REVIEW_TEST_MOBILE_V2.html
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_REVIEW_TEST_PC_V2.html
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_FINAL_TEST_MOBILE_V2.html
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_FINAL_TEST_PC_V2.html
+
+Backend:
+- guest-invitation-flow redeployed v4.
+- Future Story/Gallery uploaded photo configs include autoFrame=true.
+- Existing Pilar & Jorge mobile order was migrated to autoFrame=true for its Story and both Gallery photos.
+
+QA:
+- JavaScript syntax PASS for Production Manager V4 + both Review V2 + both Final V2 artifacts.
+- Do not reuse V3 / old Review / old Final artifacts for this pilot.
+
+Next exact action:
+- Open GUEST_PRODUCTION_MANAGER_V4.html.
+- Load the existing Pilar & Jorge order.
+- Review the full invitation again on mobile, especially opening transition, countdown, Story photo, Agenda and Gallery.
