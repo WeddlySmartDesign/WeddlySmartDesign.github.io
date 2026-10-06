@@ -88,3 +88,86 @@ Certification candidate:
 `/GUEST/END_TO_END_PILOT_2026-10-06/GUEST_PRODUCTION_MANAGER_V5_2_CERT_CANDIDATE.html`
 
 V5.2 can be marked 100% scalable/frozen only after Gate 2 generates correctly without per-order design/code intervention.
+
+
+## FINAL GATE 2 RESULT — PASS
+
+The second questionnaire order was submitted successfully:
+- order id: 829f4998-f328-4c6a-be49-d73fd3aaa2f7
+- status after submit: submitted
+- resolved_config generated automatically by guest-invitation-flow
+- no per-order design/CSS/timing/position change was made.
+
+Exact second-order characteristics:
+- names: Álvaro Alejandro / Íñigo Maximiliano;
+- initials: Á&Í;
+- long supported cover place;
+- custom Story text with no photo;
+- two long split Locations;
+- Dress code ON;
+- Agenda 5 including 02:30 continuation-of-night ordering;
+- all 4 Practical modules;
+- external-booking accommodation with long booking code;
+- bank gift;
+- Playlist;
+- +1 + children in RSVP questionnaire;
+- Gallery OFF.
+
+The exact backend-resolved config was rendered through the same certified V5.2 renderer at:
+- 360 x 800;
+- 390 x 844;
+- 430 x 932.
+
+Second-order renderer result: **PASS at all 3 widths**.
+Checks:
+- 0 horizontal document overflow;
+- 0 Cover overflow;
+- 0 split-Location event overlap;
+- 0 Agenda row overlap;
+- 0 Practical item overlap;
+- Story text-only state correct;
+- Gallery OFF state correct;
+- Agenda count = 5;
+- Practical count = 4;
+- derived initials = Á&Í;
+- 0 page JavaScript errors.
+
+Visual review of the stress order also passed:
+- long names remain intentional and readable;
+- both long Locations remain separated and legible;
+- 5-item Agenda retains approved 35px / 28px scale;
+- 4-item Practical composition remains coherent;
+- closing supports the long names/place without overflow.
+
+The scalability fixes introduced during certification are generic master fixes only:
+1. deterministic long-name clamp;
+2. convergent split-location fitting;
+3. safe wrapping of long Practical tokens;
+4. removal of the inherited I&H-specific initials branch.
+
+They do not create per-order behavior and do not alter normal supported states unnecessarily.
+
+## CERTIFICATION DECISION
+
+**VEIL LIGHT V5.2 = 100% SCALABLE / FROZEN for the supported configuration contract.**
+
+This means:
+- supported questionnaire data -> deterministic render;
+- no bespoke CSS;
+- no per-couple animation/timing adjustment;
+- no manual element repositioning;
+- no required Recraft regeneration per order;
+- only normal data/config mapping and review remain operational tasks.
+
+Frozen canonical artifacts:
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_VEIL_LIGHT_V5_2_SCALABLE_FROZEN.html
+  - SHA-256: 6706afb02baea28ac18809336474c7333a4cd31706ecc538de730096599aa956
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_PRODUCTION_MANAGER_V5_2_SCALABLE_FROZEN.html
+  - SHA-256: 64a218c42632ed89d5d33176ff5e9fce910574527b7b9730b581a243fa130365
+
+The optional future Recraft cover improvement does NOT reopen scalability certification unless the motion architecture changes.
+
+Next project step:
+- propagate this exact certified V5.2 renderer into Review and Final pilot surfaces;
+- resume the end-to-end review/change/delivery workflow;
+- do not redesign VEIL LIGHT and do not reopen template scalability QA without a reproducible supported-state defect.
