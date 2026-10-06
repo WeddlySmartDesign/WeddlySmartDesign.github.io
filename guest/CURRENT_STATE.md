@@ -1664,3 +1664,29 @@ Persistent Library:
 - /GUEST/END_TO_END_PILOT_2026-10-06/
 
 Existing Pilar & Jorge order continues in designing. Do not restart questionnaire.
+
+
+## GUEST — MOBILE PILOT V4.4 ENTRY INITIALS 2026-10-06
+
+Owner rejected V4.3 entry initials because the masking patch was visually unacceptable.
+
+Frame-level diagnosis:
+- clean source through ~4.0 s;
+- residual baked master H appears only around ~4.2–4.6 s at the exiting door edge;
+- V4.3's visible patch was the wrong solution.
+
+V4.4:
+- removes the initials patch/card entirely;
+- restores direct understated initials on the door;
+- hands off from the clean door segment at ~4.08 s to the clean veil segment at ~4.82 s before any residual master letter appears;
+- keeps approved Agenda 5-item scale unchanged.
+
+Use now:
+- GUEST_PRODUCTION_MANAGER_V4_4.html
+- GUEST_REVIEW_TEST_MOBILE_V2_4.html / PC_V2_4
+- GUEST_FINAL_TEST_MOBILE_V2_4.html / PC_V2_4
+
+Persistent Library:
+- /GUEST/END_TO_END_PILOT_2026-10-06/
+
+Do not use V4.3 after this point.
