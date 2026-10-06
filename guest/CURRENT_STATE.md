@@ -1582,3 +1582,29 @@ Pilot continuation:
 - DO NOT restart questionnaire.
 - Continue existing mobile order from GUEST_PRODUCTION_MANAGER_V3.html.
 - Once mobile owner/review/delivery flow is completed, run PC questionnaire pilot.
+
+
+## GUEST — REAL MOBILE PILOT RENDER FIXES V4 2026-10-06
+
+From owner video 1000094342.mp4, real-order defects were confirmed and corrected without restarting the questionnaire:
+
+- opening: canonical entry video contained baked I&H pixels near the tail; production/review/final V2 now crossfade to the configured hero before those frames;
+- countdown: duplicate master + real timers caused the old master date to overwrite the real date; previous timer is now cleared before each render;
+- Agenda: dynamic rows were created after the original reveal observer and stayed invisible; reveal binding is now recreated after each dynamic render;
+- Story/Gallery framing: uploaded couple photos previously forced 50/50 crop; production now uses autoFrame=true and switches to the existing approved full-photo state only when ratio mismatch would severely crop the couple;
+- current Pilar & Jorge mobile test order remains in designing and was migrated to autoFrame=true.
+
+Use from now on:
+- GUEST_PRODUCTION_MANAGER_V4.html
+- GUEST_REVIEW_TEST_MOBILE_V2.html / PC_V2
+- GUEST_FINAL_TEST_MOBILE_V2.html / PC_V2
+
+Persistent location:
+- /GUEST/END_TO_END_PILOT_2026-10-06/
+
+Backend:
+- guest-invitation-flow v4 active.
+
+Do not use V3 or the old Review/Final pilot artifacts.
+Do not restart the mobile questionnaire.
+Next action is to reopen the existing Pilar & Jorge order in Production Manager V4 and inspect the same full mobile invitation again.
