@@ -1426,3 +1426,40 @@ Work mode changes now:
 - every experiment must branch from the canonical visual master into a separate derivative;
 - failed experiments are discarded, never patched back into the master;
 - no publication without explicit owner approval.
+
+
+## VEIL LIGHT — SCALABILITY QA CLOSED 2026-10-06
+Systematic QA continued from the frozen visual master.
+
+One reproducible defect was found:
+- with 2 Locations and very long venue names/addresses, Ceremony and Celebration could overlap at 360–390 px widths.
+
+Fix:
+- adaptive split-venue fitting only when overlap is detected;
+- normal approved split/shared geometry remains unchanged;
+- if needed, Celebration moves down and the venue-photo height expands just enough;
+- re-check after fonts resolve and on viewport resize;
+- Agenda and all other approved blocks remain untouched.
+
+Validation:
+- normal default/shared and normal split geometry are identical before/after fix at 360×800, 390×844, 430×932;
+- venue bright/green and dark photo stress states visually reviewed;
+- Story no-photo continuity visually reviewed with the Practical material asset;
+- extended configuration matrix: 168/168 PASS;
+- sequential cleanup states PASS;
+- JS syntax PASS;
+- no horizontal overflow;
+- no agenda row overlap;
+- no Practical card overlap;
+- no split-location event overlap;
+- gallery duplicate-Story-photo filtering PASS;
+- approved invisible Practical action hit targets retained.
+
+New canonical scalable artifact:
+- GUEST_VEIL_LIGHT_VISUAL_MASTER_SCALABLE_LOCKED_2026-10-06.html
+- SHA-256: 94f6a7f80dba43631ad20b5c413f6411e05ba4f526c1b0977f78321f41815d53
+- NOT published.
+
+This artifact supersedes GUEST_VEIL_LIGHT_VISUAL_MASTER_LOCKED_2026-10-06.html for subsequent configuration/QA work. The previous master stays preserved as rollback reference.
+
+Audit updated in commit f9739ee3c8f0d6e74705d420157e4e9f299e8d8b.
