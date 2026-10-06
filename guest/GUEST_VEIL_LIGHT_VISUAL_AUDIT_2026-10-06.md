@@ -275,3 +275,53 @@ Required test matrix before declaring VEIL LIGHT commercially frozen:
 - If the experiment fails, discard the derivative; never patch the visual master.
 - Approved blocks are immutable unless a reproducible defect is demonstrated.
 - No publication without explicit owner approval.
+
+
+## Scalability QA pass — 2026-10-06
+
+A systematic responsive/configuration QA was executed against the frozen visual master.
+
+Coverage:
+- viewports: 360×800, 390×844, 430×932;
+- built-in states plus custom edge cases;
+- Story: photo, no photo, off, long free text, full image;
+- Locations: shared/split, links on/off, dress code on/off, very long names/addresses;
+- Agenda: 0–5 moments, long labels, midnight continuation ordering;
+- Practical: 0–4 modules, long copy, accommodation modes, gift modes;
+- Gallery: off, 1–4 photos, Story-photo duplicate filtering;
+- Cover: optional place/time, long/very long names, typography variants;
+- Closing: long names + long closing copy;
+- sequential cleanup transitions: agenda on→off→on, gallery on→off→on, practical 4→0→2, Story photo→no photo→off→photo, split→shared→split.
+
+Defect found:
+- in 2-location mode, extremely long venue names/addresses could make Ceremony and Celebration overlap at 360–390 px widths.
+
+Correction:
+- introduced an adaptive split-venue fit routine;
+- normal approved geometry is unchanged;
+- when overlap is detected, only the Celebration block is pushed down and the venue photo height grows only if required;
+- the routine re-checks after fonts resolve and on resize;
+- Agenda and all other approved blocks remain untouched.
+
+Regression protection:
+- default/shared and normal split geometry are identical before vs after the fix at 360×800, 390×844 and 430×932.
+- bright/green and dark venue-photo stress cases were visually reviewed and text remains legible.
+- Story without photo was visually reviewed with the Practical material asset and preserves continuity into Locations.
+
+Final QA result on corrected candidate:
+- 168 / 168 checks PASS
+- 0 horizontal-overflow failures
+- 0 stale-state cleanup failures
+- 0 agenda-order failures
+- 0 gallery-filter failures
+- 0 practical-card collisions
+- 0 venue-event collisions
+- Practical action hit areas retain the approved invisible 48 px target via pseudo-element while visual geometry remains unchanged.
+
+New scalable visual master:
+- GUEST_VEIL_LIGHT_VISUAL_MASTER_SCALABLE_LOCKED_2026-10-06.html
+- SHA-256: 94f6a7f80dba43631ad20b5c413f6411e05ba4f526c1b0977f78321f41815d53
+- byte-identical to the fully QA-passed candidate
+- NOT published.
+
+From this point, this scalable locked artifact supersedes the previous visual master for further QA/configuration work. The prior visual master remains preserved as rollback reference.
