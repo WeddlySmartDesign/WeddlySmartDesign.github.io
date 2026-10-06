@@ -1771,3 +1771,25 @@ Checkpoint:
 Exact next action:
 continue the operational pilot with the complete PC order through Production Manager -> Review -> change/approval -> Final delivery.
 Do NOT start Design 02 until this workflow is accepted.
+
+
+## OPERATIONAL PANEL STATE-SYNC FIX — 2026-10-06 21:09 CEST
+
+During the live second-order pilot, after marking order 829f4998-f328-4c6a-be49-d73fd3aaa2f7 as review_ready, the Production Manager showed two contradictory labels for the same order: the live order summary correctly showed “Lista para revisión” while the lower loaded-invitation meta card still showed stale “En diseño”, even after Refresh.
+
+This was an owner-panel UI synchronization defect only. The backend order state was correct and VEIL LIGHT V5.2 remained untouched/frozen.
+
+Correction created:
+- GUEST_PRODUCTION_MANAGER_V5_2_1_OPERATIONAL_STATE_FIX.html
+
+Fix scope:
+- preserve the currently selected order on Refresh/state transitions;
+- refresh the lower production meta card from the latest backend order state;
+- make the bottom status message state-aware (review_ready -> “Ya puedes pulsar Enviar revisión”, etc.);
+- no changes to VEIL_APPLY_CONFIG, invitation CSS, layout, timing, media, or frozen renderer.
+
+Validation:
+- JavaScript syntax PASS;
+- all content before the owner workbench script is byte-identical to the frozen V5.2 manager.
+
+Resume with the same order already in review_ready. Do not revert or restart the questionnaire. Open V5.2.1, Refresh once, verify both status displays agree, then continue with Enviar revisión.
