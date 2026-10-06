@@ -1608,3 +1608,40 @@ Backend:
 Do not use V3 or the old Review/Final pilot artifacts.
 Do not restart the mobile questionnaire.
 Next action is to reopen the existing Pilar & Jorge order in Production Manager V4 and inspect the same full mobile invitation again.
+
+
+## GUEST — MOBILE PILOT FULL REVIEW V4.2 2026-10-06
+
+Full video 1000094355.mp4 reviewed as one invitation after V4.1.
+
+Critical Cover regression found:
+- previous flash workaround hid the entry video and removed the approved moving veil from the Cover.
+- V4.2 restores continuous moving-veil Cover behavior while keeping the custom initials over the baked I&H until those source pixels leave the opening animation.
+- browser title now uses the actual couple.
+
+Full-video status after recheck:
+- Countdown real date: correct.
+- Story framing: correct / both people retained.
+- Split Location: correct.
+- Agenda 5 moments incl. 00:00 ordering: correct.
+- Practical render: correct.
+- Gallery framing: correct / both people retained.
+- Closing: correct.
+
+Additional pilot workflow issue:
+- current Pilar & Jorge order has Playlist enabled but no URL because the original questionnaire did not require it.
+- new questionnaire pilot files V2 now enforce required practical data.
+- guest-invitation-flow active v6 with matching server-side validation.
+- mark_review_ready now rejects incomplete orders.
+
+Use:
+- GUEST_PRODUCTION_MANAGER_V4_2.html
+- GUEST_REVIEW_TEST_MOBILE_V2_2.html / PC_V2_2
+- GUEST_FINAL_TEST_MOBILE_V2_2.html / PC_V2_2
+- GUEST_QUESTIONNAIRE_TEST_MOBILE_V2.html / PC_V2.html
+
+Persistent Library:
+- /GUEST/END_TO_END_PILOT_2026-10-06/
+
+Existing Pilar & Jorge order remains designing and should NOT be restarted.
+It may be visually reviewed now; sending to review is intentionally blocked until its missing Playlist URL is resolved.
