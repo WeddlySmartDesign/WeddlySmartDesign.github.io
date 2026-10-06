@@ -1824,3 +1824,35 @@ Final report:
 - guest/GUEST_END_TO_END_OPERATIONAL_PILOT_FINAL_2026-10-06.md
 
 The scalability gate and operational-pilot gate are now both closed. Design 02 is no longer blocked by those gates. Publication/Stripe wiring remains intentionally separate and unchanged.
+
+
+## VEIL LIGHT V5.3 — VISUAL ROBUSTNESS GATE REOPENED 2026-10-06
+
+Owner Android review of the delivered long-name / long-Story order exposed three real commercial-quality defects that the prior technical matrix did not classify as failures:
+- Cover kicker/place can lose contrast against the moving veil.
+- Long names using the contemporary Bodoni treatment can be technically contained but insufficiently legible.
+- Long text-only Story copy at the fixed 26 px editorial scale can become visually excessive.
+
+Correction to prior status:
+- V5.2 technical scalability PASS remains valid.
+- End-to-end operational pilot PASS remains valid.
+- The previous **commercial visual freeze is revoked** until visual robustness is accepted.
+- Design 02 is BLOCKED again until this gate closes.
+
+V5.3 candidate introduces bounded visual tuning stored in resolved_config and rendered identically in Production / Review / Final. No free CSS, manual positioning or per-order motion changes are permitted.
+
+Safe owner controls:
+- Cover name font and bounded size preset.
+- Cover personalized metadata size; contrast is hardened automatically.
+- Story body font and bounded size preset.
+
+Automatic defaults also harden older orders: long names prefer a readable Playfair treatment, cover microcopy gets high contrast, and long text-only Story copy scales down deterministically by character count.
+
+Artifacts:
+- GUEST_PRODUCTION_MANAGER_V5_3_VISUAL_ROBUSTNESS.html
+- GUEST_REVIEW_TEST_MOBILE_V5_3_VISUAL_ROBUSTNESS.html / PC
+- GUEST_FINAL_TEST_MOBILE_V5_3_VISUAL_ROBUSTNESS.html / PC
+
+Checkpoint: `guest/GUEST_VEIL_LIGHT_VISUAL_ROBUSTNESS_CONTROLS_2026-10-06.md`.
+
+Next action: owner Android review of the problematic long-name / long-Story case. Do not start Design 02 before PASS.
