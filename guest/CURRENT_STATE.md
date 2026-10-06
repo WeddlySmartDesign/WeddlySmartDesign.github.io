@@ -1338,3 +1338,33 @@ Validation:
 Status:
 - pending one owner mobile validation of the recovery build;
 - Agenda remains frozen regardless of further Venue feedback.
+
+
+## VEIL LIGHT — TWO-LOCATION ARCHITECTURE REBUILD 2026-10-06
+Owner confirmed the recovery restored the approved Agenda but the horizontal seam inside Locations remained visible in the two-location state. Further gradient/band patching is rejected.
+
+New direction:
+- one-location state remains unchanged;
+- two-location state no longer uses stacked .venue-split-row blocks inside a shared text panel;
+- Ceremony and Celebration are rendered as two independent typographic moments (.venue-event) floating over one continuous venue photograph;
+- there is no row background, divider, pseudo-band, shared copy gradient or vertical tonal breakpoint between the two events;
+- photo protection is one continuous photo-wide field, biased horizontally for text readability rather than vertically, so it cannot create a horizontal seam;
+- Dress code remains a separate bottom typographic line without a divider;
+- Agenda is HARD-LOCKED and untouched.
+
+Validation:
+- recovery Agenda HTML is byte-identical in the new rebuild;
+- renderAgenda() is byte-identical;
+- the new venue rebuild CSS contains no #agenda/.agenda selectors;
+- JavaScript syntax PASS on principal, two-location, green-photo two-location and Story-no-photo artifacts;
+- QA split-count assertion updated to the new .venue-event architecture.
+
+Artifacts:
+- GUEST_VEIL_LIGHT_LOCATION_REBUILD.html
+- GUEST_VEIL_LIGHT_LOCATION_REBUILD_TWO_LOCATIONS_QA.html
+- GUEST_VEIL_LIGHT_LOCATION_REBUILD_TWO_LOCATIONS_GREEN_PHOTO_QA.html
+- GUEST_VEIL_LIGHT_LOCATION_REBUILD_STORY_NO_PHOTO_QA.html
+
+Status:
+- candidate only, NOT published;
+- next owner check should focus only on the two-location state and the bright/green stress case.
