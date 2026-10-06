@@ -1929,3 +1929,20 @@ Canonical checkpoint: `guest/GUEST_VEIL_LIGHT_V5_3_3_COMMERCIAL_FREEZE_2026-10-0
 Do not reopen VEIL LIGHT unless a reproducible supported-state defect is found in a real order. Do not use VEIL LIGHT work as a pretext to modify ONE, ONE Partner or STUDIO.
 
 Design 02 is now UNBLOCKED. Publication and Stripe wiring remain intentionally separate and unchanged.
+
+
+## GUEST MOBILE CENTER + GUIDED QUESTIONNAIRE — 2026-10-06
+
+Operational packaging added without modifying frozen VEIL LIGHT V5.3.3.
+
+New persistent Library artifacts:
+- /GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V1.html
+- /GUEST/MOBILE_CENTER/GUEST_QUESTIONNAIRE_VEIL_LIGHT_GUIDED_V1.html
+
+The questionnaire now uses real VEIL LIGHT visual examples for every step and simpler plain-language copy.
+
+The Mobile Center is the single owner-side phone file: create a test, open its questionnaire, receive/edit the order, preview the invitation, test the couple review path and verify the delivered final from one place. Separate owner-side Review/Final test files are no longer the normal workflow.
+
+Checkpoint: `guest/GUEST_MOBILE_CENTER_AND_GUIDED_QUESTIONNAIRE_2026-10-06.md`.
+
+VEIL LIGHT V5.3.3 remains frozen. No Stripe/publication changes. Next gate is owner mobile usability of the single-file center, then Design 02.
