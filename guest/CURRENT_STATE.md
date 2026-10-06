@@ -1745,3 +1745,29 @@ Optional later Recraft cover improvement is cosmetic only and does not reopen th
 
 Next:
 propagate frozen V5.2 into Review/Final and complete the operational pilot before Design 02.
+
+
+## GUEST — VEIL LIGHT V5.2 REVIEW/FINAL HANDOFF 2026-10-06
+
+Certification remains CLOSED and FROZEN. No template change was made after Gate 2.
+
+Independent recheck:
+- second order 829f4998-f328-4c6a-be49-d73fd3aaa2f7 passes at 360/390/430;
+- Agenda 5 = 35px / 28px;
+- Story text-only, Gallery OFF, split Locations and Practical 4 all remain valid;
+- frozen production manager hash matches the certification candidate exactly.
+
+Review/Final pilot surfaces have been rebuilt from the canonical frozen invitation, preserving only their workflow overlays:
+- GUEST_REVIEW_TEST_MOBILE_V5_2_FROZEN.html
+- GUEST_REVIEW_TEST_PC_V5_2_FROZEN.html
+- GUEST_FINAL_TEST_MOBILE_V5_2_FROZEN.html
+- GUEST_FINAL_TEST_PC_V5_2_FROZEN.html
+
+All four pass JavaScript syntax QA and are renderer-identical to the frozen base once the workflow overlay is removed.
+
+Checkpoint:
+- guest/GUEST_VEIL_LIGHT_V5_2_FREEZE_HANDOFF_2026-10-06.md
+
+Exact next action:
+continue the operational pilot with the complete PC order through Production Manager -> Review -> change/approval -> Final delivery.
+Do NOT start Design 02 until this workflow is accepted.
