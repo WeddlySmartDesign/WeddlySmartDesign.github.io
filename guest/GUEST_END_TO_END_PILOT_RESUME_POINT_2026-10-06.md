@@ -578,3 +578,47 @@ Use:
 - /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_QUESTIONNAIRE_PC_SCALE_GATE_AUTOFILL_V3.html
 
 Retire V1 and V2.
+
+
+## VEIL LIGHT V5.2 — 100% SCALABLE / FROZEN 2026-10-06
+
+Second real-order gate PASSED.
+
+Order:
+- 829f4998-f328-4c6a-be49-d73fd3aaa2f7
+- submitted successfully from the real PC questionnaire harness;
+- backend generated resolved_config automatically;
+- materially different from Pilar & Jorge.
+
+The exact resolved config was rendered through the same V5.2 certification renderer with ZERO per-order design edits at 360/390/430 px.
+
+PASS:
+- no horizontal overflow;
+- no Cover overflow;
+- no split-location overlap;
+- no Agenda overlap;
+- no Practical overlap;
+- Story text-only;
+- Gallery OFF;
+- Agenda 5;
+- Practical 4;
+- initials Á&Í;
+- 0 page JS errors.
+
+Visual stress review PASS.
+
+Certification result:
+**VEIL LIGHT V5.2 is now 100% scalable and FROZEN for the supported contract.**
+
+Canonical artifacts:
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_VEIL_LIGHT_V5_2_SCALABLE_FROZEN.html
+  SHA-256 6706afb02baea28ac18809336474c7333a4cd31706ecc538de730096599aa956
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_PRODUCTION_MANAGER_V5_2_SCALABLE_FROZEN.html
+  SHA-256 64a218c42632ed89d5d33176ff5e9fce910574527b7b9730b581a243fa130365
+
+Do NOT reopen VEIL LIGHT design or scalability QA without a reproducible supported-state defect.
+
+Next exact action:
+- propagate this certified renderer into Review + Final pilot surfaces;
+- resume end-to-end couple review / change loop / delivery;
+- Design 02 remains blocked until the operational pilot is completed and accepted.
