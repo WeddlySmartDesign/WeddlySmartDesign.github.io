@@ -528,3 +528,35 @@ Important:
 - V5.1 full CSS door is rejected and must not be reused.
 - V5.2 is the visual candidate to validate next.
 - Do not propagate to Review/Final until owner confirms the opening/cover continuity.
+
+
+## VEIL LIGHT V5.2 — SCALABILITY CERTIFICATION GATE 2026-10-06
+
+Owner keeps V5.2 as the currently approved visual version. Optional future Recraft work is deferred; do not spend more credits now.
+
+A strict scalability audit was run before continuing the real pilot.
+
+Results:
+- removed the inherited couple-specific `I&H` initials branch; all couples now use one generic initials path;
+- extracted/inspected the embedded V5.2 opening asset: no initials/names/date are baked into the reusable MP4;
+- stress matrix: 77 configurations x 3 mobile widths (360/390/430) = **231/231 PASS**, 0 page JS errors;
+- Agenda count-5 remains at approved 35px / 28px;
+- three generic supported-limit defects were found and fixed once in the master: long-name font fitting, long split-location adaptive fitting, and long unbroken Practical values;
+- no per-order CSS/timing/manual positioning is used by these fixes.
+
+Persistent certification candidate:
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_PRODUCTION_MANAGER_V5_2_CERT_CANDIDATE.html
+
+Certification report:
+- guest/GUEST_VEIL_LIGHT_V5_2_SCALABILITY_CERTIFICATION_2026-10-06.md
+- persistent Library copy in the pilot folder.
+
+Final 100% freeze is still withheld pending the second, materially different PC questionnaire order.
+
+Second-order gate:
+- existing PC order 829f4998-f328-4c6a-be49-d73fd3aaa2f7 is still draft/empty;
+- test harness prepared: GUEST_QUESTIONNAIRE_PC_SCALE_GATE_AUTOFILL_V1.html;
+- it uses the real questionnaire controls, normal validations and normal save path, fills a deliberately different stress configuration, and stops on the real Review step for explicit final submit;
+- offline harness QA reaches Review correctly with no client validation/page errors.
+
+Do not start Design 02 and do not declare VEIL LIGHT 100% frozen until this second order renders through V5.2 without per-order design/code intervention.
