@@ -1524,3 +1524,34 @@ Production-boundary rule:
 - do NOT switch the live GUEST Stripe/checkout handoff yet;
 - first complete this real pilot and correct questionnaire/operations defects once;
 - after owner accepts the pilot, host commercial questionnaire/review/final surfaces, wire guest-stripe-checkout to the new order workflow, connect production RSVP/access, retire old guest-order.html, and only then start Design 02.
+
+
+## GUEST — REAL-TEST PILOT PERSISTENCE LOCK 2026-10-06
+
+The owner cannot run the real pilot immediately and explicitly requested that the exact test point, artifacts and associated documentation be preserved for later resumption.
+
+Persistent Library folder:
+- /GUEST/END_TO_END_PILOT_2026-10-06
+
+It contains the exact current pilot artifacts:
+- GUEST_QUESTIONNAIRE_TEST_MOBILE.html
+- GUEST_QUESTIONNAIRE_TEST_PC.html
+- guest-orders-admin-v2.html
+- GUEST_VEIL_LIGHT_PRODUCTION_WORKBENCH.html
+- GUEST_REVIEW_TEST_MOBILE.html
+- GUEST_REVIEW_TEST_PC.html
+- GUEST_FINAL_TEST_MOBILE.html
+- GUEST_FINAL_TEST_PC.html
+- GUEST_END_TO_END_PILOT_RESUME_POINT_2026-10-06.md
+
+Repository resume document:
+- guest/GUEST_END_TO_END_PILOT_RESUME_POINT_2026-10-06.md
+- commit: 6debbc06d9fcd3f8de91cf5064ec61234c8811fb
+
+Resume rule:
+- recover the resume document, this CURRENT_STATE and guest/GUEST_END_TO_END_ORDER_WORKFLOW_V1_2026-10-06.md before doing any work;
+- do not ask the owner to remember links, order or prior decisions;
+- next action remains Phase 1 of the real pilot: questionnaire as a couple on mobile, then PC;
+- do not start Design 02;
+- do not repeat VEIL LIGHT scalability QA;
+- do not wire production Stripe/checkout until the pilot is completed and accepted.
