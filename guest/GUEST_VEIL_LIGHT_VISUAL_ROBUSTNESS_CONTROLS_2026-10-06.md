@@ -96,3 +96,21 @@ Acceptance requires:
 - no layout/design manual repair.
 
 Only after this gate passes may VEIL LIGHT be commercially frozen and Design 02 begin.
+
+
+## V5.3.1 — NAME TYPOGRAPHY COHERENCE 2026-10-06
+
+Owner Android review of V5.3 found a coherence defect: the safer long-name font was applied to Cover while Closing could still inherit the old template typography variant. This made the same couple names use different typefaces at the beginning and end of the invitation.
+
+Rule now sealed:
+- couple-name typography is ONE invitation-level visual token;
+- Cover and Closing always use the exact same font family/variant;
+- Closing may use its own bounded size fitting for available space, but never a different typeface;
+- the owner control is now labelled “Nombres · tipografía (portada y cierre)” and cannot tune the two independently.
+
+Artifacts:
+- GUEST_PRODUCTION_MANAGER_V5_3_1_NAME_COHERENCE.html
+- GUEST_REVIEW_TEST_MOBILE_V5_3_1_NAME_COHERENCE.html / PC
+- GUEST_FINAL_TEST_MOBILE_V5_3_1_NAME_COHERENCE.html / PC
+
+Static QA: JavaScript syntax PASS on all five artifacts. Visual robustness gate remains open pending owner Android review.
