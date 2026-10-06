@@ -1874,3 +1874,22 @@ Artifacts:
 - GUEST_FINAL_TEST_MOBILE_V5_3_1_NAME_COHERENCE.html / PC
 
 Static QA: JavaScript syntax PASS on all five artifacts. Visual robustness gate remains open pending owner Android review.
+
+
+## V5.3.2 — AMPERSAND + MICROCOPY COHERENCE 2026-10-06
+
+Owner Android review of V5.3.1 found two remaining coherence/readability defects:
+- the ampersand was too small on Cover and visually awkward in Closing;
+- Closing kicker “NOS VEMOS ALLÍ” was weaker than Cover kicker “NOS CASAMOS”.
+
+Rules now sealed:
+1. Ampersand uses one neutral, readable sans treatment in Cover and Closing. It is no longer an ornamental italic glyph. Couple names keep the selected invitation-level serif.
+2. Closing kicker uses the same microcopy system as Cover kicker: uppercase, same size token, tracking, weight and contrast/shadow logic.
+3. The owner microcopy-size control now explicitly governs Cover + Closing together; the two cannot diverge.
+
+Artifacts:
+- GUEST_PRODUCTION_MANAGER_V5_3_2_AMP_KICKER_COHERENCE.html
+- GUEST_REVIEW_TEST_MOBILE_V5_3_2_AMP_KICKER_COHERENCE.html / PC
+- GUEST_FINAL_TEST_MOBILE_V5_3_2_AMP_KICKER_COHERENCE.html / PC
+
+Static QA: JavaScript syntax PASS on all five artifacts. Visual robustness gate remains open pending owner Android review of Cover + Closing.
