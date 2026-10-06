@@ -133,3 +133,21 @@ Artifacts:
 - GUEST_FINAL_TEST_MOBILE_V5_3_2_AMP_KICKER_COHERENCE.html / PC
 
 Static QA: JavaScript syntax PASS on all five artifacts. Visual robustness gate remains open pending owner Android review of Cover + Closing.
+
+
+## V5.3.3 — FINAL AMPERSAND SCALE 2026-10-06
+
+Owner Android review of V5.3.2 confirmed the ampersand treatment was coherent but still slightly too small in both Cover and Closing.
+
+Final rule:
+- ampersand remains neutral/readable and secondary to the names;
+- one shared structural size token now controls Cover + Closing: `clamp(30px, 8vw, 36px)`;
+- no owner control is added for ampersand size;
+- no other V5.3.2 visual rule changes.
+
+Artifacts:
+- GUEST_PRODUCTION_MANAGER_V5_3_3_AMP_SCALE_FINAL.html
+- GUEST_REVIEW_TEST_MOBILE_V5_3_3_AMP_SCALE_FINAL.html / PC
+- GUEST_FINAL_TEST_MOBILE_V5_3_3_AMP_SCALE_FINAL.html / PC
+
+Visual robustness gate remains open only for owner Android confirmation of this final micro-adjustment.
