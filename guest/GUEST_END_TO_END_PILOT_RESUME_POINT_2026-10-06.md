@@ -492,3 +492,39 @@ Important:
 - V5 is rejected and must not be reused.
 - V5.1 is still a visual candidate, not an approved master.
 - Do not propagate to Review/Final until owner approves the opening itself.
+
+
+## STRUCTURAL OPENING CANDIDATE V5.2 — RECRAFT CONTINUOUS 2026-10-06
+
+Owner compared V5.1 against the original Recraft opening and correctly identified two issues:
+- V5.1 was visually less elegant than the Recraft solution;
+- there was a perceptible scene break between “door opened” and “cover begins”, so the sequence no longer felt like one continuous motion.
+
+Decision:
+- abandon the redrawn CSS door as the visual solution;
+- restore the original Recraft motion language as the basis of the scalable opening.
+
+Root architecture of V5.2:
+1. The Recraft motion is treated as a generic template asset, not a couple-specific animation.
+2. The source asset is cleaned once globally to remove the residual baked master-letter fragment during the late door exit.
+3. Couple initials are DOM/config driven and remain stationary on the closed door.
+4. On tap, initials fade out BEFORE the door begins moving. They are no longer tracked over a moving video.
+5. The same single Recraft motion asset plays continuously from closed door -> opening -> moving veil.
+6. Cover copy fades in over the same running asset only after the video itself has naturally become the full veil.
+7. No video swap / scene cut occurs between opening and cover.
+8. After the cover starts, the clean veil portion loops as before.
+
+This preserves the original premium visual language while meeting scalability:
+- no order-specific timing;
+- no order-specific CSS;
+- no per-frame initials tracking;
+- no initials baked into production content;
+- one generic cleaned motion asset reused for every couple.
+
+Candidate:
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_PRODUCTION_MANAGER_V5_2_RECRAFT_CONTINUOUS.html
+
+Important:
+- V5.1 full CSS door is rejected and must not be reused.
+- V5.2 is the visual candidate to validate next.
+- Do not propagate to Review/Final until owner confirms the opening/cover continuity.
