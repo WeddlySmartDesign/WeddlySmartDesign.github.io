@@ -397,3 +397,38 @@ QA:
 - JavaScript syntax PASS for all V4.3/V2.3 files.
 
 Continue the existing Pilar & Jorge order; do not restart questionnaire.
+
+
+## REAL MOBILE PILOT — V4.4 ENTRY INITIALS ROOT-CAUSE FIX 2026-10-06
+
+Owner rejected V4.3 entry initials as visually unacceptable.
+
+A frame-level comparison against the approved master established the exact cause:
+- the entry MP4 itself is clean through ~4.0 s;
+- between ~4.2 and ~4.6 s, a residual baked portion of the master H appears at the extreme left edge as the door exits;
+- V4.3 tried to hide that with an opaque/radial patch around the dynamic initials;
+- that patch created the visibly artificial “label/card” effect that the owner correctly rejected.
+
+V4.4 does NOT mask the initials with a patch.
+
+New approach:
+- dynamic couple initials are again rendered directly on the door in the same understated typographic language as the approved master;
+- no rectangle, glow card, radial label or visible masking treatment;
+- the source video is allowed to play normally only while its frames are clean;
+- at ~4.08 s, before the residual baked H begins to enter the viewport, the video seeks directly to the clean full-veil segment at ~4.82 s;
+- the dynamic initials are removed at that same handoff;
+- cover motion then continues on the clean veil segment;
+- approved Agenda 5-item scale remains locked at 35px time / 28px label.
+
+Applied consistently to:
+- GUEST_PRODUCTION_MANAGER_V4_4.html
+- GUEST_REVIEW_TEST_MOBILE_V2_4.html / PC_V2_4
+- GUEST_FINAL_TEST_MOBILE_V2_4.html / PC_V2_4
+
+Persistent Library:
+- /GUEST/END_TO_END_PILOT_2026-10-06/
+
+QA:
+- JavaScript syntax PASS for all V4.4/V2.4 artifacts.
+
+Existing Pilar & Jorge order remains valid and should be continued, not restarted.
