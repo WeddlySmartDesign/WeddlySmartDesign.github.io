@@ -1645,3 +1645,22 @@ Persistent Library:
 
 Existing Pilar & Jorge order remains designing and should NOT be restarted.
 It may be visually reviewed now; sending to review is intentionally blocked until its missing Playlist URL is resolved.
+
+
+## GUEST — MOBILE PILOT V4.3 2026-10-06
+
+Real mobile pilot corrections after owner screenshots/video:
+- Agenda 5-item state no longer uses reduced 20px/23px typography.
+- Agenda count-5 now preserves approved base scale: time 35px, label 28px; only row spacing compacts.
+- opening/test-initial suppression upgraded from timing-only to a hard clean-segment handoff at ~4.58s;
+- initials overlay is physically removed after opening and cannot reappear at final act.
+
+Use now:
+- GUEST_PRODUCTION_MANAGER_V4_3.html
+- GUEST_REVIEW_TEST_MOBILE_V2_3.html / PC_V2_3
+- GUEST_FINAL_TEST_MOBILE_V2_3.html / PC_V2_3
+
+Persistent Library:
+- /GUEST/END_TO_END_PILOT_2026-10-06/
+
+Existing Pilar & Jorge order continues in designing. Do not restart questionnaire.
