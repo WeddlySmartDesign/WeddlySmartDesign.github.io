@@ -294,3 +294,64 @@ Persistent Library:
 
 Do NOT use V4 without _1, Review V2 without _1, or Final V2 without _1.
 The existing Pilar & Jorge order remains in designing; do not restart the questionnaire.
+
+
+## REAL MOBILE PILOT — FULL VIDEO REVIEW 1000094355 + V4.2 2026-10-06
+
+Owner requested a full end-to-end visual review, explicitly including the Cover, rather than only the previously reported defects.
+
+Full-video findings:
+
+### Cover regression — real defect
+- V4/V4.1 eliminated the I&H flash by hiding the entry video at the exact point where VEIL LIGHT should remain on the moving veil.
+- Result: after opening, the approved moving veil disappeared and the Cover became a nearly flat beige panel.
+- This broke one of VEIL LIGHT's strongest approved elements.
+
+V4.2 correction:
+- the entry video is never hidden after opening;
+- the custom initials overlay stays over the baked master initials until the baked I&H has left the door area;
+- the custom overlay disappears only after ~4.76 s;
+- the approved Cover copy appears at ~5 s;
+- the video continues into the clean full-veil segment and loops from 5 s exactly as the approved master did;
+- no blank beige Cover;
+- browser title now follows the real couple instead of retaining Isabel & Hugo.
+
+### Previously reported items rechecked in the full video
+- countdown: now reflects the real 2027-10-23 wedding date; duplicate-master-timer bug remains fixed;
+- Story image: auto-safe framing now keeps both people visible;
+- Agenda: all 5 submitted moments render and remain visible, including 00:00 continuation-of-night ordering;
+- Gallery: both submitted photos keep the couple visible; auto-safe framing works;
+- Location: real split location data render correctly;
+- Practical: Bus, Gift and Playlist combinations render without the earlier giftDetail crash;
+- Closing: Pilar & Jorge fit correctly and the final-act transition remains intact.
+
+### Additional workflow defect found proactively
+The current order selected Playlist but contains no playlist URL.
+The original questionnaire allowed this invalid combination, so the invitation shows the Playlist module without an action.
+
+Fix for future pilot orders:
+- GUEST_QUESTIONNAIRE_TEST_MOBILE_V2.html / PC_V2.html validate enabled practical modules before advancing;
+- Playlist enabled => URL required;
+- Bus enabled => pickup + outbound time required;
+- Gift enabled => mode-specific data required;
+- custom Story => non-empty text required;
+- enabled Cover place/time => corresponding value required;
+- guest-invitation-flow redeployed to v6 with matching server-side validation;
+- mark_review_ready now blocks incomplete orders server-side.
+
+Current Pilar & Jorge order:
+- NOT restarted;
+- remains designing;
+- can still be visually reviewed;
+- it cannot be sent to couple review until the missing Playlist link is resolved. This is intentional: incomplete data must never reach the couple.
+
+Current artifacts to use:
+- GUEST_PRODUCTION_MANAGER_V4_2.html
+- GUEST_REVIEW_TEST_MOBILE_V2_2.html / PC_V2_2
+- GUEST_FINAL_TEST_MOBILE_V2_2.html / PC_V2_2
+- GUEST_QUESTIONNAIRE_TEST_MOBILE_V2.html / PC_V2.html
+
+Persistent Library:
+- /GUEST/END_TO_END_PILOT_2026-10-06/
+
+Do not reuse V4/V4.1 or the previous Review/Final pilot artifacts after this checkpoint.
