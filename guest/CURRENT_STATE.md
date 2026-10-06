@@ -1391,3 +1391,38 @@ Rules:
 - Agenda remains frozen.
 - Any future Practical -> Gallery transition experiment must branch from this exact locked artifact and must not modify Venue, Agenda, Story, Cover, Gallery internals, RSVP or Closing.
 - NOT published.
+
+
+## VEIL LIGHT — VISUAL MASTER FROZEN + AUDIT 2026-10-06
+Owner approved the current invitation as a coherent whole after reviewing the full mobile flow.
+
+Canonical visual master:
+- GUEST_VEIL_LIGHT_VISUAL_MASTER_LOCKED_2026-10-06.html
+- exact source: GUEST_VEIL_LIGHT_APPROVED_LOCKED_2026-10-06_WELCOME_VEIL_VISIBLE.html
+- SHA-256: 56ed823c3b97a5f85632b2b2052e5625ed044bb35a5d8dceaaade42bbb6c51e2
+- byte-for-byte identity confirmed
+- JavaScript syntax PASS
+- NOT published
+
+Approved state includes:
+- cover/opening protected;
+- current visible-but-subtle “Qué ilusión” veil intensity approved;
+- Story photo optional, with no-photo continuity required;
+- rebuilt two-location architecture without horizontal band or geometric patch;
+- Agenda HARD-LOCKED;
+- Practical editorial CTA language including Regalo = “VER DETALLES”;
+- enlarged invisible tap areas for Practical actions;
+- current fused Practical -> Gallery transition accepted;
+- Gallery and closing/final act protected.
+
+Operational audit:
+- guest/GUEST_VEIL_LIGHT_VISUAL_AUDIT_2026-10-06.md
+- commit creating audit: 8c146b89911fe0eeba4c255e6172e20a442aabb4
+
+Work mode changes now:
+- stop aesthetic iteration;
+- remaining work is scalability/functional QA;
+- approved blocks may not be reopened unless a reproducible defect is demonstrated;
+- every experiment must branch from the canonical visual master into a separate derivative;
+- failed experiments are discarded, never patched back into the master;
+- no publication without explicit owner approval.
