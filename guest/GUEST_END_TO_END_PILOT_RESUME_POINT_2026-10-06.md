@@ -174,3 +174,40 @@ Do not ask the user to remember this state.
 Recover this file + CURRENT_STATE + workflow doc first.
 Then continue from the exact real-test phase the user is on.
 Do not repeat completed QA, redo architecture, or rebuild test artifacts without evidence of a defect.
+
+
+## FIRST REAL MOBILE PILOT FINDING — 2026-10-06 12:04 CEST
+
+The owner completed the mobile questionnaire and received both emails correctly, then became blocked at the owner step “Preparar diseño”: the old guest-orders-admin-v2.html only changed the backend status/config and did NOT show/open the actual invitation.
+
+This is a real workflow defect, not user error.
+
+Evidence from the real pilot:
+- questionnaire submission succeeded;
+- couple confirmation email succeeded;
+- internal “Nuevo encargo GUEST · Pilar & Jorge” email succeeded;
+- order appeared in owner manager with questionnaire, photos and controls;
+- pressing “Preparar diseño” did not reveal the invitation, so the next action was not discoverable;
+- the test order was accidentally advanced to review_ready while trying to continue.
+
+Correction:
+- test order 68a0b0d0-5bea-40e7-bcfb-84e795a1cb39 was reset to status designing so the pilot can continue cleanly;
+- guest-orders-admin-v2.html is RETIRED for the pilot production step;
+- new persistent artifact: /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_PRODUCTION_MANAGER_V3.html
+- GUEST_PRODUCTION_MANAGER_V3.html contains the exact frozen scalable VEIL LIGHT master plus the private owner production panel in the SAME file;
+- after owner unlock, it selects the pending order and offers one explicit primary action: “Preparar y ver invitación”;
+- that action generates/loads the resolved config, applies it to the real frozen master and closes the panel so the owner immediately sees the invitation;
+- the same panel can be reopened with the floating production control and continues with: Lista para revisión -> Enviar revisión -> Entregar final.
+
+Pilot resume rule updated:
+- after questionnaire submission, skip guest-orders-admin-v2.html;
+- use GUEST_PRODUCTION_MANAGER_V3.html as the single owner-side production surface.
+
+Additional defect noticed in the real emails:
+- sender display name was inherited from ONE.
+Correction:
+- guest-invitation-flow redeployed as v3;
+- GUEST workflow emails now display “GUEST by WeddlySmartDesign” while preserving the configured sender address;
+- test-mode internal order email no longer points to a not-yet-hosted production manager link; it tells the owner to use GUEST_PRODUCTION_MANAGER_V3.html.
+
+Do NOT restart the questionnaire. Continue the existing mobile test order from designing using GUEST_PRODUCTION_MANAGER_V3.html.
