@@ -622,3 +622,35 @@ Next exact action:
 - propagate this certified renderer into Review + Final pilot surfaces;
 - resume end-to-end couple review / change loop / delivery;
 - Design 02 remains blocked until the operational pilot is completed and accepted.
+
+
+## V5.2 FROZEN -> REVIEW/FINAL PROPAGATED 2026-10-06
+
+VEIL LIGHT scalability certification is fully closed. Do not repeat Gate 2.
+
+Frozen renderer was propagated into the Review and Final pilot surfaces with no renderer edits:
+- GUEST_REVIEW_TEST_MOBILE_V5_2_FROZEN.html
+- GUEST_REVIEW_TEST_PC_V5_2_FROZEN.html
+- GUEST_FINAL_TEST_MOBILE_V5_2_FROZEN.html
+- GUEST_FINAL_TEST_PC_V5_2_FROZEN.html
+
+Static QA:
+- exact frozen renderer preserved;
+- Review actions preserved;
+- Final public-load action preserved;
+- JavaScript syntax PASS.
+
+The current environment could not persist the four generated HTML copies into Library because its container-to-Library bridge returned container_session_unavailable. The files themselves are valid; do not modify product code because of this storage issue.
+
+Resume the operational pilot with order 829f4998-f328-4c6a-be49-d73fd3aaa2f7:
+1. GUEST_PRODUCTION_MANAGER_V5_2_SCALABLE_FROZEN.html
+2. mark ready and send review
+3. GUEST_REVIEW_TEST_PC_V5_2_FROZEN.html
+4. approve or request change
+5. complete change loop if used
+6. deliver
+7. GUEST_FINAL_TEST_PC_V5_2_FROZEN.html
+
+Pilar & Jorge remains review-blocked only by the legacy Playlist-without-URL condition. Do not invent data and do not restart it.
+
+Design 02 remains blocked until the operational pilot is accepted.
