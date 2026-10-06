@@ -1690,3 +1690,33 @@ Persistent Library:
 - /GUEST/END_TO_END_PILOT_2026-10-06/
 
 Do not use V4.3 after this point.
+
+
+## GUEST — VEIL LIGHT V5.2 SCALABILITY GATE 2026-10-06
+
+V5.2 is the currently approved visual invitation. Recraft/cover refinement is deferred unless credits remain later.
+
+Technical certification status:
+- couple-specific `I&H` runtime exception removed;
+- V5.2 embedded opening asset confirmed neutral/no baked initials;
+- 77 supported/stress configs at 360, 390 and 430 px = **231/231 PASS**;
+- 0 page JS errors;
+- Agenda count-5 remains locked at 35px time / 28px label;
+- generic fixes only: long-name fitting, split-location convergence, long Practical token wrapping.
+
+Use certification candidate:
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_PRODUCTION_MANAGER_V5_2_CERT_CANDIDATE.html
+
+Report:
+- guest/GUEST_VEIL_LIGHT_V5_2_SCALABILITY_CERTIFICATION_2026-10-06.md
+
+Overall status remains NOT YET 100% FROZEN because the required second PC questionnaire order is still pending.
+
+PC order:
+- 829f4998-f328-4c6a-be49-d73fd3aaa2f7
+- draft / empty
+- dedicated real-questionnaire autofill harness prepared and offline-validated:
+  GUEST_QUESTIONNAIRE_PC_SCALE_GATE_AUTOFILL_V1.html
+- next gate: open it, review the deliberately different generated questionnaire data, explicitly submit, then load that order into the same V5.2 certification candidate with zero design/code edits.
+
+Do not start Design 02 before that gate passes.
