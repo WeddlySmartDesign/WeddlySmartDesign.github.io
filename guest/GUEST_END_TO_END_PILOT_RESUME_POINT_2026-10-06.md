@@ -432,3 +432,39 @@ QA:
 - JavaScript syntax PASS for all V4.4/V2.4 artifacts.
 
 Existing Pilar & Jorge order remains valid and should be continued, not restarted.
+
+
+## SCALABILITY ARCHITECTURE FINDING — OPENING MOTION 2026-10-06
+
+The real-order pilot exposed a structural issue, not a normal per-order adjustment:
+
+- the opening depended on tracking personalized initials over a motion asset / source sequence;
+- successive timing/masking fixes produced order-specific-looking behavior;
+- this violates the business requirement that GUEST templates must generate from questionnaire/config without manual design repair.
+
+Decision:
+- V4.x opening architecture is NOT acceptable as the commercial scalable solution;
+- no more per-order timing patches;
+- stop treating initials motion as an order-level problem.
+
+New scalability rule:
+1. Motion assets must be generic and contain no personalized names/initials/dates.
+2. Every personalized element must be DOM/config-driven.
+3. Personalized motion must be produced by the template structure itself, not by manually tracking text over a video.
+4. No CSS/JS may branch on a specific couple/order.
+5. If a supported questionnaire state breaks the design, that is a template defect and must be fixed once in the master before accepting more orders.
+6. Production handling of an order should be data -> deterministic render -> review; no bespoke CSS/timing work.
+
+Structural replacement candidate created:
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_PRODUCTION_MANAGER_V5_SCALABLE_MOTION.html
+
+V5 opening architecture:
+- uses the clean veil segment as the generic moving background;
+- creates the opening door as a DOM element;
+- initials are a child of the door, so they move naturally with it without frame-by-frame tracking;
+- no initials are baked into the motion asset;
+- no per-order timing coordinates are required;
+- existing approved dynamic config/rendering remains intact.
+
+V5 is a structural candidate and is NOT visually approved yet.
+The current real-order pilot should pause before review/delivery until this architecture is visually accepted.
