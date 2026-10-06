@@ -1793,3 +1793,34 @@ Validation:
 - all content before the owner workbench script is byte-identical to the frozen V5.2 manager.
 
 Resume with the same order already in review_ready. Do not revert or restart the questionnaire. Open V5.2.1, Refresh once, verify both status displays agree, then continue with Enviar revisión.
+
+
+## GUEST — END-TO-END OPERATIONAL PILOT CLOSED 2026-10-06
+
+The real second-order operational pilot is complete and PASS.
+
+Order 829f4998-f328-4c6a-be49-d73fd3aaa2f7 completed:
+- frozen render;
+- review send;
+- couple change request;
+- revision notification;
+- owner data-only edit;
+- regenerated invitation;
+- second review;
+- approval;
+- final delivery;
+- final mobile invitation load.
+
+Backend final state: delivered, revision_count=1.
+
+Operational fixes remained outside the VEIL LIGHT renderer. Current owner candidate:
+- GUEST_PRODUCTION_MANAGER_V5_2_5_TIME_COHERENCE_GUARD.html
+
+V5.2.5 adds a warning/confirmation guard when cover time, ceremony time and first Agenda moment differ. It never auto-synchronizes them.
+
+VEIL LIGHT V5.2 remains 100% scalable/frozen. Do not reopen it without a reproducible supported-state defect.
+
+Final report:
+- guest/GUEST_END_TO_END_OPERATIONAL_PILOT_FINAL_2026-10-06.md
+
+The scalability gate and operational-pilot gate are now both closed. Design 02 is no longer blocked by those gates. Publication/Stripe wiring remains intentionally separate and unchanged.
