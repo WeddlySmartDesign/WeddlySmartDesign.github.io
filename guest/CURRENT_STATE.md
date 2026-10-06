@@ -1720,3 +1720,28 @@ PC order:
 - next gate: open it, review the deliberately different generated questionnaire data, explicitly submit, then load that order into the same V5.2 certification candidate with zero design/code edits.
 
 Do not start Design 02 before that gate passes.
+
+
+## GUEST — VEIL LIGHT V5.2 CERTIFIED AND FROZEN 2026-10-06
+
+VEIL LIGHT V5.2 has passed the final scalability gate.
+
+Evidence:
+- supported/stress matrix 231/231 PASS;
+- neutral reusable opening asset confirmed;
+- I&H-specific runtime exception removed;
+- first real order Pilar & Jorge rendered correctly;
+- second materially different PC order submitted and auto-resolved by backend;
+- second order rendered unchanged at 360/390/430 px with no overflow/overlap/JS errors and correct optional-state behavior.
+
+Result:
+**100% scalable for the defined supported configuration contract.**
+
+Frozen:
+- GUEST_VEIL_LIGHT_V5_2_SCALABLE_FROZEN.html
+- GUEST_PRODUCTION_MANAGER_V5_2_SCALABLE_FROZEN.html
+
+Optional later Recraft cover improvement is cosmetic only and does not reopen this certification unless architecture changes.
+
+Next:
+propagate frozen V5.2 into Review/Final and complete the operational pilot before Design 02.
