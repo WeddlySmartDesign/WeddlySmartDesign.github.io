@@ -1368,3 +1368,26 @@ Artifacts:
 Status:
 - candidate only, NOT published;
 - next owner check should focus only on the two-location state and the bright/green stress case.
+
+
+## VEIL LIGHT — CORRECT APPROVED LOCK 2026-10-06
+Owner reported that the previously "locked" artifact was wrong: it reintroduced the visible horizontal venue lines.
+
+Root cause:
+- the wrong source artifact was frozen.
+- I locked GUEST_VEIL_LIGHT_LOCATION_REBUILD_CLEAN_VISIBLE.html (principal / one-location variant),
+  but the owner-approved artifact was GUEST_VEIL_LIGHT_LOCATION_REBUILD_CLEAN_TWO_LOCATIONS_QA_VISIBLE.html.
+- These files are NOT identical.
+
+Correct frozen baseline:
+- GUEST_VEIL_LIGHT_APPROVED_LOCKED_2026-10-06.html
+- source: GUEST_VEIL_LIGHT_LOCATION_REBUILD_CLEAN_TWO_LOCATIONS_QA_VISIBLE.html
+- SHA-256: 953729fac4415aacc1576abae214622c2e0859e6046fe4e9ea043f5c46c0f8b3
+- byte-for-byte identity between source and frozen copy confirmed with cmp.
+
+Rules:
+- This exact artifact is the approved visual baseline.
+- Do not substitute the principal CLEAN_VISIBLE file for this baseline.
+- Agenda remains frozen.
+- Any future Practical -> Gallery transition experiment must branch from this exact locked artifact and must not modify Venue, Agenda, Story, Cover, Gallery internals, RSVP or Closing.
+- NOT published.
