@@ -468,3 +468,27 @@ V5 opening architecture:
 
 V5 is a structural candidate and is NOT visually approved yet.
 The current real-order pilot should pause before review/delivery until this architecture is visually accepted.
+
+
+## STRUCTURAL OPENING CANDIDATE V5.1 — FULL-SCREEN DOOR 2026-10-06
+
+Owner rejected V5 immediately because the DOM door looked like a narrow floating rectangle over the veil rather than a believable premium door.
+
+This is a valid visual objection. Scalability alone is not sufficient; the structural solution must preserve the approved premium standard.
+
+V5.1 correction:
+- the opening door now covers the full invitation viewport from edge to edge;
+- no veil/background is visible around the closed door;
+- subtle architectural frame/panel lines are built into the door itself so it reads as an intentional door rather than a floating card;
+- the door remains entirely DOM/CSS and generic;
+- couple initials remain config-driven children of the door;
+- opening motion is still deterministic and requires no per-order tracking/timing coordinates;
+- the door slides away as one full surface, revealing the generic moving veil underneath.
+
+Candidate:
+- /GUEST/END_TO_END_PILOT_2026-10-06/GUEST_PRODUCTION_MANAGER_V5_1_FULL_DOOR.html
+
+Important:
+- V5 is rejected and must not be reused.
+- V5.1 is still a visual candidate, not an approved master.
+- Do not propagate to Review/Final until owner approves the opening itself.
