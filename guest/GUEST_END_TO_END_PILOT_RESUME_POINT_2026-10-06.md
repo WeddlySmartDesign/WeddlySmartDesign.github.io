@@ -268,3 +268,29 @@ Next exact action:
 - Open GUEST_PRODUCTION_MANAGER_V4.html.
 - Load the existing Pilar & Jorge order.
 - Review the full invitation again on mobile, especially opening transition, countdown, Story photo, Agenda and Gallery.
+
+
+## PILOT HOTFIX — GIFT DETAIL REGRESSION 2026-10-06
+
+Production Manager V4 failed while loading the real Pilar & Jorge order with:
+- "giftDetail is not defined"
+
+Cause:
+- while patching Agenda/reveal behavior into V4, the pre-existing giftDetail(g) helper from V3 was accidentally removed;
+- because this real order uses Gift mode = Bizum, rendering Practical invoked giftDetail(g) and aborted the invitation render.
+
+Correction:
+- restored the exact giftDetail(g) helper from V3;
+- applied the same restoration to the paired Review/Final pilot artifacts so the defect cannot reappear later in the same test;
+- JavaScript syntax check PASS on all corrected artifacts.
+
+Use now:
+- GUEST_PRODUCTION_MANAGER_V4_1.html
+- GUEST_REVIEW_TEST_MOBILE_V2_1.html / PC_V2_1
+- GUEST_FINAL_TEST_MOBILE_V2_1.html / PC_V2_1
+
+Persistent Library:
+- /GUEST/END_TO_END_PILOT_2026-10-06/
+
+Do NOT use V4 without _1, Review V2 without _1, or Final V2 without _1.
+The existing Pilar & Jorge order remains in designing; do not restart the questionnaire.
