@@ -395,7 +395,7 @@ Deno.serve(async req=>{
     const ctx=await managerContext(c,req);if(!ctx)return json({ok:false,error:'manager_required'},403);
     if(action==='status')return json({ok:true});
     if(action==='create_test'){
-      const o=await createOrder(c,'test',txt(b.email,200),'',null,txt(b.templateId||'veil-light',80));return json({ok:true,...o},201);
+      const o=await createOrder(c,'test',txt(b.email,200),null,null,txt(b.templateId||'veil-light',80));return json({ok:true,...o},201);
     }
     if(action==='list'){
       const {data:rows,error}=await c.from('guest_invitation_orders').select('id,mode,buyer_email,template_id,status,questionnaire,created_at,updated_at,submitted_at,designing_at,review_sent_at,approved_at,delivered_at,revision_count').order('updated_at',{ascending:false}).limit(200);if(error)throw error;
