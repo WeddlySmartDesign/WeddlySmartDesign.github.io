@@ -114,3 +114,55 @@ Replace flowing/fabric-like forms with:
 - no undulating/folded surfaces.
 
 Run one corrective static generation only.
+
+
+---
+
+# M04B TEST 02 RESULT — APPROVED MATERIAL
+
+Asset:
+- corrected Recraft V4.x Pro optical material;
+- hard planar/refraction language;
+- no fabric/veil reading.
+
+## Verdict
+**PASS AS COMPOSITING MATERIAL.**
+
+Important:
+this asset is NOT approved as a finished Cover/background.
+It is approved only as reusable raw optical material.
+
+## Why it passes
+- materially distinct from VEIL LIGHT;
+- hard smoked-glass / planar-reflection reading;
+- strong dark central negative space;
+- champagne edge light is controlled;
+- subtle oxblood contamination remains secondary;
+- crisp-to-soft optical transitions suitable for masking;
+- no visible venue/environment;
+- no wedding cliché;
+- no obvious spotlight/ribbon;
+- enough tonal structure to animate independently.
+
+## Risk to control
+Used alone, the geometry could drift toward luxury-tech / automotive aesthetics.
+
+Mitigation:
+- never present the plate as a standalone section background;
+- crop/mask only selected optical regions;
+- composite over the NOCTURNE base scene;
+- synchronize with native typography and scroll;
+- keep oxblood/champagne warmth and wedding copy as emotional counterweight.
+
+## Decision
+M04B static material asset is approved for integration.
+
+Next:
+**D02-M05 — FIRST NATIVE COMPOSITING PROOF**
+- rigid Image B as base;
+- approved M04B optical material as moving/masked overlay;
+- native names/date;
+- live light-aware typography reveal;
+- one scroll handoff into the next scene;
+- short-name + long-name deterministic test;
+- no additional Recraft credits before this proof is reviewed.
