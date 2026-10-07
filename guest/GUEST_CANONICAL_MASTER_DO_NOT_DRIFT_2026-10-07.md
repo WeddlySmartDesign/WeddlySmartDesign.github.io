@@ -484,3 +484,13 @@ Read in this order:
 
 Customers buy a premium invitation because they love the design; behind it sits the already-built guest-management system, connected invisibly and explained only when useful, while the owner delivers what feels highly personalized with approximately five minutes of operational work per order.
 
+
+
+## 20. Latest executable checkpoint — 2026-10-07
+
+Automated/backend catalog certification has passed. Final-delivery packaging of the real frozen VEIL LIGHT master has been proven wrapper-only and byte-identical at renderer level.
+
+Canonical remaining gate before Design 02:
+`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_2_CERTIFICATION_READY.html`
+
+The V4.2 owner workspace creates a normal certification order automatically and measures real active owner work against the <=5 minute target. This single Android owner gate is the only remaining non-automatable item before freezing Catalog Pipeline V1.
