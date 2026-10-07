@@ -637,3 +637,28 @@ If any answer is NO:
 **STOP. Do not generate/build the asset. Redesign the concept first.**
 
 This scalability invariant has priority over visual convenience.
+
+
+---
+
+## 23. SCALABILITY IS AN INTERNAL GATE — OWNER MUST NOT POLICE IT
+
+The owner must never need to ask whether a design change is scalable.
+
+For **every** visual, structural, copy, motion, interaction or layout change in any GUEST invitation template, scalability is a mandatory internal gate performed before the change is proposed for approval.
+
+Before showing a change to the owner, verify:
+- no per-couple asset regeneration is required;
+- no per-couple HTML/CSS/layout/timing edits are required;
+- all variable wedding data remains renderer-driven;
+- supported optional states remain deterministic;
+- supported text-length ranges remain safe;
+- mobile behavior remains certified;
+- the common engine/schema is preserved;
+- normal owner intervention remains review-only and under 5 minutes.
+
+If any item is unproven, the change must be labelled **NOT YET SCALABILITY-CERTIFIED** and must not be presented as a finished direction.
+
+If any item fails, redesign internally before asking the owner to review the visual result.
+
+The owner reviews the product; the owner does not police scalability.
