@@ -193,3 +193,27 @@ Remaining gate:
 REAL ANDROID OWNER TOUCH-TIME / EXPERIENCE VALIDATION.
 
 Commercial publication and Stripe connection remain explicitly on hold.
+
+
+## 11. Post-certification hardening completed
+
+After the initial automated E2E certification:
+
+- `guest-invitation-flow` advanced to **v11**;
+- final delivery now requires explicit couple status `approved` (no delivery from merely `review_ready`);
+- production final delivery is blocked unless both the final invitation URL and the existing management-app license/access are available;
+- customer email subjects no longer expose unexplained `GUEST` naming;
+- order-received, review and final-delivery emails now use premium visual HTML and explain the next action;
+- final delivery explicitly introduces the included **gestión de invitados** by function, with separate CTAs for viewing the invitation and organizing/sending to guests;
+- `guest/access.html` now explains the included management app before using product branding;
+- `guest/tools/build_catalog_delivery.js` packages any commercially frozen catalog template through the common delivery runtime;
+- the real frozen VEIL LIGHT V5.3.3 master was packaged successfully and the renderer payload was proven byte-identical after wrapper stripping;
+- focused Catalog Bridge QA including customer-journey and delivery-builder gates passed in run **37593716818**.
+
+Real artifact evidence:
+`guest/GUEST_CATALOG_DELIVERY_ARTIFACT_QA_2026-10-07.md`.
+
+Persistent catalog pilot artifact:
+`/GUEST/CATALOG_PIPELINE/GUEST_VEIL_LIGHT_CATALOG_DELIVERY_V1_PILOT.html`.
+
+The only remaining certification item that cannot be automated is the real-Android owner usability/touch-time gate using Mobile Center V4.1.
