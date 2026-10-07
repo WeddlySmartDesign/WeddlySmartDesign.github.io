@@ -494,3 +494,16 @@ Canonical remaining gate before Design 02:
 `/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_3_ONE_TAP_CERTIFICATION.html`
 
 The V4.3 owner workspace creates a normal certification order automatically and measures real active owner work against the <=5 minute target. This single Android owner gate is the only remaining non-automatable item before freezing Catalog Pipeline V1.
+
+
+## CATALOG PIPELINE V1 FINAL FREEZE — 2026-10-07
+
+The common catalog pipeline has passed its final real-Android gate and is now frozen.
+
+Evidence:
+`guest/GUEST_CATALOG_PIPELINE_V1_FINAL_CERTIFICATION_2026-10-07.md`.
+
+Real normal-order owner active time: **1:32**, below the <=5 minute target.
+The complete review -> approval -> final-delivery chain passed on Android and the backend ended in `delivered`.
+
+Future Design 02–06 must plug into this frozen pipeline and may not reopen architecture, sender, RSVP, management or owner workflow unless a reproducible cross-template defect requires a global correction.
