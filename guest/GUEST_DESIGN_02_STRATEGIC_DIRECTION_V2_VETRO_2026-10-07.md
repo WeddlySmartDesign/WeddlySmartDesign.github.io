@@ -2,7 +2,7 @@
 
 Date: 2026-10-07
 Branch: guest-independent
-Status: PROPOSED / MOTION GATE REQUIRED
+Status: REJECTED IN ABSTRACT FORM — DO NOT BUILD
 Working name: VETRO
 
 ## Core idea
@@ -179,3 +179,35 @@ Create only:
 - native names/date mock overlay after motion selection.
 
 If that opening does not visibly exceed Canva-level work and show a clear path for sharp photography, reject VETRO before any further build.
+
+
+---
+
+# REAL-MOBILE FULL REVIEW — 2026-10-07
+
+## Decision
+The abstract VETRO direction is rejected and must not proceed to full-template build.
+
+## Why
+- the glass is premium as material but semantically ambiguous;
+- viewers cannot clearly read what the forms are or why they belong in a wedding invitation;
+- the rotation/separation motion reads like a design object on display, not a wedding-specific emotional event;
+- the photo integration does not increase the value of the couple photo;
+- the glass overlay feels added on top rather than intrinsically connected to the photography;
+- visual sophistication alone is insufficient without a recognisable emotional/wedding anchor.
+
+## What may be salvaged
+Only the principle:
+**realistic high-end material motion created in Recraft can justify premium value.**
+
+Do NOT salvage:
+- current abstract shapes;
+- current rotation/display motion;
+- current photo overlay language;
+- current opening composition.
+
+Any future glass direction must have:
+- a clearly legible subject/form;
+- a movement that belongs naturally to that subject;
+- an obvious emotional/wedding relevance;
+- a photo-integration method that makes real photography look better, not decorated.
