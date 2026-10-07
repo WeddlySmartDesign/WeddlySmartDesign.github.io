@@ -453,3 +453,115 @@ No Catalog Pipeline architecture changes are permitted during this gate.
 **Recommended Design 02 territory: NOCTURNE — cinematic black-tie, light as material.**
 
 This direction is strategically strong enough to justify a second catalog slot because it serves a clearly different couple/taste from VEIL LIGHT while preserving the same industrialized product pipeline and <=5-minute operating target.
+
+
+---
+
+## 20. OWNER DESIGN RULES — ABSOLUTE / ADDED 2026-10-07
+
+These rules override any weaker interpretation of the visual direction and apply before any Design 02 asset, prototype, layout or motion is accepted.
+
+### 20.1 Scalability before beauty
+Everything designed for Design 02 must be 100% scalable from the start.
+
+Required:
+- premium-personalized customer perception;
+- deterministic template behavior;
+- no per-couple layout repair;
+- no per-couple CSS/HTML edits;
+- no bespoke animation timing;
+- no asset that requires manual recreation for every order;
+- no visual solution that only works for the demo couple.
+
+If a visual idea cannot survive the full supported configuration matrix without manual design intervention, reject the idea before polishing it.
+
+The aim is not to reduce personalization.
+The aim is to create the **appearance of deep personalization from a certified reusable system**.
+
+### 20.2 No cheap/static background language
+Do not accept flat static backgrounds that make the invitation feel basic, templated or low-cost.
+
+Design 02 may and should use Recraft as many times as necessary during development to create the reusable visual universe, including:
+- opening/cover art;
+- closing art;
+- interior scene backgrounds;
+- transitional visual material;
+- section-specific atmospheric assets where the concept benefits.
+
+The constraint is not “avoid generated assets”.
+The constraint is:
+- generate/build them once as reusable template assets;
+- keep them coherent as one art direction;
+- never require fresh asset production for a normal couple order.
+
+A static asset is acceptable only if its composition, layering, motion treatment and integration make it feel intentional and premium. A flat wallpaper-like background is rejected.
+
+### 20.3 Canva rejection test
+For every major visual component ask:
+
+**“Could a normal Canva Premium user plausibly reproduce the perceived result without specialist design/animation/system work?”**
+
+If the answer is yes, reject or materially elevate the component.
+
+This applies especially to:
+- cover;
+- transitions;
+- story;
+- locations;
+- agenda;
+- practical information;
+- gallery;
+- RSVP final act;
+- closing.
+
+Changing font, colour, adding a photo, gradient or decorative PNG is not sufficient differentiation.
+
+### 20.4 Microblock operating method
+Design 02 must be developed in concise, sealed microblocks.
+
+Default sequence:
+1. define microblock objective;
+2. execute as much as possible without owner intervention;
+3. internally reject weak options;
+4. show only a review-worthy finished result;
+5. owner gives visual approval/rejection/light feedback;
+6. seal the microblock before advancing.
+
+Do not leave the owner wondering whether work is progressing.
+Do not fragment one visual decision across repeated small questions.
+Do not ask the owner to make technical or design-production choices that can be resolved internally.
+
+### 20.5 Couple-voice copy
+Customer-facing copy inside the invitation is written **as if it comes from the couple to their own guests**.
+
+Required voice:
+- warm;
+- familiar;
+- natural;
+- affectionate where appropriate;
+- elegant without sounding formal for the sake of it;
+- specific enough to feel human.
+
+Reject:
+- brand voice;
+- marketing copy;
+- product-language;
+- corporate/event copy;
+- generic AI sentiment;
+- empty phrases that could belong to any wedding;
+- over-written romantic language;
+- internal terms such as modules, RSVP engine, management system, template, configuration.
+
+Functional copy must still be clear, but should sound like the couple helping their guests.
+
+### 20.6 Admission rule
+A microblock is not approved merely because it looks attractive.
+
+It must pass all five tests:
+1. premium visual quality;
+2. 100% scalability;
+3. not plausibly Canva-reproducible;
+4. reusable asset/system logic with no normal-order manual production;
+5. believable couple-to-guest copy.
+
+Failure of any one test = microblock remains open or is discarded.
