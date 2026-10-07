@@ -135,7 +135,7 @@ No duplicate sender or duplicate RSVP engine was created.
 ## 7. Owner workspace prepared for multi-template catalog
 
 Prepared and persisted:
-- /GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_1_CATALOG_GENERIC_TOUCH_METRIC.html
+- /GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_3_ONE_TAP_CERTIFICATION.html
 
 SHA-256:
 55bfee9aac131420f652358390ddd327fc4cdc2992ee95a759f0ae01aab1a1c3
@@ -166,7 +166,7 @@ Recipient-specific RSVP routing is added only at final-view runtime, so one fina
 
 Only the following human/mobile gate remains:
 
-1. load Mobile Center V4.1 in the already-installed Android app;
+1. load Mobile Center V4.3 in the already-installed Android app;
 2. run one normal catalog order from the owner workspace;
 3. visually inspect the selected invitation on the real device;
 4. confirm owner active-work metric <=5:00 for the normal order;
@@ -216,4 +216,11 @@ Real artifact evidence:
 Persistent catalog pilot artifact:
 `/GUEST/CATALOG_PIPELINE/GUEST_VEIL_LIGHT_CATALOG_DELIVERY_V1_PILOT.html`.
 
-The only remaining certification item that cannot be automated is the real-Android owner usability/touch-time gate using Mobile Center V4.1.
+The only remaining certification item that cannot be automated is the real-Android owner usability/touch-time gate using Mobile Center V4.3.
+
+
+### Final owner-gate minimization
+
+Mobile Center V4.3 now prepares the normal certification order in one tap, starts the design stage automatically, resets active owner work to 0:00 only after setup is finished, opens the invitation, and stops the metric automatically after successful **Enviar revisión**. It reports whether <=5:00 was achieved.
+
+Thus no owner time is spent creating/filling the certification case.
