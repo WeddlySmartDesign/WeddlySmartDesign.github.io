@@ -2160,3 +2160,26 @@ V4.4 changes:
 Static QA: all inline JavaScript syntax PASS and all navigation invariants present.
 
 V4.3 is superseded and must not be used for further certification.
+
+
+## MOBILE CENTER V4.5 — STATE-AWARE FLOW FIX — 2026-10-07
+
+Actual Android video showed that in a `designing` order the buttons `Vista revisión` and `Vista final` accepted taps but could not produce a valid view because those backend states do not exist yet. This looked like broken buttons and hid the actual next action below the fold.
+
+Corrected in persistent owner file:
+`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_5_STATE_AWARE_FLOW.html`
+SHA-256 `d769a1120f74cd17d7fd6d37d6c16764e35a7a5476995201125b89ba56a11c2b`.
+
+Rules now:
+- never show an owner button that cannot work in the current state;
+- while `designing`, show only Questionnaire + Invitation access;
+- show `Vista revisión` only from `review_ready` onward;
+- show `Vista final` only after `delivered`;
+- move the real workflow action directly under quick access, above editor/details;
+- for `designing`: one primary next action = `He revisado la invitación · lista para revisión`;
+- after that, replace it with `Enviar revisión a la pareja`;
+- after approval, replace it with `Entregar invitación final`;
+- feedback/errors are now visible at the top instead of below the fold;
+- `changes_requested` can again progress to review-ready from the visible next-step control.
+
+The Lucía & Mateo certification order and its stored owner-touch timer are preserved across this Center update; no repeat of the visual review is required.
