@@ -17,9 +17,9 @@ Catalog launch:
 
 ### Backend
 
-Supabase `guest-invitation-flow` upgraded to v8.
+Supabase `guest-invitation-flow` upgraded to v9.
 
-It is no longer structurally VEIL-LIGHT-only:
+It is no longer structurally VEIL-LIGHT-only:\n- Template versions are pinned per order, so a later template update cannot alter an order already in progress;\n- typography/safe preset choices are resolved by the selected template registry entry;
 - catalog template registry introduced;
 - order creation/build config resolves template by `template_id`;
 - `create_test` accepts `templateId`;
