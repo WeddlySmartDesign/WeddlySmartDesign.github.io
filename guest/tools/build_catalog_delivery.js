@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+'use strict';
+const fs=require('fs'),path=require('path');
+function fail(m){console.error(m);process.exit(1)}
+const [input,output,publicToken,templateId]=process.argv.slice(2);
+if(!input||!output||!publicToken||!templateId)fail('Usage: build_catalog_delivery.js <input.html> <output.html> <publicToken> <templateId>');
+const guestDir=path.resolve(__dirname,'..');
+const registry=JSON.parse(fs.readFileSync(path.join(guestDir,'GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'),'utf8'));
+const spec=(registry.templates||[]).find(x=>x.id===templateId);
+if(!spec)fail('Unknown catalog template: '+templateId);
+if(spec.status!=='commercially-frozen')fail('Template is not commercially frozen: '+templateId);
+let html=fs.readFileSync(input,'utf8');
+const runtime=fs.readFileSync(path.join(guestDir,'guest-catalog-delivery-runtime-v1.js'),'utf8');
+const adapterName='guest-catalog-template-'+templateId+'-adapter-v1.js';
+const adapterPath=path.join(guestDir,adapterName);
+if(!fs.existsSync(adapterPath))fail('Missing template adapter: '+adapterName);
+const adapter=fs.readFileSync(adapterPath,'utf8');
+if(templateId==='veil-light'&&!html.includes('VEIL_APPLY_CONFIG'))fail('VEIL LIGHT renderer interface not found in source master');
+html=html.replace(/\s*<script id=["']wsd-final-script["']>[\s\S]*?<\/script>\s*/g,'\n');
+html=html.replace(/\s*<script id=["']guest-catalog-delivery-runtime["']>[\s\S]*?<\/script>\s*/g,'\n');
+html=html.replace(/\s*<script id=["']guest-catalog-template-adapter["']>[\s\S]*?<\/script>\s*/g,'\n');
+html=html.replace(/\s*<script id=["']guest-catalog-delivery-boot["']>[\s\S]*?<\/script>\s*/g,'\n');
+const boot='<script id="guest-catalog-delivery-runtime">'+runtime+'</script>\n'+'<script id="guest-catalog-template-adapter">'+adapter+'</script>\n'+'<script id="guest-catalog-delivery-boot">(()=>{const templateId='+JSON.stringify(templateId)+';const publicToken='+JSON.stringify(publicToken)+';const adapter=window.__GuestCatalogTemplateAdapters?.[templateId];if(!adapter)throw new Error("catalog_template_adapter_unavailable:"+templateId);window.__GuestCatalogDeliveryRuntime.boot({publicToken,applyConfig:cfg=>adapter.applyConfig(cfg)}).catch(e=>{console.error("[GUEST catalog delivery]",e);let m=document.getElementById("wsdCatalogDeliveryError");if(!m){m=document.createElement("div");m.id="wsdCatalogDeliveryError";m.hidden=true;document.body.appendChild(m)}m.dataset.error=String(e?.message||"request_failed")});})();</script>';
+if(!html.includes('</body>'))fail('Source HTML has no closing body');
+html=html.replace('</body>',boot+'\n</body>');
+if(html.includes('id="wsd-final-script"')||html.includes("id='wsd-final-script'"))fail('Legacy final loader was not removed');
+if(!html.includes('guest-catalog-delivery-runtime'))fail('Catalog delivery runtime was not injected');
+if(!html.includes(publicToken))fail('Public token was not embedded');
+fs.mkdirSync(path.dirname(path.resolve(output)),{recursive:true});
+fs.writeFileSync(output,html);
+console.log(JSON.stringify({ok:true,input:path.resolve(input),output:path.resolve(output),templateId,templateVersion:spec.version,bytes:Buffer.byteLength(html)}));
