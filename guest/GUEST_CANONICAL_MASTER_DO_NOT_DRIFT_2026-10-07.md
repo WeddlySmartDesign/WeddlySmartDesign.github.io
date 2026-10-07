@@ -662,3 +662,35 @@ If any item is unproven, the change must be labelled **NOT YET SCALABILITY-CERTI
 If any item fails, redesign internally before asking the owner to review the visual result.
 
 The owner reviews the product; the owner does not police scalability.
+
+
+---
+
+## 24. LOCATION / VENUE STATE IS 0–2 PLACES — GLOBAL TEMPLATE RULE
+
+Every current and future GUEST invitation template must support the same location contract without per-order design work.
+
+Supported states:
+- 0 places: hide the location section cleanly.
+- 1 place: render one complete venue scene.
+- 2 places: render two complete venue scenes deterministically (for example ceremony + celebration), preserving the same visual language and transition system.
+
+Each place independently supports:
+- photo present;
+- photo absent (template-owned fallback visual);
+- variable place name;
+- variable time;
+- variable city/date metadata;
+- variable address;
+- directions action.
+
+No template may assume that there is always exactly one place.
+
+A two-place order must NOT require:
+- a new Recraft/AI asset;
+- manual HTML/CSS;
+- manual repositioning;
+- bespoke transitions;
+- manual repair of the surrounding sections.
+
+This is part of the mandatory <5 minute owner workflow and the internal scalability gate.
