@@ -1633,13 +1633,13 @@ Do not restart the mobile questionnaire.
 Next action is to reopen the existing Pilar & Jorge order in Production Manager V4 and inspect the same full mobile invitation again.
 
 
-## GUEST — MOBILE PILOT FULL REVIEW V4.2 2026-10-06
+## GUEST — MOBILE PILOT FULL REVIEW V4.3 2026-10-06
 
 Full video 1000094355.mp4 reviewed as one invitation after V4.1.
 
 Critical Cover regression found:
 - previous flash workaround hid the entry video and removed the approved moving veil from the Cover.
-- V4.2 restores continuous moving-veil Cover behavior while keeping the custom initials over the baked I&H until those source pixels leave the opening animation.
+- V4.3 restores continuous moving-veil Cover behavior while keeping the custom initials over the baked I&H until those source pixels leave the opening animation.
 - browser title now uses the actual couple.
 
 Full-video status after recheck:
@@ -2110,15 +2110,15 @@ Persistent artifacts:
 Remaining unavoidable human gate: one real Android owner pass to validate actual readability/operation and measured active owner time <=5 minutes. No new architecture or manual design work is required for this gate.
 
 
-## MOBILE CENTER V4.2 — FINAL OWNER GATE PREPARED
+## MOBILE CENTER V4.3 — FINAL OWNER GATE PREPARED
 
 Persistent file:
-`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_2_CERTIFICATION_READY.html`
+`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_3_ONE_TAP_CERTIFICATION.html`
 
 SHA-256:
-`4ce9a9a7c2a4adab177deb9fd69129accbe992fd5e48b38f51e580a912a2a180`
+`be5c586909b6bc83c1f726c9903ffdec9e53da842efdc17d32a2664f0290a0a0`
 
-V4.2 fixes the last owner-side direct VEIL LIGHT rendering call and routes all owner preview actions through the template registry.
+V4.3 fixes the last owner-side direct VEIL LIGHT rendering call and routes all owner preview actions through the template registry.
 It adds a one-tap **Certificación real · pedido normal ≤5 min** setup that:
 1. creates a test order using template_id=veil-light;
 2. fills/submits a normal representative questionnaire automatically;
@@ -2128,3 +2128,8 @@ It adds a one-tap **Certificación real · pedido normal ≤5 min** setup that:
 
 Therefore the owner does not need to create/fill a certification order manually.
 Remaining human work is only the part that cannot be simulated: actual mobile usability + measured owner touch time.
+
+
+### V4.3 one-tap owner measurement
+
+The final non-automatable gate has been reduced to one real-device action sequence. V4.3 automatically prepares and opens a normal order and starts the timer only after setup is complete. Successful Send Review closes the metric automatically and reports PASS/over-5-min.
