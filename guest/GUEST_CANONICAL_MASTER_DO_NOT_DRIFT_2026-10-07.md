@@ -491,6 +491,6 @@ Customers buy a premium invitation because they love the design; behind it sits 
 Automated/backend catalog certification has passed. Final-delivery packaging of the real frozen VEIL LIGHT master has been proven wrapper-only and byte-identical at renderer level.
 
 Canonical remaining gate before Design 02:
-`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_2_CERTIFICATION_READY.html`
+`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_3_ONE_TAP_CERTIFICATION.html`
 
-The V4.2 owner workspace creates a normal certification order automatically and measures real active owner work against the <=5 minute target. This single Android owner gate is the only remaining non-automatable item before freezing Catalog Pipeline V1.
+The V4.3 owner workspace creates a normal certification order automatically and measures real active owner work against the <=5 minute target. This single Android owner gate is the only remaining non-automatable item before freezing Catalog Pipeline V1.
