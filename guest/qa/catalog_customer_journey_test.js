@@ -28,4 +28,8 @@ ok(access.includes('Abrir gestión de invitados'),'activation CTA still assumes 
 ok(!access.includes('Activa vuestro GUEST'),'legacy unexplained activation title remains');
 ok(!access.includes('Activar GUEST'),'legacy unexplained activation button remains');
 
+
+ok(flow.includes("createOrder(c,'test',txt(b.email,200),null,null,txt(b.templateId||'veil-light',80))"),'test-order creation must use null, never empty string, for UUID license_id');
+ok(!flow.includes("createOrder(c,'test',txt(b.email,200),'',null"),'empty-string UUID license regression detected');
+
 console.log('CATALOG CUSTOMER JOURNEY / COMMUNICATION CONTRACT PASS');
