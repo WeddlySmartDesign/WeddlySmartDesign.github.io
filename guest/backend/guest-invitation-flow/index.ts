@@ -459,7 +459,7 @@ Deno.serve(async req=>{
     }
     if(action==='deliver'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
-      if(!['approved','review_ready'].includes(order.status))return json({ok:false,error:'approval_required'},409);
+      if(order.status!=='approved')return json({ok:false,error:'approval_required'},409);
       const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);
       const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=hydrateConfig(order.resolved_config||{},publicFiles),ts=now(),token=await capability(order.id,'p'),supplied=txt(b.invitationUrl,1200),localTest=order.mode==='test'&&!supplied,inviteUrl=supplied;
       if(order.mode==='production'&&!inviteUrl)return json({ok:false,error:'missing_invitation_url'},400);
