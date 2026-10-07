@@ -392,3 +392,56 @@ This makes the premium motion depend on compositing + responsive scene behavior,
 
 Next microblock:
 **D02-M04 — RECRAFT LIGHT PLATE + COMPOSITING PROOF.**
+
+
+---
+
+# 13. M04 LIGHT-PLATE TEST RESULT — TEXT-TO-VIDEO
+
+Video:
+- 5.04 s
+- 496 × 864
+- 24 fps
+- Seedance 1.5 Pro
+- text-to-video, no source image
+
+## Verdict
+
+**FAIL / DO NOT ITERATE THIS SAME METHOD.**
+
+## Failure mode
+
+The model turns the requested moving illumination into a visible cinematic spotlight:
+- explicit conical beam;
+- visible bright source point;
+- optical flare orb;
+- red flare streak / lens artifact;
+- light itself becomes a graphical object.
+
+This violates the intended NOCTURNE language:
+- illumination should reveal material;
+- the light source should not become the subject;
+- no laser/ribbon/spotlight aesthetic;
+- no AI-video-demo look.
+
+## Decision
+
+Do not spend another low-cost text-to-video generation trying to refine a black-background light plate.
+
+New strategy:
+1. use Recraft for high-quality static material/light assets and, later, only selected high-value motion generation;
+2. build the first NOCTURNE premium motion proof through native compositing:
+   - rigid Image B or successor scene;
+   - static Recraft reflection/light textures;
+   - live CSS/SVG masks;
+   - live blend modes;
+   - scroll-linked progression;
+   - native typography;
+   - optional real couple photo;
+3. use an expensive Recraft motion model only after this compositing prototype proves the art direction and only where it adds something native motion cannot reproduce.
+
+Reason:
+this gives exact control, preserves geometry, avoids AI hallucinated light objects, keeps scalability, and makes the final result harder to reproduce in Canva than a generated video background.
+
+Next:
+**D02-M04B — STATIC RECRAFT LIGHT MATERIAL PACK + NATIVE COMPOSITING PROOF.**
