@@ -553,3 +553,87 @@ Reading-heavy sections may be quieter, but they must still have:
 - clear hierarchy.
 
 "Subtle" must never become "flat/basic".
+
+
+---
+
+## 22. GLOBAL SCALABILITY INVARIANT — ABSOLUTE / ALL DESIGNS
+
+This rule applies to **every current and future GUEST invitation design**, not only Design 02.
+
+### 22.1 One engine, many visual templates
+All catalog invitations are different visual templates of the same frozen product engine.
+
+They may vary in:
+- visual art direction;
+- typography;
+- motion;
+- palette;
+- composition;
+- reusable media assets;
+- certified safe presets.
+
+They may NOT create a template-specific operational workflow, questionnaire, RSVP, sending system, guest-management path, or per-order design process.
+
+### 22.2 100% scalable by design
+A template is invalid if a normal supported order requires the owner to:
+- manually edit HTML/CSS;
+- manually reposition text;
+- manually retime animation;
+- regenerate decorative AI/Recraft assets for that couple;
+- manually rebuild a section because names/text/location differ;
+- manually repair a layout because an optional module is on/off;
+- decide ad hoc where content should fit.
+
+Normal order target:
+**review only**.
+
+Total owner active intervention target:
+**< 5 minutes**.
+
+### 22.3 Generated-media rule
+Recraft / AI-generated imagery and motion are **template master assets**, created once during template development.
+
+They must never contain baked-in variable wedding data such as:
+- couple names;
+- dates;
+- venue/location;
+- agenda times/moments;
+- RSVP copy;
+- transport/accommodation details;
+- gift information;
+- any couple-specific wording.
+
+Variable data is always rendered natively by the common template renderer from the shared config schema.
+
+Couple-supplied photography/media may vary per order, but its placement/crop/focal handling must use certified deterministic rules and safe controls.
+
+### 22.4 Optional-state rule
+Every supported optional state must have deterministic behavior before sale.
+
+Examples:
+- 1–5 agenda moments;
+- photo on/off;
+- venue photo on/off;
+- transport on/off;
+- accommodation on/off;
+- music on/off;
+- gift/info on/off;
+- gallery count variations;
+- long/short names and locations.
+
+If an optional state requires per-order design intervention, the template fails admission.
+
+### 22.5 Preflight before any new visual asset
+Before generating or coding any new design asset, verify:
+
+1. Is this asset fixed/reusable for every order using this template?
+2. Does it contain zero variable wedding data?
+3. Can all supported content states render without editing the asset?
+4. Can the owner process a normal order without design work?
+5. Does the solution preserve the common engine and schema?
+
+If any answer is NO:
+**STOP. Do not generate/build the asset. Redesign the concept first.**
+
+This scalability invariant has priority over visual convenience.
