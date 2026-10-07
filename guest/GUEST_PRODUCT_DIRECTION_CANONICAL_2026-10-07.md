@@ -167,12 +167,12 @@ These are onboarding/explanation steps for EXISTING functionality, not new funct
 Automated/backend/catalog-delivery work has been maximized.
 
 The remaining gate before Design 02 is ONE unavoidable real-device owner certification:
-- load Mobile Center V4.2;
+- load Mobile Center V4.3;
 - generate the built-in normal certification order with one tap;
 - work it as a real owner order;
 - confirm the mobile experience is operationally clear;
 - confirm measured active owner time is <=5 minutes.
 
-Mobile Center V4.2 prepares the normal order automatically and resets the work timer to 0:00, so owner intervention is limited to the real usability/touch-time work that cannot be simulated.
+Mobile Center V4.3 prepares the normal order automatically and resets the work timer to 0:00, so owner intervention is limited to the real usability/touch-time work that cannot be simulated.
 
 After that PASS, Catalog Pipeline V1 can be frozen and Design 02 starts under the same contract.
