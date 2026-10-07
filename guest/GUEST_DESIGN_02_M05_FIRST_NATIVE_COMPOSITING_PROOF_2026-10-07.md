@@ -143,3 +143,44 @@ Changes:
 - same deterministic long-name stress mechanism.
 
 V2 requires real-mobile review before M05 can be sealed.
+
+
+---
+
+# REAL MOBILE GATE — V2 RESULT
+
+Evidence:
+- owner real-Android recording received 2026-10-07.
+
+## Verdict
+**V2 FAIL — PACING DEFECT ONLY.**
+
+The art direction/system remains valid enough to continue iterating.
+The failure is specifically timing/readability:
+
+1. names resolve too quickly;
+2. there is almost no resting/readable hold after both names become fully visible;
+3. the first scroll gesture removes the names too aggressively.
+
+## V3 correction
+
+Prepared:
+`GUEST_D02_M05_NOCTURNE_MOTION_PROOF_V3.html`
+
+Changes:
+- slower reveal choreography;
+- Lucía begins later and resolves over ~2.15 s;
+- Mateo begins later and resolves over ~2.2 s;
+- supporting details resolve after names;
+- scroll cue delayed to ~6.6 s;
+- names remain fully present through the first meaningful swipe;
+- text exit uses a separate delayed scroll variable rather than the general scene-progress variable;
+- Cover sticky runway increased to create a deliberate reading/rest moment before handoff;
+- no additional Recraft credits used;
+- no art-direction redesign;
+- same deterministic long-name behavior.
+
+SHA-256:
+`87a065afd308068d89019a4a34f7b6ae79b83136dad922ba6aaa829b9a90e8f1`
+
+V3 requires real-mobile review before M05 can be sealed.
