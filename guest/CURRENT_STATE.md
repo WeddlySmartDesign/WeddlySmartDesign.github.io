@@ -2032,7 +2032,7 @@ Launch architecture is now explicitly template-agnostic:
 - premium-personalized customer perception;
 - owner touch target <=5 minutes and no per-order HTML/CSS/layout work.
 
-Backend `guest-invitation-flow` v8 now resolves config by template_id, stores a stable delivered `delivery_url`, and exposes the authenticated `active_for_member` bridge to the EXISTING management app.
+Backend `guest-invitation-flow` v9 now resolves config by template_id, stores a stable delivered `delivery_url`, and exposes the authenticated `active_for_member` bridge to the EXISTING management app.
 
 Existing send/runtime bridge installed:
 - `guests-catalog-invitation-bridge-v1.js`;
