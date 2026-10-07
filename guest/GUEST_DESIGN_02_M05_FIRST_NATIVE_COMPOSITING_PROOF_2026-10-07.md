@@ -184,3 +184,44 @@ SHA-256:
 `87a065afd308068d89019a4a34f7b6ae79b83136dad922ba6aaa829b9a90e8f1`
 
 V3 requires real-mobile review before M05 can be sealed.
+
+
+---
+
+# REAL MOBILE GATE — V3 ROOT CAUSE FOUND
+
+Owner Android evidence showed that the names still disappeared automatically within roughly one second after reveal, even without meaningful scroll.
+
+## Root cause
+
+This was NOT a pacing problem.
+
+The persistent `-webkit-mask-image` / mask-position reveal used on the native name text behaves incorrectly on the real Android browser:
+- names become visible while the mask travels;
+- the final persisted mask state hides the text again.
+
+Therefore increasing animation duration could never solve the defect.
+
+## V4 correction
+
+Prepared:
+`GUEST_D02_M05_NOCTURNE_MOTION_PROOF_V4.html`
+
+Changes:
+- removed the persistent WebKit mask from name reveal;
+- replaced it with deterministic JS-triggered clip-path reveal;
+- names remain fully visible indefinitely after reveal;
+- only real scroll handoff may fade the Cover copy;
+- first name begins at ~2.2 s;
+- second name begins at ~3.05 s;
+- scroll cue delayed to ~7.2 s;
+- browser scroll restoration forced to manual/top so reopening cannot inherit a previous scroll position;
+- Cover exit threshold pushed later;
+- JavaScript syntax PASS;
+- no extra Recraft credits;
+- no visual-system redesign.
+
+SHA-256:
+`9e3a640c37f87f11b96fd1374182b78a22398b523775a44f803f217d770fb662`
+
+V4 requires one real Android confirmation that both names remain present after the reveal.
