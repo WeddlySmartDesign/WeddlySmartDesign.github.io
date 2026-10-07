@@ -1,0 +1,23 @@
+name: GUEST Catalog Bridge QA
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - 'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'
+      - 'guest/GUEST_CATALOG_PIPELINE_CONTRACT_V1.md'
+      - 'guest/guest-catalog-recipient-context-v1.js'
+      - 'guest/guests-catalog-invitation-bridge-v1.js'
+      - 'guest/guests-rsvp-share-composer-v3.js'
+      - 'guest/guests-rsvp-operations-live.html'
+      - 'guest/qa/catalog_invitation_bridge_test.js'
+      - '.github/workflows/guest-catalog-bridge-qa.yml'
+  workflow_dispatch:
+jobs:
+  catalog-bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node guest/qa/catalog_invitation_bridge_test.js
