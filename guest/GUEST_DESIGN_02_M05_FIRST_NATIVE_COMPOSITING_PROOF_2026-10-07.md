@@ -225,3 +225,42 @@ SHA-256:
 `9e3a640c37f87f11b96fd1374182b78a22398b523775a44f803f217d770fb662`
 
 V4 requires one real Android confirmation that both names remain present after the reveal.
+
+
+---
+
+# REAL MOBILE GATE — V4 RESULT
+
+Evidence:
+- owner real-Android recording received 2026-10-07.
+
+## Verdict
+**V4 IMPROVED / STILL FAILS VISIBILITY GATE.**
+
+## Defects observed
+1. Mateo sits too close to the brighter right optical zone and loses visual safety.
+2. The ampersand and functional microcopy remain too weak at real-mobile scale.
+3. Top/bottom metadata are still too fine/low-contrast.
+4. Partial-word reveal remains visually fragile even though the names now persist after reveal.
+5. Foreground depth treatment still has too much authority over the text layer.
+
+## V5 correction
+
+Prepared:
+`GUEST_D02_M05_NOCTURNE_MOTION_PROOF_V5.html`
+
+Changes:
+- removed all partial-word clipping from the name reveal;
+- names now appear as complete words using opacity/blur/position while the scene light provides the premium reveal;
+- Mateo moved into the darker text-safe zone instead of anchoring against the bright right edge;
+- name block receives a soft dynamic contrast field, not a card/panel;
+- text is now above the foreground occlusion layer;
+- increased mobile contrast and minimum size for metadata, kicker, details and scroll cue;
+- ampersand strengthened and repositioned;
+- long-name stress layout retained with deterministic bounds;
+- no extra Recraft credits used.
+
+SHA-256:
+`986b0040b9b6c0cc4a5327678ed745b012aad02dd0ce1c3bca819cc263d286d3`
+
+V5 requires real-mobile review.
