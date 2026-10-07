@@ -30,7 +30,7 @@ async function fetchActive(force=false){
       const r=await fetch(FLOW,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':member},body:JSON.stringify({action:'active_for_member'}),cache:'no-store',signal:c.signal});
       clearTimeout(timer);
       const x=await r.json().catch(()=>({}));
-      if(!r.ok||!x?.ok||x?.active!==true||!x?.invitation?.publicToken)return null;
+      if(!r.ok||!x?.ok||x?.active!==true||!x?.invitation?.shareBaseUrl)return null;
       activeCache=x.invitation;activeAt=Date.now();return activeCache;
     }catch{return null}finally{activePromise=null}
   })();
@@ -39,8 +39,7 @@ async function fetchActive(force=false){
 async function buildRecipientUrl(ctx){
   const active=await fetchActive(false);
   if(!active)return legacyUrl(ctx);
-  const base=new URL(active.sharePath||'/guest/catalog-invitation.html',location.origin);
-  base.searchParams.set('i',active.publicToken);
+  const base=new URL(active.shareBaseUrl,location.href);
   base.searchParams.set('rt',ctx.rsvpToken||'');
   base.searchParams.set('lang',ctx.lang||'es');
   if(ctx.unitId&&Number(ctx.unitSize)>1)base.searchParams.set('u',ctx.unitId);
