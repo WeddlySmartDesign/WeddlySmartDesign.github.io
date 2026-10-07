@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "guest-catalog-cert-scenario-v1",
+  "id": "normal-01",
+  "purpose": "Representative normal owner-touch and visual certification order used across catalog templates.",
+  "questionnaire": {
+    "rsvp": {
+      "menu": true,
+      "plusOne": true,
+      "children": false,
+      "allergies": true,
+      "customQuestions": []
+    },
+    "story": {
+      "enabled": true,
+      "presetId": "story-01",
+      "textMode": "preset",
+      "customText": ""
+    },
+    "agenda": {
+      "enabled": true,
+      "moments": [
+        {
+          "time": "17:30",
+          "label": "Ceremonia"
+        },
+        {
+          "time": "19:00",
+          "label": "Cóctel"
+        },
+        {
+          "time": "21:00",
+          "label": "Cena"
+        },
+        {
+          "time": "23:30",
+          "label": "Baile"
+        }
+      ]
+    },
+    "couple": {
+      "date": "2027-06-12",
+      "name1": "Lucía",
+      "name2": "Mateo",
+      "coverTime": "17:30",
+      "coverPlace": "Madrid",
+      "coverTimeEnabled": true,
+      "coverPlaceEnabled": true,
+      "typographyVariant": "classic"
+    },
+    "closing": {
+      "mode": "default",
+      "customLine": ""
+    },
+    "contact": {
+      "email": "weddlysmartdesign@gmail.com"
+    },
+    "gallery": {
+      "enabled": false
+    },
+    "countdown": {
+      "enabled": true
+    },
+    "locations": {
+      "mode": "shared",
+      "shared": {
+        "name": "Finca Los Olivos",
+        "time": "17:30",
+        "address": "Madrid",
+        "mapsUrl": "https://maps.google.com/?q=Madrid",
+        "websiteUrl": ""
+      },
+      "ceremony": {
+        "name": "",
+        "time": "",
+        "address": "",
+        "mapsUrl": "",
+        "websiteUrl": ""
+      },
+      "celebration": {
+        "name": "",
+        "time": "",
+        "address": "",
+        "mapsUrl": "",
+        "websiteUrl": ""
+      },
+      "dressCodeEnabled": false,
+      "dressCode": ""
+    },
+    "practical": {
+      "bus": {
+        "enabled": false,
+        "pickupPoints": [],
+        "outboundTimes": [],
+        "returnTimes": [],
+        "note": "",
+        "mapsUrl": ""
+      },
+      "accommodation": {
+        "enabled": false,
+        "mode": "recommended",
+        "name": "",
+        "address": "",
+        "websiteUrl": "",
+        "bookingCode": "",
+        "bookingName": "",
+        "externalBookingUrl": "",
+        "deadline": "",
+        "note": "",
+        "phone": "",
+        "mapsUrl": ""
+      },
+      "gift": {
+        "enabled": false,
+        "mode": "short_text",
+        "message": "",
+        "displayText": "",
+        "iban": "",
+        "bic": "",
+        "holder": "",
+        "phone": "",
+        "url": "",
+        "reference": ""
+      },
+      "playlist": {
+        "enabled": false,
+        "url": "",
+        "prompt": ""
+      }
+    },
+    "confirmation": {
+      "reviewed": true
+    }
+  },
+  "expected": {
+    "ownerNormalTouchTargetSeconds": 300,
+    "locationMode": "shared",
+    "agendaCount": 4,
+    "practicalEnabledCount": 0,
+    "galleryEnabled": false
+  }
+}
