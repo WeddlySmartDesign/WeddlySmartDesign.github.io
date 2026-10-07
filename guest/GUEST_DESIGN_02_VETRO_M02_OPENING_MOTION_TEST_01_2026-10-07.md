@@ -88,3 +88,58 @@ Goal:
 - no morphing.
 
 No invitation build begins until this gate passes.
+
+
+---
+
+# M03 — KLING 3 STANDARD MOTION GATE
+
+Source:
+- same second VETRO master image.
+
+Video:
+- 5.04 s
+- 1088 × 1904
+- 24 fps
+- Kling 3 Standard
+- image-to-video
+
+## Verdict
+**PASS — APPROVED OPENING MOTION MASTER V1.**
+
+## Why it passes
+- movement reads primarily as physical separation/rotation in depth rather than continuous AI morphing;
+- sculptural blown-glass identity remains coherent throughout;
+- daylight/refraction changes are tied plausibly to the movement;
+- central negative space opens progressively and is clearly usable for native typography;
+- scene reaches a stable final resting state;
+- camera remains restrained;
+- perceived value depends on realistic material motion, not Canva-equivalent fade/pan/zoom;
+- this motion materially exceeds the rejected NOCTURNE motion language.
+
+## Minor residual limitation
+Small edge-contour variation remains visible in places, as expected from single-image 3D inference.
+
+This is accepted for the current opening master because:
+- it is not the dominant perceived behavior;
+- no gross geometry hallucination appears;
+- the sculpture remains coherent;
+- the premium physical opening survives real-time viewing.
+
+If later high-resolution/final export exposes objectionable edge artifacts, one final quality pass may be justified. Do not regenerate now.
+
+## Decision
+Seal this clip as:
+**VETRO OPENING MOTION MASTER V1**
+
+Do not spend more Recraft credits on opening motion at this stage.
+
+Next microblock:
+**D02-VETRO-M04 — NATIVE TYPOGRAPHY + PHOTO INTEGRATION PROOF**
+
+Requirements:
+- integrate native couple names/date into the opened central space;
+- typography appears only when the sculpture has created sufficient negative space;
+- keep video as premium physical event;
+- prove one sharp real couple photo can enter the VETRO language without blur/darkening;
+- no full invitation build yet.
