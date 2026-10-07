@@ -213,3 +213,44 @@ Do not regenerate A02.
 
 Next asset:
 **A03 — PHOTO FOREGROUND TRANSITION.**
+
+
+---
+
+# FULL-DESIGN REVIEW V1 — GLOBAL CORRECTION
+
+Owner real-mobile review: 2026-10-07.
+
+## V1 verdict
+**STRONG START / VISUAL AUTHORITY COLLAPSES THROUGH MIDDLE AND END.**
+
+Observed:
+- Cover: strong, premium, keep direction.
+- Countdown/Story: acceptable foundation.
+- Location: too weak/flat.
+- Agenda: weaker again.
+- Practical: weakest; too list-like and visually basic.
+- RSVP + Closing: must not be separate; global rule now requires one final act.
+
+## A03 verdict
+The foreground floral wipe/occlusion asset is rejected for this design.
+Reason:
+- motion reads artificial;
+- transition announces itself as an effect;
+- does not increase photo value.
+
+Do not use A03 in production.
+
+## V2 direction
+Rebalance section intensity without repeating the same hero background:
+- Location becomes real venue photography with strong editorial treatment.
+- Agenda uses A02 visibly as a living stage, with native schedule layered over it.
+- Practical uses stronger editorial structure + visible A02 motion, not flat text list.
+- Gallery keeps sharp full photography.
+- RSVP + Closing merge into one sticky/continuous final act using one coherent living background.
+
+No additional Recraft asset required before V2 owner review.
+
+## Review method
+From this point, BOTÁNICA CINEMÁTICA is reviewed as one complete invitation.
+Do not return to isolated micro-scene owner gates unless a reproducible specific defect requires it.
