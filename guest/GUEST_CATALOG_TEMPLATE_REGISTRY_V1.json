@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "guest-catalog-template-registry-v1",
+  "catalog": {
+    "purchaseEntry": "premium-digital-invitation",
+    "includedDifferentiator": "existing-guest-management-app",
+    "minimumLaunchTemplates": 5,
+    "targetLaunchTemplates": 6,
+    "commonConfigSchema": "guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json",
+    "ownerTouchTargetMinutes": 5
+  },
+  "templates": [
+    {
+      "id": "veil-light",
+      "displayName": "VEIL LIGHT",
+      "version": "5.3.3",
+      "status": "commercially-frozen",
+      "scalabilityCertified": true,
+      "operationalPilotPass": true,
+      "visualRobustnessPass": true,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1"
+    }
+  ]
+}
