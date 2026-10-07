@@ -267,3 +267,77 @@ Settings:
 - generations: 1.
 
 Only after that single result is reviewed may a second generation be authorized.
+
+
+---
+
+# 11. M03 TEST 01 RESULT — SEEDANCE 1.5 / IMAGE B
+
+Source:
+- Image B selected from first Recraft image pair.
+
+Video:
+- 5.04 s
+- 496 × 864
+- 24 fps
+- Seedance 1.5 image-to-video test
+
+## Verdict
+
+**FAIL AS FINAL / USEFUL AS DIRECTIONAL TEST.**
+
+The concept of light moving through a dark layered scene is worth continuing.
+The generated clip is not acceptable for integration yet.
+
+## What passed
+
+- camera remains comparatively restrained;
+- overall palette stays coherent;
+- warm light progression creates more premium interest than a static image;
+- foreground diagonal occlusion remains visually useful;
+- dark central zone still offers potential for live typography;
+- final state is comparatively calm.
+
+## What failed
+
+### 1. Geometry mutation
+The source architecture is not preserved strongly enough.
+
+During the animation:
+- a rounded/arched opening is invented in the central structure;
+- the apparent shape and relationship of columns/opening change through time;
+- architectural forms subtly morph rather than remaining stable.
+
+This violates the scalability/premium rule:
+motion must come from light and optical response, not AI geometry transformation.
+
+### 2. Light behaves too much like a revealed doorway
+The central bright region becomes a large luminous opening.
+That reads more like:
+- a doorway being revealed;
+- a scene redesign;
+than:
+- one physical light source traveling across existing depth planes.
+
+### 3. Insufficient independent material response
+There is some change in highlights, but not enough evidence that background, midground and foreground are reacting independently.
+The result still depends too much on the global central reveal.
+
+### 4. Source composition is being reinterpreted
+The model uses the still as inspiration rather than holding it as a rigid plate.
+For NOCTURNE, that is not good enough.
+
+## Decision
+
+Do NOT move to expensive Kling/Veo yet.
+
+Run exactly one second low-cost corrective test using the same Image B and Seedance 1.5.
+The corrective goal is:
+- freeze geometry;
+- remove the invented doorway/arch behavior;
+- restrict animation to moving highlights/reflections/light;
+- keep central architecture dark and stable.
+
+If Test 02 still morphs geometry, stop using Seedance for this source and reassess whether:
+A) a different source image with simpler geometry is required, or
+B) the final premium motion should be built from separately generated Recraft layers rather than single-image video generation.
