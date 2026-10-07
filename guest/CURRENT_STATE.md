@@ -1998,3 +1998,23 @@ New sealed product rule: couples may choose GUEST purely for the invitation desi
 Canonical standard: `guest/GUEST_END_TO_END_CUSTOMER_EXPERIENCE_STANDARD_2026-10-07.md`.
 
 Current email preview: `GUEST_EMAILS_PAREJA_PREVIEW_V2_EXPERIENCIA_INTEGRAL.html`. Backend messages remain unchanged pending owner approval.
+
+
+## CANONICAL PRODUCT DIRECTION — 2026-10-07
+
+Read FIRST before any new GUEST work:
+`guest/GUEST_PRODUCT_DIRECTION_CANONICAL_2026-10-07.md`.
+
+Correction after project-direction audit:
+- primary commercial product / purchase entry = premium wedding invitation;
+- secondary included differentiator = the EXISTING guest-management application;
+- the engine is already built and validated and must NOT be rebuilt;
+- the direction change is invitation-led customer flow, not functionality reconstruction;
+- customer-facing copy must identify functions in plain language and never assume knowledge of the name GUEST or WeddlySmartDesign;
+- VEIL LIGHT = chosen invitation design;
+- GUEST = existing guest-management app, only if explicitly identified as such;
+- current technical task is ONLY the bridge between the frozen catalog invitation and the existing GUEST send/RSVP runtime.
+
+Verified existing functionality includes groups/subgroups, people/import, invitation units, personalized share composer/contact selection, RSVP, +1, children, transport/accommodation, tables, multi-select seating, controlled print/PDF/catering lists and extra events. Do not propose building these again.
+
+Design 02 remains paused until the bridge/customer journey is specified correctly.
