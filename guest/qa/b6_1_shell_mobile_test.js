@@ -134,7 +134,7 @@ async function run(){
   // Access page states.
   await page.evaluate(()=>localStorage.removeItem('weddly_shared_wedding_token'));
   await page.goto(base+'/guest/access.html',{waitUntil:'domcontentloaded'});
-  ok(await page.locator('#title').innerText()==='Activa vuestro GUEST','activation title wrong');
+  ok(await page.locator('#title').innerText()==='Abrir vuestra gestión de invitados','activation title wrong');
   ok(await page.locator('#activate').isVisible(),'activation control missing');
   await page.locator('#code').fill('INVALID');
   await page.locator('#activate').click();
