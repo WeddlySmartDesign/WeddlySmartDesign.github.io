@@ -1969,3 +1969,23 @@ Persistent Library: /GUEST/MOBILE_CENTER/
 Checkpoint: guest/GUEST_MOBILE_OWNER_WORKSPACE_2026-10-07.md
 
 VEIL LIGHT V5.3.3 remains frozen. Stripe/publication remain untouched. Design 02 waits for owner real-device validation of this mobile workspace.
+
+
+## MOBILE OWNER WORKSPACE V3 — READABILITY + QUESTIONNAIRE COVER FIX 2026-10-07
+
+Real Android validation exposed two defects:
+- the questionnaire Cover guide image could render as a broken image on Android even though the embedded WebP decoded correctly off-device;
+- owner operational text in Mobile Center used several 10–12 px labels/meta/explanatory sizes, too small for reliable QA on a phone.
+
+Resolved without changing the Android APK shell:
+- canonical center content: GUEST_MOBILE_CENTER_V3_MOBILE_CLEAR.html;
+- canonical questionnaire: GUEST_QUESTIONNAIRE_VEIL_LIGHT_GUIDED_V3_MOBILE_CLEAR.html;
+- all 7 questionnaire guide images re-encoded as standard JPEG data URIs; 7/7 decode PASS at 390×488;
+- Cover reference now has a literal embedded src before JS boot, so it does not depend on API load/step initialization to appear;
+- normal Isabel & Hugo reference remains; no stress-order imagery reintroduced;
+- couple questionnaire mobile helper/form text enlarged;
+- owner Mobile Center typography enlarged substantially (inputs/selects 18 px, buttons 16 px, meta/status ~15.5 px, explanatory text 16 px, editor labels 17 px);
+- owner readability CSS is scoped to #wsdProd and does NOT alter the frozen invitation renderer;
+- APK reinstall is NOT required: use native menu → Actualizar centro and import V3 once.
+
+VEIL LIGHT V5.3.3 remains frozen. No Stripe/publication changes.
