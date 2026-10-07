@@ -97,3 +97,19 @@ Resolved without changing the Android APK shell:
 - APK reinstall is NOT required: use native menu → Actualizar centro and import V3 once.
 
 VEIL LIGHT V5.3.3 remains frozen. No Stripe/publication changes.
+
+
+## Catalog-generic owner workspace prepared — 2026-10-07
+
+Prepared and persisted in Library:
+`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_1_CATALOG_GENERIC_TOUCH_METRIC.html`.
+
+This version keeps the installed Android shell unchanged and makes the owner workspace catalog-aware:
+- resolves renderer from order template id instead of calling VEIL LIGHT directly in owner operations;
+- currently registers VEIL LIGHT as catalog template #1; future designs plug into the same registry;
+- test-order creation explicitly uses the catalog template contract;
+- owner summaries identify the selected design;
+- automatically measures active owner touch time per order (idle/hidden time excluded) against the <=5:00 target.
+
+This is an owner-workspace upgrade only. It does not alter the frozen VEIL LIGHT visual renderer or rebuild any GUEST management capability.
+The owner does not need to update the installed center until the next real certification step requires it.
