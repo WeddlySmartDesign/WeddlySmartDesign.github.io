@@ -39,3 +39,52 @@ Next pass must:
 - use exact 9:16.
 
 Do not build the invitation yet.
+
+
+---
+
+# TEST 02 — SEEDANCE CORRECTIVE PASS
+
+Source:
+- same second VETRO master image.
+
+Video:
+- 5.04 s
+- 416×720
+- 24 fps
+
+## Verdict
+**IMPROVED / STILL FAILS FINAL MOTION GATE.**
+
+## What improved
+- overall sculptural identity remains more stable;
+- opening movement is more legible;
+- central negative space remains usable;
+- material/refractive behavior still feels premium;
+- VETRO direction remains strongly viable.
+
+## Remaining defect
+Seedance still morphs the glass:
+- edges change curvature;
+- small tips/points appear and disappear;
+- individual elements subtly reshape rather than behaving as rigid blown-glass pieces.
+
+This is unacceptable for the final premium opening because the design promise is realistic physical glass motion.
+
+## Decision
+Stop Seedance iteration.
+
+VETRO has passed the concept-value gate strongly enough to justify exactly one higher-fidelity motion generation with a physics/consistency-focused model.
+
+Preferred next model:
+- Kling 3 Standard, image-to-video.
+- Pro is not required for this validation pass unless Standard fails despite correct prompting.
+
+Goal:
+- rigid glass geometry;
+- small controlled rotations/translations;
+- realistic refraction;
+- clear opening/resting state;
+- no morphing.
+
+No invitation build begins until this gate passes.
