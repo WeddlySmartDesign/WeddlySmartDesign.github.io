@@ -19,6 +19,18 @@ Do not reopen sealed competitive research.
 Do not touch ONE, ONE Partner or STUDIO.
 Do not publish GUEST automatically.
 
+## Release seals required by CI
+
+B8 commercial QA — PASS / SEALED.
+B9 release preparation — PASS / SEALED.
+
+Only after both seals exist may GUEST be considered ready for an explicit publication step.
+Publication remains a separate explicit step and MUST NOT happen automatically.
+
+Canonical evidence:
+- `guest/B8_FINAL_COMMERCIAL_SEAL_QA_2026-10-01.md`
+- `guest/B9_FINAL_RELEASE_PREPARATION_SEAL_2026-10-01.md`
+
 ## Product/technical track — SEALED
 The independent GUEST product, engine and commercial/release-preparation track completed B0–B9 QA on `guest-independent`.
 Canonical pre-design release-preparation baseline: `dac667cffa863fadb65411f6abef7e72ddf04f59`.
