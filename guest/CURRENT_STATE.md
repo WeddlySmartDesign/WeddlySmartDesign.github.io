@@ -1946,3 +1946,26 @@ The Mobile Center is the single owner-side phone file: create a test, open its q
 Checkpoint: `guest/GUEST_MOBILE_CENTER_AND_GUIDED_QUESTIONNAIRE_2026-10-06.md`.
 
 VEIL LIGHT V5.3.3 remains frozen. No Stripe/publication changes. Next gate is owner mobile usability of the single-file center, then Design 02.
+
+
+## GUEST MOBILE OWNER WORKSPACE — 2026-10-07
+
+Before Design 02, owner required two operational corrections:
+1. questionnaire section guides must use a normal representative VEIL LIGHT sample, not the extreme long-name scalability order, and the copy must be immediately understandable;
+2. owner operations must be available from a direct Android app entry point rather than separate HTML files/chat links.
+
+Completed:
+- canonical questionnaire: GUEST_QUESTIONNAIRE_VEIL_LIGHT_GUIDED_V2_NORMAL_REFERENCE.html;
+- all guide images embedded offline; normal Isabel & Hugo sample; no stress-order references;
+- simplified couple-facing copy;
+- canonical center content package: GUEST_MOBILE_CENTER_V2.html (embeds the corrected questionnaire);
+- native Android shell built successfully: GUEST_MOBILE_CENTER_ANDROID_V1.apk;
+- GitHub Actions build run 37574512849 PASS;
+- app package com.weddlysmartdesign.guestmobile;
+- first launch imports the center HTML once into private app storage; subsequent use is direct from the Android launcher icon;
+- app supports updating the center later without reinstalling the APK.
+
+Persistent Library: /GUEST/MOBILE_CENTER/
+Checkpoint: guest/GUEST_MOBILE_OWNER_WORKSPACE_2026-10-07.md
+
+VEIL LIGHT V5.3.3 remains frozen. Stripe/publication remain untouched. Design 02 waits for owner real-device validation of this mobile workspace.
