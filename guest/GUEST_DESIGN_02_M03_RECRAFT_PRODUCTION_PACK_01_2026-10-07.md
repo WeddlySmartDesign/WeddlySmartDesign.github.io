@@ -1,0 +1,230 @@
+# GUEST — DESIGN 02 · D02-M03 RECRAFT PRODUCTION PACK 01
+
+Date: 2026-10-07
+Branch: `guest-independent`
+Status: READY TO EXECUTE
+Design: NOCTURNE
+Scope: Opening + Cover motion proof only.
+
+## Purpose
+
+Produce the minimum Recraft material needed to prove the NOCTURNE premium motion language before any full invitation build.
+
+This pack is intentionally narrow:
+- one hero visual family;
+- one selected still master;
+- one motion plate derived from that master;
+- no Story / Location / Agenda / Practical / RSVP / Closing production yet.
+
+Owner role:
+- copy prompt;
+- generate requested batch;
+- return the candidates/results;
+- no manual design decisions.
+
+ChatGPT role:
+- direct;
+- select;
+- reject;
+- refine;
+- integrate after approval.
+
+---
+
+# 1. CURRENT RECRAFT WORKFLOW BASIS
+
+Recraft Studio currently supports:
+- Recraft V4/V4.1 image generation;
+- image-to-video in the same canvas;
+- multiple video models including Kling, Veo, Sora, Seedance and others.
+
+For this microblock:
+- IMAGE MASTER: Recraft V4 / highest-quality available image mode.
+- MOTION MASTER: Kling 3 Pro preferred for precise controlled motion.
+- FALLBACK MOTION: Veo 3.1 Standard if Kling distorts architecture/material continuity.
+
+Do not use Fast variants for the final candidate unless a Standard/Pro generation is demonstrably no better.
+
+---
+
+# 2. CREDIT-EFFICIENCY RULE
+
+Do not explore broadly.
+
+Round 1:
+- generate exactly **4 image candidates** from Prompt A.
+- return all 4 together in one screenshot/export set.
+- ChatGPT selects one or rejects the batch.
+
+Only after one still is selected:
+- generate exactly **2 image-to-video candidates** using Prompt B on the SAME selected image.
+- return both.
+- ChatGPT selects one or issues one focused correction.
+
+No additional generations without a specific defect and specific correction instruction.
+
+---
+
+# 3. PROMPT A — COVER MASTER IMAGE
+
+Use portrait / vertical mobile composition.
+Use Recraft V4 or best available Recraft image model.
+No text.
+
+### Prompt
+
+Cinematic luxury wedding visual world after dark, created as a premium moving invitation master frame rather than a finished poster. Deep warm ink-black environment, restrained oxblood reflections, warm ivory and champagne directional light, sophisticated chiaroscuro, realistic optical reflections, layered foreground / midground / background depth, dark smoked glass, polished stone and subtle architectural surfaces, elegant negative space for very large couple names, asymmetrical composition, high-fashion fragrance campaign restraint, premium European black-tie atmosphere, intimate and sensual without being theatrical.
+
+The composition must visibly contain THREE DEPTH PLANES that can later feel independent in motion:
+1. distant dark atmospheric architecture with soft depth;
+2. a reflective midground surface catching a narrow warm beam;
+3. a close foreground shadow or glass edge that partially crosses the scene.
+
+One narrow diagonal warm light source enters from outside frame and catches different surfaces at different depths. The light must feel physically present in the space, not painted as a flat gradient. The scene should feel moments before an elegant evening celebration begins, but must not depict a specific venue.
+
+Leave sophisticated negative space in the central-to-lower visual field for dynamic native typography. Keep the most visually complex detail away from the name zone.
+
+Photorealistic, cinematic, optical depth, luxury campaign art direction, highly controlled composition, realistic materials, refined darkness, premium mobile 9:16 framing.
+
+### Negative constraints
+
+No text. No letters. No monogram. No couple. No people. No wedding arch. No envelope. No curtain. No florals as main motif. No bouquet. No glitter. No gold foil effect. No star field. No fairy-light wallpaper. No generic bokeh. No candles as dominant subject. No red carpet. No nightclub. No casino. No gothic decor. No ornate frame. No circle or arch-shaped empty photo area. No obvious hotel lobby. No obvious house interior. No blank flat gradient. No generic website background. No central spotlight circle. No symmetrical stage. No Canva-style composition.
+
+---
+
+# 4. IMAGE ACCEPTANCE GATE
+
+Reject any image immediately if:
+- it reads as hotel/interior photography;
+- it is beautiful but flat;
+- it has fewer than 3 believable depth planes;
+- the light looks like a gradient overlay;
+- there is no clean zone for long names;
+- it only feels premium because it is dark;
+- it contains an obvious decorative wedding trope;
+- it could be used unchanged as a finished Canva background.
+
+Preferred candidate:
+- strongest depth;
+- strongest controlled light direction;
+- least literal setting;
+- greatest capacity for masking/occlusion;
+- most visually distinctive still frame.
+
+The still itself is NOT the product.
+It is the motion source.
+
+---
+
+# 5. PROMPT B — IMAGE-TO-VIDEO MOTION MASTER
+
+Apply only to the selected Prompt-A image.
+
+Preferred model:
+**Kling 3 Pro**.
+
+Camera:
+fixed or almost fixed.
+No obvious dolly-in.
+No sweeping camera travel.
+
+Duration target:
+5–7 seconds if available.
+
+### Motion prompt
+
+Preserve the exact architecture, composition, framing, materials, geometry and negative space of the source image. Do not redesign the scene.
+
+Create sophisticated physical light movement through depth.
+
+The scene begins almost unlit. A narrow warm champagne beam enters gradually from the same direction already implied in the source image. The beam travels across the environment and reveals the three depth planes at different moments: first a faint distant atmospheric reflection, then the midground reflective material, then a controlled edge of the foreground glass/shadow.
+
+The foreground and midground should show extremely subtle independent optical response: tiny reflection shifts, slight parallax-like depth separation and realistic changing specular highlights caused by the moving light. The architecture itself must remain stable.
+
+The light should widen and soften during the final third, creating a calm resting composition suitable for readable wedding typography. The ending should feel settled and premium, not like a loop restarting.
+
+Movement must be slow, precise, restrained and physically believable. Luxury fragrance-film lighting. No dramatic camera move. No object morphing. No new objects. No people appearing. No decorative particles.
+
+The premium effect must come from light moving through depth, not from camera movement.
+
+### Motion negative constraints
+
+Do not move walls, columns or architectural geometry.
+Do not warp surfaces.
+Do not add people.
+Do not add flowers.
+Do not add text.
+Do not add sparkles or floating particles.
+Do not add rain, smoke or fog effects.
+Do not introduce a new light source.
+Do not zoom continuously.
+Do not pan across the scene.
+Do not create a generic fade-in.
+Do not make the whole image brighten uniformly.
+Do not create a looping pulse.
+Do not alter the colour palette.
+Do not invent a wedding venue.
+
+---
+
+# 6. VIDEO ACCEPTANCE GATE
+
+A motion candidate fails if:
+- the whole image merely gets brighter;
+- the camera movement creates the interest;
+- architecture warps;
+- light feels digital rather than physical;
+- motion is equivalent to Canva pan/fade/zoom;
+- the scene loses the negative-space typography zone;
+- motion is busy enough to hurt reading;
+- it looks like an AI-video demo rather than a luxury invitation.
+
+A motion candidate passes only if:
+- light travels through depth;
+- different planes react differently;
+- the composition remains stable;
+- there is a calm final resting state;
+- the video gives us material that can be combined with live masks/type/scroll to create a non-Canva result.
+
+---
+
+# 7. WHY THIS DOES NOT BECOME A VIDEO-BACKGROUND TEMPLATE
+
+The Recraft video will not be the complete Cover.
+
+Integration after approval will add:
+- live native names/date/place/time;
+- light-aware text reveal;
+- live SVG/CSS mask synchronized with the visual light direction;
+- optional real couple photo revealed through that mask;
+- foreground occlusion over native type/photo;
+- scroll-linked transition into the next scene;
+- deterministic long-name behavior.
+
+Therefore the finished Cover cannot be reproduced by simply uploading this video to Canva and placing text over it.
+
+---
+
+# 8. OWNER ACTION — ROUND 1 ONLY
+
+Do exactly this:
+1. Open Recraft Studio.
+2. Select Image.
+3. Select Recraft V4 / highest-quality Recraft image mode available.
+4. Set vertical 9:16.
+5. Paste Prompt A + Negative constraints.
+6. Generate **4 candidates only**.
+7. Send the 4 candidates together for selection.
+
+Do NOT animate any candidate yet.
+
+This keeps the first review to one decision and avoids wasting video credits on a weak base image.
+
+---
+
+# 9. M03 STATUS
+
+READY FOR OWNER RECRAFT ROUND 1.
+
+No code integration begins until Prompt-A master image passes.
+No other Design 02 sections begin until Opening/Cover motion proof passes.
