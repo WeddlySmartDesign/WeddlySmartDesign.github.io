@@ -19,7 +19,14 @@
       "visualRobustnessPass": true,
       "ownerEditing": "bounded-safe-controls-only",
       "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
-      "configSchema": "guest-invitation-config-v1"
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic",
+        "romantic",
+        "contemporary"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
     }
   ]
 }
