@@ -71,3 +71,46 @@ After approval:
 - animate its position/scale/mask natively;
 - add live typography;
 - test first Cover compositing proof before generating more assets.
+
+
+---
+
+# M04B TEST 01 RESULT
+
+Asset:
+- first Recraft V4.x Pro optical reflection texture.
+
+## Verdict
+**FAIL / DO NOT USE.**
+
+## What worked
+- central area remains dark and compositionally useful;
+- no explicit environment is visible;
+- light is softer and more compositable than prior video tests;
+- no obvious spotlight/laser object.
+
+## Why it fails
+The reflected forms read too strongly as:
+- satin;
+- silk;
+- folded fabric;
+- flowing textile.
+
+This creates unacceptable visual drift toward VEIL LIGHT, whose dominant language is veil/fabric/material softness.
+
+Design 02 must remain materially distinct.
+
+Secondary issue:
+the asset is visually complete enough that it risks reading as an AI-generated luxury wallpaper rather than specialized compositing material.
+
+## Corrective direction
+Replace flowing/fabric-like forms with:
+- smoked architectural glass;
+- hard optical caustics;
+- refracted edge light;
+- planar reflections;
+- subtle prismatic distortion;
+- crisp-to-soft transitions;
+- no undulating/folded surfaces.
+
+Run one corrective static generation only.
