@@ -507,3 +507,49 @@ Real normal-order owner active time: **1:32**, below the <=5 minute target.
 The complete review -> approval -> final-delivery chain passed on Android and the backend ended in `delivered`.
 
 Future Design 02–06 must plug into this frozen pipeline and may not reopen architecture, sender, RSVP, management or owner workflow unless a reproducible cross-template defect requires a global correction.
+
+
+---
+
+## 21. GLOBAL INVITATION DESIGN RULES — ADDED 2026-10-07
+
+These rules apply to every current/future GUEST invitation design.
+
+### 21.1 RSVP + closing = one final act
+RSVP and closing must be designed as **one continuous final visual act**, as in VEIL LIGHT.
+
+Required:
+- one coherent scene/background system;
+- RSVP CTA first;
+- closing names/date/emotional sign-off resolve within the same final act;
+- no separate generic RSVP section followed by a visually disconnected closing section.
+
+This rule applies to Designs 02–06 and any future catalog design.
+
+### 21.2 Judge the invitation as a whole before micro-polishing
+After a new visual territory passes its opening gate, build a complete visual runway before prolonged scene-by-scene refinement.
+
+Reason:
+- premium quality is perceived across the full invitation;
+- a strong Cover cannot compensate for a weak middle/end;
+- section intensity must rise/fall intentionally without visual collapse;
+- owner review burden must be minimized.
+
+Preferred workflow:
+1. concept sketch gate;
+2. hero-motion gate;
+3. minimum reusable support assets;
+4. one complete visual runway;
+5. global owner review;
+6. only then polish/certify individual sections.
+
+### 21.3 No progressive visual collapse
+A design fails if visual authority steadily decreases after the Cover.
+
+Reading-heavy sections may be quieter, but they must still have:
+- intentional composition;
+- coherent material/motion language;
+- enough depth/presence to feel designed;
+- clear hierarchy.
+
+"Subtle" must never become "flat/basic".
