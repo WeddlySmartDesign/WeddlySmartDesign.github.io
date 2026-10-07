@@ -78,5 +78,41 @@ function ok(v,msg){if(!v)throw new Error(msg)}
   ok(uu.searchParams.get('u')==='unit_9','invitation unit missing');
   ok(!uu.searchParams.has('g'),'unit URL must not also expose single guest id');
 
+
+  const deliveryRuntime=read('guest-catalog-delivery-runtime-v1.js');
+  ok(!deliveryRuntime.includes('veil-light'),'delivery runtime must be template-agnostic');
+  ok(deliveryRuntime.includes("action:'public_load'"),'delivery runtime must load delivered order');
+  ok(deliveryRuntime.includes("q.get('rt')"),'delivery runtime must read RSVP token');
+  ok(deliveryRuntime.includes("q.get('g')"),'delivery runtime must read guest id');
+  ok(deliveryRuntime.includes("q.get('u')"),'delivery runtime must read invitation unit');
+  ok(deliveryRuntime.includes("cfg.rsvp.route=rsvpUrl()"),'delivery runtime must decorate RSVP route');
+
+  const veilAdapter=read('guest-catalog-template-veil-light-adapter-v1.js');
+  ok(veilAdapter.includes("root['veil-light']"),'VEIL LIGHT adapter missing');
+  ok(veilAdapter.includes('VEIL_APPLY_CONFIG'),'VEIL LIGHT adapter must call frozen renderer interface');
+
+  // Behaviour QA for the generic final-delivery runtime.
+  const domNode={dataset:{},hidden:true};
+  const dctx={
+    window:{},
+    document:{
+      getElementById:()=>null,
+      createElement:()=>domNode,
+      body:{appendChild:()=>{}}
+    },
+    location:{origin:'https://weddlysmartdesign.github.io',href:'https://weddlysmartdesign.github.io/invite.html?rt=token_r&g=guest_7&n=Ana&lang=es'},
+    URL,structuredClone,setTimeout,clearTimeout,
+    fetch:async()=>({ok:true,json:async()=>({ok:true,order:{config:{rsvp:{route:'#',ctaLabel:'Confirmar asistencia'},couple:{name1:'A',name2:'B'}}}})})
+  };
+  dctx.window=dctx;
+  vm.createContext(dctx);
+  vm.runInContext(deliveryRuntime,dctx);
+  let applied=null;
+  const booted=await dctx.__GuestCatalogDeliveryRuntime.boot({publicToken:'public_order_token',applyConfig:c=>{applied=c}});
+  ok(applied?.rsvp?.route.includes('/guests-rsvp-v105.html'),'final delivery did not receive existing RSVP route');
+  ok(applied.rsvp.route.includes('t=token_r'),'final delivery RSVP token missing');
+  ok(applied.rsvp.route.includes('g=guest_7'),'final delivery guest id missing');
+  ok(booted.recipient.guestId==='guest_7','recipient context not returned from delivery runtime');
+
   console.log('CATALOG BRIDGE CONTRACT PASS');
 })().catch(e=>{console.error(e);process.exit(1)});
