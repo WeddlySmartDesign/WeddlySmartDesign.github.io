@@ -2108,3 +2108,23 @@ Persistent artifacts:
 - `/GUEST/CATALOG_PIPELINE/GUEST_CATALOG_DELIVERY_ARTIFACT_QA_2026-10-07.md`
 
 Remaining unavoidable human gate: one real Android owner pass to validate actual readability/operation and measured active owner time <=5 minutes. No new architecture or manual design work is required for this gate.
+
+
+## MOBILE CENTER V4.2 — FINAL OWNER GATE PREPARED
+
+Persistent file:
+`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_2_CERTIFICATION_READY.html`
+
+SHA-256:
+`4ce9a9a7c2a4adab177deb9fd69129accbe992fd5e48b38f51e580a912a2a180`
+
+V4.2 fixes the last owner-side direct VEIL LIGHT rendering call and routes all owner preview actions through the template registry.
+It adds a one-tap **Certificación real · pedido normal ≤5 min** setup that:
+1. creates a test order using template_id=veil-light;
+2. fills/submits a normal representative questionnaire automatically;
+3. selects the order;
+4. resets owner active-work time to 0:00;
+5. leaves only real owner review/send work for the Android gate.
+
+Therefore the owner does not need to create/fill a certification order manually.
+Remaining human work is only the part that cannot be simulated: actual mobile usability + measured owner touch time.
