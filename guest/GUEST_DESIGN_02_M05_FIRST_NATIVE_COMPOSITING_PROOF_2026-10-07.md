@@ -100,3 +100,46 @@ repair globally or reject the art direction.
 
 If PASS:
 seal M05 and proceed to D02-M06 interior visual system.
+
+
+---
+
+# REAL MOBILE GATE — V1 RESULT
+
+Evidence:
+- owner real-Android recording received 2026-10-07.
+
+## Verdict
+**V1 FAIL — GLOBAL CORRECTION REQUIRED.**
+
+## Defects observed
+1. Opening remains too dark for too long before readable content appears.
+2. Foreground occlusion crosses the central name area too aggressively and makes the names look partially erased rather than spatially integrated.
+3. Date/place/details are too small/subtle in the real mobile browser viewport.
+4. Wedding signal is too weak during the first seconds; the scene can read as luxury architecture/brand campaign.
+5. Motion is controlled but not yet strong enough to justify the premium proposition by itself.
+
+## What remains valid
+- rigid geometry approach;
+- Recraft hard-optical material;
+- live native masks/compositing;
+- no AI-video dependency;
+- overall dark cinematic territory;
+- scroll-linked architecture.
+
+## V2 correction
+Prepared:
+`GUEST_D02_M05_NOCTURNE_MOTION_PROOF_V2.html`
+
+Changes:
+- faster transition from darkness to readable state;
+- "Nos casamos" promoted as an early human/wedding cue;
+- names reach full legibility earlier;
+- foreground occlusion moved away from the name core;
+- metadata/details contrast and mobile size increased;
+- optical/light movement made more perceptible while preserving restraint;
+- same rigid source and approved Recraft material;
+- no extra Recraft credits used;
+- same deterministic long-name stress mechanism.
+
+V2 requires real-mobile review before M05 can be sealed.
