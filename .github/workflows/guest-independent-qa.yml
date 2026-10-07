@@ -18,6 +18,16 @@ jobs:
       - name: GUEST independence and parity gate
         run: node guest/qa/guest_independent_regression_test.js
 
+  catalog-invitation-bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Catalog invitation bridge contract
+        run: node guest/qa/catalog_invitation_bridge_test.js
+
   b6-shell-mobile:
     runs-on: ubuntu-latest
     steps:
