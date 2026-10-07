@@ -116,7 +116,7 @@ A template that regularly requires special handling is rejected from the catalog
 
 ## Current backend implementation
 
-`guest-invitation-flow` v8:
+`guest-invitation-flow` v9:
 - template registry introduced;
 - `create_test` accepts templateId;
 - buildConfig uses order.template_id rather than hard-coded VEIL LIGHT;
@@ -139,3 +139,8 @@ Existing management runtime:
 - Do not touch ONE / ONE Partner / STUDIO.
 - Do not publish or connect the new commercial flow to Stripe yet.
 - Future Design 02–06 must implement this contract rather than inventing their own flow.
+
+
+## Template version pinning
+
+The template version is fixed when the order is created. A later catalog template update must never silently migrate an order already in progress. Typography/safe visual presets are resolved from that template's registry entry rather than from VEIL-LIGHT-specific assumptions.
