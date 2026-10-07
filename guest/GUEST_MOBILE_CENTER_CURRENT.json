@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "guest-mobile-center-current-v1",
+  "updatedAt": "2026-10-07",
+  "version": "4.3",
+  "status": "canonical-final-owner-gate",
+  "libraryPath": "/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_3_ONE_TAP_CERTIFICATION.html",
+  "sha256": "be5c586909b6bc83c1f726c9903ffdec9e53da842efdc17d32a2664f0290a0a0",
+  "androidShell": "GUEST_MOBILE_CENTER_ANDROID_V1.apk",
+  "reinstallRequired": false,
+  "updateMethod": "Installed Android app -> menu -> Actualizar centro -> choose V4.3 HTML",
+  "certificationScenario": "normal-01",
+  "targetOwnerActiveSeconds": 300,
+  "timerStarts": "after automated order creation, questionnaire submit, start_design and resolved invitation load",
+  "timerStops": "successful send_review",
+  "idleExclusionSeconds": 60,
+  "hiddenAppTimeExcluded": true,
+  "design02BlockedUntil": "real Android V4.3 owner usability + <=5 minute active-time PASS"
+}
