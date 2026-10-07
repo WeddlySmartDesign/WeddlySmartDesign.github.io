@@ -115,15 +115,15 @@ This is an owner-workspace upgrade only. It does not alter the frozen VEIL LIGHT
 The owner does not need to update the installed center until the next real certification step requires it.
 
 
-## V4.2 certification-ready workspace
+## V4.3 certification-ready workspace
 
 Canonical next mobile center:
-`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_2_CERTIFICATION_READY.html`
+`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_3_ONE_TAP_CERTIFICATION.html`
 
 SHA-256:
-`4ce9a9a7c2a4adab177deb9fd69129accbe992fd5e48b38f51e580a912a2a180`
+`be5c586909b6bc83c1f726c9903ffdec9e53da842efdc17d32a2664f0290a0a0`
 
-V4.2 supersedes V4.1 for the final owner certification and keeps the installed Android APK unchanged.
+V4.3 supersedes V4.1 for the final owner certification and keeps the installed Android APK unchanged.
 
 Improvements over V4.1:
 - fixes the last direct VEIL-LIGHT call in the owner “Ver invitación” action; all owner invitation rendering now resolves through the catalog renderer registry;
@@ -135,3 +135,19 @@ Improvements over V4.1:
 JavaScript syntax: PASS.
 
 This makes the only remaining owner action a real-device usability/touch-time check rather than project setup work.
+
+
+## V4.3 one-tap measurement finalization
+
+V4.3 supersedes V4.2 as the canonical final owner-certification workspace.
+
+It removes setup work from the measured owner task:
+- one tap creates the normal catalog test order;
+- fills and submits the normal representative questionnaire;
+- starts the design stage;
+- loads the resolved invitation;
+- only then resets the active owner timer to 0:00 and opens the invitation for real review.
+
+The timer now stops automatically on successful **Enviar revisión** and reports the final active time plus whether the <=5:00 target was met. Hidden/idle time remains excluded.
+
+Therefore the metric now measures the intended owner work only: visual review + any bounded adjustment + marking ready + sending review.
