@@ -525,3 +525,86 @@ Scope:
 
 M02 visual gate:
 if opening/cover does not look unmistakably premium and non-Canva on real mobile, reject or rebuild before proceeding.
+
+
+---
+
+# 13. OWNER CORRECTION — MOTION IS THE PREMIUM PRODUCT (2026-10-07)
+
+The previous static A01 image-direction proof is REJECTED as a product direction.
+
+Reason:
+- a beautiful static AI-generated image is reproducible with widely available tools;
+- placing text and simple Canva-style animation over it does not justify GUEST premium positioning;
+- the premium value of Design 02 must come primarily from motion architecture and interactive scene behavior.
+
+## New hard rule
+
+A Design 02 scene is not admitted merely because its still frame looks premium.
+
+It must also pass:
+
+**Can this perceived experience be recreated in Canva Premium with a static background plus common entrance/pan/fade animations?**
+
+If YES -> reject.
+
+## Motion must be structural
+
+Accepted motion must involve combinations such as:
+- multi-layer depth with independent velocities;
+- moving light masks that reveal different parts of the scene;
+- foreground/background occlusion;
+- scroll-driven progress rather than pre-baked linear playback;
+- typography reacting to light/scene state;
+- scene transitions where one visual element becomes the next section's material;
+- photo reveal controlled by live masks rather than a canned entrance;
+- count/state-aware motion in agenda/practical blocks;
+- touch/swipe behavior that changes the scene rather than simply changing slides;
+- reduced-motion equivalent that preserves premium composition.
+
+## Recraft role revised
+
+Recraft assets are raw visual material, not finished backgrounds.
+
+Whenever possible, assets should be generated in separable visual roles:
+- background atmosphere;
+- midground architecture/material;
+- foreground shadow/reflection/texture;
+- optional light/reflection plates;
+- transition material.
+
+The renderer recombines them dynamically.
+
+A single flattened Recraft background may be used only when it is heavily transformed by native masking/layering and cannot read as the finished scene on its own.
+
+## Premium-motion admission test
+
+Every major scene must demonstrate at least THREE of these before approval:
+1. independent layered motion;
+2. live mask/light choreography;
+3. scroll/touch-state response;
+4. cross-section visual continuity;
+5. dynamic recomposition from content state;
+6. non-trivial real-photo integration;
+7. typography synchronized with scene state.
+
+If it demonstrates only fade, zoom, pan, dissolve, parallax-lite or canned entrance animation, it fails.
+
+## D02-M02 scope changed
+
+Do NOT continue by selecting a static Cover image.
+
+D02-M02 becomes:
+**OPENING + COVER MOTION ARCHITECTURE**
+
+Required proof:
+- black/dark initial state;
+- multi-layer scene assembled from reusable assets;
+- light travels through depth, not over a flat image;
+- typography is revealed/occluded by the same light system;
+- optional couple photo can enter through the same live mask architecture;
+- interaction/scroll changes scene state;
+- transition into the next section carries an element of the Cover forward;
+- no Canva-equivalent canned animation path.
+
+Only after this motion proof is conceptually and technically defined should final Recraft assets be generated.
