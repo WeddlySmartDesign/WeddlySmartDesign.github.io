@@ -115,22 +115,23 @@ Existing send layers include:
 
 Do not propose rebuilding any of the above.
 
-## 5. The actual integration work still required
+## 5. Invitation ↔ existing management bridge — IMPLEMENTED
 
-The new invitation production line (VEIL LIGHT / later catalog designs) and the existing management app must be connected.
+The bridge task is complete at automated/backend level.
 
-This is a BRIDGE task, not a new GUEST build.
+Implemented and verified:
+- final catalog invitation stores one stable `delivery_url`;
+- the EXISTING management member/license resolves that delivered invitation through `active_for_member`;
+- the EXISTING send composer uses the delivered catalog invitation while preserving recipient/invitation-unit/message/contact/share behavior;
+- recipient context `rt / g / u / lang` is applied by the common catalog runtime;
+- the final invitation routes its CTA into the EXISTING RSVP engine;
+- live RSVP submission writes back into the EXISTING `guest_app_state`;
+- no second guest list, sender, RSVP engine or tables system exists.
 
-Current verified gap:
-- the frozen VEIL LIGHT order/delivery flow produces the approved invitation/public delivery;
-- the existing main-invitation share composer still constructs its invitation link using the legacy guests-rsvp-v105.html route;
-- therefore the existing send flow must be pointed at the customer's final approved catalog invitation while preserving its existing recipient/invitation-unit/RSVP behavior.
-
-Required outcome:
-once a catalog invitation is approved, that exact invitation is the active main invitation inside the customer's existing guest-management experience.
-The couple uses the already-built guest list/groups/subgroups/send-message/contact/share workflow.
-Guest responses continue to feed the already-built management engine.
-No second guest list, second sender, second RSVP engine or second tables system is created.
+Automated/live evidence:
+`guest/GUEST_CATALOG_PIPELINE_E2E_AUTOMATED_CERT_2026-10-07.md`
+and
+`guest/GUEST_CATALOG_DELIVERY_ARTIFACT_QA_2026-10-07.md`.
 
 ## 6. Delivery / communication principle
 
@@ -163,9 +164,15 @@ These are onboarding/explanation steps for EXISTING functionality, not new funct
 
 ## 8. Current next step
 
-Before any additional feature work:
-audit and specify the exact bridge between the frozen catalog invitation order/delivery data and the existing GUEST invitation/send/RSVP runtime.
+Automated/backend/catalog-delivery work has been maximized.
 
-Then update customer-facing delivery/onboarding copy around that existing functionality.
+The remaining gate before Design 02 is ONE unavoidable real-device owner certification:
+- load Mobile Center V4.2;
+- generate the built-in normal certification order with one tap;
+- work it as a real owner order;
+- confirm the mobile experience is operationally clear;
+- confirm measured active owner time is <=5 minutes.
 
-No feature ideation beyond that boundary.
+Mobile Center V4.2 prepares the normal order automatically and resets the work timer to 0:00, so owner intervention is limited to the real usability/touch-time work that cannot be simulated.
+
+After that PASS, Catalog Pipeline V1 can be frozen and Design 02 starts under the same contract.
