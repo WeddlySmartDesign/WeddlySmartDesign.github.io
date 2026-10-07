@@ -178,3 +178,26 @@ V4.4 changes:
 Static QA: all inline JavaScript syntax PASS and all navigation invariants present.
 
 V4.3 is superseded and must not be used for further certification.
+
+
+## V4.6 — CLEAN FROZEN OWNER WORKSPACE
+
+Final real-Android certification completed on 2026-10-07.
+
+Measured normal-order owner active time:
+- 1:32
+- target <=5:00 — PASS.
+
+Final workspace:
+`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_6_CLEAN_FROZEN.html`
+SHA-256: `a95984b658e560a9c3fca4bd92315b41c1b92cc4f6d47fffeed890da6f1f2133`.
+
+V4.6 closes issues found during real-device certification:
+- transient tool layers correctly return to center;
+- certification order creation fixed for UUID null handling;
+- only state-valid actions are shown;
+- redundant Prepare action hidden after the submitted state;
+- Android top/status-bar clearance added;
+- couple-review sheet uses its own Volver action without the redundant floating center button.
+
+Owner workspace is frozen for Catalog Pipeline V1. Future template support must plug into its common catalog renderer registry rather than creating a separate owner flow.
