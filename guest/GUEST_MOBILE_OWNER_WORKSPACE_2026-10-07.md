@@ -151,3 +151,30 @@ It removes setup work from the measured owner task:
 The timer now stops automatically on successful **Enviar revisión** and reports the final active time plus whether the <=5:00 target was met. Hidden/idle time remains excluded.
 
 Therefore the metric now measures the intended owner work only: visual review + any bounded adjustment + marking ready + sending review.
+
+
+## Mobile Center V4.4 navigation recovery — 2026-10-07
+
+Real Android finding from V4.3:
+- tool/questionnaire overlay was opening behind the owner center because `openTool()` did not hide the center layer;
+- pressing `Ver invitación` could therefore reveal the already-open questionnaire underneath;
+- the floating `CENTRO GUEST` control did not first close transient overlays, so the owner could become trapped outside the center.
+
+Root cause: owner-workspace layer/navigation bug. Not a VEIL LIGHT renderer defect and not a GUEST management-engine defect.
+
+Fixed in persistent Library artifact:
+`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_4_NAVIGATION_FIXED.html`
+
+V4.4 changes:
+- tool/questionnaire views explicitly hide the center before opening;
+- toolbar `Volver al centro` closes the tool layer and restores the center;
+- floating `CENTRO GUEST` now closes questionnaire/review layers before restoring the center;
+- click + pointer + touch fallback handlers added for Android;
+- floating return button moved to a safe bottom inset and only appears outside the center;
+- `Ver invitación` now requires a loaded order and intentionally closes transient layers before showing the invitation;
+- system/browser back also restores the center from transient owner views;
+- one-tap certification and <=5-minute metric remain intact.
+
+Static QA: all inline JavaScript syntax PASS and all navigation invariants present.
+
+V4.3 is superseded and must not be used for further certification.
