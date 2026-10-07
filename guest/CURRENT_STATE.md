@@ -1989,3 +1989,12 @@ Resolved without changing the Android APK shell:
 - APK reinstall is NOT required: use native menu → Actualizar centro and import V3 once.
 
 VEIL LIGHT V5.3.3 remains frozen. No Stripe/publication changes.
+
+
+## GUEST END-TO-END CUSTOMER EXPERIENCE STANDARD — 2026-10-07
+
+New sealed product rule: couples may choose GUEST purely for the invitation design and price. Customer-facing flows must never assume they know the brand, the GUEST engine, or the post-purchase process. The complete journey — browse, understand, buy, questionnaire, review, delivery/share, and guest management — is one product experience and each transition must be self-explanatory and visually guided.
+
+Canonical standard: `guest/GUEST_END_TO_END_CUSTOMER_EXPERIENCE_STANDARD_2026-10-07.md`.
+
+Current email preview: `GUEST_EMAILS_PAREJA_PREVIEW_V2_EXPERIENCIA_INTEGRAL.html`. Backend messages remain unchanged pending owner approval.
