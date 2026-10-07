@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "guest-catalog-cert-scenario-v1",
+  "id": "stress-01",
+  "purpose": "Common high-density supported-state stress order. Derived from the real Álvaro/Íñigo scalability gate.",
+  "questionnaire": {
+    "rsvp": {
+      "menu": true,
+      "plusOne": true,
+      "children": true,
+      "allergies": true,
+      "customQuestions": [
+        "¿Hay algo más que debamos saber para que disfrutéis del día?"
+      ]
+    },
+    "story": {
+      "enabled": true,
+      "presetId": "story-03",
+      "textMode": "custom",
+      "customText": "Nos conocimos cuando ninguno de los dos esperaba que un plan cualquiera terminara convirtiéndose en tantos años compartidos. Desde entonces han llegado viajes, mudanzas, sobremesas interminables, decisiones importantes y muchos días normales que son precisamente nuestros favoritos. Ahora queremos celebrar este nuevo capítulo rodeados de las personas que han estado cerca durante todo el camino."
+    },
+    "agenda": {
+      "enabled": true,
+      "moments": [
+        {
+          "time": "17:15",
+          "label": "Ceremonia y bienvenida"
+        },
+        {
+          "time": "19:00",
+          "label": "Cóctel en los jardines"
+        },
+        {
+          "time": "21:15",
+          "label": "Cena y brindis"
+        },
+        {
+          "time": "23:45",
+          "label": "Baile y barra libre"
+        },
+        {
+          "time": "02:30",
+          "label": "Último bus de regreso"
+        }
+      ]
+    },
+    "couple": {
+      "date": "2027-09-25",
+      "name1": "Álvaro Alejandro",
+      "name2": "Íñigo Maximiliano",
+      "coverTime": "17:15",
+      "coverPlace": "San Lorenzo de El Escorial",
+      "coverTimeEnabled": true,
+      "coverPlaceEnabled": true,
+      "typographyVariant": "contemporary"
+    },
+    "closing": {
+      "mode": "default",
+      "customLine": ""
+    },
+    "contact": {
+      "email": "weddlysmartdesign@gmail.com"
+    },
+    "gallery": {
+      "enabled": false
+    },
+    "countdown": {
+      "enabled": true
+    },
+    "locations": {
+      "mode": "split",
+      "shared": {
+        "name": "",
+        "time": "",
+        "address": "",
+        "mapsUrl": "",
+        "websiteUrl": ""
+      },
+      "ceremony": {
+        "name": "Real Basílica de San Francisco el Grande",
+        "time": "17:15",
+        "address": "Calle de San Buenaventura, 1, 28005 Madrid",
+        "mapsUrl": "https://maps.google.com/?q=San+Francisco+el+Grande",
+        "websiteUrl": "https://example.com/ceremonia"
+      },
+      "dressCode": "Formal de tarde · colores libres",
+      "celebration": {
+        "name": "Palacio de los Duques de Pastrana",
+        "time": "19:00",
+        "address": "Paseo de la Habana, 208, 28036 Madrid",
+        "mapsUrl": "https://maps.google.com/?q=Palacio+de+Pastrana",
+        "websiteUrl": "https://example.com/celebracion"
+      },
+      "dressCodeEnabled": true
+    },
+    "practical": {
+      "bus": {
+        "note": "Las plazas se confirmarán junto con la asistencia.",
+        "enabled": true,
+        "mapsUrl": "https://maps.google.com/?q=Plaza+de+Castilla",
+        "returnTimes": [
+          "00:30",
+          "02:00",
+          "04:00"
+        ],
+        "pickupPoints": [
+          "Plaza de Castilla, marquesina principal"
+        ],
+        "outboundTimes": [
+          "16:15"
+        ]
+      },
+      "gift": {
+        "bic": "CAIXESBBXXX",
+        "url": "",
+        "iban": "ES91 2100 0418 4502 0005 1332",
+        "mode": "bank",
+        "phone": "",
+        "holder": "Álvaro Alejandro e Íñigo Maximiliano",
+        "enabled": true,
+        "message": "",
+        "reference": "",
+        "displayText": "Vuestra presencia es lo más importante; si queréis tener un detalle, os dejamos estos datos."
+      },
+      "playlist": {
+        "url": "https://open.spotify.com/playlist/test",
+        "prompt": "Añadid esa canción con la que sabéis que acabaremos todos bailando.",
+        "enabled": true
+      },
+      "accommodation": {
+        "mode": "external_booking",
+        "name": "Hotel Eurostars Madrid Tower",
+        "note": "Bloque de habitaciones sujeto a disponibilidad hasta la fecha indicada.",
+        "phone": "+34 910 00 00 00",
+        "address": "Paseo de la Castellana, 259 B, 28046 Madrid",
+        "enabled": true,
+        "mapsUrl": "https://maps.google.com/?q=Eurostars+Madrid+Tower",
+        "deadline": "25 de agosto de 2027",
+        "websiteUrl": "https://example.com/hotel",
+        "bookingCode": "CELEBRACIONSEPTIEMBRE2027",
+        "bookingName": "CELEBRACIONSEPTIEMBRE2027",
+        "externalBookingUrl": "https://example.com/reserva"
+      }
+    },
+    "confirmation": {
+      "reviewed": true
+    }
+  },
+  "expected": {
+    "locationMode": "split",
+    "agendaCount": 5,
+    "agendaContainsAfterMidnight": true,
+    "practicalEnabledCount": 4,
+    "galleryEnabled": false,
+    "longNames": true,
+    "longPracticalToken": true
+  }
+}
