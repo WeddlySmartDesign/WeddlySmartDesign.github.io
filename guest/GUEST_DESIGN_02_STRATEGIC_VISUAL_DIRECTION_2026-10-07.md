@@ -2,7 +2,7 @@
 
 Date: 2026-10-07  
 Branch: `guest-independent`  
-Status: PROPOSED — OWNER VISUAL DIRECTION GATE  
+Status: REJECTED — DO NOT REVIVE  
 Scope: Design 02 only. No code implementation in this checkpoint.
 
 ## Canonical constraints read and accepted
@@ -565,3 +565,26 @@ It must pass all five tests:
 5. believable couple-to-guest copy.
 
 Failure of any one test = microblock remains open or is discarded.
+
+
+---
+
+# FINAL REJECTION — 2026-10-07
+
+NOCTURNE is permanently rejected as Design 02 direction after full real-mobile visual runway review.
+
+Do not revive, reskin, lighten, or incrementally improve this direction.
+
+Reasons:
+- perceived design quality materially below VEIL LIGHT;
+- too flat despite motion/compositing effort;
+- major sections reproducible with ordinary Canva-style layout/animation;
+- insufficient defensible premium personalisation value;
+- photography had to be darkened/controlled to fit the template instead of increasing its value;
+- motion language did not justify Recraft/premium positioning;
+- invitation read too much like luxury branding/web design and not enough like a unique wedding experience;
+- effort-to-result ratio is commercially unacceptable.
+
+Assets/experiments may be retained only as negative QA evidence.
+
+Design 02 must restart from a materially, chromatically, compositionally and motion-wise different territory.
