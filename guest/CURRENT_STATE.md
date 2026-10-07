@@ -1,3 +1,14 @@
+# ⚠️ READ FIRST — CANONICAL GUEST MASTER
+
+Before any GUEST work, read:
+
+`guest/GUEST_CANONICAL_MASTER_DO_NOT_DRIFT_2026-10-07.md`
+
+That file has priority over partial notes, chat recollections or later ideas if they conflict.
+Do not rebuild GUEST, do not create parallel flows, and do not treat VEIL LIGHT as the architecture for the whole catalog.
+
+---
+
 # GUEST by WeddlySmartDesign — CURRENT STATE
 Updated: 2026-10-02
 
