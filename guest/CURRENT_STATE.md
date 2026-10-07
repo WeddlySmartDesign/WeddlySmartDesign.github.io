@@ -25,7 +25,7 @@ B8 commercial QA — PASS / SEALED.
 B9 release preparation — PASS / SEALED.
 
 Only after both seals exist may GUEST be considered ready for an explicit publication step.
-Publication remains a separate explicit step and MUST NOT happen automatically.
+Publication remains a separate explicit step and MUST NOT happen automatically.\nDo not merge/publish to `main` automatically.
 
 Canonical evidence:
 - `guest/B8_FINAL_COMMERCIAL_SEAL_QA_2026-10-01.md`
