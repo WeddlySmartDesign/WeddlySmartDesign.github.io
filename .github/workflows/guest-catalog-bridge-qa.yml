@@ -12,6 +12,9 @@ on:
       - 'guest/guests-rsvp-share-composer-v3.js'
       - 'guest/guests-rsvp-operations-live.html'
       - 'guest/qa/catalog_invitation_bridge_test.js'
+      - 'guest/qa/catalog_customer_journey_test.js'
+      - 'guest/backend/guest-invitation-flow/index.ts'
+      - 'guest/access.html'
       - '.github/workflows/guest-catalog-bridge-qa.yml'
   workflow_dispatch:
 jobs:
@@ -23,3 +26,5 @@ jobs:
         with:
           node-version: '22'
       - run: node guest/qa/catalog_invitation_bridge_test.js
+      - name: Catalog customer journey contract
+        run: node guest/qa/catalog_customer_journey_test.js
