@@ -168,3 +168,48 @@ No additional assets are generated without a clear reusable role.
 Generate exactly one A02 support-motion test from the second B02 floral image.
 
 No other Recraft generation before review.
+
+
+---
+
+# A02 REAL MOTION REVIEW — PASS
+
+Date: 2026-10-07
+
+Source:
+- second B02 floral master image.
+
+Motion:
+- Kling 3 Standard
+- image-to-video
+- 5.04 s
+- 724 × 1268
+- 24 fps
+
+## Verdict
+**PASS — APPROVED SUPPORT MOTION 01.**
+
+Why:
+- motion remains deliberately subtle;
+- central reading zone stays calm and usable;
+- flowers retain recognizable geometry;
+- no distracting bloom/timelapse behavior;
+- natural daylight and petal translucency remain coherent;
+- foreground/background depth stays alive without becoming a second hero;
+- suitable for reading-heavy sections.
+
+Approved use:
+- Story text-only state;
+- Agenda;
+- Practical information;
+- possibly restrained RSVP support.
+
+Not approved use:
+- Cover;
+- Gallery hero;
+- Closing hero.
+
+Do not regenerate A02.
+
+Next asset:
+**A03 — PHOTO FOREGROUND TRANSITION.**
