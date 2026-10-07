@@ -2183,3 +2183,28 @@ Rules now:
 - `changes_requested` can again progress to review-ready from the visible next-step control.
 
 The Lucía & Mateo certification order and its stored owner-touch timer are preserved across this Center update; no repeat of the visual review is required.
+
+
+## CATALOG PIPELINE V1 — FINAL PASS / FROZEN (2026-10-07)
+
+Final certification:
+`guest/GUEST_CATALOG_PIPELINE_V1_FINAL_CERTIFICATION_2026-10-07.md`.
+
+Real Android owner gate:
+- normal order Lucía & Mateo;
+- active owner work = **1:32**;
+- target <=5:00 — PASS;
+- review sent — PASS;
+- simulated couple approval — PASS;
+- final delivery — PASS;
+- backend final state = `delivered`.
+
+Catalog Pipeline V1 is now CLOSED and FROZEN for reuse by Design 02–06.
+No further architecture changes are allowed for future designs unless a reproducible cross-template defect proves the common pipeline wrong.
+
+Final owner workspace:
+`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_6_CLEAN_FROZEN.html`
+SHA-256: `a95984b658e560a9c3fca4bd92315b41c1b92cc4f6d47fffeed890da6f1f2133`.
+
+Next product-development block: **Design 02** under the existing common catalog contracts.
+Commercial publication and Stripe remain on hold.
