@@ -125,3 +125,27 @@ Before a design enters sale:
 - owner touch target <=5 min.
 
 Only then set registry status to `commercially-frozen`.
+
+
+---
+
+## Absolute reusable-media contract
+
+Every visual template must treat generated art/motion as reusable master media.
+
+Template media may contain only fixed visual language.
+It must not contain baked-in variable wedding data.
+
+All variable content must be supplied through the common config and rendered natively by the template adapter.
+
+A template fails this contract if a supported order requires:
+- per-couple AI/Recraft generation;
+- manual media editing;
+- manual text placement;
+- manual layout repair;
+- manual timing changes.
+
+This applies to every Design 01–06 and any future catalog template.
+
+Owner operating target remains:
+**normal order = review only; total active intervention < 5 minutes.**
