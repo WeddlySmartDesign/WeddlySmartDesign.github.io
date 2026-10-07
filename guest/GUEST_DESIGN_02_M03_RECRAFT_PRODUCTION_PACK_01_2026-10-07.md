@@ -341,3 +341,54 @@ The corrective goal is:
 If Test 02 still morphs geometry, stop using Seedance for this source and reassess whether:
 A) a different source image with simpler geometry is required, or
 B) the final premium motion should be built from separately generated Recraft layers rather than single-image video generation.
+
+
+---
+
+# 12. M03 TEST 02 RESULT — SEEDANCE 1.5 / IMAGE B
+
+Video:
+- 5.04 s
+- 496 × 864
+- 24 fps
+- same Image B source
+- corrective prompt prioritizing rigid geometry
+
+## Verdict
+
+**FAIL / STOP SEEDANCE ON THIS FLATTENED SOURCE.**
+
+## Improvement over Test 01
+
+- source architecture remains substantially more stable;
+- camera is acceptably restrained;
+- the dark composition and foreground diagonal remain usable;
+- central typography zone remains available.
+
+## Remaining failure
+
+The moving light becomes an explicit bright ribbon / light-painting trail.
+
+Observed behavior:
+- a narrow bright line grows into a curved luminous path;
+- it reads as an animated effect rather than physically plausible illumination;
+- the line becomes the subject of the scene instead of light revealing material;
+- this risks a synthetic AI-video aesthetic and does not meet premium admission.
+
+Even though geometry is better preserved, this is not the desired luxury-light behavior.
+
+## Decision
+
+Do NOT spend a third Seedance generation on Image B.
+Do NOT escalate to expensive Kling/Veo yet.
+
+The next efficient strategy is **separate light-motion material from static geometry**:
+1. keep a rigid source/master scene;
+2. generate motion as an abstract light/reflection plate with no architecture to mutate;
+3. integrate that moving plate over/through the rigid scene using native masking/blending;
+4. add live native typography and scroll interaction in the renderer.
+
+This makes the premium motion depend on compositing + responsive scene behavior, not on an AI model redrawing architecture frame by frame.
+
+Next microblock:
+**D02-M04 — RECRAFT LIGHT PLATE + COMPOSITING PROOF.**
