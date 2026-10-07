@@ -228,3 +228,42 @@ READY FOR OWNER RECRAFT ROUND 1.
 
 No code integration begins until Prompt-A master image passes.
 No other Design 02 sections begin until Opening/Cover motion proof passes.
+
+
+---
+
+# 10. EXECUTION CORRECTION — SINGLE CLOSED RECRAFT ORDER
+
+Owner must never receive fragmented video instructions.
+
+For every Recraft generation ChatGPT must provide, in one block:
+- exact source asset;
+- exact model;
+- exact aspect ratio;
+- exact resolution;
+- exact duration;
+- exact number of generations;
+- ONE complete prompt containing all positive and negative constraints.
+
+No separate add-ons, no "variant" suffixes, no second negative-prompt block unless Recraft explicitly exposes a separate negative-prompt field for the selected model.
+
+## Current test order
+
+Source:
+- selected Image B.
+
+Model:
+- Seedance 1.5 image-to-video.
+
+Reason:
+- Recraft officially documents Seedance 1.5 as supporting image-to-video;
+- this is a low-cost concept-validation step;
+- expensive Kling/Veo passes are reserved for final refinement only if the direction proves itself.
+
+Settings:
+- aspect ratio: preserve source vertical 9:16;
+- resolution: lowest/preview quality available sufficient for motion judgment;
+- duration: 5 seconds;
+- generations: 1.
+
+Only after that single result is reviewed may a second generation be authorized.
