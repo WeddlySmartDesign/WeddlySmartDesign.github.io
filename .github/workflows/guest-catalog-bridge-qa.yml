@@ -13,6 +13,8 @@ on:
       - 'guest/guests-rsvp-operations-live.html'
       - 'guest/qa/catalog_invitation_bridge_test.js'
       - 'guest/qa/catalog_customer_journey_test.js'
+      - 'guest/tools/build_catalog_delivery.js'
+      - 'guest/qa/catalog_delivery_builder_test.js'
       - 'guest/backend/guest-invitation-flow/index.ts'
       - 'guest/access.html'
       - '.github/workflows/guest-catalog-bridge-qa.yml'
@@ -28,3 +30,5 @@ jobs:
       - run: node guest/qa/catalog_invitation_bridge_test.js
       - name: Catalog customer journey contract
         run: node guest/qa/catalog_customer_journey_test.js
+      - name: Catalog delivery builder
+        run: node guest/qa/catalog_delivery_builder_test.js
