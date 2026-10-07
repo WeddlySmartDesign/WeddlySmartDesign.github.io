@@ -113,3 +113,25 @@ This version keeps the installed Android shell unchanged and makes the owner wor
 
 This is an owner-workspace upgrade only. It does not alter the frozen VEIL LIGHT visual renderer or rebuild any GUEST management capability.
 The owner does not need to update the installed center until the next real certification step requires it.
+
+
+## V4.2 certification-ready workspace
+
+Canonical next mobile center:
+`/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_2_CERTIFICATION_READY.html`
+
+SHA-256:
+`4ce9a9a7c2a4adab177deb9fd69129accbe992fd5e48b38f51e580a912a2a180`
+
+V4.2 supersedes V4.1 for the final owner certification and keeps the installed Android APK unchanged.
+
+Improvements over V4.1:
+- fixes the last direct VEIL-LIGHT call in the owner “Ver invitación” action; all owner invitation rendering now resolves through the catalog renderer registry;
+- adds one button: **“Certificación real · pedido normal ≤5 min”**;
+- that button automatically creates a VEIL LIGHT test order, fills and submits a normal representative questionnaire, selects the resulting order, resets owner active-work time to 0:00, and leaves only the real owner workflow to perform;
+- no questionnaire filling is required from the owner for this certification;
+- active-work metric keeps excluding hidden/idle time.
+
+JavaScript syntax: PASS.
+
+This makes the only remaining owner action a real-device usability/touch-time check rather than project setup work.
