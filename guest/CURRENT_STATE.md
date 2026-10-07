@@ -2018,3 +2018,29 @@ Correction after project-direction audit:
 Verified existing functionality includes groups/subgroups, people/import, invitation units, personalized share composer/contact selection, RSVP, +1, children, transport/accommodation, tables, multi-select seating, controlled print/PDF/catering lists and extra events. Do not propose building these again.
 
 Design 02 remains paused until the bridge/customer journey is specified correctly.
+
+
+## CATALOG BRIDGE + 5-MIN OWNER MODEL — 2026-10-07
+
+Canonical checkpoint: `guest/GUEST_CATALOG_BRIDGE_CHECKPOINT_2026-10-07.md`.
+Canonical catalog contract: `guest/GUEST_CATALOG_PIPELINE_CONTRACT_V1.md`.
+Template registry: `guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json`.
+
+Launch architecture is now explicitly template-agnostic:
+- minimum 5 invitation designs; target 6;
+- identical order/questionnaire/review/delivery/management flow for every design;
+- premium-personalized customer perception;
+- owner touch target <=5 minutes and no per-order HTML/CSS/layout work.
+
+Backend `guest-invitation-flow` v8 now resolves config by template_id, stores a stable delivered `delivery_url`, and exposes the authenticated `active_for_member` bridge to the EXISTING management app.
+
+Existing send/runtime bridge installed:
+- `guests-catalog-invitation-bridge-v1.js`;
+- `guests-rsvp-share-composer-v3.js`;
+- wired from `guests-rsvp-operations-live.html`.
+
+Existing groups/subgroups, contacts, personalized message, invitation units, RSVP, tables, multiselect seating, PDFs/catering and extra events remain the same engine and are NOT rebuilt.
+
+Commercial activation remains held: no Stripe wiring, no publication, no live production catalog order. The bridge therefore stays dormant until a delivered order has a stable URL.
+
+Design 02–06 must conform to this same contract. A template that requires routine manual design intervention is rejected.
