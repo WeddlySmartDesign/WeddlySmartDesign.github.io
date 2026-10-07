@@ -264,3 +264,74 @@ SHA-256:
 `986b0040b9b6c0cc4a5327678ed745b012aad02dd0ce1c3bca819cc263d286d3`
 
 V5 requires real-mobile review.
+
+
+---
+
+# REAL MOBILE GATE — V5 CONSOLIDATED REVIEW
+
+Evidence:
+- owner real-Android recording `1000094605.mp4`, reviewed frame-by-frame.
+
+## Decision
+
+Do not continue patching V5.
+
+V2–V5 accumulated multiple CSS override layers and conflicting reveal/visibility rules. Further incremental fixes would increase regression risk and owner review burden.
+
+A clean rebuild was therefore performed for V6 using only the approved visual ingredients.
+
+## V5 defects consolidated
+
+1. Duplicate location information: Cartagena appeared both in top metadata and lower details.
+2. Ampersand was effectively invisible.
+3. Top metadata / kicker / practical details remained undersized on real mobile.
+4. Cover lacked a clean stable reading hierarchy during the reveal sequence.
+5. Text-safe zone was not sufficiently protected from the right optical highlight.
+6. Foreground/scene geometry retained too much authority over the copy layer.
+7. Scroll cue was not reliably visible/safely placed above mobile browser/navigation UI.
+8. First swipe could begin dismantling the cover too early.
+9. Prototype technical label remained visible.
+10. Long-name behavior still depended on test-specific CSS rather than a clean deterministic fit routine.
+11. Layered legacy overrides made further patching unsafe.
+
+## V6 clean rebuild
+
+Artifact:
+`GUEST_D02_M05_NOCTURNE_MOTION_PROOF_V6.html`
+
+SHA-256:
+`d61fe3456ff8170e1cfb4b6c686ce50a3b5beafa446bcbbd84a4ad1670e96d5c`
+
+V6 is rebuilt from a clean stylesheet/JS architecture and retains:
+- rigid Image B base;
+- approved hard-optical Recraft material;
+- native light/compositing motion;
+- no AI-video background;
+- no extra Recraft credits.
+
+### V6 corrections
+
+- one date line only;
+- one combined lower detail line: time + location;
+- visible champagne ampersand;
+- stronger mobile sizes/contrast for all functional text;
+- full-word name reveals only;
+- names remain visible indefinitely until meaningful scroll;
+- first ~45% viewport scroll leaves copy fully visible;
+- cover exit starts only after ~78% viewport scroll;
+- foreground remains below text;
+- optical activity kept outside core text-safe zone;
+- scroll cue moved into safe mobile area and changed to `Desliza para seguir`;
+- prototype/debug label removed;
+- reduced-motion state preserved;
+- automatic long-name fitting added; no per-couple CSS repair;
+- JS syntax PASS;
+- 360×800 and 390×844 static final-state render reviewed internally;
+- 360×800 first-scroll state preserves full copy visibility;
+- no additional Recraft generation requested.
+
+## Gate
+
+V6 is the next and only owner-review candidate.
+Do not create V7 unless the real-mobile recording shows a concrete reproducible defect.
