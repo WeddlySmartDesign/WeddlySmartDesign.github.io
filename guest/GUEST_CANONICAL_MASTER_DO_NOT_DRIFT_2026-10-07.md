@@ -757,3 +757,28 @@ New QA-tested prototype: **BOTÁNICA V16E CONTINUITY QA**
 Automated browser QA on the structural V16D baseline: 7/7 scenarios across mobile viewport widths 360–430, 0–2 venues, 1–5 agenda moments, 0–4 practical modules including stress text. The refined V16E artifact passed three additional extreme configurations; checked no horizontal overflow, resource loads, RSVP CTA presence and code execution.
 
 **OWNER VISUAL APPROVAL PENDING.** Do NOT mark Design 02 frozen or commercially certified before a real Android review confirms motion and visual quality. Preserve both V15E rollback and V16E isolated candidate; do not revive V15F or revert to repeated section-background video architecture.
+
+
+---
+
+## 28. DESIGN 02 — V22 CUT CONTINUITY CANDIDATE (2026-10-08)
+
+V21 mobile review showed that its CSS mask-based `living` botanical video accents can render as visible rectangular/geometric cuts on the owner's Android. It also accumulated excessive vertical whitespace between Story, Venue, Agenda, Practical and Gallery.
+
+V22 is an isolated review candidate built directly from V21 without changing the canonical order or data contract.
+
+Changes:
+- remove CSS `mask-image` / `-webkit-mask-image` from moving botanical accents;
+- dissolve video edges using Android-safe ivory linear-gradient overlays instead;
+- keep moving botanical material away from physical section boundaries;
+- reduce accumulated vertical paddings/gaps across intermediate scenes;
+- preserve exact canonical order: Cover → Countdown → Story → Venue(s) → Agenda → Practical → Gallery → RSVP+Closing;
+- preserve V21 render/config logic and scalability states.
+
+Automated QA before owner review:
+- widths 360 / 390 / 430 px: no root horizontal overflow;
+- 2 venues + long names/text at 360 px: PASS;
+- 1–5 agenda moments / 0–4 practical modules: renderer unchanged;
+- minimal state with Story off, 0 venues, 1 agenda moment, 0 practical, 0 gallery: PASS.
+
+Status: **OWNER VISUAL APPROVAL PENDING.** Do not freeze or commercially certify V22 yet.
