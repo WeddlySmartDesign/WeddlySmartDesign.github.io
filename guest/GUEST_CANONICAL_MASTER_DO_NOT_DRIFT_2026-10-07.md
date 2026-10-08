@@ -734,3 +734,26 @@ Direction retained:
 - no image generation is required for this repair.
 
 Next work should be a **structural cleanup from V15E**, reducing section-boundary machinery rather than adding more transition effects.
+
+
+---
+
+## 27. DESIGN 02 — STRUCTURAL CONTINUITY RESOLUTION (2026-10-08)
+
+Owner requested a definitive architectural solution after 20+ unsuccessful visual iterations.
+
+The technical conclusion:
+- Repeating the same A02 video inside independently sized 100svh sections will **always** reintroduce spatial jumps: adjacent footage bottom/top edges cannot match even when playback is synchronized.
+- Additional masks, overlapping videos, sticky/fixed backgrounds and local gradient bands did not solve the underlying geometry. V15F remains permanently rejected; V15E is the untouched rollback checkpoint.
+
+New QA-tested prototype: **BOTÁNICA V16E CONTINUITY QA**
+- Delivered as an isolated, self-contained HTML review artifact, not yet merged into commercial production.
+- One continuous **spatial** botanical material covers the full narrative in normal document flow. It is composited strictly from frames of the existing approved A02 motion, with no new AI-generated art and zero per-order image work.
+- Existing approved A01 cover remains intact; foreground couple/venue photos and final RSVP/closing remain native and configurable.
+- Each approved A02 video copy now contributes only masked, subtle motion/light inside its chapter, not a new rectangular background scene. No fixed/sticky media surfaces; no physical section wallpaper edges.
+- A02 MP4 is embedded **once** and shared through a Blob URL, reducing self-contained prototype file size from about 34MB to about 21MB. Offscreen footage is paused for mobile performance.
+- Continuous backdrop uses `background-size: cover` (not distortion/stretch) across 0–2 venues and optional sections.
+
+Automated browser QA on the structural V16D baseline: 7/7 scenarios across mobile viewport widths 360–430, 0–2 venues, 1–5 agenda moments, 0–4 practical modules including stress text. The refined V16E artifact passed three additional extreme configurations; checked no horizontal overflow, resource loads, RSVP CTA presence and code execution.
+
+**OWNER VISUAL APPROVAL PENDING.** Do NOT mark Design 02 frozen or commercially certified before a real Android review confirms motion and visual quality. Preserve both V15E rollback and V16E isolated candidate; do not revive V15F or revert to repeated section-background video architecture.
