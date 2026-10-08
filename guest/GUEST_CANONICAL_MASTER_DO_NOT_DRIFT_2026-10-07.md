@@ -694,3 +694,21 @@ A two-place order must NOT require:
 - manual repair of the surrounding sections.
 
 This is part of the mandatory <5 minute owner workflow and the internal scalability gate.
+
+
+---
+
+## 25. CONTINUOUS-EXPERIENCE RULE — NO “SLIDES STUCK TOGETHER”
+
+Every GUEST invitation must feel like one continuous designed experience from opening to closing.
+
+Sections may have distinct functional jobs, but they must not read as independent slides or screens simply stacked vertically.
+
+Before a template or revision can pass visual review, verify:
+- adjacent sections share or deliberately hand off visual language, motion, light, texture, typography and rhythm;
+- transitions are designed as part of the composition, not added as generic fades between unrelated blocks;
+- functional sections (agenda, practical information, RSVP, locations, gallery) remain inside the invitation’s art direction instead of falling back to generic app/web UI;
+- no section creates a hard “new page” feeling unless the art direction intentionally requires it;
+- the final act resolves the same visual narrative established by the opening.
+
+This rule applies to every current and future GUEST catalog design and is checked together with scalability before owner review.
