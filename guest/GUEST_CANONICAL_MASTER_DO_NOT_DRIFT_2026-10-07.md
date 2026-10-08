@@ -712,3 +712,25 @@ Before a template or revision can pass visual review, verify:
 - the final act resolves the same visual narrative established by the opening.
 
 This rule applies to every current and future GUEST catalog design and is checked together with scalability before owner review.
+
+
+---
+
+## 26. DESIGN 02 TRANSITION CHECKPOINT — V15F REJECTED
+
+After mobile review on 2026-10-08:
+
+- **V15F is REJECTED — DO NOT REVIVE.**
+- Reason: the long overlap / organic-mask experiment introduced more visible transition problems and incorrect background-motion behavior.
+- **V15E is the last stable visual checkpoint** and remains the rollback baseline.
+- The next iteration must NOT add new fixed/sticky layers, duplicate background videos, long masked overlaps, or extra transition wrappers.
+
+Direction retained:
+- one coherent BOTÁNICA invitation;
+- approved opening remains untouched;
+- real photos stay natural;
+- transitions must not reveal screen boundaries;
+- motion must remain physically plausible and consistent;
+- no image generation is required for this repair.
+
+Next work should be a **structural cleanup from V15E**, reducing section-boundary machinery rather than adding more transition effects.
