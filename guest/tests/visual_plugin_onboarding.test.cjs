@@ -9,6 +9,7 @@ try{
  add('guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',JSON.stringify({schemaVersion:'guest-catalog-template-registry-v1',templates:[{id:'veil-light',version:'5.3.3',status:'commercially-frozen'}]}));
  add('guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json',JSON.stringify({policy:{newTemplateRequirements:['common-questionnaire','backend-test-only','renderer','two-real-test-orders','recipient-rsvp','owner-android']},templates:{'veil-light':{basis:'pre-existing-commercial-seal',version:'5.3.3'}}}));
  add('guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',JSON.stringify({schemaVersion:'guest-catalog-owner-renderers-v2',templates:{'veil-light':{mode:'native',version:'5.3.3'}}}));
+ add('guest/GUEST_PROJECT_STATUS_V1.json',JSON.stringify({schemaVersion:'guest-project-status-v1',designs:{'veil-light':{version:'5.3.3',status:'commercially-frozen'},'design-03':{status:'not-started'}}}));
  const original=fs.readFileSync(path.join(tmp,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'),'utf8');
  const example=path.join(root,'guest/templates/_example');
  let res=run(['--root',tmp,'--manifest',path.join(example,'visual-plugin.json')]);
@@ -24,6 +25,11 @@ try{
  assert.equal(registry.templates.find(x=>x.id==='design-03').status,'certification-pending');
  assert.equal(evidence.templates['design-03'].gates['backend-test-only'].pass,false);
  assert.equal(evidence.templates['design-03'].gates['two-real-test-orders'].pass,false);
+ const state=JSON.parse(fs.readFileSync(path.join(tmp,'guest/GUEST_PROJECT_STATUS_V1.json')));
+ assert.equal(state.designs['design-03'].version,'1.0.0');
+ assert.equal(state.designs['design-03'].status,'certification-pending');
+ assert.equal(state.designs['design-03'].commerciallyCertified,false);
+ assert.match(state.designs['design-03'].visualMasterSha256,/^[a-f0-9]{64}$/);
  assert.equal(owner.templates['design-03'].mode,'iframe');
  assert.equal(owner.templates['design-03'].applyApi,'GUEST_APPLY_CONFIG');
  assert.equal(owner.templates['design-03'].src,'/guest/catalog-assets/design-03/1.0.0/index.html');
