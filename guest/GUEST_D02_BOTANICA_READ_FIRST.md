@@ -90,3 +90,11 @@ El repositorio contiene solo el **adaptador** `guest/guest-catalog-template-bota
 **No preguntar “¿en qué nos quedamos?” ni pedir repetir instrucciones.** Comprobar fuentes y entorno. Si el despliegue test-only sigue bloqueado, continuar únicamente pruebas locales y documentación verificable, informar claramente del bloqueo y del gate pendiente. Si se autoriza el backend, completar los dos pedidos reales descritos en §6 antes de pedir a la propietaria que abra nada en Android.
 
 **Estado que debe reflejar cualquier UI o reporte:** `Botánica V14 = diseño aprobado congelado; Botánica V14.5 = candidata técnica localmente probada; certificación comercial = PENDIENTE; backend Botánica test-only = NO DESPLEGADO; ventas = NO AUTORIZADAS.`
+
+## 9. Paquete autónomo de recuperación (respaldo redundante)
+
+Biblioteca personal: `/GUEST by WeddlySmartDesign/BOTANICA/Checkpoints/GUEST_BOTANICA_D02_RECUPERACION_INDEPENDIENTE_2026-10-09.zip`.
+
+SHA-256 del ZIP: `987c0c4256995023f877af7a0a9250362937c6c4635f5297c3a51f33deb5b2ef`.
+
+Contiene ambos HTML completos (V14 FROZEN y V14.5 candidata), README, manifiesto JSON, checkpoints, pruebas offline y `SHA256SUMS.txt`. Se probó integridad del ZIP y de las dos plantillas extraídas. Es un segundo medio de recuperación, no una versión nueva ni una aprobación comercial. El README dentro del ZIP refleja el estado al momento de empaquetar; esta sección del README persistente en GitHub informa de la existencia del ZIP.
