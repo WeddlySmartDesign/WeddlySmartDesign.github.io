@@ -723,6 +723,41 @@ body:has(#app:not([hidden])){overflow:hidden}
   #app:not([hidden]) .top-actions{gap:3px}
   #app:not([hidden]) .icon-btn{padding-left:6px;padding-right:6px;font-size:9.8px}
 }
+
+/* ONE trials: private, mobile-first individual record history */
+.trial-history-link{
+  margin-top:12px;padding:10px 15px;background:#fffdf9;border:1px solid var(--line);
+  border-radius:999px;color:var(--clay);font:800 13px/1.25 var(--sans);cursor:pointer;
+}
+.trial-history{margin-top:19px;padding-top:18px;border-top:1px solid var(--line)}
+.trial-history h4{margin:0 0 5px;font-family:var(--serif);font-size:26px;font-weight:400;line-height:1.15}
+.trial-history-intro{color:var(--muted);font-size:13px;line-height:1.5;margin:0 0 12px}
+.trial-history-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.trial-history-controls select{
+  flex:1 1 150px;max-width:260px;min-width:0;width:auto;background:var(--white);border:1px solid var(--line);
+  border-radius:12px;color:var(--ink);padding:10px;font:700 14px/1.3 var(--sans)
+}
+.trial-history-qa{display:flex;align-items:center;gap:7px;color:var(--muted);font:700 12.5px/1.4 var(--sans)}
+.trial-history-qa input{width:17px;height:17px;accent-color:var(--clay)}
+.trial-history-count{font-size:12px;line-height:1.5;color:var(--muted);font-weight:750;margin-bottom:9px}
+.trial-history-list{display:grid;gap:10px}
+.trial-entry{min-width:0;background:var(--white);border:1px solid var(--line);border-radius:17px;padding:14px}
+.trial-entry-header{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.trial-entry-person{min-width:0;flex:1 1 150px}
+.trial-entry-person strong{display:block;font-size:16px;line-height:1.3;overflow-wrap:anywhere}
+.trial-entry-person small{display:block;margin-top:4px;font-size:12px;color:var(--muted);line-height:1.4;overflow-wrap:anywhere}
+.trial-entry-status{display:inline-block;flex:0 0 auto;border:1px solid var(--line);border-radius:999px;padding:6px 9px;
+  color:var(--ink);font-size:11.5px;font-weight:850;line-height:1.2}
+.trial-entry-status[data-state="active"]{border-color:#a6c2a8;color:#296139}
+.trial-entry-status[data-state="pending_activation"]{border-color:#dbc5a0;color:#8b631c}
+.trial-entry-status[data-state="converted"]{border-color:#a9bce4;color:#274c8b}
+.trial-entry-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.trial-entry-grid>div{min-width:0}
+.trial-entry-grid span{display:block;color:var(--muted);font-size:11.5px;font-weight:700;line-height:1.35}
+.trial-entry-grid b{display:block;margin-top:3px;color:var(--ink);font-size:13px;line-height:1.4;overflow-wrap:anywhere}
+.trial-history-empty{border:1px dashed var(--line);border-radius:14px;padding:15px;color:var(--muted);font-size:13px;line-height:1.5}
+@media(max-width:540px){.trial-entry-grid{grid-template-columns:minmax(0,1fr)}.trial-history h4{font-size:25px}}
+
 </style>
 </head>
 <body>
@@ -804,6 +839,7 @@ body:has(#app:not([hidden])){overflow:hidden}
         <div class="last"><small>Compran después</small><strong id="tPaid">0</strong></div>
       </div>
       <p class="trial-period-note">“Compran después” cuenta compras realizadas en el periodo por bodas que empezaron como prueba; no es una tasa de cohorte.</p>
+      <button class="trial-history-link" id="openTrialsHistory" type="button">Ver pruebas, fechas y estado →</button>
     </section>
 
     <section class="quick-read" aria-label="Comportamiento">
@@ -813,7 +849,7 @@ body:has(#app:not([hidden])){overflow:hidden}
     </section>
 
     <div class="dashboard-footline dashboard-foot-actions">
-      <span>Datos internos · Analytics v19</span>
+      <span>Datos internos · Analytics v20</span>
     </div>
   </main>
 </div>
@@ -842,6 +878,20 @@ body:has(#app:not([hidden])){overflow:hidden}
         <div class="demo-interest-strip">
           <div><span>Ingresos desde prueba</span><small>Pagos del periodo procedentes de una boda que empezó como trial.</small></div>
           <strong id="tdRevenue">0 €</strong>
+        </div>
+        <div class="trial-history" id="trialHistorySection">
+          <h4>Historial de pruebas ONE</h4>
+          <p class="trial-history-intro">Cada prueba, con fecha de creación, activación y vencimiento. Este historial incluye todas las fechas, independientemente del periodo elegido arriba. Las pruebas técnicas se ocultan inicialmente.</p>
+          <div class="trial-history-controls">
+            <select id="trialHistoryChannel" aria-label="Filtrar origen de las pruebas">
+              <option value="all">Todas las pruebas</option>
+              <option value="web">Solicitadas en la web</option>
+              <option value="manual">Entregadas manualmente</option>
+            </select>
+            <label class="trial-history-qa"><input type="checkbox" id="trialHistoryIncludeQa"> Incluir pruebas técnicas</label>
+          </div>
+          <div class="trial-history-count" id="trialHistoryCount" aria-live="polite">Cargando historial…</div>
+          <div class="trial-history-list" id="trialHistoryList" aria-live="polite"></div>
         </div>
       </section>
 
@@ -1055,6 +1105,8 @@ let evolutionChannels=[];
 let selectedActionMonth='';
 let selectedActionChannel='all';
 let editingActionId='';
+let trialHistoryData=[];
+let trialHistoryError='Cargando historial…';
 
 const $=id=>document.getElementById(id);
 const lock=$('lock'),app=$('app'),loading=$('loading'),loginError=$('loginError');
@@ -1228,6 +1280,75 @@ function renderRows(tbody,rows,mapper,empty){
   empty.hidden=rows.length>0;
   tbody.closest('table').hidden=rows.length===0;
 }
+
+function trialDateTime(value){
+  if(!value)return '—';
+  const d=new Date(value);
+  if(!Number.isFinite(d.getTime()))return '—';
+  return new Intl.DateTimeFormat('es-ES',{
+    timeZone:'Europe/Madrid',day:'2-digit',month:'2-digit',year:'numeric',
+    hour:'2-digit',minute:'2-digit',hourCycle:'h23'
+  }).format(d);
+}
+function trialStateLabel(state){
+  return ({
+    active:'Activa',pending_activation:'Pendiente de activar',
+    expired:'Caducada',not_activated_expired:'Caducada sin activar',
+    converted:'Convertida en compra',revoked:'Revocada'
+  })[state]||'Estado no disponible';
+}
+function trialProductLabel(product,edition){
+  const main=product==='full'?'ONE completo':product==='guests'?'ONE Invitados':
+    product==='payments'||product==='suppliers_payments'?'ONE Pagos y proveedores':'ONE';
+  return main+(edition==='signature'?' · Signature':edition==='essential'?' · Essential':'');
+}
+function renderTrialHistory(){
+  const list=$('trialHistoryList');
+  clear(list);
+  if(trialHistoryError){
+    $('trialHistoryCount').textContent=trialHistoryError;
+    const p=document.createElement('p');p.className='trial-history-empty';
+    p.textContent=trialHistoryError;list.appendChild(p);return;
+  }
+  const channel=$('trialHistoryChannel').value,includeQa=$('trialHistoryIncludeQa').checked;
+  const records=trialHistoryData.filter(t=>(includeQa||!t.isQa)&&(channel==='all'||t.channel===channel));
+  const web=records.filter(t=>t.channel==='web').length;
+  const manual=records.length-web;
+  $('trialHistoryCount').textContent=records.length+' pruebas · '+web+' web · '+manual+' manuales'+(includeQa?' · incluidas las técnicas':'');
+  if(!records.length){
+    const p=document.createElement('p');p.className='trial-history-empty';
+    p.textContent='No hay pruebas que cumplan los filtros seleccionados.';list.appendChild(p);return;
+  }
+  for(const t of records){
+    const article=document.createElement('article');article.className='trial-entry';
+    const header=document.createElement('div');header.className='trial-entry-header';
+    const person=document.createElement('div');person.className='trial-entry-person';
+    const name=document.createElement('strong');
+    name.textContent=t.label||t.email||('Prueba #'+String(t.id||'').slice(0,8));
+    const origin=document.createElement('small');
+    origin.textContent=(t.channel==='web'?'Solicitud web':'Entrega manual')
+      +(t.label&&t.email?' · '+t.email:'')
+      +(t.isQa?' · Prueba técnica':'')
+      +' · '+trialProductLabel(t.product,t.edition);
+    person.append(name,origin);
+    const status=document.createElement('span');status.className='trial-entry-status';
+    status.dataset.state=t.state;status.textContent=trialStateLabel(t.state);
+    header.append(person,status);article.appendChild(header);
+    const dates=document.createElement('div');dates.className='trial-entry-grid';
+    const cells=[
+      ['Creada',trialDateTime(t.createdAt)],
+      ['Activada',t.activatedAt?trialDateTime(t.activatedAt):'No activada'],
+      ['Caducidad',t.expiresAt?trialDateTime(t.expiresAt):'Pendiente de activación']
+    ];
+    if(t.activationDeadline&&!t.activatedAt)cells.push(['Plazo para activar',trialDateTime(t.activationDeadline)]);
+    for(const [label,value] of cells){
+      const cell=document.createElement('div'),small=document.createElement('span'),bold=document.createElement('b');
+      small.textContent=label;bold.textContent=value;cell.append(small,bold);dates.appendChild(cell);
+    }
+    article.appendChild(dates);list.appendChild(article);
+  }
+}
+
 function renderList(node,rows,kind){
   clear(node);
   if(!rows.length){
@@ -1414,6 +1535,16 @@ async function load(range=currentRange,{quiet=false}={}){
     const data=await requestSummary(range);
     try{localStorage.setItem(INTERNAL_EXCLUDE,'1')}catch{}
     setScreen(true);render(data);loginError.textContent='';syncNotificationsButton().catch(()=>{});
+    trialHistoryError='Cargando historial…';renderTrialHistory();
+    try{
+      const history=await requestAdmin('trials_list');
+      trialHistoryData=Array.isArray(history.trials)?history.trials:[];
+      trialHistoryError='';
+    }catch(err){
+      trialHistoryData=[];
+      trialHistoryError='No se ha podido consultar el historial. Pulsa Actualizar para reintentarlo.';
+    }
+    renderTrialHistory();
   }catch(e){
     if(e?.message==='unauthorized'){
       localStorage.removeItem(STORAGE);token='';setScreen(false);
@@ -1900,7 +2031,13 @@ $('actionsBtn').addEventListener('click',async()=>{
 $('actionsClose').addEventListener('click',()=>actionsPanel.close());
 actionsPanel.addEventListener('click',e=>{if(e.target===actionsPanel)actionsPanel.close()});
 
+$('trialHistoryChannel').addEventListener('change',renderTrialHistory);
+$('trialHistoryIncludeQa').addEventListener('change',renderTrialHistory);
 const detailsPanel=$('detailsPanel');
+$('openTrialsHistory').addEventListener('click',()=>{
+  if(typeof detailsPanel.showModal==='function'&&!detailsPanel.open)detailsPanel.showModal();
+  requestAnimationFrame(()=>$('trialHistorySection').scrollIntoView({block:'start',behavior:'instant'}));
+});
 $('detailsBtn').addEventListener('click',()=>{
   if(typeof detailsPanel.showModal==='function'&&!detailsPanel.open)detailsPanel.showModal();
 });
