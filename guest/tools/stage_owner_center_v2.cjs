@@ -79,7 +79,7 @@ function stageWithExpectedCenterSha(centerFile,assetFiles,outDir,root,expectedCe
  fs.writeFileSync(path.join(dest,CENTER_FILE),html,{flag:'wx'});
  for(const a of assets)fs.copyFileSync(a.source,path.join(dest,a.output),fs.constants.COPYFILE_EXCL);
  const manifest={schemaVersion:'guest-owner-preproduction-stage-v2',state:'LOCAL TEST ONLY: NOT DEPLOYED OR COMMERCIAL CERTIFIED',
-  network:'connect-src none; form-action none; live order operations disabled by CSP',
+  network:'CSP connect-src none; form-action none blocks fetch/XHR/WebSocket/beacon and form submits; NOT a full network airgap: fonts, other resources or navigation may remain possible',
   centerCandidateOriginalSha256:expectedCenterSha,stagedCenterFile:CENTER_FILE,stagedCenterSha256:sha(Buffer.from(html)),
   assets:assets.map(({id,version,output,sha256})=>({id,version,file:output,sha256})),
   registry:'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',sharedViewer:'guest/catalog/guest-catalog-owner-viewer-v2.js',
