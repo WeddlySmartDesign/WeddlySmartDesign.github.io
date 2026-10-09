@@ -1,0 +1,8 @@
+{
+  "id":"design-03",
+  "displayName":"Nombre del diseño 03",
+  "version":"1.0.0",
+  "rendererApi":"GUEST_APPLY_CONFIG",
+  "masterHtml":"master.html",
+  "typographyVariants":["classic"]
+}
