@@ -1,5 +1,7 @@
 # ACTUALIZACIÓN VIGENTE — BOTÁNICA V14.7 / 9 OCTUBRE 2026
 
+**Respaldo autónomo vigente:** `/GUEST by WeddlySmartDesign/BOTANICA/Checkpoints/GUEST_BOTANICA_D02_RECUPERACION_V3_2026-10-09.zip` (35 281 287 bytes, SHA-256 `62fc41815ac288f1ba6f86a0607ffeacab42e4ad68591f7e747eaec216bdd3c5`). Incluye V14 congelada, históricas V14.5/V14.6, V14.7 candidata, matriz, scripts visuales portables, capturas y hashes. Leer `LEER_PRIMERO.txt` al descomprimir.
+
 **PUNTO DE ENTRADA OBLIGATORIO Y ÚNICO:** este documento y `guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V3_2026-10-09.json`. Todo lo que figura más abajo sobre V14.6 es **historial**, no la candidata actual.
 
 - **V14**: APROBADA visualmente por la propietaria y congelada. SHA-256 `27ede39dbf1e04dc7ee8e758601127eaf9de6e705f1f14a026df09fb72795c39`. **NO MODIFICAR.**
