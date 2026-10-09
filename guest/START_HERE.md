@@ -8,6 +8,13 @@
 
 
 
+## Actualización contrastada — sistema genérico y Biblioteca (09/10/2026)
+
+- **Regla de entrada:** consultar primero la bitácora acumulativa en Biblioteca `/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_AUDITORIA_DOCUMENTAL_Y_BITACORA_UNICA_2026-10-09.md` y esta fuente viva de GitHub. La auditoría de Biblioteca inventaría 123 archivos; las copias anteriores de START_HERE/STATUS allí son históricos. Registrar y verificar en la MISMA bitácora cada bloque de trabajo: cambios, commits, pruebas, bloqueos y siguiente paso.
+- **Protección común para cualquier diseño (commits cbf142a67 y bd2f6c892):** se ha reforzado el generador de catálogo existente para rechazar gates vacíos, evidencia desconocida, shared blockers ausentes, versiones/estados divergentes y falsa admisión comercial. La regresión incluye un design-03 FICTICIO, sin crear D03 real. GitHub Actions de catálogo offline PASS en [37990223784](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/37990223784). Hubo fallo transitorio en run 37990171524 antes de actualizar su fixture, subsanado en bd2f6c892.
+- **Sin cambios de despliegue:** Supabase guest-invitation-flow v12 confirmado otra vez por lectura; backend V13 y Centro común V2 no publicados, Botánica V14 congelada/V14.7 candidata 3/11 gates PASS, VEIL LIGHT congelado. Los tests offline no acreditan E2E ni ventas.
+- **QA independiente:** última ejecución completa confirmada [37973762871](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/37973762871) en 3f9eb1d, con B6.3 y B6.6 correctos. Para el último HEAD de código bd2f6c892 la ejecución [37990223827](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/37990223827) estaba en curso al redactar; verificar conclusión actual. Los anteriores fallos B6 de apartados históricos no representan el estado último.
+
 ## Estado comprobable automáticamente (sin reinterpretar bitácoras)
 
 - **Única fotografía estructurada actual**: [`GUEST_PROJECT_STATUS_V1.json`](GUEST_PROJECT_STATUS_V1.json). El archivo conserva versiones, estados, rutas y checksums; **no es un permiso de despliegue** y debe contrastarse con el código/Edge Function realmente vigentes.
