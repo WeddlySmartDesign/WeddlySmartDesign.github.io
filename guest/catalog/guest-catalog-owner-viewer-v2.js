@@ -6,7 +6,8 @@
 if(window.GUEST_CATALOG_OWNER_VIEWER_V2)return;
 function fail(s){throw new Error('guest_owner_viewer:'+s)}
 const sameOrigin=u=>{const x=new URL(u,location.href);if(x.protocol!=='https:'&&x.protocol!=='http:')fail('unsupported_protocol');if(x.origin!==location.origin)fail('cross_origin_template');return x.href};
-async function show({order,config,host,registry}){
+const IFRAME_LOAD_TIMEOUT_MS=45000;
+async function show({order,config,host,registry,signal}){
  if(!host||typeof host.replaceChildren!=='function')fail('host_missing');
  const id=String(order?.template_id||order?.templateId||'');
  if(!id)fail('order_template_id_missing');
@@ -22,16 +23,31 @@ async function show({order,config,host,registry}){
    host.replaceChildren();apply(structuredClone(config));return {mode:'native',id,close(){}};
  }
  if(spec.mode!=='iframe'||!spec.src)fail('visual_asset_not_ready:'+id);
+ if(signal?.aborted)fail('preview_cancelled');
  const url=sameOrigin(spec.src);
  const iframe=document.createElement('iframe');iframe.className='guest-catalog-owner-preview';iframe.title='Vista previa '+id;
  iframe.setAttribute('referrerpolicy','no-referrer');iframe.setAttribute('loading','eager');
  iframe.style.cssText='display:block;width:100%;height:100%;border:0;';
  host.replaceChildren(iframe);
- await new Promise((resolve,reject)=>{let resolved=false;iframe.addEventListener('load',()=>{if(!resolved){resolved=true;resolve()}},{once:true});iframe.addEventListener('error',()=>{if(!resolved){resolved=true;reject(new Error('guest_owner_viewer:iframe_load_failed'))}},{once:true});iframe.src=url});
+ await new Promise((resolve,reject)=>{
+  let completed=false,timer;
+  const clean=()=>{clearTimeout(timer);signal?.removeEventListener('abort',onAbort);iframe.removeEventListener?.('load',onLoad);iframe.removeEventListener?.('error',onError)};
+  const finish=(reason)=>{if(completed)return;completed=true;clean();if(reason){if(iframe.isConnected)iframe.remove();reject(new Error('guest_owner_viewer:'+reason))}else resolve()};
+  const onLoad=()=>finish();
+  const onError=()=>finish('iframe_load_failed');
+  const onAbort=()=>finish('preview_cancelled');
+  if(signal?.aborted){finish('preview_cancelled');return}
+  iframe.addEventListener('load',onLoad,{once:true});iframe.addEventListener('error',onError,{once:true});
+  signal?.addEventListener('abort',onAbort,{once:true});
+  timer=setTimeout(()=>finish('iframe_load_timeout'),IFRAME_LOAD_TIMEOUT_MS);
+  try{iframe.src=url}catch{finish('iframe_navigation_failed')}
+ });
+ if(signal?.aborted){if(iframe.isConnected)iframe.remove();fail('preview_cancelled')}
  if(!iframe.isConnected)fail('preview_detached');
- let child;try{child=iframe.contentWindow}catch{fail('iframe_cross_origin')}
- const apply=child?.[spec.applyApi];if(typeof apply!=='function')fail('iframe_adapter_missing:'+id);
- apply(structuredClone(config));
+ let child;try{child=iframe.contentWindow}catch{if(iframe.isConnected)iframe.remove();fail('iframe_cross_origin')}
+ const apply=child?.[spec.applyApi];
+ if(typeof apply!=='function'){iframe.remove();fail('iframe_adapter_missing:'+id)}
+ try{apply(structuredClone(config))}catch{iframe.remove();fail('iframe_apply_failed:'+id)}
  return {mode:'iframe',id,close(){if(iframe.isConnected)iframe.remove()}};
 }
 window.GUEST_CATALOG_OWNER_VIEWER_V2=Object.freeze({version:'2.0.0',show});
