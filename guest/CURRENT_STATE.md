@@ -1,3 +1,11 @@
+# ESTADO VIGENTE 2026-10-09 — BOTÁNICA D02 / LEER PRIMERO
+
+**Fuente única de recuperación:** `guest/GUEST_D02_BOTANICA_READ_FIRST.md` y manifiesto `guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_2026-10-09.json`. Leer ambos junto al máster canónico ANTES de retomar D02 o empezar D03.
+
+**Situación:** V14 aprobada visualmente, FROZEN (no modificar); V14.5 candidata técnica comprobada localmente, **NO** certificada comercialmente; backend de Botánica test-only **NO DESPLEGADO** por bloqueo de entorno; pedidos E2E reales, RSVP real y Android quedan **PENDIENTES**; ventas **NO autorizadas**. Las indicaciones históricas de este archivo sobre “siguiente paso Diseño 02” y “sólo VEIL LIGHT aprobada visualmente” están desactualizadas; prevalecen el README de D02 y el máster canónico para la situación actual. No tocar ONE, ONE Partner, STUDIO ni VEIL LIGHT.
+
+---
+
 # ⚠️ READ FIRST — CANONICAL GUEST MASTER
 
 Before any GUEST work, read:
