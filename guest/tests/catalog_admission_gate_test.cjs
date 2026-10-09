@@ -34,6 +34,11 @@ try{
  assert.notEqual(run(tmp).status,0,'Version drift in generic owner preview must be rejected');
  owners.templates.botanica.version='14.7';
  fs.writeFileSync(path.join(tmp,'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json'),JSON.stringify(owners));
+ const fake=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json')));
+ fake.templates.botanica={basis:'pre-existing-commercial-seal',version:'14.7',source:'guest/GUEST_CATALOG_PIPELINE_V1_FINAL_CERTIFICATION_2026-10-07.md'};
+ fs.writeFileSync(path.join(tmp,'guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json'),JSON.stringify(fake));
+ assert.notEqual(run(tmp).status,0,'A new design must not reuse VEIL LIGHT historical seal');
+ fs.writeFileSync(path.join(tmp,'guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json'),JSON.stringify(ev));
  const again=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json')));
  again.templates.push({id:'design-03',version:'1.0',status:'certification-pending',scalabilityCertified:false,operationalPilotPass:false});
  fs.writeFileSync(registryFile,JSON.stringify(again));
