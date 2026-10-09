@@ -77,10 +77,15 @@ function build(source){
  const typedGate=gates.slice(gStart,gEnd)
    .replace("function assertPinnedInvitationConfig(config, order, validateConfig, files, phase='stored')",
      "function assertPinnedInvitationConfig(config:any, order:any, validateConfig:(v:any)=>string[], files:any[], phase:string='stored')")
-   .replace('  const media=[];','  const media:any[]=[];');
+   .replace('function assertLegacyDeliveredTestRead(config,order,files)', 'function assertLegacyDeliveredTestRead(config:any,order:any,files:any[])')
+   .replaceAll('  const media=[];','  const media:any[]=[];');
  const schemaRuntime='const schema:any='+JSON.stringify(schema)+';\n'+validator+'\n'+typedGate+
    "\nfunction checkInvitationConfig(config:any,order:any,files:any[]=order.files||[],phase:string='stored'){\n"+
-   " return assertPinnedInvitationConfig(config,order,validate,files,phase);\n}\n";
+   " return assertPinnedInvitationConfig(config,order,validate,files,phase);\n}\n"+
+   "function checkInvitationRead(config:any,order:any,files:any[]){\n"+
+   " if(order?.mode==='test'&&order?.status==='delivered'&&config?.schemaVersion===undefined)\n"+
+   "  return assertLegacyDeliveredTestRead(config,order,files);\n"+
+   " return checkInvitationConfig(config,order,files,'hydrated');\n}\n";
  source=once(source,'function buildConfig(',schemaRuntime+'function buildConfig(','inject_shared_strict_runtime_gate');
  // Single guard applied at every lifecycle boundary. Only a new test-only
  // candidate is produced; existing live v12 must not be modified here.
@@ -110,14 +115,14 @@ function build(source){
    'send_review_gate');
  source=once(source,
    "if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);\n      const files=await signedFiles(c,order,7200),config=hydrateConfig(order.resolved_config||{},files);",
-   "if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);\n      const files=await signedFiles(c,order,7200),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},files),order,files,'hydrated');",
+   "if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);\n      const files=await signedFiles(c,order,7200),config=checkInvitationRead(hydrateConfig(order.resolved_config||{},files),order,files);",
    'signed_review_gate');
  // Previous anchor occurs twice (review_load and detail); first is the
  // user-visible review, second is manager detail. Only review_load needs a
  // strict gate; once(...) insists it has exactly one occurrence.
  source=once(source,
    "const files=await signedFiles(c,order,86400),config=hydrateConfig(order.resolved_config||{},files);",
-   "const files=await signedFiles(c,order,86400),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},files),order,files,'hydrated');",
+   "const files=await signedFiles(c,order,86400),config=checkInvitationRead(hydrateConfig(order.resolved_config||{},files),order,files);",
    'public_final_gate');
  source=once(source,
    "const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=hydrateConfig(order.resolved_config||{},publicFiles),ts=now()",
@@ -181,7 +186,8 @@ function build(source){
  // Production VEIL logic is still subject to separate real regression.
  if(!source.includes("spec?.testOnly===true&&mode!=='test'"))throw Error('missing_test_only_guard');
  if(!source.includes('return normalizeBackendInvitationConfig({'))throw Error('missing_config_normalization');
- if((source.match(/checkInvitationConfig\(/g)||[]).length!==11)throw Error('missing_lifecycle_validation_paths');
+ if((source.match(/checkInvitationConfig\(/g)||[]).length!==10)throw Error('missing_lifecycle_validation_paths');
+ if((source.match(/checkInvitationRead\(/g)||[]).length!==3)throw Error('missing_legacy_read_paths');
  if(!source.includes("const files=order.mode==='test'?(Array.isArray(order.files)?order.files:[]):await copyPublicFiles"))
    throw Error('missing_test_private_media_barrier');
  if(!source.includes("resolved_config:order.mode==='test'?order.resolved_config:config"))
