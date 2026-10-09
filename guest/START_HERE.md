@@ -14,6 +14,8 @@
 - **Puerta previa obligatoria**: `node guest/qa/handoff_gate.cjs` y su prueba de mutaciones `node guest/tests/handoff_gate_test.cjs`. Esta comprobación detecta inmediatamente versiones contradictorias entre catálogo, visor, manifiesto y evidencias, archivos desaparecidos y falsos certificados comerciales.
 - La lectura histórica permanece en `CURRENT_STATE.md` y checkpoints, sin disputar el estado actual. **Solo se actualiza este índice y el JSON de estado**, no se añade otra nota «VIGENTE» al comienzo de cada archivo. El procedimiento para D03–D1000 sigue siendo **un único runbook existente**: [`DESIGN_NEW_RUNBOOK.md`](DESIGN_NEW_RUNBOOK.md).
 
+**Respaldo del control de continuidad (no sustituye el código del repositorio):** Biblioteca `/GUEST by WeddlySmartDesign/Normativa/Punto de entrada definitivo/GUEST_CONTROL_CONTINUIDAD_D03_D1000_2026-10-09.zip`, SHA-256 `f498635eb3a88c79bc727c61bf1f33967bf587de235bd3d6c42b6ad602e33abd`. Contiene el estado legible por máquinas y el QA offline. **El índice, los contratos y el procedimiento solo se mantienen canónicamente aquí, en GitHub.**
+
 ## 1. Reglas irrenunciables
 
 1. Trabajar **solo** con GUEST en `guest-independent`. **NO tocar ONE, ONE Partner, STUDIO**, ni modificar VEIL LIGHT V5.3.3 o Botánica V14 congeladas. No publicar en `main`, activar ventas/Stripe, desplegar backend ni enviar comunicaciones a clientes sin autorización y controles completos.
