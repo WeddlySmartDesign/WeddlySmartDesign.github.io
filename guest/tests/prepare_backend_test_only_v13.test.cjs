@@ -11,7 +11,8 @@ function buildConfig(){
     template:{id:spec.id,version:pinnedVersion},
     story:{
       textMode:story.textMode==='custom'?'custom':'preset',
-    }
+    },
+    closing:{line:closing.mode==='custom'?txt(closing.customLine,80):'Gracias por formar parte de nuestra historia.'}
   };
 }
 function validateQuestionnaire(q:any,files:any[]){
@@ -40,6 +41,9 @@ async function deliver(order:any){
 `;
 const patched=build(fixture);
 assert.match(patched,/schemaVersion:'guest-invitation-config-v1'/);
+assert.match(patched,/return normalizeBackendInvitationConfig\(\{/);
+assert.match(patched,/function normalizeBackendInvitationConfig\(input:any\)/);
+assert.match(patched,/config.cover.photo = null/);
 assert.match(patched,/textMode:story.textMode==='none'\?'none'/);
 assert.match(patched,/historia solo fotográfica/);
 assert.match(patched,/assertCatalogOrderMode\(spec,mode\)/);
@@ -54,6 +58,7 @@ assert.ok(!patched.includes("renderer:'botanica-v14-5'"));
 assert.equal(fixture.includes('testOnly'),false);
 assert.throws(()=>build(patched),/source_drift_or_duplicate/);
 assert.throws(()=>build(fixture.replace("template:{id:spec.id,version:pinnedVersion}","template:{id:other.id}")),/source_drift_or_duplicate:schema_version/);
+assert.throws(()=>build(fixture.replace("closing:{line:closing.mode", "closing:{text:closing.mode")),/source_drift_or_duplicate:normalize_build_config_close/);
 assert.throws(()=>build(fixture.replace(".from('guest_invitation_orders').insert(row)","from('guest_invitation_orders').insert(row)")),/unreviewed_order_insert_paths/);
 assert.throws(()=>build(fixture.replace("await internalSubmittedEmail(fresh);","return true;")),/source_drift_or_duplicate:submission_internal_email/);
 assert.throws(()=>build(fixture.replace("'Revisión de prueba preparada'","'CHANGED'")),/source_drift_or_duplicate:review_outbound_email/);
