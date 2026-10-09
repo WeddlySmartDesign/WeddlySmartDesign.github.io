@@ -21,9 +21,8 @@ function build(source){
  const generated=cp.spawnSync(process.execPath,[path.join(root,'guest/tools/generate_backend_catalog_registry.cjs'),'--mode','test-only'],{cwd:root,encoding:'utf8',timeout:10000});
  if(generated.status!==0)throw Error('registry_generation_failed:'+generated.stderr);
  const start=generated.stdout.indexOf('const CATALOG_TEMPLATES:any=');
- const end=generated.stdout.indexOf('// Call assertCatalogOrderMode',start);
- if(start<0||end<start)throw Error('unexpected_generated_registry');
- const declaration=generated.stdout.slice(start,end).trimEnd();
+ if(start<0||!generated.stdout.includes('function assertCatalogOrderMode'))throw Error('unexpected_generated_registry');
+ const declaration=generated.stdout.slice(start).trimEnd();
  if(!declaration.includes('"botanica"')||!declaration.includes('"testOnly": true'))throw Error('botanica_test_only_missing');
  if(!declaration.includes('"veil-light"'))throw Error('veil_light_missing');
  source=once(source,`const CATALOG_TEMPLATES:any={
