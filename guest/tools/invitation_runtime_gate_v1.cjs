@@ -15,6 +15,10 @@ function assertPinnedInvitationConfig(config, order, validateConfig, files, phas
     throw new Error('invitation_template_pin_mismatch');
   if (typeof validateConfig !== 'function' || validateConfig(config).length !== 0)
     throw new Error('invalid_invitation_config');
+  // The stored invitation is recipient-neutral. Existing GUEST sharing adds
+  // rt + g/u + lang only at render time; never persist a redirect here.
+  if (config.rsvp?.route != null && config.rsvp.route !== '#')
+    throw new Error('invalid_invitation_rsvp_route');
   const media=[];
   if (config.cover?.photo) media.push(config.cover.photo);
   if (config.story?.photo) media.push(config.story.photo);
