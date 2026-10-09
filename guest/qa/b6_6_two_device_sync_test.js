@@ -13,6 +13,7 @@ const initial={
 let remote=structuredClone(initial),version=1;
 const offline=new Set(),dead=new Set([TOKENS.dead]);
 const puts=[],legacy=[],errors=[];
+let deterministicSameFieldConflict=false;
 
 const clone=x=>JSON.parse(JSON.stringify(x));
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -61,7 +62,14 @@ async function mock(page,token){
       }
       if(req.method()==='PUT'){
         // Partner request is slightly slower so simultaneous writes deterministically create a 409 on B.
-        if(member===TOKENS.b)await sleep(120);
+        if(member===TOKENS.b&&deterministicSameFieldConflict){
+          // Make A's version win the first PUT before allowing B to submit
+          // its previously captured version; B must then reconcile HTTP 409.
+          for(let tick=0;tick<150&&!puts.some(x=>x.member===TOKENS.a&&x.state?.guests?.g1?.meal==='Celíaco');tick++)await sleep(40);
+          if(!puts.some(x=>x.member===TOKENS.a&&x.state?.guests?.g1?.meal==='Celíaco')){
+            await route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({ok:false,error:'qa_conflict_barrier_timeout'})});return;
+          }
+        }else if(member===TOKENS.b)await sleep(120);
         const want=Number(body.version||0);
         if(want!==version){
           await route.fulfill({status:409,contentType:'application/json',body:JSON.stringify({ok:false,error:'version_conflict',server:{state:clone(remote),version}})});return;
@@ -154,13 +162,19 @@ async function editGuestUi(page,id,{meal,transport}={}){
   await Promise.all([a.evaluate(()=>window.dispatchEvent(new Event('focus'))),b.evaluate(()=>window.dispatchEvent(new Event('focus')))]);
   await Promise.all([waitLocal(a,null,'merged'),waitLocal(b,null,'merged')]);
 
-  // Same-field conflict: deterministic second writer B must win locally and remotely, with conflict notice.
+  // Same-field conflict: enforce A-first server write then B's stale version as a real 409.
+  deterministicSameFieldConflict=true;
   await Promise.all([
     editGuestUi(a,'g1',{meal:'Celíaco'}),
     editGuestUi(b,'g1',{meal:'Sin lactosa'})
   ]);
   for(let i=0;i<50&&remote.guests.g1.meal!=='Sin lactosa';i++)await sleep(150);
-  ok(remote.guests.g1.meal==='Sin lactosa','same-field conflict did not preserve the second device local choice: '+remote.guests.g1.meal);
+  if(remote.guests.g1.meal!=='Sin lactosa'){
+    const da=await a.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}')}));
+    const db=await b.evaluate(()=>({state:JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'null'),meta:JSON.parse(localStorage.getItem('weddly_guests_sync_meta_v2')||'{}')}));
+    throw new Error('same-field concurrent merge rejected B local intent '+JSON.stringify({remoteMeal:remote.guests.g1.meal,version,puts:puts.slice(-8),da,db}));
+  }
+  deterministicSameFieldConflict=false;
   await a.evaluate(()=>window.dispatchEvent(new Event('focus')));await waitLocal(a,null,'conflictB');
   const conflictNotice=await b.locator('#notice').innerText().catch(()=> '');
   ok(/Cambio simultáneo|Cambios combinados/.test(conflictNotice)||puts.some(x=>x.member===TOKENS.b),'conflict resolution path did not execute');
