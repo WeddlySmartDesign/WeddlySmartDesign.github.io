@@ -26,6 +26,7 @@ jobs:
       - name: Prepare test-only backend candidate without deployment and reject unsafe drift
         run: |
           node guest/tests/prepare_backend_test_only_v13.test.cjs
+          node guest/tests/invitation_config_schema_contract.test.cjs
       - name: Verify one recovery state and deliberate failure mutations
         run: |
           node guest/qa/handoff_gate.cjs
