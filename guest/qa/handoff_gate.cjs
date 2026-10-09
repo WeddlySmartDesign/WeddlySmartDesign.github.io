@@ -66,6 +66,11 @@ function validate(){
  for(const [id,data] of Object.entries(s.designs))if(id.startsWith('design-')&&data.status==='not-started'){
   requireIt(!ids.has(id),'not-started design already registered: '+id);
  }
+ for(const t of reg.templates||[]){
+  const record=s.designs[t.id];
+  requireIt(!!record,'catalog template missing from machine state: '+t.id);
+  if(record){requireIt(record.version===t.version,'machine state version differs for '+t.id);requireIt(record.status===t.status,'machine state status differs for '+t.id)}
+ }
  requireIt(s.runtime.lastObservedSupports.length===1&&s.runtime.lastObservedSupports[0]==='veil-light','backend support claimed without observed deploy');
  const counts={passed:pass,pending:reqs.length-pass,total:reqs.length};
  return {errors,counts};
