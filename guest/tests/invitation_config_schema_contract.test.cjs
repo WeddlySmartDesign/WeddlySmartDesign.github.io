@@ -74,4 +74,10 @@ const clone=x=>structuredClone(x);
  const x=clone(valid);x.gallery.enabled=true;
  assert.ok(validate(x).includes('$.gallery.photos:required_when_enabled'));
 }
+{
+ const x=clone(valid);x.wedding.date='2027-02-30';
+ assert.ok(validate(x).includes('$.wedding.date:date'),'invalid calendar day must be rejected');
+ x.wedding.date='2028-02-29';
+ assert.deepEqual(validate(x),[],'valid leap day must pass');
+}
 console.log('PASS: common GUEST schema structural and semantic contract; zero backend or commercial E2E calls.');
