@@ -10,6 +10,9 @@ const required=[
  'guest/GUEST_CANONICAL_MASTER_DO_NOT_DRIFT_2026-10-07.md','guest/CURRENT_STATE.md',
  'guest/GUEST_D02_BOTANICA_READ_FIRST.md','guest/GUEST_PLATFORM_VISUAL_V2_READ_FIRST_2026-10-09.md',
  'guest/GUEST_DESIGN_PRODUCTION_QA_MASTER_D03_D06_2026-10-09.md',
+ 'guest/GUEST_D02_BOTANICA_CHECKPOINT_V14_7_2026-10-09.md',
+ 'guest/GUEST_D02_BOTANICA_CIERRE_TECNICO_GATES_PENDIENTES_2026-10-09.md',
+ 'guest/GUEST_D02_BOTANICA_ESTADO_BLOQUEO_REAL_2026-10-09.md',
  'guest/GUEST_CATALOGO_VISUAL_SISTEMA_COMUN_V2_2026-10-09.md',
  'guest/DESIGN_NEW_RUNBOOK.md',
  'guest/qa/catalog_admission_gate.cjs','guest/tools/register_visual_template.cjs',
@@ -26,10 +29,32 @@ const cases=[
  ['candidate hash replaced',(r)=>mutate(r,'guest/GUEST_PROJECT_STATUS_V1.json',j=>{j.designs.botanica.candidateSha256='0'.repeat(64)})],
  ['unverified E2E claimed',(r)=>mutate(r,'guest/GUEST_PROJECT_STATUS_V1.json',j=>{j.commercialGate.realOrderE2e='PASS'})],
  ['new registered while not started',(r)=>mutate(r,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',j=>{j.templates.push({id:'design-03',version:'1',status:'certification-pending'})})],
- ['unknown extra design without snapshot',(r)=>mutate(r,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',j=>{j.templates.push({id:'design-1000',version:'1.0.0',status:'certification-pending'})})]
+ ['unknown extra design without snapshot',(r)=>mutate(r,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',j=>{j.templates.push({id:'design-1000',version:'1.0.0',status:'certification-pending'})})],
+ ['false production without gates',(r)=>mutate(r,'guest/GUEST_PROJECT_STATUS_V1.json',j=>{j.system.deploymentCertified=true;j.runtime.botanicaTestOnlyDeployed=true})]
 ];
 {
  const s=sandbox();try{assert.equal(run(s).status,0, 'baseline handoff gate must PASS')}finally{fs.rmSync(s,{recursive:true,force:true})}
 }
 for(const [name,alter] of cases){const s=sandbox();try{alter(s);const r=run(s);assert.notEqual(r.status,0,'should reject '+name);assert.match(r.stderr,/FAIL/,'should explain '+name)}finally{fs.rmSync(s,{recursive:true,force:true})}}
-console.log('PASS GUEST handoff gate baseline and '+cases.length+' anti-regression mutations (offline only)');
+// Forward compatibility: a later FULLY VERIFIED release must not require editing the gate itself.
+{
+ const s=sandbox();
+ try{
+  mutate(s,'guest/GUEST_PROJECT_STATUS_V1.json',j=>{
+   j.designs.botanica.status='commercially-frozen';j.system.deploymentCertified=true;
+   j.runtime.botanicaTestOnlyDeployed=true;j.runtime.ownerGenericV2Deployed=true;
+   j.runtime.lastObservedSupports.push('botanica');
+   j.commercialGate.currentBotanicaPass=11;j.commercialGate.currentBotanicaPending=0;
+   j.commercialGate.realOrderE2e='PASS';j.commercialGate.recipientRsvpPersistence='PASS';j.commercialGate.ownerAndroid='PASS';
+  });
+  mutate(s,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',j=>{j.templates.find(x=>x.id==='botanica').status='commercially-frozen'});
+  mutate(s,'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',j=>{j.templates.botanica.status='commercially-frozen'});
+  mutate(s,'guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json',j=>{
+   for(const g of Object.values(j.templates.botanica.gates))g.pass=true;
+   for(const key of Object.keys(j.sharedBlockers))j.sharedBlockers[key]=true;
+  });
+  mutate(s,'guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V3_2026-10-09.json',j=>{j.catalog.commerciallyCertified=true});
+  assert.equal(run(s).status,0,'fully evidenced future Botánica release should PASS without changing gate source');
+ }finally{fs.rmSync(s,{recursive:true,force:true})}
+}
+console.log('PASS GUEST handoff gate baseline and '+cases.length+' anti-regression mutations + future-state compatibility (offline only)');
