@@ -8,6 +8,7 @@
 - **Nuevo test reproducible:** `node guest/tests/botanica_schema_mapping_offline.test.cjs /ruta/V14.6.html`. El test detecta el fallo en V14.5 y pasa en V14.6.
 - **Registro y adaptador GitHub:** apuntan a versión `14.6`, pero `certification-pending`. Backend Supabase v12 sigue solo con VEIL LIGHT, sin despliegue ni ventas de Botánica.
 - **Paquete de recuperación V2:** `/GUEST by WeddlySmartDesign/BOTANICA/Checkpoints/GUEST_BOTANICA_D02_RECUPERACION_COMPLETA_V2_2026-10-09.zip` (3 HTML completos, dos tests, manifiesto, evidencia y huellas). El primer ZIP sigue guardado, pero ya no es el respaldo más reciente.
+- **Huella SHA-256 del ZIP V2 final:** `9a752624861cf7a8b91ad5fbdeab68033970f77c12c31bea274bbc53253b3374`. (La copia del README dentro del ZIP es una instantánea anterior a añadir esta línea.)
 - **Siguiente trabajo permitido:** verificar visualmente la variante foto sin texto en un navegador autorizado; integrar Botánica *solo como test* cuando se permita desplegar; ejecutar dos pedidos E2E y pruebas RSVP. **No modificar V14. No evadir bloqueos administrativos.**
 
 ---
