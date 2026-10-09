@@ -123,6 +123,18 @@ function build(source){
    "const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=hydrateConfig(order.resolved_config||{},publicFiles),ts=now()",
    "checkInvitationConfig(order.resolved_config||{},order);\n      const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},publicFiles),order,publicFiles,'hydrated'),ts=now()",
    'delivery_pre_post_gates');
+ // TEST orders must NEVER promote uploaded media into the permanent public
+ // storage bucket. Serve private, expiring signed assets through public_load;
+ // the token URL remains stable while signatures are refreshed per request.
+ source=once(source,
+   "const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=checkInvitationConfig(",
+   "const files=order.mode==='test'?(Array.isArray(order.files)?order.files:[]):await copyPublicFiles(c,order),publicFiles=order.mode==='test'?await signedFiles(c,order,7200):files.map((x:any)=>({...x,url:x.publicUrl||''})),config=checkInvitationConfig(",
+   'test_private_media_no_public_storage');
+ source=once(source,
+   "update({files,resolved_config:config,delivery_url:inviteUrl||null,status:'delivered'",
+   "update({files,resolved_config:order.mode==='test'?order.resolved_config:config,delivery_url:inviteUrl||null,status:'delivered'",
+   'test_delivery_keep_upload_refs');
+
  // Failing signatures from the signing API must NOT become blank images.
  source=once(source,
    "if(typeof x[k]==='string'&&x[k].startsWith('upload:'))x[k]=map.get(x[k].slice(7))||'';else walk(x[k])",
@@ -170,6 +182,10 @@ function build(source){
  if(!source.includes("spec?.testOnly===true&&mode!=='test'"))throw Error('missing_test_only_guard');
  if(!source.includes('return normalizeBackendInvitationConfig({'))throw Error('missing_config_normalization');
  if((source.match(/checkInvitationConfig\(/g)||[]).length!==11)throw Error('missing_lifecycle_validation_paths');
+ if(!source.includes("const files=order.mode==='test'?(Array.isArray(order.files)?order.files:[]):await copyPublicFiles"))
+   throw Error('missing_test_private_media_barrier');
+ if(!source.includes("resolved_config:order.mode==='test'?order.resolved_config:config"))
+   throw Error('test_frozen_upload_ref_barrier_missing');
  return source;
 }
 if(require.main===module){
