@@ -1,3 +1,5 @@
+> **PUNTO ÚNICO DE CONTINUIDAD (09/10/2026):** Antes de leer este documento o hacer cambios, abrir **[`guest/START_HERE.md`](START_HERE.md)** y **[`guest/DESIGN_NEW_RUNBOOK.md`](DESIGN_NEW_RUNBOOK.md)**. Este archivo mantiene su valor de política o evidencia histórica en su ámbito, pero los encabezados antiguos que digan «vigente» no sustituyen el estado actual del índice y los registros verificables. **No modificar congelados ni certificar ventas sin gates reales.**
+
 # GUEST by WeddlySmartDesign
 ## MANUAL MAESTRO DE DISEÑO, PRODUCCIÓN Y CONTROL DE CALIDAD
 ### Diseños 03, 04, 05 y 06 · Edición 1.0 · 9 de octubre de 2026
