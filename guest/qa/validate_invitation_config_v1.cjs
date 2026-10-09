@@ -41,7 +41,10 @@ function validate(data,contract=schema){
   if(typeof value==='string'){
    if(node.minLength!==undefined&&value.length<node.minLength)errors.push(p+':minLength');
    if(node.maxLength!==undefined&&value.length>node.maxLength)errors.push(p+':maxLength');
-   if(node.format==='date'&&(!/^\d{4}-\d{2}-\d{2}$/.test(value)||Number.isNaN(Date.parse(value+'T00:00:00Z'))))errors.push(p+':date');
+   if(node.format==='date'){
+    const parsed=/^\d{4}-\d{2}-\d{2}$/.test(value)?new Date(value+'T00:00:00Z'):null;
+    if(!parsed||Number.isNaN(parsed.getTime())||parsed.toISOString().slice(0,10)!==value)errors.push(p+':date');
+   }
    if(node.format==='uri'&&!/^https?:\/\/\S+$/i.test(value))errors.push(p+':uri');
   }
   if(typeof value==='number'){
