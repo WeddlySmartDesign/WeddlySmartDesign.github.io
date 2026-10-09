@@ -1,3 +1,5 @@
+> **PUNTO ÚNICO DE CONTINUIDAD (09/10/2026):** Antes de leer este documento o hacer cambios, abrir **[`guest/START_HERE.md`](START_HERE.md)** y **[`guest/DESIGN_NEW_RUNBOOK.md`](DESIGN_NEW_RUNBOOK.md)**. Este archivo mantiene su valor de política o evidencia histórica en su ámbito, pero los encabezados antiguos que digan «vigente» no sustituyen el estado actual del índice y los registros verificables. **No modificar congelados ni certificar ventas sin gates reales.**
+
 # ACTUALIZACIÓN VIGENTE — BOTÁNICA V14.7 / 9 OCTUBRE 2026
 
 **Respaldo autónomo vigente:** `/GUEST by WeddlySmartDesign/BOTANICA/Checkpoints/GUEST_BOTANICA_D02_RECUPERACION_V3_2026-10-09.zip` (35 281 287 bytes, SHA-256 `62fc41815ac288f1ba6f86a0607ffeacab42e4ad68591f7e747eaec216bdd3c5`). Incluye V14 congelada, históricas V14.5/V14.6, V14.7 candidata, matriz, scripts visuales portables, capturas y hashes. Leer `LEER_PRIMERO.txt` al descomprimir.
