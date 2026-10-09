@@ -54,6 +54,80 @@ function build(source){
    "    closing:{line:closing.mode==='custom'?txt(closing.customLine,80):'Gracias por formar parte de nuestra historia.'}\n  };\n}",
    "    closing:{line:closing.mode==='custom'?txt(closing.customLine,80):'Gracias por formar parte de nuestra historia.'}\n  });\n}",
    'normalize_build_config_close');
+ // Embed the EXACT canonical JSON Schema and the same strict validator as Node QA.
+ // Prevent any set_config/manual path from bypassing the shared contract.
+ const schema=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json'),'utf8'));
+ const validatorSource=fs.readFileSync(path.join(root,'guest/qa/validate_invitation_config_v1.cjs'),'utf8');
+ const vStart=validatorSource.indexOf('const equal=');
+ const vEnd=validatorSource.indexOf('if(require.main===module)',vStart);
+ if(vStart<0||vEnd<0)throw Error('validator_source_drift');
+ const validator=validatorSource.slice(vStart,vEnd)
+   .replace('const equal=(a,b)=>','const equal=(a:any,b:any)=>')
+   .replace('function validate(data,contract=schema){','function validate(data:any,contract:any=schema){')
+   .replace(' const errors=[];',' const errors:string[]=[];')
+   .replace('const got=x=>','const got=(x:any)=>')
+   .replace(' function walk(value,node,p){',' function walk(value:any,node:any,p:string){')
+   .replace('const failures=[];','const failures:any[]=[];');
+ if(!validator.includes('required_for_photo_only')||!validator.includes('return errors;'))
+   throw Error('validator_semantics_drift');
+ const gates=fs.readFileSync(path.join(root,'guest/tools/invitation_runtime_gate_v1.cjs'),'utf8');
+ const gStart=gates.indexOf('function assertPinnedInvitationConfig(');
+ const gEnd=gates.indexOf('if (typeof module',gStart);
+ if(gStart<0||gEnd<0)throw Error('runtime_gate_source_drift');
+ const typedGate=gates.slice(gStart,gEnd)
+   .replace("function assertPinnedInvitationConfig(config, order, validateConfig, files, phase='stored')",
+     "function assertPinnedInvitationConfig(config:any, order:any, validateConfig:(v:any)=>string[], files:any[], phase:string='stored')")
+   .replace('  const media=[];','  const media:any[]=[];');
+ const schemaRuntime='const schema:any='+JSON.stringify(schema)+';\n'+validator+'\n'+typedGate+
+   "\nfunction checkInvitationConfig(config:any,order:any,files:any[]=order.files||[],phase:string='stored'){\n"+
+   " return assertPinnedInvitationConfig(config,order,validate,files,phase);\n}\n";
+ source=once(source,'function buildConfig(',schemaRuntime+'function buildConfig(','inject_shared_strict_runtime_gate');
+ // Single guard applied at every lifecycle boundary. Only a new test-only
+ // candidate is produced; existing live v12 must not be modified here.
+ source=once(source,
+   "const config=buildConfig(questionnaire,order.files||[],'#',order.template_id,order.template_version),ts=now()",
+   "const config=checkInvitationConfig(buildConfig(questionnaire,order.files||[],'#',order.template_id,order.template_version),order),ts=now()",
+   'submit_canonical_config_gate');
+ source=once(source,
+   "const config=buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version),ts=now()",
+   "const config=checkInvitationConfig(buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version),order),ts=now()",
+   'start_design_config_gate');
+ source=once(source,
+   "const rawCfg=JSON.stringify(config);if(rawCfg.length>120000)return json({ok:false,error:'config_too_large'},400);",
+   "const rawCfg=JSON.stringify(config);if(rawCfg.length>120000)return json({ok:false,error:'config_too_large'},400);\n      checkInvitationConfig(config,order);",
+   'set_config_gate');
+ source=once(source,
+   "const ts=now(),config=Object.keys(order.resolved_config||{}).length?order.resolved_config:buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version);",
+   "const ts=now(),config=checkInvitationConfig(Object.keys(order.resolved_config||{}).length?order.resolved_config:buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version),order);",
+   'mark_review_ready_gate');
+ source=once(source,
+   "if(decision==='approve'){\n         const {error}",
+   "if(decision==='approve'){\n         checkInvitationConfig(order.resolved_config||{},order);\n         const {error}",
+   'review_approve_gate');
+ source=once(source,
+   "const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);\n       const token=await capability(order.id,'r')",
+   "const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);\n       checkInvitationConfig(order.resolved_config||{},order);\n       const token=await capability(order.id,'r')",
+   'send_review_gate');
+ source=once(source,
+   "const files=await signedFiles(c,order,7200),config=hydrateConfig(order.resolved_config||{},files);",
+   "const files=await signedFiles(c,order,7200),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},files),order,files,'hydrated');",
+   'signed_render_gates');
+ // Previous anchor occurs twice (review_load and detail); first is the
+ // user-visible review, second is manager detail. Only review_load needs a
+ // strict gate; once(...) insists it has exactly one occurrence.
+ source=once(source,
+   "const files=await signedFiles(c,order,86400),config=hydrateConfig(order.resolved_config||{},files);",
+   "const files=await signedFiles(c,order,86400),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},files),order,files,'hydrated');",
+   'public_final_gate');
+ source=once(source,
+   "const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=hydrateConfig(order.resolved_config||{},publicFiles),ts=now()",
+   "checkInvitationConfig(order.resolved_config||{},order);\n       const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},publicFiles),order,publicFiles,'hydrated'),ts=now()",
+   'delivery_pre_post_gates');
+ // Failing signatures from the signing API must NOT become blank images.
+ source=once(source,
+   "if(typeof x[k]==='string'&&x[k].startsWith('upload:'))x[k]=map.get(x[k].slice(7))||'';else walk(x[k])",
+   "if(typeof x[k]==='string'&&x[k].startsWith('upload:')){const resolved=map.get(x[k].slice(7));if(!resolved)throw new Error('missing_signed_asset');x[k]=resolved;}else walk(x[k])",
+   'signed_media_fail_closed');
  source=once(source,
    "textMode:story.textMode==='custom'?'custom':'preset',",
    "textMode:story.textMode==='none'?'none':(story.textMode==='custom'?'custom':'preset'),",
@@ -95,6 +169,7 @@ function build(source){
  // Production VEIL logic is still subject to separate real regression.
  if(!source.includes("spec?.testOnly===true&&mode!=='test'"))throw Error('missing_test_only_guard');
  if(!source.includes('return normalizeBackendInvitationConfig({'))throw Error('missing_config_normalization');
+ if((source.match(/checkInvitationConfig\(/g)||[]).length!==10)throw Error('missing_lifecycle_validation_paths');
  return source;
 }
 if(require.main===module){
