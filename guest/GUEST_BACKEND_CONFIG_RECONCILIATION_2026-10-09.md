@@ -95,3 +95,35 @@ La tabla `public.guest_invitation_orders` tenía **3 registros históricos de pr
 5. Solo después, ejecutar E2E real test-only con dos pedidos independientes, revisión/final, paridad, RSVP persistente, Android y tiempo ≤5 minutos. Seguir **3/11 PASS y 8 PENDING** hasta evidencias reales. D03 no se inicia.
 
 **No se ha generado un nuevo diseño, no se ha modificado la V14 aprobada ni la candidata V14.7, y la única versión real de Supabase sigue siendo v12.**
+
+## 9. 10/10/2026 — Puerta de despliegue: entorno aislado inexistente y compatibilidad histórica verificada SIN PII
+
+**Esta sección añade evidencia de explotación real, no modifica la candidata V13 ni habilita el despliegue.** Consultados mediante el conector Supabase, exclusivamente de lectura, el proyecto `dnjsxequwgtyyauuofxj`, las ramas disponibles, las versiones activas de funciones, el esquema de `guest_invitation_orders` y agregados anónimos de tres pedidos históricos. Se contrastó también el HEAD y ambas QA de GitHub antes de trabajar.
+
+### Topología observada (fecha de consulta 10/10/2026)
+
+- **Supabase GUEST:** `guest-invitation-flow` ACTIVE v12, SHA `69ef41f9867eb048b052632141be9b8e5ea53aa78a63ade1883e1e88da7b28ac`; `guest-stripe-checkout` ACTIVE v20, SHA `c81575ca422e05c943f029ce5a10f3b382676b718529b4b68231abc7a0ba88ce`. Ambas tienen `verify_jwt:false` en metadatos; deben seguir sujetas a sus barreras de autorización internas. Ningún cambio de función.
+- **Ramas de Supabase:** `list_branches` devolvió **`[]`**. No existe un entorno aislado de prueba conectado que permita cambiar el backend sin afectar directamente a la Edge Function activa.
+- **Proyectos visibles:** el proyecto activo compartido de WeddlySmartDesign y otro proyecto **STUDIO** inactivo. **STUDIO no es un entorno de pruebas de GUEST, no debe utilizarse ni tocarse.** No se ha creado proyecto nuevo, desplegado, ni solicitado ningún cambio de plan.
+- El backend V13 generado en GitHub es una **candidata**, no una versión que se pueda probar hoy sustituyendo de forma segura la v12 activa. No se intentó sortear el bloqueo administrativo registrado el 09/10.
+
+### Comprobación real agregada de compatibilidad (SQL SELECT, sin PII)
+
+Se evaluaron exactamente los invariantes pertinentes del `assertLegacyDeliveredTestRead` previsto: `mode=test`, `status=delivered`, ausencia de `schemaVersion`, correspondencia de `template.id` con la orden, RSVP neutro y medios con fuentes HTTPS; se revisó separadamente la igualdad de versiones. Solo se mostraron **recuentos por estado** y resultados booleanos agrupados:
+
+| Grupo histórico | Registros | Cumplen condiciones de lectura heredada (inspección SQL, **no prueba del backend**) | Versión fijada igual a la versión interna | Filas con medios no HTTPS / estructura irregular |
+|---|---:|---:|---:|---:|
+| VEIL `test/delivered` | 2 | 2 | 1 | 0 |
+| VEIL `test/designing` | 1 | No es aplicable la excepción de entregados | 0 | 1 |
+
+La única fila `designing` tiene versión antigua no coincidente y al menos una referencia de medio que no cumple la condición para contenido **ya hidratado**; esto NO prueba pérdida de fotos ni corrupción: podría ser un `upload:` válido mientras el trabajo está en curso. **No convertirla, editarla, borrarla ni reinterpretarla automáticamente.** La excepción heredada existe únicamente para lectura de `delivered`, nunca mutación ni `designing`.
+
+La comprobación SQL es una **aproximación estática conservadora** de la lógica, no demuestra que `review_load` o `public_load` reales pasen, ni que el tercer pedido se pueda continuar en V13. No se consultaron identificadores de filas, nombres, correos, archivos, enlaces privados, tokens ni contenidos textuales.
+
+### Decisión GO/NO-GO obligatoria
+
+**NO-GO** para actualizar en este momento `guest-invitation-flow` de v12 a V13 en el proyecto activo. Razones independientes: (1) `list_branches=[]`, sin ambiente de pruebas autorizado; (2) orden histórica `designing` no cubierta por compatibilidad V13 y susceptible de ruptura; (3) faltan QA navegador/Android, dos E2E y rollback probado. Una actualización directa sería una prueba sobre producción, no una certificación responsable. Nada de usar el proyecto STUDIO ni desplegar por una vía alternativa para sortear la restricción.
+
+Para convertir esta condición en GO **sin rediseñar la arquitectura**, el siguiente operador deberá acreditar, por orden: (a) destino de pruebas **legítimamente aislado/autorizado**, con coste y permisos conocidos, que no sea el proyecto STUDIO; (b) respaldo exacto de v12, versión/verify_jwt/configuración y camino de reversión; (c) decisión explícita sobre la **continuación del test histórico `designing`** sin alterar sus datos; (d) V13 solo test-only, sin Stripe, correos ni recursos públicos permanentes, con prueba VEIL; (e) Centro V2 nuevo y dos pedidos E2E de Botánica más RSVPs g/u y Android; (f) 11/11 gates antes de considerar venta, bajo autorización comercial independiente.
+
+**Importante:** ninguna alternativa debe exigir comprar un plan o herramienta por defecto; la opción de staging deberá valorarse por coste concreto y seguridad. Un entorno local aislado requiere recursos y una vía de ejecución realmente disponible; no se afirma que exista en la sesión actual. Las suites GitHub offline están en verde pero **no levantan un backend real**. Mantener Botánica 3/11 y no iniciar D03.
