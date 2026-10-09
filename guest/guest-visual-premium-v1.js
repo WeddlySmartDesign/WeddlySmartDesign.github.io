@@ -66,6 +66,7 @@ h3{line-height:1.18}
   transition:background .14s ease,color .14s ease,transform .14s ease
 }
 .nav button:active{transform:scale(.97)}
+#nav button{border-radius:16px!important}
 .nav button.on{background:var(--guest-olive)!important;color:#fff!important}
 .sheet{background:rgba(30,28,25,.34)!important;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
 .panel{
