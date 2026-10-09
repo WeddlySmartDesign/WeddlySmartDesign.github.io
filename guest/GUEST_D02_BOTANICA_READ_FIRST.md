@@ -1,3 +1,17 @@
+# ACTUALIZACIÓN D02 V14.6 — ESTADO VIGENTE (09/10/2026)
+
+**Esta actualización prevalece sobre las referencias históricas a V14.5 en secciones inferiores.** El archivo V14 original sigue aprobado y congelado. La V14.5 continúa conservada como evidencia histórica. **La candidata técnica vigente es V14.6**, que corrige únicamente el caso `Historia habilitada + foto + texto desactivado`; el fallo existía realmente en V14.5. La nueva condición supera **11/11 pruebas de mapeo** y conserva los 17 medios originales; *no* ha pasado prueba visual Android ni los dos pedidos E2E reales, por lo que continúa **NO CERTIFICADA y NO PUBLICABLE**.
+
+- **Candidata actual:** `/GUEST by WeddlySmartDesign/BOTANICA/Candidatas/GUEST_D02_BOTANICA_ATELIER_V14_6_PHOTO_ONLY_QA_CANDIDATE_2026-10-09.html`
+- **SHA-256:** `35d0caf0a2ef716a51b7d5cdfd451ebc5ad5ae60bb9ad56aee4ed9c692820c85`
+- **Manifiesto vigente:** `guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V2_2026-10-09.json` (el anterior V1 queda como histórico).
+- **Nuevo test reproducible:** `node guest/tests/botanica_schema_mapping_offline.test.cjs /ruta/V14.6.html`. El test detecta el fallo en V14.5 y pasa en V14.6.
+- **Registro y adaptador GitHub:** apuntan a versión `14.6`, pero `certification-pending`. Backend Supabase v12 sigue solo con VEIL LIGHT, sin despliegue ni ventas de Botánica.
+- **Paquete de recuperación V2:** `/GUEST by WeddlySmartDesign/BOTANICA/Checkpoints/GUEST_BOTANICA_D02_RECUPERACION_COMPLETA_V2_2026-10-09.zip` (3 HTML completos, dos tests, manifiesto, evidencia y huellas). El primer ZIP sigue guardado, pero ya no es el respaldo más reciente.
+- **Siguiente trabajo permitido:** verificar visualmente la variante foto sin texto en un navegador autorizado; integrar Botánica *solo como test* cuando se permita desplegar; ejecutar dos pedidos E2E y pruebas RSVP. **No modificar V14. No evadir bloqueos administrativos.**
+
+---
+
 # BOTÁNICA D02 — LEER PRIMERO / FUENTE ÚNICA DE CONTINUIDAD
 
 **GUEST by WeddlySmartDesign · 09/10/2026 · rama `guest-independent`**
