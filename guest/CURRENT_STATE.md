@@ -1,3 +1,5 @@
+> **PUNTO ÚNICO DE CONTINUIDAD (09/10/2026):** Antes de leer este documento o hacer cambios, abrir **[`guest/START_HERE.md`](START_HERE.md)** y **[`guest/DESIGN_NEW_RUNBOOK.md`](DESIGN_NEW_RUNBOOK.md)**. Este archivo mantiene su valor de política o evidencia histórica en su ámbito, pero los encabezados antiguos que digan «vigente» no sustituyen el estado actual del índice y los registros verificables. **No modificar congelados ni certificar ventas sin gates reales.**
+
 # GUEST — PUERTA DE VENTA Y ANTIRREGRESIONES (09/10/2026)
 
 **Antes de crear D03–D06 o certificar D02:** leer `guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md` y ejecutar `node guest/qa/catalog_admission_gate.cjs`. Verificar el estado de cada plantilla en `guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json`. Para certificar una plantilla nueva, ejecutar `node guest/qa/catalog_admission_gate.cjs --admit <id>` y exigir PASS basado en evidencias E2E reales y Android. La puerta automatizada falla si se declara `commercially-frozen` con huecos.
