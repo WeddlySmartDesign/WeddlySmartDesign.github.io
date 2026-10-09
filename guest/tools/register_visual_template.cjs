@@ -24,8 +24,11 @@ if(!displayName||typeof displayName!=='string'||displayName.length>80)fail('Inva
 if(!/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,30}$/.test(version||''))fail('Invalid version');
 if(rendererApi!=='GUEST_APPLY_CONFIG')fail('New visual plugins must expose the same GUEST_APPLY_CONFIG API');
 if(!Array.isArray(typographyVariants)||!typographyVariants.length||typographyVariants.some(x=>typeof x!=='string'))fail('Typography variants required');
-const masterPath=path.resolve(path.dirname(path.resolve(manifestPath)),masterHtml||'');
+const manifestDir=path.dirname(path.resolve(manifestPath));
+const masterPath=path.resolve(manifestDir,masterHtml||'');
+if(!masterPath.startsWith(manifestDir+path.sep)||!fs.realpathSync(manifestDir))fail('Visual master must be alongside manifest');
 if(!masterHtml||!fs.existsSync(masterPath)||path.extname(masterPath)!=='.html')fail('Missing visual master HTML');
+if(!fs.realpathSync(masterPath).startsWith(fs.realpathSync(manifestDir)+path.sep))fail('Master symlink leaves the plugin folder');
 const html=fs.readFileSync(masterPath,'utf8');
 if(!html.includes('GUEST_APPLY_CONFIG'))fail('Master must define GUEST_APPLY_CONFIG');
 if(!html.includes('</body>'))fail('Incomplete visual master HTML');
