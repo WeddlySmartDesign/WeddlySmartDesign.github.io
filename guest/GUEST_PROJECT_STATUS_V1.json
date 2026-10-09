@@ -110,7 +110,34 @@
       },
       "note": "Neither checked-in tooling nor static audit proves a generated browser pack, deployed Center, live orders or Android verification. No Botánica gate promoted.",
       "deployed": false,
-      "commercialReady": false
+      "commercialReady": false,
+      "latestCodeCommit": "c22a010498a0936d24576d7a2d4430d448bea650",
+      "latestTestCommit": "797790589a63143fba1e028cab66277d049f30a3",
+      "stageEntrypoint": "stage() CLI requires fixed official candidate CENTER_SHA; stageWithExpectedCenterSha is only a programmatic synthetic test helper",
+      "supportedRegistrations": [
+        "legacy native VEIL LIGHT",
+        "registered pending iframe with src=null",
+        "registered frozen iframe with published src and its own pinned local SHA"
+      ],
+      "security": [
+        "no writing to originals",
+        "source SHA checked against canonical status and candidate registry",
+        "pending/frozen manifests checked consistently",
+        "only newly created output directory",
+        "CSP connect-src none; form-action none; no legitimate live workflow in offline pack"
+      ],
+      "tests": [
+        "generic VEIL/Botánica/D03/D1000 fixture with certified iframe",
+        "physical multi-asset output directories, checksum and manifest verification",
+        "source immutability",
+        "tampered asset blocked before output",
+        "operator CLI rejects fake center checksum"
+      ],
+      "catalogOfflineRun": 37993893056,
+      "catalogOfflineStatus": "success",
+      "independentLatestOnThisCode": "queued at last observed check",
+      "realInputAuditLibrary": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_STAGE_REAL_INPUT_ANCHOR_AUDIT_2026-10-09.json",
+      "realE2e": false
     }
   },
   "designs": {
@@ -245,7 +272,7 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Generate and browser-test a real offline nonfrozen Mobile Center V2 package from the SHA-pinned candidate using the generic stage tool and assets available in Library. This remains an offline proof, not a deployment.",
+    "Offline pack generator and source SHA check are complete as tooling; next genuine evidence gap is running the actual 30MB Center and 11MB V14.7 package through a browser with source-authentic GitHub viewer/overlay, and recording that QA in Library. Physical pack test so far uses synthetic assets only.",
     "Do NOT bypass environmental deployment restriction: guest-invitation-flow v12 remains active, guarded V13 only offline. Check runtime source/rollback and obtain legitimate controlled test-only deployment authorization before any Supabase mutation.",
     "Wire canonical questionnaire and generic viewer to distributed NEW Mobile Center, never modifying frozen V4.6; verify safety and VEIL historical regression before deploy.",
     "Run two distinct persisted test orders end-to-end with common questionnaire, reviews, stable final URL, private media and recipient RSVP g/u persistence, zero commercial email/Stripe. Current Botánica remains 3/11.",
@@ -261,9 +288,9 @@
   ],
   "ciObserved": {
     "verificationDate": "2026-10-09",
-    "catalogRun": "37992983172",
-    "catalogAtCommit": "2357ce041",
-    "catalogOutcome": "SUCCESS: registered generic multi-template owner stage and CSP test on 2357ce041; does NOT prove deployed runtime or real E2E.",
+    "catalogRun": "37993893056",
+    "catalogAtCommit": "797790589",
+    "catalogOutcome": "SUCCESS offline full physical pack generation regression on synthetic 4-template fixture (including D1000 frozen iframe) at 797790589. No real deployed center or browser E2E.",
     "independentRun": "37992983155",
     "independentAtCommit": "2357ce041",
     "independentOutcome": "SUCCESS: GUEST Independent QA on same code commit 2357ce041; not owner Android or commercial E2E.",
@@ -296,10 +323,10 @@
     },
     "latestObserved": {
       "at": "2026-10-09",
-      "headCodeCommit": "2357ce041bbc741f89669f1e0de16cf3988c9397",
-      "catalogRun": 37992983172,
+      "headCodeCommit": "797790589a63143fba1e028cab66277d049f30a3",
+      "catalogRun": 37993893056,
       "catalogConclusion": "success",
-      "independentRun": 37992983155,
+      "independentRun": 37993893017,
       "independentConclusion": "success",
       "intermediateFailures": [
         {
@@ -313,7 +340,9 @@
           "cause": "legacy staging test expected hardcoded botanica manifestation"
         }
       ],
-      "intermediateResolutions": "updated same regression fixtures and added synthetic design-03 in commit 2357ce041; both workflows PASS"
+      "intermediateResolutions": "updated same regression fixtures and added synthetic design-03 in commit 2357ce041; both workflows PASS",
+      "independentConclusionAtObservation": "queued",
+      "lastCompletedIndependentAtPriorCode": "c7b22041b4ca430b55d7341cc69626d1a6188985"
     },
     "intermediateTestUpdateFailure": {
       "runId": 37990171524,
