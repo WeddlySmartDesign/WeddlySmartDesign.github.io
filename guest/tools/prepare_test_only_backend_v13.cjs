@@ -16,6 +16,30 @@ function once(source,before,after,label){
   throw Error('source_drift_or_duplicate:'+label);
  return source.slice(0,first)+after+source.slice(first+before.length);
 }
+/* Pure cross-template verification: no Botánica-specific admission exceptions.
+ * The generated registry must contain every pinned catalog entry exactly once.
+ */
+function assertGeneratedCatalog(declaration,templates){
+ const prefix='const CATALOG_TEMPLATES:any=';
+ const begin=declaration.indexOf(prefix),end=declaration.indexOf(';\n// Call assertCatalogOrderMode');
+ if(begin<0||end<=begin)throw Error('unexpected_generated_catalog');
+ let items;
+ try{items=JSON.parse(declaration.slice(begin+prefix.length,end))}catch{throw Error('invalid_generated_catalog_json')}
+ if(!Array.isArray(templates)||!templates.length||!items||typeof items!=='object')throw Error('invalid_expected_catalog');
+ const ids=new Set();
+ for(const t of templates){
+  if(!t||typeof t.id!=='string'||ids.has(t.id))throw Error('duplicate_expected_catalog_id');
+  ids.add(t.id);
+  const spec=Object.hasOwn(items,t.id)?items[t.id]:null;
+  if(!spec||spec.id!==t.id||String(spec.version)!==String(t.version))throw Error('catalog_id_or_version_mismatch:'+t.id);
+  const candidate=t.status==='certification-pending';
+  if(!candidate&&t.status!=='commercially-frozen')throw Error('unreviewed_catalog_status:'+t.id);
+  if((spec.testOnly===true)!==candidate)throw Error('catalog_test_only_mismatch:'+t.id);
+ }
+ if(Object.keys(items).length!==ids.size)throw Error('unexpected_generated_catalog_entries');
+ return items;
+}
+
 function build(source){
  if(typeof source!=='string'||!source.includes("function buildConfig("))throw Error('missing_backend_source');
  const generated=cp.spawnSync(process.execPath,[path.join(root,'guest/tools/generate_backend_catalog_registry.cjs'),'--mode','test-only'],{cwd:root,encoding:'utf8',timeout:10000});
@@ -23,8 +47,8 @@ function build(source){
  const start=generated.stdout.indexOf('const CATALOG_TEMPLATES:any=');
  if(start<0||!generated.stdout.includes('function assertCatalogOrderMode'))throw Error('unexpected_generated_registry');
  const declaration=generated.stdout.slice(start).trimEnd();
- if(!declaration.includes('"botanica"')||!declaration.includes('"testOnly": true'))throw Error('botanica_test_only_missing');
- if(!declaration.includes('"veil-light"'))throw Error('veil_light_missing');
+ const catalog=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'),'utf8'));
+ assertGeneratedCatalog(declaration,catalog.templates);
  source=once(source,`const CATALOG_TEMPLATES:any={
   'veil-light':{id:'veil-light',version:'5.3.3',renderer:'veil-light-v5-3-3',active:true,typographyVariants:['classic','romantic','contemporary'],defaultTypographyVariant:'classic'}
 };`,declaration,'catalog_v12');
@@ -212,4 +236,4 @@ if(require.main===module){
  fs.writeFileSync(output,result,{flag:'wx'});
  console.log('PREPARED TEST-ONLY CANDIDATE, NOT DEPLOYED. Verify all paths and snapshot before any authorized release.');
 }
-module.exports={build};
+module.exports={build,assertGeneratedCatalog};
