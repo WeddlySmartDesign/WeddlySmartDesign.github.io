@@ -21,7 +21,7 @@ function build(center,rawRegistry,viewer,overlay,stagedAssets={'botanica':BOT_FI
  if(!stagedAssets||typeof stagedAssets!=='object')throw Error('missing_staged_assets');
  for(const [id,name] of Object.entries(stagedAssets)){
   const t=registry.templates[id];
-  if(!t||t.id&&t.id!==id||t.mode!=='iframe'||!['certification-pending','commercially-frozen'].includes(t.status)||(t.status==='certification-pending'&&t.src!==null))throw Error('unsafe_staged_asset:'+id);
+  if(!t||t.id&&t.id!==id||t.mode!=='iframe'||!['certification-pending','commercially-frozen'].includes(t.status)||((t.status==='certification-pending'&&t.src!==null)||(t.status==='commercially-frozen'&&!t.src)))throw Error('unsafe_staged_asset:'+id);
   if(typeof name!=='string'||!/^[a-zA-Z0-9_.-]+\.html$/.test(name)||name.includes('..'))throw Error('unsafe_staged_filename:'+id);
   t.src='./'+name;
  }
@@ -61,7 +61,7 @@ function stage(centerFile,assetFiles,outDir,root=ROOT){
  const names={},assets=[],uniqueSources=new Set([path.resolve(centerFile)]);
  for(const [id,filename] of Object.entries(files)){
   const t=registry.templates?.[id],record=project.designs?.[id];
-  if(!t||!['certification-pending','commercially-frozen'].includes(t.status)||t.mode!=='iframe'||(t.status==='certification-pending'&&t.src!==null)||record?.version!==t.version||record?.status!==t.status)throw Error('asset_unregistered_or_registry_drift:'+id);
+  if(!t||!['certification-pending','commercially-frozen'].includes(t.status)||t.mode!=='iframe'||((t.status==='certification-pending'&&t.src!==null)||(t.status==='commercially-frozen'&&!t.src))||record?.version!==t.version||record?.status!==t.status)throw Error('asset_unregistered_or_registry_drift:'+id);
   const reference=record.candidateSha256||record.visualMasterSha256;
   if(!/^[a-f0-9]{64}$/.test(reference||''))throw Error('missing_catalog_artifact_sha256:'+id);
   const source=path.resolve(filename),actual=sha(fs.readFileSync(source));
