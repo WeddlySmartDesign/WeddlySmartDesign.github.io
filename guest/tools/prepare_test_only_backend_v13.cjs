@@ -46,28 +46,28 @@ function build(source){
    "  if(q?.story?.enabled&&q?.story?.textMode==='none'&&!files.some((f:any)=>f.slot==='story'))e.push('Añade una foto para la historia solo fotográfica.');\n  if(q?.story?.enabled&&q?.story?.textMode==='custom'&&!txt(q?.story?.customText,450))",
    'photo_required');
  source=once(source,
-   "       await internalSubmittedEmail(fresh);",
+   "      await internalSubmittedEmail(fresh);",
    "       if(order.mode!=='test')await internalSubmittedEmail(fresh);",
    'submission_internal_email');
  source=once(source,
-   "       if(email){\n         const steps=",
+   "      if(email){\n        const steps=",
    "       if(email&&order.mode!=='test'){\n         const steps=",
    'submission_customer_email');
  source=once(source,
-   "         await resend({to:['weddlysmartdesign@gmail.com'],subject:'Invitación GUEST aprobada",
+   "        await resend({to:['weddlysmartdesign@gmail.com'],subject:'Invitación GUEST aprobada",
    "         if(order.mode!=='test')await resend({to:['weddlysmartdesign@gmail.com'],subject:'Invitación GUEST aprobada",
    'approval_internal_email');
  source=once(source,
-   "       await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados",
+   "      await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados",
    "       if(order.mode!=='test')await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados",
    'changes_internal_email');
  source=once(source,
-   "       const ok=await resend({to:[email],subject:localTest?'Revisión de prueba preparada'",
-   "       const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Revisión de prueba preparada'",
+   "      const ok=await resend({to:[email],subject:localTest?'Revisión de prueba preparada'",
+   "      const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Revisión de prueba preparada'",
    'review_outbound_email');
  source=once(source,
-   "       const ok=await resend({to:[email],subject:localTest?'Entrega de prueba completada'",
-   "       const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Entrega de prueba completada'",
+   "      const ok=await resend({to:[email],subject:localTest?'Entrega de prueba completada'",
+   "      const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Entrega de prueba completada'",
    'delivery_outbound_email');
  // Fail closed: the existing order system has a single insert entry point. Every
  // creation path must continue to pass through that guarded function.
