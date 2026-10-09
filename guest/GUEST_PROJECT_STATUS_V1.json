@@ -33,6 +33,21 @@
       "scope": "ALL future template IDs; fail-closed on complete admission policy, owner registry, gating and certification flags",
       "realE2E": false,
       "deployed": false
+    },
+    "testOnlyBackendPreparerGeneric": {
+      "path": "guest/tools/prepare_test_only_backend_v13.cjs",
+      "test": "guest/tests/prepare_backend_test_only_v13.test.cjs",
+      "codeCommit": "fb177e07aff429cca82e45de3b3d2577ce6a67a7",
+      "testCommit": "6a3c5b036d87b67fcdccc9755ed070d1c2782baa",
+      "supportsAllRegisteredTemplates": true,
+      "syntheticFixtures": [
+        "design-03",
+        "design-1000"
+      ],
+      "lastOfflineCatalogQARun": 37990684936,
+      "lastOfflineCatalogQAResult": "success",
+      "deployment": "NOT DEPLOYED",
+      "commercialCertification": "NOT E2E"
     }
   },
   "designs": {
@@ -97,7 +112,7 @@
       "deployed": false,
       "fullSchemaComplianceProven": false,
       "completeCommercialIntegration": false,
-      "localFixtureGate": "PASS native offline catalog + V13 contract suite in GitHub Actions run 37990223784 (commit bd2f6c892); remains NOT DEPLOYED and NOT E2E. GUEST Independent QA of same commit is separate.",
+      "localFixtureGate": "PASS native GitHub Actions offline catalog and V13 guard tests incl generic catalog with synthetic D03/D1000, 37990684936. Candidate V13 is NOT DEPLOYED, no real orders or E2E.",
       "remainingContractDrift": [
         "Deployed Edge Function still v12 and does not support botanica or v13 canonical config",
         "Test-only V13 candidate generated successfully but no native CI green or real E2E certification confirmed",
@@ -115,7 +130,7 @@
           "guest/tests/prepare_backend_test_only_v13.test.cjs"
         ],
         "executed": "3 CJS tests under in-memory emulated Node imports, plus actual-v12 buildConfig on 2 synthetic questionnaires PASS after planned v13 adaptation; no live orders",
-        "nativeRepositoryCI": "PASS offline catalog workflow on bd2f6c892 (37990223784). Independent QA: last fully verified PASS on preceding 3f9eb1d (37973762871); latest bd2f6c892 run 37990223827 still in progress at this checkpoint.",
+        "nativeRepositoryCI": "PASS GUEST Catalog and Continuity QA offline on code commit 6a3c5b036, run 37990684936. Independent QA on code commit bd2f6c892 PASS, 37990223827; latest 6a run 37990684974 pending at this observation. Not E2E.",
         "note": "V13 strict config through submit/start_design/set_config/ready/approve/send_review/deliver; review/public read strict for new orders. Private media in test delivery, safe signed failure. Read-only legacy delivered test compatibility. Not deployed.",
         "guardSource": "guest/tools/invitation_runtime_gate_v1.cjs",
         "guardTest": "guest/tests/invitation_runtime_gate.test.cjs"
@@ -157,7 +172,7 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Verify Independent QA completion on latest HEAD; B6.3 and B6.6 were green in the prior verified run 37973762871. Do not infer E2E or Android from CI.",
+    "Check conclusion of Independent QA run 37990684974 for code commit 6a3c5b036, including possible B7.7 1366 intermittent visual event-scope failure. Never suppress legitimate visual assertions or claim latest HEAD green if not.",
     "Keep backend V12 deployed and V13 test-only offline until legitimate deployment authorization; no attempts to bypass environment safety blocker.",
     "Review safe error propagation, runtime schema, test-only private signed assets, owner config edit and production VEIL regression before authorized deployment; never bypass blocked environment",
     "Deploy only after legitimate authorization in controlled test-only channel, with rollback, zero Stripe/client email, no frozen visual changes",
@@ -174,12 +189,12 @@
   ],
   "ciObserved": {
     "verificationDate": "2026-10-09",
-    "catalogRun": "37990223784",
-    "catalogAtCommit": "bd2f6c892",
-    "catalogOutcome": "SUCCESS: shared catalog and continuity offline QA on bd2f6c892 including generic backend registry guard + synthetic multi-template mutations. NOT commercial E2E.",
-    "independentRun": "37973762871",
-    "independentAtCommit": "3f9eb1d736",
-    "independentOutcome": "SUCCESS: prior commit Independent QA including browser B6 invitation RSVP and two-device sync. Latest HEAD bd2f6c892 has Independent QA run 37990223827 in progress at this checkpoint; check before claiming PASS.",
+    "catalogRun": "37990684936",
+    "catalogAtCommit": "6a3c5b036",
+    "catalogOutcome": "SUCCESS: catalog offline QA on 6a3c5b036, includes generic V13 registry contract and D03/D1000 synthetic mutation fixtures. This is not E2E.",
+    "independentRun": "37990223827",
+    "independentAtCommit": "bd2f6c892",
+    "independentOutcome": "SUCCESS: latest completed independent QA verified for code commit bd2f6c892. At documentation time Independent QA on commit 6a3c5b036 was not yet completed; do not claim PASS for it.",
     "source": "GitHub Actions job logs via connected GitHub; checkpoint guest/GUEST_BACKEND_CONFIG_RECONCILIATION_2026-10-09.md",
     "independentFollowup": {
       "observedFailure": "run 37968228481: children opt-in lost in B6 browser test",
@@ -209,13 +224,19 @@
     },
     "latestObserved": {
       "at": "2026-10-09",
-      "headAtObservation": "bd2f6c8921314eab235b96eda2883720a0504e82",
-      "catalogRun": 37990223784,
+      "headCodeCommit": "6a3c5b036d87b67fcdccc9755ed070d1c2782baa",
+      "catalogRun": 37990684936,
       "catalogConclusion": "success",
-      "independentRun": 37990223827,
-      "independentConclusionAtObservation": "in_progress",
-      "lastCompletedIndependentRun": 37973762871,
-      "lastCompletedIndependentConclusion": "success"
+      "independentRun": 37990684974,
+      "independentConclusionAtObservation": "queued",
+      "lastFullyVerifiedIndependentRun": 37990223827,
+      "lastFullyVerifiedIndependentConclusion": "success",
+      "intermediateUnrelatedVisualQaFailure": {
+        "runId": 37990485039,
+        "job": "b7-final-visual-seal",
+        "failure": "events legacy scope visible 1366",
+        "status": "not reproduced on prior code commit bd2f6c892; if recurrent, diagnose without changing frozen visuals"
+      }
     },
     "intermediateTestUpdateFailure": {
       "runId": 37990171524,
