@@ -24,7 +24,16 @@
     "ownerViewerRegistry": "guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json",
     "pluginOnboarding": "guest/tools/register_visual_template.cjs",
     "commonSchema": "guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json",
-    "deploymentCertified": false
+    "deploymentCertified": false,
+    "backendCatalogAdmissionGuard": {
+      "path": "guest/tools/generate_backend_catalog_registry.cjs",
+      "test": "guest/tests/backend_catalog_generation.test.cjs",
+      "latestCodeCommit": "cbf142a67d31bb20a03d9b7504986ff0600cbf2a",
+      "latestTestCommit": "bd2f6c8921314eab235b96eda2883720a0504e82",
+      "scope": "ALL future template IDs; fail-closed on complete admission policy, owner registry, gating and certification flags",
+      "realE2E": false,
+      "deployed": false
+    }
   },
   "designs": {
     "veil-light": {
@@ -88,7 +97,7 @@
       "deployed": false,
       "fullSchemaComplianceProven": false,
       "completeCommercialIntegration": false,
-      "localFixtureGate": "PASS: four CJS suites under isolated Node-compatible harness; exact deployed v12 source transformed to staged V13, NOT E2E. Full native CI of latest HEAD remains unverified.",
+      "localFixtureGate": "PASS native offline catalog + V13 contract suite in GitHub Actions run 37990223784 (commit bd2f6c892); remains NOT DEPLOYED and NOT E2E. GUEST Independent QA of same commit is separate.",
       "remainingContractDrift": [
         "Deployed Edge Function still v12 and does not support botanica or v13 canonical config",
         "Test-only V13 candidate generated successfully but no native CI green or real E2E certification confirmed",
@@ -106,7 +115,7 @@
           "guest/tests/prepare_backend_test_only_v13.test.cjs"
         ],
         "executed": "3 CJS tests under in-memory emulated Node imports, plus actual-v12 buildConfig on 2 synthetic questionnaires PASS after planned v13 adaptation; no live orders",
-        "nativeRepositoryCI": "NOT YET CONFIRMED GREEN FOR LATEST HEAD",
+        "nativeRepositoryCI": "PASS offline catalog workflow on bd2f6c892 (37990223784). Independent QA: last fully verified PASS on preceding 3f9eb1d (37973762871); latest bd2f6c892 run 37990223827 still in progress at this checkpoint.",
         "note": "V13 strict config through submit/start_design/set_config/ready/approve/send_review/deliver; review/public read strict for new orders. Private media in test delivery, safe signed failure. Read-only legacy delivered test compatibility. Not deployed.",
         "guardSource": "guest/tools/invitation_runtime_gate_v1.cjs",
         "guardTest": "guest/tests/invitation_runtime_gate.test.cjs"
@@ -148,8 +157,8 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Obtain verified native GitHub Actions green for V13 candidate syntax/contract, historical read safety and B6.3; diagnose B6.6 deterministic two-device 409 regression from latest logs",
-    "Run scoped read-only historical delivery compatibility QA and protect remaining legacy designing order against unsafe migration",
+    "Verify Independent QA completion on latest HEAD; B6.3 and B6.6 were green in the prior verified run 37973762871. Do not infer E2E or Android from CI.",
+    "Keep backend V12 deployed and V13 test-only offline until legitimate deployment authorization; no attempts to bypass environment safety blocker.",
     "Review safe error propagation, runtime schema, test-only private signed assets, owner config edit and production VEIL regression before authorized deployment; never bypass blocked environment",
     "Deploy only after legitimate authorization in controlled test-only channel, with rollback, zero Stripe/client email, no frozen visual changes",
     "Wire generic viewer and common questionnaire into a new owner Mobile Center release, preserving frozen V4.6",
@@ -165,12 +174,12 @@
   ],
   "ciObserved": {
     "verificationDate": "2026-10-09",
-    "catalogRun": "37967724099",
-    "catalogAtCommit": "48429d9",
-    "catalogOutcome": "FAILED intermediate syntax error, corrected in later commit 87a5a152; later native CI PASS not yet verified",
-    "independentRun": "37968228481",
-    "independentAtCommit": "87a5a15",
-    "independentOutcome": "FAILED job b6-invitation-rsvp: children opt-in was not persisted in config payload",
+    "catalogRun": "37990223784",
+    "catalogAtCommit": "bd2f6c892",
+    "catalogOutcome": "SUCCESS: shared catalog and continuity offline QA on bd2f6c892 including generic backend registry guard + synthetic multi-template mutations. NOT commercial E2E.",
+    "independentRun": "37973762871",
+    "independentAtCommit": "3f9eb1d736",
+    "independentOutcome": "SUCCESS: prior commit Independent QA including browser B6 invitation RSVP and two-device sync. Latest HEAD bd2f6c892 has Independent QA run 37990223827 in progress at this checkpoint; check before claiming PASS.",
     "source": "GitHub Actions job logs via connected GitHub; checkpoint guest/GUEST_BACKEND_CONFIG_RECONCILIATION_2026-10-09.md",
     "independentFollowup": {
       "observedFailure": "run 37968228481: children opt-in lost in B6 browser test",
@@ -197,6 +206,21 @@
       "diagnosticOnlyCommit": "20fec034347871769e5d6879d199bc12416ad225",
       "diagnosticChange": "Enforce A-first server write, delayed B stale-version 409 and rich synthetic state diagnostics; NOT confirmed passing in native CI",
       "engineSourceChanged": false
+    },
+    "latestObserved": {
+      "at": "2026-10-09",
+      "headAtObservation": "bd2f6c8921314eab235b96eda2883720a0504e82",
+      "catalogRun": 37990223784,
+      "catalogConclusion": "success",
+      "independentRun": 37990223827,
+      "independentConclusionAtObservation": "in_progress",
+      "lastCompletedIndependentRun": 37973762871,
+      "lastCompletedIndependentConclusion": "success"
+    },
+    "intermediateTestUpdateFailure": {
+      "runId": 37990171524,
+      "atCommit": "cbf142a67",
+      "cause": "generator changed before updating its old regression fixtures; resolved by bd2f6c892; next offline catalog workflow PASS"
     }
   }
 }
