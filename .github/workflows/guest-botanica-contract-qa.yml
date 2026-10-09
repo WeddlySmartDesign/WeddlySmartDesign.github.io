@@ -23,6 +23,9 @@ jobs:
           node guest/tests/botanica_catalog_bridge_offline.test.cjs
           node guest/tests/botanica_catalog_manifest_guard.test.cjs
           node guest/qa/catalog_preflight_v2.cjs
+      - name: Prepare test-only backend candidate without deployment and reject unsafe drift
+        run: |
+          node guest/tests/prepare_backend_test_only_v13.test.cjs
       - name: Verify one recovery state and deliberate failure mutations
         run: |
           node guest/qa/handoff_gate.cjs
