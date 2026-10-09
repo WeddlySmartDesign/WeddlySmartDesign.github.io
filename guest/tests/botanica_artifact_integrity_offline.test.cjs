@@ -1,10 +1,10 @@
 'use strict';
-// Usage: node guest/tests/botanica_artifact_integrity_offline.test.cjs <V14-frozen.html> <V14.5.html> [<V14.6.html>]
+// Usage: node guest/tests/botanica_artifact_integrity_offline.test.cjs <V14-frozen.html> <V14.5.html> [<V14.6.html>] [<V14.7.html>]
 // Offline only: no browser, account, deployed API, network, or data mutation.
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const crypto=require('node:crypto');
-const [frozen,v145,v146]=process.argv.slice(2);
+const [frozen,v145,v146,v147]=process.argv.slice(2);
 if(!frozen||!v145){
  console.error('Usage: node botanica_artifact_integrity_offline.test.cjs <V14> <V14.5> [<V14.6>]');process.exit(2);
 }
@@ -12,9 +12,10 @@ const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
 const expected={
   'V14':'27ede39dbf1e04dc7ee8e758601127eaf9de6e705f1f14a026df09fb72795c39',
   'V14.5':'ba8b6515e5bb2ba81c3ea3dbd88199b4a3abc66919caefa1e3d37ced8ce61e84',
-  'V14.6':'35d0caf0a2ef716a51b7d5cdfd451ebc5ad5ae60bb9ad56aee4ed9c692820c85'
+  'V14.6':'35d0caf0a2ef716a51b7d5cdfd451ebc5ad5ae60bb9ad56aee4ed9c692820c85',
+  'V14.7':'fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a'
 };
-const input=[['V14',frozen],['V14.5',v145],...(v146?[['V14.6',v146]]:[])];
+const input=[['V14',frozen],['V14.5',v145],...(v146?[['V14.6',v146]]:[]),...(v147?[['V14.7',v147]]:[])];
 const htmls=new Map();
 for(const [ver,file] of input){const bytes=fs.readFileSync(file);assert.equal(hash(bytes),expected[ver],ver+' SHA256 changed');htmls.set(ver,bytes.toString('utf8'));}
 console.log('PASS: '+input.length+' immutable artifact hashes');
@@ -34,4 +35,17 @@ if(v146){
  assert.equal(htmls.get('V14.5').replace(original,corrected),htmls.get('V14.6'),'Unexpected changes between V14.5 and V14.6');
  console.log('PASS: V14.6 differs by photo-only visibility condition and nothing else');
 }
-console.log('RESULT '+(v146?'4':'3')+' artifact gates PASS (E2E and Android remain pending)');
+if(v147){
+ assert(v146,'V14.6 required to verify V14.7 delta');
+ const a='const storyOn=CONF.storyEnabled!==false;';
+ const b="const storyOn=CONF.storyEnabled!==false && !!String(CONF.copy?.story||'').trim();";
+ const c="if(storyOn){$('storyTitle').textContent=CONF.copy.storyTitle;$('storyCopy').textContent=CONF.copy.story;}";
+ const d="if(storyOn){$('storyTitle').textContent=CONF.copy.storyTitle;$('storyCopy').textContent=CONF.copy.story;}else{$('storyTitle').textContent='';$('storyCopy').textContent='';}";
+ let html=htmls.get('V14.6');
+ assert.equal(html.split(a).length-1,1,'V14.6 story condition not unique');
+ assert.equal(html.split(c).length-1,1,'V14.6 copy condition not unique');
+ html=html.replace(a,b).replace(c,d);
+ assert.equal(html,htmls.get('V14.7'),'Unexpected edits from V14.6 to V14.7');
+ console.log('PASS: V14.7 changes exactly two conditional lines; no visual/code drift elsewhere');
+}
+console.log('RESULT '+(v147?'5':v146?'4':'3')+' artifact gates PASS (E2E and Android remain pending)');
