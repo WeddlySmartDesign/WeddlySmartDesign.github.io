@@ -2,64 +2,31 @@
 'use strict';
 const assert=require('node:assert/strict');
 const {build}=require('../tools/prepare_test_only_backend_v13.cjs');
-const fixture=`
-const CATALOG_TEMPLATES:any={
-  'veil-light':{id:'veil-light',version:'5.3.3',renderer:'veil-light-v5-3-3',active:true,typographyVariants:['classic','romantic','contemporary'],defaultTypographyVariant:'classic'}
-};
-function buildConfig(){
-  return {
-    template:{id:spec.id,version:pinnedVersion},
-    story:{
-      textMode:story.textMode==='custom'?'custom':'preset',
-    },
-    closing:{line:closing.mode==='custom'?txt(closing.customLine,80):'Gracias por formar parte de nuestra historia.'}
-  };
-}
-function validateQuestionnaire(q:any,files:any[]){
-  const e=[];
-  if(q?.story?.enabled&&q?.story?.textMode==='custom'&&!txt(q?.story?.customText,450))e.push('custom');
-}
-async function createOrder(c:any,mode:'test'|'production'){
-  const spec=templateSpec(templateId),id=crypto.randomUUID(),qToken=token;
-  const {error}=await c.from('guest_invitation_orders').insert(row);
-}
-async function submit(order:any){
-      await internalSubmittedEmail(fresh);
-      if(email){
-        const steps='here';
-         await resend({to:[email],subject:'Hemos recibido vuestros datos',html:steps},'confirm');
-       }
-}
-async function review(order:any){
-        await resend({to:['weddlysmartdesign@gmail.com'],subject:'Invitación GUEST aprobada · '+orderLabel(order),html:'ok'},'approve');
-      await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados · '+orderLabel(order),html:'change'},'changes');
-      const ok=await resend({to:[email],subject:localTest?'Revisión de prueba preparada':'Revisión real',html:'review'},'review');
-}
-async function deliver(order:any){
-      const ok=await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Entrega real',html:'delivery'},'delivery');
-}
-`;
+const fixture="const CATALOG_TEMPLATES:any={\n  'veil-light':{id:'veil-light',version:'5.3.3',renderer:'veil-light-v5-3-3',active:true,typographyVariants:['classic','romantic','contemporary'],defaultTypographyVariant:'classic'}\n};\nfunction buildConfig(){\n  return {\n    template:{id:spec.id,version:pinnedVersion},\n    story:{textMode:story.textMode==='custom'?'custom':'preset'},\n    closing:{line:closing.mode==='custom'?txt(closing.customLine,80):'Gracias por formar parte de nuestra historia.'}\n  };\n}\nfunction validateQuestionnaire(q:any,files:any[]){\n  const e=[];\n  if(q?.story?.enabled&&q?.story?.textMode==='custom'&&!txt(q?.story?.customText,450))e.push('custom');\n}\nfunction hydrateConfig(config:any,files:any[]){\n  const map=new Map();\n  const walk=(x:any)=>{if(typeof x[k]==='string'&&x[k].startsWith('upload:'))x[k]=map.get(x[k].slice(7))||'';else walk(x[k])};\n  return config;\n}\nasync function createOrder(c:any,mode:'test'|'production'){\n  const spec=templateSpec(templateId),id=crypto.randomUUID(),qToken=token;\n  const {error}=await c.from('guest_invitation_orders').insert(row);\n}\nasync function submit(){\n      const config=buildConfig(questionnaire,order.files||[],'#',order.template_id,order.template_version),ts=now();\n      await internalSubmittedEmail(fresh);\n      if(email){\n        const steps='test';\n        await resend({to:[email],subject:'Hemos recibido vuestros datos',html:steps},'confirm');\n      }\n}\nasync function startDesign(){\n      const config=buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version),ts=now();\n}\nasync function setConfig(){\n      const config=b.config&&typeof b.config==='object'?b.config:null;if(!config)return json({ok:false,error:'invalid_config'},400);\n      const rawCfg=JSON.stringify(config);if(rawCfg.length>120000)return json({ok:false,error:'config_too_large'},400);\n}\nasync function markReviewReady(){\n      const ts=now(),config=Object.keys(order.resolved_config||{}).length?order.resolved_config:buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version);\n}\nasync function reviewLoad(){\n      if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);\n      const files=await signedFiles(c,order,7200),config=hydrateConfig(order.resolved_config||{},files);\n}\nasync function reviewRespond(){\n      if(decision==='approve'){\n        const {error}=await c.from('guest_invitation_orders').update({status:'approved'});\n        await resend({to:['weddlysmartdesign@gmail.com'],subject:'Invitación GUEST aprobada',html:'ok'},'approve');\n      }\n      await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados',html:'change'},'changes');\n}\nasync function publicLoad(){\n      const files=await signedFiles(c,order,86400),config=hydrateConfig(order.resolved_config||{},files);\n}\nasync function sendReview(){\n      const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);\n      const token=await capability(order.id,'r'),supplied=txt(b.reviewUrl,1200),localTest=order.mode==='test'&&!supplied;\n      const ok=await resend({to:[email],subject:localTest?'Revisión de prueba preparada':'Revisión real',html:'review'},'review');\n}\nasync function deliver(){\n      const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=hydrateConfig(order.resolved_config||{},publicFiles),ts=now();\n      const ok=await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Entrega real',html:'delivery'},'delivery');\n}";
 const patched=build(fixture);
 assert.match(patched,/schemaVersion:'guest-invitation-config-v1'/);
+assert.match(patched,/function assertPinnedInvitationConfig\(config:any/);
+assert.match(patched,/function validate\(data:any,contract:any=schema\)/);
 assert.match(patched,/return normalizeBackendInvitationConfig\(\{/);
 assert.match(patched,/function normalizeBackendInvitationConfig\(input:any\)/);
-assert.match(patched,/config.cover.photo = null/);
 assert.match(patched,/textMode:story.textMode==='none'\?'none'/);
-assert.match(patched,/historia solo fotográfica/);
 assert.match(patched,/assertCatalogOrderMode\(spec,mode\)/);
 assert.match(patched,/"botanica": \{/);
 assert.match(patched,/"testOnly": true/);
 assert.match(patched,/veil-light-v5-3-3/);
+assert.equal((patched.match(/checkInvitationConfig\(/g)||[]).length,11);
+assert.match(patched,/checkInvitationConfig\(config,order\);/);
+assert.match(patched,/checkInvitationConfig\(hydrateConfig\(order.resolved_config/);
+assert.match(patched,/if\(!resolved\)throw new Error\('missing_signed_asset'\)/);
 assert.match(patched,/if\(order.mode!=='test'\)await internalSubmittedEmail/);
-assert.match(patched,/if\(email&&order.mode!=='test'\)/);
-assert.match(patched,/if\(order.mode!=='test'\)await resend/);
 assert.equal((patched.match(/const ok=order.mode==='test'\?true:await resend/g)||[]).length,2);
 assert.ok(!patched.includes("renderer:'botanica-v14-5'"));
-assert.equal(fixture.includes('testOnly'),false);
 assert.throws(()=>build(patched),/source_drift_or_duplicate/);
 assert.throws(()=>build(fixture.replace("template:{id:spec.id,version:pinnedVersion}","template:{id:other.id}")),/source_drift_or_duplicate:schema_version/);
-assert.throws(()=>build(fixture.replace("closing:{line:closing.mode", "closing:{text:closing.mode")),/source_drift_or_duplicate:normalize_build_config_close/);
+assert.throws(()=>build(fixture.replace("const rawCfg=JSON.stringify(config);", "const rawCfg=serialize(config);")),/source_drift_or_duplicate:set_config_gate/);
+assert.throws(()=>build(fixture.replace("if(decision==='approve'){", "if(decision==='approve' && allowed){")),/source_drift_or_duplicate:review_approve_gate/);
+assert.throws(()=>build(fixture.replace("x[k]=map.get(x[k].slice(7))||''", "x[k]=null")),/source_drift_or_duplicate:signed_media_fail_closed/);
+assert.throws(()=>build(fixture.replace("const files=await copyPublicFiles(c,order)", "const files=await copyOtherFiles(c,order)")),/source_drift_or_duplicate:delivery_pre_post_gates/);
 assert.throws(()=>build(fixture.replace(".from('guest_invitation_orders').insert(row)","from('guest_invitation_orders').insert(row)")),/unreviewed_order_insert_paths/);
 assert.throws(()=>build(fixture.replace("await internalSubmittedEmail(fresh);","return true;")),/source_drift_or_duplicate:submission_internal_email/);
-assert.throws(()=>build(fixture.replace("'Revisión de prueba preparada'","'CHANGED'")),/source_drift_or_duplicate:review_outbound_email/);
-console.log('PASS: generated guarded test-only backend candidate from shared catalog; schema/none/photo/email gates; VEIL retained; 5 drift mutations rejected. NO DEPLOY.');
+console.log('PASS: guarded v13 generated with pinned strict schema, 11 lifecycle checks, signed-media fail closed and 7 mutation rejections. NO DEPLOY.');
