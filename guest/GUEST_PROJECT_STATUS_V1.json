@@ -152,6 +152,16 @@
       "compatibilityScope": "read only, delivered TEST orders with schemaVersion missing, template id match, HTTPS signed images, neutral RSVP; no writes or new production",
       "migrationExecuted": false,
       "checkpoint": "guest/GUEST_BACKEND_CONFIG_RECONCILIATION_2026-10-09.md"
+    },
+    "checkoutBoundaryObserved": {
+      "verifiedAt": "2026-10-09",
+      "projectId": "dnjsxequwgtyyauuofxj",
+      "function": "guest-stripe-checkout",
+      "version": 20,
+      "digest": "c81575ca422e05c943f029ce5a10f3b382676b718529b4b68231abc7a0ba88ce",
+      "inspection": "READ ONLY: current checkout code is edition Essential/Signature-based; no templateId/template_id/version/testOnly fields observed",
+      "conclusion": "Do not connect to multi-design sale before explicit separate commercial release verifying selected certified template ID/version and fail-closed test-only rejection. It is a future release boundary, not an E2E proof or new design gate.",
+      "modified": false
     }
   },
   "commercialGate": {
@@ -178,7 +188,8 @@
     "Deploy only after legitimate authorization in controlled test-only channel, with rollback, zero Stripe/client email, no frozen visual changes",
     "Wire generic viewer and common questionnaire into a new owner Mobile Center release, preserving frozen V4.6",
     "Run two actual distinct test-mode orders, signed upload/review/final stable URL and real GUEST RSVP g/u persistence; then owner Android and <=5 minute measurement",
-    "Retain Botánica 3/11 commercial passes, 8 PENDING until independent real evidence; publication/payment separately authorized"
+    "Retain Botánica 3/11 commercial passes, 8 PENDING until independent real evidence; publication/payment separately authorized",
+    "Before any authorized catalog checkout launch, reconcile edition-level guest-stripe-checkout v20 with selected certified template ID/version, prevent checkout for pending/testOnly templates, and verify purchase-to-order pinning separately. Do NOT enable Stripe or charge during test-only certification."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
