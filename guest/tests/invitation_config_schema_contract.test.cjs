@@ -32,7 +32,7 @@ const clone=x=>structuredClone(x);
 }
 {
  const x=clone(valid);x.story.photo={src:'upload:story',fit:'crop',focusX:50,focusY:50,autoFrame:true};
- assert.ok(validate(x).includes('$.story.photo.autoFrame:unexpected'));
+ assert.deepEqual(validate(x),[],'real producer autoFrame must be defined in schema');
 }
 {
  const x=clone(valid);x.locations.items[0].websiteUrl='';
@@ -40,7 +40,7 @@ const clone=x=>structuredClone(x);
 }
 {
  const x=clone(valid);x.wedding.coverPlace='';
- assert.ok(validate(x).includes('$.wedding.coverPlace:minLength'));
+ assert.ok(validate(x).includes('$.wedding.coverPlace:required_when_shown'));
 }
 {
  const x=clone(valid);x.story.textMode='broken';
@@ -54,4 +54,24 @@ const clone=x=>structuredClone(x);
  const x=clone(valid);x.rsvp.menu.enabled=true;x.rsvp.menu.options=['Vegetariano'];
  assert.deepEqual(validate(x),[]);
 }
-console.log('PASS: canonical GUEST schema validated and 6 real backend incompatibility classes rejected. NOT commercial E2E.');
+{
+ const x=clone(valid);delete x.rsvp.plusOneEnabled;delete x.rsvp.menu;
+ assert.deepEqual(validate(x),[],'RSVP ownership remains with GUEST app, not questionnaire');
+}
+{
+ const x=clone(valid);x.cover.showPlace=false;x.wedding.coverPlace='';
+ assert.deepEqual(validate(x),[],'hidden cover place can be blank');
+}
+{
+ const x=clone(valid);x.story.enabled=true;x.story.textMode='none';
+ assert.ok(validate(x).includes('$.story.photo:required_for_photo_only'));
+}
+{
+ const x=clone(valid);x.locations.mode='split';
+ assert.ok(validate(x).includes('$.locations.items:split_requires_two'));
+}
+{
+ const x=clone(valid);x.gallery.enabled=true;
+ assert.ok(validate(x).includes('$.gallery.photos:required_when_enabled'));
+}
+console.log('PASS: common GUEST schema structural and semantic contract; zero backend or commercial E2E calls.');
