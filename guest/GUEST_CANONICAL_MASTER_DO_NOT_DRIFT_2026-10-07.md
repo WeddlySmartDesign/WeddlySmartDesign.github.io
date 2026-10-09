@@ -1,3 +1,9 @@
+# ACTUALIZACIÓN PRIORITARIA D02 — V14.7 (2026-10-09)
+
+Se conserva la política canónica. El checkpoint más reciente de Botánica es `guest/GUEST_D02_BOTANICA_READ_FIRST.md` y su manifiesto `guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V3_2026-10-09.json`. V14 permanece congelada; **V14.7 solo candidata técnica** (20 pruebas visuales locales de Historia, paridad estándar y medios verificados). El backend v12 actual no admite Botánica y transforma `story.textMode='none'` en `preset`, por lo que faltan pedidos reales, integración RSVP/entrega y Android. No publicar ni certificar hasta resolver estos gates en entorno autorizado. Las referencias V14.5/V14.6 que aparezcan en la cronología son históricas, no estado vigente.
+
+---
+
 # GUEST — CANONICAL MASTER / DO NOT DRIFT
 
 Date: 2026-10-07
