@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 const assert=require('node:assert/strict');
-const {build}=require('../tools/prepare_test_only_backend_v13.cjs');
+const {build,assertGeneratedCatalog}=require('../tools/prepare_test_only_backend_v13.cjs');
 const {stripTypeScriptTypes}=require('node:module');
 const fixture="const CATALOG_TEMPLATES:any={\n  'veil-light':{id:'veil-light',version:'5.3.3',renderer:'veil-light-v5-3-3',active:true,typographyVariants:['classic','romantic','contemporary'],defaultTypographyVariant:'classic'}\n};\nfunction buildConfig(){\n  return {\n    template:{id:spec.id,version:pinnedVersion},\n    story:{textMode:story.textMode==='custom'?'custom':'preset',},\n    closing:{line:closing.mode==='custom'?txt(closing.customLine,80):'Gracias por formar parte de nuestra historia.'}\n  };\n}\nfunction validateQuestionnaire(q:any,files:any[]){\n  const e=[];\n  if(q?.story?.enabled&&q?.story?.textMode==='custom'&&!txt(q?.story?.customText,450))e.push('custom');\n}\nfunction hydrateConfig(config:any,files:any[]){\n  const map=new Map();\n  const walk=(x:any)=>{if(typeof x[k]==='string'&&x[k].startsWith('upload:'))x[k]=map.get(x[k].slice(7))||'';else walk(x[k])};\n  return config;\n}\nasync function createOrder(c:any,mode:'test'|'production'){\n  const spec=templateSpec(templateId),id=crypto.randomUUID(),qToken=token;\n  const {error}=await c.from('guest_invitation_orders').insert(row);\n}\nasync function submit(){\n      const config=buildConfig(questionnaire,order.files||[],'#',order.template_id,order.template_version),ts=now();\n      await internalSubmittedEmail(fresh);\n      if(email){\n        const steps='test';\n        await resend({to:[email],subject:'Hemos recibido vuestros datos',html:steps},'confirm');\n      }\n}\nasync function startDesign(){\n      const config=buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version),ts=now();\n}\nasync function setConfig(){\n      const config=b.config&&typeof b.config==='object'?b.config:null;if(!config)return json({ok:false,error:'invalid_config'},400);\n      const rawCfg=JSON.stringify(config);if(rawCfg.length>120000)return json({ok:false,error:'config_too_large'},400);\n}\nasync function markReviewReady(){\n      const ts=now(),config=Object.keys(order.resolved_config||{}).length?order.resolved_config:buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version);\n}\nasync function reviewLoad(){\n      if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);\n      const files=await signedFiles(c,order,7200),config=hydrateConfig(order.resolved_config||{},files);\n}\nasync function reviewRespond(){\n      if(decision==='approve'){\n        const {error}=await c.from('guest_invitation_orders').update({status:'approved'});\n        await resend({to:['weddlysmartdesign@gmail.com'],subject:'Invitación GUEST aprobada',html:'ok'},'approve');\n      }\n      await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados',html:'change'},'changes');\n}\nasync function publicLoad(){\n      const files=await signedFiles(c,order,86400),config=hydrateConfig(order.resolved_config||{},files);\n}\nasync function sendReview(){\n      const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);\n      const token=await capability(order.id,'r'),supplied=txt(b.reviewUrl,1200),localTest=order.mode==='test'&&!supplied;\n      const ok=await resend({to:[email],subject:localTest?'Revisión de prueba preparada':'Revisión real',html:'review'},'review');\n}\nasync function deliver(){\n      const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=hydrateConfig(order.resolved_config||{},publicFiles),ts=now();\n      const ok=await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Entrega real',html:'delivery'},'delivery');\n      const {error}=await c.from('guest_invitation_orders').update({files,resolved_config:config,delivery_url:inviteUrl||null,status:'delivered',delivered_at:ts,updated_at:ts});\n}\nfunction outer(){try{}catch(e){const m=String((e as Error)?.message||'');console.error(e);if(['questionnaire_too_large','invalid_config'].includes(m))return json({ok:false,error:m},400)}}";
 const patched=build(fixture);
@@ -37,4 +37,31 @@ assert.throws(()=>build(fixture.replace("x[k]=map.get(x[k].slice(7))||''", "x[k]
 assert.throws(()=>build(fixture.replace("const files=await copyPublicFiles(c,order)", "const files=await copyOtherFiles(c,order)")),/source_drift_or_duplicate:delivery_pre_post_gates/);
 assert.throws(()=>build(fixture.replace(".from('guest_invitation_orders').insert(row)","from('guest_invitation_orders').insert(row)")),/unreviewed_order_insert_paths/);
 assert.throws(()=>build(fixture.replace("await internalSubmittedEmail(fresh);","return true;")),/source_drift_or_duplicate:submission_internal_email/);
-console.log('PASS: guarded v13 generated with pinned strict schema, 11 lifecycle checks, signed-media fail closed and 7 mutation rejections. NO DEPLOY.');
+// The SAME preparer must work with any future template without hard-coded IDs.
+const manifest=[
+ {id:'veil-light',version:'5.3.3',status:'commercially-frozen'},
+ {id:'botanica',version:'14.7',status:'certification-pending'},
+ {id:'design-03',version:'1.0.0',status:'certification-pending'},
+ {id:'design-1000',version:'25.0.0',status:'certification-pending'}
+];
+const specs={
+ 'veil-light':{id:'veil-light',version:'5.3.3'},
+ botanica:{id:'botanica',version:'14.7',testOnly:true},
+ 'design-03':{id:'design-03',version:'1.0.0',testOnly:true},
+ 'design-1000':{id:'design-1000',version:'25.0.0',testOnly:true}
+};
+const sourceOf=entries=>'const CATALOG_TEMPLATES:any='+JSON.stringify(entries,null,2)+';\n// Call assertCatalogOrderMode(spec,mode) inside ALL order-creation routes.';
+assert.equal(Object.keys(assertGeneratedCatalog(sourceOf(specs),manifest)).length,4);
+const missing={...specs};delete missing['design-03'];
+assert.throws(()=>assertGeneratedCatalog(sourceOf(missing),manifest),/catalog_id_or_version_mismatch:design-03/);
+const promoted={...specs,'design-03':{...specs['design-03'],testOnly:false}};
+assert.throws(()=>assertGeneratedCatalog(sourceOf(promoted),manifest),/catalog_test_only_mismatch:design-03/);
+const drift={...specs,'design-1000':{...specs['design-1000'],version:'99.0'}};
+assert.throws(()=>assertGeneratedCatalog(sourceOf(drift),manifest),/catalog_id_or_version_mismatch:design-1000/);
+const orphan={...specs,unreviewed:{id:'unreviewed',version:'1',testOnly:true}};
+assert.throws(()=>assertGeneratedCatalog(sourceOf(orphan),manifest),/unexpected_generated_catalog_entries/);
+assert.throws(()=>assertGeneratedCatalog(sourceOf(specs),[manifest[0],manifest[1],manifest[1]]),/duplicate_expected_catalog_id/);
+assert.throws(()=>assertGeneratedCatalog('not a catalog',manifest),/unexpected_generated_catalog/);
+assert.equal(require('node:fs').readFileSync(require('node:path').resolve(__dirname,'../tools/prepare_test_only_backend_v13.cjs'),'utf8').includes('botanica_test_only_missing'),false,'Preparer must not require Botánica by name');
+
+console.log('PASS: guarded v13 generated with pinned strict schema, 11 lifecycle checks, signed-media fail closed and 7 drift mutations plus 7 generic multi-template regressions. NO DEPLOY.');
