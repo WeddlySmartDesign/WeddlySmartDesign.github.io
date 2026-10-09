@@ -36,6 +36,24 @@ function build(source){
    "  return {\n    template:{id:spec.id,",
    "  return {\n    schemaVersion:'guest-invitation-config-v1',\n    template:{id:spec.id,",
    'schema_version');
+ // Embed exactly the same pure normalization used by the Node contract QA.
+ // Do not import Node/CJS in Deno; no per-template or per-order branches.
+ const contract=fs.readFileSync(path.join(root,'guest/tools/backend_config_contract_v1.cjs'),'utf8');
+ const fnStart=contract.indexOf('function normalizeBackendInvitationConfig(');
+ const fnEnd=contract.indexOf('// Deno source can inline',fnStart);
+ if(fnStart<0||fnEnd<0)throw Error('backend_normalizer_source_drift');
+ const typed=contract.slice(fnStart,fnEnd)
+  .replace('function normalizeBackendInvitationConfig(input)', 'function normalizeBackendInvitationConfig(input:any)')
+  .replace('const optionalUrl = (object, key) =>', 'const optionalUrl = (object:any, key:string) =>');
+ source=once(source,'function buildConfig(',typed+'\nfunction buildConfig(','inject_shared_normalizer');
+ source=once(source,
+   "  return {\n    schemaVersion:'guest-invitation-config-v1',",
+   "  return normalizeBackendInvitationConfig({\n    schemaVersion:'guest-invitation-config-v1',",
+   'normalize_build_config');
+ source=once(source,
+   "    closing:{line:closing.mode==='custom'?txt(closing.customLine,80):'Gracias por formar parte de nuestra historia.'}\n  };\n}",
+   "    closing:{line:closing.mode==='custom'?txt(closing.customLine,80):'Gracias por formar parte de nuestra historia.'}\n  });\n}",
+   'normalize_build_config_close');
  source=once(source,
    "textMode:story.textMode==='custom'?'custom':'preset',",
    "textMode:story.textMode==='none'?'none':(story.textMode==='custom'?'custom':'preset'),",
@@ -76,6 +94,7 @@ function build(source){
    throw Error('unreviewed_email_paths');
  // Production VEIL logic is still subject to separate real regression.
  if(!source.includes("spec?.testOnly===true&&mode!=='test'"))throw Error('missing_test_only_guard');
+ if(!source.includes('return normalizeBackendInvitationConfig({'))throw Error('missing_config_normalization');
  return source;
 }
 if(require.main===module){
