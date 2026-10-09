@@ -31,6 +31,21 @@ node guest/qa/catalog_admission_gate.cjs
 
 - [ ] El primer comando no escribe; el segundo genera copia versionada, adaptador, registro comercial, registro de owner/visor y gates **PENDING**. Verificar `git diff` y no tocar otros diseños.
 - [ ] Testar visor V2 y la paridad de preview/review/final con la **misma** versión anclada. Verificar que la identidad no depende de nombres, textos o HTML filenames.
+
+**Preparación de una vista LOCAL sin publicar (común a cualquier plantilla):**
+
+```bash
+# Solo después de tener el nuevo asset HTML candidato y su SHA registrado en GUEST_PROJECT_STATUS_V1.json:
+node guest/tools/stage_owner_center_v2.cjs \
+  --center /ruta/al/centro-candidato-pinneado.html \
+  --asset '<id>=/ruta/al/master-candidato.html' \
+  --out-dir /ruta/nueva/salida-staging
+# Repetir --asset por cada candidato iframe adicional que se vaya a revisar en ese pack.
+# --botanica se conserva SOLO como alias CLI histórico; no es un paso específico obligatorio.
+```
+
+El script trabaja **exclusivamente offline**: comprueba el SHA del Centro candidato y cada asset contra la evidencia persistida por plantilla, rechaza rutas o versiones inesperadas, no sobrescribe fuentes, y genera un paquete con CSP que bloquea conexiones a servicios y envíos de formularios. No permite realizar pedidos E2E ni sustituye el Centro desplegado. **No copiar ni publicar** esa salida como web comercial. Los assets aún no certificados permanecen `testOnly`.
+
 - [ ] Probar flujo de contexto de invitado `rt`, `g` **o** `u`, `lang`; conservar RSVP existente y su almacenamiento. No crear envío paralelo.
 
 ## Fase 3 — certificación comercial por diseño (sigue siendo obligatoria)
