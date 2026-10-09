@@ -33,7 +33,7 @@ jobs:
           node guest/tests/owner_stage_overlay_v2.test.cjs
           node guest/tests/rsvp_form_async_load_guard.test.cjs
       - name: Export one-time owner stage source snapshot
-        if: startsWith(github.event.head_commit.message, 'qa(guest): capture owner stage source')
+        if: "${{ startsWith(github.event.head_commit.message, 'qa(guest): capture owner stage source') }}"
         uses: actions/upload-artifact@v4
         with:
           name: guest-owner-stage-source
