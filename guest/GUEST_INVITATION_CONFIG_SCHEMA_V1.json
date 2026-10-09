@@ -95,7 +95,7 @@
         },
         "coverPlace": {
           "type": "string",
-          "minLength": 1,
+          "minLength": 0,
           "maxLength": 36
         }
       }
@@ -292,12 +292,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "ctaLabel",
-        "plusOneEnabled",
-        "childrenEnabled",
-        "customQuestions",
-        "menu",
-        "dietary"
+        "ctaLabel"
       ],
       "properties": {
         "ctaLabel": {
@@ -463,6 +458,9 @@
             "null"
           ],
           "maxLength": 160
+        },
+        "autoFrame": {
+          "type": "boolean"
         }
       }
     },
@@ -505,7 +503,7 @@
         },
         "address": {
           "type": "string",
-          "minLength": 1,
+          "minLength": 0,
           "maxLength": 100
         },
         "mapsUrl": {
@@ -531,10 +529,7 @@
         "enabled",
         "pickupPoints",
         "outboundTimes",
-        "returnTimes",
-        "collectUsageInRSVP",
-        "collectRouteChoiceInRSVP",
-        "collectReturnChoiceInRSVP"
+        "returnTimes"
       ],
       "properties": {
         "enabled": {
@@ -545,7 +540,7 @@
           "maxItems": 3,
           "items": {
             "type": "string",
-            "maxLength": 60
+            "maxLength": 120
           }
         },
         "outboundTimes": {
@@ -553,7 +548,7 @@
           "maxItems": 3,
           "items": {
             "type": "string",
-            "maxLength": 10
+            "maxLength": 20
           }
         },
         "returnTimes": {
@@ -561,7 +556,7 @@
           "maxItems": 4,
           "items": {
             "type": "string",
-            "maxLength": 10
+            "maxLength": 20
           }
         },
         "note": {
@@ -594,8 +589,7 @@
       "additionalProperties": false,
       "required": [
         "enabled",
-        "mode",
-        "collectAccommodationInRSVP"
+        "mode"
       ],
       "properties": {
         "enabled": {
@@ -616,14 +610,14 @@
             "string",
             "null"
           ],
-          "maxLength": 55
+          "maxLength": 140
         },
         "address": {
           "type": [
             "string",
             "null"
           ],
-          "maxLength": 100
+          "maxLength": 180
         },
         "websiteUrl": {
           "type": [
@@ -644,28 +638,28 @@
             "string",
             "null"
           ],
-          "maxLength": 40
+          "maxLength": 60
         },
         "bookingCode": {
           "type": [
             "string",
             "null"
           ],
-          "maxLength": 40
+          "maxLength": 100
         },
         "bookingName": {
           "type": [
             "string",
             "null"
           ],
-          "maxLength": 60
+          "maxLength": 120
         },
         "discountText": {
           "type": [
             "string",
             "null"
           ],
-          "maxLength": 80
+          "maxLength": 160
         },
         "deadline": {
           "type": [
@@ -693,7 +687,7 @@
             "string",
             "null"
           ],
-          "maxLength": 140
+          "maxLength": 180
         },
         "collectAccommodationInRSVP": {
           "type": "boolean"
@@ -733,7 +727,7 @@
             "string",
             "null"
           ],
-          "maxLength": 100
+          "maxLength": 160
         },
         "details": {
           "type": [
@@ -816,7 +810,7 @@
             "string",
             "null"
           ],
-          "maxLength": 100
+          "maxLength": 160
         },
         "url": {
           "type": [
