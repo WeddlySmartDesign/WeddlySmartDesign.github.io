@@ -8,10 +8,14 @@ function fail(s){throw new Error('guest_owner_viewer:'+s)}
 const sameOrigin=u=>{const x=new URL(u,location.href);if(x.protocol!=='https:'&&x.protocol!=='http:')fail('unsupported_protocol');if(x.origin!==location.origin)fail('cross_origin_template');return x.href};
 async function show({order,config,host,registry}){
  if(!host||typeof host.replaceChildren!=='function')fail('host_missing');
- const id=String(order?.template_id||order?.templateId||config?.template?.id||'');
+ const id=String(order?.template_id||order?.templateId||'');
+ if(!id)fail('order_template_id_missing');
+ const pinned=order?.template_version||order?.templateVersion;
+ if(typeof pinned!=='string'||!pinned.trim())fail('order_template_version_missing:'+id);
  const spec=registry?.templates?.[id];if(!spec)fail('unknown_template:'+id);
- if(String(spec.version)!==String(order?.template_version||order?.templateVersion||config?.template?.version))fail('version_mismatch:'+id);
- if(config?.template?.id && config.template.id!==id)fail('config_id_mismatch:'+id);
+ if(String(spec.version)!==pinned)fail('version_mismatch:'+id);
+ if(config?.template?.id!==id)fail('config_id_mismatch:'+id);
+ if(String(config?.template?.version||'')!==pinned)fail('config_version_mismatch:'+id);
  if(spec.status!=='commercially-frozen'&&order?.mode!=='test')fail('pending_template_not_authorized_for_production:'+id);
  if(spec.mode==='native'){
    const apply=window[spec.applyApi];if(typeof apply!=='function')fail('native_adapter_missing:'+id);
