@@ -53,6 +53,7 @@ for(const t of registry.templates||[]){
     check(s.includes('applyConfig(config)'),'Adapter missing applyConfig '+t.id);
   }
   if(e.basis==='pre-existing-commercial-seal'){
+    check(t.id==='veil-light'&&String(t.version)==='5.3.3','Only VEIL LIGHT V5.3.3 may use historical certification: '+t.id);
     check(t.status==='commercially-frozen','Previous commercial seal changed '+t.id);
     check(fileExists(e.source),'Historical certification missing '+t.id);
     perTemplate[t.id]={status:t.status,evidence:'historical-seal',missing:[]};
