@@ -91,6 +91,17 @@ function validate(){
   requireIt(!!record,'catalog template missing from machine state: '+t.id);
   if(record){requireIt(record.version===t.version,'machine state version differs for '+t.id);requireIt(record.status===t.status,'machine state status differs for '+t.id)}
  }
+ const schema=load('guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json');
+ requireIt(schema.properties?.schemaVersion?.const==='guest-invitation-config-v1','canonical schemaVersion changed');
+ requireIt(schema.properties?.story?.properties?.textMode?.enum?.includes('none'),'shared Story none mode missing');
+ requireIt(schema.properties?.locations?.properties?.items?.maxItems===2,'shared two-venue configuration lost');
+ requireIt(schema.properties?.gallery?.properties?.photos?.maxItems===4,'shared four-photo gallery configuration lost');
+ requireIt(fs.readFileSync(file('guest/START_HERE.md'),'utf8').includes('GUEST_PROJECT_STATUS_V1.json'),'entrypoint no longer links the sole state');
+ const wf=fs.readFileSync(file('.github/workflows/guest-botanica-contract-qa.yml'),'utf8');
+ requireIt(wf.includes('node guest/qa/handoff_gate.cjs')&&wf.includes('node guest/tests/handoff_gate_test.cjs'),'CI no longer runs the single handoff gate and mutation test');
+ if(s.system.deploymentCertified!==true){
+  for(const t of reg.templates||[])requireIt(['veil-light','botanica'].includes(t.id),'new design onboarded before shared V2 E2E certification: '+t.id);
+ }
  requireIt(Array.isArray(s.runtime.lastObservedSupports)&&s.runtime.lastObservedSupports.includes('veil-light'),'certified VEIL no longer supported by last-observed backend');
  const counts={passed:pass,pending:reqs.length-pass,total:reqs.length};
  return {errors,counts,liveE2E:s.commercialGate.realOrderE2e};
