@@ -16,7 +16,8 @@ const required=[
  'guest/GUEST_CATALOGO_VISUAL_SISTEMA_COMUN_V2_2026-10-09.md',
  'guest/DESIGN_NEW_RUNBOOK.md',
  'guest/qa/catalog_admission_gate.cjs','guest/tools/register_visual_template.cjs',
- 'guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json'
+ 'guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json',
+ '.github/workflows/guest-botanica-contract-qa.yml'
 ];
 function sandbox(){const temp=fs.mkdtempSync(path.join(os.tmpdir(),'guest-handoff-'));for(const p of required){const dst=path.join(temp,p);fs.mkdirSync(path.dirname(dst),{recursive:true});fs.copyFileSync(path.join(sourceRoot,p),dst)}return temp}
 function run(root){return cp.spawnSync(process.execPath,[script,'--root',root],{encoding:'utf8',timeout:10000})}
@@ -30,7 +31,9 @@ const cases=[
  ['unverified E2E claimed',(r)=>mutate(r,'guest/GUEST_PROJECT_STATUS_V1.json',j=>{j.commercialGate.realOrderE2e='PASS'})],
  ['new registered while not started',(r)=>mutate(r,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',j=>{j.templates.push({id:'design-03',version:'1',status:'certification-pending'})})],
  ['unknown extra design without snapshot',(r)=>mutate(r,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',j=>{j.templates.push({id:'design-1000',version:'1.0.0',status:'certification-pending'})})],
- ['false production without gates',(r)=>mutate(r,'guest/GUEST_PROJECT_STATUS_V1.json',j=>{j.system.deploymentCertified=true;j.runtime.botanicaTestOnlyDeployed=true})]
+ ['false production without gates',(r)=>mutate(r,'guest/GUEST_PROJECT_STATUS_V1.json',j=>{j.system.deploymentCertified=true;j.runtime.botanicaTestOnlyDeployed=true})],
+ ['missing none mode in shared schema',(r)=>mutate(r,'guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json',j=>{j.properties.story.properties.textMode.enum=['preset','custom']})],
+ ['offline CI no longer runs handoff',(r)=>{const p=path.join(r,'.github/workflows/guest-botanica-contract-qa.yml');fs.writeFileSync(p,fs.readFileSync(p,'utf8').replace('node guest/qa/handoff_gate.cjs','# removed handoff'))}]
 ];
 {
  const s=sandbox();try{assert.equal(run(s).status,0, 'baseline handoff gate must PASS')}finally{fs.rmSync(s,{recursive:true,force:true})}
