@@ -177,6 +177,13 @@ function build(source){
    "      const ok=await resend({to:[email],subject:localTest?'Entrega de prueba completada'",
    "      const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Entrega de prueba completada'",
    'delivery_outbound_email');
+ source=once(source,
+   "}catch(e){const m=String((e as Error)?.message||'');console.error(e);if(['questionnaire_too_large'",
+   "}catch(e){const m=String((e as Error)?.message||'');console.error(e);"+
+   "if(['missing_signed_asset','missing_invitation_upload','missing_order_template_pin'].includes(m))return json({ok:false,error:m},409);"+
+   "if(['invalid_invitation_config','invitation_template_pin_mismatch','invalid_invitation_media','invalid_invitation_rsvp_route','untrusted_legacy_invitation'].includes(m))return json({ok:false,error:m},400);"+
+   "if(['questionnaire_too_large'",
+   'safe_api_error_codes');
  // Fail closed: the existing order system has a single insert entry point. Every
  // creation path must continue to pass through that guarded function.
  if((source.match(/\.from\('guest_invitation_orders'\)\.insert\(/g)||[]).length!==1)
