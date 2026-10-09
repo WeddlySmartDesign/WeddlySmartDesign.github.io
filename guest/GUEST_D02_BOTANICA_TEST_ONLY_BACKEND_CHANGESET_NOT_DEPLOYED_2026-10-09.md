@@ -36,7 +36,9 @@ async function createOrder(c:any,mode:'test'|'production',buyerEmail:string,lice
 }
 ```
 
-Este guard debe cubrir **todas** las rutas que crean pedidos (incluido el checkout) y no solo `create_test`. Confirmar eso leyendo la función íntegra antes de autorizar su despliegue. No cambiar Stripe, `main`, VEIL LIGHT, ONE, Partner ni STUDIO.
+Este guard debe cubrir **todas** las rutas que creen pedidos, no solo `create_test`. Revisión de código desplegado v12: `createOrder` está invocada en `create_test`; `guest-stripe-checkout` es otra Edge Function y hoy gestiona cobro/licencias, no inserta pedidos en `guest_invitation_orders`. Revalidar **ambas** funciones y cualquier otra ruta antes de abrir una plantilla nueva, sin suponer que el guard de una función protege a las demás. No cambiar Stripe, `main`, VEIL LIGHT, ONE, Partner ni STUDIO.
+
+**Control de correo de pruebas obligatorio:** la versión desplegada v12 invoca `resend()` también durante `submit`, `send_review` y `deliver` de pedidos `mode='test'` (la etiqueta `localTest` cambia el contenido, no elimina el envío). Antes de cualquier E2E real, exigir un destinatario de prueba controlado y una política verificada para impedir correos a clientes o direcciones externas; no usar datos reales ni probar estos pasos directamente en producción. Esta observación es una lectura de código, **no** acredita que el aislamiento de email esté implementado.
 
 ## Ensayos imprescindibles tras el despliegue autorizado
 
