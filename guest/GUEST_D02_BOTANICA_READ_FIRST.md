@@ -146,3 +146,15 @@ También se ha preparado una **copia separada** del Mobile Center con solo la ca
 ## ÚLTIMO ESTADO — INTEGRACIÓN DE RENDERIZADOR (09/10/2026)
 
 Ver `guest/GUEST_D02_BOTANICA_ESTADO_BLOQUEO_REAL_2026-10-09.md`. Se ha creado copia de preproducción del Mobile Center con el renderizador Botánica V14.7 aislado, sin duplicación de multimedia (paquete de dos archivos en Biblioteca `/GUEST by WeddlySmartDesign/BOTANICA/Preproduccion/GUEST_BOTANICA_MOBILE_CENTER_RENDERER_TEST_ONLY_2026-10-09.zip`, SHA256 `67c12d03fa2f1aeb4478a06db84291ba83d8a337a50687433f2ed6c422246238`). Prueba de sintaxis JS, paridad de fuente original y ZIP CRC **PASS**; prueba gráfica de navegador **BLOQUEADA por el entorno** con `net::ERR_BLOCKED_BY_ADMINISTRATOR`. **No se ha integrado ni publicado en producción.** La Edge Function sigue sin admitir Botánica y su despliegue test-only continúa bloqueado. La V14 aprobada sigue congelada; V14.7 continúa `certification-pending`. La certificación final E2E y Android **NO HECHAS**.
+
+## Admisión comercial verificable — control automático (09/10/2026)
+
+Antes de reclamar D02 como lista para vender, ejecutar `node guest/qa/catalog_admission_gate.cjs --admit botanica`. El registro de evidencias `guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json` marca **3/11 pruebas PASS** (matriz local, integridad multimedia, visual V14 aprobado) y **8/11 PENDING** (cuestionario común en producción, backend en test-only, renderizador real del centro, dos pedidos E2E reales, paridad revisión/final, RSVP persistente, Android, tiempo real de atención). También bloquea cinco incompatibilidades compartidas, incluida `schemaVersion` y `textMode='none'`. Es una barrera obligatoria y automática para D02–D06, no un sustituto del E2E.
+
+Comandos reproducibles:
+```bash
+node guest/qa/catalog_admission_gate.cjs
+node guest/tests/catalog_admission_gate_test.cjs
+node guest/qa/catalog_admission_gate.cjs --admit botanica
+```
+Los dos primeros deben pasar con estados honestos. El tercero debe rechazar la certificación mientras haya gates pendientes. Guía completa: `guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md`. No publicar, desplegar al margen de controles, ni iniciar D03 mientras el contrato compartido de D02 no esté resuelto.
