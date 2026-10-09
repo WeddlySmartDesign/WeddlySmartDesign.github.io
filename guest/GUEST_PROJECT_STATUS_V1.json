@@ -130,7 +130,7 @@
           "guest/tests/prepare_backend_test_only_v13.test.cjs"
         ],
         "executed": "3 CJS tests under in-memory emulated Node imports, plus actual-v12 buildConfig on 2 synthetic questionnaires PASS after planned v13 adaptation; no live orders",
-        "nativeRepositoryCI": "PASS GUEST Catalog and Continuity QA offline on code commit 6a3c5b036, run 37990684936. Independent QA on code commit bd2f6c892 PASS, 37990223827; latest 6a run 37990684974 pending at this observation. Not E2E.",
+        "nativeRepositoryCI": "PASS BOTH shared catalog (37990684936) and GUEST Independent (37990684974) on code commit 6a3c5b036. Still not E2E, not deployed, no Android owner final.",
         "note": "V13 strict config through submit/start_design/set_config/ready/approve/send_review/deliver; review/public read strict for new orders. Private media in test delivery, safe signed failure. Read-only legacy delivered test compatibility. Not deployed.",
         "guardSource": "guest/tools/invitation_runtime_gate_v1.cjs",
         "guardTest": "guest/tests/invitation_runtime_gate.test.cjs"
@@ -172,7 +172,7 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Check conclusion of Independent QA run 37990684974 for code commit 6a3c5b036, including possible B7.7 1366 intermittent visual event-scope failure. Never suppress legitimate visual assertions or claim latest HEAD green if not.",
+    "Keep both 6a3c5b036 code CI successes as evidence (Catalog 37990684936; Independent 37990684974). Confirm CI after documentation-only commits and investigate B7.7 intermittent desktop extra-event scope only if reproducible; never modify frozen visuals or suppress genuine assertions.",
     "Keep backend V12 deployed and V13 test-only offline until legitimate deployment authorization; no attempts to bypass environment safety blocker.",
     "Review safe error propagation, runtime schema, test-only private signed assets, owner config edit and production VEIL regression before authorized deployment; never bypass blocked environment",
     "Deploy only after legitimate authorization in controlled test-only channel, with rollback, zero Stripe/client email, no frozen visual changes",
@@ -192,9 +192,9 @@
     "catalogRun": "37990684936",
     "catalogAtCommit": "6a3c5b036",
     "catalogOutcome": "SUCCESS: catalog offline QA on 6a3c5b036, includes generic V13 registry contract and D03/D1000 synthetic mutation fixtures. This is not E2E.",
-    "independentRun": "37990223827",
-    "independentAtCommit": "bd2f6c892",
-    "independentOutcome": "SUCCESS: latest completed independent QA verified for code commit bd2f6c892. At documentation time Independent QA on commit 6a3c5b036 was not yet completed; do not claim PASS for it.",
+    "independentRun": "37990684974",
+    "independentAtCommit": "6a3c5b036",
+    "independentOutcome": "SUCCESS: GUEST Independent QA on 6a3c5b036 (37990684974), including B6 invitation RSVP and B6 two-device sync. This is CI, NOT live commercial E2E.",
     "source": "GitHub Actions job logs via connected GitHub; checkpoint guest/GUEST_BACKEND_CONFIG_RECONCILIATION_2026-10-09.md",
     "independentFollowup": {
       "observedFailure": "run 37968228481: children opt-in lost in B6 browser test",
@@ -228,15 +228,16 @@
       "catalogRun": 37990684936,
       "catalogConclusion": "success",
       "independentRun": 37990684974,
-      "independentConclusionAtObservation": "queued",
-      "lastFullyVerifiedIndependentRun": 37990223827,
+      "independentConclusionAtObservation": "success",
+      "lastFullyVerifiedIndependentRun": 37990684974,
       "lastFullyVerifiedIndependentConclusion": "success",
       "intermediateUnrelatedVisualQaFailure": {
         "runId": 37990485039,
         "job": "b7-final-visual-seal",
         "failure": "events legacy scope visible 1366",
         "status": "not reproduced on prior code commit bd2f6c892; if recurrent, diagnose without changing frozen visuals"
-      }
+      },
+      "lastFullyVerifiedIndependentCodeCommit": "6a3c5b036d87b67fcdccc9755ed070d1c2782baa"
     },
     "intermediateTestUpdateFailure": {
       "runId": 37990171524,
