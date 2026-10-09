@@ -1,0 +1,26 @@
+name: GUEST Botánica contract QA (offline)
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - 'guest/tests/botanica_catalog_bridge_offline.test.cjs'
+      - 'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'
+      - 'guest/guest-catalog-template-botanica-adapter-v1.js'
+      - 'guest/guest-catalog-delivery-runtime-v1.js'
+      - 'guest/tools/build_catalog_delivery.js'
+      - '.github/workflows/guest-botanica-contract-qa.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  contract-offline:
+    name: Registro, adaptador y puente RSVP simulados
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Ejecutar contrato Botánica sin datos ni red
+        run: node guest/tests/botanica_catalog_bridge_offline.test.cjs
