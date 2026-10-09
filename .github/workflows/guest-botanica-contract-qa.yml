@@ -7,6 +7,16 @@ on:
       - 'guest/qa/catalog_admission_gate.cjs'
       - 'guest/tests/catalog_admission_gate_test.cjs'
       - 'guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json'
+      - 'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json'
+      - 'guest/catalog/**'
+      - 'guest/tools/register_visual_template.cjs'
+      - 'guest/tools/generate_backend_catalog_registry.cjs'
+      - 'guest/templates/_example/**'
+      - 'guest/qa/catalog_preflight_v2.cjs'
+      - 'guest/qa/visual_plugin_system_contract.cjs'
+      - 'guest/tests/visual_plugin_onboarding.test.cjs'
+      - 'guest/tests/owner_viewer_generic.test.cjs'
+      - 'guest/tests/backend_catalog_generation.test.cjs'
       - 'guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json'
       - 'guest/tests/botanica_catalog_manifest_guard.test.cjs'
       - 'guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V3_2026-10-09.json'
@@ -33,5 +43,4 @@ jobs:
         run: |
           node guest/tests/botanica_catalog_bridge_offline.test.cjs
           node guest/tests/botanica_catalog_manifest_guard.test.cjs
-          node guest/qa/catalog_admission_gate.cjs
-          node guest/tests/catalog_admission_gate_test.cjs
+          node guest/qa/catalog_preflight_v2.cjs
