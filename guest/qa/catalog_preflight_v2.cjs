@@ -6,6 +6,8 @@
 const cp=require('node:child_process'),path=require('node:path');
 const root=path.resolve(__dirname,'../..');
 const tests=[
+ 'guest/qa/handoff_gate.cjs',
+ 'guest/tests/handoff_gate_test.cjs',
  'guest/qa/catalog_admission_gate.cjs',
  'guest/tests/catalog_admission_gate_test.cjs',
  'guest/qa/visual_plugin_system_contract.cjs',
