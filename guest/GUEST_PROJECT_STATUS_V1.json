@@ -130,7 +130,7 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Obtain verified native CI PASS for catalog/continuity tests; independently diagnose B6 children opt-in test failure without touching frozen products",
+    "Verify native CI PASS for both catalog-continuity and B6 Playwright browser test after common RSVP async-hydration race fix; do not assume success from static tests",
     "Finish shared strict validation of set_config/mark_review_ready and signed uploaded asset handling, check production order/checkout barriers, auth and all email paths",
     "Validate actual v13 backend config using strict reusable QA on two captured test-only configurations once authorized; VEIL regression; do not mistake two synthetic in-memory builds for real E2E",
     "Deploy safe test-only backend via authorized channel only, with verified rollback and zero client emails/Stripe",
@@ -153,6 +153,15 @@
     "independentRun": "37968228481",
     "independentAtCommit": "87a5a15",
     "independentOutcome": "FAILED job b6-invitation-rsvp: children opt-in was not persisted in config payload",
-    "source": "GitHub Actions job logs via connected GitHub; checkpoint guest/GUEST_BACKEND_CONFIG_RECONCILIATION_2026-10-09.md"
+    "source": "GitHub Actions job logs via connected GitHub; checkpoint guest/GUEST_BACKEND_CONFIG_RECONCILIATION_2026-10-09.md",
+    "independentFollowup": {
+      "observedFailure": "run 37968228481: children opt-in lost in B6 browser test",
+      "rootCause": "form inputs enabled before asynchronous remote RSVP hydration; late load could overwrite child toggle",
+      "scopedFix": "guest/guests-rsvp-form-flex.html",
+      "staticTest": "guest/tests/rsvp_form_async_load_guard.test.cjs",
+      "staticTestExecuted": "PASS in isolated JS harness",
+      "actualBrowserCI": "NOT YET VERIFIED PASS",
+      "additionalIntermediateCatalogFailure": "commit 4b14e0d due overly broad static regression assertion; corrected in ce6ea90dbc915dad3f3d5a2911d8dff90d1f1619"
+    }
   }
 }
