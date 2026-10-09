@@ -1,1 +1,35 @@
-The requested file reference is not currently visible. Use files.search or files.list to rediscover the file, then retry with a returned ref_id or file_id.
+#!/usr/bin/env node
+'use strict';
+// Pure offline metadata guard. Never connects to Supabase, Stripe, or customers.
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const dir=path.resolve(__dirname,'..');
+const txt=p=>fs.readFileSync(path.join(dir,p),'utf8');
+const registry=JSON.parse(txt('GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'));
+const manifest=JSON.parse(txt('GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V3_2026-10-09.json'));
+const ad=txt('guest-catalog-template-botanica-adapter-v1.js');
+const state=txt('GUEST_D02_BOTANICA_READ_FIRST.md');
+const template=registry.templates.find(t=>t.id==='botanica');
+const veil=registry.templates.find(t=>t.id==='veil-light');
+assert(template,'Botánica missing from registry');
+assert.equal(template.version,'14.7');
+assert.equal(template.status,'certification-pending');
+assert.equal(template.scalabilityCertified,false);
+assert.equal(template.operationalPilotPass,false);
+assert.equal(template.visualRobustnessPass,false);
+assert.equal(veil?.version,'5.3.3');
+assert.equal(veil?.status,'commercially-frozen');
+console.log('PASS: registry stays pinned, pending, and VEIL LIGHT frozen');
+assert.equal(manifest.visualApproval.version,'14');
+assert.equal(manifest.visualApproval.sha256,'27ede39dbf1e04dc7ee8e758601127eaf9de6e705f1f14a026df09fb72795c39');
+assert.equal(manifest.technicalCandidate.version,'14.7');
+assert.equal(manifest.technicalCandidate.sha256,'fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a');
+assert.equal(manifest.catalog.commerciallyCertified,false);
+assert.equal(manifest.catalog.backendTemplateEnabled,false);
+assert.equal(manifest.catalog.salesEnabled,false);
+console.log('PASS: manifest protects approved V14 and candidate V14.7');
+assert(ad.includes("version:'14.7'"),'adapter version mismatch');
+assert(ad.includes('BOTANICA_APPLY_CONFIG'),'adapter renderer contract missing');
+assert(state.includes('14.7'),'README not updated to newest candidate');
+assert(state.includes('CERTIFIC')||state.includes('certific'),'README lacks certification state');
+console.log('PASS: adapter / recovery README agree with manifest');
+console.log('RESULT 3/3 catalog manifest guards PASS (NOT E2E)');
