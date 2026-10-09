@@ -32,6 +32,19 @@ jobs:
           node guest/tests/owner_center_stage_v2.test.cjs
           node guest/tests/owner_stage_overlay_v2.test.cjs
           node guest/tests/rsvp_form_async_load_guard.test.cjs
+      - name: Export one-time owner stage source snapshot
+        if: startsWith(github.event.head_commit.message, 'qa(guest): capture owner stage source')
+        uses: actions/upload-artifact@v4
+        with:
+          name: guest-owner-stage-source
+          retention-days: 1
+          path: |
+            guest/tools/stage_owner_center_v2.cjs
+            guest/catalog/guest-catalog-owner-viewer-v2.js
+            guest/catalog/guest-owner-stage-overlay-v2.js
+            guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json
+            guest/GUEST_PROJECT_STATUS_V1.json
+
       - name: Verify one recovery state and deliberate failure mutations
         run: |
           node guest/qa/handoff_gate.cjs
