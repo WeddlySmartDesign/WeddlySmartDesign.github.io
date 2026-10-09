@@ -782,3 +782,7 @@ Automated QA before owner review:
 - minimal state with Story off, 0 venues, 1 agenda moment, 0 practical, 0 gallery: PASS.
 
 Status: **OWNER VISUAL APPROVAL PENDING.** Do not freeze or commercially certify V22 yet.
+
+## 20. Mandatory design QA for Designs 03–06
+
+For every future catalog design, **before any visual/code changes**, read and apply `guest/GUEST_DESIGN_PRODUCTION_QA_MASTER_D03_D06_2026-10-09.md` together with this canonical master, the live schema and the template contracts. That manual operationalizes full-scroll review, questionnaire parity, mobile/animation checks, immutable backups and escalation/rollback after regressions. **Do not delegate basic QA to the owner.** Only a candidate with documented checks may be sent for Android visual review. Botánica D02 V14 was visually owner-approved on 2026-10-09; do not label it commercially certified without its outstanding scalability/E2E gates. If instructions conflict, **this canonical master and the live schema/contracts take precedence**, and the conflict must be resolved before implementation.
