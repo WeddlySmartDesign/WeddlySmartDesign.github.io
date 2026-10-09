@@ -137,7 +137,35 @@
       "catalogOfflineStatus": "success",
       "independentLatestOnThisCode": "queued at last observed check",
       "realInputAuditLibrary": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_STAGE_REAL_INPUT_ANCHOR_AUDIT_2026-10-09.json",
-      "realE2e": false
+      "realE2e": false,
+      "realArtifactIntegration": {
+        "executionDate": "2026-10-09",
+        "sourceCodeCommit": "0871f22d74af5c1d9b23f2a271f5d5dde6bcc024",
+        "extractedAuthenticatedGitHubSourceArtifactId": 11646875417,
+        "htmlCenterSha256": "0832f4fac4ae51f5a3e305a0d06284a3ff4bb1a121ece4a4e8b01e5368605c7a",
+        "botanicaHtmlSha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+        "generatedCenterSha256": "5a82db99ddd43c8a3660f89d60b24ba067baaaa404eaa650ae96573220dc233b",
+        "generatedCenterBytes": 30046614,
+        "generatedAssetCount": 1,
+        "generatedManifest": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_OWNER_V2_REAL_STAGE_MANIFEST_2026-10-09.json",
+        "generatedAndHashesVerified": true,
+        "browserQA": {
+          "status": "BLOCKED_BY_ENVIRONMENT",
+          "attemptedViewports": [
+            "390x844",
+            "1366x900"
+          ],
+          "blockingError": "Page.goto net::ERR_BLOCKED_BY_ADMINISTRATOR on 127.0.0.1 BEFORE any page load",
+          "source": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_OWNER_V2_BROWSER_QA_BLOCKED_2026-10-09.json",
+          "succeeded": false,
+          "noAlternativeBypassAttempted": true
+        },
+        "stagingSourceExport": "temporary GitHub artifact generated once, CI step later removed, no designs uploaded to GitHub",
+        "originalMastersUnmodified": true,
+        "deployed": false,
+        "realE2E": false,
+        "customerCommercialReady": false
+      }
     }
   },
   "designs": {
@@ -272,12 +300,11 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Offline pack generator and source SHA check are complete as tooling; next genuine evidence gap is running the actual 30MB Center and 11MB V14.7 package through a browser with source-authentic GitHub viewer/overlay, and recording that QA in Library. Physical pack test so far uses synthetic assets only.",
-    "Do NOT bypass environmental deployment restriction: guest-invitation-flow v12 remains active, guarded V13 only offline. Check runtime source/rollback and obtain legitimate controlled test-only deployment authorization before any Supabase mutation.",
-    "Wire canonical questionnaire and generic viewer to distributed NEW Mobile Center, never modifying frozen V4.6; verify safety and VEIL historical regression before deploy.",
-    "Run two distinct persisted test orders end-to-end with common questionnaire, reviews, stable final URL, private media and recipient RSVP g/u persistence, zero commercial email/Stripe. Current Botánica remains 3/11.",
-    "Owner Android final and <=5-min review only after E2E; publish/payment require separate explicit approval. No new designs before platform certification.",
-    "Before any multi-template checkout release, require selected certified template ID/version across Stripe and created order; reject pending templates."
+    "AUTHORIZATION/ENVIRONMENT BLOCK: Chromium navigation to genuine local staged V2 pack denied with ERR_BLOCKED_BY_ADMINISTRATOR, before page load at 390 and 1366. Do not bypass restrictions. Re-run in a legitimately permitted browser environment; no Android PASS claimed.",
+    "Backend test-only V13 not deployed; legitimate controlled test-only authorization plus rollback and real E2E environment required. Do not attempt bypass of earlier deployment restriction; keep guest-invitation-flow v12 and frozen VEIL unchanged.",
+    "Deploy a NEW common Mobile Center and unified questionnaire only when authorized; preserve frozen V4.6. Verify VEIL regression and Botánica iframe renderer.",
+    "Two distinct persisted test orders end-to-end review/final/stable URL/private media and recipient RSVP g/u. Botánica stays 3/11.",
+    "Owner actual Android final and <=5-min owner touch, then explicit commercial release and Stripe template pinning as separate gate. No D03+ until shared platform genuinely certified."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
@@ -342,7 +369,20 @@
       ],
       "intermediateResolutions": "updated same regression fixtures and added synthetic design-03 in commit 2357ce041; both workflows PASS",
       "independentConclusionAtObservation": "queued",
-      "lastCompletedIndependentAtPriorCode": "c7b22041b4ca430b55d7341cc69626d1a6188985"
+      "lastCompletedIndependentAtPriorCode": "c7b22041b4ca430b55d7341cc69626d1a6188985",
+      "latestHeadAfterRestoration": "40ea02cb303bbc59b715800fd90735d196c74d98",
+      "catalogRunAfterRestoration": 37994357802,
+      "catalogConclusionAfterRestoration": "success",
+      "independentRunOnLastCode": 37993893017,
+      "independentConclusionOnLastCode": "success",
+      "ciTempSourceCapture": {
+        "invalidWorkflowIntermediateCommit": "756fac444e7436051c20cee4a55376faa63f9db1",
+        "reason": "unquoted YAML if expression containing ': ' caused parser error; corrected with YAML-quoted expression",
+        "validCaptureCommit": "0871f22d74af5c1d9b23f2a271f5d5dde6bcc024",
+        "validCatalogRun": 37994147760,
+        "restoredNormalWorkflowCommit": "40ea02cb303bbc59b715800fd90735d196c74d98",
+        "noPersistentExportStep": true
+      }
     },
     "intermediateTestUpdateFailure": {
       "runId": 37990171524,
