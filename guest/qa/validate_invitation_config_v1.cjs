@@ -61,20 +61,8 @@ function validate(data,contract=schema){
    }
   }
  }
- walk(data,contract,'
-}
-if(require.main===module){
- const argv=process.argv.slice(2),input=argv[0];
- if(!input)throw Error('Usage: node guest/qa/validate_invitation_config_v1.cjs CONFIG.json');
- const candidate=JSON.parse(fs.readFileSync(input,'utf8'));
- const errors=validate(candidate);
- if(errors.length){console.error('FAIL GUEST schema validation:\n'+errors.map(e=>' - '+e).join('\n'));process.exitCode=1}
- else console.log('PASS GUEST config schema v1 (offline): '+input);
-}
-module.exports={validate,schema};
-);
- // Semantic invariants from the *shared* questionnaire, not per-template rules.
- // Structural errors remain in the list; these conditions never add defaults.
+ walk(data,contract,'$');
+ // Semantic invariants from the shared questionnaire; no per-template branches.
  if (data && typeof data === 'object' && !Array.isArray(data)) {
   if (data.cover?.showPlace === true && !String(data.wedding?.coverPlace || '').trim())
    errors.push('$.wedding.coverPlace:required_when_shown');
