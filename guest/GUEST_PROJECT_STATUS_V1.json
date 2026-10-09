@@ -74,6 +74,43 @@
       "independentQAOnLatestCode": "NOT VERIFIED at time of this checkpoint",
       "deployed": false,
       "realE2E": false
+    },
+    "ownerStageGenericPackV2": {
+      "tool": "guest/tools/stage_owner_center_v2.cjs",
+      "test": "guest/tests/owner_center_stage_v2.test.cjs",
+      "codeCommits": [
+        "8e325d9cc1297b5c53f6898ac0ffae25367f3cc7",
+        "feb1646f563671d7e7c77ca8484b5d0d1ebab7aa"
+      ],
+      "testCommit": "2357ce041bbc741f89669f1e0de16cf3988c9397",
+      "scope": "local preproduction only; registry-driven iframe assets for every registered candidate, no need for per-template code",
+      "integrity": "all source assets SHA256 verified against per-template candidateSha256 or visualMasterSha256 in canonical status; source center checksum fixed",
+      "protection": "CSP connect-src none; form-action none on generated local HTML; output dir must not exist; all sources preserved",
+      "testFixtures": [
+        "veil-light native legacy",
+        "botanica iframe",
+        "design-03 synthetic iframe"
+      ],
+      "actualCandidateInspection": {
+        "centerLibrary": "/GUEST by WeddlySmartDesign/BOTANICA/Preproduccion/GUEST_MOBILE_CENTER_V4_6_SOLO_FOTO_REGALO_INTEGRADO_CANDIDATA_NO_PUBLICAR_2026-10-09.html",
+        "centerSha256": "0832f4fac4ae51f5a3e305a0d06284a3ff4bb1a121ece4a4e8b01e5368605c7a",
+        "botanicaSha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+        "sevenUniqueIntegrationAnchors": "PASS in actual 30MB candidate HTML",
+        "questionnaireEmbedded": "base64 decoded; Story none and gift text present; not runtime/E2E verified"
+      },
+      "catalogOfflineQA": {
+        "run": 37992983172,
+        "commit": "2357ce041bbc741f89669f1e0de16cf3988c9397",
+        "result": "success"
+      },
+      "independentQA": {
+        "run": 37992983155,
+        "commit": "2357ce041bbc741f89669f1e0de16cf3988c9397",
+        "result": "success"
+      },
+      "note": "Neither checked-in tooling nor static audit proves a generated browser pack, deployed Center, live orders or Android verification. No Botánica gate promoted.",
+      "deployed": false,
+      "commercialReady": false
     }
   },
   "designs": {
@@ -208,14 +245,12 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Verify Independent QA for latest code commit 8d96595404 / owner staging checks; do not treat offline catalog PASS as Android or real invitation E2E.",
-    "Keep backend V12 deployed and V13 test-only offline until legitimate deployment authorization; no attempts to bypass environment safety blocker.",
-    "Review safe error propagation, runtime schema, test-only private signed assets, owner config edit and production VEIL regression before authorized deployment; never bypass blocked environment",
-    "Deploy only after legitimate authorization in controlled test-only channel, with rollback, zero Stripe/client email, no frozen visual changes",
-    "Prepare and verify one non-frozen Mobile Center v2 release using existing generic viewer/registry, with input-identity and pinned-version guards; keep V4.6 frozen and do not publish without authorized deployment and rollback.",
-    "Run two actual distinct test-mode orders, signed upload/review/final stable URL and real GUEST RSVP g/u persistence; then owner Android and <=5 minute measurement",
-    "Retain Botánica 3/11 commercial passes, 8 PENDING until independent real evidence; publication/payment separately authorized",
-    "Before any authorized catalog checkout launch, reconcile edition-level guest-stripe-checkout v20 with selected certified template ID/version, prevent checkout for pending/testOnly templates, and verify purchase-to-order pinning separately. Do NOT enable Stripe or charge during test-only certification."
+    "Generate and browser-test a real offline nonfrozen Mobile Center V2 package from the SHA-pinned candidate using the generic stage tool and assets available in Library. This remains an offline proof, not a deployment.",
+    "Do NOT bypass environmental deployment restriction: guest-invitation-flow v12 remains active, guarded V13 only offline. Check runtime source/rollback and obtain legitimate controlled test-only deployment authorization before any Supabase mutation.",
+    "Wire canonical questionnaire and generic viewer to distributed NEW Mobile Center, never modifying frozen V4.6; verify safety and VEIL historical regression before deploy.",
+    "Run two distinct persisted test orders end-to-end with common questionnaire, reviews, stable final URL, private media and recipient RSVP g/u persistence, zero commercial email/Stripe. Current Botánica remains 3/11.",
+    "Owner Android final and <=5-min review only after E2E; publish/payment require separate explicit approval. No new designs before platform certification.",
+    "Before any multi-template checkout release, require selected certified template ID/version across Stripe and created order; reject pending templates."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
@@ -226,12 +261,12 @@
   ],
   "ciObserved": {
     "verificationDate": "2026-10-09",
-    "catalogRun": "37991814787",
-    "catalogAtCommit": "8d96595404",
-    "catalogOutcome": "SUCCESS on 8d96595404: shared viewer pin guard and new 3-template stage overlay test included. OFFLINE, NOT E2E.",
-    "independentRun": "37991350084",
-    "independentAtCommit": "ddaa4cd38",
-    "independentOutcome": "SUCCESS previously verified on ddaa4cd38. Independent QA on latest owner V2 code still queued/in progress at checkpoint.",
+    "catalogRun": "37992983172",
+    "catalogAtCommit": "2357ce041",
+    "catalogOutcome": "SUCCESS: registered generic multi-template owner stage and CSP test on 2357ce041; does NOT prove deployed runtime or real E2E.",
+    "independentRun": "37992983155",
+    "independentAtCommit": "2357ce041",
+    "independentOutcome": "SUCCESS: GUEST Independent QA on same code commit 2357ce041; not owner Android or commercial E2E.",
     "source": "GitHub Actions job logs via connected GitHub; checkpoint guest/GUEST_BACKEND_CONFIG_RECONCILIATION_2026-10-09.md",
     "independentFollowup": {
       "observedFailure": "run 37968228481: children opt-in lost in B6 browser test",
@@ -261,20 +296,24 @@
     },
     "latestObserved": {
       "at": "2026-10-09",
-      "headCodeCommit": "8d96595404ca666ceecac345b358eadadeb04be6",
-      "catalogRun": 37991814787,
+      "headCodeCommit": "2357ce041bbc741f89669f1e0de16cf3988c9397",
+      "catalogRun": 37992983172,
       "catalogConclusion": "success",
-      "independentRun": 37991800377,
-      "independentConclusionAtObservation": "queued",
-      "lastFullyVerifiedIndependentRun": 37991350084,
-      "lastFullyVerifiedIndependentConclusion": "success",
-      "intermediateUnrelatedVisualQaFailure": {
-        "runId": 37990485039,
-        "job": "b7-final-visual-seal",
-        "failure": "events legacy scope visible 1366",
-        "status": "not reproduced on prior code commit bd2f6c892; if recurrent, diagnose without changing frozen visuals"
-      },
-      "lastFullyVerifiedIndependentCodeCommit": "ddaa4cd38fb4067d3d52e59a5894134bab1c64b5"
+      "independentRun": 37992983155,
+      "independentConclusion": "success",
+      "intermediateFailures": [
+        {
+          "run": 37992883023,
+          "sha": "8e325d9",
+          "cause": "former staging mock lacks <head> for new CSP"
+        },
+        {
+          "run": 37992934894,
+          "sha": "feb1646f5",
+          "cause": "legacy staging test expected hardcoded botanica manifestation"
+        }
+      ],
+      "intermediateResolutions": "updated same regression fixtures and added synthetic design-03 in commit 2357ce041; both workflows PASS"
     },
     "intermediateTestUpdateFailure": {
       "runId": 37990171524,
