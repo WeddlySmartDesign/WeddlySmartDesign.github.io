@@ -164,6 +164,15 @@ function build(source){
    "update({files,resolved_config:order.mode==='test'?order.resolved_config:config,delivery_url:inviteUrl||null,status:'delivered'",
    'test_delivery_keep_upload_refs');
 
+ // Existing V12 allows test orders to say "delivered" with empty delivery_url.
+ // An empty test delivery cannot prove end-to-end invitation sharing or RSVP.
+ // Require an actual final link for BOTH modes in the isolated V13 candidate.
+ // This does not update V12 or any pre-existing delivered rows.
+ source=once(source,
+   "if(order.mode==='production'&&!inviteUrl)return json({ok:false,error:'missing_invitation_url'},400);",
+   "if(!inviteUrl)return json({ok:false,error:'missing_invitation_url'},400);",
+   'test_delivery_requires_final_url');
+
  // Failing signatures from the signing API must NOT become blank images.
  source=once(source,
    "if(typeof x[k]==='string'&&x[k].startsWith('upload:'))x[k]=map.get(x[k].slice(7))||'';else walk(x[k])",
