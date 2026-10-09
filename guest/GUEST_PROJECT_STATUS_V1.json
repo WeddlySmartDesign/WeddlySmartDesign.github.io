@@ -429,6 +429,73 @@
       "edgeDeployed": false,
       "checkoutModified": false,
       "commercialReady": false
+    },
+    "endToEndDeliveryLinkAudit20261010": {
+      "observedAt": "2026-10-10",
+      "scope": "READ_ONLY live V12 source, GUEST bridge and recipient context, aggregate SQL of legacy tests, storage bucket metadata; no PII, no writes",
+      "liveBackend": "guest-invitation-flow v12 (unchanged)",
+      "historical": {
+        "testDelivered": 2,
+        "testDeliveredWithFinalUrl": 0,
+        "testDeliveredWithLicense": 0,
+        "testDeliveredReadyForMemberBridge": 0,
+        "allLegacyTestOrders": 3
+      },
+      "actualBridge": {
+        "memberLookup": "active_for_member requires matching license_id plus delivered status plus nonempty delivery_url",
+        "createTest": "current create_test inserts license_id=null; never claim test delivery validates manager app",
+        "recipient": "existing GUEST bridge decorates URL with rt + g|u + lang and falls back to legacy if active_for_member returns inactive",
+        "consequence": "Test E2E must separately prove persisted RSVP and license-bound management integration; a delivered flag alone is not evidence."
+      },
+      "storage": {
+        "guest-invitation-uploads": {
+          "public": false,
+          "maxBytes": 15728640,
+          "types": [
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/heic",
+            "image/heif"
+          ]
+        },
+        "guest-invitation-public": {
+          "public": true,
+          "maxBytes": 15728640,
+          "types": [
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/heic",
+            "image/heif"
+          ]
+        },
+        "testModeRule": "never copy uploaded test images to public; use renewable signed URLs and persistent upload references"
+      },
+      "v13CandidateFix": {
+        "generator": "guest/tools/prepare_test_only_backend_v13.cjs",
+        "commit": "aebf544e48d4e6b285e36b7417df7bd8867edb1f",
+        "test": "guest/tests/prepare_backend_test_only_v13.test.cjs",
+        "testCommit": "9ad67b7b346778854058e08afc8fdea2db146673",
+        "newInvariant": "No mode=test or mode=production order may become delivered without nonempty invitationUrl. Additional HTTPS/domain/security validation remains required for commercial release.",
+        "offlineCatalogRun": 37999040984,
+        "offlineCatalogResult": "success",
+        "deployed": false
+      },
+      "stagingChoices": {
+        "currentSupabaseBranches": 0,
+        "supabasePreviewBranch": "Requires Pro + usage billing according to current Supabase docs; user cost confirmation required before branch creation",
+        "localSupabase": "Free, but working environment lacks Supabase CLI and Docker/Podman runtime and cannot download. Native runtime is experimental; not validated.",
+        "prohibit": [
+          "do not reuse STUDIO",
+          "do not change live v12 or legacy orders",
+          "do not incur charges without consent",
+          "do not bypass browser administrative block"
+        ]
+      },
+      "acceptance": "Two truly distinct Botánica orders with valid stable HTTPS URLs, private signed media, review-final parity, g/u persisted RSVP; separate synthetic-license app bridge validation in isolated environment; Android owner and <=5 minutes. No gates elevated.",
+      "document": "guest/GUEST_BACKEND_CONFIG_RECONCILIATION_2026-10-09.md section 10",
+      "commercialCertified": false
     }
   },
   "commercialGate": {
@@ -449,10 +516,10 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "NO-GO live backend V13 on 2026-10-10: Supabase list_branches returned zero isolated branches and an old TEST/DESIGNING VEIL order is not covered by read-only legacy compatibility (read-only aggregate evidence). Do not replace active V12 or use STUDIO as staging.",
-    "Use only a legitimately authorized isolated GUEST runtime with rollback/permissions and verified cost before V13 test-only deployment; preserve production v12 digest and 3 historical orders.",
-    "Verify V13 and new Owner Center V2 integrated in protected test environment with real browser, two independent Botánica persisted test orders, stable review/final links, photos and RSVP g/u; Android owner and <=5min thereafter.",
-    "Do not sell or start D03 until Botánica 11/11 with explicit separate checkout release. Continue using common V2; no parallel engines or frozen edits."
+    "Obtain user-authorized genuinely isolated GUEST staging environment (Supabase branch requires confirmed cost/Pro; local stack currently unavailable). Do not create billable resources or bypass restrictions without explicit consent.",
+    "Once isolated, deploy test-only V13 with candidate URL-presence guard and verify real HTTPS final URL for two Botánica orders; test media signed, previews/reviews/final, zero emails/Stripe/public test media.",
+    "Use synthetic member+license in isolated test environment to prove active_for_member bridging, original share composer and persisted g/u RSVP; 2 historical delivered tests are NOT acceptable evidence because both have null URL and license.",
+    "Owner Android final and ≤5-minute intervention; only after genuine 11/11 gates and independent checkout release could Botánica be sold. No D03 yet."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
@@ -533,14 +600,20 @@
       },
       "latestCodeHead": "eac596850ef6de9136bdf86baa9313b566214541",
       "lastCompletedBothAtHead": "d8773e2cd41e3dd13db2ad7e2c7222b3221fb827",
-      "note": "Catalog CI PASS on latest async code; Independent CI pending when written; no new commercial gate.",
+      "note": "Do not claim new documentation HEAD green until GitHub Actions conclude. V13 is not deployed.",
       "catalogConclusionAtObservation": "queued",
       "lastCatalogPassingRun": 37996238912,
       "lastCatalogPassingCommit": "83a1e4b98591f0b86db8a7b8262be967b77b82cb",
       "lastIndependentPassingRun": 37995936520,
       "lastIndependentPassingCommit": "5ab79b91cd91bf52b0ab2eb4c4f16dd2bc52a98f",
       "verifiedBeforeReleaseAssessmentHead": "e5d8c8630e4d76180dde99c0700a526ffa44077c",
-      "assessmentUpdatesAfterCode": "documentation only; must recheck GitHub Actions for new docs HEAD"
+      "assessmentUpdatesAfterCode": "documentation only; must recheck GitHub Actions for new docs HEAD",
+      "lastVerifiedOriginalBeforeChange": "28ce1e8ea0775a916378d90f37ed31829232d528",
+      "v13UrlContractCodeCommit": "9ad67b7b346778854058e08afc8fdea2db146673",
+      "offlineCatalogRun": 37999040984,
+      "offlineCatalogConclusion": "success",
+      "independentQaRun": 37999040876,
+      "independentQaConclusionAtLastObservation": "in_progress"
     },
     "intermediateTestUpdateFailure": {
       "runId": 37990171524,
