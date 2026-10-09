@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "guest-current-truth-v1",
+  "observedAt": "2026-10-09",
+  "project": "GUEST by WeddlySmartDesign",
+  "repository": "WeddlySmartDesign/WeddlySmartDesign.github.io",
+  "branch": "guest-independent",
+  "readFirst": "guest/START_HERE.md",
+  "productAuthority": "guest/GUEST_CANONICAL_MASTER_DO_NOT_DRIFT_2026-10-07.md",
+  "schemaAuthority": "guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json",
+  "catalog": "guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json",
+  "evidence": "guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json",
+  "ownerRegistry": "guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json",
+  "visualSystem": "guest/GUEST_PLATFORM_VISUAL_V2_READ_FIRST_2026-10-09.md",
+  "designManual": "guest/GUEST_DESIGN_PRODUCTION_QA_MASTER_D03_D06_2026-10-09.md",
+  "architecture": {
+    "codeV2Implemented": true,
+    "codeV2LocallyTested": true,
+    "distributedMobileCenterUsesV2": false,
+    "deployedBackendUsesV2": false,
+    "commonPlatformCommerciallyCertified": false,
+    "nextDesignAllowed": false,
+    "newDesignContract": ["master.html", "visual-plugin.json", "GUEST_APPLY_CONFIG"],
+    "commonFlow": ["one questionnaire", "one backend", "one owner center", "one delivery", "existing GUEST RSVP"]
+  },
+  "templates": {
+    "veil-light": {
+      "version": "5.3.3",
+      "state": "commercially-frozen",
+      "certificationBasis": "previously certified in common pipeline",
+      "frozen": true,
+      "source": "guest/GUEST_CATALOG_PIPELINE_V1_FINAL_CERTIFICATION_2026-10-07.md"
+    },
+    "botanica": {
+      "visualMasterVersion": "14",
+      "visualMasterSha256": "27ede39dbf1e04dc7ee8e758601127eaf9de6e705f1f14a026df09fb72795c39",
+      "technicalCandidateVersion": "14.7",
+      "technicalCandidateSha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+      "state": "certification-pending",
+      "evidencePassed": 3,
+      "evidenceTotal": 11,
+      "commerciallyCertified": false,
+      "source": "guest/GUEST_D02_BOTANICA_READ_FIRST.md",
+      "manifest": "guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V3_2026-10-09.json",
+      "visualMasterLibrary": "/GUEST by WeddlySmartDesign/BOTANICA/Checkpoints/GUEST_D02_BOTANICA_ATELIER_V14_FROZEN_2026-10-09.html",
+      "technicalCandidateLibrary": "/GUEST by WeddlySmartDesign/BOTANICA/Candidatas/GUEST_D02_BOTANICA_ATELIER_V14_7_PHOTO_ONLY_VISUAL_QA_CANDIDATE_2026-10-09.html"
+    }
+  },
+  "lastObservedBackend": {
+    "projectId": "dnjsxequwgtyyauuofxj",
+    "function": "guest-invitation-flow",
+    "version": 12,
+    "sha256Metadata": "69ef41f9867eb048b052632141be9b8e5ea53aa78a63ade1883e1e88da7b28ac",
+    "supportsBotanica": false,
+    "emitsSchemaVersion": false,
+    "preservesStoryNone": false,
+    "deploymentBlockedByEnvironment": true,
+    "observationNotLiveCheck": true
+  },
+  "pendingCommercialGates": [
+    "common-questionnaire",
+    "backend-test-only",
+    "renderer",
+    "two-real-test-orders",
+    "review-final-parity",
+    "recipient-rsvp",
+    "owner-android",
+    "owner-touch"
+  ],
+  "deployment": {
+    "publicSaleAuthorized": false,
+    "stripeEnabledForBotanica": false,
+    "mainBranchUpdated": false,
+    "productsOutsideGuestTouched": false,
+    "twoOfflineMockOrdersPass": true,
+    "twoRealTestOrdersPass": false,
+    "realRSVPPersistencePass": false,
+    "ownerAndroidPass": false
+  },
+  "operationalBlocker": "Authorized Supabase test-only backend and actual V2 owner-center deployment/integration, followed by real E2E and Android certification. No bypass of blocked tools.",
+  "notes": "All statuses are as-of snapshots. CI verifies repository consistency, not live Supabase or external Library bytes. A future authorized deployment requires a fresh backend read and updating this truth file with evidence."
+}
