@@ -127,3 +127,35 @@ La comprobación SQL es una **aproximación estática conservadora** de la lógi
 Para convertir esta condición en GO **sin rediseñar la arquitectura**, el siguiente operador deberá acreditar, por orden: (a) destino de pruebas **legítimamente aislado/autorizado**, con coste y permisos conocidos, que no sea el proyecto STUDIO; (b) respaldo exacto de v12, versión/verify_jwt/configuración y camino de reversión; (c) decisión explícita sobre la **continuación del test histórico `designing`** sin alterar sus datos; (d) V13 solo test-only, sin Stripe, correos ni recursos públicos permanentes, con prueba VEIL; (e) Centro V2 nuevo y dos pedidos E2E de Botánica más RSVPs g/u y Android; (f) 11/11 gates antes de considerar venta, bajo autorización comercial independiente.
 
 **Importante:** ninguna alternativa debe exigir comprar un plan o herramienta por defecto; la opción de staging deberá valorarse por coste concreto y seguridad. Un entorno local aislado requiere recursos y una vía de ejecución realmente disponible; no se afirma que exista en la sesión actual. Las suites GitHub offline están en verde pero **no levantan un backend real**. Mantener Botánica 3/11 y no iniciar D03.
+
+## 10. 10/10/2026 — La entrega de pruebas no demuestra el puente con invitados; criterio verificable de E2E
+
+**Pruebas de servicio SOLO LECTURA; no hay despliegue.** Se cotejó el código de la función activa `guest-invitation-flow` v12 y los módulos `guest/guests-catalog-invitation-bridge-v1.js` / `guest/guest-catalog-recipient-context-v1.js` con tres consultas SELECT agregadas, sin recuperar datos personales, tokens, licencias concretas ni fotografías.
+
+### Tres dependencias del circuito comercial real
+
+1. **Entrega con URL final:** v12 permite que un pedido `test` pase a `delivered` sin `invitationUrl`: `delivery_url` termina como `null`. Los **dos** ensayos históricos con estado `test/delivered` tienen efectivamente **0 URLs finales**. Una etiqueta de estado no acredita la invitación lista para compartir. En el generador **NO DESPLEGADO** de V13 se ha cerrado la discrepancia: tanto `test` como `production` deben presentar `invitationUrl` no vacío antes de registrar `delivered` (commit `aebf544e48d4e6b285e36b7417df7bd8867edb1f`). La prueba de contrato que impide volver a admitir test sin URL es `guest/tests/prepare_backend_test_only_v13.test.cjs` (commit `9ad67b7b346778854058e08afc8fdea2db146673`); no retroconvierte los registros históricos ni promueve Botánica.
+2. **Misma licencia en app de gestión:** `active_for_member` busca únicamente una invitación `delivered` con `guest_invitation_orders.license_id = wedding_members.license_id` y una `delivery_url` no vacía. `create_test` crea `license_id:null`. En SQL agregado, **0 de los 2 pedidos test entregados** tienen licencia asociada y **0 de 2** cumplen ambas condiciones. Aunque se entregue con URL en V13, **eso no prueba automáticamente el envío desde la app**. No asociar una licencia real a un test ni habilitar rutas de producción por conveniencia. La prueba de integración comercial GUEST↔gestión debe utilizar una licencia *ficticia válida* en entorno aislado (sin afectar usuarios reales) o un procedimiento equivalente revisado y autorizado.
+3. **RSVP personalizado y persistencia:** el bridge ya preparado añade `rt` y `g` **o** `u`, más `lang`, sobre la URL final; `guest-catalog-recipient-context-v1.js` reconstruye la ruta de la gestión RSVP existente. Hay que observar en un entorno con **escritura de prueba autorizada** que las respuestas de persona y unidad se guardan en el motor GUEST, no solo que los enlaces llevan parámetros. Los dos pedidos históricos no constituyen dicha evidencia.
+
+### Almacenamiento real verificado por metadatos, SIN leer fotos
+
+- `storage.buckets.guest-invitation-uploads`: **privado**, tamaño máximo 15 MiB, formatos JPEG/PNG/WebP/HEIC/HEIF.
+- `storage.buckets.guest-invitation-public`: **público**, mismos límites. Precisamente por esta distinción, **V13 en modo test no debe copiar fotos a public**; debe firmar las fuentes privadas temporalmente, conservar los `upload:` persistidos y renovar los enlaces temporales al recuperar la invitación.
+- Las únicas políticas RLS de `storage.objects` observadas en la consulta agregada corresponden a documentos de Partner (4 políticas); no se efectuaron operaciones `INSERT/UPDATE/DELETE`. Esto no equivale a certificar seguridad: hay que revisar la función de servicio y su control de permisos en la rama de pruebas.
+
+### Dos E2E obligatorios (no meros mocks)
+
+**Pedido de prueba 1, Botánica foto-only:** historia `none` con fotografía, dos sedes distintas, RSVP con destinatario `g`, revisión de propietaria, aprobación de pareja, URL final HTTPS **no vacía**, recarga y persistencia real de respuesta. Se comprueba que no se envían correos, no hay Stripe y ningún archivo de prueba se copia a bucket público.
+
+**Pedido de prueba 2, Botánica variante distinta:** historia `custom` o `preset`, una sede, módulos opcionales en otra combinación, destinatario de unidad `u`, todos los pasos anteriores y paridad entre vista de revisión y URL final. No reutilizar configuraciones ni valores del primer pedido.
+
+**Prueba comercial separada de asociación a licencia:** un miembro de gestión **ficticio** en staging aislado debe obtener la invitación `delivered` correspondiente, enviar desde el compositor existente y comprobar tanto `g` como `u`. No utilizar ni alterar licencias reales; comprobar las autorizaciones y el aislamiento antes de crear fixtures. El circuito E2E solo se acredita cuando se ejecuta de verdad, con logs fechados y sin PII persistida en documentos.
+
+### Vía de ejecución y coste (sin decisiones de compra)
+
+En la lectura de las herramientas actuales, `list_branches` devolvió `[]`: no hay rama Supabase disponible. Según la documentación de Supabase consultada el 10/10/2026, las **ramas preview requieren Pro**, crean entornos separados sin copiar datos productivos y facturan su uso; la solución local es gratuita pero necesita CLI y runtime. En el entorno de trabajo se comprobó que **no estaban instalados Docker, Podman, Supabase CLI ni Postgres**, y no se dispone de acceso de red para descargarlos desde el contenedor. La opción de stack nativa sin Docker es **experimental** y tampoco se puede dar por operativa en este entorno. No se ha creado rama, proyecto nuevo, contrato ni gasto. No reutilizar STUDIO para GUEST.
+
+**Único bloqueo para ejecutar los siguientes E2E:** disponer de una instancia GUEST realmente aislada/autorizada y navegador permitido. Antes de pedir cualquier confirmación de gasto, comprobar con el conector el coste **para la organización elegida explícitamente por la propietaria**, ya que los importes varían según plan. No confundir el hecho de que `list_branches=[]` con un fallo de código de Botánica.
+
+**Frontera comercial:** V13 candidata mejorada únicamente en fuente, sin despliegue; Botánica sigue **3/11 PASS**. VEIL LIGHT, Centro V4.6, ONE, Partner, STUDIO, Stripe y datos existentes continúan intactos.
