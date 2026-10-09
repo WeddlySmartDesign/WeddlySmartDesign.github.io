@@ -53,7 +53,7 @@
     "responsiveCases": "116/116 local PASS in prior checkpoint, not real orders",
     "backendShapedFixtures": "8/8 local PASS in prior checkpoint",
     "sharedCatalogContract": "7 isolated Node contract assertions PASS",
-    "artifactIntegrity": "3 PASS on 2026-10-09; 3 MP4 and 14 WebP bitwise identical",
+    "artifactIntegrity": "4/4 offline artifact checks PASS on 2026-10-09: V14, V14.5, V14.6 SHA256, 3 MP4 + 14 WebP identical, renderer and only one-line V14.6 delta",
     "realOrderE2E": "NOT EXECUTED",
     "ownerAndroidV14point5": "NOT CERTIFIED",
     "storyPhotoOnlyRegression": "FAIL on V14.5; PASS on V14.6 (pure mapping extraction)",
