@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "guest-catalog-admission-evidence-v1",
+  "policy": {
+    "designs": ["veil-light", "botanica", "design-03", "design-04", "design-05", "design-06"],
+    "newTemplateRequirements": ["common-questionnaire", "backend-test-only", "renderer", "config-matrix", "two-real-test-orders", "review-final-parity", "recipient-rsvp", "owner-android", "owner-touch", "media-integrity", "approved-visual"]
+  },
+  "templates": {
+    "veil-light": {
+      "version": "5.3.3",
+      "basis": "pre-existing-commercial-seal",
+      "source": "guest/GUEST_CATALOG_PIPELINE_V1_FINAL_CERTIFICATION_2026-10-07.md",
+      "note": "Previously certified; do not alter or retroactively rewrite this seal to imply new photo-only contract testing."
+    },
+    "botanica": {
+      "version": "14.7",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {"pass": false, "source": "guest/GUEST_D02_BOTANICA_CIERRE_TECNICO_GATES_PENDIENTES_2026-10-09.md", "why": "Candidate form is isolated; common form not deployed; backend none-mode mismatch."},
+        "backend-test-only": {"pass": false, "source": "guest/GUEST_D02_BOTANICA_ESTADO_BLOQUEO_REAL_2026-10-09.md", "why": "Deployed backend v12 knows only veil-light; authorized test-only deploy blocked."},
+        "renderer": {"pass": false, "source": "guest/GUEST_D02_BOTANICA_ESTADO_BLOQUEO_REAL_2026-10-09.md", "why": "QA isolated viewer exists, but real owner workspace rendering is not tested or deployed."},
+        "config-matrix": {"pass": true, "source": "guest/GUEST_D02_BOTANICA_CHECKPOINT_V14_7_2026-10-09.md", "why": "Local supported cases and media preservation; NOT E2E."},
+        "two-real-test-orders": {"pass": false, "source": "guest/GUEST_D02_BOTANICA_CIERRE_TECNICO_GATES_PENDIENTES_2026-10-09.md", "why": "Two full local mocks only, not real Supabase orders."},
+        "review-final-parity": {"pass": false, "source": "guest/GUEST_D02_BOTANICA_CIERRE_TECNICO_GATES_PENDIENTES_2026-10-09.md", "why": "No generated delivered final link from live order."},
+        "recipient-rsvp": {"pass": false, "source": "guest/GUEST_D02_BOTANICA_ESTADO_BLOQUEO_REAL_2026-10-09.md", "why": "RSVP helper unit tests pass; no live state persistence test."},
+        "owner-android": {"pass": false, "source": "guest/GUEST_D02_BOTANICA_CHECKPOINT_V14_7_2026-10-09.md", "why": "Chromium local screenshots cannot replace owner's Android gate."},
+        "owner-touch": {"pass": false, "source": "guest/GUEST_D02_BOTANICA_CIERRE_TECNICO_GATES_PENDIENTES_2026-10-09.md", "why": "Active time has not been measured for a Botánica real order."},
+        "media-integrity": {"pass": true, "source": "guest/GUEST_D02_BOTANICA_CHECKPOINT_V14_7_2026-10-09.md", "why": "17 reusable media resources verified against V14 master."},
+        "approved-visual": {"pass": true, "source": "guest/GUEST_D02_BOTANICA_READ_FIRST.md", "why": "V14 visually approved; V14.7 technical changes require final Android check."}
+      }
+    }
+  },
+  "sharedBlockers": {
+    "production-backend-supports-botanica": false,
+    "schemaVersion-emitted-by-backend-v12": false,
+    "story-none-preserved-by-backend-v12": false,
+    "story-none-available-in-frozen-questionnaire-v3": false,
+    "botanica-renderer-registered-in-frozen-center-v4_6": false
+  },
+  "safety": "Evidence is a state record, not a deployment authorization. All missing new-template gates must PASS with independently verifiable evidence before commercial certification. Publishing and payment enablement require a separate deliberate approval."
+}
