@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "guest-catalog-owner-renderers-v2",
+  "notes": "One generic owner viewer; new templates add only a registry entry. No hardcoded per-design center changes.",
+  "templates": {
+    "veil-light": {
+      "id": "veil-light",
+      "version": "5.3.3",
+      "mode": "native",
+      "applyApi": "VEIL_APPLY_CONFIG",
+      "status": "commercially-frozen"
+    },
+    "botanica": {
+      "id": "botanica",
+      "version": "14.7",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "BOTANICA_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "No published asset URL; isolated local V14.7 master preserved in Library, do not invent a public URL"
+    }
+  }
+}
