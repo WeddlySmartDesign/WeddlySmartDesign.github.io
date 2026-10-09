@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 const assert=require('node:assert/strict');
-const {assertPinnedInvitationConfig:gate}=require('../tools/invitation_runtime_gate_v1.cjs');
+const {assertPinnedInvitationConfig:gate,assertLegacyDeliveredTestRead:legacy}=require('../tools/invitation_runtime_gate_v1.cjs');
 const {validate}=require('../qa/validate_invitation_config_v1.cjs');
 const cfg={
  schemaVersion:'guest-invitation-config-v1',
@@ -47,4 +47,17 @@ assert.strictEqual(gate(v,order,validate,files),v,'disabled optional story');
 assert.throws(()=>gate({},order,validate,files),/invitation_template_pin_mismatch/);
 const malicious=structuredClone(cfg);malicious.rsvp.route='https://attacker.example/rsvp';
 assert.throws(()=>gate(malicious,order,validate,files),/invalid_invitation_rsvp_route/,'recipient URL cannot be stored by owner');
+const legacyConfig=structuredClone(cfg);
+delete legacyConfig.schemaVersion;
+delete legacyConfig.cover.photo;
+legacyConfig.template.version='3.1.0';
+legacyConfig.story.photo.src='https://example.test/legacy-signed';
+const oldOrder={template_id:'botanica',template_version:'2026-10-06',mode:'test',status:'delivered'};
+assert.strictEqual(legacy(legacyConfig,oldOrder,files),legacyConfig,'legacy test delivered read only');
+assert.throws(()=>legacy(legacyConfig,{...oldOrder,mode:'production'},files),/untrusted_legacy_invitation/);
+assert.throws(()=>legacy(legacyConfig,{...oldOrder,status:'designing'},files),/untrusted_legacy_invitation/);
+assert.throws(()=>legacy(legacyConfig,{...oldOrder,template_id:'veil-light'},files),/untrusted_legacy_invitation/);
+assert.throws(()=>legacy({...legacyConfig,schemaVersion:'guest-invitation-config-v1'},oldOrder,files),/untrusted_legacy_invitation/);
+const broken=structuredClone(legacyConfig);broken.story.photo.src='upload:story';
+assert.throws(()=>legacy(broken,oldOrder,files),/missing_signed_asset/);
 console.log('PASS strict GUEST lifecycle gate: template pin, schema, raw/signed media, disabled modules and mutation rejection. OFFLINE.');
