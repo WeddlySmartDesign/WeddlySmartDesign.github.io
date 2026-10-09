@@ -196,6 +196,62 @@
         "deployed": false,
         "realE2e": false
       }
+    },
+    "ownerViewerAsyncLifecycleV2": {
+      "state": "CODE_QA_PASS_OFFLINE_NO_BROWSER",
+      "scope": "all registered iframe designs (Botanica, synthetic D03 and future certified D1000), never a per-template exception",
+      "files": [
+        "guest/catalog/guest-catalog-owner-viewer-v2.js",
+        "guest/catalog/guest-owner-stage-overlay-v2.js",
+        "guest/tests/owner_viewer_generic.test.cjs",
+        "guest/tests/owner_stage_overlay_v2.test.cjs"
+      ],
+      "commits": {
+        "viewer": "60a96e5e98e1e70412ad22e71da9cb911299aaed",
+        "overlay": "bf4e15efdc4b0da660a86cc39214ee4787f6e86d",
+        "viewerTests": "e90b78e564591296f284d558e9a5c16fc89e18c2",
+        "overlayTests": "5ab79b91cd91bf52b0ab2eb4c4f16dd2bc52a98f"
+      },
+      "loadTimeoutMs": 45000,
+      "cancelOnCenterReturn": true,
+      "cancelOnTemplateChange": true,
+      "cleanupOn": [
+        "timeout",
+        "error",
+        "navigation exception",
+        "missing iframe adapter",
+        "apply failure",
+        "abort"
+      ],
+      "behaviorUnderTest": [
+        "pending candidate may never be shown as production",
+        "certified iframe still supports production",
+        "old slow preview cannot appear after selecting another design",
+        "aborted iframe removed without stale DOM",
+        "pre-aborted does not touch host"
+      ],
+      "offlineCatalogRun": 37995936554,
+      "offlineCatalogConclusion": "SUCCESS on code commit 5ab79b91cd91bf52b0ab2eb4c4f16dd2bc52a98f",
+      "independentRunAtObservation": 37995936520,
+      "independentConclusionAtObservation": "queued",
+      "intermediateOfflineFailures": [
+        {
+          "run": 37995842462,
+          "reason": "viewer changed before overlay and harness updated; transient incomplete commit"
+        },
+        {
+          "run": 37995865822,
+          "reason": "overlay harness was still missing AbortController"
+        },
+        {
+          "run": 37995907430,
+          "reason": "overlay harness was still missing AbortController; viewer test itself passed"
+        }
+      ],
+      "actualBrowserQA": false,
+      "androidOwnerQA": false,
+      "deployed": false,
+      "commercialCertification": false
     }
   },
   "designs": {
@@ -330,7 +386,7 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Rebuilt local V2 pack with latest certified-iframe owner guard and byte-verified git blobs; static JS syntax/asset hashes PASS. Browser QA still blocked by administrative policy: execute genuine user-facing browser/Android only in permitted environment, never claim PASS via static lint.",
+    "Common V2 iframe async timeout and abort test CI now PASS; no owner Android or local Chromium proof. Verify Independent QA 37995936520 and re-run real browser only in permitted environment. Keep environment restriction and 3/11 gates.",
     "Read-only Supabase 2026-10-09 confirms guest-invitation-flow ACTIVE v12 and checkout ACTIVE v20; no backend V13 or new Center V2 deployment. Do not bypass previously documented restrictions.",
     "Deploy a NEW common Mobile Center and unified questionnaire only when authorized; preserve frozen V4.6. Verify VEIL regression and Botánica iframe renderer.",
     "Two distinct persisted test orders end-to-end review/final/stable URL/private media and recipient RSVP g/u. Botánica stays 3/11.",
@@ -345,9 +401,9 @@
   ],
   "ciObserved": {
     "verificationDate": "2026-10-09",
-    "catalogRun": "37995219800",
-    "catalogAtCommit": "463da9167",
-    "catalogOutcome": "SUCCESS on owner runtime code and tests including certified iframe production viewer (run 37995109175 for code 64faecd32, and run 37995219800 for manifest change 463da9167). Not real E2E.",
+    "catalogRun": "37995936554",
+    "catalogAtCommit": "5ab79b91c",
+    "catalogOutcome": "SUCCESS: complete generic iframe load timeout/cancel/failure/cleanup CI on 5ab79b91c, including verified owner viewer and overlay async regressions; NOT real browser/E2E.",
     "independentRun": "37992983155",
     "independentAtCommit": "2357ce041",
     "independentOutcome": "SUCCESS: GUEST Independent QA on same code commit 2357ce041; not owner Android or commercial E2E.",
@@ -381,9 +437,9 @@
     "latestObserved": {
       "at": "2026-10-09",
       "headCodeCommit": "797790589a63143fba1e028cab66277d049f30a3",
-      "catalogRun": 37995219800,
+      "catalogRun": 37995936554,
       "catalogConclusion": "success",
-      "independentRun": 37995219775,
+      "independentRun": 37995936520,
       "independentConclusion": "success",
       "intermediateFailures": [
         {
@@ -413,8 +469,9 @@
         "restoredNormalWorkflowCommit": "40ea02cb303bbc59b715800fd90735d196c74d98",
         "noPersistentExportStep": true
       },
-      "latestCodeHead": "463da916792fdea0a7ddad11899cf27e566a2169",
-      "lastCompletedBothAtHead": "d8773e2cd41e3dd13db2ad7e2c7222b3221fb827"
+      "latestCodeHead": "5ab79b91cd91bf52b0ab2eb4c4f16dd2bc52a98f",
+      "lastCompletedBothAtHead": "d8773e2cd41e3dd13db2ad7e2c7222b3221fb827",
+      "note": "Catalog CI PASS on latest async code; Independent CI pending when written; no new commercial gate."
     },
     "intermediateTestUpdateFailure": {
       "runId": 37990171524,
