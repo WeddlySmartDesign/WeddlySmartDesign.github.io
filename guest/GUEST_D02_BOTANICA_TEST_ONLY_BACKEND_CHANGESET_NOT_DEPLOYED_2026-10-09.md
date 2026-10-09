@@ -17,12 +17,12 @@
 
 Aplicar **solo si la función desplegada y los contratos siguen coincidiendo**. Antes de aplicar, hacer respaldo del código de Edge Function. Si difieren, no despliegue automático.
 
-**1. Registro de pruebas:** añadir una entrada `botanica` sin alterar `veil-light`:
+**1. Registro de pruebas:** generar primero el registro con `node guest/tools/generate_backend_catalog_registry.cjs --mode test-only` (fuente común de catálogo, evidencias y visor) y cotejarlo con la función desplegada. La entrada `botanica` debe conservar `version:'14.7'`, `renderer:'botanica-v14-7'` y `testOnly:true`, sin alterar `veil-light`. El fragmento siguiente es solo una referencia documental, no código autorizado para desplegar directamente:
 
 ```ts
 const CATALOG_TEMPLATES:any={
   'veil-light':{id:'veil-light',version:'5.3.3',renderer:'veil-light-v5-3-3',active:true,typographyVariants:['classic','romantic','contemporary'],defaultTypographyVariant:'classic'},
-  'botanica':{id:'botanica',version:'14.7',renderer:'botanica-v14-5',active:true,testOnly:true,typographyVariants:['classic'],defaultTypographyVariant:'classic'}
+  'botanica':{id:'botanica',version:'14.7',renderer:'botanica-v14-7',active:true,testOnly:true,typographyVariants:['classic'],defaultTypographyVariant:'classic'}
 };
 ```
 
