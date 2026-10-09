@@ -34,7 +34,7 @@ function applyOrderConfig(order,config){
   const apply=window[r.applyApi];if(typeof apply!=='function')throw Error('renderer_unavailable:'+id);
   return apply(structuredClone(config));
  }
- if(r.mode!=='iframe'||!r.src||order.mode!=='test')throw Error('template_not_ready:'+id);
+ if(r.mode!=='iframe'||!r.src)throw Error('template_not_ready:'+id); // test-only gate is enforced by rendererFor for pending entries
  mode='iframe';host.replaceChildren();
  const p=window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order,config,host,registry:reg});
  p.then(h=>{if(generation!==seq){h.close();return}handle=h}).catch(e=>{
