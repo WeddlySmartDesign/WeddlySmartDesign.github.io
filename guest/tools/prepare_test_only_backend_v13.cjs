@@ -62,8 +62,8 @@ function build(source){
    "       if(order.mode!=='test')await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados",
    'changes_internal_email');
  source=once(source,
-   "       const ok=await resend({to:[email],subject:localTest?",
-   "       const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?",
+   "       const ok=await resend({to:[email],subject:localTest?'Revisión de prueba preparada'",
+   "       const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Revisión de prueba preparada'",
    'review_outbound_email');
  source=once(source,
    "       const ok=await resend({to:[email],subject:localTest?'Entrega de prueba completada'",
@@ -73,7 +73,7 @@ function build(source){
  // creation path must continue to pass through that guarded function.
  if((source.match(/\.from\('guest_invitation_orders'\)\.insert\(/g)||[]).length!==1)
    throw Error('unreviewed_order_insert_paths');
- if((source.match(/await resend\(/g)||[]).length!==6)
+ if((source.match(/await resend\(/g)||[]).length!==5)
    throw Error('unreviewed_email_paths');
  // Production VEIL logic is still subject to separate real regression.
  if(!source.includes("spec?.testOnly===true&&mode!=='test'"))throw Error('missing_test_only_guard');
