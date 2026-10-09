@@ -88,14 +88,13 @@
       "deployed": false,
       "fullSchemaComplianceProven": false,
       "completeCommercialIntegration": false,
-      "localFixtureGate": "PASS in catalog CI; live E2E not run",
+      "localFixtureGate": "PASS: four CJS suites under isolated Node-compatible harness; exact deployed v12 source transformed to staged V13, NOT E2E. Full native CI of latest HEAD remains unverified.",
       "remainingContractDrift": [
-        "deployed v12 still lacks schemaVersion and cover.photo; prepared v13 and normalizer not deployed",
-        "deployed v12 coerces story.textMode none to preset; prepared v13 not deployed",
-        "deployed v12 outputs empty optional URLs; prepared normalizer converts only empty values",
-        "deployed v12 set_config and mark_review_ready paths have not been proven to enforce strict schema",
-        "signed hydration missing URLs may yield empty photo src",
-        "live guest management RSVP and public URL parity not E2E tested"
+        "Deployed Edge Function still v12 and does not support botanica or v13 canonical config",
+        "Test-only V13 candidate generated successfully but no native CI green or real E2E certification confirmed",
+        "Historical VEIL test rows noncanonical and have version mismatches; delivered reads get isolated safe fallback, designing legacy row needs predeployment decision",
+        "New Mobile Center V2 and questionnaire candidate not distributed; no recipient RSVP persistent E2E",
+        "Review/final parity, signed upload through deployed system and rollback not verified"
       ],
       "contractReconciliation": {
         "checkpoint": "guest/GUEST_BACKEND_CONFIG_RECONCILIATION_2026-10-09.md",
@@ -107,9 +106,28 @@
           "guest/tests/prepare_backend_test_only_v13.test.cjs"
         ],
         "executed": "3 CJS tests under in-memory emulated Node imports, plus actual-v12 buildConfig on 2 synthetic questionnaires PASS after planned v13 adaptation; no live orders",
-        "nativeRepositoryCI": "NOT YET VERIFIED PASS FOR LATEST HEAD",
-        "note": "Supabase deployed unchanged v12; set_config, signed media and full schema guards still require audit before any authorized deploy"
+        "nativeRepositoryCI": "NOT YET CONFIRMED GREEN FOR LATEST HEAD",
+        "note": "V13 strict config through submit/start_design/set_config/ready/approve/send_review/deliver; review/public read strict for new orders. Private media in test delivery, safe signed failure. Read-only legacy delivered test compatibility. Not deployed.",
+        "guardSource": "guest/tools/invitation_runtime_gate_v1.cjs",
+        "guardTest": "guest/tests/invitation_runtime_gate.test.cjs"
       }
+    },
+    "legacyInvitationOrdersObserved": {
+      "date": "2026-10-09",
+      "readOnlyAggregateSql": true,
+      "total": 3,
+      "allMode": "test",
+      "allTemplateId": "veil-light",
+      "lackingSchemaVersion": 3,
+      "delivered": 2,
+      "designing": 1,
+      "pinnedVersionVsConfigVersionMismatch": 2,
+      "deliveredWithMismatch": 1,
+      "noPersonalDataRetrieved": true,
+      "guard": "guest/tools/invitation_runtime_gate_v1.cjs::assertLegacyDeliveredTestRead",
+      "compatibilityScope": "read only, delivered TEST orders with schemaVersion missing, template id match, HTTPS signed images, neutral RSVP; no writes or new production",
+      "migrationExecuted": false,
+      "checkpoint": "guest/GUEST_BACKEND_CONFIG_RECONCILIATION_2026-10-09.md"
     }
   },
   "commercialGate": {
@@ -130,13 +148,13 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Verify native CI PASS for both catalog-continuity and B6 Playwright browser test after common RSVP async-hydration race fix; do not assume success from static tests",
-    "Finish shared strict validation of set_config/mark_review_ready and signed uploaded asset handling, check production order/checkout barriers, auth and all email paths",
-    "Validate actual v13 backend config using strict reusable QA on two captured test-only configurations once authorized; VEIL regression; do not mistake two synthetic in-memory builds for real E2E",
-    "Deploy safe test-only backend via authorized channel only, with verified rollback and zero client emails/Stripe",
-    "Integrate shared viewer V2 into new owner Mobile Center without modifying frozen V4.6",
-    "Execute two real synthetic-data orders through live test-only pipeline, approval/delivery/RSVP g/u persistent and stable URL; final Android and owner <=5min",
-    "Keep 8 commercial gates PENDING; require all 11 with observed evidence before any independent sales/publication permission"
+    "Obtain verified native GitHub Actions green for V13 candidate syntax/contract, historical read safety and B6.3; diagnose B6.6 deterministic two-device 409 regression from latest logs",
+    "Run scoped read-only historical delivery compatibility QA and protect remaining legacy designing order against unsafe migration",
+    "Review safe error propagation, runtime schema, test-only private signed assets, owner config edit and production VEIL regression before authorized deployment; never bypass blocked environment",
+    "Deploy only after legitimate authorization in controlled test-only channel, with rollback, zero Stripe/client email, no frozen visual changes",
+    "Wire generic viewer and common questionnaire into a new owner Mobile Center release, preserving frozen V4.6",
+    "Run two actual distinct test-mode orders, signed upload/review/final stable URL and real GUEST RSVP g/u persistence; then owner Android and <=5 minute measurement",
+    "Retain Botánica 3/11 commercial passes, 8 PENDING until independent real evidence; publication/payment separately authorized"
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
@@ -162,6 +180,23 @@
       "staticTestExecuted": "PASS in isolated JS harness",
       "actualBrowserCI": "NOT YET VERIFIED PASS",
       "additionalIntermediateCatalogFailure": "commit 4b14e0d due overly broad static regression assertion; corrected in ce6ea90dbc915dad3f3d5a2911d8dff90d1f1619"
+    },
+    "b6_3_verified": {
+      "runId": 37971333514,
+      "commit": "d316f3f",
+      "job": "b6-invitation-rsvp",
+      "conclusion": "success",
+      "source": "GitHub Actions job metadata"
+    },
+    "b6_6_observed": {
+      "runId": 37971333514,
+      "job": "b6-two-device-sync",
+      "conclusion": "failure",
+      "error": "same-field conflict did not preserve the second device local choice: Celíaco",
+      "diagnosticOnlyChange": "guest/qa/b6_6_two_device_sync_test.js",
+      "diagnosticOnlyCommit": "20fec034347871769e5d6879d199bc12416ad225",
+      "diagnosticChange": "Enforce A-first server write, delayed B stale-version 409 and rich synthetic state diagnostics; NOT confirmed passing in native CI",
+      "engineSourceChanged": false
     }
   }
 }
