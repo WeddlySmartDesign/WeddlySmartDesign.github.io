@@ -21,6 +21,7 @@ No hay ningún otro cambio en el HTML y los 17 recursos incrustados de V14.5 se 
 - 11/11 escenarios de mapeo canónico PASS en V14.6, incluido modo fotografía sin texto, historia vacía apagada, historia desactivada, fuente portada como foto, presets, vestimenta, dos lugares, cinco momentos, secciones opcionales, regalo y RSVP.
 - El mismo caso de foto sin texto **FALLA** en V14.5. Esto demuestra que el nuevo test detecta el error anterior.
 - 4/4 scripts JS inline sin error de sintaxis.
+- 4/4 comprobaciones del nuevo test de integridad de tres versiones: huellas, medios, interfaz y diferencia exacta de una condición.
 - Multimedia 3 MP4 + 14 WebP = idénticos a V14.5; cambios de código limitados a una condición.
 - Pruebas del puente RSVP simulado: 7/7 PASS tras poner adaptador y registro en versión `14.6`, siempre `certification-pending`.
 
