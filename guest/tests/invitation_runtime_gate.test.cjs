@@ -45,4 +45,6 @@ assert.throws(()=>gate({...cfg,template:{...cfg.template,id:'veil-light'}},order
 const v={...cfg,story:{...cfg.story,enabled:false,photo:null}};
 assert.strictEqual(gate(v,order,validate,files),v,'disabled optional story');
 assert.throws(()=>gate({},order,validate,files),/invitation_template_pin_mismatch/);
+const malicious=structuredClone(cfg);malicious.rsvp.route='https://attacker.example/rsvp';
+assert.throws(()=>gate(malicious,order,validate,files),/invalid_invitation_rsvp_route/,'recipient URL cannot be stored by owner');
 console.log('PASS strict GUEST lifecycle gate: template pin, schema, raw/signed media, disabled modules and mutation rejection. OFFLINE.');
