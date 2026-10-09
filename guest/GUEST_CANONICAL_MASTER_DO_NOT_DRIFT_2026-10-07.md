@@ -808,3 +808,15 @@ For Botánica, the owner-approved **V14 FROZEN** remains unmodified. A separate 
 ## 23. Design 02 candidate progression to 14.6
 
 2026-10-09: keep **V14 FROZEN** as the immutable owner-approved visual version. V14.5 remains a historical technical QA candidate. V14.6 is the current **certification-pending** candidate; one generic change fixes Story enabled with a photo and `textMode:'none'`. The same code path failed in V14.5; 11 mapping fixtures pass in V14.6, with 17 embedded assets unchanged. Neither V14.5 nor V14.6 is commercially certified. Updated recovery: `guest/GUEST_D02_BOTANICA_READ_FIRST.md` and `guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V2_2026-10-09.json`; versioned reproduction script: `guest/tests/botanica_schema_mapping_offline.test.cjs`. Supabase backend test-only deploy remains BLOCKED / NOT DEPLOYED. Do not claim live orders, RSVP E2E, customer messaging, or Android visual certification. No publication until explicit later consent and full gates.
+
+## 24. Automated commercial admission gate for D02–D06
+
+From 2026-10-09, the permanent implementation (not only a written rule) is:
+- `guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json` — source-identified PASS/PENDING evidence per common gate, tied to exact template id and version;
+- `guest/qa/catalog_admission_gate.cjs` — **consistency check** for push QA and **strict** `--admit <id>` before marking any new template commercially frozen;
+- `guest/tests/catalog_admission_gate_test.cjs` — checks that false certification and unregistered new templates fail;
+- `guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md` — the operating rules and shared contract fixes.
+
+Required before work on D03–D06: use one questionnaire, schema and backend; identify real backend output/config discrepancies **before visual design**; supply an adapter, mobile owner renderer, recipient RSVP, QA variants and evidence record. Any new catalog template without all prerequisites must stay `certification-pending`. The non-strict CI gate must PASS when that pending status is honest; strict `--admit` MUST FAIL until every new-template gate and common compatibility blocker is resolved. Do not retroactively alter VEIL LIGHT V5.3.3's frozen commercial seal or count simulated orders as real E2E.
+
+For D02 Botánica, the record currently lists **3/11 gates with local/historical evidence, 8 still pending**, including actual backend test-only activation, owner renderer, two real test orders, final/review, recipient RSVP, Android and owner touch. A blocked deployment must not be worked around or portrayed as passing. Publishing/payment remains separate and requires explicit later approval.
