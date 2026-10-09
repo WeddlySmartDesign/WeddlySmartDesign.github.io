@@ -9,7 +9,8 @@ const calls=[],previewCalls=[];
 const registry={templates:{
  'veil-light':{id:'veil-light',version:'5.3.3',mode:'native',status:'commercially-frozen',applyApi:'VEIL_APPLY_CONFIG'},
  botanica:{id:'botanica',version:'14.7',mode:'iframe',status:'certification-pending',applyApi:'BOTANICA_APPLY_CONFIG',src:'/guest/catalog-assets/botanica/14.7/index.html'},
- 'design-03':{id:'design-03',version:'1.0.0',mode:'iframe',status:'certification-pending',applyApi:'GUEST_APPLY_CONFIG',src:'/guest/catalog-assets/design-03/1.0.0/index.html'}
+ 'design-03':{id:'design-03',version:'1.0.0',mode:'iframe',status:'certification-pending',applyApi:'GUEST_APPLY_CONFIG',src:'/guest/catalog-assets/design-03/1.0.0/index.html'},
+ 'design-1000':{id:'design-1000',version:'10.0.0',mode:'iframe',status:'commercially-frozen',applyApi:'GUEST_APPLY_CONFIG',src:'/guest/catalog-assets/design-1000/10.0.0/index.html'}
 }};
 const host={children:[],replaceChildren(...nodes){this.children=nodes},appendChild(n){this.children.push(n)}};
 const back={addEventListener(name,fn){if(name==='click')this.activate=fn}};
@@ -23,6 +24,7 @@ const o=window.GUEST_STAGE_OWNER;
 const veil={template_id:'veil-light',template_version:'5.3.3',mode:'production'};
 const bot={template_id:'botanica',template_version:'14.7',mode:'test'};
 const d03={template_id:'design-03',template_version:'1.0.0',mode:'test'};
+const d1000={template_id:'design-1000',template_version:'10.0.0',mode:'production'};
 const cfg=(id,version)=>({template:{id,version},couple:{name1:'Ana',name2:'Luis'}});
 async function main(){
  assert.equal(o.applyOrderConfig(veil,cfg('veil-light','5.3.3')),'legacy-native');
@@ -38,10 +40,15 @@ async function main(){
  assert.equal(calls.length,1,'Invalid orders never invoke frozen renderer');
  await o.applyOrderConfig(bot,cfg('botanica','14.7'));
  await o.applyOrderConfig(d03,cfg('design-03','1.0.0'));
- assert.equal(previewCalls.length,2,'Any future design uses the same preview host');
+ await o.applyOrderConfig(d1000,cfg('design-1000','10.0.0'));
+ assert.equal(previewCalls.length,3,'A certified future iframe must use the exact same host in production');
  assert.equal(previewCalls[1].order.template_id,'design-03');
+ assert.equal(previewCalls[2].order.template_id,'design-1000');
+ assert.equal(previewCalls[2].order.mode,'production');
+ assert.throws(()=>o.rendererFor({...d1000,template_version:'9.0.0'}),/template_version_mismatch/);
+ assert.throws(()=>o.applyOrderConfig({...bot,mode:'production'},cfg('botanica','14.7')),/test_only_template/);
  o.open();assert.equal(layer.style.display,'block');
  o.close();assert.equal(layer.style.display,'none');
- console.log('PASS common owner staging dispatcher: 3 design IDs; frozen VEIL, 2 pending iframe designs, pinned order/config, production hold, missing/mismatch rejected. NO DEPLOYMENT');
+ console.log('PASS common owner staging: VEIL native production, pending Botanica/D03 test-only, certified D1000 iframe production, version-pinned. NO DEPLOYMENT');
 }
 main().catch(e=>{console.error(e.stack||e);process.exitCode=1});
