@@ -1,0 +1,57 @@
+{
+  "manifestVersion": "botanica-artifact-manifest-v1",
+  "updated": "2026-10-09",
+  "project": "GUEST by WeddlySmartDesign",
+  "designId": "botanica",
+  "designNumber": 2,
+  "repository": "WeddlySmartDesign/WeddlySmartDesign.github.io",
+  "branch": "guest-independent",
+  "visualApproval": {
+    "version": "14",
+    "state": "owner-approved-and-immutable",
+    "filename": "GUEST_D02_BOTANICA_ATELIER_V14_FROZEN_2026-10-09.html",
+    "libraryPath": "/GUEST by WeddlySmartDesign/BOTANICA/Checkpoints/GUEST_D02_BOTANICA_ATELIER_V14_FROZEN_2026-10-09.html",
+    "sha256": "27ede39dbf1e04dc7ee8e758601127eaf9de6e705f1f14a026df09fb72795c39",
+    "bytes": 11632145
+  },
+  "technicalCandidate": {
+    "version": "14.5",
+    "state": "qa-passed-locally-e2e-pending",
+    "filename": "GUEST_D02_BOTANICA_ATELIER_V14_5_TECHNICAL_CANDIDATE_2026-10-09.html",
+    "libraryPath": "/GUEST by WeddlySmartDesign/BOTANICA/Candidatas/GUEST_D02_BOTANICA_ATELIER_V14_5_TECHNICAL_CANDIDATE_2026-10-09.html",
+    "sha256": "ba8b6515e5bb2ba81c3ea3dbd88199b4a3abc66919caefa1e3d37ced8ce61e84",
+    "bytes": 11635473
+  },
+  "media": {"embeddedMp4": 3, "embeddedWebp": 14, "byteIdenticalBetweenVersions": true},
+  "catalog": {
+    "registryFile": "guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json",
+    "adapterFile": "guest/guest-catalog-template-botanica-adapter-v1.js",
+    "templateVersion": "14.5",
+    "registryStatus": "certification-pending",
+    "commerciallyCertified": false,
+    "scalabilityCertified": false,
+    "ownerMobilePilotPass": false,
+    "backendTemplateEnabled": false,
+    "salesEnabled": false
+  },
+  "deployedBackendAtCheckpoint": {
+    "projectId": "dnjsxequwgtyyauuofxj",
+    "function": "guest-invitation-flow",
+    "version": 12,
+    "ezbrSha256": "69ef41f9867eb048b052632141be9b8e5ea53aa78a63ade1883e1e88da7b28ac",
+    "supports": ["veil-light"]
+  },
+  "testEvidence": {
+    "responsiveCases": "116/116 local PASS in prior checkpoint, not real orders",
+    "backendShapedFixtures": "8/8 local PASS in prior checkpoint",
+    "sharedCatalogContract": "7 isolated Node contract assertions PASS",
+    "artifactIntegrity": "3 PASS on 2026-10-09; 3 MP4 and 14 WebP bitwise identical",
+    "realOrderE2E": "NOT EXECUTED",
+    "ownerAndroidV14point5": "NOT CERTIFIED"
+  },
+  "readFirst": "guest/GUEST_D02_BOTANICA_READ_FIRST.md",
+  "masterRules": "guest/GUEST_DESIGN_PRODUCTION_QA_MASTER_D03_D06_2026-10-09.md",
+  "offlineContractTest": "guest/tests/botanica_catalog_bridge_offline.test.cjs",
+  "offlineIntegrityTest": "guest/tests/botanica_artifact_integrity_offline.test.cjs",
+  "safety": "Never alter V14 or V14.5 in place. Do not enable production purchases, publish, modify ONE/Partner/STUDIO, or override blocked tools."
+}
