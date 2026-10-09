@@ -149,10 +149,16 @@ body:has(#app:not([hidden])){overflow:hidden}
 .top-inner{min-height:62px}
 .dashboard-main{
   height:calc(100dvh - 62px);
-  padding:14px 0 12px;
-  overflow:hidden;
+  min-height:0;
+  padding:14px 0 max(28px,env(safe-area-inset-bottom));
+  overflow-x:hidden;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:contain;
+  scrollbar-width:thin;
   display:grid;
-  grid-template-rows:auto auto auto auto auto;
+  grid-template-rows:repeat(6,max-content);
+  align-content:start;
   gap:10px;
 }
 .dashboard-hero{display:grid;gap:8px}
@@ -201,23 +207,46 @@ body:has(#app:not([hidden])){overflow:hidden}
 
 .quick-read{
   display:grid;
-  grid-template-columns:1.35fr .85fr .9fr;
-  gap:7px;
+  gap:11px;
+  padding:15px 13px;
+  margin-top:6px;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 10px 28px rgba(52,47,45,.05);
 }
-.quick-read>div{
+.quick-read-heading h2{
+  margin:0;
+  font-family:var(--serif);
+  font-weight:400;
+  font-size:25px;
+  line-height:1.15;
+}
+.quick-read-heading p{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.4;
+}
+.quick-read-values{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+.quick-read-values>div{
   min-width:0;
-  background:rgba(255,250,246,.76);
+  background:rgba(246,238,231,.42);
   border:1px solid var(--line);
   border-radius:14px;
-  padding:9px 10px;
+  padding:11px 10px;
 }
 .quick-read small{
-  display:block;font-size:11.5px;color:var(--muted);font-weight:800;
-  text-transform:uppercase;letter-spacing:.06em
+  display:block;font-size:11px;line-height:1.35;color:var(--muted);font-weight:800;
+  text-transform:uppercase;letter-spacing:.04em
 }
 .quick-read strong{
-  display:block;font-size:14px;line-height:1.15;margin-top:3px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+  display:block;font-size:16px;line-height:1.2;margin-top:5px;
+  overflow-wrap:anywhere
 }
 .dashboard-footline{font-size:11.5px;color:var(--muted);text-align:center;align-self:end}
 .dashboard-foot-actions{display:flex;align-items:center;justify-content:center;gap:9px}
@@ -529,7 +558,7 @@ body:has(#app:not([hidden])){overflow:hidden}
   .funnel-title{font-size:23px;margin-bottom:7px}
   .funnel-flow small{font-size:11px}
   .funnel-flow strong{font-size:25px}
-  .quick-read>div{padding:8px}
+  .quick-read-values>div{padding:10px 8px}
   .quick-read small{font-size:10.8px}
   .quick-read strong{font-size:13.5px}
   .dashboard-footline{font-size:10.8px}
@@ -542,7 +571,7 @@ body:has(#app:not([hidden])){overflow:hidden}
   .compact-metric{min-height:86px}
   .compact-metric strong{font-size:27px}
   .compact-funnel{padding:8px 9px}
-  .quick-read>div{padding:7px 8px}
+  .quick-read-values>div{padding:9px 7px}
 }
 
 
@@ -842,14 +871,20 @@ body:has(#app:not([hidden])){overflow:hidden}
       <button class="trial-history-link" id="openTrialsHistory" type="button">Ver pruebas, fechas y estado →</button>
     </section>
 
-    <section class="quick-read" aria-label="Comportamiento">
-      <div><small>Tiempo activo</small><strong id="quickTime">—</strong></div>
-      <div><small>Llega al precio</small><strong id="quickPrice">—</strong></div>
-      <div><small>Recorrido</small><strong id="quickDepth">—</strong></div>
+    <section class="quick-read" aria-label="Comportamiento de los visitantes">
+      <header class="quick-read-heading">
+        <h2>Comportamiento</h2>
+        <p>Cómo navegan los visitantes · periodo seleccionado</p>
+      </header>
+      <div class="quick-read-values">
+        <div><small>Tiempo activo</small><strong id="quickTime">—</strong></div>
+        <div><small>Llega al precio</small><strong id="quickPrice">—</strong></div>
+        <div><small>Recorrido</small><strong id="quickDepth">—</strong></div>
+      </div>
     </section>
 
     <div class="dashboard-footline dashboard-foot-actions">
-      <span>Datos internos · Analytics v20</span>
+      <span>Datos internos · Analytics v21</span>
     </div>
   </main>
 </div>
