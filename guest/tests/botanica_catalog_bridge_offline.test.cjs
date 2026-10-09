@@ -16,7 +16,7 @@ const registered=registry.templates.find(t=>t.id==='botanica');
 assert(registered,'Botánica must exist in catalog registry');
 assert.equal(registered.status,'certification-pending','Do not bypass commercial gate');
 assert.equal(registered.scalabilityCertified,false);
-assert.equal(registered.version,'14.6');
+assert.equal(registered.version,'14.7');
 assert.equal(registry.templates.find(t=>t.id==='veil-light').status,'commercially-frozen');
 console.log('PASS: registry is pending, VEIL LIGHT remains certified');
 
@@ -31,7 +31,7 @@ vm.runInContext(read('guest-catalog-template-botanica-adapter-v1.js'),context,{t
 const adapter=context.window.__GuestCatalogTemplateAdapters?.botanica;
 assert(adapter,'Adapter not installed');
 assert.equal(adapter.id,'botanica');
-assert.equal(adapter.version,'14.6');
+assert.equal(adapter.version,'14.7');
 const forwarded={couple:{name1:'Alba',name2:'Nicolás'},agenda:{enabled:true,moments:[]}};
 assert.equal(adapter.applyConfig(forwarded),true);
 assert.equal(applied,forwarded,'Adapter should forward original config');
@@ -40,7 +40,7 @@ console.log('PASS: Botánica adapter works with unchanged shared config');
 async function bootScenario(query, expectedRoute, opts={}){
   const calls=[];
   const guestConfig={
-    template:{id:'botanica',version:'14.6'},
+    template:{id:'botanica',version:'14.7'},
     couple:{name1:'Alba',name2:'Nicolás'},rsvp:{route:'#',ctaLabel:'Confirmar asistencia'},
     practical:{bus:{enabled:false},accommodation:{enabled:false},gift:{enabled:false},playlist:{enabled:false}}
   };
