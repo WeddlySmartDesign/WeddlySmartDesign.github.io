@@ -102,5 +102,19 @@
       "safeToPublish": false
     }
   ],
-  "checkpoint": "guest/GUEST_D02_BOTANICA_CHECKPOINT_V14_7_2026-10-09.md"
+  "checkpoint": "guest/GUEST_D02_BOTANICA_CHECKPOINT_V14_7_2026-10-09.md",
+  "recoveryArchive": {
+    "libraryPath": "/GUEST by WeddlySmartDesign/BOTANICA/Checkpoints/GUEST_BOTANICA_D02_RECUPERACION_V3_2026-10-09.zip",
+    "filename": "GUEST_BOTANICA_D02_RECUPERACION_V3_2026-10-09.zip",
+    "sha256": "62fc41815ac288f1ba6f86a0607ffeacab42e4ad68591f7e747eaec216bdd3c5",
+    "bytes": 35281287,
+    "zipContentsValidated": true,
+    "containsVersions": [
+      "14",
+      "14.5",
+      "14.6",
+      "14.7"
+    ],
+    "includesPortableVisualQAScripts": true
+  }
 }
