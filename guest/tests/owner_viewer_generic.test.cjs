@@ -10,7 +10,7 @@ function makeEnv(){
   fireTimeout(){const [id,fn]=timers.entries().next().value||[];if(fn){timers.delete(id);fn()}},get pendingTimers(){return timers.size},setBehavior(v){behavior=v},
   location:{origin:'https://guest.example',href:'https://guest.example/owner.html'},
   document:{createElement(tag){assert.equal(tag,'iframe');const el={isConnected:false,style:{},attrs:{},listeners:{},setAttribute(k,v){this.attrs[k]=v},addEventListener(t,cb){this.listeners[t]=cb},removeEventListener(t,cb){if(this.listeners[t]===cb)delete this.listeners[t]},remove(){this.isConnected=false}};
-  Object.defineProperty(el,'src',{set(v){if(behavior==='navigationThrow')throw Error('bad_navigation');this.url=v;el.contentWindow=behavior==='missingAdapter'?{}:{GUEST_APPLY_CONFIG(c){if(behavior==='applyThrow')throw Error('application_failure');calls.push({api:'guest',config:c})},BOTANICA_APPLY_CONFIG(c){calls.push({api:'botanica',config:c})}};if(behavior==='error')queueMicrotask(()=>el.listeners.error?.());else if(behavior!=='hang')queueMicrotask(()=>el.listeners.load?.())}});return el}}};
+  Object.defineProperty(el,'src',{set(v){if(behavior==='navigationThrow')throw Error('bad_navigation');this.url=v;el.contentWindow=behavior==='crossOrigin'?new Proxy({},{get(){throw Error('SecurityError')}}):behavior==='missingAdapter'?{}:{GUEST_APPLY_CONFIG(c){if(behavior==='applyThrow')throw Error('application_failure');calls.push({api:'guest',config:c})},BOTANICA_APPLY_CONFIG(c){calls.push({api:'botanica',config:c})}};if(behavior==='error')queueMicrotask(()=>el.listeners.error?.());else if(behavior!=='hang')queueMicrotask(()=>el.listeners.load?.())}});return el}}};
  env.window={VEIL_APPLY_CONFIG(c){calls.push({api:'veil',config:c})},GUEST_APPLY_CONFIG(c){calls.push({api:'guest',config:c})}};
  vm.runInNewContext(source,env,{timeout:1000});return env;
 }
@@ -53,7 +53,7 @@ const config=(id,version)=>({template:{id,version},couple:{name1:'Ana',name2:'Lu
  ctl.abort();await assert.rejects(()=>aborted,/preview_cancelled/);
  assert.equal(abortedEnv.pendingTimers,0);assert.equal(abortedEnv.host.nodes[0].isConnected,false);
  // A denied load, blocked navigation, missing adapter or broken apply also removes the iframe.
- for(const [behavior,error] of [['error','iframe_load_failed'],['navigationThrow','iframe_navigation_failed'],['missingAdapter','iframe_adapter_missing'],['applyThrow','iframe_apply_failed']]){
+ for(const [behavior,error] of [['error','iframe_load_failed'],['navigationThrow','iframe_navigation_failed'],['missingAdapter','iframe_adapter_missing'],['crossOrigin','iframe_cross_origin'],['applyThrow','iframe_apply_failed']]){
   const env=makeEnv();env.setBehavior(behavior);
   await assert.rejects(()=>env.window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order:order('design-03','1.0.0'),config:config('design-03','1.0.0'),host:env.host,registry}),new RegExp(error),behavior);
   assert.equal(env.host.nodes[0].isConnected,false,behavior+' must not leave broken iframe');assert.equal(env.pendingTimers,0);
