@@ -2236,3 +2236,11 @@ SHA-256: `a95984b658e560a9c3fca4bd92315b41c1b92cc4f6d47fffeed890da6f1f2133`.
 
 Next product-development block: **Design 02** under the existing common catalog contracts.
 Commercial publication and Stripe remain on hold.
+
+## 25. GUEST visual-plugin common system V2 — reuse gate
+
+Updated 2026-10-09. **Mandatory read-first:** `guest/GUEST_PLATFORM_VISUAL_V2_READ_FIRST_2026-10-09.md`, with implementation details in `guest/GUEST_CATALOGO_VISUAL_SISTEMA_COMUN_V2_2026-10-09.md`.
+
+Future Design 03/04/… templates must provide only visual HTML exposing `window.GUEST_APPLY_CONFIG(config)` and a small `visual-plugin.json`. `guest/tools/register_visual_template.cjs` creates adapter, owner-viewer manifest, catalog registry entry and certification evidence atomically **in a working tree**; commit all generated files together. `guest/catalog/guest-catalog-owner-viewer-v2.js` uses one owner interface (native VEIL legacy / same-origin iframes for future designs), and `guest/tools/generate_backend_catalog_registry.cjs` compiles production-only certified IDs or guarded test-only IDs. CI executes `guest/qa/catalog_preflight_v2.cjs` and the sale-admission gate; new designs cannot inherit VEIL's historical seal, and a pending candidate cannot be used as production.
+
+**Scope truth:** The common system is implemented and locally tested in branch `guest-independent` but has **NOT YET** been deployed into the actual Mobile Center or Supabase v12. The latter remains blocked by platform tooling. Until an authorized backend and common owner UI integration is deployed and verified with real orders, RSVP, Android and <=5 minute owner touch, D02 Botánica remains `certification-pending` and the system must NOT be called fully commercial-certified. Do not bypass tooling controls, change frozen files or start D03 with custom commercial/RSVP code.
