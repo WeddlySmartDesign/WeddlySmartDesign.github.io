@@ -4,6 +4,10 @@ on:
     branches: [guest-independent]
     paths:
       - 'guest/tests/botanica_catalog_bridge_offline.test.cjs'
+      - 'guest/qa/catalog_admission_gate.cjs'
+      - 'guest/tests/catalog_admission_gate_test.cjs'
+      - 'guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json'
+      - 'guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json'
       - 'guest/tests/botanica_catalog_manifest_guard.test.cjs'
       - 'guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V3_2026-10-09.json'
       - 'guest/GUEST_D02_BOTANICA_READ_FIRST.md'
@@ -29,3 +33,5 @@ jobs:
         run: |
           node guest/tests/botanica_catalog_bridge_offline.test.cjs
           node guest/tests/botanica_catalog_manifest_guard.test.cjs
+          node guest/qa/catalog_admission_gate.cjs
+          node guest/tests/catalog_admission_gate_test.cjs
