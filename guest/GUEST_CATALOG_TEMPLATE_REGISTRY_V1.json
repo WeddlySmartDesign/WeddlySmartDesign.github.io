@@ -27,6 +27,23 @@
       ],
       "defaultTypographyVariant": "classic",
       "versionPinnedPerOrder": true
+    },
+    {
+      "id": "botanica",
+      "displayName": "BOTÁNICA",
+      "version": "14.1",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
     }
   ]
 }
