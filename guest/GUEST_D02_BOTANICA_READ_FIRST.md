@@ -1,3 +1,16 @@
+# ACTUALIZACIÓN VIGENTE — BOTÁNICA V14.7 / 9 OCTUBRE 2026
+
+**PUNTO DE ENTRADA OBLIGATORIO Y ÚNICO:** este documento y `guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V3_2026-10-09.json`. Todo lo que figura más abajo sobre V14.6 es **historial**, no la candidata actual.
+
+- **V14**: APROBADA visualmente por la propietaria y congelada. SHA-256 `27ede39dbf1e04dc7ee8e758601127eaf9de6e705f1f14a026df09fb72795c39`. **NO MODIFICAR.**
+- **V14.7**: candidata técnica vigente, SHA-256 `fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a`, copia en `/GUEST by WeddlySmartDesign/BOTANICA/Candidatas/GUEST_D02_BOTANICA_ATELIER_V14_7_PHOTO_ONLY_VISUAL_QA_CANDIDATE_2026-10-09.html`. **NO certificada comercialmente ni validada aún en Android de la propietaria.** V14.5 y V14.6 son solo historial técnico.
+- **Pruebas localmente verificadas:** 20/20 estados móviles Historia (320/360/390/430); 6/6 escenas estándar idénticas en comparativa píxel a píxel V14.6↔V14.7 con animaciones y vídeo deshabilitados; HTML completo V14.7 con foto visible y bloque Story vacío oculto; 5/5 controles de integridad de cuatro HTML y 17 recursos inalterados; siete pruebas aisladas de catálogo/RSVP (simulaciones). Evidencias: `guest/GUEST_D02_BOTANICA_CHECKPOINT_V14_7_2026-10-09.md`.
+- **Nuevo defecto de contrato descubierto:** Edge Function v12 convierte `story.textMode='none'` a `preset`, aunque el esquema común admite `none`. El renderer V14.7 ya maneja foto-only, pero el estado **no está verificado desde un pedido del cuestionario real**; debe armonizarse en un despliegue test-only autorizado.
+- **BLOQUEO SIN CAMBIOS:** Supabase `guest-invitation-flow` v12 solo admite VEIL LIGHT; el despliegue de pruebas Botánica fue bloqueado por el entorno. **No intentar eludirlo.** Dos pedidos E2E, revisión/final, entrega/RSVP, y prueba Android con intervención ≤5 min siguen PENDIENTES. Registro de Botánica: `certification-pending`, sin compras, sin publicación, sin Stripe.
+- **Próximo paso correcto:** seguir el checkpoint V14.7; si un entorno permite despliegue autorizado, habilitar la plantilla exclusivamente para pruebas con barrera de producción y verificar también normalización `none`. Nunca elevar a `commercially-frozen` sin todos los gates.
+
+---
+
 # ACTUALIZACIÓN D02 V14.6 — ESTADO VIGENTE (09/10/2026)
 
 **Esta actualización prevalece sobre las referencias históricas a V14.5 en secciones inferiores.** El archivo V14 original sigue aprobado y congelado. La V14.5 continúa conservada como evidencia histórica. **La candidata técnica vigente es V14.6**, que corrige únicamente el caso `Historia habilitada + foto + texto desactivado`; el fallo existía realmente en V14.5. La nueva condición supera **11/11 pruebas de mapeo** y conserva los 17 medios originales; *no* ha pasado prueba visual Android ni los dos pedidos E2E reales, por lo que continúa **NO CERTIFICADA y NO PUBLICABLE**.
