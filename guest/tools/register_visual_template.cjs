@@ -37,6 +37,12 @@ const registry=JSON.parse(fs.readFileSync(registryPath,'utf8'));
 const evidence=JSON.parse(fs.readFileSync(evidencePath,'utf8'));
 const owner=JSON.parse(fs.readFileSync(ownerPath,'utf8'));
 if(registry.templates.some(x=>x.id===id)||evidence.templates[id]||owner.templates[id])fail('Template ID already exists: '+id);
+const statusPath=path.join(root,'guest/GUEST_PROJECT_STATUS_V1.json');
+const projectStatus=fs.existsSync(statusPath)?JSON.parse(fs.readFileSync(statusPath,'utf8')):null;
+if(projectStatus){
+ if(!projectStatus.designs||projectStatus.schemaVersion!=='guest-project-status-v1')fail('Invalid canonical handoff state');
+ if(projectStatus.designs[id]&&projectStatus.designs[id].status!=='not-started')fail('State already contains an active template: '+id);
+}
 if(!Array.isArray(evidence.policy.newTemplateRequirements))fail('Admission policy missing');
 const assetPath=`guest/catalog-assets/${id}/${version}/index.html`;
 const adapterPath=`guest/guest-catalog-template-${id}-adapter-v1.js`;
@@ -47,12 +53,16 @@ const gates={};
 for(const k of evidence.policy.newTemplateRequirements)gates[k]={pass:false,source:'guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md',why:'Not independently certified for '+id};
 evidence.templates[id]={version,basis:'new-template-gated',gates};
 owner.templates[id]={id,version,mode:'iframe',src:'/'+assetPath,applyApi:rendererApi,status:'certification-pending'};
+if(projectStatus){
+ projectStatus.designs[id]={version,status:'certification-pending',catalogAsset:assetPath,adapter:adapterPath,visualMasterSha256:crypto.createHash('sha256').update(html).digest('hex'),commerciallyCertified:false,requiredGates:evidence.policy.newTemplateRequirements.length};
+}
 const emitted=[
  [assetPath,html],
  [adapterPath,adapter],
  ['guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',JSON.stringify(registry,null,2)+'\n'],
  ['guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json',JSON.stringify(evidence,null,2)+'\n'],
  ['guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',JSON.stringify(owner,null,2)+'\n']
+ ,...(projectStatus?[['guest/GUEST_PROJECT_STATUS_V1.json',JSON.stringify(projectStatus,null,2)+'\n']]:[])
 ];
 const hash=crypto.createHash('sha256').update(html).digest('hex');
 const report={ok:true,mode:apply?'applied':'dry-run',template:id,version,assetSha256:hash,assetBytes:Buffer.byteLength(html),files:emitted.map(([p])=>p),commerciallyCertified:false,backendDeployed:false};
