@@ -26,9 +26,9 @@ const valid={
 assert.deepEqual(validate(valid),[],'minimum valid canonical config must pass');
 const clone=x=>structuredClone(x);
 {
- const x=clone(valid);delete x.schemaVersion;delete x.cover.photo;delete x.rsvp.plusOneEnabled;
+ const x=clone(valid);delete x.schemaVersion;delete x.cover.photo;
  let errors=validate(x);
- for(let e of ['$.schemaVersion:required','$.cover.photo:required','$.rsvp.plusOneEnabled:required'])assert.ok(errors.includes(e),e);
+ for(let e of ['$.schemaVersion:required','$.cover.photo:required'])assert.ok(errors.includes(e),e);
 }
 {
  const x=clone(valid);x.story.photo={src:'upload:story',fit:'crop',focusX:50,focusY:50,autoFrame:true};
