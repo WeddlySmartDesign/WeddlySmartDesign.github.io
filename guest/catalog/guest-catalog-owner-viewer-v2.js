@@ -44,8 +44,7 @@ async function show({order,config,host,registry,signal}){
  });
  if(signal?.aborted){if(iframe.isConnected)iframe.remove();fail('preview_cancelled')}
  if(!iframe.isConnected)fail('preview_detached');
- let child;try{child=iframe.contentWindow}catch{if(iframe.isConnected)iframe.remove();fail('iframe_cross_origin')}
- const apply=child?.[spec.applyApi];
+ let apply;try{apply=iframe.contentWindow?.[spec.applyApi]}catch{if(iframe.isConnected)iframe.remove();fail('iframe_cross_origin')}
  if(typeof apply!=='function'){iframe.remove();fail('iframe_adapter_missing:'+id)}
  try{apply(structuredClone(config))}catch{iframe.remove();fail('iframe_apply_failed:'+id)}
  return {mode:'iframe',id,close(){if(iframe.isConnected)iframe.remove()}};
