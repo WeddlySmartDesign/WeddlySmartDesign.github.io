@@ -101,16 +101,16 @@ function build(source){
    "const ts=now(),config=checkInvitationConfig(Object.keys(order.resolved_config||{}).length?order.resolved_config:buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version),order);",
    'mark_review_ready_gate');
  source=once(source,
-   "if(decision==='approve'){\n         const {error}",
-   "if(decision==='approve'){\n         checkInvitationConfig(order.resolved_config||{},order);\n         const {error}",
+   "if(decision==='approve'){\n        const {error}",
+   "if(decision==='approve'){\n        checkInvitationConfig(order.resolved_config||{},order);\n        const {error}",
    'review_approve_gate');
  source=once(source,
-   "const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);\n       const token=await capability(order.id,'r')",
-   "const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);\n       checkInvitationConfig(order.resolved_config||{},order);\n       const token=await capability(order.id,'r')",
+   "const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);\n      const token=await capability(order.id,'r')",
+   "const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);\n      checkInvitationConfig(order.resolved_config||{},order);\n      const token=await capability(order.id,'r')",
    'send_review_gate');
  source=once(source,
-   "if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);\n       const files=await signedFiles(c,order,7200),config=hydrateConfig(order.resolved_config||{},files);",
-   "if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);\n       const files=await signedFiles(c,order,7200),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},files),order,files,'hydrated');",
+   "if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);\n      const files=await signedFiles(c,order,7200),config=hydrateConfig(order.resolved_config||{},files);",
+   "if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);\n      const files=await signedFiles(c,order,7200),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},files),order,files,'hydrated');",
    'signed_review_gate');
  // Previous anchor occurs twice (review_load and detail); first is the
  // user-visible review, second is manager detail. Only review_load needs a
@@ -121,7 +121,7 @@ function build(source){
    'public_final_gate');
  source=once(source,
    "const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=hydrateConfig(order.resolved_config||{},publicFiles),ts=now()",
-   "checkInvitationConfig(order.resolved_config||{},order);\n       const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},publicFiles),order,publicFiles,'hydrated'),ts=now()",
+   "checkInvitationConfig(order.resolved_config||{},order);\n      const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},publicFiles),order,publicFiles,'hydrated'),ts=now()",
    'delivery_pre_post_gates');
  // Failing signatures from the signing API must NOT become blank images.
  source=once(source,
