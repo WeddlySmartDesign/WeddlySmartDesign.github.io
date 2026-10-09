@@ -48,11 +48,11 @@ function build(center,rawRegistry,viewer,overlay,stagedAssets={'botanica':BOT_FI
  if(!out.includes("connect-src 'none'"))throw Error('offline_network_guard_missing');
  return out;
 }
-function stage(centerFile,assetFiles,outDir,root=ROOT){
+function stageWithExpectedCenterSha(centerFile,assetFiles,outDir,root,expectedCenterSha){
  const files=typeof assetFiles==='string'?{botanica:assetFiles}:assetFiles;
  if(!centerFile||!files||!Object.keys(files).length||!outDir)throw Error('usage: --center FILE --asset template-id=FILE --out-dir NEW_DIR');
  const center=fs.readFileSync(centerFile);
- if(sha(center)!==CENTER_SHA)throw Error('preproduction_center_sha256_mismatch');
+ if(sha(center)!==expectedCenterSha)throw Error('preproduction_center_sha256_mismatch');
  if(fs.existsSync(outDir))throw Error('output_dir_must_not_exist');
  const registry=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json'),'utf8'));
  const project=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_PROJECT_STATUS_V1.json'),'utf8'));
@@ -80,7 +80,7 @@ function stage(centerFile,assetFiles,outDir,root=ROOT){
  for(const a of assets)fs.copyFileSync(a.source,path.join(dest,a.output),fs.constants.COPYFILE_EXCL);
  const manifest={schemaVersion:'guest-owner-preproduction-stage-v2',state:'LOCAL TEST ONLY: NOT DEPLOYED OR COMMERCIAL CERTIFIED',
   network:'connect-src none; form-action none; live order operations disabled by CSP',
-  centerCandidateOriginalSha256:CENTER_SHA,stagedCenterFile:CENTER_FILE,stagedCenterSha256:sha(Buffer.from(html)),
+  centerCandidateOriginalSha256:expectedCenterSha,stagedCenterFile:CENTER_FILE,stagedCenterSha256:sha(Buffer.from(html)),
   assets:assets.map(({id,version,output,sha256})=>({id,version,file:output,sha256})),
   registry:'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',sharedViewer:'guest/catalog/guest-catalog-owner-viewer-v2.js',
   stagingAdapter:'guest/catalog/guest-owner-stage-overlay-v2.js',
@@ -88,6 +88,9 @@ function stage(centerFile,assetFiles,outDir,root=ROOT){
  fs.writeFileSync(path.join(dest,'STAGING_MANIFEST.json'),JSON.stringify(manifest,null,2)+'\n',{flag:'wx'});
  return manifest;
 }
+// Public operator path ALWAYS requires the frozen candidate's exact SHA.
+// Override is exported ONLY for synthetic local tests; never accepted by CLI.
+function stage(centerFile,assetFiles,outDir,root=ROOT){return stageWithExpectedCenterSha(centerFile,assetFiles,outDir,root,CENTER_SHA)}
 if(require.main===module){
  const args=process.argv.slice(2),arg=k=>args.includes(k)?args[args.indexOf(k)+1]:null;
  const assets={};
@@ -98,4 +101,4 @@ if(require.main===module){
  }
  console.log(JSON.stringify(stage(arg('--center'),assets,arg('--out-dir'),arg('--root')?path.resolve(arg('--root')):ROOT),null,2));
 }
-module.exports={build,stage,CENTER_SHA,BOTANICA_SHA,CENTER_FILE,BOT_FILE};
+module.exports={build,stage,stageWithExpectedCenterSha,CENTER_SHA,BOTANICA_SHA,CENTER_FILE,BOT_FILE};
