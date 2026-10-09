@@ -40,6 +40,14 @@ third.templates['design-03']={id:'design-03',version:'1.0.0',mode:'iframe',statu
 const staged=build(html,third,viewer,overlay,{botanica:'GUEST_BOTANICA_V14_7_TEST_ONLY_ASSET.html','design-03':'GUEST_STAGE_design-03_v1-0-0.html'});
 assert.match(staged,/GUEST_STAGE_design-03_v1-0-0\.html/,'third design must stage without code per-template');
 assert.equal(third.templates['design-03'].src,null,'never mutate canonical registry');
+const fourth=structuredClone(third);
+fourth.templates['design-1000']={id:'design-1000',version:'10.0.0',mode:'iframe',status:'commercially-frozen',applyApi:'GUEST_APPLY_CONFIG',src:'/guest/catalog-assets/design-1000/10.0.0/index.html'};
+const mature=build(html,fourth,viewer,overlay,{botanica:'GUEST_BOTANICA_V14_7_TEST_ONLY_ASSET.html','design-03':'GUEST_STAGE_design-03_v1-0-0.html','design-1000':'GUEST_STAGE_design-1000_v10-0-0.html'});
+assert.match(mature,/GUEST_STAGE_design-1000_v10-0-0\.html/,'offline regression of any future certified iframe');
+assert.equal(fourth.templates['design-1000'].src,'/guest/catalog-assets/design-1000/10.0.0/index.html','published manifest must stay immutable');
+assert.throws(()=>build(html,third,viewer,overlay,{botanica:'GUEST_BOTANICA_V14_7_TEST_ONLY_ASSET.html','veil-light':'GUEST_STAGE_legacy.html'}),/unsafe_staged_asset:veil-light/);
+const fakeApproved=structuredClone(third);fakeApproved.templates['design-03'].src='/guest/catalog-assets/design-03/fake.html';
+assert.throws(()=>build(html,fakeApproved,viewer,overlay,{'design-03':'GUEST_STAGE_design-03_v1-0-0.html'}),/unsafe_staged_asset:design-03/);
 assert.throws(()=>build(html,third,viewer,overlay,{bogus:'bogus.html'}),/unsafe_staged_asset:bogus/);
 assert.throws(()=>build(html,third,viewer,overlay,{'design-03':'../escape.html'}),/unsafe_staged_filename:design-03/);
 assert.throws(()=>build(html,third,viewer,overlay,{botanica:'https://evil.example'}),/unsafe_staged_filename:botanica/);
