@@ -48,33 +48,54 @@ function build(center,rawRegistry,viewer,overlay,stagedAssets={'botanica':BOT_FI
  if(!out.includes("connect-src 'none'"))throw Error('offline_network_guard_missing');
  return out;
 }
-function stage(centerFile,botFile,outDir){
- if(!centerFile||!botFile||!outDir)throw Error('usage: --center FILE --botanica FILE --out-dir NEW_DIR');
- const center=fs.readFileSync(centerFile),bot=fs.readFileSync(botFile);
+function stage(centerFile,assetFiles,outDir,root=ROOT){
+ const files=typeof assetFiles==='string'?{botanica:assetFiles}:assetFiles;
+ if(!centerFile||!files||!Object.keys(files).length||!outDir)throw Error('usage: --center FILE --asset template-id=FILE --out-dir NEW_DIR');
+ const center=fs.readFileSync(centerFile);
  if(sha(center)!==CENTER_SHA)throw Error('preproduction_center_sha256_mismatch');
- if(sha(bot)!==BOTANICA_SHA)throw Error('frozen_botanica_candidate_sha256_mismatch');
  if(fs.existsSync(outDir))throw Error('output_dir_must_not_exist');
- if([centerFile,botFile].some(p=>path.resolve(p).startsWith(path.resolve(outDir)+path.sep)))throw Error('overlap_with_source');
- const reg=JSON.parse(fs.readFileSync(path.join(ROOT,'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json'),'utf8'));
- const viewer=fs.readFileSync(path.join(ROOT,'guest/catalog/guest-catalog-owner-viewer-v2.js'),'utf8');
- const overlay=fs.readFileSync(path.join(ROOT,'guest/catalog/guest-owner-stage-overlay-v2.js'),'utf8');
- const html=build(center.toString('utf8'),reg,viewer,overlay);
- fs.mkdirSync(outDir,{recursive:false});
- const output=path.join(outDir,CENTER_FILE),copy=path.join(outDir,BOT_FILE);
- fs.writeFileSync(output,html,{flag:'wx'});fs.copyFileSync(botFile,copy,fs.constants.COPYFILE_EXCL);
- const manifest={schemaVersion:'guest-owner-preproduction-stage-v1',state:'LOCAL TEST ONLY: NOT DEPLOYED OR COMMERCIAL CERTIFIED',
-   centerCandidateOriginalSha256:CENTER_SHA,botanicaV14_7OriginalSha256:BOTANICA_SHA,
-   stagedCenterFile:CENTER_FILE,stagedCenterSha256:sha(Buffer.from(html)),
-   stagedBotanicaFile:BOT_FILE,stagedBotanicaSha256:sha(fs.readFileSync(copy)),
-   registry:'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',
-   sharedViewer:'guest/catalog/guest-catalog-owner-viewer-v2.js',
-   stagingAdapter:'guest/catalog/guest-owner-stage-overlay-v2.js',
-   verification:'local artifact only; backend v12 and frozen files untouched'};
- fs.writeFileSync(path.join(outDir,'STAGING_MANIFEST.json'),JSON.stringify(manifest,null,2)+'\n',{flag:'wx'});
+ const registry=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json'),'utf8'));
+ const project=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_PROJECT_STATUS_V1.json'),'utf8'));
+ const viewer=fs.readFileSync(path.join(root,'guest/catalog/guest-catalog-owner-viewer-v2.js'),'utf8');
+ const overlay=fs.readFileSync(path.join(root,'guest/catalog/guest-owner-stage-overlay-v2.js'),'utf8');
+ const names={},assets=[],uniqueSources=new Set([path.resolve(centerFile)]);
+ for(const [id,filename] of Object.entries(files)){
+  const t=registry.templates?.[id],record=project.designs?.[id];
+  if(!t||t.status!=='certification-pending'||t.mode!=='iframe'||t.src!==null||record?.version!==t.version)throw Error('asset_not_pending_or_registry_drift:'+id);
+  const reference=record.candidateSha256||record.visualMasterSha256;
+  if(!/^[a-f0-9]{64}$/.test(reference||''))throw Error('missing_catalog_artifact_sha256:'+id);
+  const source=path.resolve(filename),actual=sha(fs.readFileSync(source));
+  if(actual!==reference)throw Error('asset_sha256_mismatch:'+id);
+  if(uniqueSources.has(source))throw Error('duplicate_asset_source:'+id);uniqueSources.add(source);
+  const safe=id.replace(/[^a-z0-9-]/g,'-'),version=t.version.replace(/[^a-z0-9-]/gi,'-');
+  const output=id==='botanica'?BOT_FILE:'GUEST_STAGE_'+safe+'_v'+version+'.html';
+  if(Object.values(names).includes(output))throw Error('duplicate_asset_output:'+id);
+  names[id]=output;assets.push({id,version:t.version,source,output,sha256:actual});
+ }
+ const dest=path.resolve(outDir);
+ for(const source of uniqueSources)if(source.startsWith(dest+path.sep))throw Error('source_inside_output_dir');
+ const html=build(center.toString('utf8'),registry,viewer,overlay,names);
+ fs.mkdirSync(dest,{recursive:false});
+ fs.writeFileSync(path.join(dest,CENTER_FILE),html,{flag:'wx'});
+ for(const a of assets)fs.copyFileSync(a.source,path.join(dest,a.output),fs.constants.COPYFILE_EXCL);
+ const manifest={schemaVersion:'guest-owner-preproduction-stage-v2',state:'LOCAL TEST ONLY: NOT DEPLOYED OR COMMERCIAL CERTIFIED',
+  network:'connect-src none; form-action none; live order operations disabled by CSP',
+  centerCandidateOriginalSha256:CENTER_SHA,stagedCenterFile:CENTER_FILE,stagedCenterSha256:sha(Buffer.from(html)),
+  assets:assets.map(({id,version,output,sha256})=>({id,version,file:output,sha256})),
+  registry:'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',sharedViewer:'guest/catalog/guest-catalog-owner-viewer-v2.js',
+  stagingAdapter:'guest/catalog/guest-owner-stage-overlay-v2.js',
+  verification:'offline artifact only; production backend, Stripe, emails and frozen files untouched'};
+ fs.writeFileSync(path.join(dest,'STAGING_MANIFEST.json'),JSON.stringify(manifest,null,2)+'\n',{flag:'wx'});
  return manifest;
 }
 if(require.main===module){
  const args=process.argv.slice(2),arg=k=>args.includes(k)?args[args.indexOf(k)+1]:null;
- console.log(JSON.stringify(stage(arg('--center'),arg('--botanica'),arg('--out-dir')),null,2));
+ const assets={};
+ if(arg('--botanica'))assets.botanica=arg('--botanica'); // historical CLI alias; not required by new designs
+ for(let i=0;i<args.length;i++)if(args[i]==='--asset'){
+  const pair=String(args[++i]||''),split=pair.indexOf('=');if(split<=0)throw Error('asset_usage_id_equals_path');
+  const id=pair.slice(0,split);if(Object.hasOwn(assets,id))throw Error('duplicate_asset_id:'+id);assets[id]=pair.slice(split+1);
+ }
+ console.log(JSON.stringify(stage(arg('--center'),assets,arg('--out-dir'),arg('--root')?path.resolve(arg('--root')):ROOT),null,2));
 }
 module.exports={build,stage,CENTER_SHA,BOTANICA_SHA,CENTER_FILE,BOT_FILE};
