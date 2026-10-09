@@ -13,15 +13,20 @@ document.body.appendChild(layer);
 const host=layer.querySelector('#guestOwnerStagedHost');
 layer.querySelector('#guestOwnerStagedBack').addEventListener('click',()=>window.GUEST_STAGE_CLOSE?.());
 function rendererFor(order){
- const id=String(order?.template_id||order?.templateId||'veil-light'),r=renderers[id];
+ const id=String(order?.template_id||order?.templateId||'');
+ if(!id)throw Error('order_template_id_missing');
+ const pinned=order?.template_version||order?.templateVersion;
+ if(typeof pinned!=='string'||!pinned.trim())throw Error('order_template_version_missing:'+id);
+ const r=renderers[id];
  if(!r)throw Error('template_renderer_unavailable:'+id);
  if(r.status!=='commercially-frozen'&&order?.mode!=='test')throw Error('test_only_template:'+id);
- if(r.mode!=='native'&&String(order?.template_version||order?.templateVersion)!==String(r.version))throw Error('template_version_mismatch:'+id);
+ if(pinned!==String(r.version))throw Error('template_version_mismatch:'+id);
  return r;
 }
 function applyOrderConfig(order,config){
  const r=rendererFor(order),id=r.id;
- if(config?.template?.id&&config.template.id!==id)throw Error('template_config_id_mismatch:'+id);
+ if(config?.template?.id!==id)throw Error('template_config_id_mismatch:'+id);
+ if(String(config?.template?.version||'')!==String(order.template_version||order.templateVersion))throw Error('template_config_version_mismatch:'+id);
  const generation=++seq;
  if(handle?.close){handle.close();handle=null}
  if(r.mode==='native'){
