@@ -1,63 +1,29 @@
-name: GUEST Botánica contract QA (offline)
+name: GUEST Catalog and Continuity QA (offline)
 on:
   push:
     branches: [guest-independent]
     paths:
-      - 'guest/tests/botanica_catalog_bridge_offline.test.cjs'
-      - 'guest/START_HERE.md'
-      - 'guest/DESIGN_NEW_RUNBOOK.md'
-      - 'guest/qa/continuity_entry_guard.cjs'
-      - 'guest/CURRENT_STATE.md'
-      - 'guest/GUEST_CANONICAL_MASTER_DO_NOT_DRIFT_2026-10-07.md'
-      - 'guest/GUEST_PLATFORM_VISUAL_V2_READ_FIRST_2026-10-09.md'
-      - 'guest/GUEST_DESIGN_PRODUCTION_QA_MASTER_D03_D06_2026-10-09.md'
-      - 'guest/qa/catalog_admission_gate.cjs'
-      - 'guest/tests/catalog_admission_gate_test.cjs'
-      - 'guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json'
-      - 'guest/START_HERE.md'
-      - 'guest/GUEST_PROJECT_STATUS_V1.json'
-      - 'guest/DESIGN_NEW_RUNBOOK.md'
-      - 'guest/CURRENT_STATE.md'
-      - 'guest/qa/handoff_gate.cjs'
-      - 'guest/tests/handoff_gate_test.cjs'
-      - 'guest/GUEST_DESIGN_PRODUCTION_QA_MASTER_D03_D06_2026-10-09.md'
-      - 'guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V3_2026-10-09.json'
-      - 'guest/GUEST_PLATFORM_VISUAL_V2_READ_FIRST_2026-10-09.md'
-      - 'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json'
-      - 'guest/catalog/**'
-      - 'guest/tools/register_visual_template.cjs'
-      - 'guest/tools/generate_backend_catalog_registry.cjs'
-      - 'guest/templates/_example/**'
-      - 'guest/qa/catalog_preflight_v2.cjs'
-      - 'guest/qa/visual_plugin_system_contract.cjs'
-      - 'guest/tests/visual_plugin_onboarding.test.cjs'
-      - 'guest/tests/owner_viewer_generic.test.cjs'
-      - 'guest/tests/backend_catalog_generation.test.cjs'
-      - 'guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json'
-      - 'guest/tests/botanica_catalog_manifest_guard.test.cjs'
-      - 'guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V3_2026-10-09.json'
-      - 'guest/GUEST_D02_BOTANICA_READ_FIRST.md'
-      - 'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'
-      - 'guest/guest-catalog-template-botanica-adapter-v1.js'
-      - 'guest/guest-catalog-delivery-runtime-v1.js'
-      - 'guest/tools/build_catalog_delivery.js'
+      - 'guest/**'
       - '.github/workflows/guest-botanica-contract-qa.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   contract-offline:
-    name: Registro, adaptador y puente RSVP simulados
+    name: Shared visual contract, catalog, handoff and anti-regression
     runs-on: ubuntu-latest
-    timeout-minutes: 4
+    timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Ejecutar contrato Botánica sin datos ni red
+      - name: Verify isolated catalog/RSVP contract and admission
         run: |
           node guest/tests/botanica_catalog_bridge_offline.test.cjs
           node guest/tests/botanica_catalog_manifest_guard.test.cjs
           node guest/qa/catalog_preflight_v2.cjs
-          node guest/qa/continuity_entry_guard.cjs
+      - name: Verify one recovery state and deliberate failure mutations
+        run: |
+          node guest/qa/handoff_gate.cjs
+          node guest/tests/handoff_gate_test.cjs
