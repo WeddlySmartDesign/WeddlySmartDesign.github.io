@@ -27,6 +27,12 @@ const config=(id,version)=>({template:{id,version},couple:{name1:'Ana',name2:'Lu
  await assert.rejects(()=>v.show({order:order('botanica','14.7'),config:config('botanica','14.7'),host:e.host,registry:{templates:{'botanica':{version:'14.7',mode:'iframe',status:'certification-pending',src:null}}}}),/visual_asset_not_ready/);
  await assert.rejects(()=>v.show({order:order('botanica','14.7'),config:config('botanica','14.7'),host:e.host,registry:{templates:{'botanica':{version:'14.7',mode:'iframe',status:'certification-pending',src:'https://another-origin.example/test.html'}}}}),/cross_origin_template/);
  await assert.rejects(()=>v.show({order:order('botanica','14.7'),config:config('veil-light','14.7'),host:e.host,registry}),/config_id_mismatch/);
+ await assert.rejects(()=>v.show({order:{template_id:'veil-light',mode:'test'},config:config('veil-light','5.3.3'),host:e.host,registry}),/order_template_version_missing/);
+ await assert.rejects(()=>v.show({order:{template_version:'5.3.3',mode:'test'},config:config('veil-light','5.3.3'),host:e.host,registry}),/order_template_id_missing/);
+ await assert.rejects(()=>v.show({order:order('veil-light','5.3.3'),config:{template:{id:'veil-light'}},host:e.host,registry}),/config_version_mismatch/);
+ await assert.rejects(()=>v.show({order:order('design-03','1.0.0'),config:{template:{id:'design-03',version:'0.8.0'}},host:e.host,registry}),/config_version_mismatch/);
+ await assert.rejects(()=>v.show({order:order('botanica','14.7'),config:{couple:{name1:'Ana'}},host:e.host,registry}),/config_id_mismatch/);
+ await assert.rejects(()=>v.show({order:order('botanica','14.7','production'),config:config('botanica','14.7'),host:e.host,registry}),/pending_template_not_authorized/);
  assert.equal(e.calls.length,3,'Failed requests must never be applied');
- console.log('PASS generic owner: VEIL native, Botánica iframe, Design 03 iframe no owner code changes, close, unknown id, version mismatch, missing asset, cross-origin, config mismatch');
+ console.log('PASS generic owner: VEIL native, Botánica/Design03 iframe, strict pinned order+config identity/version, production hold, missing asset, cross-origin, no state mutations');
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});
