@@ -1,3 +1,9 @@
+# ACTUALIZACIÓN VIGENTE (09/10/2026) — BOTÁNICA D02 V14.6
+
+**Leer primero**: `guest/GUEST_D02_BOTANICA_READ_FIRST.md` y `guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V2_2026-10-09.json`. La V14 aprobada sigue FROZEN; la V14.5 queda histórica y **V14.6 es candidata de QA, no certificada**. Un defecto real de Historia con foto y sin texto fue corregido en V14.6; 11/11 pruebas aisladas del mapeo PASS y multimedia inalterada. Backend test-only NO desplegado (bloqueo administrativo), pedidos reales y Android NO realizados; ventas NO autorizadas. El resto de este archivo contiene historial y puede describir estados antiguos; prevalecen estos documentos y el máster canónico. No tocar ONE, Partner, STUDIO ni VEIL LIGHT.
+
+---
+
 # ESTADO VIGENTE 2026-10-09 — BOTÁNICA D02 / LEER PRIMERO
 
 **Fuente única de recuperación:** `guest/GUEST_D02_BOTANICA_READ_FIRST.md` y manifiesto `guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_2026-10-09.json`. Leer ambos junto al máster canónico ANTES de retomar D02 o empezar D03.
