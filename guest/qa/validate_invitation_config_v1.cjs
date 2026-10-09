@@ -61,7 +61,41 @@ function validate(data,contract=schema){
    }
   }
  }
- walk(data,contract,'$');
+ walk(data,contract,'
+}
+if(require.main===module){
+ const argv=process.argv.slice(2),input=argv[0];
+ if(!input)throw Error('Usage: node guest/qa/validate_invitation_config_v1.cjs CONFIG.json');
+ const candidate=JSON.parse(fs.readFileSync(input,'utf8'));
+ const errors=validate(candidate);
+ if(errors.length){console.error('FAIL GUEST schema validation:\n'+errors.map(e=>' - '+e).join('\n'));process.exitCode=1}
+ else console.log('PASS GUEST config schema v1 (offline): '+input);
+}
+module.exports={validate,schema};
+);
+ // Semantic invariants from the *shared* questionnaire, not per-template rules.
+ // Structural errors remain in the list; these conditions never add defaults.
+ if (data && typeof data === 'object' && !Array.isArray(data)) {
+  if (data.cover?.showPlace === true && !String(data.wedding?.coverPlace || '').trim())
+   errors.push('$.wedding.coverPlace:required_when_shown');
+  if (data.story?.enabled === true && data.story.textMode === 'none' && !data.story.photo)
+   errors.push('$.story.photo:required_for_photo_only');
+  if (data.story?.enabled === true && data.story.textMode === 'custom' && !String(data.story.body || '').trim())
+   errors.push('$.story.body:required_for_custom');
+  if (data.locations?.mode === 'shared' && Array.isArray(data.locations.items) && data.locations.items.length !== 1)
+   errors.push('$.locations.items:shared_requires_one');
+  if (data.locations?.mode === 'split' && Array.isArray(data.locations.items) && data.locations.items.length !== 2)
+   errors.push('$.locations.items:split_requires_two');
+  if (data.agenda?.enabled === true && Array.isArray(data.agenda.moments) && data.agenda.moments.length === 0)
+   errors.push('$.agenda.moments:required_when_enabled');
+  if (data.gallery?.enabled === true && Array.isArray(data.gallery.photos) && data.gallery.photos.length === 0)
+   errors.push('$.gallery.photos:required_when_enabled');
+  if (data.practical?.bus?.enabled === true &&
+      (!data.practical.bus.pickupPoints?.length || !data.practical.bus.outboundTimes?.length))
+   errors.push('$.practical.bus:pickup_and_outbound_required');
+  if (data.practical?.playlist?.enabled === true && !data.practical.playlist.url)
+   errors.push('$.practical.playlist.url:required_when_enabled');
+ }
  return errors;
 }
 if(require.main===module){
