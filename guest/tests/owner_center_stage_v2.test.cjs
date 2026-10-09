@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
-const assert=require('node:assert/strict');
-const {build}=require('../tools/stage_owner_center_v2.cjs');
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os'),crypto=require('node:crypto');
+const {build,stage,stageWithExpectedCenterSha,CENTER_FILE}=require('../tools/stage_owner_center_v2.cjs');
 const registry={
  templates:{
   'veil-light':{id:'veil-light',version:'5.3.3',mode:'native',status:'commercially-frozen',applyApi:'VEIL_APPLY_CONFIG'},
@@ -53,4 +53,39 @@ assert.throws(()=>build(html,third,viewer,overlay,{'design-03':'../escape.html'}
 assert.throws(()=>build(html,third,viewer,overlay,{botanica:'https://evil.example'}),/unsafe_staged_filename:botanica/);
 assert.throws(()=>build(html.replace('<head>','<head data-drift>'),registry,viewer,overlay),/source_drift:offline_csp/);
 assert.throws(()=>build(html,registry,'wrong viewer',overlay),/unexpected_source_files/);
-console.log('PASS generic owner V2 local-only staging: VEIL/Botánica/fictional D03, 2 iframe assets, CSP blocks network, fail-closed drift, no registry mutation. NOT DEPLOYED.');
+// Positive file-IO integration: generate an entire generic local package from
+// synthetic, checksum-pinned HTML assets (never the published masters).
+const sha=x=>crypto.createHash('sha256').update(x).digest('hex');
+const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'guest-stage-pack-'));
+const put=(name,data)=>{const p=path.join(tmp,name);fs.mkdirSync(path.dirname(p),{recursive:true});fs.writeFileSync(p,data);return p};
+try{
+ const centerFile=put('center-original.html',html);
+ const sources={botanica:put('botanica.html','<html>Botánica ficticia</html>'),
+  'design-03':put('design03.html','<html>Design 03 ficticio</html>'),
+  'design-1000':put('design1000.html','<html>Design 1000 ficticio</html>')};
+ put('guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',JSON.stringify({schemaVersion:'guest-catalog-owner-renderers-v2',templates:fourth.templates}));
+ put('guest/GUEST_PROJECT_STATUS_V1.json',JSON.stringify({designs:{
+  botanica:{status:'certification-pending',version:'14.7',candidateSha256:sha(fs.readFileSync(sources.botanica))},
+  'design-03':{status:'certification-pending',version:'1.0.0',visualMasterSha256:sha(fs.readFileSync(sources['design-03']))},
+  'design-1000':{status:'commercially-frozen',version:'10.0.0',visualMasterSha256:sha(fs.readFileSync(sources['design-1000']))}
+ }}));
+ put('guest/catalog/guest-catalog-owner-viewer-v2.js',viewer);
+ put('guest/catalog/guest-owner-stage-overlay-v2.js',overlay);
+ const outputDir=path.join(tmp,'new-pack');
+ const result=stageWithExpectedCenterSha(centerFile,sources,outputDir,tmp,sha(Buffer.from(html)));
+ assert.equal(result.assets.length,3,'all candidate and frozen iframe assets copied');
+ assert.equal(result.stagedCenterFile,CENTER_FILE);
+ assert(fs.existsSync(path.join(outputDir,'STAGING_MANIFEST.json')));
+ const stagedHtml=fs.readFileSync(path.join(outputDir,CENTER_FILE),'utf8');
+ assert(stagedHtml.includes("connect-src 'none'"),'pack cannot reach live backend');
+ assert(stagedHtml.includes('GUEST_STAGE_design-03_v1-0-0.html'));
+ assert(stagedHtml.includes('GUEST_STAGE_design-1000_v10-0-0.html'));
+ for(const asset of result.assets)assert.equal(sha(fs.readFileSync(path.join(outputDir,asset.file))),asset.sha256,'copied resource must match original SHA');
+ assert.equal(fs.readFileSync(centerFile,'utf8'),html,'original center is immutable');
+ assert.throws(()=>stageWithExpectedCenterSha(centerFile,sources,outputDir,tmp,sha(Buffer.from(html))),/output_dir_must_not_exist/);
+ assert.throws(()=>stage(centerFile,sources,path.join(tmp,'must-not-be-created'),tmp),/preproduction_center_sha256_mismatch/,'CLI entry always insists on historical actual center SHA');
+ const wrong={...sources,botanica:put('tampered.html','<html>wrong bytes</html>')};
+ assert.throws(()=>stageWithExpectedCenterSha(centerFile,wrong,path.join(tmp,'wrong-pack'),tmp,sha(Buffer.from(html))),/asset_sha256_mismatch:botanica/);
+ assert(!fs.existsSync(path.join(tmp,'wrong-pack')),'no partial output on digest failure');
+}finally{fs.rmSync(tmp,{recursive:true,force:true})}
+console.log('PASS generic owner stage: 3 synthetic iframe copies incl certified D1000, physical ZIP-input-style pack creation, SHA gates, no overwrites, CSP/no network. NO DEPLOY.');
