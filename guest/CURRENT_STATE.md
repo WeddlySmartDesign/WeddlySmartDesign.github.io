@@ -1,3 +1,11 @@
+# GUEST — PUERTA DE VENTA Y ANTIRREGRESIONES (09/10/2026)
+
+**Antes de crear D03–D06 o certificar D02:** leer `guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md` y ejecutar `node guest/qa/catalog_admission_gate.cjs`. Verificar el estado de cada plantilla en `guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json`. Para certificar una plantilla nueva, ejecutar `node guest/qa/catalog_admission_gate.cjs --admit <id>` y exigir PASS basado en evidencias E2E reales y Android. La puerta automatizada falla si se declara `commercially-frozen` con huecos.
+
+**Situación:** VEIL LIGHT V5.3.3 sigue congelada/certificada. Botánica V14 visual aprobada, V14.7 candidata con pruebas locales y 3/11 gates respaldados; 8/11 pendientes, incluida habilitación de backend de pruebas bloqueada. No habilitar ventas ni suplantar E2E simulados. Sin cambios en ONE, Partner ni STUDIO.
+
+---
+
 # ACTUALIZACIÓN D02 — V14.7 (2026-10-09)
 
 Para continuar Botánica: leer primero `guest/GUEST_D02_BOTANICA_READ_FIRST.md` y `guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V3_2026-10-09.json`. V14 visualmente aprobada/inmutable; **V14.7** candidata técnica, QA local foto-only aprobada, **E2E/Android pendientes**, Supabase backend **sin Botánica** y despliegue test-only bloqueado. Ventas NO activadas. Todo párrafo histórico que indique V14.5/V14.6 como candidata actual está supersedido por este estado.
