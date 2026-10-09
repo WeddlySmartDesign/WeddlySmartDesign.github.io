@@ -4,7 +4,7 @@ if(window.GUEST_STAGE_OWNER)return;
 const reg=window.GUEST_STAGE_OWNER_REGISTRY;
 if(!reg?.templates||!window.GUEST_CATALOG_OWNER_VIEWER_V2)throw Error('staging_missing_registry_or_shared_viewer');
 const renderers=Object.fromEntries(Object.entries(reg.templates).map(([id,s])=>[id,{...s,label:id==='veil-light'?'VEIL LIGHT':id.toUpperCase().replaceAll('-',' ')}]));
-let mode='native',seq=0,handle=null;
+let mode='native',seq=0,handle=null,pending=null;
 const layer=document.createElement('section');
 layer.id='guestOwnerStagedPreview';
 layer.style.cssText='display:none;position:fixed;inset:0;z-index:2147483000;background:#fff;overflow:hidden';
@@ -28,6 +28,7 @@ function applyOrderConfig(order,config){
  if(config?.template?.id!==id)throw Error('template_config_id_mismatch:'+id);
  if(String(config?.template?.version||'')!==String(order.template_version||order.templateVersion))throw Error('template_config_version_mismatch:'+id);
  const generation=++seq;
+ if(pending){pending.abort();pending=null}
  if(handle?.close){handle.close();handle=null}
  if(r.mode==='native'){
   mode='native';layer.style.display='none';
@@ -36,9 +37,11 @@ function applyOrderConfig(order,config){
  }
  if(r.mode!=='iframe'||!r.src)throw Error('template_not_ready:'+id); // test-only gate is enforced by rendererFor for pending entries
  mode='iframe';host.replaceChildren();
- const p=window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order,config,host,registry:reg});
- p.then(h=>{if(generation!==seq){h.close();return}handle=h}).catch(e=>{
+ const controller=new AbortController();pending=controller;
+ const p=window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order,config,host,registry:reg,signal:controller.signal});
+ p.then(h=>{if(generation!==seq){h.close();return}if(pending===controller)pending=null;handle=h}).catch(e=>{
   if(generation!==seq)return;
+  if(pending===controller)pending=null;
   host.replaceChildren();
   const x=document.createElement('p');x.style.cssText='padding:20px;font:14px system-ui;color:#9f4039';x.textContent='Vista no disponible: '+String(e?.message||e);
   host.appendChild(x);
@@ -46,6 +49,6 @@ function applyOrderConfig(order,config){
  return p;
 }
 function open(){if(mode==='iframe')layer.style.display='block'}
-function close(){seq++;layer.style.display='none';if(handle?.close){handle.close();handle=null}}
+function close(){seq++;layer.style.display='none';if(pending){pending.abort();pending=null}if(handle?.close){handle.close();handle=null}host.replaceChildren()}
 window.GUEST_STAGE_OWNER=Object.freeze({renderers,rendererFor,applyOrderConfig,open,close});
 })();
