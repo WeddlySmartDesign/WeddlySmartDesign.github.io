@@ -23,19 +23,19 @@ async function createOrder(c:any,mode:'test'|'production'){
   const {error}=await c.from('guest_invitation_orders').insert(row);
 }
 async function submit(order:any){
-       await internalSubmittedEmail(fresh);
-       if(email){
-         const steps='here';
+      await internalSubmittedEmail(fresh);
+      if(email){
+        const steps='here';
          await resend({to:[email],subject:'Hemos recibido vuestros datos',html:steps},'confirm');
        }
 }
 async function review(order:any){
-         await resend({to:['weddlysmartdesign@gmail.com'],subject:'Invitación GUEST aprobada · '+orderLabel(order),html:'ok'},'approve');
-       await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados · '+orderLabel(order),html:'change'},'changes');
-       const ok=await resend({to:[email],subject:localTest?'Revisión de prueba preparada':'Revisión real',html:'review'},'review');
+        await resend({to:['weddlysmartdesign@gmail.com'],subject:'Invitación GUEST aprobada · '+orderLabel(order),html:'ok'},'approve');
+      await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados · '+orderLabel(order),html:'change'},'changes');
+      const ok=await resend({to:[email],subject:localTest?'Revisión de prueba preparada':'Revisión real',html:'review'},'review');
 }
 async function deliver(order:any){
-       const ok=await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Entrega real',html:'delivery'},'delivery');
+      const ok=await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Entrega real',html:'delivery'},'delivery');
 }
 `;
 const patched=build(fixture);
