@@ -7,7 +7,7 @@
 var cvs=document.getElementById('cv'),ctx=cvs.getContext('2d',{alpha:false}),v=document.getElementById('v'),p=document.getElementById('p'),e=document.getElementById('e'),st=document.getElementById('state'),prog=document.getElementById('progress'),img={},running=false,recording=false,started=0,req=0,rec=null,seconds=20,W=1080,H=1920;
 var sources={plan:'../assets/one-final-2026-09-23/asset-01.jpg',mesas:'../assets/real-screens/plano-mesas.webp',listados:'../assets/real-screens/plano-listados.webp'};
 function rect(x,y,w,h,c,r){ctx.fillStyle=c;ctx.beginPath();ctx.roundRect(x,y,w,h,r||0);ctx.fill()}
-function text(s,x,y,size,c,font,align){ctx.textAlign=align||'left';ctx.fillStyle=c;ctx.font=(font||'600')+' '+size+'px '+(font==='serif'?'Georgia,serif':'Arial,sans-serif');ctx.fillText(s,x,y)}
+function text(s,x,y,size,c,font,align){ctx.textAlign=align||'left';ctx.fillStyle=c;ctx.font=(font==='serif'?'400':(font||'600'))+' '+size+'px '+(font==='serif'?'Georgia,serif':'Arial,sans-serif');ctx.fillText(s,x,y)}
 function label(s,y){text(s,83,y,26,'#cfdaca','700')}
 function cover(o,x,y,w,h){if(!o)return;var sw=o.videoWidth||o.naturalWidth,sh=o.videoHeight||o.naturalHeight;if(!sw)return;var sourceRatio=sw/sh,targetRatio=w/h,sx=0,sy=0,cw=sw,ch=sh;if(sourceRatio>targetRatio){cw=sh*targetRatio;sx=(sw-cw)/2}else{ch=sw/targetRatio;sy=(sh-ch)/2}ctx.drawImage(o,sx,sy,cw,ch,x,y,w,h)}
 function contain(o,x,y,w,h){if(!o||!o.naturalWidth)return;var f=Math.min(w/o.naturalWidth,h/o.naturalHeight),ww=o.naturalWidth*f,hh=o.naturalHeight*f;ctx.drawImage(o,x+(w-ww)/2,y+(h-hh)/2,ww,hh)}
