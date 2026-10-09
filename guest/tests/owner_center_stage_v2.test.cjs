@@ -9,7 +9,7 @@ const registry={
  }
 };
 const legacy="const CATALOG_RENDERERS={'veil-light':{label:'VEIL LIGHT',apply:c=>{if(typeof window.VEIL_APPLY_CONFIG!=='function')throw new Error('renderer_unavailable');return window.VEIL_APPLY_CONFIG(c)}}};\nfunction rendererFor(order){const id=String(order?.template_id||order?.templateId||'veil-light');const r=CATALOG_RENDERERS[id];if(!r)throw new Error('template_renderer_unavailable:'+id);return r}\nfunction applyOrderConfig(order,cfg){return rendererFor(order).apply(cfg)}";
-const html='<!doctype html><html><body><script id="wsd-production-workbench-script">'+legacy+
+const html='<!doctype html><html><head></head><body><script id="wsd-production-workbench-script">'+legacy+
  "\nfunction openCenter(){\n  closeTool();\n}\nfunction hideCenter(){\n  root.classList.add('off');\n}\n"+
  "const x=await call(FLOW,{action:'create_test',email:'',templateId:'veil-light'});"+
  "\nconst reopen=document.createElement('button');reopen.id='wsdProdBtn';"+
@@ -28,9 +28,21 @@ assert.match(output,/GUEST_BOTANICA_V14_7_TEST_ONLY_ASSET.html/);
 assert.ok(output.includes('VEIL_APPLY_CONFIG'),'legacy VEIL remains native');
 assert.ok(output.includes('BOTANICA_APPLY_CONFIG'),'Botánica renderer resolved generically');
 assert.equal(registry.templates.botanica.src,null,'do not mutate production registry');
+assert.match(output,/Content-Security-Policy/);
+assert.match(output,/connect-src 'none'/);
+assert.match(output,/form-action 'none'/);
 assert.match(output,/"src":"\.\/GUEST_BOTANICA_V14_7_TEST_ONLY_ASSET.html"/);
 assert.throws(()=>build(html.replace("templateId:'veil-light'","templateId:'botanica'"),registry,viewer,overlay),/source_drift:generic_test_creation/);
 assert.throws(()=>build(html.replace("function hideCenter()","function closeCenter()"),registry,viewer,overlay),/source_drift:center_preview/);
-assert.throws(()=>build(html,{templates:{...registry.templates,botanica:{...registry.templates.botanica,status:'commercially-frozen'}}},viewer,overlay),/botanica_manifest_drift/);
+assert.throws(()=>build(html,{templates:{...registry.templates,botanica:{...registry.templates.botanica,status:'commercially-frozen'}}},viewer,overlay),/unsafe_staged_asset:botanica/);
+const third=structuredClone(registry);
+third.templates['design-03']={id:'design-03',version:'1.0.0',mode:'iframe',status:'certification-pending',applyApi:'GUEST_APPLY_CONFIG',src:null};
+const staged=build(html,third,viewer,overlay,{botanica:'GUEST_BOTANICA_V14_7_TEST_ONLY_ASSET.html','design-03':'GUEST_STAGE_design-03_v1-0-0.html'});
+assert.match(staged,/GUEST_STAGE_design-03_v1-0-0\.html/,'third design must stage without code per-template');
+assert.equal(third.templates['design-03'].src,null,'never mutate canonical registry');
+assert.throws(()=>build(html,third,viewer,overlay,{bogus:'bogus.html'}),/unsafe_staged_asset:bogus/);
+assert.throws(()=>build(html,third,viewer,overlay,{'design-03':'../escape.html'}),/unsafe_staged_filename:design-03/);
+assert.throws(()=>build(html,third,viewer,overlay,{botanica:'https://evil.example'}),/unsafe_staged_filename:botanica/);
+assert.throws(()=>build(html.replace('<head>','<head data-drift>'),registry,viewer,overlay),/source_drift:offline_csp/);
 assert.throws(()=>build(html,registry,'wrong viewer',overlay),/unexpected_source_files/);
-console.log('PASS generic owner V2 local-only staging: two designs, frozen native VEIL, Botánica iframe, no registry mutation, 4 fail-closed mutations. NOT DEPLOYED.');
+console.log('PASS generic owner V2 local-only staging: VEIL/Botánica/fictional D03, 2 iframe assets, CSP blocks network, fail-closed drift, no registry mutation. NOT DEPLOYED.');
