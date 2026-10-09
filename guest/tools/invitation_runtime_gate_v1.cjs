@@ -37,5 +37,29 @@ function assertPinnedInvitationConfig(config, order, validateConfig, files, phas
   }
   return config;
 }
+/**
+ * Read-only compatibility for historical delivered TEST orders written by v12.
+ * Never used for creation, mutation, approval, delivery, or production orders.
+ * The old rows may have template.version different from template_version;
+ * preserving their bytes is safer than silently rewriting order history.
+ */
+function assertLegacyDeliveredTestRead(config,order,files) {
+  if (order?.mode !== 'test' || order?.status !== 'delivered' ||
+      !config || typeof config !== 'object' || Array.isArray(config) ||
+      config.schemaVersion !== undefined || config.template?.id !== order.template_id)
+    throw new Error('untrusted_legacy_invitation');
+  if (config.rsvp?.route != null && config.rsvp.route !== '#')
+    throw new Error('invalid_invitation_rsvp_route');
+  const media=[];
+  if(config.cover?.photo)media.push(config.cover.photo);
+  if(config.story?.photo)media.push(config.story.photo);
+  if(config.locations?.heroPhoto)media.push(config.locations.heroPhoto);
+  for(const picture of config.gallery?.photos||[])media.push(picture);
+  for(const picture of media){
+    if(typeof picture?.src !== 'string' || !/^https:\/\/[^\s]+$/i.test(picture.src))
+      throw new Error('missing_signed_asset');
+  }
+  return config;
+}
 if (typeof module !== 'undefined' && module.exports)
-  module.exports={assertPinnedInvitationConfig};
+  module.exports={assertPinnedInvitationConfig,assertLegacyDeliveredTestRead};
