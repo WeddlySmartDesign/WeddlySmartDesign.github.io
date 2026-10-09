@@ -230,9 +230,9 @@
         "aborted iframe removed without stale DOM",
         "pre-aborted does not touch host"
       ],
-      "offlineCatalogRun": 37995936554,
-      "offlineCatalogConclusion": "SUCCESS on code commit 5ab79b91cd91bf52b0ab2eb4c4f16dd2bc52a98f",
-      "independentRunAtObservation": 37995936520,
+      "offlineCatalogRun": 37996238912,
+      "offlineCatalogConclusion": "PASS on 83a1e4b98; test-inclusive eac596850 workflow pending at observation",
+      "independentRunAtObservation": 37996258498,
       "independentConclusionAtObservation": "queued",
       "intermediateOfflineFailures": [
         {
@@ -251,7 +251,15 @@
       "actualBrowserQA": false,
       "androidOwnerQA": false,
       "deployed": false,
-      "commercialCertification": false
+      "commercialCertification": false,
+      "redirectHardening": {
+        "risk": "iframe src may be same-origin but redirected after load to a cross-origin page. Reading contentWindow[applyApi] throws SecurityError; prior handler only guarded the contentWindow getter.",
+        "fix": "Catch errors while reading contentWindow[applyApi], remove iframe and fail with typed iframe_cross_origin.",
+        "codeCommit": "83a1e4b98591f0b86db8a7b8262be967b77b82cb",
+        "testCommit": "eac596850ef6de9136bdf86baa9313b566214541",
+        "test": "guest/tests/owner_viewer_generic.test.cjs (crossOrigin Proxy simulation)",
+        "actualRedirectBrowserTest": false
+      }
     }
   },
   "designs": {
@@ -401,9 +409,9 @@
   ],
   "ciObserved": {
     "verificationDate": "2026-10-09",
-    "catalogRun": "37995936554",
-    "catalogAtCommit": "5ab79b91c",
-    "catalogOutcome": "SUCCESS: complete generic iframe load timeout/cancel/failure/cleanup CI on 5ab79b91c, including verified owner viewer and overlay async regressions; NOT real browser/E2E.",
+    "catalogRun": "37996238912",
+    "catalogAtCommit": "83a1e4b98",
+    "catalogOutcome": "SUCCESS on code commit 83a1e4b98; latest added cross-origin redirect fixture commit eac596850 waiting in catalog run 37996258533 at observation.",
     "independentRun": "37992983155",
     "independentAtCommit": "2357ce041",
     "independentOutcome": "SUCCESS: GUEST Independent QA on same code commit 2357ce041; not owner Android or commercial E2E.",
@@ -437,9 +445,9 @@
     "latestObserved": {
       "at": "2026-10-09",
       "headCodeCommit": "797790589a63143fba1e028cab66277d049f30a3",
-      "catalogRun": 37995936554,
+      "catalogRun": 37996258533,
       "catalogConclusion": "success",
-      "independentRun": 37995936520,
+      "independentRun": 37996258498,
       "independentConclusion": "success",
       "intermediateFailures": [
         {
@@ -469,9 +477,14 @@
         "restoredNormalWorkflowCommit": "40ea02cb303bbc59b715800fd90735d196c74d98",
         "noPersistentExportStep": true
       },
-      "latestCodeHead": "5ab79b91cd91bf52b0ab2eb4c4f16dd2bc52a98f",
+      "latestCodeHead": "eac596850ef6de9136bdf86baa9313b566214541",
       "lastCompletedBothAtHead": "d8773e2cd41e3dd13db2ad7e2c7222b3221fb827",
-      "note": "Catalog CI PASS on latest async code; Independent CI pending when written; no new commercial gate."
+      "note": "Catalog CI PASS on latest async code; Independent CI pending when written; no new commercial gate.",
+      "catalogConclusionAtObservation": "queued",
+      "lastCatalogPassingRun": 37996238912,
+      "lastCatalogPassingCommit": "83a1e4b98591f0b86db8a7b8262be967b77b82cb",
+      "lastIndependentPassingRun": 37995936520,
+      "lastIndependentPassingCommit": "5ab79b91cd91bf52b0ab2eb4c4f16dd2bc52a98f"
     },
     "intermediateTestUpdateFailure": {
       "runId": 37990171524,
