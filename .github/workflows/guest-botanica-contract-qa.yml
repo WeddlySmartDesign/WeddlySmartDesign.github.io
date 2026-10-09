@@ -4,6 +4,9 @@ on:
     branches: [guest-independent]
     paths:
       - 'guest/tests/botanica_catalog_bridge_offline.test.cjs'
+      - 'guest/tests/botanica_catalog_manifest_guard.test.cjs'
+      - 'guest/GUEST_D02_BOTANICA_ARTIFACT_MANIFEST_V3_2026-10-09.json'
+      - 'guest/GUEST_D02_BOTANICA_READ_FIRST.md'
       - 'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'
       - 'guest/guest-catalog-template-botanica-adapter-v1.js'
       - 'guest/guest-catalog-delivery-runtime-v1.js'
@@ -23,4 +26,6 @@ jobs:
         with:
           node-version: '22'
       - name: Ejecutar contrato Botánica sin datos ni red
-        run: node guest/tests/botanica_catalog_bridge_offline.test.cjs
+        run: |
+          node guest/tests/botanica_catalog_bridge_offline.test.cjs
+          node guest/tests/botanica_catalog_manifest_guard.test.cjs
