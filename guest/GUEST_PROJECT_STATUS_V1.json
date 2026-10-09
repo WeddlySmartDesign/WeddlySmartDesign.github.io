@@ -79,7 +79,25 @@
     "questionnaireCandidate": "library only; not published",
     "mobileCenterFrozen": "V4.6",
     "ownerGenericV2Deployed": false,
-    "ownerGenericV2Status": "tested locally, not wired to real Mobile Center"
+    "ownerGenericV2Status": "tested locally, not wired to real Mobile Center",
+    "preproductionBackendCandidate": {
+      "codePath": "guest/tools/prepare_test_only_backend_v13.cjs",
+      "regressionTest": "guest/tests/prepare_backend_test_only_v13.test.cjs",
+      "validator": "guest/qa/validate_invitation_config_v1.cjs",
+      "validatorTest": "guest/tests/invitation_config_schema_contract.test.cjs",
+      "deployed": false,
+      "fullSchemaComplianceProven": false,
+      "completeCommercialIntegration": false,
+      "localFixtureGate": "PASS in catalog CI; live E2E not run",
+      "remainingContractDrift": [
+        "cover.photo required by schema but absent in deployed buildConfig",
+        "rsvp plusOneEnabled/childrenEnabled/customQuestions/menu/dietary mandatory in schema but not emitted",
+        "bus and accommodation collect* keys mandatory in schema but absent",
+        "photo autoFrame in backend not admitted by schema",
+        "empty optional URLs violate uri format",
+        "optional coverPlace and location.address conflict with nonempty schema constraints"
+      ]
+    }
   },
   "commercialGate": {
     "source": "guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json",
@@ -99,7 +117,7 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Resolve common questionnaire none/story and gift issues, ensure backend schemaVersion with VEIL regression",
+    "Fully reconcile live buildConfig output with shared v1 JSON schema (not just schemaVersion/story none); validate two real backend fixtures via strict reusable QA validator, VEIL regression, then stage guarded test-only deployment",
     "Deploy backend test-only through authorized channel with creation-mode guard and rollback",
     "Wire generic visual viewer once into a new owner Mobile Center without modifying frozen V4.6",
     "Execute two real synthetic-data orders through live test pipeline; review/final and signed asset parity",
