@@ -374,6 +374,61 @@
       "inspection": "READ ONLY: current checkout code is edition Essential/Signature-based; no templateId/template_id/version/testOnly fields observed",
       "conclusion": "Do not connect to multi-design sale before explicit separate commercial release verifying selected certified template ID/version and fail-closed test-only rejection. It is a future release boundary, not an E2E proof or new design gate.",
       "modified": false
+    },
+    "actualReleaseEnvironmentAssessment20261010": {
+      "observedAt": "2026-10-10",
+      "result": "NO_GO_FOR_LIVE_V13_DEPLOYMENT",
+      "projectId": "dnjsxequwgtyyauuofxj",
+      "supabaseBranches": 0,
+      "genuineIsolatedTestRuntimeAvailable": false,
+      "liveFunction": {
+        "slug": "guest-invitation-flow",
+        "version": 12,
+        "sha256": "69ef41f9867eb048b052632141be9b8e5ea53aa78a63ade1883e1e88da7b28ac",
+        "verifyJwt": false
+      },
+      "checkout": {
+        "slug": "guest-stripe-checkout",
+        "version": 20,
+        "sha256": "c81575ca422e05c943f029ce5a10f3b382676b718529b4b68231abc7a0ba88ce",
+        "verifyJwt": false
+      },
+      "liveV12SourceAnchorsChecked": "PASS 11/11 for baseline v12, no V13 guards, sole order insert and five send calls",
+      "observedProjects": "GUEST shared project ACTIVE; STUDIO unrelated INACTIVE and NOT TO BE TOUCHED",
+      "historicalRowsAggregatedNoPII": {
+        "total": 3,
+        "deliveredTest": {
+          "rows": 2,
+          "sqlApproxLegacyReadEligible": 2,
+          "exactVersionMatch": 1,
+          "unsafeMedia": 0
+        },
+        "designingTest": {
+          "rows": 1,
+          "sqlApproxLegacyReadEligible": 0,
+          "exactVersionMatch": 0,
+          "unsafeHydratedMediaCount": 1
+        },
+        "notes": "The designing row could legitimately still reference upload: media. Not evidence of missing files or corrupt data. No customer identifiers or secrets read."
+      },
+      "priorEnvBlocks": [
+        "Supabase V13 test-only deployment tool previously denied; do not bypass",
+        "Chromium page.goto ERR_BLOCKED_BY_ADMINISTRATOR; do not bypass"
+      ],
+      "record": "guest/GUEST_BACKEND_CONFIG_RECONCILIATION_2026-10-09.md section 9",
+      "releasePrereqs": [
+        "authorized genuinely isolated GUEST staging environment and known costs; not STUDIO",
+        "byte-verified V12 rollback and secure configuration captured before mutation",
+        "explicit handling of old test/designing order without data mutation",
+        "V13 test-only with emails, Stripe and public media disabled, VEIL regression",
+        "new Center V2 + genuine browser/Android plus two persisted test orders and RSVP g/u",
+        "11/11 commercial gates + separate checkout authorization"
+      ],
+      "actionsTaken": "read-only Supabase + GitHub, documentation updates only",
+      "databaseWritten": false,
+      "edgeDeployed": false,
+      "checkoutModified": false,
+      "commercialReady": false
     }
   },
   "commercialGate": {
@@ -394,11 +449,10 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Common V2 iframe async timeout and abort test CI now PASS; no owner Android or local Chromium proof. Verify Independent QA 37995936520 and re-run real browser only in permitted environment. Keep environment restriction and 3/11 gates.",
-    "Read-only Supabase 2026-10-09 confirms guest-invitation-flow ACTIVE v12 and checkout ACTIVE v20; no backend V13 or new Center V2 deployment. Do not bypass previously documented restrictions.",
-    "Deploy a NEW common Mobile Center and unified questionnaire only when authorized; preserve frozen V4.6. Verify VEIL regression and Botánica iframe renderer.",
-    "Two distinct persisted test orders end-to-end review/final/stable URL/private media and recipient RSVP g/u. Botánica stays 3/11.",
-    "Owner actual Android final and <=5-min owner touch, then explicit commercial release and Stripe template pinning as separate gate. No D03+ until shared platform genuinely certified."
+    "NO-GO live backend V13 on 2026-10-10: Supabase list_branches returned zero isolated branches and an old TEST/DESIGNING VEIL order is not covered by read-only legacy compatibility (read-only aggregate evidence). Do not replace active V12 or use STUDIO as staging.",
+    "Use only a legitimately authorized isolated GUEST runtime with rollback/permissions and verified cost before V13 test-only deployment; preserve production v12 digest and 3 historical orders.",
+    "Verify V13 and new Owner Center V2 integrated in protected test environment with real browser, two independent Botánica persisted test orders, stable review/final links, photos and RSVP g/u; Android owner and <=5min thereafter.",
+    "Do not sell or start D03 until Botánica 11/11 with explicit separate checkout release. Continue using common V2; no parallel engines or frozen edits."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
@@ -445,9 +499,9 @@
     "latestObserved": {
       "at": "2026-10-09",
       "headCodeCommit": "797790589a63143fba1e028cab66277d049f30a3",
-      "catalogRun": 37996258533,
+      "catalogRun": 37996307382,
       "catalogConclusion": "success",
-      "independentRun": 37996258498,
+      "independentRun": 37996307369,
       "independentConclusion": "success",
       "intermediateFailures": [
         {
@@ -484,7 +538,9 @@
       "lastCatalogPassingRun": 37996238912,
       "lastCatalogPassingCommit": "83a1e4b98591f0b86db8a7b8262be967b77b82cb",
       "lastIndependentPassingRun": 37995936520,
-      "lastIndependentPassingCommit": "5ab79b91cd91bf52b0ab2eb4c4f16dd2bc52a98f"
+      "lastIndependentPassingCommit": "5ab79b91cd91bf52b0ab2eb4c4f16dd2bc52a98f",
+      "verifiedBeforeReleaseAssessmentHead": "e5d8c8630e4d76180dde99c0700a526ffa44077c",
+      "assessmentUpdatesAfterCode": "documentation only; must recheck GitHub Actions for new docs HEAD"
     },
     "intermediateTestUpdateFailure": {
       "runId": 37990171524,
