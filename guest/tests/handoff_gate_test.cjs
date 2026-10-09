@@ -25,7 +25,8 @@ const cases=[
  ['historical masquerades as current',(r)=>fs.writeFileSync(path.join(r,'guest/CURRENT_STATE.md'),'# D02 V14.6 — ESTADO VIGENTE\n')],
  ['candidate hash replaced',(r)=>mutate(r,'guest/GUEST_PROJECT_STATUS_V1.json',j=>{j.designs.botanica.candidateSha256='0'.repeat(64)})],
  ['unverified E2E claimed',(r)=>mutate(r,'guest/GUEST_PROJECT_STATUS_V1.json',j=>{j.commercialGate.realOrderE2e='PASS'})],
- ['new registered while not started',(r)=>mutate(r,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',j=>{j.templates.push({id:'design-03',version:'1',status:'certification-pending'})})]
+ ['new registered while not started',(r)=>mutate(r,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',j=>{j.templates.push({id:'design-03',version:'1',status:'certification-pending'})})],
+ ['unknown extra design without snapshot',(r)=>mutate(r,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',j=>{j.templates.push({id:'design-1000',version:'1.0.0',status:'certification-pending'})})]
 ];
 {
  const s=sandbox();try{assert.equal(run(s).status,0, 'baseline handoff gate must PASS')}finally{fs.rmSync(s,{recursive:true,force:true})}
