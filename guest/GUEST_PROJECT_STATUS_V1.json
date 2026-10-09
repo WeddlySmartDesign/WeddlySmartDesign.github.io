@@ -165,6 +165,36 @@
         "deployed": false,
         "realE2E": false,
         "customerCommercialReady": false
+      },
+      "futureCertifiedIframeProductionGuard": {
+        "issue": "Local staged owner dispatcher blocked production mode for ALL iframe designs, even commercially-frozen versions; contradicted common catalog plugin contract.",
+        "correctedIn": "guest/catalog/guest-owner-stage-overlay-v2.js",
+        "commit": "25edef3caf86c07cde512a0ef4e2689d8c742914",
+        "testCommit": "3c9e0bc5e4f269fa4da2271480ed03c4ef34901b",
+        "directViewerTestCommit": "64faecd328c8d891c4d0cbeb652e7fa1f6aa4efe",
+        "syntheticExamples": [
+          "VEIL native commercial",
+          "Botanica pending test-only",
+          "Design 03 pending test-only",
+          "Design 1000 certified iframe production"
+        ],
+        "saleReadiness": "NOT_DEPLOYED_AND_NOT_E2E"
+      },
+      "localArtifactRebuiltAfterFix": {
+        "date": "2026-10-09",
+        "centerCandidateOriginalSha256": "0832f4fac4ae51f5a3e305a0d06284a3ff4bb1a121ece4a4e8b01e5368605c7a",
+        "botanicaCandidateOriginalSha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+        "ownerCenterBuiltSha256": "17d1b60364197a1c1f03df51966f2497544ef60c3be00568c55a561b96b497df",
+        "stageToolGitBlob": "5169b55c408f718dd010a16e79304bca44101bac",
+        "overlayGitBlob": "e06cf5ca7ac665e385ea3f0a6a32c543f4167711",
+        "allGitBlobsVerifiedLocally": true,
+        "physicalStaging": "SUCCESS",
+        "javascriptStaticSyntax": "PASS 9/9 scripts across center and Botánica",
+        "manifestChecksum": "PASS 2/2",
+        "browserVisualQA": "NOT_RUN on rebuilt pack; prior browser admin block remains",
+        "networkCaveat": "CSP connect-src none; form-action none is NOT complete network isolation. Both masters reference external fonts.googleapis.com/fonts.gstatic.com; external resource and navigation requests remain possible.",
+        "deployed": false,
+        "realE2e": false
       }
     }
   },
@@ -300,8 +330,8 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "AUTHORIZATION/ENVIRONMENT BLOCK: Chromium navigation to genuine local staged V2 pack denied with ERR_BLOCKED_BY_ADMINISTRATOR, before page load at 390 and 1366. Do not bypass restrictions. Re-run in a legitimately permitted browser environment; no Android PASS claimed.",
-    "Backend test-only V13 not deployed; legitimate controlled test-only authorization plus rollback and real E2E environment required. Do not attempt bypass of earlier deployment restriction; keep guest-invitation-flow v12 and frozen VEIL unchanged.",
+    "Rebuilt local V2 pack with latest certified-iframe owner guard and byte-verified git blobs; static JS syntax/asset hashes PASS. Browser QA still blocked by administrative policy: execute genuine user-facing browser/Android only in permitted environment, never claim PASS via static lint.",
+    "Read-only Supabase 2026-10-09 confirms guest-invitation-flow ACTIVE v12 and checkout ACTIVE v20; no backend V13 or new Center V2 deployment. Do not bypass previously documented restrictions.",
     "Deploy a NEW common Mobile Center and unified questionnaire only when authorized; preserve frozen V4.6. Verify VEIL regression and Botánica iframe renderer.",
     "Two distinct persisted test orders end-to-end review/final/stable URL/private media and recipient RSVP g/u. Botánica stays 3/11.",
     "Owner actual Android final and <=5-min owner touch, then explicit commercial release and Stripe template pinning as separate gate. No D03+ until shared platform genuinely certified."
@@ -315,9 +345,9 @@
   ],
   "ciObserved": {
     "verificationDate": "2026-10-09",
-    "catalogRun": "37993893056",
-    "catalogAtCommit": "797790589",
-    "catalogOutcome": "SUCCESS offline full physical pack generation regression on synthetic 4-template fixture (including D1000 frozen iframe) at 797790589. No real deployed center or browser E2E.",
+    "catalogRun": "37995219800",
+    "catalogAtCommit": "463da9167",
+    "catalogOutcome": "SUCCESS on owner runtime code and tests including certified iframe production viewer (run 37995109175 for code 64faecd32, and run 37995219800 for manifest change 463da9167). Not real E2E.",
     "independentRun": "37992983155",
     "independentAtCommit": "2357ce041",
     "independentOutcome": "SUCCESS: GUEST Independent QA on same code commit 2357ce041; not owner Android or commercial E2E.",
@@ -351,9 +381,9 @@
     "latestObserved": {
       "at": "2026-10-09",
       "headCodeCommit": "797790589a63143fba1e028cab66277d049f30a3",
-      "catalogRun": 37993893056,
+      "catalogRun": 37995219800,
       "catalogConclusion": "success",
-      "independentRun": 37993893017,
+      "independentRun": 37995219775,
       "independentConclusion": "success",
       "intermediateFailures": [
         {
@@ -382,7 +412,9 @@
         "validCatalogRun": 37994147760,
         "restoredNormalWorkflowCommit": "40ea02cb303bbc59b715800fd90735d196c74d98",
         "noPersistentExportStep": true
-      }
+      },
+      "latestCodeHead": "463da916792fdea0a7ddad11899cf27e566a2169",
+      "lastCompletedBothAtHead": "d8773e2cd41e3dd13db2ad7e2c7222b3221fb827"
     },
     "intermediateTestUpdateFailure": {
       "runId": 37990171524,
