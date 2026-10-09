@@ -109,9 +109,9 @@ function build(source){
    "const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);\n       checkInvitationConfig(order.resolved_config||{},order);\n       const token=await capability(order.id,'r')",
    'send_review_gate');
  source=once(source,
-   "const files=await signedFiles(c,order,7200),config=hydrateConfig(order.resolved_config||{},files);",
-   "const files=await signedFiles(c,order,7200),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},files),order,files,'hydrated');",
-   'signed_render_gates');
+   "if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);\n       const files=await signedFiles(c,order,7200),config=hydrateConfig(order.resolved_config||{},files);",
+   "if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);\n       const files=await signedFiles(c,order,7200),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},files),order,files,'hydrated');",
+   'signed_review_gate');
  // Previous anchor occurs twice (review_load and detail); first is the
  // user-visible review, second is manager detail. Only review_load needs a
  // strict gate; once(...) insists it has exactly one occurrence.
@@ -169,7 +169,7 @@ function build(source){
  // Production VEIL logic is still subject to separate real regression.
  if(!source.includes("spec?.testOnly===true&&mode!=='test'"))throw Error('missing_test_only_guard');
  if(!source.includes('return normalizeBackendInvitationConfig({'))throw Error('missing_config_normalization');
- if((source.match(/checkInvitationConfig\(/g)||[]).length!==10)throw Error('missing_lifecycle_validation_paths');
+ if((source.match(/checkInvitationConfig\(/g)||[]).length!==11)throw Error('missing_lifecycle_validation_paths');
  return source;
 }
 if(require.main===module){
