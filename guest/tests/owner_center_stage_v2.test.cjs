@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 const assert=require('node:assert/strict');
-const {build,stagedRegistry}=require('../tools/stage_owner_center_v2.cjs');
+const {build}=require('../tools/stage_owner_center_v2.cjs');
 const registry={
  templates:{
   'veil-light':{id:'veil-light',version:'5.3.3',mode:'native',status:'commercially-frozen',applyApi:'VEIL_APPLY_CONFIG'},
@@ -27,9 +27,8 @@ assert.match(output,/guestStageTemplateId/);
 assert.match(output,/GUEST_BOTANICA_V14_7_TEST_ONLY_ASSET.html/);
 assert.ok(output.includes('VEIL_APPLY_CONFIG'),'legacy VEIL remains native');
 assert.ok(output.includes('BOTANICA_APPLY_CONFIG'),'Botánica renderer resolved generically');
-const r=stagedRegistry(registry);
 assert.equal(registry.templates.botanica.src,null,'do not mutate production registry');
-assert.equal(r.templates.botanica.src,'./GUEST_BOTANICA_V14_7_TEST_ONLY_ASSET.html');
+assert.match(output,/"src":"\.\/GUEST_BOTANICA_V14_7_TEST_ONLY_ASSET.html"/);
 assert.throws(()=>build(html.replace("templateId:'veil-light'","templateId:'botanica'"),registry,viewer,overlay),/source_drift:generic_test_creation/);
 assert.throws(()=>build(html.replace("function hideCenter()","function closeCenter()"),registry,viewer,overlay),/source_drift:center_preview/);
 assert.throws(()=>build(html,{templates:{...registry.templates,botanica:{...registry.templates.botanica,status:'commercially-frozen'}}},viewer,overlay),/botanica_manifest_drift/);
