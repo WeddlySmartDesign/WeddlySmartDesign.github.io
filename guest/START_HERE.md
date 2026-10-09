@@ -6,6 +6,14 @@
 
 > **LEER ESTE ARCHIVO EN PRIMER LUGAR.** No interpretar nombres como `FINAL`, `FROZEN`, `SEALED` o `PASS` sin comprobar **a qué capa pertenecen**. Un diseño visual aprobado, un paquete técnico QA, un pipeline de producción y una plantilla certificada para venta son estados distintos. Las afirmaciones de este documento son un *snapshot* a fecha indicada: contrastar cualquier estado dinámico con GitHub, el registro de evidencias y el servicio desplegado antes de escribir o publicar.
 
+
+
+## Estado comprobable automáticamente (sin reinterpretar bitácoras)
+
+- **Única fotografía estructurada actual**: [`GUEST_PROJECT_STATUS_V1.json`](GUEST_PROJECT_STATUS_V1.json). El archivo conserva versiones, estados, rutas y checksums; **no es un permiso de despliegue** y debe contrastarse con el código/Edge Function realmente vigentes.
+- **Puerta previa obligatoria**: `node guest/qa/handoff_gate.cjs` y su prueba de mutaciones `node guest/tests/handoff_gate_test.cjs`. Esta comprobación detecta inmediatamente versiones contradictorias entre catálogo, visor, manifiesto y evidencias, archivos desaparecidos y falsos certificados comerciales.
+- La lectura histórica permanece en `CURRENT_STATE.md` y checkpoints, sin disputar el estado actual. **Solo se actualiza este índice y el JSON de estado**, no se añade otra nota «VIGENTE» al comienzo de cada archivo. El procedimiento para D03–D1000 sigue siendo **un único runbook existente**: [`DESIGN_NEW_RUNBOOK.md`](DESIGN_NEW_RUNBOOK.md).
+
 ## 1. Reglas irrenunciables
 
 1. Trabajar **solo** con GUEST en `guest-independent`. **NO tocar ONE, ONE Partner, STUDIO**, ni modificar VEIL LIGHT V5.3.3 o Botánica V14 congeladas. No publicar en `main`, activar ventas/Stripe, desplegar backend ni enviar comunicaciones a clientes sin autorización y controles completos.
