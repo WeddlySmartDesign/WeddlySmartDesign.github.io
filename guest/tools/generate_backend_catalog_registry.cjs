@@ -18,6 +18,7 @@ for(const template of registry.templates){
  const id=template.id;
  if(!evidence.templates?.[id]||!owner.templates?.[id]||String(owner.templates[id].version)!==String(template.version))throw Error('Incomplete manifest for '+id);
  const certified=template.status==='commercially-frozen';
+ if(evidence.templates[id].basis==='pre-existing-commercial-seal'&&(id!=='veil-light'||template.version!=='5.3.3'))throw Error('Historical VEIL seal cannot certify '+id);
  if(!certified&&template.status!=='certification-pending')throw Error('Unrecognized template status for '+id);
  if(!certified&&mode==='production')continue;
  const testOnly=!certified;
