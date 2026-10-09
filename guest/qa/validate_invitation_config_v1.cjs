@@ -20,7 +20,17 @@ function validate(data,contract=schema){
    if(!target){errors.push(p+':unknown_ref_'+key);return}
    walk(value,target,p);return;
   }
-  if(node.anyOf){if(!node.anyOf.some(branch=>{const n=errors.length;walk(value,branch,p);const valid=errors.length===n;errors.length=n;return valid}))errors.push(p+':anyOf');return}
+  if(node.anyOf){
+   const failures=[];let valid=false;
+   for(const branch of node.anyOf){
+    const start=errors.length;walk(value,branch,p);
+    const issues=errors.splice(start);
+    if(!issues.length){valid=true;break}
+    failures.push(issues);
+   }
+   if(!valid)errors.push(...(failures.sort((a,b)=>a.length-b.length)[0]||[p+':anyOf']));
+   return;
+  }
   if(Object.hasOwn(node,'const')&&!equal(value,node.const))errors.push(p+':const');
   if(Array.isArray(node.enum)&&!node.enum.some(x=>equal(x,value)))errors.push(p+':enum');
   if(node.type){
