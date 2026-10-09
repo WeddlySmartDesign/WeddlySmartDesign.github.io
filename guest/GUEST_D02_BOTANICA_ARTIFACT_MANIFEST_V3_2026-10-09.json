@@ -20,7 +20,7 @@
     "filename": "GUEST_D02_BOTANICA_ATELIER_V14_7_PHOTO_ONLY_VISUAL_QA_CANDIDATE_2026-10-09.html",
     "libraryPath": "/GUEST by WeddlySmartDesign/BOTANICA/Candidatas/GUEST_D02_BOTANICA_ATELIER_V14_7_PHOTO_ONLY_VISUAL_QA_CANDIDATE_2026-10-09.html",
     "sha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
-    "bytes": 11635568,
+    "bytes": 11635635,
     "change": "two conditional render lines: hide empty Story heading/copy when photo-only; clear stale text; keep photo interlude",
     "safeToPublish": false
   },
