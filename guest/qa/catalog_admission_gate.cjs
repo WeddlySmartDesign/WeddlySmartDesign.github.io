@@ -13,12 +13,14 @@ const read=p=>JSON.parse(fs.readFileSync(path.join(root,p),'utf8'));
 const registry=read('guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json');
 const evidence=read('guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json');
 const schema=read('guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json');
+const ownerRenderers=read('guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json');
 const admitIndex=process.argv.indexOf('--admit');
 const candidate=admitIndex>=0?process.argv[admitIndex+1]:null;
 const problems=[];const warnings=[];const perTemplate={};
 function check(ok,msg){if(!ok)problems.push(msg)}
 function fileExists(f){return Boolean(f&&typeof f==='string'&&f.startsWith('guest/')&&fs.existsSync(path.join(root,f)))}
 check(registry.schemaVersion==='guest-catalog-template-registry-v1','Invalid registry schemaVersion');
+check(ownerRenderers.schemaVersion==='guest-catalog-owner-renderers-v2','Invalid owner renderer registry schema');
 check(evidence.schemaVersion==='guest-catalog-admission-evidence-v1','Invalid evidence schemaVersion');
 check(schema.properties?.schemaVersion?.const==='guest-invitation-config-v1','Unexpected shared config schemaVersion');
 check(schema.properties?.story?.properties?.textMode?.enum?.includes('none'),'Shared schema does not permit story textMode=none');
@@ -27,6 +29,17 @@ check(schema.properties?.gallery?.properties?.photos?.maxItems===4,'Shared schem
 const ids=new Set();
 for(const t of registry.templates||[]){
   check(!ids.has(t.id),'Duplicate catalog id: '+t.id);ids.add(t.id);
+  const view=ownerRenderers.templates?.[t.id];
+  check(!!view,'Missing owner renderer registration: '+t.id);
+  if(view){
+    check(String(view.version)===String(t.version),'Owner preview version drift: '+t.id);
+    check(view.mode==='native'||view.mode==='iframe','Unknown viewer mode: '+t.id);
+    check(typeof view.applyApi==='string'&&/^[_A-Z][_A-Z0-9]*$/.test(view.applyApi),'Invalid owner apply API: '+t.id);
+    if(view.mode==='iframe'){
+      check(view.src===null||(typeof view.src==='string'&&view.src.startsWith('/guest/')&&!view.src.includes('..')),'Unsafe/incorrect owner template URL: '+t.id);
+      if(t.status==='commercially-frozen')check(!!view.src,'Certified template missing published owner viewer asset: '+t.id);
+    }
+  }
   const e=evidence.templates[t.id];
   check(!!e,'No evidence entry for '+t.id);
   if(!e)continue;
@@ -66,6 +79,7 @@ for(const t of registry.templates||[]){
   perTemplate[t.id]={status:t.status,missing,passed:evidence.policy.newTemplateRequirements.length-missing.length,total:evidence.policy.newTemplateRequirements.length};
 }
 for(const id of Object.keys(evidence.templates))check(ids.has(id),'Evidence for missing catalog template '+id);
+for(const id of Object.keys(ownerRenderers.templates||{}))check(ids.has(id),'Orphaned owner renderer: '+id);
 if(candidate){
   check(ids.has(candidate),'Unknown template for admission: '+candidate);
   const status=perTemplate[candidate];
