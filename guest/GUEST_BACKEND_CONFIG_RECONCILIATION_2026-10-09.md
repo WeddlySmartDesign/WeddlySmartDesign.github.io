@@ -65,3 +65,33 @@ Nueva regresión `guest/tests/rsvp_form_async_load_guard.test.cjs` (PASS en arn�
 5. Actualizar el expediente `GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json` solo cuando exista evidencia **real**. Mantener `--admit botanica` fallando hasta completar 11/11. Autorización comercial/publicación independiente.
 
 **Regla de cierre:** ninguna evidencia de este documento promueve `botanica` a `commercially-frozen`. Cada futuro diseño reutiliza el esquema y el pipeline; no se crea un motor o formulario particular.
+
+## 6. Segunda fase: protección integral del candidato V13 (09/10/2026, NO DESPLEGADO)
+
+**Regla:** código en `guest-independent`, preparador fuente `guest/tools/prepare_test_only_backend_v13.cjs`; Supabase continúa V12. Nada de SQL de escritura, despliegue, correos, Stripe o cambio de plantilla congelada.
+
+- **Contrato real en el ciclo de vida:** `guest/tools/invitation_runtime_gate_v1.cjs` verifica versión de plantilla fijada, JSON Schema completo (validador común), enlaces de medios y ruta RSVP neutral `'#'`. Se inyecta en creación de config tras `submit`, `start_design`, `set_config`, `mark_review_ready`, aprobación, `send_review`, y pre/post `deliver`. `review_load` y `public_load` pasan por una función de lectura: para nuevos pedidos exige igualmente contrato estricto.
+- **Fotografías firmadas:** `hydrateConfig` pasa de reemplazar `upload:` no resuelto por `''` a fallar con `missing_signed_asset`. La respuesta de API distingue error de contrato (400) y medio no disponible (409), sin imprimir datos privados en la respuesta.
+- **Prueba ≠ publicación:** la candidata V13 no llama a `copyPublicFiles` en `order.mode==='test'`; entrega un token de acceso al servicio existente y firma las fotos privadas a cada lectura. Conserva `resolved_config` con `upload:<slot>`, sin guardar enlaces temporales caducables. El camino de producción permanece separado y requiere su propio QA; no se habilita Botánica en producción.
+- **Seguridad de RSVP:** no se aceptan URLs de redirección ni enlaces de invitado persistidos en la configuración del pedido; los parámetros `rt`, `g/u` y `lang` se aplican posteriormente mediante el helper común existente, sin duplicar motor.
+- **Fecha de boda:** el validador compartido verifica el día real, incluidos años bisiestos; 30 de febrero se rechaza antes de que llegue a una plantilla.
+
+**Pruebas incorporadas al workflow `.github/workflows/guest-botanica-contract-qa.yml`:** `guest/tests/invitation_runtime_gate.test.cjs` y ampliación de `guest/tests/prepare_backend_test_only_v13.test.cjs` con casos/mutaciones de fijación de plantilla, medios privados, contraseñas no necesarias, rutas de estado y comprobación de sintaxis TypeScript por `node:module.stripTypeScriptTypes` de Node 22. También continúan los tests del esquema, normalizador y guard de RSVP. El arnés aislado de esta sesión ejecutó las **cuatro suites principales** con módulos simulados; el preparador generó correctamente V13 a partir del archivo real de Edge Function v12 (sin desplegar). La comprobación **nativa** de TypeScript/CI corre exclusivamente en GitHub Actions; no se ha confundido el mock de esa API con su ejecución real.
+
+## 7. Riesgo de compatibilidad detectado por consulta SQL **solo lectura**
+
+La tabla `public.guest_invitation_orders` tenía **3 registros históricos de prueba** y **0 pedidos de Botánica**, todos bajo `veil-light`: dos `delivered` y uno `designing`. Los tres carecen de `schemaVersion`. En dos pedidos, `template_version` de orden era `2026-10-06` mientras `resolved_config.template.version` era `3.1.0`; en el tercero ambos campos correspondían a `5.3.3`. No se han leído nombres, email, tokens, imágenes ni datos personales; se consultaron únicamente estados, versiones y recuentos agregados.
+
+**Consecuencia:** forzar sin distinción los controles nuevos a todos los pedidos antiguos rompería la lectura y alteraría evidencia histórica. La candidata incorpora ahora **compatibilidad genérica de lectura**, no de escritura: `assertLegacyDeliveredTestRead` permite leer únicamente pedidos `mode='test'`, `status='delivered'`, sin `schemaVersion`, con ID de plantilla coincidente, RSVP neutral y fotos ya firmadas HTTPS. No modifica ningún registro, no acepta producción, no sirve para `set_config`, aprobación, ni nuevos pedidos. Sigue siendo necesario probar en entorno autorizado los dos pedidos históricos entregados y estudiar por separado el tercero `designing` antes de una migración; **la regresión VEIL no se ha certificado**.
+
+**CI independiente observado en GitHub Actions:** ejecución `37971333514` del commit `d316f3f`: el job `b6-invitation-rsvp` **PASÓ**, por lo que el guard de hidratación introducido anteriormente superó esa prueba real de navegador. El workflow general **FALLÓ** por `b6-two-device-sync`: `same-field conflict did not preserve the second device local choice: Celíaco`. No se ha atribuido ese error al cambio RSVP ni a Botánica sin prueba causal. Faltan repetición determinista e inspección del algoritmo de merge para ese job, y confirmación de CI catálogo verde sobre el HEAD más reciente. Los fallos antiguos de commits intermedios no justifican saltarse controles.
+
+## 8. Punto exacto de reanudación
+
+1. Confirmar rama `guest-independent`, HEAD y CI completo. Verificar que las últimas suites del candidato V13, incluido strip TypeScript nativo, pasan en GitHub Actions y que la antigua prueba B6.3 se mantiene verde. Si hay fallo, leer logs del job, corregir causa concreta y no difundir el estado PASS anterior como actual.
+2. Comprobar en una prueba de código aislada que `review_load` y `public_load` aceptan los dos `delivered` históricos sin mutar registro, y rechazan registros nuevos malformados y URLs firmadas ausentes. La ruta `designing` antigua requiere evaluación específica antes de autorizar despliegue.
+3. Investigar B6.6 de sincronización sin tocar ONE/Partner/STUDIO ni masters; no reducir la aserción para ocultar pérdida real de datos.
+4. Revisar preparación de rollback, llamadas a correos, `set_config`, guard test-only y checkout; **cualquier operación antes bloqueada sigue sin autorización**. No desplegar por vía alternativa.
+5. Solo después, ejecutar E2E real test-only con dos pedidos independientes, revisión/final, paridad, RSVP persistente, Android y tiempo ≤5 minutos. Seguir **3/11 PASS y 8 PENDING** hasta evidencias reales. D03 no se inicia.
+
+**No se ha generado un nuevo diseño, no se ha modificado la V14 aprobada ni la candidata V14.7, y la única versión real de Supabase sigue siendo v12.**
