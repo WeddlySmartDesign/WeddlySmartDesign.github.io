@@ -352,6 +352,8 @@ jobs:
           exit 1
       - name: B8.1 commercial entry flow QA
         run: node guest/qa/b8_1_commercial_entry_flow_test.js
+      - name: GUEST shared final and review mobile E2E (mocked, no Cloud)
+        run: node guest/qa/catalog_public_final_review_browser_test.js
 
   b8-checkout-return:
     runs-on: ubuntu-latest
