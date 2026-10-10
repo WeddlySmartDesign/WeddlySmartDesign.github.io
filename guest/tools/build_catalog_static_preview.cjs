@@ -41,13 +41,34 @@ const viewRegistry=structuredClone(registry);
 viewRegistry.templates[id].src='/guest/catalog-assets/'+id+'/'+t.version+'/index.html';
 files.push(write('guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',Buffer.from(JSON.stringify(viewRegistry,null,2)+'\n')));
 let visualIncluded=false;
-const registeredAsset=path.join(root,'guest/catalog-assets',id,t.version,'index.html');
-const masterPath=master|| (fs.existsSync(registeredAsset)?registeredAsset:null);
-if(masterPath){
- const v=fs.readFileSync(masterPath);
- if(sha(v)!==expected||!v.includes(Buffer.from('window.'+t.applyApi)))
+const assetRoot=path.join(root,'guest/catalog-assets',id,t.version);
+const registeredAsset=path.join(assetRoot,'index.html');
+const chunksFile=path.join(assetRoot,'source-chunks','manifest.json');
+let visual=null;
+if(master)visual=fs.readFileSync(master);
+else if(fs.existsSync(registeredAsset))visual=fs.readFileSync(registeredAsset);
+else if(fs.existsSync(chunksFile)){
+ const meta=JSON.parse(fs.readFileSync(chunksFile,'utf8'));
+ if(meta.schemaVersion!=='guest-immutable-visual-chunks-v1'||meta.id!==id||
+    meta.version!==t.version||meta.sha256!==expected||
+    !Array.isArray(meta.parts)||meta.parts.length<2||meta.parts.length>100||
+    new Set(meta.parts).size!==meta.parts.length)
+   throw Error('INVALID_FROZEN_VISUAL_CHUNK_MANIFEST:'+id);
+ const chunkDirectory=path.join(assetRoot,'source-chunks');
+ const parts=meta.parts.map(name=>{
+    if(typeof name!=='string'||!/^[0-9]{3}\.txt$/.test(name))
+      throw Error('INVALID_CHUNK_PATH:'+id);
+    const file=path.join(chunkDirectory,name);
+    if(!fs.existsSync(file))throw Error('MISSING_FROZEN_VISUAL_CHUNK:'+id+':'+name);
+    return fs.readFileSync(file);
+ });
+ visual=Buffer.concat(parts);
+ if(visual.length!==meta.bytes)throw Error('FROZEN_VISUAL_CHUNK_SIZE_MISMATCH:'+id);
+}
+if(visual){
+ if(sha(visual)!==expected||!visual.includes(Buffer.from('window.'+t.applyApi)))
    throw Error('FROZEN_VISUAL_SHA256_OR_RENDERER_MISMATCH:'+id);
- files.push(write('guest/catalog-assets/'+id+'/'+t.version+'/index.html',v));
+ files.push(write('guest/catalog-assets/'+id+'/'+t.version+'/index.html',visual));
  visualIncluded=true;
 }
 // Noindex is intentional. NEVER deploy commercial catalog while pending certification.
