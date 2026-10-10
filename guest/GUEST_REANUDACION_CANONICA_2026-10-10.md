@@ -1,5 +1,14 @@
 # GUEST by WeddlySmartDesign — REANUDACIÓN CANÓNICA Y ENTREGA DE TURNO
 
+## ÚLTIMO ANEXO — ENTRADA 35 / AUTORIZACIÓN CLOUDFARE FREE
+
+La usuaria ha confirmado: **«Te autorizo»**, para conectar y publicar Botánica en alojamiento gratuito. La autorización **no incluye planes de pago** ni significa que Cloudflare esté ya vinculado. Se ha verificado que el Vercel conectado es **Hobby**, no usar para e-commerce; Cloudflare Pages Free es el elegido por 25 MiB por archivo y tráfico estático gratuito.
+
+La API GitHub no admitió la subida de un master completo de 11,6 MB (falló sin crear archivo); por tanto se han subido a la rama aislada de GUEST **22 fragmentos originales** bajo `guest/catalog-assets/botanica/14.7/source-chunks/`, con manifiesto SHA256. La suma de bytes de GitHub es **11.635.635**, exactamente el tamaño aprobado; el único empaquetador ahora recompone y comprueba el **SHA256 total obligatorio**. La QA nueva está **en cola a la última comprobación**; verificar antes de dar por superada. El original de Biblioteca no se edita. Hay una portada de preproducción sin ventas ni datos reales.
+
+**La dependencia externa P0 es exactamente una autorización OAuth de Cloudflare GitHub desde el navegador de la propietaria**, no diseño, herramientas de pago ni programación. Pasos y valores precisos en `guest/GUEST_CLOUDFLARE_PAGES_FREE_DEPLOY_2026-10-10.md`. Crear Pages **Free**, conectar el repositorio `WeddlySmartDesign/WeddlySmartDesign.github.io`, rama `guest-independent`, raíz del repositorio; compilar con `node guest/tools/build_catalog_static_preview.cjs --output "$PWD/dist" --template botanica` y salida `dist`. Una vez se comparta el dominio real `*.pages.dev`, comprobar HTTPS, 11/11 gates, Android, dos bodas, RSVP, gestión, y únicamente después habilitar la venta. No afirmar URL que aún no existe; no tocar ONE, STUDIO, VEIL o `main`.
+
+
 **Actualizado:** 10/10/2026 · **Naturaleza:** documentación operativa y evidencia, **NO autorización comercial**.
 **Repositorio:** `WeddlySmartDesign/WeddlySmartDesign.github.io` · **ÚNICA rama de trabajo:** `guest-independent`.
 **Checkpoint de partida verificado:** `04ec83d352e305fb27debe3c8f141ea453844adc` (antes de añadir este documento). Los commits de documentación posteriores actualizan este punto, no el código de venta.
