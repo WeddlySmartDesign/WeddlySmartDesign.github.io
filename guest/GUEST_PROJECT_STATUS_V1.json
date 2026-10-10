@@ -976,6 +976,56 @@
       "commercialGates": "3/11 PASS; 8 PENDING",
       "commercialReady": false,
       "libraryEvidence": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_AUDITORIA_DOCUMENTAL_Y_BITACORA_UNICA_2026-10-09.md#entrada-23"
+    },
+    "paidCatalogBridgeCandidate20261010": {
+      "status": "IMPLEMENTED_AND_REAL_LOCAL_TEST_PASS_NOT_DEPLOYED",
+      "codeHead": "d6d75077557913bd0dc773f5e87a2bc0d48c1de1",
+      "documentedAt": "2026-10-10",
+      "scope": [
+        "guest/tools/prepare_test_only_backend_v13.cjs",
+        "guest/qa/isolated_free/001_guest_minimal_fixture.sql",
+        "guest/qa/isolated_free/verify_v13_two_botanica_orders.cjs",
+        "guest/tests/prepare_backend_test_only_v13.test.cjs"
+      ],
+      "onlyManagerCanCreate": true,
+      "mode": "production",
+      "verification": [
+        "active Stripe GUEST license",
+        "non-null Stripe session",
+        "explicit checkout-pinned catalog template ID and version",
+        "licensed buyer email from delivery table",
+        "idempotent by license; original production unique indexes verified",
+        "Botanica pending sale rejected 409",
+        "historic unpinned orders rejected"
+      ],
+      "realIsolatedSmoke": {
+        "run": 38067385589,
+        "head": "18193a21ca64789e4d579ff1ae2d11aae6c20fba",
+        "conclusion": "success",
+        "payment": "synthetic; no Stripe contacted"
+      },
+      "ciOnCodeHead": {
+        "catalog": {
+          "run": 38067536504,
+          "conclusion": "success"
+        },
+        "independent": {
+          "run": 38067536492,
+          "conclusion": "success"
+        }
+      },
+      "deployedCloudFlowVersion": 12,
+      "checkoutVersion": 20,
+      "checkoutStoresCatalogPins": false,
+      "checkoutUpdated": false,
+      "ownerCenterV2Deployed": false,
+      "verifiedPublicHttps": false,
+      "actualAndroid": false,
+      "commercialGate": "3/11 PASS, 8 PENDING",
+      "saleAllowed": false,
+      "vercelRead": "403 forbidden for existing owner-demos project scope; no deployment",
+      "additionalEUR": 0,
+      "nextP0": "Complete template selection/checkout pinning only for certified templates; authorized release + VEIL rollback; externally reachable HTTPS delivery, media, real RSVP, licensed management, owner Android."
     }
   },
   "commercialGate": {
