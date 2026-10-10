@@ -109,10 +109,45 @@ function ok(v,msg){if(!v)throw new Error(msg)}
   vm.runInContext(deliveryRuntime,dctx);
   let applied=null;
   const booted=await dctx.__GuestCatalogDeliveryRuntime.boot({publicToken:'public_order_token',applyConfig:c=>{applied=c}});
-  ok(applied?.rsvp?.route.includes('/guests-rsvp-v105.html'),'final delivery did not receive existing RSVP route');
+  ok(applied?.rsvp?.route.includes('/guest/guests-rsvp-v105.html'),'final delivery did not receive existing RSVP route');
   ok(applied.rsvp.route.includes('t=token_r'),'final delivery RSVP token missing');
   ok(applied.rsvp.route.includes('g=guest_7'),'final delivery guest id missing');
   ok(booted.recipient.guestId==='guest_7','recipient context not returned from delivery runtime');
+
+
+  // Route isolation: guest product invitation must not lead to ONE's root RSVP.
+  const legacy=context.__GuestCatalogBridge.legacyUrl({
+    recipientId:'g_A',rsvpToken:'rsvp_person',lang:'en',name:'Marta',
+    unitId:'',unitSize:1
+  });
+  const legacyParsed=new URL(legacy);
+  ok(legacyParsed.pathname==='/guest/guests-rsvp-v105.html','legacy GUEST RSVP must stay under /guest/');
+  ok(legacyParsed.searchParams.get('t')==='rsvp_person'&&legacyParsed.searchParams.get('g')==='g_A','legacy single RSVP context lost');
+  const family=new URL(context.__GuestCatalogBridge.legacyUrl({
+    recipientId:'ignored',rsvpToken:'rsvp_family',lang:'es',unitId:'u_7',unitSize:2
+  }));
+  ok(family.pathname==='/guest/guests-rsvp-v105.html'&&family.searchParams.get('u')==='u_7','legacy family route wrong');
+  ok(!family.searchParams.has('g'),'family route must not add a person ID');
+
+  const guestContext={window:{},location:new URL('https://weddlysmartdesign.github.io/guest/preview.html?rt=rsvp_family&u=u_7&lang=en'),URL,structuredClone};
+  guestContext.window=guestContext;
+  vm.createContext(guestContext);
+  vm.runInContext(ctx,guestContext);
+  const rc=new URL(guestContext.__GuestCatalogRecipientContext.rsvpUrl());
+  ok(rc.pathname==='/guest/guests-rsvp-v105.html','generic recipient RSVP must use /guest/');
+  ok(rc.searchParams.get('u')==='u_7'&&rc.searchParams.get('t')==='rsvp_family'&&rc.searchParams.get('lang')==='en','generic recipient RSVP context lost');
+
+  const entry=read('guests-rsvp-v105.html');
+  const gate=read('guests-rsvp-design-live.html');
+  const clean=read('guests-rsvp-public-clean.html');
+  ok(entry.includes("location.replace('guests-rsvp-design-live.html'"),'GUEST entrypoint must forward within its own directory');
+  ok(gate.includes('/functions/v1/guest-personalization'),'GUEST public gate must use GUEST personalization');
+  ok(!gate.includes('/functions/v1/weddly-personalization'),'GUEST must not read general/ONE personalization');
+  ok(gate.includes("'guests-rsvp-public-clean.html'+location.search+location.hash"),'RSVP gate must preserve parameters');
+  ok(clean.includes('/functions/v1/guest-personalization'),'GUEST clean invitation must use GUEST personalization');
+  ok(clean.includes("guests-rsvp-signature-live.html")&&clean.includes("guests-rsvp-essential-live.html"),'GUEST invitation edition routing lost');
+  ok(clean.includes("sp.get('u')")&&clean.includes("sp.get('g')"),'GUEST public RSVP must support person/family routes');
+  ok(!deliveryRuntime.includes("location.origin+'/guests-rsvp-v105.html'"),'GUEST delivery cannot point to ONE root');
 
   console.log('CATALOG BRIDGE CONTRACT PASS');
 })().catch(e=>{console.error(e);process.exit(1)});

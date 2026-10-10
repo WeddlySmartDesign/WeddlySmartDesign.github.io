@@ -6,7 +6,7 @@ const MEMBER_KEY='weddly_shared_wedding_token';
 let activePromise=null,activeCache=null,activeAt=0;
 
 function legacyUrl({recipientId,rsvpToken,lang,name,unitId,unitSize}){
-  const base=new URL(location.origin+'/guests-rsvp-v105.html');
+  const base=new URL(location.origin+'/guest/guests-rsvp-v105.html');
   base.searchParams.set('guest','1');
   base.searchParams.set('t',rsvpToken||'');
   base.searchParams.set('lang',lang||'es');

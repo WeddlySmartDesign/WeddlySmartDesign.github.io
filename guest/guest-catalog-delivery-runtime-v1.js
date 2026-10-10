@@ -16,7 +16,7 @@ function context(){
 }
 function rsvpUrl(ctx=context()){
   if(!ctx.rsvpToken)return '#';
-  const u=new URL(location.origin+'/guests-rsvp-v105.html');
+  const u=new URL(location.origin+'/guest/guests-rsvp-v105.html');
   u.searchParams.set('guest','1');
   u.searchParams.set('t',ctx.rsvpToken);
   u.searchParams.set('lang',ctx.lang||'es');
