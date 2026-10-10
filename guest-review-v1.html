@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer"><title>Revisar nuestra invitación · GUEST by WeddlySmartDesign</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#f7f0e8;color:#382f2a}#host{position:fixed;inset:0;overflow:auto}#state{position:fixed;inset:0;display:grid;place-items:center;background:#f7f0e8;z-index:30;padding:24px;text-align:center}#state[hidden]{display:none}#state div{max-width:460px}#state h1{font:400 clamp(28px,7vw,46px) Georgia,serif}#state p{line-height:1.6}
+#review{position:fixed;z-index:35;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(94vw,510px);background:#fffdfb;border:1px solid #e3d7cc;box-shadow:0 8px 40px #24160e45;border-radius:20px;padding:15px}#review[hidden]{display:none}#review strong{font-size:15px}#review p{font-size:12px;line-height:1.5;margin:5px 0 10px;color:#68584c}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}button{border:1px solid #45392f;background:#45392f;color:white;border-radius:12px;padding:12px 8px;font:700 14px system-ui;cursor:pointer;min-height:48px}.secondary{background:#fff;color:#45392f}button:disabled{opacity:.6;cursor:default}#changes[hidden],#done[hidden]{display:none}textarea{font:16px system-ui;width:100%;min-height:90px;resize:vertical;margin:8px 0;border:1px solid #b3a69b;border-radius:9px;padding:12px}#done{font-size:14px;line-height:1.6}#msg{font-size:12px;color:#963e37}
+</style></head><body><main id="host" aria-label="Vista previa exacta de la invitación"></main><section id="state" role="status"><div><h1>Abriendo vuestra revisión</h1><p>Estamos preparando la invitación para que podáis comprobarla completa.</p></div></section>
+<section id="review" hidden aria-label="Confirmar revisión"><strong>Revisad todos los detalles</strong><p>Comprobad nombres, fecha, lugares, textos y fotografías antes de aprobar.</p>
+<div id="actions" class="actions"><button id="approve">Aprobar invitación</button><button class="secondary" id="request">Pedir cambios</button></div>
+<div id="changes" hidden><label for="note">¿Qué necesitáis cambiar?</label><textarea id="note" maxlength="1500" placeholder="Describid los cambios concretos..."></textarea><div class="actions"><button id="send">Enviar cambios</button><button id="cancel" class="secondary">Volver</button></div></div>
+<p id="done" hidden></p><p id="msg" role="alert"></p></section>
+<script src="guest/catalog/guest-catalog-owner-viewer-v2.js"></script>
+<script>
+(()=>{'use strict';
+const FLOW='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow',q=new URLSearchParams(location.search),token=q.get('t')||'',$=id=>document.getElementById(id);
+let busy=false,order=null;
+async function api(body){const r=await fetch(FLOW,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body),cache:'no-store'});const j=await r.json().catch(()=>({}));if(!r.ok||!j?.ok)throw Error(j?.error||'request_failed');return j}
+function failure(){const state=$('state');state.hidden=false;state.innerHTML='';const box=document.createElement('div'),h=document.createElement('h1'),p=document.createElement('p');h.textContent='No hemos podido abrir la revisión';p.textContent='Pedid un enlace actualizado o responded al correo de WeddlySmartDesign.';box.append(h,p);state.append(box)}
+async function respond(decision){if(busy)return;if(decision==='changes'&&!$('note').value.trim()){$('msg').textContent='Describid qué queréis modificar.';return}busy=true;$('approve').disabled=$('request').disabled=$('send').disabled=true;$('msg').textContent='';
+ try{const b={action:'review_respond',token,decision,...(decision==='changes'?{note:$('note').value.trim()}:{})};const x=await api(b);if(x.status!=='approved'&&x.status!=='changes_requested')throw Error('unexpected_response');$('actions').hidden=true;$('changes').hidden=true;$('done').hidden=false;$('done').textContent=x.status==='approved'?'La invitación está aprobada. ¡Gracias! Nos encargamos de la entrega final.':'Hemos recibido los cambios. Os avisaremos cuando esté lista la nueva revisión.'}
+ catch{$('msg').textContent='No hemos podido enviar la respuesta. Volved a intentarlo.';$('approve').disabled=$('request').disabled=$('send').disabled=false}
+ finally{busy=false}
+}
+$('approve').onclick=()=>respond('approve');$('request').onclick=()=>{$('actions').hidden=true;$('changes').hidden=false;$('note').focus()};
+$('cancel').onclick=()=>{$('changes').hidden=true;$('actions').hidden=false};$('send').onclick=()=>respond('changes');
+(async()=>{if(token.length<32||token.length>200){failure();return}try{
+ const [loaded,manifest]=await Promise.all([api({action:'review_load',token}),fetch('guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',{cache:'no-store'}).then(r=>r.ok?r.json():null)]);
+ if(!manifest||manifest.schemaVersion!=='guest-catalog-owner-renderers-v2')throw Error('registry_unavailable');
+ order=loaded.order;if(!order?.config?.template?.id)throw Error('missing_template');
+ const cfg=order.config,id=cfg.template.id,version=String(cfg.template.version||''),spec=manifest.templates?.[id];
+ if(!spec||spec.mode!=='iframe'||!spec.src)throw Error('template_asset_not_ready');
+ await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order:{template_id:id,template_version:version,mode:'test'},config:cfg,host:$('host'),registry:manifest});
+ $('state').hidden=true;$('review').hidden=false;
+ if(!['review_ready','review_sent','changes_requested'].includes(order.status)){$('actions').hidden=true;$('done').hidden=false;$('done').textContent='Esta revisión ya está cerrada.';}
+ }catch(e){console.warn('[GUEST review]',String(e?.message||'review_failed'));failure()}
+})();
+})();
+</script></body></html>
