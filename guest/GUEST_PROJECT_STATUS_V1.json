@@ -1048,6 +1048,56 @@
       "documentation": "Library bitacora Entries 27 and 28",
       "launchStatus": "NO-GO; 3 of 11 gates pass",
       "limitations": "No public final personalized invitation, real media signing E2E, paid checkout-to-V13 E2E, or Android sign-off. Frozen ONE/STUDIO untouched."
+    },
+    "nextDesignVisualOnlyContract20261010": {
+      "source": "guest/GUEST_NEW_DESIGN_ONLY_VISUAL_CONTRACT_2026-10-10.md",
+      "scope": "existing GUEST single catalog, no duplicate backend or app",
+      "codeCommits": [
+        "6d7e3fd1895ed125551898e6876e8e22aa16a5cc",
+        "df04fbceacb15e572862bc2eb09f0122006fd86c",
+        "a2e0ed71da652c3e0f7fdacd46891fd7413cc0b8",
+        "990ce5650e0e7e8a08998a03e2efcaa047928705"
+      ],
+      "genericNewTemplateRegistration": {
+        "tool": "guest/tools/register_visual_template.cjs",
+        "candidateSha256MatchesVisualMaster": true,
+        "pendingViewerSrcNull": true,
+        "externalPublishAutomatic": false,
+        "generatedAdapterPerDesign": true,
+        "backendPerDesign": false
+      },
+      "genericDelivery": {
+        "tool": "guest/tools/build_catalog_delivery.js",
+        "applyApiFromOwnerRendererManifest": true,
+        "individualVeilBotanicaConditionsRemoved": true,
+        "testOnlyRequiresIsolatedFlowAndCandidateSha": true,
+        "checkoutChanged": false
+      },
+      "syntheticDesign03Qa": {
+        "tool": "guest/tests/visual_plugin_onboarding.test.cjs",
+        "newDesignActuallyRegisteredInRealCatalog": false,
+        "mockFixtureRuntime": "real packaging CLI in ephemeral local directory",
+        "catalogAndContinuityRun": 38070865079,
+        "catalogAndContinuityConclusion": "success",
+        "catalogBridgeRun": 38070865042,
+        "catalogBridgeConclusion": "success",
+        "independentRun": 38070865032,
+        "independentStatusAtObservation": "in_progress"
+      },
+      "semanticRestriction": "Next design visual production starts only after Botánica commercial E2E and Android acceptance; registration is plug-in only, 11 gates per new design still required.",
+      "externalChanges": {
+        "ONE": false,
+        "partner": false,
+        "STUDIO": false,
+        "VEIL": false,
+        "botanicaVisual": false,
+        "publicMain": false,
+        "cloudBackend": false,
+        "checkout": false,
+        "vercel": false,
+        "costEUR": 0
+      },
+      "botanicaCommercialGate": "3/11 PASS, 8 PENDING; NO-GO"
     }
   },
   "commercialGate": {
