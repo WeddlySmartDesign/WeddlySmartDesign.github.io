@@ -71,6 +71,11 @@ if(visual){
  files.push(write('guest/catalog-assets/'+id+'/'+t.version+'/index.html',visual));
  visualIncluded=true;
 }
+// Public QA entry is intentionally inert: never advertises or accepts checkout.
+// One template-neutral URL per catalog design; owner can inspect the exact frozen HTML.
+const href='/guest/catalog-assets/'+encodeURIComponent(id)+'/'+encodeURIComponent(t.version)+'/index.html';
+const landing='<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer"><title>GUEST · preproducción</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f8f5f0;color:#38312d;font-family:system-ui,sans-serif}main{padding:30px;max-width:500px;text-align:center}h1{font:400 38px Georgia,serif}p{line-height:1.65}a{display:inline-block;padding:14px 18px;background:#41362f;color:#fff;border-radius:10px;text-decoration:none}</style></head><body><main><h1>GUEST by WeddlySmartDesign</h1><p>Entorno de revisión visual. No es una tienda ni una invitación entregada a una pareja.</p>'+ (visualIncluded?'<a href="'+href+'">Ver diseño en el móvil</a>':'<p>Diseño pendiente de instalar.</p>')+'</main></body></html>';
+files.push(write('index.html',Buffer.from(landing)));
 // Noindex is intentional. NEVER deploy commercial catalog while pending certification.
 const headers=`/*\n  X-Robots-Tag: noindex, nofollow, noarchive\n  Referrer-Policy: no-referrer\n  X-Content-Type-Options: nosniff\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n`;
 files.push(write('_headers',Buffer.from(headers)));
