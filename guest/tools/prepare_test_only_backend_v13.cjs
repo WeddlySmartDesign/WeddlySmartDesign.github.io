@@ -195,6 +195,7 @@ function build(source){
       const licenseId=txt(b.licenseId,80);
       if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(licenseId))return json({ok:false,error:'invalid_license_id'},400);
       const spec=templateSpec(txt(b.templateId,80));
+      if(spec.testOnly===true)return json({ok:false,error:'template_test_only'},409);
       assertCatalogOrderMode(spec,'production');
       const {data:license,error:le}=await c.from('licenses')
         .select('id,source,source_order_id,status,metadata').eq('id',licenseId).maybeSingle();
