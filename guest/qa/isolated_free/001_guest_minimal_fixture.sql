@@ -100,3 +100,31 @@ values ('22222222-3333-4444-8555-666666666666',0,
 alter table public.guest_app_state enable row level security;
 revoke all on public.guest_app_state from anon,authenticated;
 grant all on public.guest_app_state to service_role;
+
+-- GUEST LOCAL MEMBER HANDOFF: TEST FIXTURES ONLY. Production schema untouched.
+alter table public.licenses add column wedding_id uuid;
+create table public.wedding_members(
+  wedding_id uuid not null,
+  license_id uuid not null references public.licenses(id),
+  member_hash text not null unique check(char_length(member_hash)=64),
+  status text not null default 'active'
+);
+create table public.guest_rsvp_contacts(
+  form_id uuid not null references public.guest_rsvp_forms(id) on delete cascade,
+  guest_key text not null,
+  phone text,
+  email text,
+  updated_at timestamptz not null default now()
+);
+create table public.guest_rsvp_delivery(
+  form_id uuid not null references public.guest_rsvp_forms(id) on delete cascade,
+  guest_key text not null,
+  status text not null default 'pending',
+  sent_at timestamptz,
+  updated_at timestamptz not null default now()
+);
+alter table public.wedding_members enable row level security;
+alter table public.guest_rsvp_contacts enable row level security;
+alter table public.guest_rsvp_delivery enable row level security;
+revoke all on public.wedding_members,public.guest_rsvp_contacts,public.guest_rsvp_delivery from anon,authenticated;
+grant all on public.wedding_members,public.guest_rsvp_contacts,public.guest_rsvp_delivery to service_role;
