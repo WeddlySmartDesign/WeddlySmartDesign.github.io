@@ -74,7 +74,7 @@ jobs:
         run: |
           set -euo pipefail
           umask 077
-          supabase status -o env --override-name api.url=GUEST_LOCAL_API_URL --override-name auth.anon_key=GUEST_LOCAL_ANON_KEY > local-api-env.txt
+          supabase status -o env --override-name api.url=GUEST_LOCAL_API_URL --override-name auth.anon_key=GUEST_LOCAL_ANON_KEY --override-name auth.service_role_key=GUEST_LOCAL_SERVICE_ROLE_KEY > local-api-env.txt
           supabase status -o env >> local-api-env.txt
           printf 'WEDDLY_SITE_ORIGIN=https://guest-ci-local.invalid\\n' > local-site-env.txt
           supabase functions serve --no-verify-jwt --env-file local-site-env.txt > /tmp/guest-v13-local-only.log 2>&1 &
