@@ -1243,6 +1243,83 @@
       "ONE_UNCHANGED": true,
       "STUDIO_UNCHANGED": true,
       "VEIL_VISUAL_UNCHANGED": true
+    },
+    "canonicalHandoffVerified20261010": {
+      "checkpointType": "DOCUMENTATION_RECONCILIATION_NO_CLOUD_CHANGE",
+      "canonicalHandoffRepoPath": "guest/GUEST_REANUDACION_CANONICA_2026-10-10.md",
+      "canonicalHandoffLibraryPath": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_REANUDACION_CANONICA_2026-10-10.md",
+      "canonicalHandoffSha256": "225a0fe3764e3701c6779d3f39cf2729f6438c94326d31fe9b8ea6cecd052aa3",
+      "canonicalBitacoraLibraryPath": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
+      "canonicalBitacoraEntries": 34,
+      "branch": "guest-independent",
+      "baselineVerifiedHeadBeforeDocs": "04ec83d352e305fb27debe3c8f141ea453844adc",
+      "verifiedCI": [
+        {
+          "name": "GUEST Catalog and Continuity QA (offline)",
+          "run": 38076412993,
+          "commit": "04ec83d3",
+          "conclusion": "success"
+        },
+        {
+          "name": "GUEST Independent QA",
+          "run": 38076413020,
+          "commit": "04ec83d3",
+          "conclusion": "success"
+        },
+        {
+          "name": "GUEST Free Isolated Supabase Smoke",
+          "run": 38075826054,
+          "conclusion": "success"
+        }
+      ],
+      "productionVerified": {
+        "guestInvitationFlow": {
+          "version": 14,
+          "status": "ACTIVE",
+          "sha": "84bdc6814b9738081036b7fb144da7d5556d64ab24c3f6b858ef1dc79e50e63e"
+        },
+        "guestStripeCheckout": {
+          "version": 22,
+          "status": "ACTIVE",
+          "sha": "9c2628eb373d59e4595579529bffc9e45c347daae6936e4eefae9b785db69d0b"
+        },
+        "ONEFunctionsUntouched": {
+          "weddly-app": 70,
+          "wedding-sync": 18
+        },
+        "guestAdditionalUntouched": {
+          "guest-rsvp": 4,
+          "guest-license-access": 3,
+          "guest-orders-admin": 3
+        }
+      },
+      "immutableBotanicaPackage": {
+        "libraryPath": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BOTANICA_V14_7_PAQUETE_HOSTING_GRATUITO_PREPRODUCCION_2026-10-10.zip",
+        "bytes": 9133859,
+        "sha256": "dd0729f27b30812a722ba18439335303ce20d7df78a28f14d8341bd8419b86dc",
+        "zipEntries": 11,
+        "visualMasterBytes": 11635635,
+        "visualMasterSha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+        "manifestStatus": "PREPRODUCTION_DO_NOT_SELL",
+        "commercialApproved": false
+      },
+      "commercialStatus": "BOTANICA_NO_GO",
+      "formalGates": {
+        "passed": 3,
+        "pending": 8,
+        "total": 11
+      },
+      "publicGuestHostingVerified": false,
+      "publiclyDeliveredInvitationVerified": false,
+      "liveProductionStripeToRsvpE2EVerified": false,
+      "ownerPhysicalAndroidVerified": false,
+      "paymentSalesEnabledForBotanica": false,
+      "hostingProviderConnection": "NOT CONNECTED/VERIFIED",
+      "hostEnvironmentSecretVisibility": "UNAVAILABLE; DO NOT ASSERT CONFIGURED",
+      "externalDependency": "ONE free commercial-capable static hosting connection/deployment; no new subscription, public HTTPS/Android evidence",
+      "newPaidServicesAuthorized": false,
+      "noDesign03UntilCommercialCert": true,
+      "note": "Historic entries and older JSON fragments are timestamps. This object and latest Library entry 34 reconcile the verified current state. Do not infer launch from ACTIVE Edge Functions or PREPRODUCTION ZIP."
     }
   },
   "commercialGate": {
