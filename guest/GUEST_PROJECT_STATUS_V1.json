@@ -750,7 +750,14 @@
         "scope": "owner test license, two fictional orders, one photo-only/two-venues, one custom/one-venue; lifecycle submit, review, approval, deliver, public_load",
         "workflowRunAtRecord": 38041993258,
         "resultAtRecord": "IN_PROGRESS / NO CLAIM OF PASS",
-        "caveat": "Local synthetic origin guest-ci-local.invalid is not a reachable published site; actual external client and Android still must be verified."
+        "caveat": "Local synthetic origin guest-ci-local.invalid is not a reachable published site; actual external client and Android still must be verified.",
+        "run": 38052989153,
+        "result": "SUCCESS",
+        "backend": "candidate V13 executed locally in disposable public GitHub runner; only CI-local signed-URL facade for photo, original V13 standalone access check separately succeeded",
+        "scenario1": "botanica 14.7 test, story none, two venues, private image; manager create_test, load, upload, save, submit, start_design, mark_review_ready, review_load, review_respond approve, deliver with synthetic .invalid final URL, public_load all passed",
+        "scenario2": "botanica 14.7 test, custom story, shared one venue, same lifecycle passed",
+        "reviewFinalParity": "PASS stable configured content ignoring ephemeral signed media query signature; actual external URL delivery not verified",
+        "production": false
       },
       "costs": {
         "newSubscriptionsEuro": 0,
@@ -760,7 +767,49 @@
         "oneModified": false
       },
       "actualProductionFlowV13": "NOT DEPLOYED; version v12 remains live",
-      "commercialGates": "3/11 still, no promotion"
+      "commercialGates": "3/11 still, no promotion",
+      "rsvpActualEdge": {
+        "function": "guest-rsvp actual ACTIVE v4 source copied read-only to guest/qa/isolated_free/edge_guest_rsvp_v4_readonly_snapshot.ts",
+        "productionSourceVersion": 4,
+        "productionDigest": "fd68e8d7d470bfe5c28831a614b5d23542dd240dbedf03e8ed3b45fdcfee75b9",
+        "testFile": "guest/qa/isolated_free/verify_rsvp_actual_edge.cjs",
+        "workflow": ".github/workflows/guest-isolated-free-smoke.yml",
+        "run": 38052989153,
+        "result": "SUCCESS",
+        "checks": [
+          "GET /functions/v1/guest-rsvp token plus guest fictional-g-1 returns person",
+          "GET token plus unit fictional-u-1 returns two expected members",
+          "POST RSVP from person accepted 201; POST from unit member accepted 201",
+          "both records stored in guest_rsvp_submissions",
+          "guest_app_state updated to confirmed/declined for corresponding fictional guests",
+          "repeat of same client_submission_id returns duplicate true and no extra submitted row",
+          "uses local ephemeral RLS/PostgREST and no real customer data or account credentials"
+        ],
+        "firstFailedRuns": [
+          {
+            "run": 38042984681,
+            "reason": "missing local-only service key in RSVP test env; corrected without cloud"
+          },
+          {
+            "run": 38052830406,
+            "reason": "assertion erroneously counted 2 records from previous synthetic REST exercise; limited query to the 2 newly created form IDs"
+          }
+        ],
+        "warnings": [
+          "Synthetic registered RSVP forms and GUEST guest state, not fully connected through delivered invitation's actual recipient link or license",
+          "No production URLs or mobile/browser acceptance, no real emails, no Stripe, no signed HTTPS image accessibility tested",
+          "The local V13 two-order workflow uses CI-only fake HTTPS signed URLs, original V13 service remains undeployed"
+        ],
+        "commercialCertified": false
+      },
+      "latestVerifiedRun": 38052989153,
+      "productionUnchanged": true,
+      "zeroNewRecurringFees": true,
+      "gates": {
+        "passed": 3,
+        "total": 11,
+        "remaining": 8
+      }
     }
   },
   "commercialGate": {
@@ -781,9 +830,10 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Finish and diagnose GUEST Free Isolated Supabase Smoke run 38041993258 (real generated V13, two fictional Botánica lifecycle orders and private photo upload); do not infer PASS before CI.",
-    "If local V13 lifecycle passes, next verify full real RSVP endpoint g/u and recipient link, frozen VEIL regression and rollback, then decide safe coexistence deployment to existing Supabase Free without STUDIO. NO new subscription.",
-    "Owner Android testing, live deliverable HTTPS links, license handoff and <=5 min remain external gates; preserve 3/11 until evidenced and do not start D03 yet."
+    "Runtime foundation now PASS: Free public GitHub local Supabase run 38052989153 exercised candidate V13 TWO fictional Botánica lifecycle orders and ACTUAL guest-rsvp v4 person/unit routes with persisted records and guest_app_state; no new paid service or STUDIO impact.",
+    "Next only genuine P0 gaps: validate Botánica delivery on reachable HTTPS host with actual signed private media and exact origin, connected RSVP g/u recipient link from that final URL, plus license-based management handoff; do not conflate fake .invalid URL with sellable client link.",
+    "Before any production V13 deploy to existing Free Supabase, perform VEIL LIGHT v12->v13 regression and rollback strategy, permission/tenant isolation/security inspection and explicit approval; preserve ONE, Partner, STUDIO and frozen designs.",
+    "Owner Android acceptance of real deliverable invitation and <=5 minutes measured, then 11/11 certification and D03 can begin. Until then Botánica remains 3/11, sale NO-GO."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
