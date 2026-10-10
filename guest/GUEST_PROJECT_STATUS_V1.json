@@ -587,11 +587,10 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "STUDIO PROTECTION OVERRIDES prior GUEST Free staging recommendation: NO project creation on conditional consent. STUDIO must remain restartable in Free within its restore window and without charges; capacity impact not yet disproven.",
-    "Read-only verify actual STUDIO pause date/deadline and whether any new GUEST project can be fully retired BEFORE resuming STUDIO; do not pause, resume, delete or alter STUDIO without express request.",
-    "Source code has zero checked-in SQL migrations while DB records 91 applied; prepare isolated GUEST-only schema/functions/storage and synthetic records, no production data; do not claim new Free staging is a one-click clone.",
-    "Staged Center carries TWO production endpoint literals (FLOW guest-invitation-flow and OWNER weddly-owner-manager); ensure zero production Supabase refs and no live checkout/email before allowing a connected staging preview. Preserve offline CSP otherwise.",
-    "With isolated authorized runtime and allowed browser, complete Botánica E2E 2 orders, VEIL regression, real g/u RSVP with fictional license/membership, Android owner and <=5min. Keep 3/11 and no D03 until PASS."
+    "Stop extending technical infrastructure absent a demonstrated sale-blocking defect. Focus solely on closing Botánica full invitation-to-RSVP flow (including promised guest management) with genuine E2E evidence.",
+    "Preserve THREE independent coexisting catalog products: ONE frozen, GUEST prioritized, STUDIO paused for development but safeguarded for later independent resumption. No sharing or consuming STUDIO resources.",
+    "Use a clearly isolated, legitimately approved staging path that does not block STUDIO or trigger cost; until available, leave V12, checkout, designs and real orders untouched.",
+    "Once approved staging is available, execute Botánica 2 different persisted orders, final URL, private media, review/approval, RSVP g/u, guest management linkage, VEIL regression and owner Android. Only then consider 11/11 and sale; no D03 yet."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
@@ -702,5 +701,43 @@
       "atCommit": "cbf142a67",
       "cause": "generator changed before updating its old regression fixtures; resolved by bd2f6c892; next offline catalog workflow PASS"
     }
+  },
+  "productPortfolioDirection20261010": {
+    "decidedByOwner": "ONE, GUEST and STUDIO coexist as three standalone products in the WeddlySmartDesign catalog; pausing STUDIO to work on GUEST was a temporary sequencing decision, not abandonment or permission to consume STUDIO resources.",
+    "products": {
+      "ONE": {
+        "audience": "couples",
+        "promise": "all-in-one wedding planning and guest management",
+        "phase": "finished/frozen; no changes through GUEST work"
+      },
+      "GUEST": {
+        "audience": "couples buying a premium digital wedding invitation",
+        "promise": "premium invitation first; requested customization, approval, delivery; guest/RSVP management included as stated in existing offer",
+        "phase": "currently prioritized for honest commercial completion, not infinite platform expansion"
+      },
+      "STUDIO": {
+        "audience": "Spanish wedding planners and professional studios",
+        "promise": "independent professional planning/operations software",
+        "phase": "strategically active in catalog, currently paused as an implementation project; must remain independently resumable"
+      }
+    },
+    "nonnegotiableBoundaries": [
+      "Three products must be independently deliverable and capable of coexisting: never make one a sacrificial temporary substitute for another.",
+      "No edits to frozen ONE, ONE Partner, VEIL LIGHT, Botánica visual, or STUDIO in the process of finishing GUEST.",
+      "Reuse existing GUEST guests, RSVP, tables and list engine and its already-built shared invitation runtime; do not reconstruct a second ERP or new platform.",
+      "Keep existing GUEST invitation-led sales and its promised included guest-management functionality; do not secretly remove promised inclusions to ship.",
+      "Technical hardening should fix demonstrated P0/P1 end-to-end failures; avoid further speculative edge-case infrastructure work and future D03–D1000 work before Botánica release.",
+      "STUDIO must remain resumable without data/code loss, unapproved charges, or GUEST occupying the only available Free Supabase activation slot."
+    ],
+    "operationalPriority": {
+      "P0": "One complete honest purchase/test request -> standardized questionnaire -> preview/review -> approval -> real final URL -> client delivery -> recipient RSVP persistence, and included management handoff if contract claims it.",
+      "P1": "Necessary admin/mobile owner experience, preview consistency, two genuinely distinct E2E orders, private media, regression of frozen VEIL, Android owner acceptance, measured time <=5 min.",
+      "DEFER": "Nonessential feature growth, hypothetical future design codes, speculative technical edge cases, extra dashboards/automation/services not essential to first safe sale.",
+      "commercialGate": "Botánica stays 3/11 PASS, 8 PENDING; record real evidence for remaining gates rather than reclassifying them by scope."
+    },
+    "resourceDecision": "No new Supabase project, branch, paid tier or changes to STUDIO on the basis of a generic 'continue'. Explicit approval and documented coexistence/capacity plan required.",
+    "scopeControlQuestion": "For each new task, is it needed to complete a real commercial GUEST invitation and its promised included guest/RSVP usage now? If no, defer; document separately without implementing.",
+    "source": "Owner clarifying message of 2026-10-10; record in single Library GUEST bitacora Entry 15.",
+    "scopeChange": "Project management and priorities only; no removed features or release gates; no design/backend/service modifications"
   }
 }
