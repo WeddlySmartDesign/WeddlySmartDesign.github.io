@@ -21,6 +21,23 @@ function amountFor(e:string){return e==='signature'?4990:3990}
 function normalFor(e:string){return e==='signature'?5990:4990}
 function labelFor(e:string){return e==='signature'?'GUEST Signature':'GUEST Essential'}
 function descriptionFor(e:string){return e==='signature'?'Invitación digital Signature personalizada + RSVP + gestión GUEST':'Invitación digital Essential personalizada + RSVP + gestión GUEST'}
+// Optional certified-catalog purchases only. Existing Essential/Signature checkout is unchanged.
+// The operator-owned GUEST_CATALOG_SALE_OPTIONS is a deployment gate, NOT client input:
+// {"veil-light":{"version":"5.3.3","status":"commercially-frozen","edition":"signature","amountCents":4990}}
+// Never configure pending Botánica; no GUEST catalog sale is enabled by default.
+function catalogSaleOption(raw:any,edition:string){
+ const id=String(raw||'').trim().toLowerCase();
+ if(!id)return null;
+ if(!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(id))throw new Error('catalog_template_not_for_sale');
+ let published:any={};
+ try{published=JSON.parse(env('GUEST_CATALOG_SALE_OPTIONS')||'{}')}catch{throw new Error('catalog_not_configured')}
+ const option=published&&Object.prototype.hasOwnProperty.call(published,id)?published[id]:null;
+ if(!option||option.status!=='commercially-frozen'||option.edition!==edition||
+    option.amountCents!==amountFor(edition)||typeof option.version!=='string'||
+    !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,30}$/.test(option.version))
+  throw new Error('catalog_template_not_for_sale');
+ return {id,version:option.version};
+}
 function activationCode(){const a=crypto.randomUUID().replaceAll('-','').toUpperCase(),b=crypto.randomUUID().replaceAll('-','').toUpperCase();return `WSD-GUEST-${a.slice(0,8)}-${a.slice(8,16)}-${b.slice(0,8)}`}
 function normalizeCode(v:string){return String(v||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'')}
 async function stripeRequest(path:string,init:RequestInit={}){
@@ -28,9 +45,10 @@ async function stripeRequest(path:string,init:RequestInit={}){
  const r=await fetch('https://api.stripe.com/v1'+path,{...init,headers:{Authorization:'Bearer '+secret,...(init.headers||{})}});
  const x=await r.json().catch(()=>({}));if(!r.ok){console.warn('stripe_error',r.status,x);if(r.status===404)throw new Error('session_not_found');if(r.status===401||r.status===403)throw new Error('stripe_not_configured');if(r.status===429)throw new Error('stripe_temporarily_unavailable');throw new Error('stripe_request_failed')}return x
 }
-async function createSession(edition:string,consent:boolean,attempt:any){
+async function createSession(edition:string,consent:boolean,attempt:any,requestedTemplateId:any){
  if(!consent)throw new Error('consent_required');
  const key=String(attempt||'').trim();if(!/^[A-Za-z0-9-]{16,100}$/.test(key))throw new Error('invalid_checkout_attempt');
+ const option=catalogSaleOption(requestedTemplateId,edition);
  const amount=amountFor(edition),base=origin(),p=new URLSearchParams();
  p.set('ui_mode','embedded_page');p.set('mode','payment');p.set('locale','es');p.set('submit_type','pay');
  p.set('billing_address_collection','auto');p.set('customer_creation','always');p.set('redirect_on_completion','always');
@@ -42,6 +60,12 @@ async function createSession(edition:string,consent:boolean,attempt:any){
  p.set('line_items[0][price_data][product_data][description]',descriptionFor(edition));
  p.set('metadata[product]','guest');p.set('metadata[edition]',edition);p.set('metadata[pricing]','launch');
  p.set('metadata[amount_cents]',String(amount));p.set('metadata[start_personalization_consent]','true');
+ if(option){
+  p.set('metadata[guest_catalog_template_id]',option.id);
+  p.set('metadata[guest_catalog_template_version]',option.version);
+  p.set('payment_intent_data[metadata][guest_catalog_template_id]',option.id);
+  p.set('payment_intent_data[metadata][guest_catalog_template_version]',option.version);
+ }
  p.set('payment_intent_data[metadata][product]','guest');p.set('payment_intent_data[metadata][edition]',edition);
  p.set('custom_text[submit][message]','Al pagar confirmas tu pedido GUEST. Después completarás los datos para que personalicemos vuestra invitación.');
  if(['1','true','on','yes'].includes(env('WEDDLY_STRIPE_AUTOMATIC_TAX').toLowerCase()))p.set('automatic_tax[enabled]','true');
@@ -78,7 +102,15 @@ async function provision(session:any){
    return {licenseId:String(existing.id),edition,buyerEmail:buyer,metadata:existing.metadata||{}}
  }
  const code=activationCode(),hash=await sha256(normalizeCode(code)),created=new Date((Number(session.created)||Math.floor(Date.now()/1000))*1000).toISOString();
- const metadata={product:'guest',edition,access_kind:'paid',payment_provider:'stripe',stripe_session_id:sessionId,stripe_payment_intent:typeof session.payment_intent==='string'?session.payment_intent:null,amount_total:Number(session.amount_total||amountFor(edition)),currency:'eur',pricing:'launch',guest_personalization_status:'awaiting_details',purchased_at:created};
+ // Pin exactly the catalog template/version that Stripe actually charged for.
+ // Never add catalog pins retroactively to legacy Essential/Signature purchases.
+ const templateId=String(session.metadata?.guest_catalog_template_id||'').trim();
+ const templateVersion=String(session.metadata?.guest_catalog_template_version||'').trim();
+ if((templateId||templateVersion)&&(!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(templateId)||
+    !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,30}$/.test(templateVersion)))
+  throw new Error('invalid_checkout_session');
+ const metadata={product:'guest',edition,access_kind:'paid',payment_provider:'stripe',stripe_session_id:sessionId,stripe_payment_intent:typeof session.payment_intent==='string'?session.payment_intent:null,amount_total:Number(session.amount_total||amountFor(edition)),currency:'eur',pricing:'launch',guest_personalization_status:'awaiting_details',purchased_at:created,
+   ...(templateId?{guest_catalog_template_id:templateId,guest_catalog_template_version:templateVersion}:{})};
  const {data,error}=await db.rpc('provision_weddly_license',{p_source:'stripe',p_source_order_id:sessionId,p_buyer_email:buyer,p_product_ref:'guest_'+edition,p_metadata:metadata,p_activation_code:code,p_purchase_hash:hash});if(error)throw error;
  const row=data?.[0];if(!row?.license_id)throw new Error('license_provision_failed');
  const sent=await startEmail(buyer,sessionId,edition);
@@ -151,12 +183,12 @@ Deno.serve(async req=>{
    const pk=env('STRIPE_PUBLISHABLE_KEY')||'pk_live_51UHSpGGsLCo0tfLrCEFrbgR8GuH08Ug3czX35u4W2HUoCjKQSvzOC3ZfRleCXg67h05eytwFeE31ycgw7ozHHLvK00CPs5ZG8P';if(!pk)return json({ok:false,error:'stripe_not_configured'},503);
    return json({ok:true,publishableKey:pk,launch:true,prices:{essential:{current:amountFor('essential'),normal:normalFor('essential')},signature:{current:amountFor('signature'),normal:normalFor('signature')}}})
   }
-  if(action==='create'){const edition=editionOf(b.edition),session=await createSession(edition,b.startPersonalizationConsent===true,b.checkoutAttemptId);return json({ok:true,clientSecret:session.client_secret,sessionId:session.id,edition})}
+  if(action==='create'){const edition=editionOf(b.edition),session=await createSession(edition,b.startPersonalizationConsent===true,b.checkoutAttemptId,b.catalogTemplateId);return json({ok:true,clientSecret:session.client_secret,sessionId:session.id,edition})}
   if(action==='status'){
    const session=await retrieveSession(String(b.sessionId||'')),paid=session.status==='complete'&&session.payment_status==='paid';let p=null;if(paid)p=await provision(session);
-   return json({ok:true,status:session.status,paymentStatus:session.payment_status,paid,provisioned:!!p,edition:editionOf(session.metadata?.edition),amountTotal:session.amount_total||null,currency:session.currency||'eur',email:p?.buyerEmail||session.customer_details?.email||null,orderSubmittedAt:p?.metadata?.guest_order_submitted_at||null})
+   return json({ok:true,status:session.status,paymentStatus:session.payment_status,paid,provisioned:!!p,edition:editionOf(session.metadata?.edition),amountTotal:session.amount_total||null,currency:session.currency||'eur',email:p?.buyerEmail||session.customer_details?.email||null,orderSubmittedAt:p?.metadata?.guest_order_submitted_at||null,catalogTemplateId:p?.metadata?.guest_catalog_template_id||null,catalogTemplateVersion:p?.metadata?.guest_catalog_template_version||null})
   }
   if(action==='submit_order'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await submitOrder(session,b.details||{}))}
   return json({ok:false,error:'invalid_action'},400)
- }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
+ }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','catalog_template_not_for_sale'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
 });
