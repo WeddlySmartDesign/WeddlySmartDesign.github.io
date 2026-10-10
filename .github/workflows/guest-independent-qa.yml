@@ -97,6 +97,8 @@ jobs:
           exit 1
       - name: B6.3 invitation and RSVP QA
         run: node guest/qa/b6_3_invitation_rsvp_test.js
+      - name: B6.3a GUEST public RSVP route browser check (stubbed; no cloud)
+        run: node guest/qa/catalog_public_rsvp_browser_test.js
 
   b6-tables-lists:
     runs-on: ubuntu-latest
