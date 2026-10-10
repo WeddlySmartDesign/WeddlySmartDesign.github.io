@@ -52,9 +52,11 @@ registry.templates.push(newEntry);
 const gates={};
 for(const k of evidence.policy.newTemplateRequirements)gates[k]={pass:false,source:'guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md',why:'Not independently certified for '+id};
 evidence.templates[id]={version,basis:'new-template-gated',gates};
-owner.templates[id]={id,version,mode:'iframe',src:'/'+assetPath,applyApi:rendererApi,status:'certification-pending'};
+// Pending designs have no public asset. The existing generic owner staging tool
+// injects the locally SHA-pinned copy; an HTTPS asset is recorded only after release.
+owner.templates[id]={id,version,mode:'iframe',src:null,applyApi:rendererApi,status:'certification-pending'};
 if(projectStatus){
- projectStatus.designs[id]={version,status:'certification-pending',catalogAsset:assetPath,adapter:adapterPath,visualMasterSha256:crypto.createHash('sha256').update(html).digest('hex'),commerciallyCertified:false,requiredGates:evidence.policy.newTemplateRequirements.length};
+ projectStatus.designs[id]={version,status:'certification-pending',catalogAsset:assetPath,adapter:adapterPath,visualMasterSha256:crypto.createHash('sha256').update(html).digest('hex'),candidateSha256:crypto.createHash('sha256').update(html).digest('hex'),commerciallyCertified:false,requiredGates:evidence.policy.newTemplateRequirements.length};
 }
 const emitted=[
  [assetPath,html],
