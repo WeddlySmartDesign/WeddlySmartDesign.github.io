@@ -12,6 +12,10 @@ const guestDir=path.resolve(__dirname,'..');
 const registry=JSON.parse(fs.readFileSync(path.join(guestDir,'GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'),'utf8'));
 const spec=(registry.templates||[]).find(x=>x.id===templateId);
 if(!spec)fail('Unknown catalog template: '+templateId);
+const owners=JSON.parse(fs.readFileSync(path.join(guestDir,'GUEST_CATALOG_OWNER_RENDERERS_V2.json'),'utf8'));
+const owner=owners.templates?.[templateId];
+if(!owner||owner.id!==spec.id||owner.version!==spec.version||owner.status!==spec.status||
+  !/^[_A-Z][_A-Z0-9]*$/.test(owner.applyApi||''))fail('catalog_owner_renderer_manifest_drift:'+templateId);
 if(!testOnly&&spec.status!=='commercially-frozen')fail('Template is not commercially frozen: '+templateId);
 if(testOnly){
  if(spec.status!=='certification-pending')fail('test_only_requires_pending_template');
@@ -42,8 +46,9 @@ const adapterName='guest-catalog-template-'+templateId+'-adapter-v1.js';
 const adapterPath=path.join(guestDir,adapterName);
 if(!fs.existsSync(adapterPath))fail('Missing template adapter: '+adapterName);
 const adapter=fs.readFileSync(adapterPath,'utf8');
-if(templateId==='veil-light'&&!html.includes('VEIL_APPLY_CONFIG'))fail('VEIL LIGHT renderer interface not found in source master');
-if(testOnly&&!html.includes('BOTANICA_APPLY_CONFIG')&&templateId==='botanica')fail('botanica_candidate_renderer_unavailable');
+// Exactly one common interface guard for VEIL, Botánica and future designs.
+// No per-template branch here: renderer identity comes from the version-pinned manifest.
+if(!html.includes(owner.applyApi))fail('catalog_renderer_interface_unavailable:'+templateId);
 html=html.replace(/\s*<script id=["']wsd-final-script["']>[\s\S]*?<\/script>\s*/g,'\n');
 html=html.replace(/\s*<script id=["']guest-catalog-delivery-runtime["']>[\s\S]*?<\/script>\s*/g,'\n');
 html=html.replace(/\s*<script id=["']guest-catalog-template-adapter["']>[\s\S]*?<\/script>\s*/g,'\n');
