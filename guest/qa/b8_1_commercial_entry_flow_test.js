@@ -67,6 +67,33 @@ async function verifyEdition(browser,edition,w,h){
   ok(!/ONE Partner|STUDIO/.test(body),'foreign product visible in checkout');
   await ctx.close();
 }
+async function verifyCatalogSelection(browser){
+ const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+ const page=await ctx.newPage(),submitted=[];
+ await page.addInitScript(()=>{window.Stripe=()=>({initEmbeddedCheckout:async({fetchClientSecret})=>{
+  await fetchClientSecret();return{mount(){window.__guestStripeMockMounted=true},destroy(){}}
+ }})});
+ await page.route('https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-stripe-checkout',async route=>{
+  const body=route.request().postDataJSON();if(body.action==='create')submitted.push(body);
+  const result=body.action==='config'?{ok:true,publishableKey:'pk_test_offline',prices:{essential:{current:3990},signature:{current:4990}}}:
+    {ok:true,clientSecret:'cs_test_no_real_payment',sessionId:'offline'};
+  await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(result)});
+ });
+ await page.goto(base+'/guest-checkout.html?edition=signature&catalog_template=veil-light',{waitUntil:'domcontentloaded'});
+ ok(await page.locator('#guestCatalogCheckoutNotice').count()===1,'catalog selected design label missing');
+ ok(await page.locator('.edition[data-edition="essential"]').isDisabled(),'catalog edition must be locked');
+ await page.locator('#consent').check();
+ await page.waitForFunction(()=>window.__guestStripeMockMounted===true);
+ ok(submitted.length===1,'unexpected payment session count');
+ ok(submitted[0].edition==='signature','catalog edition changed');
+ ok(submitted[0].catalogTemplateId==='veil-light','catalog template ID did not reach Stripe creator');
+ ok(submitted[0].startPersonalizationConsent===true,'consent not preserved');
+ await page.goto(base+'/guest-checkout.html?edition=signature&catalog_template=..%2Fbotanica',{waitUntil:'domcontentloaded'});
+ ok(await page.locator('#consent').isDisabled(),'malformed catalog URL must block payment consent');
+ ok((await page.locator('#state').innerText()).includes('no es válido'),'invalid catalog reason missing');
+ ok(submitted.length===1,'malformed URL must never call Stripe');
+ await ctx.close();
+}
 (async()=>{
   staticAudit();
   const browser=await chromium.launch({headless:true});
@@ -74,6 +101,7 @@ async function verifyEdition(browser,edition,w,h){
     await verifyEdition(browser,'essential',w,h);
     await verifyEdition(browser,'signature',w,h);
   }
+  await verifyCatalogSelection(browser);
   await browser.close();
   console.log('B8.1 commercial entry flow: PASS');
 })().catch(e=>{console.error('B8.1 FAIL:',e.stack||e);process.exit(1)});
