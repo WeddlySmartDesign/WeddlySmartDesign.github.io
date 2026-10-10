@@ -4,6 +4,13 @@
 **Repositorio:** `WeddlySmartDesign/WeddlySmartDesign.github.io` · **rama exclusiva:** `guest-independent` · **fase:** sistema visual común V2 desarrollado y probado localmente, **no integrado aún en producción**.  
 **Objetivo:** retomar GUEST en otro chat, otra sesión o cualquier diseño 03–1000 **sin búsqueda histórica ni repetición de instrucciones**.
 
+## 10/10/2026 — Bloqueo concreto de PUBLICACIÓN verificado en Cloud y muestra Android disponible
+
+- Se ha verificado **directamente mediante Supabase**, sin modificar datos: `guest-invitation-flow` comercial sigue **v12**, digest `69ef41f9867eb048b052632141be9b8e5ea53aa78a63ade1883e1e88da7b28ac`; fuente desplegada **byte-idéntica** a `guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts` (43 641 caracteres). V13 continúa **LOCAL y NO DEPLOYED**. Proyecto `STUDIO` INACTIVO y protegido; las funciones `guest-rsvp` v4 y `guest-license-access` v3 están activas en la infraestructura compartida con ONE.
+- El empaquetador `guest/tools/build_catalog_delivery.js` **bloquea a propósito** empaquetar la candidata Botánica con un destino de pruebas que apunte al proyecto compartido ONE/GUEST o a STUDIO; exige otra función Supabase HTTPS aislada. No se ha modificado ni saltado el bloqueo. La certificación comercial requiere un despliegue GUEST seguro controlado con rollback, hosting HTTPS final con fotos, licencia real y verificación Android antes de autorizar cobros/ventas.
+- Se ha entregado en el chat una **copia exacta, sin modificar**, de la V14.7 conservada en Biblioteca, SHA-256 `fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a` (11 635 635 bytes), bajo `/mnt/data/BOTANICA_V14_7_REVISION_MOVIL.html`. Es **solo una revisión local móvil**; no es enlace de invitado, hosting ni venta. La aprobación móvil de la propietaria sigue pendiente.
+- **No declarar terminación comercial por presión temporal.** 3/11 PASS, 8 PENDING, NO-GO venta, NO D03, cero gastos nuevos. Bitácora de Biblioteca: **Entrada 23**. Desde aquí trabajar SOLAMENTE el despliegue/publicación seguros, no abrir investigación o QA periférica.
+
 ## 10/10/2026 — DOS bodas Botánica: enlace entrega → licencia → RSVP → gestión integrado en Supabase efímero, 0 €
 
 - **P0 corregido**: el fallback final de `guest/guests-rsvp-share-composer-v3.js` ya utiliza `/guest/guests-rsvp-v105.html` y nunca la raíz de ONE. Commit [`aca4ed40e042d3a70b2de9fb5985452b8d0858c2`](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/commit/aca4ed40e042d3a70b2de9fb5985452b8d0858c2), Catalog Bridge PASS 38057426419, Catalog/Continuity PASS 38057426416, Independent QA PASS 38057426434.

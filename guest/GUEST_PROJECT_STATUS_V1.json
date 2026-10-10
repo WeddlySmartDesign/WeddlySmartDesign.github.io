@@ -938,6 +938,44 @@
       "productionDeployment": false,
       "costAdditionalEUR": 0,
       "libraryEvidence": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_AUDITORIA_DOCUMENTAL_Y_BITACORA_UNICA_2026-10-09.md#entrada-22"
+    },
+    "botanicaCommercialReleaseBlockerRechecked20261010": {
+      "checkedAt": "2026-10-10",
+      "currentCodeHead": "359aac2fd6ec5e4431e6de6c81a66c0536a81c30",
+      "verifiedCloudProject": "dnjsxequwgtyyauuofxj",
+      "studioProject": "kijigxprredusnaaazow",
+      "studioStatus": "INACTIVE",
+      "liveFunction": "guest-invitation-flow",
+      "liveVersion": 12,
+      "liveDigest": "69ef41f9867eb048b052632141be9b8e5ea53aa78a63ade1883e1e88da7b28ac",
+      "snapshotFile": "guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts",
+      "snapshotMatchesLiveByteForByte": true,
+      "liveRsvpVersion": 4,
+      "liveLicenseAccessVersion": 3,
+      "stageBuilder": "guest/tools/build_catalog_delivery.js",
+      "stageBuilderSafety": "strictly excludes currently live ONE/GUEST Supabase project and paused STUDIO; requires isolated HTTPS Supabase endpoint for --test-only",
+      "requiredForFinalSale": [
+        "authorized guest-only backend promotion or authorized isolated backend; rollback and VEIL regression",
+        "real publicly hosted HTTPS invitation with signed media and proper owner/customer link",
+        "licensed activation and recipient RSVP final E2E",
+        "owner Android check and active work timing",
+        "commercial publication/checkout approval"
+      ],
+      "mobilePreview": {
+        "file": "/mnt/data/BOTANICA_V14_7_REVISION_MOVIL.html",
+        "bytes": 11635635,
+        "sha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+        "source": "Library technicalCandidate V14.7, exact unmodified copy",
+        "isSaleable": false
+      },
+      "cloudChanged": false,
+      "oneChanged": false,
+      "studioChanged": false,
+      "visualFrozenChanged": false,
+      "newFeesEUR": 0,
+      "commercialGates": "3/11 PASS; 8 PENDING",
+      "commercialReady": false,
+      "libraryEvidence": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_AUDITORIA_DOCUMENTAL_Y_BITACORA_UNICA_2026-10-09.md#entrada-23"
     }
   },
   "commercialGate": {
