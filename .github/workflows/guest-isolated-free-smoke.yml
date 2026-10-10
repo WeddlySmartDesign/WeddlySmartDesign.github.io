@@ -49,6 +49,9 @@ jobs:
           node guest/tools/prepare_test_only_backend_v13.cjs --input guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts --output /tmp/guest-v13-pristine-ci.ts
           node guest/qa/isolated_free/patch_local_signed_https.cjs /tmp/guest-v13-pristine-ci.ts supabase/functions/guest-invitation-flow/index.ts
           test -s supabase/functions/guest-invitation-flow/index.ts
+          mkdir -p supabase/functions/guest-rsvp
+          cp guest/qa/isolated_free/edge_guest_rsvp_v4_readonly_snapshot.ts supabase/functions/guest-rsvp/index.ts
+          test -s supabase/functions/guest-rsvp/index.ts
       - name: Boot local isolated Supabase services
         run: |
           set -euo pipefail
@@ -74,7 +77,7 @@ jobs:
           supabase status -o env --override-name api.url=GUEST_LOCAL_API_URL --override-name auth.anon_key=GUEST_LOCAL_ANON_KEY > local-api-env.txt
           supabase status -o env >> local-api-env.txt
           printf 'WEDDLY_SITE_ORIGIN=https://guest-ci-local.invalid\\n' > local-site-env.txt
-          supabase functions serve guest-invitation-flow --no-verify-jwt --env-file local-site-env.txt > /tmp/guest-v13-local-only.log 2>&1 &
+          supabase functions serve --no-verify-jwt --env-file local-site-env.txt > /tmp/guest-v13-local-only.log 2>&1 &
           edge_pid=$!
           trap 'kill "$edge_pid" 2>/dev/null || true; rm -f local-api-env.txt local-site-env.txt /tmp/guest-v13-local-only.log' EXIT
           node guest/qa/isolated_free/verify_v13_runtime.cjs local-api-env.txt
@@ -83,6 +86,7 @@ jobs:
             grep -Eo 'ci_signed_url_(invalid|outside_loopback)|missing_signed_asset|invalid_invitation_media|invalid_invitation_config|TypeError|ReferenceError' /tmp/guest-v13-local-only.log | sort -u || true
             exit 1
           fi
+          node guest/qa/isolated_free/verify_rsvp_actual_edge.cjs local-api-env.txt
       - name: Stop local-only stack
         if: always()
         shell: bash
