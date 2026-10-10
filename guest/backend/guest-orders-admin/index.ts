@@ -20,7 +20,7 @@ async function resend(payload:any){
 }
 async function getOrder(db:any,id:string){
  const {data:l,error}=await db.from('licenses').select('id,source,status,wedding_id,purchase_hash,metadata,created_at,activated_at,updated_at').eq('id',id).maybeSingle();if(error)throw error;
- if(!l||l.source!=='stripe'||String(l.metadata?.product||'')!=='guests')return null;
+ if(!l||l.source!=='stripe'||!['guest','guests'].includes(String(l.metadata?.product||'')))return null;
  return l
 }
 async function seedWedding(db:any,l:any,weddingId:string){
@@ -52,7 +52,7 @@ async function prepare(db:any,l:any){
 }
 function cleanUrl(v:any){const u=String(v||'').trim();if(!u)return'';try{const x=new URL(u);if(x.origin!==origin())throw 0;if(!x.pathname.startsWith('/guest/'))throw 0;return x.toString()}catch{throw new Error('invalid_invitation_url')}}
 async function listOrders(db:any){
- const {data:rows,error}=await db.from('licenses').select('id,status,wedding_id,metadata,created_at,activated_at,updated_at').eq('source','stripe').eq('metadata->>product','guests').order('created_at',{ascending:false}).limit(100);if(error)throw error;
+ const {data:rows,error}=await db.from('licenses').select('id,status,wedding_id,metadata,created_at,activated_at,updated_at').eq('source','stripe').in('metadata->>product',['guest','guests']).order('created_at',{ascending:false}).limit(100);if(error)throw error;
  const ids=(rows||[]).map((x:any)=>x.id);const deliveries=new Map<string,any>();
  if(ids.length){const {data:d,error:de}=await db.from('license_delivery_codes').select('license_id,buyer_email,delivered_at').in('license_id',ids);if(de)throw de;for(const x of d||[])deliveries.set(String(x.license_id),x)}
  return(rows||[]).map((x:any)=>{const m=x.metadata||{},o=m.guest_order||{},d=deliveries.get(String(x.id))||{};return{id:x.id,status:String(m.guest_personalization_status||'awaiting_details'),edition:String(m.edition||'essential'),buyerEmail:String(d.buyer_email||''),couple1:String(o.couple1||''),couple2:String(o.couple2||''),weddingDate:String(o.weddingDate||''),design:String(o.design||''),phone:String(o.contactPhone||''),createdAt:x.created_at,detailsAt:m.guest_order_submitted_at||null,preparingAt:m.guest_preparation_started_at||null,readyAt:m.guest_ready_at||null,deliveredAt:m.guest_delivered_at||d.delivered_at||null,weddingId:x.wedding_id||null,invitationUrl:String(m.guest_invitation_url||''),notes:String(o.notes||''),extraEvents:String(o.extraEvents||'')}})

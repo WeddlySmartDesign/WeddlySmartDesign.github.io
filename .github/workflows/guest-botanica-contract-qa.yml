@@ -28,6 +28,7 @@ jobs:
           node guest/tests/prepare_backend_test_only_v13.test.cjs
           node guest/tests/invitation_config_schema_contract.test.cjs
           node guest/tests/backend_config_contract_v1.test.cjs
+          node guest/tests/paid_order_admin_checkout_contract.test.cjs
           node guest/tests/invitation_runtime_gate.test.cjs
           node guest/tests/owner_center_stage_v2.test.cjs
           node guest/tests/owner_stage_overlay_v2.test.cjs
