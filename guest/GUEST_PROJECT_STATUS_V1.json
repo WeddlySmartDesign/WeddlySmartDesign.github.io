@@ -1,6 +1,6 @@
 {
   "schemaVersion": "guest-project-status-v1",
-  "asOf": "2026-10-09",
+  "asOf": "2026-10-10",
   "entryPoint": "guest/START_HERE.md",
   "repository": "WeddlySmartDesign/WeddlySmartDesign.github.io",
   "branch": "guest-independent",
@@ -810,6 +810,48 @@
         "total": 11,
         "remaining": 8
       }
+    },
+    "guestPublicRsvpRouteIsolation20261010": {
+      "status": "CODE_COMMITTED_QA_BRIDGE_PASS_PUBLIC_E2E_PENDING",
+      "branch": "guest-independent",
+      "commit": "9e410343d328aad48c10fd56449139cd65ae1da6",
+      "correctedPaths": [
+        "guest/guests-catalog-invitation-bridge-v1.js",
+        "guest/guest-catalog-recipient-context-v1.js",
+        "guest/guest-catalog-delivery-runtime-v1.js",
+        "guest/guests-rsvp-design-live.html"
+      ],
+      "tests": [
+        "guest/qa/catalog_invitation_bridge_test.js",
+        "guest/tests/botanica_catalog_bridge_offline.test.cjs"
+      ],
+      "guestRsvpEntry": "/guest/guests-rsvp-v105.html",
+      "ownerMainUnaffected": true,
+      "studioUnaffected": true,
+      "catalogBridge": {
+        "run": 38056356001,
+        "result": "success"
+      },
+      "catalogAndContinuity": {
+        "run": 38056356008,
+        "result": "success"
+      },
+      "independentAtFirstCheck": {
+        "run": 38056356070,
+        "result": "in_progress"
+      },
+      "stillMissing": [
+        "published HTTPS link from Botánica through real recipient g/u to actual GUEST RSVP",
+        "licensed management handoff and tenant isolation E2E",
+        "real HTTPS signed media and VEIL regression with rollback",
+        "owner Android review and <=5min active work",
+        "separate payment template-version safety approval"
+      ],
+      "productionDeployed": false,
+      "backendV13Deployed": false,
+      "botanicaCommercialGates": "3/11 PASS",
+      "saleAllowed": false,
+      "libraryEvidence": "GUEST_AUDITORIA_DOCUMENTAL_Y_BITACORA_UNICA_2026-10-09.md Entrada 21"
     }
   },
   "commercialGate": {
