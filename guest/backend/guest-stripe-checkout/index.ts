@@ -92,14 +92,59 @@ async function startEmail(to:string,sessionId:string,edition:string){
  const link=origin()+'/guest-order.html?session_id='+encodeURIComponent(sessionId);
  return await resend({idempotencyKey:'guest-start/'+sessionId,body:{to:[to],subject:'Pago recibido · completa vuestra invitación GUEST',html:`<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#2C2A26"><h1 style="font-family:Georgia,serif;font-weight:400">GUEST by WeddlySmartDesign</h1><p>Hemos recibido correctamente el pago de <strong>${esc(labelFor(edition))}</strong>.</p><p>El siguiente paso es sencillo: completa los datos de vuestra invitación y empezaremos a personalizarla.</p><p><a href="${esc(link)}" style="display:inline-block;background:#2C2A26;color:#fff;text-decoration:none;padding:13px 18px;border-radius:10px">Completar datos de la invitación</a></p><p>La entrega prevista es de 24–48 h desde que recibamos los datos necesarios.</p><p style="color:#736F63;font-size:13px">Si tienes cualquier problema, responde a este correo o escribe a weddlysmartdesign@gmail.com.</p></div>`}})
 }
+/* Paid catalog handoff: reuse the V13 create_paid route after Stripe verification,
+ * never create a second database or expose manager credentials to a browser.
+ * An empty catalog pin takes the original Essential/Signature path unchanged.
+ */
+async function paidCatalogQuestionnaire(licenseId:string,metadata:any){
+ const templateId=String(metadata?.guest_catalog_template_id||'');
+ const version=String(metadata?.guest_catalog_template_version||'');
+ if(!templateId)return null;
+ if(!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(templateId)||
+    !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,30}$/.test(version))throw new Error('catalog_invalid_pin');
+ const c=admin();
+ const {data:owners,error}=await c.from('licenses').select('id,metadata')
+   .eq('source','internal_owner').eq('status','active').limit(10);
+ if(error)throw error;
+ const matches=(owners||[]).filter((x:any)=>x.metadata?.grant_type==='owner');
+ if(matches.length!==1)throw new Error('catalog_owner_unavailable');
+ const payload=btoa(JSON.stringify({ownerId:matches[0].id,exp:Date.now()+120000}))
+   .replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
+ const secrets=Deno.env.get('SUPABASE_SECRET_KEYS');
+ const key=secrets?String(JSON.parse(secrets).default||''):String(Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')||'');
+ if(!key)throw new Error('catalog_manager_unavailable');
+ const token='v1.'+payload+'.'+await hmacHex(key,'wsd-owner-manager-v1|'+payload);
+ const response=await fetch(env('SUPABASE_URL')+'/functions/v1/guest-invitation-flow',{
+   method:'POST',headers:{'content-type':'application/json','x-weddly-manager':token},
+   body:JSON.stringify({action:'create_paid',licenseId,templateId}),
+   signal:AbortSignal.timeout(15000)});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok||!data?.ok||!data?.id||!data?.qToken)throw new Error('catalog_paid_handoff_failed');
+ const qToken=String(data.qToken);
+ if(qToken.length<32||qToken.length>200)throw new Error('catalog_invalid_questionnaire_token');
+ return {templateId,version,orderId:String(data.id),
+   questionnaireUrl:origin()+'/guest/catalog-questionnaire.html?t='+encodeURIComponent(qToken)};
+}
+async function startCatalogEmail(to:string,sessionId:string,edition:string,catalog:any){
+ if(!catalog?.questionnaireUrl)throw new Error('catalog_questionnaire_unavailable');
+ return await resend({idempotencyKey:'guest-catalog-start/'+sessionId,body:{to:[to],
+  subject:'Pago recibido · completa los datos de vuestra invitación',
+  html:`<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#2C2A26"><h1 style="font-family:Georgia,serif;font-weight:400">Vuestra invitación empieza aquí.</h1><p>Hemos recibido el pago de <strong>${esc(labelFor(edition))}</strong>.</p><p>El diseño elegido está reservado para vuestro pedido. Rellenad el cuestionario y adjuntad allí las fotografías que queráis incluir.</p><p><a href="${esc(catalog.questionnaireUrl)}" style="display:inline-block;background:#2C2A26;color:#fff;text-decoration:none;padding:13px 18px;border-radius:10px">Completar vuestro cuestionario</a></p><p>Después recibiréis la invitación para revisarla antes de la entrega final.</p><p style="font-size:13px;color:#736F63">Si necesitáis ayuda, responded a este correo o escribid a weddlysmartdesign@gmail.com.</p></div>`}})
+}
 async function provision(session:any){
  const edition=validatePaid(session),sessionId=String(session.id||''),buyer=String(session.customer_details?.email||session.customer_email||'').trim().toLowerCase();
  if(!buyer.includes('@'))throw new Error('missing_buyer_email');
  const db=admin();
  let {data:existing,error:ee}=await db.from('licenses').select('id,status,metadata').eq('source','stripe').eq('source_order_id',sessionId).maybeSingle();if(ee)throw ee;
  if(existing?.id&&existing.status==='active'){
-   if(!existing.metadata?.guest_order_email_sent_at){const ok=await startEmail(buyer,sessionId,edition);if(ok){const m={...(existing.metadata||{}),guest_order_email_sent_at:new Date().toISOString()};await db.from('licenses').update({metadata:m,updated_at:new Date().toISOString()}).eq('id',existing.id);existing.metadata=m}}
-   return {licenseId:String(existing.id),edition,buyerEmail:buyer,metadata:existing.metadata||{}}
+   const catalog=await paidCatalogQuestionnaire(String(existing.id),existing.metadata);
+   if(!existing.metadata?.guest_order_email_sent_at){
+     const ok=catalog?await startCatalogEmail(buyer,sessionId,edition,catalog):await startEmail(buyer,sessionId,edition);
+     if(ok){const m={...(existing.metadata||{}),guest_order_email_sent_at:new Date().toISOString()};
+       await db.from('licenses').update({metadata:m,updated_at:new Date().toISOString()}).eq('id',existing.id);existing.metadata=m}
+   }
+   return {licenseId:String(existing.id),edition,buyerEmail:buyer,metadata:existing.metadata||{},
+     catalogQuestionnaireUrl:catalog?.questionnaireUrl||null}
  }
  const code=activationCode(),hash=await sha256(normalizeCode(code)),created=new Date((Number(session.created)||Math.floor(Date.now()/1000))*1000).toISOString();
  // Pin exactly the catalog template/version that Stripe actually charged for.
@@ -113,9 +158,11 @@ async function provision(session:any){
    ...(templateId?{guest_catalog_template_id:templateId,guest_catalog_template_version:templateVersion}:{})};
  const {data,error}=await db.rpc('provision_weddly_license',{p_source:'stripe',p_source_order_id:sessionId,p_buyer_email:buyer,p_product_ref:'guest_'+edition,p_metadata:metadata,p_activation_code:code,p_purchase_hash:hash});if(error)throw error;
  const row=data?.[0];if(!row?.license_id)throw new Error('license_provision_failed');
- const sent=await startEmail(buyer,sessionId,edition);
+ const catalog=await paidCatalogQuestionnaire(String(row.license_id),metadata);
+ const sent=catalog?await startCatalogEmail(buyer,sessionId,edition,catalog):await startEmail(buyer,sessionId,edition);
  if(sent){const next={...metadata,guest_order_email_sent_at:new Date().toISOString()};await db.from('licenses').update({metadata:next,updated_at:new Date().toISOString()}).eq('id',row.license_id);metadata.guest_order_email_sent_at=next.guest_order_email_sent_at}
- return {licenseId:String(row.license_id),edition,buyerEmail:buyer,metadata}
+ return {licenseId:String(row.license_id),edition,buyerEmail:buyer,metadata,
+   catalogQuestionnaireUrl:catalog?.questionnaireUrl||null}
 }
 function text(v:any,max=500){return String(v??'').trim().slice(0,max)}
 function cleanDetails(x:any,edition:string){
@@ -126,6 +173,7 @@ function cleanDetails(x:any,edition:string){
 async function submitOrder(session:any,raw:any){
  const p=await provision(session),db=admin();
  const {data:l,error}=await db.from('licenses').select('metadata').eq('id',p.licenseId).single();if(error)throw error;
+ if(l.metadata?.guest_catalog_template_id)throw new Error('catalog_uses_common_questionnaire');
  if(l.metadata?.guest_order_submitted_at)return {ok:true,submittedAt:l.metadata.guest_order_submitted_at,edition:p.edition,email:p.buyerEmail,alreadySubmitted:true};
  const details=cleanDetails(raw,p.edition);if(!details.design)throw new Error('invalid_design');if(!details.couple1||!details.couple2||!details.weddingDate)throw new Error('missing_order_fields');
  const now=new Date().toISOString();
@@ -186,9 +234,9 @@ Deno.serve(async req=>{
   if(action==='create'){const edition=editionOf(b.edition),session=await createSession(edition,b.startPersonalizationConsent===true,b.checkoutAttemptId,b.catalogTemplateId);return json({ok:true,clientSecret:session.client_secret,sessionId:session.id,edition})}
   if(action==='status'){
    const session=await retrieveSession(String(b.sessionId||'')),paid=session.status==='complete'&&session.payment_status==='paid';let p=null;if(paid)p=await provision(session);
-   return json({ok:true,status:session.status,paymentStatus:session.payment_status,paid,provisioned:!!p,edition:editionOf(session.metadata?.edition),amountTotal:session.amount_total||null,currency:session.currency||'eur',email:p?.buyerEmail||session.customer_details?.email||null,orderSubmittedAt:p?.metadata?.guest_order_submitted_at||null,catalogTemplateId:p?.metadata?.guest_catalog_template_id||null,catalogTemplateVersion:p?.metadata?.guest_catalog_template_version||null})
+   return json({ok:true,status:session.status,paymentStatus:session.payment_status,paid,provisioned:!!p,edition:editionOf(session.metadata?.edition),amountTotal:session.amount_total||null,currency:session.currency||'eur',email:p?.buyerEmail||session.customer_details?.email||null,orderSubmittedAt:p?.metadata?.guest_order_submitted_at||null,catalogTemplateId:p?.metadata?.guest_catalog_template_id||null,catalogTemplateVersion:p?.metadata?.guest_catalog_template_version||null,catalogQuestionnaireUrl:p?.catalogQuestionnaireUrl||null})
   }
   if(action==='submit_order'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await submitOrder(session,b.details||{}))}
   return json({ok:false,error:'invalid_action'},400)
- }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','catalog_template_not_for_sale'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
+ }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','catalog_template_not_for_sale','catalog_uses_common_questionnaire'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
 });
