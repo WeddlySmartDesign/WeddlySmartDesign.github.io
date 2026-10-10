@@ -8,6 +8,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: guest-catalog-offline-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   contract-offline:
     name: Shared visual contract, catalog, handoff and anti-regression
