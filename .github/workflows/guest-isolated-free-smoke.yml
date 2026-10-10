@@ -4,6 +4,7 @@ on:
     branches: [guest-independent]
     paths:
       - .github/workflows/guest-isolated-free-smoke.yml
+      - guest/qa/isolated_free/**
   workflow_dispatch:
 
 permissions:
@@ -42,12 +43,24 @@ jobs:
         run: |
           set -euo pipefail
           supabase init
+          cp guest/qa/isolated_free/001_guest_minimal_fixture.sql supabase/migrations/20261010000100_guest_isolated_ci_fixture.sql
       - name: Boot local isolated Supabase services
         run: |
           set -euo pipefail
           supabase start
           supabase status > /dev/null
           echo 'PASS: local Supabase stack started on disposable public GitHub runner'
+      - name: Exercise local-only GUEST order and RSVP persistence
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          supabase status -o env \
+            --override-name api.url=GUEST_LOCAL_API_URL \
+            --override-name auth.service_role_key=GUEST_LOCAL_SERVICE_ROLE_KEY \
+            --override-name auth.anon_key=GUEST_LOCAL_ANON_KEY > local-only-env.txt
+          node guest/qa/isolated_free/verify_local_backend.cjs local-only-env.txt
+          rm -f local-only-env.txt
       - name: Stop local-only stack
         if: always()
         shell: bash
