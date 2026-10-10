@@ -1371,14 +1371,20 @@
       ],
       "checks": "Cloudflare Direct Upload ZIP supported, single file 25MiB max; 11-file ZIP verified SHA-256 dd0729f27b30812a722ba18439335303ce20d7df78a28f14d8341bd8419b86dc; visual asset 11,635,635 B; master checksum fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
       "cloudflareConnectedInTools": false,
-      "attemptedConnectedAlternatives": "Vercel existing owner demo SSO protected; team details cannot be accessed 403, no basis to claim free commercial hosting; Railway known projects belong to frozen ONE Partner and STUDIO, never repurpose",
       "providerProjectCreated": false,
       "livePublicUrl": null,
-      "deployStatus": "BLOCKED_PENDING_CLOUDFLARE_OWNER_ACCOUNT_ACCESS_DIRECT_UPLOAD",
+      "deployStatus": "GIT_INTEGRATION_PREPARED_CI_REBUILT_IMMUTABLE_CANDIDATE; BLOCKED_PENDING_CLOUDFLARE_GITHUB_OAUTH",
       "customerPurchaseAllowed": false,
-      "nextOwnerAction": "Use https://dash.cloudflare.com/ -> Workers & Pages -> create Pages Direct Upload FREE -> upload verified ZIP -> share deployed *.pages.dev link (no need to edit code)",
-      "nextAssistantAfterUrl": "Inspect HTTPS and master; pin exact new public origin in isolated GUEST V14 guard and checkout, validate Cloud QA and Android; NEVER sell before 11/11 formal gates",
-      "documentation": "Same project Library Entry 35"
+      "nextOwnerAction": "Cloudflare Pages Free -> Connect to Git via authorized GitHub OAuth -> select only WeddlySmartDesign/WeddlySmartDesign.github.io; production branch guest-independent; build: node guest/tools/build_catalog_static_preview.cjs --output \"$PWD/dist\" --template botanica; output dir dist; Framework None; share verified *.pages.dev URL. No manual ZIP per design.",
+      "nextAssistantAfterUrl": "Verify deployed *.pages.dev anonymous HTTPS, exact Botánica visual SHA, no-index, no invalid token bypass; validate host and safely configure GUEST-only backend/CDN and checkout review/questionnaire handoff; 11/11 gates before sale",
+      "documentation": "guest/GUEST_CLOUDFLARE_PAGES_FREE_DEPLOY_2026-10-10.md; Library Entry 35",
+      "staticStageBuild": {
+        "run": 38081862686,
+        "sourceSha": "5688fdc29a11504bd2f490eccfc0d8c7312e208e",
+        "status": "success",
+        "artifact": "guest-platform-neutral-static-stage-no-live",
+        "zipSize": 9082460
+      }
     }
   },
   "commercialGate": {
