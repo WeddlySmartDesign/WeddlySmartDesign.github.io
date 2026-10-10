@@ -35,7 +35,8 @@ async function intercept(page,actions,{certified=true}={}){
   const frame=p.frameLocator('iframe');
   const text=await frame.locator('#rendered').innerText();
   assert(text.includes('Prueba + SinDatosReales'),'selected template did not apply config');
-  assert(text.includes('/guest/guests-rsvp-v105.html?'),'shared RSVP route was not attached');
+  assert(text.includes('https://weddlysmartdesign.github.io/guest/guests-rsvp-v105.html?'),'cross-origin static catalog must link to existing management RSVP, never to nonexistent CDN route');
+  assert(await p.locator('iframe').evaluate(e=>e.style.visibility)==='visible','visual master must only become visible after customer config is applied');
   assert(text.includes('g=guest-xyz'),'recipient identity lost');
   assert.equal(actions.length,1);assert.equal(actions[0].action,'public_load');
   await p.close();
