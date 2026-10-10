@@ -881,6 +881,63 @@
         "actualAndroid": false,
         "actualHttpsCustomerLink": false
       }
+    },
+    "botanicaMemberRsvpHandoffLocal20261010": {
+      "status": "SUCCESS_LOCAL_REAL_V13_RSVP_AND_MANAGEMENT_NO_PUBLISHED_LINK",
+      "branch": "guest-independent",
+      "latestCodeCommit": "64290ad15327ea010ab4a94a09a315b1712a6c49",
+      "scope": "two different fictional weddings and licenses in ONE disposable free GitHub Actions Supabase; no cloud",
+      "files": [
+        "guest/qa/isolated_free/verify_v13_member_handoff_actual_rsvp.cjs",
+        "guest/qa/isolated_free/001_guest_minimal_fixture.sql",
+        ".github/workflows/guest-isolated-free-smoke.yml"
+      ],
+      "composerFix": {
+        "commit": "aca4ed40e042d3a70b2de9fb5985452b8d0858c2",
+        "file": "guest/guests-rsvp-share-composer-v3.js",
+        "oldRoute": "/guests-rsvp-v105.html",
+        "newRoute": "/guest/guests-rsvp-v105.html",
+        "bridgeQARun": 38057426419,
+        "bridgeResult": "success"
+      },
+      "codeCommits": [
+        "caae5657051d4939582679602476aaa431572196",
+        "64290ad15327ea010ab4a94a09a315b1712a6c49"
+      ],
+      "passed": [
+        "V13 two synthetic Botánica 14.7 complete orders reused and linked with fictitious license through LOCAL Data API",
+        "active_for_member returns only delivered order belonging to licensed member, rejects invalid member",
+        "same real shared JS bridge builds recipient URL g/u rt lang, with prod host intercepted to localhost only",
+        "same delivery runtime performs REAL local public_load and creates GUEST RSVP CTA from recipient URL",
+        "actual guest-rsvp v4 GET person and family, POST and persistence into guest_rsvp_submissions/guest_app_state",
+        "licensed management reads own form and submission, foreign wedding guest/unit probes denied 404"
+      ],
+      "workflow": {
+        "run": 38057622631,
+        "conclusion": "success",
+        "head": "64290ad15327ea010ab4a94a09a315b1712a6c49"
+      },
+      "catalog": {
+        "run": 38057622661,
+        "conclusion": "success"
+      },
+      "independent": {
+        "run": 38057622782,
+        "conclusion": "success"
+      },
+      "caveats": [
+        "synthetic .invalid HTTPS URL is not a hosted/public deliverable",
+        "actual Android and external HTTPS private media not checked",
+        "license/order link was inserted by service-role local fixture and is not proof of real commerce activation",
+        "production guest-invitation-flow still v12; v13 and owner center V2 not deployed",
+        "no stripe/email/production QA or VEIL production rollback"
+      ],
+      "botanicaCommercialGates": "3/11 PASS; 8 PENDING",
+      "published": false,
+      "commercialReady": false,
+      "productionDeployment": false,
+      "costAdditionalEUR": 0,
+      "libraryEvidence": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_AUDITORIA_DOCUMENTAL_Y_BITACORA_UNICA_2026-10-09.md#entrada-22"
     }
   },
   "commercialGate": {
