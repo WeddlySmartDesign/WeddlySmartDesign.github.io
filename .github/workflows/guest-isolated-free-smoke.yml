@@ -24,7 +24,7 @@ jobs:
       SUPABASE_DB_PASSWORD: ""
       SUPABASE_PROJECT_ID: ""
       SUPABASE_URL: ""
-      WEDDLY_SITE_ORIGIN: "http://localhost"
+      WEDDLY_SITE_ORIGIN: "https://guest-ci-local.invalid"
     steps:
       - uses: actions/checkout@v4
       - name: Confirm completely isolated public-runner boundary
@@ -71,10 +71,13 @@ jobs:
           set -euo pipefail
           umask 077
           supabase status -o env --override-name api.url=GUEST_LOCAL_API_URL --override-name auth.anon_key=GUEST_LOCAL_ANON_KEY > local-api-env.txt
-          supabase functions serve guest-invitation-flow --no-verify-jwt > /tmp/guest-v13-local-only.log 2>&1 &
+          supabase status -o env >> local-api-env.txt
+          printf 'WEDDLY_SITE_ORIGIN=https://guest-ci-local.invalid\\n' > local-site-env.txt
+          supabase functions serve guest-invitation-flow --no-verify-jwt --env-file local-site-env.txt > /tmp/guest-v13-local-only.log 2>&1 &
           edge_pid=$!
-          trap 'kill "$edge_pid" 2>/dev/null || true; rm -f local-api-env.txt /tmp/guest-v13-local-only.log' EXIT
+          trap 'kill "$edge_pid" 2>/dev/null || true; rm -f local-api-env.txt local-site-env.txt /tmp/guest-v13-local-only.log' EXIT
           node guest/qa/isolated_free/verify_v13_runtime.cjs local-api-env.txt
+          node guest/qa/isolated_free/verify_v13_two_botanica_orders.cjs local-api-env.txt
       - name: Stop local-only stack
         if: always()
         shell: bash
