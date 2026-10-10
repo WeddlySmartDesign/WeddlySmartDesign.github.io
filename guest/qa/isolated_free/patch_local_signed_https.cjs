@@ -10,7 +10,7 @@ if(!src||!dst||path.resolve(src)===path.resolve(dst)||fs.existsSync(dst))throw E
 let s=fs.readFileSync(src,'utf8');
 const anchor="url=data?.signedUrl||''";
 if(s.split(anchor).length!==2)throw Error('source_drift_ci_only_media');
-const replacement=`url=data?.signedUrl||'';if(url){if(url.startsWith('/storage/v1/object/sign/')){url='https://guest-ci-signed.invalid'+url}else{let u;try{u=new URL(url)}catch{throw new Error('ci_signed_url_invalid')}if(u.protocol==='http:'&&(['127.0.0.1','localhost'].includes(u.hostname))&&u.port==='54321'){url='https://guest-ci-signed.invalid'+u.pathname+u.search}else if(u.protocol!=='https:')throw new Error('ci_signed_url_outside_loopback')}}`;
+const replacement=`url=data?.signedUrl||'';if(url){if(url.startsWith('/storage/v1/object/sign/')){url='https://guest-ci-signed.invalid'+url}else{let u;try{u=new URL(url)}catch{throw new Error('ci_signed_url_invalid')}if(u.protocol==='http:'&&((['127.0.0.1','localhost','host.docker.internal'].includes(u.hostname)&&u.port==='54321')||(u.hostname==='kong'&&u.port==='8000')||(/^supabase_kong_[a-z0-9_.-]+$/.test(u.hostname)&&u.port==='8000'))){url='https://guest-ci-signed.invalid'+u.pathname+u.search}else if(u.protocol!=='https:')throw new Error('ci_signed_url_outside_loopback')}}`;
 s=s.replace(anchor,replacement);
 if(!s.includes("if(!inviteUrl)return json({ok:false,error:'missing_invitation_url'},400);"))throw Error('missing_production_url_rule');
 if(!s.includes("finalUrl.protocol!=='https:'"))throw Error('missing_production_https_rule');
