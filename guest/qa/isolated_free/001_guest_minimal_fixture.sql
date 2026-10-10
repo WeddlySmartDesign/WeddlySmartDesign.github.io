@@ -76,6 +76,19 @@ create table public.licenses(
 );
 insert into public.licenses(id,source,status,metadata)
  values('11111111-2222-4333-8444-555555555555','internal_owner','active','{"grant_type":"owner"}'::jsonb);
+-- Minimal paid-license contract for disposable CI only; production has the
+-- same unique paid-order keys. No real Stripe sessions or personal data.
+alter table public.licenses add column source_order_id text;
+create table public.license_delivery_codes(
+ license_id uuid primary key references public.licenses(id),
+ buyer_email text not null
+);
+create unique index guest_ci_order_checkout_session_uq on public.guest_invitation_orders(checkout_session_id) where checkout_session_id is not null;
+create unique index guest_ci_order_license_uq on public.guest_invitation_orders(license_id) where license_id is not null;
+alter table public.license_delivery_codes enable row level security;
+revoke all on public.license_delivery_codes from anon,authenticated;
+grant all on public.license_delivery_codes to service_role;
+
 alter table public.licenses enable row level security;
 revoke all on public.licenses from anon,authenticated;
 grant all on public.licenses to service_role;
