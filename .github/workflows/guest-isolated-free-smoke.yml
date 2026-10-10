@@ -1,0 +1,56 @@
+name: GUEST Free Isolated Supabase Smoke (NO LIVE)
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - .github/workflows/guest-isolated-free-smoke.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: guest-free-supabase-smoke
+  cancel-in-progress: true
+
+jobs:
+  isolated-local-stack:
+    name: Free runner + disposable local Supabase, no credentials
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      SUPABASE_ACCESS_TOKEN: ""
+      SUPABASE_DB_PASSWORD: ""
+      SUPABASE_PROJECT_ID: ""
+      SUPABASE_URL: ""
+      WEDDLY_SITE_ORIGIN: "http://localhost"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Confirm completely isolated public-runner boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "${SUPABASE_ACCESS_TOKEN}"
+          test -z "${SUPABASE_DB_PASSWORD}"
+          test -z "${SUPABASE_PROJECT_ID}"
+          test -z "${SUPABASE_URL}"
+          test ! -e supabase/config.toml
+          docker info --format 'Docker server reachable: {{.ServerVersion}}'
+          echo 'NO PRODUCTION CREDENTIALS; ONLY DISPOSABLE LOCAL RUNNER'
+      - uses: supabase/setup-cli@v3
+      - name: Initialize ephemeral Supabase project on runner
+        run: |
+          set -euo pipefail
+          supabase init
+      - name: Boot local isolated Supabase services
+        run: |
+          set -euo pipefail
+          supabase start
+          supabase status > /dev/null
+          echo 'PASS: local Supabase stack started on disposable public GitHub runner'
+      - name: Stop local-only stack
+        if: always()
+        shell: bash
+        run: |
+          supabase stop > /dev/null 2>&1 || true
+          echo 'Runner disposable: no Supabase cloud project was created, modified or contacted'
