@@ -87,6 +87,14 @@ const namedFns=s=>[...new Set([...s.matchAll(/(?:async\s+)?function\s+([A-Za-z_$
 for(const p of sourceFiles){
   ok(exists(p),'source copy missing in /guest: '+p);
   const src=readRepo(p),dst=read(p);
+  // GUEST-specific RSVP public entry: permit ONLY the ONE->GUEST personalization endpoint switch.
+  // Keep every other byte anchored to ONE so visual/functional changes cannot drift unnoticed.
+  if(p==='guests-rsvp-design-live.html'){
+    const oneEndpoint='/functions/v1/weddly-personalization',guestEndpoint='/functions/v1/guest-personalization';
+    ok(src.includes(oneEndpoint),'original ONE RSVP gate endpoint unexpectedly changed');
+    ok(dst===src.replace(oneEndpoint,guestEndpoint),'GUEST public RSVP gate differs beyond the approved isolated API endpoint');
+    continue;
+  }
   if(!allowedModified.has(p)){const privacyOnly=s=>s.replace(/<meta\s+name=["']robots["']\s+content=["']noindex,nofollow(?:,noarchive)?["']\s*\/?>/gi,'').replace(/>\s+</g,'><');ok(src===dst||privacyOnly(src)===privacyOnly(dst),'unexpected functional modification vs latest ONE source: '+p)}
   else for(const fn of namedFns(src))ok(namedFns(dst).includes(fn),'source function lost in '+p+': '+fn);
 }
