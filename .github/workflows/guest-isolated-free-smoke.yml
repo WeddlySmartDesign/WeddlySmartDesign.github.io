@@ -78,7 +78,11 @@ jobs:
           edge_pid=$!
           trap 'kill "$edge_pid" 2>/dev/null || true; rm -f local-api-env.txt local-site-env.txt /tmp/guest-v13-local-only.log' EXIT
           node guest/qa/isolated_free/verify_v13_runtime.cjs local-api-env.txt
-          node guest/qa/isolated_free/verify_v13_two_botanica_orders.cjs local-api-env.txt
+          if ! node guest/qa/isolated_free/verify_v13_two_botanica_orders.cjs local-api-env.txt; then
+            echo 'Sanitized local V13 error classes (never credentials or signed URLs):'
+            grep -Eo 'ci_signed_url_(invalid|outside_loopback)|missing_signed_asset|invalid_invitation_media|invalid_invitation_config|TypeError|ReferenceError' /tmp/guest-v13-local-only.log | sort -u || true
+            exit 1
+          fi
       - name: Stop local-only stack
         if: always()
         shell: bash
