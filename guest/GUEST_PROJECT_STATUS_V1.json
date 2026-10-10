@@ -496,6 +496,44 @@
       "acceptance": "Two truly distinct Botánica orders with valid stable HTTPS URLs, private signed media, review-final parity, g/u persisted RSVP; separate synthetic-license app bridge validation in isolated environment; Android owner and <=5 minutes. No gates elevated.",
       "document": "guest/GUEST_BACKEND_CONFIG_RECONCILIATION_2026-10-09.md section 10",
       "commercialCertified": false
+    },
+    "stagingOptionsInvestigation20261010": {
+      "confirmedAt": "2026-10-10",
+      "organization": "Weddly Smart Design",
+      "actualPlan": "free",
+      "supabaseProjects": [
+        {
+          "product": "WeddlySmartDesign shared",
+          "state": "ACTIVE_HEALTHY"
+        },
+        {
+          "product": "STUDIO",
+          "state": "INACTIVE — PROTECTED, MUST NOT REUSE"
+        }
+      ],
+      "branchCount": 0,
+      "planProPublicPrice": "from USD 25 per month (public list price, not account-specific quote)",
+      "previewMicroComputePublicPrice": "from USD 0.01344/hour plus usage; not covered by Spend Cap",
+      "alternativeFreeProject": {
+        "availability": "POTENTIAL, NOT CONFIRMED: Free allows two active projects, paused excluded; INACTIVE might or might not equal paused for quota",
+        "needsExplicitApproval": true,
+        "noAutomaticSchemaClone": true,
+        "productionMigrationsRecorded": 91,
+        "githubCheckedInSqlMigrations": 0,
+        "githubTreeFiles": 883,
+        "scope": "new GUEST-only isolated Free project if quota approved/confirmed; NEVER use STUDIO or production"
+      },
+      "centerCandidateSha256": "0832f4fac4ae51f5a3e305a0d06284a3ff4bb1a121ece4a4e8b01e5368605c7a",
+      "centerCandidateByteSize": 30038909,
+      "liveSupabaseEndpointLiterals": [
+        "guest-invitation-flow",
+        "weddly-owner-manager"
+      ],
+      "productionEndpointRefCount": 2,
+      "isolationGate": "Before enabling network for E2E, FLOW and OWNER MUST resolve exclusively to isolated staging or OWNER disabled; require zero reference to live project ID in new staging pack. Offline V2 CSP is not a connected E2E.",
+      "userConsent": "Neither paid upgrade nor free project creation requested/approved; read-only checks only",
+      "release": "NO-GO",
+      "nextAuthorizedAction": "After user explicitly authorizes creating an isolated Free staging project and quota is confirmed, create without real data. If Free slot unavailable, obtain explicit Pro cost approval first. Do not silently upgrade."
     }
   },
   "commercialGate": {
@@ -516,10 +554,10 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Obtain user-authorized genuinely isolated GUEST staging environment (Supabase branch requires confirmed cost/Pro; local stack currently unavailable). Do not create billable resources or bypass restrictions without explicit consent.",
-    "Once isolated, deploy test-only V13 with candidate URL-presence guard and verify real HTTPS final URL for two Botánica orders; test media signed, previews/reviews/final, zero emails/Stripe/public test media.",
-    "Use synthetic member+license in isolated test environment to prove active_for_member bridging, original share composer and persisted g/u RSVP; 2 historical delivered tests are NOT acceptable evidence because both have null URL and license.",
-    "Owner Android final and ≤5-minute intervention; only after genuine 11/11 gates and independent checkout release could Botánica be sold. No D03 yet."
+    "Preferred path: verify a free second ACTIVE Supabase project slot is actually available (Free org; main GUEST active, STUDIO INACTIVE) and obtain explicit approval to create GUEST-only staging; never reuse STUDIO. Avoid Pro upgrade until Free option ruled out.",
+    "Source code has zero checked-in SQL migrations while DB records 91 applied; prepare isolated GUEST-only schema/functions/storage and synthetic records, no production data; do not claim new Free staging is a one-click clone.",
+    "Staged Center carries TWO production endpoint literals (FLOW guest-invitation-flow and OWNER weddly-owner-manager); ensure zero production Supabase refs and no live checkout/email before allowing a connected staging preview. Preserve offline CSP otherwise.",
+    "With isolated authorized runtime and allowed browser, complete Botánica E2E 2 orders, VEIL regression, real g/u RSVP with fictional license/membership, Android owner and <=5min. Keep 3/11 and no D03 until PASS."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
@@ -613,7 +651,17 @@
       "offlineCatalogRun": 37999040984,
       "offlineCatalogConclusion": "success",
       "independentQaRun": 37999040876,
-      "independentQaConclusionAtLastObservation": "in_progress"
+      "independentQaConclusionAtLastObservation": "in_progress",
+      "initialHeadThisSession": "4e4a07ffd1af473e9a7c7032ddb2273b59ec47c7",
+      "catalogOnInitialHead": {
+        "run": 37999228408,
+        "conclusion": "success"
+      },
+      "independentOnInitialHead": {
+        "run": 37999228348,
+        "conclusion": "success"
+      },
+      "thisSessionCodeChanges": 0
     },
     "intermediateTestUpdateFailure": {
       "runId": 37990171524,
