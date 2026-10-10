@@ -36,6 +36,7 @@ async function chooseLocalOwner(){
  }
  throw Error('SYNTHETIC_MANAGER_AUTH_FAILED');
 }
+function withoutShortLivedMediaSignature(value){return JSON.parse(JSON.stringify(value,(k,v)=>typeof v==='string'&&v.startsWith('https://guest-ci-signed.invalid/')?v.split('?')[0]:v));}
 function questionnaire(which){
  const common={couple:{name1:'Prueba',name2:which===1?'Fotografía':'Editorial',date:'2027-06-12'},
   confirmation:{reviewed:true},agenda:{enabled:false},gallery:{enabled:false},practical:{bus:{enabled:false},gift:{enabled:false},playlist:{enabled:false}}};
@@ -76,7 +77,7 @@ async function main(){
   assert.equal(publicView.order.config.template.id,'botanica');
   assert.equal(String(publicView.order.config.template.version),'14.7');
   const columns=['template','story','locations','agenda','practical','rsvp'];
-  for(const c of columns)assert.deepEqual(publicView.order.config[c],review.order.config[c],'review/final parity: '+c);
+  for(const c of columns)assert.deepEqual(withoutShortLivedMediaSignature(publicView.order.config[c]),withoutShortLivedMediaSignature(review.order.config[c]),'review/final parity (exclude expiring media signature): '+c);
   completed.push({orderMode:'test',template:'botanica',storyMode:q.story.textMode,locations:q.locations.mode,review:true,approved:true,deliveryRecord:true,publicLoad:true});
  }
  assert.equal(completed.length,2);
