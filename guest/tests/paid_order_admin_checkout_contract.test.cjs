@@ -12,8 +12,12 @@ assert.match(admin,/!\['guest','guests'\]\.includes\(String\(l\.metadata\?\.prod
 assert.match(admin,/\.eq\('source','stripe'\)\.in\('metadata->>product',\['guest','guests'\]\)/,'admin list must accept both GUEST formats without including ONE');
 assert.match(admin,/l\.source!=='stripe'/,'admin detail must never accept arbitrary/internal owner licenses');
 assert.match(checkout,/guest-order\.html\?session_id=/,'existing checkout still uses LEGACY order form');
-assert.doesNotMatch(checkout,/guest_invitation_orders|functions\/v1\/guest-invitation-flow/,'do not misrepresent direct checkout/new flow integration as implemented');
-assert.match(flow,/async function createOrder\(/,'new guest_invitation_orders pipeline remains independent and requires explicit commercial wiring');
+assert.match(checkout,/async function paidCatalogQuestionnaire\(/,'Stripe-verified license must enter the existing invitation-flow V13');
+assert.match(checkout,/functions\/v1\/guest-invitation-flow/,'Checkout must use existing V13, not a parallel backend');
+assert.match(checkout,/action:'create_paid'/,'V13 paid order bridge only');
+assert.match(checkout,/if\(l\.metadata\?\.guest_catalog_template_id\)throw new Error\('catalog_uses_common_questionnaire'\)/,'catalog purchases must never repeat legacy order form');
+assert.match(checkout,/catalogQuestionnaireUrl:p\?\.catalogQuestionnaireUrl\|\|null/,'paid buyer receives common questionnaire route');
+assert.match(flow,/async function createOrder\(/,'existing GUEST order pipeline still used');
 // Prove catalog pins travel Stripe checkout metadata -> license and remain gated.
 assert.match(checkout,/function catalogSaleOption\(/,'certified catalog selection is reusable across design IDs');
 assert.match(checkout,/GUEST_CATALOG_SALE_OPTIONS/,'operator-owned allowlist is required');
@@ -46,4 +50,40 @@ assert.throws(()=>catalog('../veil-light','signature'),/catalog_template_not_for
 assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:1}})('veil-light','signature'),/catalog_template_not_for_sale/);
 assert.throws(()=>options({})('veil-light','signature'),/catalog_template_not_for_sale/);
 assert.match(flow,/async function createOrder\(/,'new guest_invitation_orders pipeline remains independent until deliberate Cloud release');
-console.log('PASS GUEST checkout catalog Stripe/license pin, certified allowlist, price and edition gates, legacy fallback, and no unintended live billing. Offline only.');
+
+// Exercise real production handoff logic with a fake DB and fake HTTP response,
+// including manager signature envelope, idempotent local request and denials.
+const bridgeStart=checkout.indexOf('async function paidCatalogQuestionnaire(');
+const bridgeEnd=checkout.indexOf('async function provision(',bridgeStart);
+assert(bridgeStart>0&&bridgeEnd>bridgeStart);
+const bridgeCode=stripTypeScriptTypes(checkout.slice(bridgeStart,bridgeEnd));
+let calls=0,mailCalls=0,owners=[{id:'00000000-0000-4000-8000-000000000001',metadata:{grant_type:'owner'}}];
+const mockAdmin=()=>({from(name){assert.equal(name,'licenses');return{select(){return this},eq(){return this},limit(){return Promise.resolve({data:owners,error:null})}}}});
+const mockDeno={env:{get:name=>name==='SUPABASE_SERVICE_ROLE_KEY'?'offline-fake-role-secret':name==='SUPABASE_URL'?'https://private-qa.supabase.co':''}};
+const mockFetch=async(url,opt)=>{
+ calls++;assert.equal(url,'https://private-qa.supabase.co/functions/v1/guest-invitation-flow');
+ assert.equal(opt.method,'POST');
+ const body=JSON.parse(opt.body);
+ assert.deepEqual(body,{action:'create_paid',licenseId:'fake-uuid',templateId:'veil-light'});
+ assert.match(opt.headers['x-weddly-manager'],/^v1\.[A-Za-z0-9_-]+\.OFFLINE_SIGNATURE$/);
+ return {ok:true,json:async()=>({ok:true,id:'fake-order',qToken:'fictional-purchase-token-that-is-at-least-32-bytes-long'})};
+};
+const bridge=new Function('admin','Deno','hmacHex','fetch','AbortSignal','env','origin','btoa','resend','esc','labelFor',
+ bridgeCode+';return {paidCatalogQuestionnaire,startCatalogEmail};')(
+ mockAdmin,mockDeno,async()=> 'OFFLINE_SIGNATURE',mockFetch,AbortSignal,
+ name=>name==='SUPABASE_URL'?'https://private-qa.supabase.co':'',
+ ()=> 'https://weddlysmartdesign.github.io',btoa,
+ async()=>{mailCalls++;return true},x=>String(x),x=>x);
+(async()=>{
+ assert.equal(await bridge.paidCatalogQuestionnaire('fake-uuid',{}),null,'legacy purchase does not invoke V13');
+ const a=await bridge.paidCatalogQuestionnaire('fake-uuid',{guest_catalog_template_id:'veil-light',guest_catalog_template_version:'5.3.3'});
+ assert.equal(a.orderId,'fake-order');
+ assert.match(a.questionnaireUrl,/^https:\/\/weddlysmartdesign.github.io\/guest\/catalog-questionnaire.html\?t=/);
+ assert.equal(calls,1,'only one V13 request');
+ assert(await bridge.startCatalogEmail('fake@example.invalid','cs_test_offline','signature',a));
+ assert.equal(mailCalls,1);
+ await assert.rejects(()=>bridge.paidCatalogQuestionnaire('fake-uuid',{guest_catalog_template_id:'botanica',guest_catalog_template_version:'###'}),/catalog_invalid_pin/);
+ owners=[];await assert.rejects(()=>bridge.paidCatalogQuestionnaire('fake-uuid',{guest_catalog_template_id:'veil-light',guest_catalog_template_version:'5.3.3'}),/catalog_owner_unavailable/);
+ assert.equal(calls,1,'unauthorized owner lookup must never call V13');
+ console.log('PASS GUEST Stripe purchase → V13 paid catalog order and common questionnaire, server-only signed manager context; legacy-safe; no cloud or billing');
+})().catch(e=>{console.error(e);process.exitCode=1});
