@@ -6,12 +6,13 @@ const env=Object.fromEntries(fs.readFileSync(process.argv[2]||'', 'utf8').split(
 const u=new URL(env.GUEST_LOCAL_API_URL||'');
 if(u.hostname!=='127.0.0.1'||u.port!=='54321'||u.protocol!=='http:')throw Error('local_only_boundary');
 const url=u.origin+'/functions/v1/guest-invitation-flow';
+const anonKey=env.GUEST_LOCAL_ANON_KEY;if(!anonKey||anonKey.length<30)throw Error('missing_ephemeral_anon_key');
 async function query(action,extras={}){
- const r=await fetch(url,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action,...extras}),redirect:'error'});
+ const r=await fetch(url,{method:'POST',headers:{'content-type':'application/json','apikey':anonKey,'Authorization':'Bearer '+anonKey},body:JSON.stringify({action,...extras}),redirect:'error'});
  return {http:r.status,body:await r.json().catch(()=>({}))};
 }
 (async()=>{
- let r;for(let i=0;i<25;i++){try{r=await query('public_load',{token:'invalid-synthetic-token'});break}catch{await new Promise(ok=>setTimeout(ok,500))}}
+ let r;for(let i=0;i<50;i++){try{r=await query('public_load',{token:'invalid-synthetic-token'});if(r.http===403&&r.body?.error==='invalid_token')break}catch{}await new Promise(ok=>setTimeout(ok,500))}
  assert(r,'local V13 function is not serving');
  assert.equal(r.http,403,JSON.stringify({http:r.http,error:r.body?.error}));
  assert.equal(r.body?.error,'invalid_token');
