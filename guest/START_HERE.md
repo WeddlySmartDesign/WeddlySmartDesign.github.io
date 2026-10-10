@@ -1,5 +1,8 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+**BITÁCORA COMPLETA VIGENTE EN BIBLIOTECA (25 entradas):** `/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md` (188 735 bytes, última Entrada 25, checkpoint GitHub `8b944a02f3c0e93a7fcd11a4e351de57fab2db31`). Es una copia íntegra acumulativa, no un resumen; el archivo histórico `GUEST_AUDITORIA_DOCUMENTAL_Y_BITACORA_UNICA_2026-10-09.md` se conserva, pero solo llega hasta Entrada 24 porque Biblioteca bloqueó su reemplazo. **Para continuar, leer la versión completa del 10/10, NO rehacer trabajo anterior.**
+
+
 **Documento operativo prioritario de continuidad — 09/10/2026.**  
 **Repositorio:** `WeddlySmartDesign/WeddlySmartDesign.github.io` · **rama exclusiva:** `guest-independent` · **fase:** sistema visual común V2 desarrollado y probado localmente, **no integrado aún en producción**.  
 **Objetivo:** retomar GUEST en otro chat, otra sesión o cualquier diseño 03–1000 **sin búsqueda histórica ni repetición de instrucciones**.
