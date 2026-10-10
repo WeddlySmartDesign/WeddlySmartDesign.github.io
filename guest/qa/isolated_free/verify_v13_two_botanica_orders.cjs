@@ -51,6 +51,44 @@ async function uploadStory(qToken){
  if(res.status!==200||data.ok!==true)throw Error('EDGE_upload_got_'+res.status+'_error_'+String(data.error||'none').slice(0,100));
  return data;
 }
+// Paid-license handoff QA: synthetic local-only license, no Stripe charge.
+async function verifyPaidBridge(owner){
+ const key=env.GUEST_LOCAL_SERVICE_ROLE_KEY||env.SERVICE_ROLE_KEY;
+ if(!key)throw Error('LOCAL_PAID_KEY_UNAVAILABLE');
+ const id='f1a1f1a1-f1a1-41a1-81a1-f1a1f1a1f1a1';
+ async function seed(table,data){
+  const x=await fetch(base.origin+'/rest/v1/'+table,{method:'POST',redirect:'error',
+   headers:{apikey:key,Authorization:'Bearer '+key,'content-type':'application/json',Prefer:'return=representation'},
+   body:JSON.stringify(data)});
+  if(!x.ok)throw Error('PAID_FIXTURE_'+table+'_'+x.status);
+ }
+ async function request(action,params){
+  const x=await fetch(API,{method:'POST',redirect:'error',
+   headers:{apikey:anon,Authorization:'Bearer '+anon,'content-type':'application/json','x-weddly-manager':owner},
+   body:JSON.stringify({action,...params})});
+  return {status:x.status,body:await x.json()};
+ }
+ await seed('licenses',{id,source:'stripe',source_order_id:'cs_test_guestruntimepinned12345',status:'active',
+  metadata:{product:'guest',guest_catalog_template_id:'veil-light',guest_catalog_template_version:'5.3.3'}});
+ await seed('license_delivery_codes',{license_id:id,buyer_email:'paid-fake@example.invalid'});
+ const pending=await request('create_paid',{licenseId:id,templateId:'botanica'});
+ assert.equal(pending.status,409,'Botánica must not accept paid creation');
+ assert.equal(pending.body.error,'template_test_only');
+ const created=await call('create_paid',{licenseId:id,templateId:'veil-light'},owner,201);
+ assert(created.id&&created.qToken&&created.rToken&&created.pToken);
+ assert.equal(created.alreadyCreated,false);
+ const repeated=await call('create_paid',{licenseId:id,templateId:'veil-light'},owner);
+ assert.equal(repeated.id,created.id);assert.equal(repeated.qToken,created.qToken);
+ assert.equal(repeated.alreadyCreated,true);
+ const unknown=await request('create_paid',{licenseId:'f2a2f2a2-f2a2-42a2-82a2-f2a2f2a2f2a2',templateId:'veil-light'});
+ assert.equal(unknown.status,409);
+ const legacy='f3a3f3a3-f3a3-43a3-83a3-f3a3f3a3f3a3';
+ await seed('licenses',{id:legacy,source:'stripe',source_order_id:'cs_test_oldguestpurchase',status:'active',metadata:{product:'guest',edition:'signature'}});
+ const rejected=await request('create_paid',{licenseId:legacy,templateId:'veil-light'});
+ assert.equal(rejected.status,409);
+ assert.equal(rejected.body.error,'paid_catalog_template_not_purchased');
+ console.log('PASS paid GUEST catalog local bridge: verified license/edition/version, idempotence, rejection of legacy and Botánica test-only. Not a live checkout.');
+}
 async function main(){
  const owner=await chooseLocalOwner();
  const completed=[];
@@ -81,6 +119,7 @@ async function main(){
   completed.push({orderMode:'test',template:'botanica',storyMode:q.story.textMode,locations:q.locations.mode,review:true,approved:true,deliveryRecord:true,publicLoad:true});
  }
  assert.equal(completed.length,2);
+ await verifyPaidBridge(owner);
  console.log('PASS actual local V13 lifecycle: TWO synthetic Botánica orders via manager auth, questionnaire/save/submit, design, review, approval, delivery and public_load, photo-only none and custom, review/final parity. NO working public pages, no real RSVP endpoint, no email/checkout/production.');
 }
 main().catch(e=>{console.error('LOCAL_V13_E2E_FAILED:',e.message);process.exitCode=1});
