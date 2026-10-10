@@ -26,6 +26,7 @@ jobs:
       - name: Prepare test-only backend candidate without deployment and reject unsafe drift
         run: |
           node guest/tests/prepare_backend_test_only_v13.test.cjs
+          node guest/tests/catalog_public_origin_v14.test.cjs
           node guest/tests/invitation_config_schema_contract.test.cjs
           node guest/tests/backend_config_contract_v1.test.cjs
           node guest/tests/paid_order_admin_checkout_contract.test.cjs
