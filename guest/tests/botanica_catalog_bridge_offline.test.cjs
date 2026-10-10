@@ -83,10 +83,10 @@ async function bootScenario(query, expectedRoute, opts={}){
 }
 (async()=>{
   await bootScenario('?rt=demo-token-1&g=guest%2F1&lang=es',
-    'https://example.invalid/guest/guests-rsvp-v105.html?guest=1&t=demo-token-1&lang=es&_rsvpv=46&g=guest%2F1');
+    'https://weddlysmartdesign.github.io/guest/guests-rsvp-v105.html?guest=1&t=demo-token-1&lang=es&_rsvpv=46&g=guest%2F1');
   console.log('PASS: personalized single-guest RSVP link');
   await bootScenario('?rt=demo-token-2&u=unit%2F9&g=ignored&lang=en',
-    'https://example.invalid/guest/guests-rsvp-v105.html?guest=1&t=demo-token-2&lang=en&_rsvpv=46&u=unit%2F9');
+    'https://weddlysmartdesign.github.io/guest/guests-rsvp-v105.html?guest=1&t=demo-token-2&lang=en&_rsvpv=46&u=unit%2F9');
   console.log('PASS: invitation-unit RSVP precedence and language');
   await bootScenario('?lang=es','#');
   console.log('PASS: missing token falls back to non-bookable #');
