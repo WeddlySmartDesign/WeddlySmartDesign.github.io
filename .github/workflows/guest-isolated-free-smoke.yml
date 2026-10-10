@@ -88,6 +88,14 @@ jobs:
           fi
           node guest/qa/isolated_free/verify_rsvp_actual_edge.cjs local-api-env.txt
           node guest/qa/isolated_free/verify_v13_member_handoff_actual_rsvp.cjs local-api-env.txt
+      - name: Save V13 source ONLY after real isolated runtime PASS
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: guest-v13-validated-source-review-only
+          path: /tmp/guest-v13-pristine-ci.ts
+          if-no-files-found: error
+          retention-days: 1
       - name: Stop local-only stack
         if: always()
         shell: bash
