@@ -1,0 +1,52 @@
+name: GUEST Precommercial Static Stage (NO LIVE)
+on:
+  workflow_dispatch:
+  push:
+    branches: [guest-independent]
+    paths:
+      - .github/workflows/guest-static-stage-package.yml
+      - guest/tools/build_catalog_static_preview.cjs
+      - guest/catalog-final.html
+      - guest-review-v1.html
+      - guest/catalog-questionnaire.html
+      - guest/guest-catalog-delivery-runtime-v1.js
+      - guest/catalog/guest-catalog-owner-viewer-v2.js
+      - guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json
+permissions:
+  contents: read
+jobs:
+  sealed-static-stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      CLOUDFLARE_API_TOKEN: ""
+      VERCEL_TOKEN: ""
+      SUPABASE_ACCESS_TOKEN: ""
+      STRIPE_SECRET_KEY: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build static stage without visual or deployment credentials
+        run: |
+          set -euo pipefail
+          test -z "$CLOUDFLARE_API_TOKEN"
+          test -z "$VERCEL_TOKEN"
+          test -z "$SUPABASE_ACCESS_TOKEN"
+          test -z "$STRIPE_SECRET_KEY"
+          node --check guest/tools/build_catalog_static_preview.cjs
+          node guest/tools/build_catalog_static_preview.cjs --output /tmp/guest-static-stage
+          test -s /tmp/guest-static-stage/guest/catalog-final.html
+          test -s /tmp/guest-static-stage/guest-review-v1.html
+          test -s /tmp/guest-static-stage/guest/catalog-questionnaire.html
+          test ! -e /tmp/guest-static-stage/guest/catalog-assets/botanica/14.7/index.html
+          node -e "const f=require('/tmp/guest-static-stage/GUEST_STAGE_MANIFEST.json');if(f.status!=='PREPRODUCTION_DO_NOT_SELL'||f.botanica.visualIncluded||f.commercialApproved)process.exit(1)"
+          echo 'PASS precommercial static packaging. Frozen visual injected only by strict SHA in secure assembly.'
+      - name: Save platform-neutral stage (NOT LIVE)
+        uses: actions/upload-artifact@v4
+        with:
+          name: guest-platform-neutral-static-stage-no-live
+          path: /tmp/guest-static-stage/
+          retention-days: 3
+          if-no-files-found: error
