@@ -608,7 +608,41 @@
       "deployed": false,
       "actualBotanicaFileGenerated": false,
       "ownerAndroidValidated": false,
-      "remaining": "Officially authorized isolated backend and browser, real Botánica V14.7 pilot artifact, two persisted orders, review/final same final URL, actual RSVP g/u persistence and included guest-management handoff."
+      "remaining": "Officially authorized isolated backend and browser, real Botánica V14.7 pilot artifact, two persisted orders, review/final same final URL, actual RSVP g/u persistence and included guest-management handoff.",
+      "actualCandidateOfflineBuild": {
+        "date": "2026-10-10",
+        "sourceMaster": "GUEST_D02_BOTANICA_ATELIER_V14_7_PHOTO_ONLY_VISUAL_QA_CANDIDATE_2026-10-09.html",
+        "sourceSha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+        "sourceBytes": 11635635,
+        "generatedInternalHtml": "BOTANICA_REAL_V14_7_FINAL_INTERNAL_QA_NOT_PUBLISHED.html",
+        "outputSha256": "f32d978fbe6d1c872b0121ee3e4574fd34179e4d62a7ba5585dae005c7bb2368",
+        "outputBytes": 11639260,
+        "sourceCodeFidelity": {
+          "builderGitBlob": "b2fb3a31ed32e9bfea607f75bb1107713eead53c",
+          "sharedDeliveryRuntimeGitBlob": "abc6ddab371ebc63df16c57f8721aa181a6faedc",
+          "botanicaAdapterGitBlob": "9487106232ecf41fc0a8781c98b31d71cfbc8aaf",
+          "templateRegistryGitBlob": "120205162058e0b6c6f9120309cf9523bcc8f737",
+          "pin": "archived canonical status from earlier Github CI snapshot, same current candidate pin"
+        },
+        "checks": {
+          "visualRendererUnchanged": true,
+          "expectedInsertions": 3,
+          "inlineJSBlocks": 7,
+          "inlineJSSyntaxPASS": 7,
+          "protectedSupabaseIdsPresent": 0,
+          "noindex": true,
+          "visibleTestOnlyNotice": true
+        },
+        "backendTarget": "guest-staging-not-deployed.supabase.co (synthetic NONEXISTENT placeholder, never contacted)",
+        "dummyToken": true,
+        "actualBackend": false,
+        "liveOrders": false,
+        "deliveredPublicURL": false,
+        "android": false,
+        "commercialSaleReady": false,
+        "evidenceLibrary": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BOTANICA_V14_7_REAL_FINAL_INTERNAL_QA_MANIFEST_2026-10-10.json",
+        "note": "Physical 11.6MB approved candidate used, byte-equal visual renderer checked after stripping only injected wrappers. Do not publish pilot or count as final URL/RSVP E2E."
+      }
     }
   },
   "commercialGate": {
