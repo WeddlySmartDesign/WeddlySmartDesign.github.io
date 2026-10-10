@@ -1185,10 +1185,11 @@
     },
     "nextAction20261010": {
       "priority": "P0",
-      "task": "Connect/authorize a free commercial static host, deploy checksum-verified ZIP, configure single GUEST_CATALOG_PUBLIC_ORIGIN setting, run real HTTPS/Android/RSVP handoff and 11/11 gates before allowing Botánica sales.",
+      "status": "WAITING_ONE_PROVIDER_OAUTH",
+      "task": "Cloudflare Pages Free dashboard Git authorization and pages.dev host creation using documented exact config; then check SHA stage, public Android preview, operator origin, two real GUEST/Rsvp test orders, 11/11 gates before sales.",
       "noNewCharges": true,
       "releaseNotYetCertified": true,
-      "latestDocumentation": "guest/GUEST_STATIC_HOSTING_RELEASE_RUNBOOK_2026-10-10.md; Library Entry 33"
+      "documentedAt": "Library Entry 35"
     },
     "guestStaticHostingStage20261010": {
       "status": "PREPRODUCTION_STATIC_ARTIFACT_COMPLETE_AND_IN_LIBRARY_NO_PUBLIC_HOST",
@@ -1320,6 +1321,40 @@
       "newPaidServicesAuthorized": false,
       "noDesign03UntilCommercialCert": true,
       "note": "Historic entries and older JSON fragments are timestamps. This object and latest Library entry 34 reconcile the verified current state. Do not infer launch from ACTIVE Edge Functions or PREPRODUCTION ZIP."
+    },
+    "userAuthorizedFreeHostingAndGitStaging20261010": {
+      "userAuthorization": "Te autorizo",
+      "scope": "zero-cost hosting account/integration/publication and final certification of Botánica, not paid plan or sale activation",
+      "cloudflarePagesConnection": "NOT CONNECTED; ChatGPT has no Cloudflare account connector or token; requires owner OAuth in Cloudflare dashboard",
+      "vercelAccountPlanVerified": "HOBBY; commercial use not authorized, therefore not chosen",
+      "cloudflareFreePlanVerified": {
+        "maxIndividualAssetMiB": 25,
+        "unlimitedStaticBandwidth": true,
+        "commercialStaticStageWithinLimits": true
+      },
+      "staticDeploymentRepo": "WeddlySmartDesign/WeddlySmartDesign.github.io",
+      "staticDeploymentBranch": "guest-independent",
+      "staticDeploymentConfigDoc": "guest/GUEST_CLOUDFLARE_PAGES_FREE_DEPLOY_2026-10-10.md",
+      "staticBuildCommand": "node guest/tools/build_catalog_static_preview.cjs --output \"$PWD/dist\" --template botanica",
+      "staticBuildOutputDirectory": "dist",
+      "sourceVisualChunkManifest": "guest/catalog-assets/botanica/14.7/source-chunks/manifest.json",
+      "sourceVisualChunkCount": 22,
+      "sourceVisualChunkBytesTotalVerifiedViaGithubDirectory": 11635635,
+      "masterSha256Expected": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+      "visualFullSourceNotModified": true,
+      "chunkReassemblyShaGuard": "guest/tools/build_catalog_static_preview.cjs; fail closed on missing chunk, different byte count, or SHA",
+      "noCustomerDataOrCheckoutOnStaticLanding": true,
+      "noCloudflareAccountCreated": true,
+      "noStaticPublicUrlConfirmed": true,
+      "noSupabaseSecretsChanged": true,
+      "cloudGUESTFlowVersion": 14,
+      "cloudGUESTCheckoutVersion": 22,
+      "botanicaCommercialStatus": "NO-GO",
+      "formalBotanicaGates": "3/11 passed; 8 pending",
+      "noNewCost": true,
+      "pendingExternalAction": "Owner connects GitHub repository to new Cloudflare Pages Free project selecting production branch guest-independent, root repository, build command and dist; report verified pages.dev URL.",
+      "lastCIStatus": "GitHub Actions backlog after 22 visual chunks; no PASS asserted for final staged frozen visual until current build completes",
+      "docs": "Library Entry 35 appended after this checkpoint"
     }
   },
   "commercialGate": {
