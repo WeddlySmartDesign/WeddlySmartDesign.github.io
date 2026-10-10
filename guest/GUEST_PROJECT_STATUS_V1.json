@@ -719,6 +719,48 @@
       "studioProtection": "No actions on STUDIO; unused Free project slot reserved for STUDIO reactivation.",
       "publicPlatformCaveat": "GitHub Actions use on standard hosted public runners is free; storage artifacts and larger runners may have separate rules; this workflow uploads none.",
       "commercialStatus": "Botanica 3/11 gates, none elevated"
+    },
+    "botanicaV13RealLocalExecution20261010": {
+      "asOf": "2026-10-10",
+      "backendBaseline": {
+        "source": "guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts",
+        "sourceVersion": 12,
+        "sourceDigest": "69ef41f9867eb048b052632141be9b8e5ea53aa78a63ade1883e1e88da7b28ac",
+        "sourceLengthChars": 43641,
+        "gitCommit": "f33806de53391b9726d0dbeb50c52c25bb8492d2",
+        "literalKeyScannerResult": "No hardcoded sk_*/sb_secret_*/JWT/private key patterns found"
+      },
+      "generation": "guest/tools/prepare_test_only_backend_v13.cjs --input guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts --output supabase/functions/guest-invitation-flow/index.ts",
+      "runtime": "Full ephemeral Supabase Edge Runtime + PostgreSQL/PostgREST in standard public GitHub Actions runner; no real Supabase account credentials",
+      "smoke": {
+        "run": 38041709414,
+        "result": "SUCCESS",
+        "checks": [
+          "V13 generator ran without source drift",
+          "Edge served locally at 127.0.0.1:54321/functions/v1/guest-invitation-flow",
+          "invalid review/public tokens rejected 403",
+          "unauthorized create_test rejected 403",
+          "ephemeral resources stopped and cleaned"
+        ],
+        "caution": "Actual Edge invocation/auth test, not owner-authorized successful order creation or final sale."
+      },
+      "twoOrderFlow": {
+        "testFile": "guest/qa/isolated_free/verify_v13_two_botanica_orders.cjs",
+        "sqlFixture": "guest/qa/isolated_free/001_guest_minimal_fixture.sql",
+        "scope": "owner test license, two fictional orders, one photo-only/two-venues, one custom/one-venue; lifecycle submit, review, approval, deliver, public_load",
+        "workflowRunAtRecord": 38041993258,
+        "resultAtRecord": "IN_PROGRESS / NO CLAIM OF PASS",
+        "caveat": "Local synthetic origin guest-ci-local.invalid is not a reachable published site; actual external client and Android still must be verified."
+      },
+      "costs": {
+        "newSubscriptionsEuro": 0,
+        "cloudSupabaseNewProjects": 0,
+        "cloudSupabaseLiveDeployments": 0,
+        "studioModified": false,
+        "oneModified": false
+      },
+      "actualProductionFlowV13": "NOT DEPLOYED; version v12 remains live",
+      "commercialGates": "3/11 still, no promotion"
     }
   },
   "commercialGate": {
@@ -739,10 +781,9 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Free local Supabase + real PostgREST persistence test PROVEN on public GitHub runner (run 38037124742); no new subscription, cloud branch/project, or STUDIO impact. Do not research/pay Pro for cert.",
-    "Next: use this already-working isolated GH runner to execute exact V13 Edge function lifecycle, with GUEST-only minimal tables/buckets and no secret/live integrations; two distinct Botánica fixture orders + real token review/final and g/u RSVP endpoint, rather than creating another infrastructure.",
-    "Only when actual V13 E2E passes and rollback/legacy VEIL validated: evaluate authorized deployment to existing Free Supabase without touching ONE or STUDIO. Explicit approval required before production mutation. No live V13 now.",
-    "Owner Android mobile review and <=5-min owner touch plus verified 11/11 before selling Botánica or starting D03. Remain inside Supabase Free quotas and GitHub public standard runners; never create paid tools before proven sales."
+    "Finish and diagnose GUEST Free Isolated Supabase Smoke run 38041993258 (real generated V13, two fictional Botánica lifecycle orders and private photo upload); do not infer PASS before CI.",
+    "If local V13 lifecycle passes, next verify full real RSVP endpoint g/u and recipient link, frozen VEIL regression and rollback, then decide safe coexistence deployment to existing Supabase Free without STUDIO. NO new subscription.",
+    "Owner Android testing, live deliverable HTTPS links, license handoff and <=5 min remain external gates; preserve 3/11 until evidenced and do not start D03 yet."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
