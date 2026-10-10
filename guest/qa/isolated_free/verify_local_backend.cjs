@@ -27,6 +27,7 @@ async function req(table,{method='GET',data,query='',role='service'}={}){
   {mode:'test',buyer_email:'fictional-2@example.invalid',template_id:'botanica',template_version:'14.7',status:'approved',questionnaire_token_hash:hash('order-b'),questionnaire:{story:{textMode:'custom'},locations:{count:1}},resolved_config:{template:{id:'botanica',version:'14.7'}}}
  ];
  const insert=await req('guest_invitation_orders',{method:'POST',data:orders});
+ if(insert.code!==201)throw Error('synthetic_orders_insert_failed: HTTP '+insert.code+' code='+String(insert.data?.code||'none')+' message='+String(insert.data?.message||'none').slice(0,260));
  assert.equal(insert.code,201,'Two fully fictitious pinned orders must insert into disposable database');
  assert.equal(insert.data?.length,2);
  const orderIds=insert.data.map(x=>x.id);
