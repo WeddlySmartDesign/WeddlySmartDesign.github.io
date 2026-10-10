@@ -173,6 +173,19 @@ function build(source){
    "if(!inviteUrl)return json({ok:false,error:'missing_invitation_url'},400);",
    'test_delivery_requires_final_url');
 
+ // The final URL is sent to users and later decorated with recipient RSVP context.
+ // Reject untrusted destinations (including javascript/http/lookalike domains).
+ // The authorized canonical origin comes from WEDDLY_SITE_ORIGIN in the target
+ // environment; an isolated staging site MUST set that variable explicitly.
+ source=once(source,
+   "if(!inviteUrl)return json({ok:false,error:'missing_invitation_url'},400);",
+   "if(!inviteUrl)return json({ok:false,error:'missing_invitation_url'},400);\n"+
+   "      let finalUrl:any;try{finalUrl=new URL(inviteUrl)}catch{return json({ok:false,error:'invalid_invitation_url'},400)}\n"+
+   "      let configuredSite:any;try{configuredSite=new URL(site())}catch{return json({ok:false,error:'invalid_site_origin'},500)}\n"+
+   "      if(finalUrl.protocol!=='https:'||finalUrl.origin!==configuredSite.origin||finalUrl.username||finalUrl.password)return json({ok:false,error:'invalid_invitation_url'},400);",
+   'delivery_url_origin_guard');
+
+
  // Failing signatures from the signing API must NOT become blank images.
  source=once(source,
    "if(typeof x[k]==='string'&&x[k].startsWith('upload:'))x[k]=map.get(x[k].slice(7))||'';else walk(x[k])",
