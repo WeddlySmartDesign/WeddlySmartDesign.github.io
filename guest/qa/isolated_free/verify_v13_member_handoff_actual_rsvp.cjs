@@ -10,7 +10,7 @@ if(api.protocol!=='http:'||!['127.0.0.1','localhost'].includes(api.hostname)||ap
 const service=env.GUEST_LOCAL_SERVICE_ROLE_KEY,anon=env.GUEST_LOCAL_ANON_KEY;
 if(!service||!anon)throw Error('MISSING_DISPOSABLE_LOCAL_KEYS');
 const origin=api.origin,hash=v=>crypto.createHash('sha256').update(v).digest('hex');
-const site='https://guest-ci-local.invalid',bridgeFile=path.resolve(__dirname,'../guests-catalog-invitation-bridge-v1.js'),runtimeFile=path.resolve(__dirname,'../guest-catalog-delivery-runtime-v1.js');
+const site='https://guest-ci-local.invalid',bridgeFile=path.resolve(__dirname,'../../guests-catalog-invitation-bridge-v1.js'),runtimeFile=path.resolve(__dirname,'../../guest-catalog-delivery-runtime-v1.js');
 const weddingIds=['33333333-4444-4555-8666-777777777777','33333333-4444-4555-8666-888888888888'];
 const licenseIds=['aaaaaaa1-aaaa-4aaa-8aaa-aaaaaaaaaaaa','bbbbbbb2-bbbb-4bbb-8bbb-bbbbbbbbbbbb'];
 const cases=[{id:'A',guest:'synthetic-a-g',unit:'synthetic-a-u',language:'es'},{id:'B',guest:'synthetic-b-g',unit:'synthetic-b-u',language:'en'}];
