@@ -3,6 +3,8 @@
 if(window.__GuestCatalogDeliveryRuntime)return;
 
 const FLOW='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow';
+// RSVP lives in the already-published GUEST management app, not at a new static CDN origin.
+const RSVP_ORIGIN='https://weddlysmartdesign.github.io';
 
 function context(){
   const u=new URL(location.href),q=u.searchParams;
@@ -16,7 +18,7 @@ function context(){
 }
 function rsvpUrl(ctx=context()){
   if(!ctx.rsvpToken)return '#';
-  const u=new URL(location.origin+'/guest/guests-rsvp-v105.html');
+  const u=new URL(RSVP_ORIGIN+'/guest/guests-rsvp-v105.html');
   u.searchParams.set('guest','1');
   u.searchParams.set('t',ctx.rsvpToken);
   u.searchParams.set('lang',ctx.lang||'es');
