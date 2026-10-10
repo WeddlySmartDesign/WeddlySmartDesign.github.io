@@ -86,7 +86,7 @@ async function main(){
    assert.equal(loaded.order.id,order.id);
    assert.equal(applied.template.id,'botanica');
    const rsvpLink=new URL(applied.rsvp.route);
-   assert.equal(rsvpLink.origin,site);
+   assert.equal(rsvpLink.origin,'https://weddlysmartdesign.github.io','shared RSVP engine remains at existing public GUEST app across independent static hosts');
    assert.equal(rsvpLink.pathname,'/guest/guests-rsvp-v105.html');
    assert.equal(rsvpLink.searchParams.get('t'),c.rsvpToken);
    assert.equal(rsvpLink.searchParams.get(isFamily?'u':'g'),isFamily?c.unit:c.guest);
