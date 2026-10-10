@@ -534,6 +534,39 @@
       "userConsent": "Neither paid upgrade nor free project creation requested/approved; read-only checks only",
       "release": "NO-GO",
       "nextAuthorizedAction": "After user explicitly authorizes creating an isolated Free staging project and quota is confirmed, create without real data. If Free slot unavailable, obtain explicit Pro cost approval first. Do not silently upgrade."
+    },
+    "studioProtectionDecision20261010": {
+      "ownerConstraint": "ONLY create GUEST test project if it cannot jeopardize subsequent STUDIO reactivation, access or cost.",
+      "decision": "NO_GO_TO_CREATE_NEW_GUEST_SUPABASE_PROJECT_UNTIL_STUDIO_CAPACITY_AND_RESTORE_SAFETY_VERIFIED",
+      "evidence": {
+        "organizationPlan": "free",
+        "officialLimit": "2 active projects maximum across Free organizations controlled by same owner/admin; paused projects don't count",
+        "observedProjects": [
+          {
+            "name": "Weddly Smart Design VENDORS Project",
+            "status": "ACTIVE_HEALTHY"
+          },
+          {
+            "name": "STUDIO",
+            "status": "INACTIVE"
+          }
+        ],
+        "studioProjectModified": false,
+        "studioStateLimit": "INACTIVE status alone does not establish paused_at or 90-day deadline",
+        "officialRestorationWindow": "Paused Free projects can be restored via Dashboard for up to 90 days after pausing; exact STUDIO pause date cannot be inferred from creation date",
+        "risk": "While an isolated GUEST staging project occupies second active slot, STUDIO may need it for reactivation. Pausing/removing GUEST staging and checking any restore deadline would be required first.",
+        "verifiedDocs": [
+          "https://supabase.com/docs/guides/platform/billing-on-supabase",
+          "https://supabase.com/docs/guides/platform/billing-faq",
+          "https://supabase.com/docs/guides/platform/free-project-pausing"
+        ]
+      },
+      "userAuthorization": "CONDITIONAL only: prioritize STUDIO, no change unless zero future STUDIO impact verified",
+      "authorizedMutation": false,
+      "newProjectCreated": false,
+      "noCostsIncurred": true,
+      "safestNextStep": "Read-only verify STUDIO actual paused/recoverable status and restoration deadline via authorized account UI/support; do not provision any Free project until unequivocally safe. Alternative isolated local runtime may be pursued without affecting Supabase quota.",
+      "commercialBotanicaStill": "3/11 PASS; 8 PENDING"
     }
   },
   "commercialGate": {
@@ -554,7 +587,8 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Preferred path: verify a free second ACTIVE Supabase project slot is actually available (Free org; main GUEST active, STUDIO INACTIVE) and obtain explicit approval to create GUEST-only staging; never reuse STUDIO. Avoid Pro upgrade until Free option ruled out.",
+    "STUDIO PROTECTION OVERRIDES prior GUEST Free staging recommendation: NO project creation on conditional consent. STUDIO must remain restartable in Free within its restore window and without charges; capacity impact not yet disproven.",
+    "Read-only verify actual STUDIO pause date/deadline and whether any new GUEST project can be fully retired BEFORE resuming STUDIO; do not pause, resume, delete or alter STUDIO without express request.",
     "Source code has zero checked-in SQL migrations while DB records 91 applied; prepare isolated GUEST-only schema/functions/storage and synthetic records, no production data; do not claim new Free staging is a one-click clone.",
     "Staged Center carries TWO production endpoint literals (FLOW guest-invitation-flow and OWNER weddly-owner-manager); ensure zero production Supabase refs and no live checkout/email before allowing a connected staging preview. Preserve offline CSP otherwise.",
     "With isolated authorized runtime and allowed browser, complete Botánica E2E 2 orders, VEIL regression, real g/u RSVP with fictional license/membership, Android owner and <=5min. Keep 3/11 and no D03 until PASS."
