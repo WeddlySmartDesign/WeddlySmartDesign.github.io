@@ -1100,20 +1100,26 @@
       "botanicaCommercialGate": "3/11 PASS, 8 PENDING; NO-GO"
     },
     "guestCloudCommercialBridgeRelease20261010": {
-      "status": "PUBLISHED_BACKEND_V13_CHECKOUT_V22_PUBLIC_FINAL_AND_ANDROID_PENDING",
+      "status": "PUBLISHED_BACKEND_V14_CHECKOUT_V22_OPTIONAL_HOST_NOT_CONNECTED_NO_PUBLIC_SALE",
       "supabaseProject": "dnjsxequwgtyyauuofxj",
       "invitationFlow": {
-        "version": 13,
-        "sha256": "2bc1fd8d2b6c0831b4e46b3ac8d565cbcc6ada5b10750b9fbaaa14714dd808d5",
-        "generatedSourceSha256": "5f72cbf09dfa159815920f9f094e09e56ce7ed502b6d59224e881139d1e42a30",
-        "candidateBytes": 65519,
+        "version": 14,
+        "sha256": "84bdc6814b9738081036b7fb144da7d5556d64ab24c3f6b858ef1dc79e50e63e",
+        "generatedSourceSha256": "d87ce43ad51422984e75c7738ba902630f3ab7cc60266fce5f7773764913139f",
+        "candidateBytes": 66594,
         "generatedFrom": "guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts",
-        "githubActionsFullRun": 38071853898,
+        "githubActionsFullRun": 38075826054,
         "githubActionsResult": "success",
         "approvedLocalSmoke": "two fictional Botanica orders, real local Supabase persisted RSVP, paid VEIL synthetic license bridge",
         "livePostEndToEnd": false,
         "rollbackSource": "guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts",
-        "rollbackCloudDigest": "69ef41f9867eb048b052632141be9b8e5ea53aa78a63ade1883e1e88da7b28ac"
+        "rollbackCloudDigest": "69ef41f9867eb048b052632141be9b8e5ea53aa78a63ade1883e1e88da7b28ac",
+        "sourceLibrary": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_V14_EDGE_VALIDADO_2026-10-10.ts",
+        "previousVersion": 13,
+        "previousCloudDigest": "2bc1fd8d2b6c0831b4e46b3ac8d565cbcc6ada5b10750b9fbaaa14714dd808d5",
+        "rollbackSourceLibrary": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_V13_EDGE_GENERADO_VALIDADO_2026-10-10.ts",
+        "onlyChangedFromV13": "Single validated alternative-public-URL allowlist; no other source changes",
+        "publicAlternativeHostEnv": "GUEST_CATALOG_PUBLIC_ORIGIN; NOT CONFIGURED"
       },
       "stripeCheckout": {
         "version": 22,
@@ -1154,7 +1160,7 @@
         "25",
         "29"
       ],
-      "note": "See Library Entry 32: GUEST V13 and Stripe v22 live; static original Botánica package assembled and checksum verified, but not published, V14 origin patch staged only, zero new cost. Sales Botánica remain NO-GO 3/11.",
+      "note": "Latest Library Entry 33: GUEST flow V14 and checkout V22 live. Zero-cost static preview package ready, not hosted; no public individual invitation/RSVP Android acceptance; Botánica 3/11 NO-GO.",
       "additionalSubscriptionCost": 0,
       "customerFrontendCodePublishedToMain": false,
       "genericReviewPage": "guest-review-v1.html",
@@ -1179,10 +1185,10 @@
     },
     "nextAction20261010": {
       "priority": "P0",
-      "task": "Obtain permitted zero-incremental-cost public HTTPS commercial host access for isolated guest catalog static release; upload approved candidate separately, then real Cloud E2E and Android.",
+      "task": "Connect/authorize a free commercial static host, deploy checksum-verified ZIP, configure single GUEST_CATALOG_PUBLIC_ORIGIN setting, run real HTTPS/Android/RSVP handoff and 11/11 gates before allowing Botánica sales.",
+      "noNewCharges": true,
       "releaseNotYetCertified": true,
-      "documentedAt": "Library bitacora Entry 31",
-      "noNewCharges": true
+      "latestDocumentation": "guest/GUEST_STATIC_HOSTING_RELEASE_RUNBOOK_2026-10-10.md; Library Entry 33"
     },
     "guestStaticHostingStage20261010": {
       "status": "PREPRODUCTION_STATIC_ARTIFACT_COMPLETE_AND_IN_LIBRARY_NO_PUBLIC_HOST",
@@ -1217,15 +1223,26 @@
       "nextDesignRule": "Catalog register visual-only; one shared static packager by --template id; new D03 not started"
     },
     "guestOptionalCatalogPublicOrigin20261010": {
-      "status": "V14_PATCH_PREPARED_AND_TESTED_OFFLINE; NOT_DEPLOYED",
+      "status": "LIVE_V14_CODE_DEPLOYED, UNCONFIGURED_OPTIONAL_HOST, NO_PUBLIC_SITE",
+      "cloudProject": "dnjsxequwgtyyauuofxj",
+      "cloudFunction": "guest-invitation-flow",
+      "cloudVersion": 14,
+      "cloudDigest": "84bdc6814b9738081036b7fb144da7d5556d64ab24c3f6b858ef1dc79e50e63e",
+      "cloudSourceLibrary": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_V14_EDGE_VALIDADO_2026-10-10.ts",
       "source": "guest/tools/allow_catalog_public_origin_v14.cjs",
-      "sourceV13": "guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts -> guest/tools/prepare_test_only_backend_v13.cjs",
-      "isolationQA": "guest-isolated-free-smoke.yml run 38075826054, check conclusion before Cloud release",
-      "operatorSetting": "GUEST_CATALOG_PUBLIC_ORIGIN (empty means old site only; explicit HTTPS origin permits ONLY /guest/catalog-final.html?p=<matching capability>)",
-      "legacySiteEnvNotModified": true,
+      "isolatedCIRun": 38075826054,
+      "isolatedCIResult": "success",
+      "allowedOriginEnv": "GUEST_CATALOG_PUBLIC_ORIGIN",
+      "envConfigured": false,
+      "publicHostExists": false,
+      "safeRoute": "/guest/catalog-final.html?p=<matching valid V14 order capability>",
+      "oldSiteRouteCompatible": true,
       "checkoutV22Unchanged": true,
-      "backendCloudStillVersion": 13,
-      "rollback": "exact V13 source in Library /GUEST_V13_EDGE_GENERADO_VALIDADO_2026-10-10.ts; digest 2bc1fd8d2b6c0831b4e46b3ac8d565cbcc6ada5b10750b9fbaaa14714dd808d5"
+      "rollbackV13Digest": "2bc1fd8d2b6c0831b4e46b3ac8d565cbcc6ada5b10750b9fbaaa14714dd808d5",
+      "rollbackV13Library": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_V13_EDGE_GENERADO_VALIDADO_2026-10-10.ts",
+      "ONE_UNCHANGED": true,
+      "STUDIO_UNCHANGED": true,
+      "VEIL_VISUAL_UNCHANGED": true
     }
   },
   "commercialGate": {
