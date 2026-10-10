@@ -12,6 +12,7 @@ on:
       - guest/guest-catalog-delivery-runtime-v1.js
       - guest/catalog/guest-catalog-owner-viewer-v2.js
       - guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json
+      - guest/catalog-assets/**
 permissions:
   contents: read
 jobs:
@@ -28,7 +29,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Build static stage without visual or deployment credentials
+      - name: Build static stage including verified immutable visual, without deployment credentials
         run: |
           set -euo pipefail
           test -z "$CLOUDFLARE_API_TOKEN"
@@ -40,9 +41,10 @@ jobs:
           test -s /tmp/guest-static-stage/guest/catalog-final.html
           test -s /tmp/guest-static-stage/guest-review-v1.html
           test -s /tmp/guest-static-stage/guest/catalog-questionnaire.html
-          test ! -e /tmp/guest-static-stage/guest/catalog-assets/botanica/14.7/index.html
-          node -e "const f=require('/tmp/guest-static-stage/GUEST_STAGE_MANIFEST.json');if(f.status!=='PREPRODUCTION_DO_NOT_SELL'||f.botanica.visualIncluded||f.commercialApproved)process.exit(1)"
-          echo 'PASS precommercial static packaging. Frozen visual injected only by strict SHA in secure assembly.'
+          test -s /tmp/guest-static-stage/guest/catalog-assets/botanica/14.7/index.html
+          echo "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a  /tmp/guest-static-stage/guest/catalog-assets/botanica/14.7/index.html" | sha256sum -c -
+          node -e "const f=require('/tmp/guest-static-stage/GUEST_STAGE_MANIFEST.json');if(f.status!=='PREPRODUCTION_DO_NOT_SELL'||!f.botanica.visualIncluded||f.commercialApproved)process.exit(1)"
+          echo 'PASS precommercial static packaging. Frozen visual reconstructed from immutable chunks; SHA verified. NO SALE.'
       - name: Save platform-neutral stage (NOT LIVE)
         uses: actions/upload-artifact@v4
         with:
