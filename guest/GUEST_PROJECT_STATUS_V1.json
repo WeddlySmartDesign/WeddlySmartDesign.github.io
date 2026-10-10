@@ -1026,6 +1026,28 @@
       "vercelRead": "403 forbidden for existing owner-demos project scope; no deployment",
       "additionalEUR": 0,
       "nextP0": "Complete template selection/checkout pinning only for certified templates; authorized release + VEIL rollback; externally reachable HTTPS delivery, media, real RSVP, licensed management, owner Android."
+    },
+    "botanicaVercelVisualPreviewVerified20261010": {
+      "type": "protected-private-visual-preview-not-public-personalized-delivery",
+      "deploymentId": "dpl_EQzQNGNxxRuCaXMcCgc59meG3v6Y",
+      "project": "weddly-owner-demos",
+      "host": "weddly-owner-demos-erq8qoji7-pilarrodriguezbonilla-2303.vercel.app",
+      "target": "preview",
+      "readyState": "READY",
+      "aliasCount": 0,
+      "path": "/botanica/v14-7.html",
+      "htmlSha1": "06a6899a5269d497e25c8184baa251f5821beb75",
+      "mediaFragments": 7,
+      "serverSidePreviewSso": true,
+      "publicCustomerDelivery": false,
+      "actualAndroid": false,
+      "projectAccessFinding": "Vercel get_project/list_deployments succeeds without explicit teamId; earlier 403 on scoped query does not establish Vercel inaccessible",
+      "liveSupabaseV13Deployed": false,
+      "checkoutCatalogPinned": false,
+      "ownerNotifiedPreviewIsNotSale": true,
+      "documentation": "Library bitacora Entries 27 and 28",
+      "launchStatus": "NO-GO; 3 of 11 gates pass",
+      "limitations": "No public final personalized invitation, real media signing E2E, paid checkout-to-V13 E2E, or Android sign-off. Frozen ONE/STUDIO untouched."
     }
   },
   "commercialGate": {
