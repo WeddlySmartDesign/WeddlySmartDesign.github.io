@@ -186,6 +186,48 @@ function build(source){
    'delivery_url_origin_guard');
 
 
+ // Paid GUEST licenses can enter the EXISTING invitation workflow only after
+ // the checkout has pinned an independently certified catalog template/version.
+ // Manager-only, idempotent: never re-label legacy purchases or sell Botánica early.
+ source=once(source,
+   "    if(action==='create_test'){",
+   `    if(action==='create_paid'){
+      const licenseId=txt(b.licenseId,80);
+      if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(licenseId))return json({ok:false,error:'invalid_license_id'},400);
+      const spec=templateSpec(txt(b.templateId,80));
+      assertCatalogOrderMode(spec,'production');
+      const {data:license,error:le}=await c.from('licenses')
+        .select('id,source,source_order_id,status,metadata').eq('id',licenseId).maybeSingle();
+      if(le)throw le;
+      const checkoutId=String(license?.source_order_id||''),meta=license?.metadata||{};
+      if(!license||license.source!=='stripe'||license.status!=='active'||
+         meta.product!=='guest'||!/^cs_(?:test|live)_[A-Za-z0-9]+$/.test(checkoutId)||
+         meta.guest_catalog_template_id!==spec.id||
+         String(meta.guest_catalog_template_version||'')!==String(spec.version))
+        return json({ok:false,error:'paid_catalog_template_not_purchased'},409);
+      const {data:existing,error:xe}=await c.from('guest_invitation_orders')
+        .select('id,mode,license_id,checkout_session_id,template_id,template_version')
+        .eq('license_id',licenseId).maybeSingle();
+      if(xe)throw xe;
+      if(existing){
+        if(existing.mode!=='production'||existing.checkout_session_id!==checkoutId||
+           existing.template_id!==spec.id||String(existing.template_version)!==String(spec.version))
+          return json({ok:false,error:'paid_catalog_order_conflict'},409);
+        return json({ok:true,id:existing.id,alreadyCreated:true,
+          qToken:await capability(existing.id,'q'),rToken:await capability(existing.id,'r'),
+          pToken:await capability(existing.id,'p')});
+      }
+      const {data:delivery,error:de}=await c.from('license_delivery_codes')
+        .select('buyer_email').eq('license_id',licenseId).maybeSingle();
+      if(de)throw de;
+      const email=txt(delivery?.buyer_email,200).toLowerCase();
+      if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email))
+        return json({ok:false,error:'paid_buyer_email_missing'},409);
+      const created=await createOrder(c,'production',email,licenseId,checkoutId,spec.id);
+      return json({ok:true,...created,alreadyCreated:false},201);
+    }
+    if(action==='create_test'){`,
+   'paid_checkout_license_order_bridge');
  // Failing signatures from the signing API must NOT become blank images.
  source=once(source,
    "if(typeof x[k]==='string'&&x[k].startsWith('upload:'))x[k]=map.get(x[k].slice(7))||'';else walk(x[k])",
