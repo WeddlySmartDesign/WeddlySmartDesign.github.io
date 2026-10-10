@@ -70,7 +70,7 @@ jobs:
         run: |
           set -euo pipefail
           umask 077
-          supabase status -o env --override-name api.url=GUEST_LOCAL_API_URL > local-api-env.txt
+          supabase status -o env --override-name api.url=GUEST_LOCAL_API_URL --override-name auth.anon_key=GUEST_LOCAL_ANON_KEY > local-api-env.txt
           supabase functions serve guest-invitation-flow --no-verify-jwt > /tmp/guest-v13-local-only.log 2>&1 &
           edge_pid=$!
           trap 'kill "$edge_pid" 2>/dev/null || true; rm -f local-api-env.txt /tmp/guest-v13-local-only.log' EXIT
