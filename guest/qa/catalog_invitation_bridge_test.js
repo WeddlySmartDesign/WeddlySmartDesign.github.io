@@ -24,6 +24,8 @@ function ok(v,msg){if(!v)throw new Error(msg)}
   ok(bridge.includes('legacyUrl'),'legacy fallback must remain available');
 
   const composer=read('guests-rsvp-share-composer-v3.js');
+  ok(!composer.includes("location.origin+'/guests-rsvp-v105.html'"),'composer must never fallback to ONE root RSVP');
+  ok(composer.includes("location.origin+'/guest/guests-rsvp-v105.html'"),'composer fallback must be isolated GUEST entrypoint');
   ok(composer.includes('__GuestCatalogBridge.buildRecipientUrl'),'existing composer must use catalog bridge');
   ok(!composer.includes("templateId:'veil-light'"),'share composer cannot know a template');
   ok(composer.includes('invitationUnitId'),'invitation units must be preserved');
