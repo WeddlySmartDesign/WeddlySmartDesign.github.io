@@ -1355,6 +1355,30 @@
       "pendingExternalAction": "Owner connects GitHub repository to new Cloudflare Pages Free project selecting production branch guest-independent, root repository, build command and dist; report verified pages.dev URL.",
       "lastCIStatus": "GitHub Actions backlog after 22 visual chunks; no PASS asserted for final staged frozen visual until current build completes",
       "docs": "Library Entry 35 appended after this checkpoint"
+    },
+    "hostingAuthorization20261010": {
+      "authorization": "USER_EXPLICITLY_AUTHORIZED_FREE_HOSTING_SETUP",
+      "providerPreference": "Cloudflare Pages Free, zero incremental subscription",
+      "spendingPermission": "NONE; no paid plan, credits or card charge",
+      "scope": "Independent GUEST static production-ready preview and future certified invitation host; one new hosting project only",
+      "noTouch": [
+        "main",
+        "ONE",
+        "ONE Partner",
+        "STUDIO",
+        "VEIL LIGHT frozen visual",
+        "Botánica frozen visual"
+      ],
+      "checks": "Cloudflare Direct Upload ZIP supported, single file 25MiB max; 11-file ZIP verified SHA-256 dd0729f27b30812a722ba18439335303ce20d7df78a28f14d8341bd8419b86dc; visual asset 11,635,635 B; master checksum fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+      "cloudflareConnectedInTools": false,
+      "attemptedConnectedAlternatives": "Vercel existing owner demo SSO protected; team details cannot be accessed 403, no basis to claim free commercial hosting; Railway known projects belong to frozen ONE Partner and STUDIO, never repurpose",
+      "providerProjectCreated": false,
+      "livePublicUrl": null,
+      "deployStatus": "BLOCKED_PENDING_CLOUDFLARE_OWNER_ACCOUNT_ACCESS_DIRECT_UPLOAD",
+      "customerPurchaseAllowed": false,
+      "nextOwnerAction": "Use https://dash.cloudflare.com/ -> Workers & Pages -> create Pages Direct Upload FREE -> upload verified ZIP -> share deployed *.pages.dev link (no need to edit code)",
+      "nextAssistantAfterUrl": "Inspect HTTPS and master; pin exact new public origin in isolated GUEST V14 guard and checkout, validate Cloud QA and Android; NEVER sell before 11/11 formal gates",
+      "documentation": "Same project Library Entry 35"
     }
   },
   "commercialGate": {
