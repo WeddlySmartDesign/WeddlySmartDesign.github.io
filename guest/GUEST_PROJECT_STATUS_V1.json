@@ -567,6 +567,48 @@
       "noCostsIncurred": true,
       "safestNextStep": "Read-only verify STUDIO actual paused/recoverable status and restoration deadline via authorized account UI/support; do not provision any Free project until unequivocally safe. Alternative isolated local runtime may be pursued without affecting Supabase quota.",
       "commercialBotanicaStill": "3/11 PASS; 8 PENDING"
+    },
+    "botanicaFinalPilotIntegration20261010": {
+      "scope": "Direct commercial blocker: existing final delivery builder refused all certification-pending templates, preventing candidate Botánica preview/final QA. The existing single builder now has an opt-in internal staging-only route.",
+      "generator": "guest/tools/build_catalog_delivery.js",
+      "existingCommercialPath": "Unchanged; only commercially-frozen template ids allowed without --test-only",
+      "pendingRoute": "--test-only --flow-url https://<isolated-staging-project>.supabase.co/functions/v1/guest-invitation-flow",
+      "pendingGuards": [
+        "must be certification-pending in catalog registry",
+        "must match version/status/candidateSha256 from GUEST_PROJECT_STATUS_V1.json",
+        "requires HTTPS isolated Supabase FLOW with correct endpoint and no credentials/query/hash",
+        "rejects protected live Weddly project and STUDIO project",
+        "generated HTML must contain zero references to either protected Supabase project",
+        "injects visible non-publish warning and noindex meta",
+        "requires original template apply API; does not edit V14/V14.7 visual source",
+        "does not deploy or publish anything"
+      ],
+      "strictCommercialGate": "Botanica cannot be built through ordinary commercial path until all 11 actual sale gates PASS and registry promotes separately.",
+      "test": "guest/qa/catalog_delivery_builder_test.js",
+      "tests": [
+        "existing VEIL frozen standard commercial packaging still PASS",
+        "synthetic pending Botánica packaging with approved source SHA and isolated FLOW",
+        "blocked pending normal sale",
+        "blocked missing isolated URL, HTTP, wrong function, live production, STUDIO and tampered visual candidate",
+        "synthetic only; does not prove live E2E or actual Android"
+      ],
+      "commits": {
+        "builder": "32c5f8b960134e7c797698b9e90954a85377b4c1",
+        "test": "6f6180b0657c834eeb79a3f79891e13f0f29a477"
+      },
+      "firstObservedCI": {
+        "catalogRun": 38035338140,
+        "catalogResult": "success",
+        "bridgeRun": 38035338073,
+        "bridgeResult": "success",
+        "independentRun": 38035338095,
+        "independentResultAtObservation": "in_progress"
+      },
+      "onSale": false,
+      "deployed": false,
+      "actualBotanicaFileGenerated": false,
+      "ownerAndroidValidated": false,
+      "remaining": "Officially authorized isolated backend and browser, real Botánica V14.7 pilot artifact, two persisted orders, review/final same final URL, actual RSVP g/u persistence and included guest-management handoff."
     }
   },
   "commercialGate": {
@@ -587,10 +629,10 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Stop extending technical infrastructure absent a demonstrated sale-blocking defect. Focus solely on closing Botánica full invitation-to-RSVP flow (including promised guest management) with genuine E2E evidence.",
-    "Preserve THREE independent coexisting catalog products: ONE frozen, GUEST prioritized, STUDIO paused for development but safeguarded for later independent resumption. No sharing or consuming STUDIO resources.",
-    "Use a clearly isolated, legitimately approved staging path that does not block STUDIO or trigger cost; until available, leave V12, checkout, designs and real orders untouched.",
-    "Once approved staging is available, execute Botánica 2 different persisted orders, final URL, private media, review/approval, RSVP g/u, guest management linkage, VEIL regression and owner Android. Only then consider 11/11 and sale; no D03 yet."
+    "NEW immediate artifact step when isolated staging and real token are authorized: use the SINGLE build_catalog_delivery.js with --test-only --flow-url <isolated HTTPS Supabase> and SHA-pinned Botánica V14.7 archived master; never publish internal result. The legacy frozen VEIL builder remains unchanged.",
+    "No GUEST environment may consume STUDIO Free slot or interfere with its reactivation. No live function v12, checkout, frozen design or customer data changes without authorization. State remains NO-GO to real E2E.",
+    "Next substantive milestone: 2 actual Botánica orders in isolated service (one photo-only + two venues + g, one different story + one venue + u); persistent RSVP, real approved review/final parity and signed private images; included guest-management bridge via test license.",
+    "Owner Android and <=5 active minutes, VEIL regression; Botánica 3/11 until actual evidence, then release checkout only with explicit commercial permission. No D03 until 11/11."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
