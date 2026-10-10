@@ -57,7 +57,7 @@ async function boot({publicToken,applyConfig}){
   const x=await r.json().catch(()=>({}));
   if(!r.ok||!x?.ok)throw new Error(x?.error||'request_failed');
   const cfg=decorateConfig(x.order?.config||{});
-  applyConfig(cfg);
+  await applyConfig(cfg);
   node.dataset.state='ready';
   return{order:x.order,config:cfg,recipient:context()};
 }
