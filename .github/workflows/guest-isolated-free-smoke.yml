@@ -43,6 +43,7 @@ jobs:
         run: |
           set -euo pipefail
           supabase init
+          mkdir -p supabase/migrations
           cp guest/qa/isolated_free/001_guest_minimal_fixture.sql supabase/migrations/20261010000100_guest_isolated_ci_fixture.sql
       - name: Boot local isolated Supabase services
         run: |
