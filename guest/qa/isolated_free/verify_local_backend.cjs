@@ -44,9 +44,10 @@ async function req(table,{method='GET',data,query='',role='service'}={}){
  assert.equal(formResult.code,201);assert.equal(formResult.data.length,2);
  const people=[
   {form_id:formResult.data[0].id,client_submission_id:'synthetic-g',guest_key:'synthetic-guest-01',name:'Fictitious Guest',attend:true,payload:{recipient:{g:'synthetic-guest-01'}}},
-  {form_id:formResult.data[1].id,client_submission_id:'synthetic-u',name:'Fictitious Unit',attend:false,payload:{recipient:{u:'synthetic-unit-01'}}}
+  {form_id:formResult.data[1].id,client_submission_id:'synthetic-u',guest_key:null,name:'Fictitious Unit',attend:false,payload:{recipient:{u:'synthetic-unit-01'}}}
  ];
  const submitted=await req('guest_rsvp_submissions',{method:'POST',data:people});
+ if(submitted.code!==201)throw Error('synthetic_rsvp_insert_failed: HTTP '+submitted.code+' code='+String(submitted.data?.code||'none')+' message='+String(submitted.data?.message||'none').slice(0,200));
  assert.equal(submitted.code,201);assert.equal(submitted.data.length,2);
  const persisted=await req('guest_rsvp_submissions',{query:'?select=client_submission_id,payload&order=client_submission_id'});
  assert.equal(persisted.code,200);assert.equal(persisted.data.length,2);
