@@ -1154,7 +1154,7 @@
         "25",
         "29"
       ],
-      "note": "Read Library Entry 31. V13 and v22 live; common customer pages only in guest-independent, not public main. Assets not hosted. Do not claim end-to-end launch.",
+      "note": "See Library Entry 32: GUEST V13 and Stripe v22 live; static original Botánica package assembled and checksum verified, but not published, V14 origin patch staged only, zero new cost. Sales Botánica remain NO-GO 3/11.",
       "additionalSubscriptionCost": 0,
       "customerFrontendCodePublishedToMain": false,
       "genericReviewPage": "guest-review-v1.html",
@@ -1183,6 +1183,49 @@
       "releaseNotYetCertified": true,
       "documentedAt": "Library bitacora Entry 31",
       "noNewCharges": true
+    },
+    "guestStaticHostingStage20261010": {
+      "status": "PREPRODUCTION_STATIC_ARTIFACT_COMPLETE_AND_IN_LIBRARY_NO_PUBLIC_HOST",
+      "packageLibrary": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BOTANICA_V14_7_PAQUETE_HOSTING_GRATUITO_PREPRODUCCION_2026-10-10.zip",
+      "packageSandbox": "/mnt/data/guest_release/GUEST_BOTANICA_V14_7_PAQUETE_HOSTING_GRATUITO_PREPRODUCCION_2026-10-10.zip",
+      "packageBytes": 9133859,
+      "sha256": "dd0729f27b30812a722ba18439335303ce20d7df78a28f14d8341bd8419b86dc",
+      "files": 11,
+      "frozenMasterBytes": 11635635,
+      "masterSha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+      "masterUnchanged": true,
+      "previewEntry": "/botanica/solo_revision_visual.html",
+      "QAOnly": true,
+      "botanicaSaleEnabled": false,
+      "previewPagePublic": false,
+      "hostConnection": "none",
+      "newCloudAccountCreated": false,
+      "newPaidSubscription": false,
+      "hostingPreferred": "Cloudflare Pages Free, 25MiB per file, unlimited static request pricing; provider not connected",
+      "hostingBackup": "Firebase Hosting Spark Free, needs user plugin connection; 360MB/day transfer quota, no paid plan selected",
+      "supabaseAsHTMLHostRejected": "Supabase Edge rewrites text/html to text/plain on shared domain",
+      "code": {
+        "genericStaticPackager": "guest/tools/build_catalog_static_preview.cjs",
+        "noCredentialCI": ".github/workflows/guest-static-stage-package.yml",
+        "newDesignSyntheticTest": "guest/tests/catalog_static_preview_future_design.test.cjs",
+        "CIStageRun": 38075159054,
+        "CISyntheticCatalogRun": 38075770835,
+        "rsvpOriginCrossHostingFixed": true,
+        "guestRsvpOrigin": "https://weddlysmartdesign.github.io",
+        "noDemoNamesFlash": true
+      },
+      "nextDesignRule": "Catalog register visual-only; one shared static packager by --template id; new D03 not started"
+    },
+    "guestOptionalCatalogPublicOrigin20261010": {
+      "status": "V14_PATCH_PREPARED_AND_TESTED_OFFLINE; NOT_DEPLOYED",
+      "source": "guest/tools/allow_catalog_public_origin_v14.cjs",
+      "sourceV13": "guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts -> guest/tools/prepare_test_only_backend_v13.cjs",
+      "isolationQA": "guest-isolated-free-smoke.yml run 38075826054, check conclusion before Cloud release",
+      "operatorSetting": "GUEST_CATALOG_PUBLIC_ORIGIN (empty means old site only; explicit HTTPS origin permits ONLY /guest/catalog-final.html?p=<matching capability>)",
+      "legacySiteEnvNotModified": true,
+      "checkoutV22Unchanged": true,
+      "backendCloudStillVersion": 13,
+      "rollback": "exact V13 source in Library /GUEST_V13_EDGE_GENERADO_VALIDADO_2026-10-10.ts; digest 2bc1fd8d2b6c0831b4e46b3ac8d565cbcc6ada5b10750b9fbaaa14714dd808d5"
     }
   },
   "commercialGate": {
