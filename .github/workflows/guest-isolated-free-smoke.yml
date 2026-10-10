@@ -45,6 +45,9 @@ jobs:
           supabase init
           mkdir -p supabase/migrations
           cp guest/qa/isolated_free/001_guest_minimal_fixture.sql supabase/migrations/20261010000100_guest_isolated_ci_fixture.sql
+          mkdir -p supabase/functions/guest-invitation-flow
+          node guest/tools/prepare_test_only_backend_v13.cjs --input guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts --output supabase/functions/guest-invitation-flow/index.ts
+          test -s supabase/functions/guest-invitation-flow/index.ts
       - name: Boot local isolated Supabase services
         run: |
           set -euo pipefail
@@ -62,6 +65,16 @@ jobs:
             --override-name auth.anon_key=GUEST_LOCAL_ANON_KEY > local-only-env.txt
           node guest/qa/isolated_free/verify_local_backend.cjs local-only-env.txt
           rm -f local-only-env.txt
+      - name: Exercise REAL generated V13 Edge runtime with no remote connection
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          supabase status -o env --override-name api.url=GUEST_LOCAL_API_URL > local-api-env.txt
+          supabase functions serve guest-invitation-flow --no-verify-jwt > /tmp/guest-v13-local-only.log 2>&1 &
+          edge_pid=$!
+          trap 'kill "$edge_pid" 2>/dev/null || true; rm -f local-api-env.txt /tmp/guest-v13-local-only.log' EXIT
+          node guest/qa/isolated_free/verify_v13_runtime.cjs local-api-env.txt
       - name: Stop local-only stack
         if: always()
         shell: bash
