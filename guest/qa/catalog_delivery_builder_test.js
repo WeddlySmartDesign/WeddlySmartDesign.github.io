@@ -32,6 +32,10 @@ fs.writeFileSync(path.join(qaGuest,'GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'),JS
 fs.writeFileSync(path.join(qaGuest,'GUEST_PROJECT_STATUS_V1.json'),JSON.stringify({designs:{
  botanica:{version:'14.7',status:'certification-pending',candidateSha256:candidateHash}
 }}));
+fs.writeFileSync(path.join(qaGuest,'GUEST_CATALOG_OWNER_RENDERERS_V2.json'),JSON.stringify({schemaVersion:'guest-catalog-owner-renderers-v2',templates:{
+ 'veil-light':{id:'veil-light',version:'5.3.3',status:'commercially-frozen',mode:'native',applyApi:'VEIL_APPLY_CONFIG'},
+ botanica:{id:'botanica',version:'14.7',status:'certification-pending',mode:'iframe',src:null,applyApi:'BOTANICA_APPLY_CONFIG'}
+}}));
 const qaScript=path.join(qaGuest,'tools/build_catalog_delivery.js');
 const testOutput=path.join(tmp,'botanica-internal-only.html');
 const args=[candidate,testOutput,'gif1_p_synthetic_no_real_order','botanica'];
