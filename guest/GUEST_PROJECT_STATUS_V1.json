@@ -643,6 +643,54 @@
         "evidenceLibrary": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BOTANICA_V14_7_REAL_FINAL_INTERNAL_QA_MANIFEST_2026-10-10.json",
         "note": "Physical 11.6MB approved candidate used, byte-equal visual renderer checked after stripping only injected wrappers. Do not publish pilot or count as final URL/RSVP E2E."
       }
+    },
+    "noNewPaidToolsProof20261010": {
+      "userRequirement": "ZERO new paid subscriptions or tools until GUEST has real verified demand/sales. STUDIO/ONE/GUEST independent catalog products, STUDIO must be fully resumable.",
+      "decision": "PROCEED_FREE_ONLY",
+      "accountBaseline": {
+        "supabase": "Free existing WeddlySmartDesign project, no new project or branching",
+        "githubRepo": "PUBLIC; standard Ubuntu hosted GitHub Actions minutes free under official public repo policy"
+      },
+      "sources": [
+        "https://supabase.com/pricing",
+        "https://supabase.com/docs/guides/local-development",
+        "https://supabase.com/docs/guides/deployment/ci/testing",
+        "https://docs.github.com/en/actions/reference/runners/github-hosted-runners"
+      ],
+      "proof": {
+        "workflow": ".github/workflows/guest-isolated-free-smoke.yml",
+        "run": 38036388543,
+        "result": "SUCCESS",
+        "date": "2026-10-10",
+        "verifies": [
+          "Public standard github-hosted Ubuntu runner and Docker available",
+          "Supabase CLI setup",
+          "ephemeral supabase init",
+          "FULL disposable Supabase local stack boot and status",
+          "local stack stopped",
+          "no Supabase credentials/project IDs; zero remote mutation"
+        ],
+        "doesNotVerify": [
+          "V13 actual application backend",
+          "Botanica actual persisted E2E",
+          "public URL",
+          "RSVP via real Edge Function",
+          "Android",
+          "future always-free capacity"
+        ]
+      },
+      "nextLocalProof": {
+        "sqlFixture": "guest/qa/isolated_free/001_guest_minimal_fixture.sql",
+        "test": "guest/qa/isolated_free/verify_local_backend.cjs",
+        "target": "2 fake Botanica orders and g/u RSVP persisted via local PostgREST with RLS; synthetic test only",
+        "workflowRun": 38036784375,
+        "stateAtRecord": "running; do not claim PASS until finished",
+        "isolatedDataOnly": true
+      },
+      "financialGuard": "Do not create/upgrade Supabase projects or purchase tools, do not use larger GitHub-hosted runners, do not upload billable artifacts and do not request fee. Existing Free quotas may require reconsideration only after justified demand.",
+      "studioProtection": "No actions on STUDIO; unused Free project slot reserved for STUDIO reactivation.",
+      "publicPlatformCaveat": "GitHub Actions use on standard hosted public runners is free; storage artifacts and larger runners may have separate rules; this workflow uploads none.",
+      "commercialStatus": "Botanica 3/11 gates, none elevated"
     }
   },
   "commercialGate": {
@@ -663,10 +711,10 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "NEW immediate artifact step when isolated staging and real token are authorized: use the SINGLE build_catalog_delivery.js with --test-only --flow-url <isolated HTTPS Supabase> and SHA-pinned Botánica V14.7 archived master; never publish internal result. The legacy frozen VEIL builder remains unchanged.",
-    "No GUEST environment may consume STUDIO Free slot or interfere with its reactivation. No live function v12, checkout, frozen design or customer data changes without authorization. State remains NO-GO to real E2E.",
-    "Next substantive milestone: 2 actual Botánica orders in isolated service (one photo-only + two venues + g, one different story + one venue + u); persistent RSVP, real approved review/final parity and signed private images; included guest-management bridge via test license.",
-    "Owner Android and <=5 active minutes, VEIL regression; Botánica 3/11 until actual evidence, then release checkout only with explicit commercial permission. No D03 until 11/11."
+    "Finish free GitHub-runner Supabase-only local integration proof 38036784375; only report result after it completes, no new services/cost.",
+    "Next real milestone: run V13 actual Edge Function against isolated temporary Postgres/Storage/Auth with fictional orders, review/final/RSVP; do not call production cloud or STUDIO.",
+    "When isolated tests PASS and rollback reviewed, safely integrate V13 into EXISTING Free service without new projects, preserving ONE and historical VEIL orders; requires genuine approved release and no bypass of administrative restrictions.",
+    "Test Botánica real owner Android with two distinct orders and g/u RSVP, measure <=5min and record all 11 gates; do not start D03 until commercialization is safe."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
