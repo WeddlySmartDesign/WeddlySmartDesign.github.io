@@ -660,7 +660,7 @@
       "proof": {
         "workflow": ".github/workflows/guest-isolated-free-smoke.yml",
         "run": 38036388543,
-        "result": "SUCCESS",
+        "result": "SUCCESS for isolated runtime startup (38036388543) and local synthetic order/RSVP persistence (38037124742)",
         "date": "2026-10-10",
         "verifies": [
           "Public standard github-hosted Ubuntu runner and Docker available",
@@ -677,15 +677,43 @@
           "RSVP via real Edge Function",
           "Android",
           "future always-free capacity"
-        ]
+        ],
+        "additionalRun": 38037124742
       },
       "nextLocalProof": {
         "sqlFixture": "guest/qa/isolated_free/001_guest_minimal_fixture.sql",
         "test": "guest/qa/isolated_free/verify_local_backend.cjs",
-        "target": "2 fake Botanica orders and g/u RSVP persisted via local PostgREST with RLS; synthetic test only",
-        "workflowRun": 38036784375,
-        "stateAtRecord": "running; do not claim PASS until finished",
-        "isolatedDataOnly": true
+        "workflow": ".github/workflows/guest-isolated-free-smoke.yml",
+        "run": 38037124742,
+        "result": "SUCCESS on code commit b748ab230d3df8fe74d3293a960e409e1a1f49fa",
+        "checks": [
+          "Supabase local stack with PostgreSQL/Auth/PostgREST starts in a public free Ubuntu runner, closes cleanly",
+          "exactly two purely fictitious template-pinned botanica rows POSTed via local PostgREST and successfully re-read",
+          "separate purely fictitious RSVP person (g) and unit (u) payload rows POSTed and successfully re-read",
+          "unauthenticated/anon direct query cannot read orders or RSVPs (RLS/grants)",
+          "no production or STUDIO credentials, branches or projects used"
+        ],
+        "caveats": [
+          "tests exercise isolated Supabase Data API and storage schema, NOT actual V13 Edge function",
+          "RSVP entries are synthetic direct writes, NOT real authenticated public RSVP endpoint",
+          "fixture schema is intentionally MINIMAL and does not replace production 91 migrations",
+          "no live final URL, signed photos, Android, owner workflow, payment or email verified"
+        ],
+        "intermediateFailures": [
+          {
+            "run": 38036739451,
+            "cause": "Missing ephemeral migrations folder after supabase init; corrected with mkdir -p."
+          },
+          {
+            "run": 38036784375,
+            "cause": "First request returned HTTP 400; diagnostic added."
+          },
+          {
+            "run": 38036959072,
+            "cause": "PostgREST rejected mismatched keys in batch guest_rsvp_submissions; corrected with consistent guest_key property."
+          }
+        ],
+        "noCommercialGatesPromoted": true
       },
       "financialGuard": "Do not create/upgrade Supabase projects or purchase tools, do not use larger GitHub-hosted runners, do not upload billable artifacts and do not request fee. Existing Free quotas may require reconsideration only after justified demand.",
       "studioProtection": "No actions on STUDIO; unused Free project slot reserved for STUDIO reactivation.",
@@ -711,10 +739,10 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Finish free GitHub-runner Supabase-only local integration proof 38036784375; only report result after it completes, no new services/cost.",
-    "Next real milestone: run V13 actual Edge Function against isolated temporary Postgres/Storage/Auth with fictional orders, review/final/RSVP; do not call production cloud or STUDIO.",
-    "When isolated tests PASS and rollback reviewed, safely integrate V13 into EXISTING Free service without new projects, preserving ONE and historical VEIL orders; requires genuine approved release and no bypass of administrative restrictions.",
-    "Test Botánica real owner Android with two distinct orders and g/u RSVP, measure <=5min and record all 11 gates; do not start D03 until commercialization is safe."
+    "Free local Supabase + real PostgREST persistence test PROVEN on public GitHub runner (run 38037124742); no new subscription, cloud branch/project, or STUDIO impact. Do not research/pay Pro for cert.",
+    "Next: use this already-working isolated GH runner to execute exact V13 Edge function lifecycle, with GUEST-only minimal tables/buckets and no secret/live integrations; two distinct Botánica fixture orders + real token review/final and g/u RSVP endpoint, rather than creating another infrastructure.",
+    "Only when actual V13 E2E passes and rollback/legacy VEIL validated: evaluate authorized deployment to existing Free Supabase without touching ONE or STUDIO. Explicit approval required before production mutation. No live V13 now.",
+    "Owner Android mobile review and <=5-min owner touch plus verified 11/11 before selling Botánica or starting D03. Remain inside Supabase Free quotas and GitHub public standard runners; never create paid tools before proven sales."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
