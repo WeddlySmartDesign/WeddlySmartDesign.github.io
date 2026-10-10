@@ -812,7 +812,7 @@
       }
     },
     "guestPublicRsvpRouteIsolation20261010": {
-      "status": "CODE_COMMITTED_QA_BRIDGE_PASS_PUBLIC_E2E_PENDING",
+      "status": "BRANCH_CODE_AND_BROWSER_STUB_QA_PASS_REAL_PUBLISHED_E2E_PENDING",
       "branch": "guest-independent",
       "commit": "9e410343d328aad48c10fd56449139cd65ae1da6",
       "correctedPaths": [
@@ -851,7 +851,36 @@
       "backendV13Deployed": false,
       "botanicaCommercialGates": "3/11 PASS",
       "saleAllowed": false,
-      "libraryEvidence": "GUEST_AUDITORIA_DOCUMENTAL_Y_BITACORA_UNICA_2026-10-09.md Entrada 21"
+      "libraryEvidence": "GUEST_AUDITORIA_DOCUMENTAL_Y_BITACORA_UNICA_2026-10-09.md Entrada 21",
+      "latestCodeCommit": "6c97d6451be464487576e736dcc856b59f14dc73",
+      "provenanceRegressionFix": {
+        "commit": "030ea268121450e1c7aa4aaf110b4b8ca35ae30e",
+        "failureReason": "exact ONE byte parity initially rejected approved GUEST-only personalization API switch",
+        "allowedDifference": "ONE to GUEST personalization endpoint only; all other bytes identical",
+        "independentQARun": 38056569251,
+        "independentQA": "success",
+        "catalogRun": 38056569322,
+        "catalogQA": "success"
+      },
+      "browserStubQA": {
+        "file": "guest/qa/catalog_public_rsvp_browser_test.js",
+        "workflow": ".github/workflows/guest-independent-qa.yml",
+        "codeCommit": "6c97d6451be464487576e736dcc856b59f14dc73",
+        "scenarios": [
+          "person g Essential es hash and t",
+          "family u Signature en hash and t"
+        ],
+        "network": "all cloud calls stubbed locally; no real backend calls",
+        "independentQARun": 38056801677,
+        "independentQA": "success",
+        "browserJob": "b6-invitation-rsvp",
+        "browserStep": "B6.3a",
+        "browserStepResult": "success",
+        "catalogRun": 38056801614,
+        "catalogQA": "success",
+        "actualAndroid": false,
+        "actualHttpsCustomerLink": false
+      }
     }
   },
   "commercialGate": {
