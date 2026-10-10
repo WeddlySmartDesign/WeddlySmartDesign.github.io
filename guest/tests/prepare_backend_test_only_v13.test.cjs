@@ -25,6 +25,29 @@ assert.match(patched,/invalid_invitation_config','invitation_template_pin_mismat
 assert.match(patched,/resolved_config:order.mode==='test'\?order.resolved_config:config/);
 assert.match(patched,/if\(!inviteUrl\)return json\(\{ok:false,error:'missing_invitation_url'\},400\);/,'V13 must reject all deliveries with no final URL');
 assert.ok(!patched.includes("if(order.mode==='production'&&!inviteUrl)"),'Test orders must not bypass URL requirement');
+// Execute the ACTUAL generated V13 delivery URL guard rather than only matching source.
+const guardMatch=patched.match(/if\(!inviteUrl\)return json\(\{ok:false,error:'missing_invitation_url'\},400\);[\s\S]*?if\(finalUrl\.protocol!=='https:'[\s\S]*?return json\(\{ok:false,error:'invalid_invitation_url'\},400\);/);
+assert(guardMatch,'shared V13 deliver guard must include scheme, configured origin and credentials checks');
+const compiledGuard=stripTypeScriptTypes('function __check(){'+guardMatch[0]+'\nreturn {ok:true};}');
+const judge=new Function('inviteUrl','site','URL','json',compiledGuard+';return __check();');
+const site=()=> 'https://weddlysmartdesign.github.io';
+const json=(obj,status)=>({...obj,status});
+for(const url of [
+ 'https://weddlysmartdesign.github.io/guest/invitacion.html',
+ 'https://weddlysmartdesign.github.io/guest/invitacion.html?rt=fake&g=someone',
+ 'https://weddlysmartdesign.github.io/guest/invitacion.html#record'
+]){assert.equal(judge(url,site,URL,json).ok,true,'legitimate origin and HTTPS required: '+url)}
+for(const url of [
+ '',
+ 'http://weddlysmartdesign.github.io/guest/invitacion.html',
+ 'https://weddlysmartdesign.github.io.evil.example/guest/invitacion.html',
+ 'https://example.com/botanica',
+ 'javascript:alert(1)',
+ '/guest/invitacion.html',
+ 'https://user:secret@weddlysmartdesign.github.io/guest/invitacion.html'
+]){assert.equal(judge(url,site,URL,json).ok,false,'untrusted/missing final URL rejected: '+url)}
+assert.equal(judge('https://staging.guest.invalid/botanica',()=> 'https://staging.guest.invalid',URL,json).ok,true,'legitimate isolated staging origin supported');
+assert.equal(judge('https://weddlysmartdesign.github.io/guest/botanica',()=> 'https://staging.guest.invalid',URL,json).ok,false,'staging may not accidentally deliver production site URLs');
 assert.match(patched,/checkInvitationConfig\(config,order\);/);
 assert.match(patched,/checkInvitationRead\(hydrateConfig\(order.resolved_config/);
 assert.match(patched,/if\(!resolved\)throw new Error\('missing_signed_asset'\)/);
