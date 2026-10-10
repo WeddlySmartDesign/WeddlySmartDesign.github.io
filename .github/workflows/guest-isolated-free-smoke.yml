@@ -46,7 +46,8 @@ jobs:
           mkdir -p supabase/migrations
           cp guest/qa/isolated_free/001_guest_minimal_fixture.sql supabase/migrations/20261010000100_guest_isolated_ci_fixture.sql
           mkdir -p supabase/functions/guest-invitation-flow
-          node guest/tools/prepare_test_only_backend_v13.cjs --input guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts --output supabase/functions/guest-invitation-flow/index.ts
+          node guest/tools/prepare_test_only_backend_v13.cjs --input guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts --output /tmp/guest-v13-pristine-ci.ts
+          node guest/qa/isolated_free/patch_local_signed_https.cjs /tmp/guest-v13-pristine-ci.ts supabase/functions/guest-invitation-flow/index.ts
           test -s supabase/functions/guest-invitation-flow/index.ts
       - name: Boot local isolated Supabase services
         run: |
