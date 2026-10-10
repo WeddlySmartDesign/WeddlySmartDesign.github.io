@@ -27,7 +27,8 @@ async function show({order,config,host,registry,signal}){
  const url=sameOrigin(spec.src);
  const iframe=document.createElement('iframe');iframe.className='guest-catalog-owner-preview';iframe.title='Vista previa '+id;
  iframe.setAttribute('referrerpolicy','no-referrer');iframe.setAttribute('loading','eager');
- iframe.style.cssText='display:block;width:100%;height:100%;border:0;';
+ // Never flash the frozen demonstration names while a customer's config is loading.
+ iframe.style.cssText='display:block;width:100%;height:100%;border:0;visibility:hidden;';
  host.replaceChildren(iframe);
  await new Promise((resolve,reject)=>{
   let completed=false,timer;
@@ -46,7 +47,7 @@ async function show({order,config,host,registry,signal}){
  if(!iframe.isConnected)fail('preview_detached');
  let apply;try{apply=iframe.contentWindow?.[spec.applyApi]}catch{if(iframe.isConnected)iframe.remove();fail('iframe_cross_origin')}
  if(typeof apply!=='function'){iframe.remove();fail('iframe_adapter_missing:'+id)}
- try{apply(structuredClone(config))}catch{iframe.remove();fail('iframe_apply_failed:'+id)}
+ try{apply(structuredClone(config));iframe.style.visibility='visible'}catch{iframe.remove();fail('iframe_apply_failed:'+id)}
  return {mode:'iframe',id,close(){if(iframe.isConnected)iframe.remove()}};
 }
 window.GUEST_CATALOG_OWNER_VIEWER_V2=Object.freeze({version:'2.0.0',show});
