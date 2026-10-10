@@ -5,6 +5,8 @@ on:
     paths:
       - .github/workflows/guest-isolated-free-smoke.yml
       - guest/qa/isolated_free/**
+      - guest/tools/allow_catalog_public_origin_v14.cjs
+      - guest/tools/prepare_test_only_backend_v13.cjs
   workflow_dispatch:
 
 permissions:
@@ -47,7 +49,8 @@ jobs:
           cp guest/qa/isolated_free/001_guest_minimal_fixture.sql supabase/migrations/20261010000100_guest_isolated_ci_fixture.sql
           mkdir -p supabase/functions/guest-invitation-flow
           node guest/tools/prepare_test_only_backend_v13.cjs --input guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts --output /tmp/guest-v13-pristine-ci.ts
-          node guest/qa/isolated_free/patch_local_signed_https.cjs /tmp/guest-v13-pristine-ci.ts supabase/functions/guest-invitation-flow/index.ts
+          node guest/tools/allow_catalog_public_origin_v14.cjs --input /tmp/guest-v13-pristine-ci.ts --output /tmp/guest-v14-origin-guard-ci.ts
+          node guest/qa/isolated_free/patch_local_signed_https.cjs /tmp/guest-v14-origin-guard-ci.ts supabase/functions/guest-invitation-flow/index.ts
           test -s supabase/functions/guest-invitation-flow/index.ts
           mkdir -p supabase/functions/guest-rsvp
           cp guest/qa/isolated_free/edge_guest_rsvp_v4_readonly_snapshot.ts supabase/functions/guest-rsvp/index.ts
@@ -76,7 +79,7 @@ jobs:
           umask 077
           supabase status -o env --override-name api.url=GUEST_LOCAL_API_URL --override-name auth.anon_key=GUEST_LOCAL_ANON_KEY --override-name auth.service_role_key=GUEST_LOCAL_SERVICE_ROLE_KEY > local-api-env.txt
           supabase status -o env >> local-api-env.txt
-          printf 'WEDDLY_SITE_ORIGIN=https://guest-ci-local.invalid\\n' > local-site-env.txt
+          printf 'WEDDLY_SITE_ORIGIN=https://guest-ci-local.invalid\\nGUEST_CATALOG_PUBLIC_ORIGIN=https://guest-static-qa.pages.dev\\n' > local-site-env.txt
           supabase functions serve --no-verify-jwt --env-file local-site-env.txt > /tmp/guest-v13-local-only.log 2>&1 &
           edge_pid=$!
           trap 'kill "$edge_pid" 2>/dev/null || true; rm -f local-api-env.txt local-site-env.txt /tmp/guest-v13-local-only.log' EXIT
@@ -88,12 +91,12 @@ jobs:
           fi
           node guest/qa/isolated_free/verify_rsvp_actual_edge.cjs local-api-env.txt
           node guest/qa/isolated_free/verify_v13_member_handoff_actual_rsvp.cjs local-api-env.txt
-      - name: Save V13 source ONLY after real isolated runtime PASS
+      - name: Save V14 source ONLY after real isolated runtime PASS
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: guest-v13-validated-source-review-only
-          path: /tmp/guest-v13-pristine-ci.ts
+          name: guest-v14-origin-guard-validated-source-review-only
+          path: /tmp/guest-v14-origin-guard-ci.ts
           if-no-files-found: error
           retention-days: 1
       - name: Stop local-only stack
