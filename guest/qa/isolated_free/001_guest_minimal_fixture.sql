@@ -82,3 +82,21 @@ grant all on public.licenses to service_role;
 -- These are local-only buckets; NOT copied from production, NOT made publicly reachable.
 insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
 values ('guest-invitation-uploads','guest-invitation-uploads',false,15728640,ARRAY['image/jpeg','image/png','image/webp','image/heic','image/heif']);
+
+-- RSVP integration uses the real GUEST guest_app_state versioned update contract.
+-- Never insert real wedding data. This exists ONLY in disposable local CI.
+create table public.guest_app_state (
+ wedding_id uuid primary key,
+ version integer not null default 0,
+ state jsonb not null default '{}'::jsonb,
+ updated_at timestamptz not null default now()
+);
+insert into public.guest_app_state(wedding_id,version,state)
+values ('22222222-3333-4444-8555-666666666666',0,
+ '{"guests":{
+   "fictional-g-1":{"name":"Fictitious Person","invitationUnitId":"fictional-u-1","invitationUnitLabel":"Fictitious Household"},
+   "fictional-g-2":{"name":"Fictitious Relative","invitationUnitId":"fictional-u-1","invitationUnitLabel":"Fictitious Household"}
+ }}'::jsonb);
+alter table public.guest_app_state enable row level security;
+revoke all on public.guest_app_state from anon,authenticated;
+grant all on public.guest_app_state to service_role;
