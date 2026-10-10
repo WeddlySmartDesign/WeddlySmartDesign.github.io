@@ -4,6 +4,16 @@
 **Repositorio:** `WeddlySmartDesign/WeddlySmartDesign.github.io` · **rama exclusiva:** `guest-independent` · **fase:** sistema visual común V2 desarrollado y probado localmente, **no integrado aún en producción**.  
 **Objetivo:** retomar GUEST en otro chat, otra sesión o cualquier diseño 03–1000 **sin búsqueda histórica ni repetición de instrucciones**.
 
+## Dirección de catálogo confirmada por la propietaria — 10/10/2026
+
+**Regla superior de negocio: ONE, GUEST y STUDIO deben COEXISTIR como productos autónomos del catálogo WeddlySmartDesign.** La decisión de APARCAR STUDIO fue de **secuencia**, no de abandono: es un macroproyecto B2B para planners, que debe poder reanudarse sin rehacer ni perder código/datos ni adquirir una suscripción por culpa de GUEST. ONE es el producto para parejas YA TERMINADO y congelado. GUEST es el producto independiente que se comprará por su **invitación premium**, con la gestión de invitados/RSVP ya desarrollada como valor incluido y posterior; se concibió como una extensión comercial acotada del motor existente, NO como otro STUDIO o nuevo ERP.
+
+**Corrección de rumbo inmediata:** GUEST se ha expandido más de lo razonable. La prioridad NO es prolongar sin fin infraestructura/QA hipotética, sino completar la **única ruta comercial realmente necesaria**: elección de invitación → cuestionario estandarizado → diseño automático reutilizable → preview/aprobación → entrega final mediante URL válida → respuesta RSVP real y gestión prometida. Mantener los gates de certificación existentes (Botánica **3/11 PASS** en el último estado verificado) sin falsearlos ni redefinir el compromiso con la pareja. Resolver únicamente fallos demostrados que impidan ese recorrido; otros extras, automatizaciones, nuevas pantallas o diseño 03–1000 se aplazan. VEIL LIGHT y Botánica visual aprobada continúan congelados; ONE/STUDIO intocables. La intervención de la propietaria debe seguir reducida a validación móvil.
+
+**Regla de recursos compartidos:** no destinar STUDIO a staging ni ocupar/costear infraestructura que impida su reanudación. Mantener los tres productos **coexistentes**, aunque se desarrollen **por fases**. La autorización para crear un proyecto Supabase nuevo fue condicional y NO vigente sin demostración de compatibilidad con la vuelta de STUDIO y consentimiento específico. No crear recursos, cobrar o publicar sobre esa base.
+
+**Fuentes persistentes:** `guest/GUEST_PROJECT_STATUS_V1.json.productPortfolioDirection20261010` y **Entrada 15** en la bitácora ÚNICA de Biblioteca `/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_AUDITORIA_DOCUMENTAL_Y_BITACORA_UNICA_2026-10-09.md`. Este acuerdo de dirección tiene prioridad sobre propuestas anteriores de añadir nuevas funciones, proyectos o QA periférica, pero NO habilita despliegues ni modifica contratos/gates ya aprobados.
+
 > **LEER ESTE ARCHIVO EN PRIMER LUGAR.** No interpretar nombres como `FINAL`, `FROZEN`, `SEALED` o `PASS` sin comprobar **a qué capa pertenecen**. Un diseño visual aprobado, un paquete técnico QA, un pipeline de producción y una plantilla certificada para venta son estados distintos. Las afirmaciones de este documento son un *snapshot* a fecha indicada: contrastar cualquier estado dinámico con GitHub, el registro de evidencias y el servicio desplegado antes de escribir o publicar.
 
 
