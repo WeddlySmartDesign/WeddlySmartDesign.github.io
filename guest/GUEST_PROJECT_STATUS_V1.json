@@ -1098,6 +1098,60 @@
         "costEUR": 0
       },
       "botanicaCommercialGate": "3/11 PASS, 8 PENDING; NO-GO"
+    },
+    "guestCloudCommercialBridgeRelease20261010": {
+      "status": "PUBLISHED_BACKEND_FUNCTIONS_ONLY_NO_PUBLIC_SALE",
+      "supabaseProject": "dnjsxequwgtyyauuofxj",
+      "invitationFlow": {
+        "version": 13,
+        "sha256": "2bc1fd8d2b6c0831b4e46b3ac8d565cbcc6ada5b10750b9fbaaa14714dd808d5",
+        "generatedSourceSha256": "5f72cbf09dfa159815920f9f094e09e56ce7ed502b6d59224e881139d1e42a30",
+        "candidateBytes": 65519,
+        "generatedFrom": "guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts",
+        "githubActionsFullRun": 38071853898,
+        "githubActionsResult": "success",
+        "approvedLocalSmoke": "two fictional Botanica orders, real local Supabase persisted RSVP, paid VEIL synthetic license bridge",
+        "livePostEndToEnd": false,
+        "rollbackSource": "guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts",
+        "rollbackCloudDigest": "69ef41f9867eb048b052632141be9b8e5ea53aa78a63ade1883e1e88da7b28ac"
+      },
+      "stripeCheckout": {
+        "version": 21,
+        "sha256": "083a61f9549f2758f07577a67f0efc9417621ba9e7482edb6465d32f75be4b6f",
+        "committedCode": "da6a4b3627e321227fbf01b124661a9054ee5957",
+        "testCode": "2ceeb4d9006f36dabed1cd8dc5d79db05d2e55ef",
+        "catalogSelectionInput": "catalogTemplateId",
+        "catalogPriceOperatorAllowlist": "GUEST_CATALOG_SALE_OPTIONS; denied unless status commercially-frozen, edition and price match",
+        "existingLegacyOrdersPreserved": true,
+        "liveRealStripePaymentTest": false,
+        "rollbackGithubCommit": "a2f805074165dab4f7dce7127817cdd11dfb9cc2",
+        "rollbackBlobSha": "9a1704d92a8f45d7b6278222d1edada755f58960",
+        "rollbackCloudDigest": "c81575ca422e05c943f029ce5a10f3b382676b718529b4b68231abc7a0ba88ce"
+      },
+      "unrelatedCloudVersionsVerifiedUnchanged": {
+        "wedding-sync": 18,
+        "weddly-app": 70,
+        "guest-rsvp": 4,
+        "guest-license-access": 3,
+        "guest-orders-admin": 3
+      },
+      "liveOrdersObserved": "Only three VEIL LIGHT test orders, two delivered legacy without schemaVersion; no production rows at release read",
+      "botanicaSaleAllowed": false,
+      "botanicaStatus": "certification-pending",
+      "gate": "3/11 formal PASS, 8 PENDING: no real published invitation or Android",
+      "ownerAndroidVerified": false,
+      "publicHttpsFinalInvitation": false,
+      "liveStripeToOrderToRsvpE2E": false,
+      "customerFrontendCatalogPinWired": false,
+      "v13GeneratedLibrary": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_V13_EDGE_GENERADO_VALIDADO_2026-10-10.ts",
+      "oldTimelineEntriesSuperseded": [
+        "21",
+        "22",
+        "25",
+        "29"
+      ],
+      "note": "V13 and v21 published as GUEST-only functions; no direct changes to ONE/STUDIO/VEIL UI/repo/main; production origin and signed media with real public URLs still blocked. Do not unlock pending Botánica.",
+      "additionalSubscriptionCost": 0
     }
   },
   "commercialGate": {
@@ -1105,8 +1159,8 @@
     "requiredPerNewTemplate": 11,
     "currentBotanicaPass": 3,
     "currentBotanicaPending": 8,
-    "realOrderE2e": "NOT EXECUTED",
-    "recipientRsvpPersistence": "NOT EXECUTED",
+    "realOrderE2e": "NOT EXECUTED IN LIVE CLOUD",
+    "recipientRsvpPersistence": "PASS in isolated local Supabase; NOT VERIFIED LIVE POST/GET",
     "ownerAndroid": "NOT CERTIFIED",
     "ownerTouchMaxMinutes": 5
   },
