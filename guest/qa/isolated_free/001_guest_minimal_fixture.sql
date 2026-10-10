@@ -66,3 +66,19 @@ alter table public.guest_rsvp_forms enable row level security;
 alter table public.guest_rsvp_submissions enable row level security;
 revoke all on public.guest_invitation_orders,public.guest_rsvp_forms,public.guest_rsvp_submissions from anon,authenticated;
 grant all on public.guest_invitation_orders,public.guest_rsvp_forms,public.guest_rsvp_submissions to service_role;
+
+-- Pseudo-owner for realistic manager auth: disposable PostgreSQL only; no real licenses.
+create table public.licenses(
+ id uuid primary key,
+ source text not null default 'manual',
+ status text not null default 'active',
+ metadata jsonb not null default '{}'::jsonb
+);
+insert into public.licenses(id,source,status,metadata)
+ values('11111111-2222-4333-8444-555555555555','internal_owner','active','{"grant_type":"owner"}'::jsonb);
+alter table public.licenses enable row level security;
+revoke all on public.licenses from anon,authenticated;
+grant all on public.licenses to service_role;
+-- These are local-only buckets; NOT copied from production, NOT made publicly reachable.
+insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
+values ('guest-invitation-uploads','guest-invitation-uploads',false,15728640,ARRAY['image/jpeg','image/png','image/webp','image/heic','image/heif']);
