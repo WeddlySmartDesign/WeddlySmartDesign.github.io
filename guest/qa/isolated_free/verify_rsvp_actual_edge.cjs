@@ -33,7 +33,7 @@ async function edgeCall({method='GET',token,recipientType='',recipient='',data})
  assert.equal(grouped.status,201);
  const dup=await edgeCall({method:'POST',data:{action:'submit',token:tokens[0],guest_key:'fictional-g-1',name:'Fictitious Person',attend:true,client_submission_id:'synthetic-person-submit-1'}});
  assert.equal(dup.status,200);assert.equal(dup.data.duplicate,true);
- const stored=await rest('guest_rsvp_submissions',{query:'?select=client_submission_id,guest_key,attend&order=client_submission_id'});
+ const stored=await rest('guest_rsvp_submissions',{query:'?select=client_submission_id,guest_key,attend&form_id=in.('+forms.map(f=>f.id).join(',')+')&order=client_submission_id'});
  assert.equal(stored.length,2,'duplicate must not create another RSVP record');
  assert(stored.some(x=>x.guest_key==='fictional-g-1'&&x.attend===true));
  assert(stored.some(x=>x.guest_key==='fictional-g-2'&&x.attend===false));
