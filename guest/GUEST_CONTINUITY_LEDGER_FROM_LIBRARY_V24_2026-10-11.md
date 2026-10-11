@@ -74,6 +74,12 @@ Fuente estructurada obligatoria: `guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json
 5. **`owner-touch`:** medir minutos activos de preparación/aprobación que realiza propietaria en un pedido real (no tiempo de ejecución de CI ni espera del chat); máximo objetivo definido en estado JSON. No inventar un tiempo.
 6. Tras cada comprobación, agregar entrada GitHub append-only, actualizar gates/estado estrictamente con evidencia, QA en verde. **Solo** con 11/11 y autorización comercial expresa se podrá desbloquear Botánica. El contrato de futuros diseños ya es `HTML visual + visual-plugin.json + registro + QA`, sin rehacer motor/checkout/infraestructura.
 
+## 5 bis. Entrada 53 — revisión/final, bloqueo RSVP TEST (11/10/2026)
+
+[**Entrada 53: hechos, QA y siguiente acción**](GUEST_BOTANICA_ENTRY_53_PARITY_RSVP_EVIDENCE_2026-10-11.md). **7/11 PASS; 4 PENDING, NO-GO.** Estado real: 4 Botánica TEST `delivered` con config correcta, 0 licencias. Backend `create_test` **siempre** crea pedidos sin `license_id`, mientras el envío personalizado `active_for_member` exige coincidencia con licencia y miembro activo. La invitación con solo `?p=` no tiene token `rt` y el botón RSVP no constituye persistencia. No enlazar mediante SQL ni modificar licencias ajenas. Paridad: mismas configuraciones persistidas para revisión/final y visor genérico, pero el **resultado Cloud autorizado todavía no se ha comprobado**.
+
+Se añadió diagnóstico **read-only** revisión vs final a la recuperación privada de la propietaria, sin nuevas creaciones, y un QA estático de paridad. [QA catálogo previo 38143153914](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38143153914) SUCCESS, más ejecución de QA independiente a verificar en HEAD. **Siguiente paso:** validar camino legítimo de licencia GUEST TEST y receptor RSVP persona/unidad, sin afectar ONE, licencia comercial, `main` ni master visual. Después renderer gestor y tiempo activo. **La Entrada 53 NO ha sido sincronizada en Biblioteca v24**, no reintentar la sobrescritura fallida.
+
 ## 6. Restricciones permanentes
 
 - NO tocar **ONE, ONE Partner, STUDIO, VEIL LIGHT congelado, `main`, master V14.7 Botánica** ni credenciales/servicios ajenos.
