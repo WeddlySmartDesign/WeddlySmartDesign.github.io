@@ -70,9 +70,9 @@
           "why": "RSVP helper unit tests pass; no live state persistence test."
         },
         "owner-android": {
-          "pass": false,
-          "source": "guest/GUEST_D02_BOTANICA_CHECKPOINT_V14_7_2026-10-09.md",
-          "why": "Chromium local screenshots cannot replace owner's Android gate."
+          "pass": true,
+          "source": "guest/GUEST_BOTANICA_ENTRY_50_OWNER_ANDROID_VISUAL_OK_2026-10-11.md",
+          "why": "Owner confirmed both final TEST invitations were visually good on physical Android, with video reviews for one-venue custom story and two-venue story-none. RSVP, parity, media quality and owner touch remain separately gated."
         },
         "owner-touch": {
           "pass": false,
