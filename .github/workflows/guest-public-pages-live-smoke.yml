@@ -32,5 +32,13 @@ jobs:
           test -z "$STRIPE_SECRET_KEY"
           test -z "$CLOUDFLARE_API_TOKEN"
           test -z "$VERCEL_TOKEN"
+      - name: Probe Cloudflare canonical static routes without following redirects
+        shell: bash
+        run: |
+          set -euo pipefail
+          for path in / /guest/catalog-questionnaire.html /guest-review-v1.html /guest/catalog-final.html /guest/catalog-assets/botanica/14.7/index.html /guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json; do
+            echo "PROBE $path"
+            curl --silent --show-error --head --max-time 15 --write-out 'HTTP_CODE:%{http_code} REDIRECT:%{redirect_url} SIZE:%{size_download}\n' "https://guest-weddlysmartdesign.pages.dev$path" | grep -E '^(HTTP/|location:|Location:|content-type:|Content-Type:|HTTP_CODE:)' || true
+          done
       - name: Check production Pages external HTTPS and exact frozen assets
         run: node guest/qa/public_cloudflare_pages_live_smoke.cjs
