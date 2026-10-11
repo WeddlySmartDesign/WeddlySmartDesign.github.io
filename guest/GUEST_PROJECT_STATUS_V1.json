@@ -1870,10 +1870,10 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Runtime foundation now PASS: Free public GitHub local Supabase run 38052989153 exercised candidate V13 TWO fictional Botánica lifecycle orders and ACTUAL guest-rsvp v4 person/unit routes with persisted records and guest_app_state; no new paid service or STUDIO impact.",
-    "Next only genuine P0 gaps: validate Botánica delivery on reachable HTTPS host with actual signed private media and exact origin, connected RSVP g/u recipient link from that final URL, plus license-based management handoff; do not conflate fake .invalid URL with sellable client link.",
-    "Before any production V13 deploy to existing Free Supabase, perform VEIL LIGHT v12->v13 regression and rollback strategy, permission/tenant isolation/security inspection and explicit approval; preserve ONE, Partner, STUDIO and frozen designs.",
-    "Owner Android acceptance of real deliverable invitation and <=5 minutes measured, then 11/11 certification and D03 can begin. Until then Botánica remains 3/11, sale NO-GO."
+    "Primero validar en Android físico el Centro V4.7 integrado oficial descargado de Biblioteca: importar con 'Actualizar centro', abrir un pedido Botánica TEST entregado existente, Ver invitación y regresar con CENTRO GUEST; sin crear pedidos, alterar master ni repetir RSVP o medición.",
+    "Con evidencia de renderer Android auténtico y QA en mismo HEAD, evaluar --admit botanica, registrar 11/11 solo si satisface contrato. La certificación no autoriza publicación, Stripe ni envíos: solicitar autorización comercial expresa aparte.",
+    "Para D03+ validar el Centro genérico remoto con backend/visor reales antes de afirmar incorporación plug-and-play en APK; preservar contratos compartidos sin programar casos por plantilla.",
+    "Catálogo total pendiente: registrar y diseñar D03-D06 cuando Botánica y el Centro estén cerrados; mínimo catálogo 5, objetivo 6. No confundir 10/11 Botánica con lanzamiento del catálogo completo."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
@@ -2025,15 +2025,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 66,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_66_V47_VALIDATION_AND_GENERIC_EXTENSION_2026-10-11.md",
+    "latestEntry": 67,
+    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_67_PENDING_AUDIT_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Read Entries 66 and 65. Download official integrated V4.7 Android center from Library or verified sandbox file. Owner installs through existing GUEST Mobile Center APK Update center, tests already-delivered Botánica TEST in actual APK (Ver invitación, back to center; review/final). Do NOT count renderer PASS before owner Android evidence and QA. Generic remote V4.7 is experimental only; no other products or master edits. State 10/11, NO-GO.",
+    "resumption": "Entrada 67: 10/11 PASS, único gate pendiente renderer APK Android V4.7 oficial integrado. Importar HTML de Biblioteca, abrir pedido Botánica TEST ya entregado, Ver invitación y volver a CENTRO GUEST. No repetir pedidos/RSVP/tiempo ni usar V4.7 remoto experimental para esta prueba. Si PASS genuino, gate de admisión y QA; publicación/venta solo con permiso comercial separado. D03 no iniciado.",
     "commercialStatus": "BOTANICA_NO_GO",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
@@ -2043,6 +2043,12 @@
     "githubEntry54InLibraryVerified": false,
     "githubEntry55": "guest/GUEST_BOTANICA_ENTRY_55_CLOUD_RSVP_OWNER_ANDROID_2026-10-11.md",
     "githubEntry55InLibraryVerified": false,
-    "githubEntry62": "guest/GUEST_BOTANICA_ENTRY_62_OWNER_REAL_PARITY_ANDROID_2026-10-11.md"
+    "githubEntry62": "guest/GUEST_BOTANICA_ENTRY_62_OWNER_REAL_PARITY_ANDROID_2026-10-11.md",
+    "auditEntry67": "guest/GUEST_BOTANICA_ENTRY_67_PENDING_AUDIT_2026-10-11.md",
+    "auditBaselineHead": "f185630fe63ec9ec190353b7fc0c3345ad0d52e4",
+    "auditBaselineQARuns": [
+      38159610788,
+      38159610883
+    ]
   }
 }

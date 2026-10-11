@@ -143,3 +143,8 @@ Consultar [auditoría de V4.6 real](GUEST_BOTANICA_ENTRY_57_CENTER_REAL_V46_AUDI
 - No llamar “terminado” ni “listo para venta” si alguno de los cuatro gates comerciales sigue pendiente.
 
 **Punto de continuidad inequívoco:** 7/11 PASS, 4 PENDING (renderer, review-final-parity, recipient-rsvp, owner-touch), Botánica NO-GO, próximo trabajo RSVPs auténticos vinculados a GUEST TEST. Bitácora Biblioteca **v24 intacta** + archivos GitHub individualizados y este índice, sin depender de este chat.
+
+
+## Entrada 67 — auditoría de pendientes y corrección de instrucciones obsoletas (11/10/2026)
+
+[**Registro auditable actual**](GUEST_BOTANICA_ENTRY_67_PENDING_AUDIT_2026-10-11.md). HEAD de partida `f185630fe63e` con [catálogo 38159610788](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38159610788) y [QA independiente 38159610883](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38159610883) SUCCESS. **10/11 PASS; renderer dentro de APK V4.7 importado realmente pendiente, NO-GO, D03 no empezado.** Se corrigió exclusivamente `nextOperations` antiguo 3/11 en el estado JSON y punteros de continuidad. V4.7 oficial importable en Biblioteca, puente genérico remoto experimental; publicación comercial y resto de diseños permanecen separados. No repetir pedidos ni Supabase, RSVP, vídeos ni medición. Sin tocar producto, gates, master, congelados, checkout ni Biblioteca v24.
