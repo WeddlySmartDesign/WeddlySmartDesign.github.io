@@ -23,7 +23,7 @@ for(const re of [
  /'review_sent'\)\{show\('Esta medición ya terminó/,
  /load|prepare\.addEventListener\('click',prepare\)/
  ])assert.match(html,re);
-assert.equal((html.match(/name="reviewCheck"/g)||[]).length,5,'exactly five mandatory mobile review checks');
+assert.equal((html.match(/<input type="checkbox" name="reviewCheck"/g)||[]).length,5,'exactly five mandatory mobile review checks');
 assert.match(html,/12\/06\/2027/,'must show expected date explicitly');
 assert.match(html,/Historia ficticia para una medición de propietario\./,'must show expected story');
 assert.match(html,/Lugar ficticio para medición/,'must show expected venue');
