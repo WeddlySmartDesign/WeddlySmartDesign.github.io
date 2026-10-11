@@ -1,5 +1,9 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 75 — V4.9 ABRE Y REGRESA AL CENTRO EN ANDROID REAL (11/10/2026)
+
+[**Aceptar navegación sin repetir prueba**](GUEST_BOTANICA_ENTRY_75_V49_ANDROID_RETURN_2026-10-11.md). La propietaria confirma que **«Se ve la invitación y al pulsar a centro guest se vuelve»** en el Centro V4.9. Apertura/retorno PASS según confirmación directa (sin vídeo del clic). Botánica 11/11 técnico queda cerrado. **Pendiente independiente: visor remoto genérico para D03+**; los pedidos anteriores usan el renderizador incrustado. Venta y Stripe no autorizados. Menú superpuesto y temporizador de revisión enviada agrupados para corrección futura, sin nuevas pruebas Botánica.
+
 ## ENTRADA 74 — V4.9 ANDROID INSTALADO, SHELL/PEDIDOS VISIBLES; RENDER GENÉRICO PENDIENTE (11/10/2026)
 
 [**Evidencia, defectos y límite de validación**](GUEST_BOTANICA_ENTRY_74_V49_ANDROID_CENTER_OWNER_VISUAL_2026-10-11.md). Tres capturas de Android confirman Centro V4.9 real, selector, varios pedidos TEST y panel. Se detecta menú flotante sobre el título y cronómetro que puede sumar estando el pedido en «Revisión enviada», por no basarse en el estado Cloud si se abre desde otra sesión; **no repetir la medición anterior**. **V4.9 shell PASS, pero no se ha visto pulsar «Ver invitación» ni se ha ejercido D03+ remoto**. Cloudflare YA tiene GitHub autodeploy conectado y compilación correcta; **no pedir subir ZIP manual**, falta live smoke de bytes actuales. Botánica 11/11 técnico sigue PASS, venta NO, D03 sin empezar.

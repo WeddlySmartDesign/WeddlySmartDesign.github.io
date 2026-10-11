@@ -183,3 +183,8 @@ Consultar [auditoría de V4.6 real](GUEST_BOTANICA_ENTRY_57_CENTER_REAL_V46_AUDI
 ## Entrada 74 — V4.9 importado en Android: aceptación parcial del shell (11/10/2026)
 
 [Detalle](GUEST_BOTANICA_ENTRY_74_V49_ANDROID_CENTER_OWNER_VISUAL_2026-10-11.md). Tres capturas propietaria muestran V4.9 instalado, selector pedidos y estados. Motor genérico remoto no activado, retorno V4.9 no filmado. Menú solapa título; contador crece en review_sent si carece de marca local de cierre: corregir al consolidar próxima versión, sin invalidar benchmark V4.8. Cloudflare YA autodespliega la rama: no subir ZIP. Falta smoke externo actual. No vender ni repetir D02.
+
+
+## Entrada 75 — navegación V4.9 Android confirmada (11/10/2026)
+
+[Expediente](GUEST_BOTANICA_ENTRY_75_V49_ANDROID_RETURN_2026-10-11.md). Propietaria confirma apertura de Botánica y vuelta al Centro en V4.9 real. PASS shell/navegación; el clic no fue grabado. No demuestra render remoto D03+. Botánica 11/11 sigue certificada. Venta y Stripe deshabilitados. No repetir esta comprobación.
