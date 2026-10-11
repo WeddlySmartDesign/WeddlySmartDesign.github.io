@@ -37,6 +37,9 @@ jobs:
           node guest/tests/owner_botanica_acceptance_contract.test.cjs
           node guest/tests/owner_botanica_closeout_contract.test.cjs
           node guest/tests/owner_botanica_touch_benchmark_contract.test.cjs
+          node guest/tests/mobile_center_v47_source_contract.test.cjs
+          python3 -m py_compile guest/tools/build_mobile_center_v47_from_library.py
+          node --check guest/tests/mobile_center_v47_integrated_contract.cjs
           node guest/tests/mobile_center_v47_generic_contract.test.cjs
           node guest/tests/multi_design_dropin_pipeline.test.cjs
           node guest/tests/invitation_config_schema_contract.test.cjs
