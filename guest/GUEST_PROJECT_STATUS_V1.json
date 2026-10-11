@@ -1833,6 +1833,18 @@
       "commercialSaleApproved": false,
       "gateCountPassed": 10,
       "gateCountPending": 1
+    },
+    "botanicaEntry66OwnerCenterV47": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_66_V47_VALIDATION_AND_GENERIC_EXTENSION_2026-10-11.md",
+      "officialLibraryFile": "/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_7_BOTANICA_TEST_INTEGRATED_2026-10-11.html",
+      "officialFileSha256": "3ce9f5fa97a623c0b358336d11bbcd58db586a4e60c34e93b24abcc44e1c0484",
+      "byteExactBotanicaMasterEmbedded": true,
+      "inlineOwnerScriptsSyntaxPassed": true,
+      "ownerPhysicalApkV47Tested": false,
+      "genericBridgeCandidateSeparate": true,
+      "productionSaleApproved": false,
+      "gatePassed": 10,
+      "gatePending": 1
     }
   },
   "commercialGate": {
@@ -2013,15 +2025,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 65,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_65_ANDROID_CENTER_V47_RELEASE_2026-10-11.md",
+    "latestEntry": 66,
+    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_66_V47_VALIDATION_AND_GENERIC_EXTENSION_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Read Entry65. Standalone native APK importable V4.7 GUEST Center HTML built 45,557,384 bytes SHA256 3ce9f5fa97a623c0b358336d11bbcd58db586a4e60c34e93b24abcc44e1c0484, stored in Library /GUEST/MOBILE_CENTER; builder + QA in GitHub. Only final operative owner Center renderer gate pending: owner Android APK menu Update center -> import HTML -> select EXISTING delivered Botánica TEST -> Ver invitación -> CENTRO GUEST. No further RSVP, new orders, touch benchmarks. NO-GO sale and D03.",
+    "resumption": "Read Entries 66 and 65. Download official integrated V4.7 Android center from Library or verified sandbox file. Owner installs through existing GUEST Mobile Center APK Update center, tests already-delivered Botánica TEST in actual APK (Ver invitación, back to center; review/final). Do NOT count renderer PASS before owner Android evidence and QA. Generic remote V4.7 is experimental only; no other products or master edits. State 10/11, NO-GO.",
     "commercialStatus": "BOTANICA_NO_GO",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
