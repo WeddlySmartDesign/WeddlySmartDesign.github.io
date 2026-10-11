@@ -112,6 +112,7 @@ async function main(){
   const delivered=await call('deliver',{orderId:create.id,invitationUrl:inviteUrl},owner);
   assert.equal(delivered.status,'delivered');
   const publicView=await call('public_load',{token:create.pToken});
+  assert.equal(publicView.order.mode,'test','pending catalog may be shown in final view only with server-confirmed TEST mode');
   assert.equal(publicView.order.config.template.id,'botanica');
   assert.equal(String(publicView.order.config.template.version),'14.7');
   const columns=['template','story','locations','agenda','practical','rsvp'];
