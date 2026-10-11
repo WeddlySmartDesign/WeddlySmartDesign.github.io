@@ -21,7 +21,8 @@ assert.doesNotMatch(html,/action:'create_test'|create_paid|new FormData/,'result
 assert.match(html,/action:'list'/,'owner lists completed orders');
 assert.match(html,/action:'detail'/,'capabilities must be recovered via authenticated owner');
 assert.match(html,/action:'review_load',token:r/,'independent reviewer capability must be checked read-only');
-assert.match(html,/JSON\.stringify\(reviewed\.order\?\.config\)===JSON\.stringify\(check\.order\?\.config\)/,'parity must compare the same live saved config, no mock');
+assert.match(html,/compareConfig\(reviewed\.order\?\.config\)===compareConfig\(check\.order\?\.config\)/,'compare same saved configuration, ignoring only signed-media TTL');
+assert.match(html,/guest-invitation-uploads\//,'only signed upload paths may be normalized');
 assert.match(html,/qa-botanica@example\.invalid/,'viewer filters to synthetic QA orders only');
 assert.match(html,/status==='delivered'/,'no drafts or production allowed');
 assert.match(html,/action:'public_load',token:p/,'verify actual server-approved test order');
