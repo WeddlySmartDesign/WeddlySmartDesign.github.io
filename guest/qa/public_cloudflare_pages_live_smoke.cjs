@@ -72,6 +72,30 @@ async function getWithRetry(rel,{retries=3,maxBytes=17000000}={}){
  try{return getViaCurl(rel,maxBytes)}catch(e){throw new Error('PUBLIC_FILE_UNAVAILABLE '+rel+' [node '+String(error?.message||error).slice(0,95)+', curl '+String(e?.message||e).slice(0,180)+']')}
 }
 
+// Public API NEGATIVE tests: never send a real token or manager credential.
+// These prove an anonymous caller cannot load invitations or act as owner.
+function verifyAnonymousGuards(){
+ const endpoint='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow';
+ const cases=[
+  {action:'public_load',token:'not-a-real-guest-capability-for-negative-qa',expected:'invalid_token'},
+  {action:'status',expected:'manager_required'}
+ ];
+ for(const c of cases){
+  const call=child.spawnSync('curl',['--silent','--show-error','--max-time','20',
+   '--proto','=https','--request','POST','--header','Content-Type: application/json',
+   '--data-binary',JSON.stringify({action:c.action,token:c.token}),
+   '--write-out','\\n%{http_code}',endpoint],{encoding:'utf8',timeout:24000,maxBuffer:200000});
+  assert.equal(call.status,0,'negative access request unavailable: '+String(call.stderr||'').slice(0,120));
+  const marker=call.stdout.lastIndexOf('\\n'),code=call.stdout.slice(marker+1).trim();
+  assert.equal(code,'403','anonymous '+c.action+' must deny with HTTP 403');
+  const response=JSON.parse(call.stdout.slice(0,marker));
+  assert.equal(response.ok,false);
+  assert.equal(response.error,c.expected);
+  assert.equal(response.order,undefined,'anonymous response must not leak an order');
+  console.log('PASS anonymous GUEST '+c.action+' denied HTTP 403');
+ }
+}
+
 async function verify(){
  // Public page confirms preproduction ONLY. It is not a wedding checkout.
  const landing=await getWithRetry('/');
@@ -118,6 +142,7 @@ async function verify(){
   const mime=response.headers.get('content-type')||'';
   assert.match(mime,/text\/html/i,'bad HTML MIME type: '+rel);
  }
+ verifyAnonymousGuards();
  console.log('PASS public HTTPS, noindex, original master bytes, live common pages. Commercial certification remains NO-GO.');
 }
 verify().catch(e=>{console.error('CLOUDFLARE_PUBLIC_STAGE_SMOKE_FAILED:',e?.message||e);process.exitCode=1});
