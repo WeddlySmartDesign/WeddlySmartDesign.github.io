@@ -56,7 +56,7 @@ const config=(id,version)=>({template:{id,version},couple:{name1:'Ana',name2:'Lu
  for(const [behavior,error] of [['error','iframe_load_failed'],['navigationThrow','iframe_navigation_failed'],['missingAdapter','iframe_adapter_missing'],['crossOrigin','iframe_cross_origin'],['applyThrow','iframe_apply_failed']]){
   const env=makeEnv();env.setBehavior(behavior);
   await assert.rejects(()=>env.window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order:order('design-03','1.0.0'),config:config('design-03','1.0.0'),host:env.host,registry}),new RegExp(error),behavior);
-  assert.equal(env.host.nodes[0].isConnected,false,behavior+' must not leave broken iframe');assert.equal(env.pendingTimers,0);
+  assert(!env.host.nodes?.[0]||env.host.nodes[0].isConnected===false,behavior+' must not leave broken iframe; failed navigation may never attach');assert.equal(env.pendingTimers,0);
  }
  const already=new AbortController();already.abort();const noCreate=makeEnv();
  await assert.rejects(()=>noCreate.window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order:order('botanica','14.7'),config:config('botanica','14.7'),host:noCreate.host,registry,signal:already.signal}),/preview_cancelled/);
