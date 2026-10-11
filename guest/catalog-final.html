@@ -11,12 +11,24 @@ html,body{margin:0;width:100%;height:100%;background:#f5f0ea;color:#37302c;font-
 (()=>{'use strict';
 const host=document.getElementById('host'),state=document.getElementById('state');
 function error(message){state.hidden=false;state.innerHTML='';const panel=document.createElement('div'),h=document.createElement('strong'),p=document.createElement('p'),hint=document.createElement('small');h.textContent='No hemos podido abrir la invitación';p.textContent=message;hint.textContent='Solicitad a la pareja un enlace actualizado o escribid a weddlysmartdesign@gmail.com.';panel.append(h,p,hint);state.append(panel);}
-async function show(config){
+async function show(config,verifiedOrder){
  const response=await fetch('GUEST_CATALOG_OWNER_RENDERERS_V2.json',{cache:'no-store'}),registry=await response.json();
  if(!response.ok||registry.schemaVersion!=='guest-catalog-owner-renderers-v2')throw Error('registry_unavailable');
  const id=config?.template?.id,version=String(config?.template?.version||''),spec=registry.templates?.[id];
- if(!spec||spec.status!=='commercially-frozen'||spec.mode!=='iframe'||!spec.src)throw Error('template_not_commercially_published');
- await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order:{template_id:id,template_version:version,mode:'production'},config,host,registry});
+ const isTest=verifiedOrder?.mode==='test';
+ // A pending design can only appear with a server-validated TEST-order
+ // capability; PRODUCTION must still be admitted and commercially frozen.
+ if(!spec||spec.mode!=='iframe'||!spec.src||
+    !(spec.status==='commercially-frozen'||(isTest&&spec.status==='certification-pending')))
+   throw Error('template_not_commercially_published');
+ await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order:{template_id:id,template_version:version,mode:isTest?'test':'production'},config,host,registry});
+ if(isTest){
+   const banner=document.createElement('div');
+   banner.id='guestTestOnlyBanner';banner.setAttribute('aria-label','Vista de prueba, no distribuir');
+   banner.textContent='VISTA DE PRUEBA · NO ENVIAR A INVITADOS';
+   banner.style.cssText='position:fixed;z-index:21;top:0;left:0;right:0;background:#3e302d;color:#fff;text-align:center;padding:8px;font:700 11px system-ui;letter-spacing:.05em;pointer-events:none';
+   document.body.appendChild(banner);
+ }
 }
 (async()=>{
  const token=new URLSearchParams(location.search).get('p')||'';
