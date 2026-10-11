@@ -1860,16 +1860,29 @@
       "sourceBuilder": "guest/tools/build_mobile_center_v48_from_v47.py",
       "test": "guest/tests/mobile_center_v48_boot_order_regression.py",
       "binaryOfflineHarnessPass": true,
-      "androidV48PhysicallyVerified": false,
-      "rendererGatePass": false,
-      "commercialSaleApproved": false
+      "androidV48PhysicallyVerified": true,
+      "rendererGatePass": true,
+      "commercialSaleApproved": false,
+      "androidEvidence": "Video 1000095311.mp4 plus explicit owner confirmation 'Sí. El botón me devolvía' (not a filmed click)."
+    },
+    "botanicaEntry70RendererAccepted": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_70_V48_ANDROID_RENDERER_ACCEPTED_2026-10-11.md",
+      "gate": "renderer",
+      "pass": true,
+      "physicalAndroidVideo": "1000095311.mp4",
+      "returnToCenterConfirmedByOwner": true,
+      "returnClickFilmed": false,
+      "technicalDesignGatesPassed": 11,
+      "total": 11,
+      "productionCommercialEnabled": false,
+      "genericRemoteBridgeInApkCertified": false
     }
   },
   "commercialGate": {
     "source": "guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json",
     "requiredPerNewTemplate": 11,
-    "currentBotanicaPass": 10,
-    "currentBotanicaPending": 1,
+    "currentBotanicaPass": 11,
+    "currentBotanicaPending": 0,
     "realOrderE2e": "PASS",
     "recipientRsvpPersistence": "PASS",
     "ownerAndroid": "PASS",
@@ -1878,7 +1891,8 @@
     "ownerAndroidScope": "Physical Android verified by two owner-supplied videos and explicit owner approval of both invitations; visual rendering/vertical scrolling only, not RSVP, review parity, full-size photography or owner touch time.",
     "recipientRsvpPersistenceScope": "PASS real GUEST Cloud Botánica TEST link to authorized tester license; individual yes + individual no RSVP submissions source=guest applied and reflected in management guest_app_state, same unit. Not a physical CTA click in Android videos.",
     "ownerTouchDurationMinutes": 0.6833333333333333,
-    "ownerTouchScope": "PASS real Android human test owner QA visual review 5/5 checks; 41 seconds active until TEST review_sent confirmed independently in Cloud. Excludes original design, automatic setup, full sale fulfillment."
+    "ownerTouchScope": "PASS real Android human test owner QA visual review 5/5 checks; 41 seconds active until TEST review_sent confirmed independently in Cloud. Excludes original design, automatic setup, full sale fulfillment.",
+    "rendererScope": "Botánica TEST V4.8 owner APK: physical Android video 1000095311.mp4 shows rendered invitation; owner expressly confirmed return to CENTRO GUEST (not shown in footage). Sale remains unauthorised."
   },
   "precedence": {
     "productPolicy": "guest/GUEST_CANONICAL_MASTER_DO_NOT_DRIFT_2026-10-07.md",
@@ -1888,10 +1902,10 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Primero validar en Android físico el Centro V4.7 integrado oficial descargado de Biblioteca: importar con 'Actualizar centro', abrir un pedido Botánica TEST entregado existente, Ver invitación y regresar con CENTRO GUEST; sin crear pedidos, alterar master ni repetir RSVP o medición.",
-    "Con evidencia de renderer Android auténtico y QA en mismo HEAD, evaluar --admit botanica, registrar 11/11 solo si satisface contrato. La certificación no autoriza publicación, Stripe ni envíos: solicitar autorización comercial expresa aparte.",
-    "Para D03+ validar el Centro genérico remoto con backend/visor reales antes de afirmar incorporación plug-and-play en APK; preservar contratos compartidos sin programar casos por plantilla.",
-    "Catálogo total pendiente: registrar y diseñar D03-D06 cuando Botánica y el Centro estén cerrados; mínimo catálogo 5, objetivo 6. No confundir 10/11 Botánica con lanzamiento del catálogo completo."
+    "Botánica V4.8 in physical APK and CENTRO GUEST return accepted (Entry 70): all 11 design technical evidence gates PASS. Do not request more Botánica videos or repeat existing RSVP/orders/time.",
+    "Before any sale, reconcile five historical sharedBlockers (v12/V3/V4.6) against deployed versions and official owner center; --admit botanica remains fail-closed while false. Do not set these flags true without proofs.",
+    "Commercially-frozen promotion, payment and checkout enablement require separate verified commercial release review and express user authorization; do not auto-activate Stripe.",
+    "Generic remote owner center to accept D03+ with visual asset+manifest still needs actual operating deployment/WebView proof: V4.8 only embeds Botánica TEST. Do not change ONE, Partner, STUDIO, VEIL LIGHT or main."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
@@ -2043,16 +2057,16 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 69,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_69_ANDROID_ADAPTER_V48_FIX_2026-10-11.md",
+    "latestEntry": 70,
+    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_70_V48_ANDROID_RENDERER_ACCEPTED_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Entrada 69: pantalla Android V4.7 dio adapter_not_found; V4.8 reconstruida desde binario V4.7 SHA-pinned, master intacto, cambio srcdoc-before-attach + no consumir blank onload, cabecera y botón. Artefacto V4.8 45558028 bytes SHA256 5a35f482... en Google Drive/Weddly (id 14UMLniCMMJJvtawWffRDWOm0nNrNe2Kw). Candidata NO certificada en Android real. Única acción: importar V4.8 y abrir pedido Botánica TEST existente y regresar al Centro. Estado 10/11 NO-GO, no D03. No volver a repetir Supabase, RSVP, pedidos ni medición.",
-    "commercialStatus": "BOTANICA_NO_GO",
+    "resumption": "Entrada 70: V4.8 REAL Android render de Botánica TEST PASS por video 1000095311.mp4 y confirmación expresa de regreso a CENTRO GUEST. 11/11 EVIDENCIA TÉCNICA PASS; no ventas, no checkout, no promoción commercially-frozen. 5 sharedBlockers históricos versionados v12/V3/V4.6 aún false: reconciliar formalmente, no fingir que el gate --admit ya pasa. Centro genérico D03+ todavía experimental sin APK real validado. NO repetir pedidos, RSVP, vídeos Android Botánica ni tiempo. Siguiente: auditoría shared blockers y habilitación futura autorizada.",
+    "commercialStatus": "BOTANICA_DESIGN_TECHNICAL_GATES_11_OF_11_SALE_NOT_AUTHORIZED",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
     "githubEntry53": "guest/GUEST_BOTANICA_ENTRY_53_PARITY_RSVP_EVIDENCE_2026-10-11.md",
@@ -2069,6 +2083,7 @@
       38159610883
     ],
     "entry68": "guest/GUEST_BOTANICA_ENTRY_68_V47_DIRECT_ARTIFACT_REGRESSION_2026-10-11.md",
-    "entry69": "guest/GUEST_BOTANICA_ENTRY_69_ANDROID_ADAPTER_V48_FIX_2026-10-11.md"
+    "entry69": "guest/GUEST_BOTANICA_ENTRY_69_ANDROID_ADAPTER_V48_FIX_2026-10-11.md",
+    "entry70": "guest/GUEST_BOTANICA_ENTRY_70_V48_ANDROID_RENDERER_ACCEPTED_2026-10-11.md"
   }
 }

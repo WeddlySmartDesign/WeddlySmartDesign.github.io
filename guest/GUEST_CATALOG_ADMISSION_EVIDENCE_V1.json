@@ -45,9 +45,9 @@
           "why": "Supabase Edge V17 ACTIVE source readback plus 4 real authenticated Botánica TEST orders delivered in Cloud; no production sale enabled."
         },
         "renderer": {
-          "pass": false,
-          "source": "guest/GUEST_D02_BOTANICA_ESTADO_BLOQUEO_REAL_2026-10-09.md",
-          "why": "QA isolated viewer exists, but real owner workspace rendering is not tested or deployed."
+          "pass": true,
+          "source": "guest/GUEST_BOTANICA_ENTRY_70_V48_ANDROID_RENDERER_ACCEPTED_2026-10-11.md",
+          "why": "Physical Android V4.8 video 1000095311.mp4 demonstrates Botánica TEST rendering without adapter_not_found; owner separately confirmed CENTRO GUEST returned to workspace in writing ('Sí. El botón me devolvía'); the return tap was NOT recorded on video. Entry 70. Does not authorize paid publication nor certify experimental generic future-template center."
         },
         "config-matrix": {
           "pass": true,
