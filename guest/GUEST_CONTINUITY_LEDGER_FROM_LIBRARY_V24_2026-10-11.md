@@ -163,3 +163,8 @@ Consultar [auditoría de V4.6 real](GUEST_BOTANICA_ENTRY_57_CENTER_REAL_V46_AUDI
 ## Entrada 70 — V4.8 APK Android PASS, 11/11 evidencia técnica (11/10/2026)
 
 [**Expediente completo**](GUEST_BOTANICA_ENTRY_70_V48_ANDROID_RENDERER_ACCEPTED_2026-10-11.md): propietaria envió vídeo Android `1000095311.mp4` mostrando Botánica TEST en la aplicación V4.8, sin `adapter_not_found`, y posteriormente confirmó con su texto **«Sí. El botón me devolvía»** que CENTRO GUEST la devolvía al listado. El clic de regreso no está filmado. Se actualiza solo `renderer` a PASS y cuenta **11/11 gates de diseño**; `commercially-frozen` y venta **NO** activados. Los cinco sharedBlockers originales de versiones v12/V3/V4.6 siguen false y necesitan reconciliación con pruebas reales; el Centro genérico remoto para próximos diseños no está certificado en APK. **NO más pruebas Botánica ya superadas.** Biblioteca histórica v24 intacta.
+
+
+## Entrada 71 — QA de evidencia 11/11 y backend live (11/10/2026)
+
+[Informe y próximos pasos](GUEST_BOTANICA_ENTRY_71_TECHNICAL_CLOSEOUT_AND_LIVE_GUARDS_2026-10-11.md). Corregida la prueba de continuidad dinámica para evidencias nuevas, sin debilitarla, commit `e38254b`, ambos QA SUCCESS 38167615888 / 38167615980. Supabase fuente V18 activa y Botánica testOnly, RSVP V5, checkout V24 fail-closed por opción comercial autorizada. **Botánica 11/11 técnico, no venta aún; otros diseños no iniciados**. Cinco sharedBlockers V12/V3/V4.6 históricos aún requieren reconciliación; futuro Centro genérico remoto requiere publicación de asset pinneado, registry y aceptación en APK. No repetir tests de D02 ni alterar ONE/Partner/STUDIO/VEIL, main o Biblioteca v24.
