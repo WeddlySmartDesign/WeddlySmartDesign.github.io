@@ -1612,6 +1612,26 @@
       "commercialGatesPending": 8,
       "commercialSaleApproved": false,
       "noNewSpend": true
+    },
+    "botanicaEdgeV17VerifiedRelease20261011": {
+      "date": "2026-10-11",
+      "source": "guest/GUEST_BOTANICA_ENTRY_44_V17_RELEASE_2026-10-11.md",
+      "status": "EDGE_V17_DEPLOYED_SOURCE_READBACK_MATCHES_EXPECTED; LIVE AUTHORIZED E2E STILL PENDING",
+      "version": 17,
+      "edgeDigest": "accea6d258ff2bdd9b1366f174ea48f4852798105da4d103f5ec4835151d5aa2",
+      "actualReadbackContainsTestMode": true,
+      "exactOneLineChangeFromFormerV15": true,
+      "v15RollbackPreservedInLibrary": true,
+      "checkoutUntouched": true,
+      "ownerSupabaseSetupAlreadyCompleted": true,
+      "configEffectViaAuthenticatedOrder": false,
+      "liveBotanicaOrders": 0,
+      "commercialGatePassed": 3,
+      "commercialGatePending": 8,
+      "saleEnabled": false,
+      "d03Started": false,
+      "newCostEuros": 0,
+      "stillNeed": "Authenticated manager: 2 Botánica Cloud TEST orders and questionnaire/media/review/delivery/RSVP/management; owner Android review"
     }
   },
   "commercialGate": {
