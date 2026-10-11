@@ -94,6 +94,10 @@ Página privada para UNA acción autorizada, sin repetir pedidos: `https://guest
 
 Gate `recipient-rsvp`: **PASS funcional en Cloud GUEST TEST**, alcance descrito en Entrada 55. **Estado ahora 8/11 PASS, 3 PENDING (`renderer` centro gestor, `review-final-parity`, `owner-touch`), NO-GO venta y NO D03.** A partir de esta entrada, párrafos históricos anteriores de este índice que mencionan 7/11 o “0 Botánica vinculada” son fotografías fechadas y quedan **superados por Entrada 55 y los dos JSON estructurados**. La Biblioteca histórica sigue intacta en v24; no intentar sobrescribirla.
 
+## 5 quinquies. Entrada 56 — bloqueo de formato documental CI tras RSVP real (11/10/2026)
+
+**LEER ANTES DE TRABAJAR:** [`GUEST_BOTANICA_ENTRY_56_QA_EXACT_STATUS_BLOCKER_2026-10-11.md`](GUEST_BOTANICA_ENTRY_56_QA_EXACT_STATUS_BLOCKER_2026-10-11.md). Cloud GUEST TEST RSVP confirmado real y gate de evidencia PASS (8/11). **El QA de continuidad está rojo únicamente porque `guest/GUEST_PROJECT_STATUS_V1.json` contiene `commercialGate.recipientRsvpPersistence='PASS real ...'` y el QA exige literalmente `'PASS'`.** Intento de corregir el JSON largo desde herramienta GitHub del chat: bloqueado. **CORRECCIÓN MÁS URGENTE: modificar SOLO ese valor a `PASS` (conservar detalle en Scope/Entrada 55), comprobar QA del mismo HEAD, nunca relajar la prueba o afirmar verde sin resultado.** Independiente QA en HEAD anterior SUCCESS. No más licencias, invitados, pedidos ni pruebas; no repetir la interacción de propietaria. Después seguir con los tres gates: renderer gestor, revisión/final y tiempo activo. Biblioteca v24 sin overwrite.
+
 ## 6. Restricciones permanentes
 
 - NO tocar **ONE, ONE Partner, STUDIO, VEIL LIGHT congelado, `main`, master V14.7 Botánica** ni credenciales/servicios ajenos.
