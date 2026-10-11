@@ -17,6 +17,7 @@ try{
   'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json','guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json',
   'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json','guest/GUEST_PROJECT_STATUS_V1.json',
   'guest/catalog-final.html','guest-review-v1.html','guest/catalog-questionnaire.html','guest/qa/owner-botanica-acceptance.html','guest/qa/owner-botanica-rsvp-e2e.html',
+  'guest/qa/owner-botanica-closeout.html',
   'guest/guest-catalog-delivery-runtime-v1.js','guest/catalog/guest-catalog-owner-viewer-v2.js'
  ];
  common.forEach(copy);
