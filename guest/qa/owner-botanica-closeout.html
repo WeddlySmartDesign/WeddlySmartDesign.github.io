@@ -1,0 +1,113 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src 'self' https://dnjsxequwgtyyauuofxj.supabase.co; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; frame-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>Centro GUEST · cierre visual Botánica TEST</title>
+<style>body{background:#f6f1ea;color:#43352d;font:16px/1.55 system-ui,sans-serif;margin:0;padding:20px}main{max-width:700px;margin:auto}h1{font:400 36px/1.1 Georgia,serif}h2{font:400 23px Georgia,serif}h3{font:600 18px system-ui}p{line-height:1.55}.card{padding:20px;margin:14px 0;background:white;border:1px solid #ddd1c5;border-radius:18px}label{display:block;font-weight:700;margin:12px 0 6px}input{padding:14px;min-height:50px;width:100%;border:1px solid #c9bcb0;border-radius:10px;font:inherit;box-sizing:border-box}button{cursor:pointer;display:block;width:100%;border:0;border-radius:10px;background:#46352e;color:white;padding:15px;margin:10px 0;font-weight:700;font-size:16px;min-height:50px}button:disabled{opacity:.45;cursor:not-allowed}.minor{background:#f1e7df;color:#46352e;border:1px solid #ddd1c5}.ok{color:#245e35;font-weight:700}.bad{color:#a92f2c;font-weight:700}.muted,small{color:#786a5e}.preview{width:100%;height:72vh;max-height:780px;border:1px solid #d1c5b8;border-radius:12px;overflow:hidden;margin:12px 0;background:#f7f4ee}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;color:#504238;background:#f3efe9;padding:14px;border-radius:9px}a{color:#684834;word-break:break-word}#results .item{border-top:1px solid #ded3c5;padding:12px 0}[hidden]{display:none!important}</style>
+</head><body><main><p class="muted">GUEST by WeddlySmartDesign · Centro de certificación · NO ENVIAR A INVITADOS</p><h1>Verificar Botánica sin repetir pedidos</h1>
+<p>Reutiliza los pedidos TEST entregados. Comprueba que revisión y entrega conservan los mismos datos y permite inspeccionar el diseño en el <strong>visor genérico del Centro GUEST</strong>. No crea pedidos, ni licencias, ni modifica la base de datos.</p>
+<div class="card"><h2>Acceso de propietaria</h2><label for="owner">Código privado del Centro GUEST</label><input type="password" id="owner" autocomplete="off" autocapitalize="none" spellcheck="false"><button id="load">Comprobar los dos pedidos existentes</button><small>El código no se almacena ni se envía a GitHub o ChatGPT.</small></div>
+<div class="card" aria-live="polite"><h2>Resultado</h2><p id="state">Pendiente de acceso.</p><pre id="details">Sin operaciones.</pre><div id="results"></div></div>
+<div class="card" id="timerBox" hidden><h2>Tiempo activo de revisión en Centro GUEST</h2>
+<p>Este contador mide solo tu revisión visual en el visor, excluyendo periodos ocultos o inactivos. <strong>No mide todo el trabajo de preparación y envío del pedido.</strong></p>
+<p><strong id="clock">0:00</strong> · objetivo de referencia ≤5:00</p><button id="start">Iniciar revisión visual medida</button><button id="finish" class="minor" disabled>Terminar revisión medida</button><p id="touchResult" class="muted">Aún no se ha medido.</p></div>
+<p class="muted"><small>La certificación de venta continúa bloqueada mientras quede algún criterio sin acreditar. Los enlaces y capacidades internas de los pedidos son privados.</small></p></main>
+<script src="/guest/catalog/guest-catalog-owner-viewer-v2.js"></script>
+<script>(()=>{'use strict';
+const HOST='https://guest-weddlysmartdesign.pages.dev',SERVICE='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/';
+const FLOW=SERVICE+'guest-invitation-flow',LOGIN=SERVICE+'weddly-owner-manager';
+const el=id=>document.getElementById(id),box=el('results'),state=el('state'),details=el('details'),load=el('load'),secret=el('owner');
+let activeViewer=null,reviewStart=0,lastActivity=0,activeSeconds=0,ticking=null,reviewRunning=false;
+function note(s){details.textContent+=(details.textContent==='Sin operaciones.'?'':'\n')+s}
+function status(s,error=false){state.textContent=s;state.className=error?'bad':'ok'}
+function cleanSignedConfig(config){
+ return JSON.stringify(config,(k,v)=>{
+  if(typeof v==='string'&&v.startsWith('https://dnjsxequwgtyyauuofxj.supabase.co/storage/v1/object/sign/guest-invitation-uploads/')){
+   try{let u=new URL(v);return u.origin+u.pathname}catch{return v}
+  }
+  return v
+ })
+}
+async function post(url,payload,ownerToken){
+ const h={'content-type':'application/json'};if(ownerToken)h['x-weddly-manager']=ownerToken;
+ const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),30000);
+ try{const res=await fetch(url,{method:'POST',headers:h,body:JSON.stringify(payload),cache:'no-store',redirect:'error',signal:ctrl.signal});
+ const o=await res.json().catch(()=>({}));
+ if(!res.ok||!o.ok)throw Error(String(o.error||'HTTP '+res.status).slice(0,80));
+ return o}finally{clearTimeout(timer)}
+}
+function create(tag,txt,css){const e=document.createElement(tag);if(txt!==undefined)e.textContent=txt;if(css)e.className=css;return e}
+function trackActivity(){lastActivity=Date.now()}
+for(const ev of ['click','touchstart','touchmove','pointerdown','keydown'])document.addEventListener(ev,trackActivity,{passive:true});
+function renderClock(){let n=activeSeconds;el('clock').textContent=Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}
+function stopTimer(){if(ticking)clearInterval(ticking);ticking=null;reviewRunning=false;el('finish').disabled=true;el('start').disabled=false;
+ renderClock();el('touchResult').textContent='Tiempo activo observado de revisión visual: '+el('clock').textContent+'. No equivale al tiempo completo del encargo.'}
+el('start').addEventListener('click',()=>{if(!activeViewer){status('Abre primero un pedido en el visor del gestor.',true);return}activeSeconds=0;reviewRunning=true;trackActivity();el('start').disabled=true;el('finish').disabled=false;el('touchResult').textContent='Midiendo revisión…';renderClock();
+ if(ticking)clearInterval(ticking);
+ ticking=setInterval(()=>{if(!reviewRunning)return;
+ if(document.visibilityState==='visible'&&Date.now()-lastActivity<60000)activeSeconds++;renderClock()},1000)});
+el('finish').addEventListener('click',stopTimer);
+function iframeActivity(host){const frame=host.querySelector('iframe');try{
+ for(const ev of ['touchstart','touchmove','pointerdown','wheel','keydown'])frame.contentWindow.document.addEventListener(ev,trackActivity,{passive:true})
+}catch{}}
+async function showPreview(button,host,o,cfg,registry){
+ if(activeViewer){activeViewer.close();activeViewer=null}
+ host.replaceChildren();host.hidden=false;button.disabled=true;
+ try{
+  const id=cfg?.template?.id,version=String(cfg?.template?.version||'');
+  if(o.mode!=='test'||id!=='botanica'||version!=='14.7')throw Error('Solo Botánica 14.7 TEST');
+  const reg=structuredClone(registry),spec=reg?.templates?.[id];
+  if(spec?.status!=='certification-pending'||spec.mode!=='iframe'||spec.src!==null)throw Error('Registro GUEST sin seguridad TEST');
+  spec.src='/guest/catalog-assets/botanica/14.7/index.html';
+  activeViewer=await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order:{template_id:id,template_version:version,mode:'test'},config:cfg,host,registry:reg});
+  iframeActivity(host);trackActivity();el('timerBox').hidden=false;
+  host.scrollIntoView({block:'start',behavior:'smooth'});
+ }catch(e){host.hidden=true;status('No se pudo mostrar el visor: '+String(e.message||e).slice(0,140),true)}
+ finally{button.disabled=false}
+}
+async function run(){
+ if(load.disabled)return;
+ const code=secret.value.trim();if(code.length<20){status('Introduce el código completo.',true);return}
+ load.disabled=true;box.replaceChildren();details.textContent='';status('Comprobando acceso…');
+ let token=null;
+ try{
+  const auth=await post(LOGIN,{action:'login',recoveryCode:code});secret.value='';token=auth.managerToken;
+  if(!token?.startsWith('v1.'))throw Error('La sesión no se ha validado');
+  const registryResponse=await fetch('/guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',{cache:'no-store',redirect:'error'});
+  if(!registryResponse.ok)throw Error('No se ha podido cargar el registro del catálogo');
+  const registry=await registryResponse.json();
+  const listing=await post(FLOW,{action:'list'},token);
+  const candidates=(listing.orders||[]).filter(o=>o.templateId==='botanica'&&o.mode==='test'&&o.status==='delivered'&&o.buyerEmail==='qa-botanica@example.invalid')
+   .sort((a,b)=>String(b.deliveredAt||b.createdAt||'').localeCompare(String(a.deliveredAt||a.createdAt||'')));
+  const picks=[],modes=new Set();
+  for(const item of candidates){
+   const result=await post(FLOW,{action:'detail',orderId:item.id},token),o=result.order||{};
+   const mode=o.questionnaire?.locations?.mode||item.locationsMode||'';
+   if(modes.has(mode))continue;
+   if(o.template_id!=='botanica'||o.mode!=='test'||o.status!=='delivered')continue;
+   picks.push(o);modes.add(mode);if(picks.length===2)break;
+  }
+  if(picks.length!==2)throw Error('Faltan las dos variantes TEST entregadas');
+  let allEqual=true;
+  for(let i=0;i<picks.length;i++){
+   const order=picks[i],p=order.publicToken,r=order.reviewToken;
+   if(!p||!r)throw Error('Falta un acceso legítimo del pedido');
+   const [rev,final]=await Promise.all([post(FLOW,{action:'review_load',token:r}),post(FLOW,{action:'public_load',token:p})]);
+   if(rev.order?.id!==final.order?.id||rev.order?.id!==order.id)throw Error('Revisión y entrega no pertenecen al mismo pedido');
+   const equal=cleanSignedConfig(rev.order.config)===cleanSignedConfig(final.order.config);
+   allEqual=allEqual&&equal;
+   const group=create('div',undefined,'item');
+   group.append(create('h3','Pedido '+(i+1)+' · '+String(order.questionnaire?.locations?.mode||'TEST')));
+   group.append(create('p',equal?'Datos de revisión y final: IDÉNTICOS':'Datos de revisión y final: DIFERENCIAS',equal?'ok':'bad'));
+   const preview=create('div');preview.className='preview';preview.hidden=true;group.append(preview);
+   const button=create('button','Ver en visor común del Centro GUEST');group.append(button);
+   button.addEventListener('click',()=>showPreview(button,preview,final.order,final.order.config,registry));
+   box.append(group);
+   note('Pedido '+(i+1)+': revisión, final y diseño TEST cargados, paridad '+(equal?'PASS':'DIFERENCIAS')+'.');
+  }
+  status(allEqual?'Ambas variantes tienen la misma configuración en revisión y final. Visor listo para inspección.':'Hay diferencias de configuración; no certificar todavía.',!allEqual);
+ }catch(e){status('No se completó: '+String(e.message||e).slice(0,160),true);note('No se ha creado ni modificado ningún pedido.')}
+ finally{secret.value='';token=null;load.disabled=false;details.scrollIntoView({block:'nearest'})}
+}
+load.addEventListener('click',run);
+})();</script></body></html>
