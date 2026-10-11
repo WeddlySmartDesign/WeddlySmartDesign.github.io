@@ -357,6 +357,8 @@ jobs:
         run: node guest/qa/b8_1_commercial_entry_flow_test.js
       - name: GUEST shared final and review mobile E2E (mocked, no Cloud)
         run: node guest/qa/catalog_public_final_review_browser_test.js
+      - name: GUEST shared questionnaire mobile E2E (mocked, no Cloud)
+        run: node guest/qa/catalog_common_questionnaire_browser_test.cjs
 
   b8-checkout-return:
     runs-on: ubuntu-latest
