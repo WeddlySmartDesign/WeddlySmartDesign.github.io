@@ -16,6 +16,19 @@ function secureEqual(a:string,b:string){
  return d===0
 }
 function origin(){return env('WEDDLY_SITE_ORIGIN')||'https://weddlysmartdesign.github.io'}
+// A paid catalog always needs a verified HTTPS host separate from the legacy site.
+// Sharing the name with V14 invitation-flow ensures questionnaire, review and final
+// use one operator-owned destination. Nothing changes for non-catalog purchases.
+function catalogStaticHost(){
+ const raw=env('GUEST_CATALOG_PUBLIC_ORIGIN');
+ if(!raw)throw new Error('catalog_host_not_configured');
+ let url:URL;try{url=new URL(raw)}catch{throw new Error('catalog_host_invalid')}
+ if(url.protocol!=='https:'||url.username||url.password||url.pathname!=='/'||
+    url.search||url.hash||url.hostname==='localhost'||
+    url.hostname.endsWith('.invalid'))
+   throw new Error('catalog_host_invalid');
+ return url.origin
+}
 function editionOf(v:unknown){return String(v||'').toLowerCase()==='signature'?'signature':'essential'}
 function amountFor(e:string){return e==='signature'?4990:3990}
 function normalFor(e:string){return e==='signature'?5990:4990}
@@ -36,6 +49,7 @@ function catalogSaleOption(raw:any,edition:string){
     option.amountCents!==amountFor(edition)||typeof option.version!=='string'||
     !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,30}$/.test(option.version))
   throw new Error('catalog_template_not_for_sale');
+ catalogStaticHost(); // cannot begin a charge unless common catalog routes have a configured host
  return {id,version:option.version};
 }
 function activationCode(){const a=crypto.randomUUID().replaceAll('-','').toUpperCase(),b=crypto.randomUUID().replaceAll('-','').toUpperCase();return `WSD-GUEST-${a.slice(0,8)}-${a.slice(8,16)}-${b.slice(0,8)}`}
@@ -100,6 +114,7 @@ async function paidCatalogQuestionnaire(licenseId:string,metadata:any){
  const templateId=String(metadata?.guest_catalog_template_id||'');
  const version=String(metadata?.guest_catalog_template_version||'');
  if(!templateId)return null;
+ const host=catalogStaticHost();
  if(!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(templateId)||
     !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,30}$/.test(version))throw new Error('catalog_invalid_pin');
  const c=admin();
@@ -123,7 +138,7 @@ async function paidCatalogQuestionnaire(licenseId:string,metadata:any){
  const qToken=String(data.qToken);
  if(qToken.length<32||qToken.length>200)throw new Error('catalog_invalid_questionnaire_token');
  return {templateId,version,orderId:String(data.id),
-   questionnaireUrl:origin()+'/guest/catalog-questionnaire.html?t='+encodeURIComponent(qToken)};
+   questionnaireUrl:host+'/guest/catalog-questionnaire.html?t='+encodeURIComponent(qToken)};
 }
 async function startCatalogEmail(to:string,sessionId:string,edition:string,catalog:any){
  if(!catalog?.questionnaireUrl)throw new Error('catalog_questionnaire_unavailable');
@@ -238,5 +253,5 @@ Deno.serve(async req=>{
   }
   if(action==='submit_order'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await submitOrder(session,b.details||{}))}
   return json({ok:false,error:'invalid_action'},400)
- }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','catalog_template_not_for_sale','catalog_uses_common_questionnaire'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
+ }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','catalog_template_not_for_sale','catalog_uses_common_questionnaire','catalog_host_invalid'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable','catalog_host_not_configured'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
 });
