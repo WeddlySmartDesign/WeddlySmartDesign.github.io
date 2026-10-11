@@ -42,7 +42,8 @@ for(const [label,segment] of [['review',reviewApi],['final',finalApi]]){
   label+' must be capability-scoped');
  assert.match(segment,/hydrateConfig\(order\.resolved_config\|\|\{\},files\)/,
   label+' must hydrate the same persisted resolved_config');
- assert.match(segment,/config\}\}/,label+' must return the hydrated config');
+ assert.match(segment,/return json\(\{ok:true,order:\{id:order\.id[^\n]*\bconfig\b/,
+  label+' must return the hydrated config');
 }
 assert.match(reviewApi,/signedFiles\(c,order,7200\)/,'review-media TTL remains bounded');
 assert.match(finalApi,/signedFiles\(c,order,86400\)/,'final-media TTL remains bounded');
