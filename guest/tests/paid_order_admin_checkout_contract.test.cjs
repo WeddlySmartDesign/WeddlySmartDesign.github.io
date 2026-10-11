@@ -20,6 +20,8 @@ assert.match(checkout,/catalogQuestionnaireUrl:p\?\.catalogQuestionnaireUrl\|\|n
 assert.match(flow,/async function createOrder\(/,'existing GUEST order pipeline still used');
 // Prove catalog pins travel Stripe checkout metadata -> license and remain gated.
 assert.match(checkout,/function catalogSaleOption\(/,'certified catalog selection is reusable across design IDs');
+assert.match(checkout,/function catalogStaticHost\(/,'catalog URL cannot use the legacy GitHub Pages origin');
+assert.match(checkout,/catalogStaticHost\(\); \/\/ cannot begin a charge/,'catalog purchase must fail before Stripe if host is missing');
 assert.match(checkout,/GUEST_CATALOG_SALE_OPTIONS/,'operator-owned allowlist is required');
 assert.match(checkout,/option\.status!=='commercially-frozen'/,'pending Botánica cannot be sold');
 assert.match(checkout,/option\.amountCents!==amountFor\(edition\)/,'client may not choose price');
@@ -32,17 +34,24 @@ assert.match(checkout,/catalogTemplateVersion:p\?\.metadata\?\.guest_catalog_tem
 assert.match(checkout,/if\(!id\)return null/,'Legacy Essential/Signature checkout must remain valid without design pin');
 // Exercise exact production allowlist code, offline and with no Stripe calls.
 const {stripTypeScriptTypes}=require('node:module');
+const hostStart=checkout.indexOf('function catalogStaticHost('),hostEnd=checkout.indexOf('function editionOf(',hostStart);
+assert(hostStart>0&&hostEnd>hostStart,'Could not isolate shared catalog HTTPS host');
 const start=checkout.indexOf('function catalogSaleOption('),end=checkout.indexOf('function activationCode()',start);
 assert(start>0&&end>start,'Could not isolate production selection contract');
-const functionText=stripTypeScriptTypes(checkout.slice(start,end));
-function options(value){
-  const env=name=>name==='GUEST_CATALOG_SALE_OPTIONS'?JSON.stringify(value):'';
+const functionText=stripTypeScriptTypes(checkout.slice(hostStart,hostEnd)+checkout.slice(start,end));
+function options(value,host='https://guest-preview-qa.pages.dev'){
+  const env=name=>name==='GUEST_CATALOG_SALE_OPTIONS'?JSON.stringify(value):
+    name==='GUEST_CATALOG_PUBLIC_ORIGIN'?host:'';
   const amountFor=edition=>edition==='signature'?4990:3990;
   return new Function('env','amountFor',functionText+'; return catalogSaleOption;')(env,amountFor);
 }
 const catalog=options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990},
  botanica:{version:'14.7',status:'certification-pending',edition:'signature',amountCents:4990}});
 assert.deepEqual(catalog('veil-light','signature'),{id:'veil-light',version:'5.3.3'});
+assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990}},'')('veil-light','signature'),/catalog_host_not_configured/,'cannot initiate payment before static host is configured');
+assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990}},'http://unsafe.invalid')('veil-light','signature'),/catalog_host_invalid/,'HTTP non-production host must be refused');
+assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990}},'https://example.com/fake/')('veil-light','signature'),/catalog_host_invalid/,'host must have no hidden path');
+assert.equal(options({},'')('','essential'),null,'legacy purchases work with no catalog host');
 assert.equal(catalog('', 'essential'),null,'legacy purchases remain untouched');
 assert.throws(()=>catalog('botanica','signature'),/catalog_template_not_for_sale/);
 assert.throws(()=>catalog('veil-light','essential'),/catalog_template_not_for_sale/);
@@ -68,17 +77,18 @@ const mockFetch=async(url,opt)=>{
  assert.match(opt.headers['x-weddly-manager'],/^v1\.[A-Za-z0-9_-]+\.OFFLINE_SIGNATURE$/);
  return {ok:true,json:async()=>({ok:true,id:'fake-order',qToken:'fictional-purchase-token-that-is-at-least-32-bytes-long'})};
 };
-const bridge=new Function('admin','Deno','hmacHex','fetch','AbortSignal','env','origin','btoa','resend','esc','labelFor',
+const bridge=new Function('admin','Deno','hmacHex','fetch','AbortSignal','env','origin','btoa','resend','esc','labelFor','catalogStaticHost',
  bridgeCode+';return {paidCatalogQuestionnaire,startCatalogEmail};')(
  mockAdmin,mockDeno,async()=> 'OFFLINE_SIGNATURE',mockFetch,AbortSignal,
  name=>name==='SUPABASE_URL'?'https://private-qa.supabase.co':'',
  ()=> 'https://weddlysmartdesign.github.io',btoa,
- async()=>{mailCalls++;return true},x=>String(x),x=>x);
+ async()=>{mailCalls++;return true},x=>String(x),x=>x,
+ ()=> 'https://guest-preview-qa.pages.dev');
 (async()=>{
  assert.equal(await bridge.paidCatalogQuestionnaire('fake-uuid',{}),null,'legacy purchase does not invoke V13');
  const a=await bridge.paidCatalogQuestionnaire('fake-uuid',{guest_catalog_template_id:'veil-light',guest_catalog_template_version:'5.3.3'});
  assert.equal(a.orderId,'fake-order');
- assert.match(a.questionnaireUrl,/^https:\/\/weddlysmartdesign.github.io\/guest\/catalog-questionnaire.html\?t=/);
+ assert.match(a.questionnaireUrl,/^https:\/\/guest-preview-qa.pages.dev\/guest\/catalog-questionnaire.html\?t=/);
  assert.equal(calls,1,'only one V13 request');
  assert(await bridge.startCatalogEmail('fake@example.invalid','cs_test_offline','signature',a));
  assert.equal(mailCalls,1);
