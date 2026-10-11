@@ -1,0 +1,13 @@
+# GUEST Botánica — Entrada 45: certificación real en una página (11/10/2026)
+
+Se ha publicado una **página privada por autenticación de gestor, noindex, solo TEST** en https://guest-weddlysmartdesign.pages.dev/guest/qa/owner-botanica-acceptance.html
+
+La propietaria puede abrirla en su Android, introducir allí (NO en este chat) su **código habitual de recuperación del Centro GUEST** y pulsar **Ejecutar las dos pruebas**. El código se envía directamente al Edge Function oficial `weddly-owner-manager`; no se almacena, comunica a GitHub ni muestra en URL. El control exige autenticación real y no crea sesiones ficticias. **No tocar configuración de Supabase**, ya completada por la propietaria.
+
+El formulario realiza dos pedidos TEST de Botánica `14.7` en Supabase Cloud, con distintas variantes, subida de una foto **ficticia** en el primero, cambios solicitados en el segundo, revisión/aprobación, entrega en Cloudflare con `?p=` y comprobación del `public_load` V17. No hay cobro Stripe ni correos a compradores, no se desbloquea venta. Muestra enlaces de revisión y final para Android (capacidades privadas de TEST, no compartir).
+
+**Pruebas cumplidas de existencia/despliegue:** `guest/qa/owner-botanica-acceptance.html` creado; `guest/tools/build_catalog_static_preview.cjs` ampliado con el archivo compartido sin cambiar comando Cloudflare; test de seguridad `guest/tests/owner_botanica_acceptance_contract.test.cjs`; CI [Cloudflare Pages Live Smoke 38130853589](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38130853589) **SUCCESS**, comprobación real HTTP externo de la nueva página (10.402 bytes) exacta y master Botánica intacto. [Catalog/Continuity 38130853610](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38130853610) **SUCCESS**. La QA Independent sobre el último código aún estaba en curso cuando se observó.
+
+**NO ejecutadas todavía:** pulsación autenticada y pedidos en Cloud, revisión física en Android, gestión/RSVP real con licencia y medición de tiempo. Los pedidos TEST sin licencia no acreditan por sí solos integración de gestión pagada. **Botánica sigue 3/11 PASS, 8 PENDING y NO-GO venta.** D03 no empezado, no tocar ONE/Partner/STUDIO/VEIL LIGHT/`main` ni master Botánica, coste nuevo 0 €. Bitácora íntegra Biblioteca Entrada 45, versión 20.
+
+Siguiente paso único: propietaria entra en la página ya publicada, usa su código habitual en esa página y ejecuta dos tests. Recuperar su resultado y verificar contadores en Supabase, luego revisión Android de los enlaces y cierre genuino de restantes gates, sin nuevos desarrollos.
