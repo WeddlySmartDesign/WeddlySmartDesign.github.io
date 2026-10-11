@@ -1632,17 +1632,36 @@
       "d03Started": false,
       "newCostEuros": 0,
       "stillNeed": "Authenticated manager: 2 Botánica Cloud TEST orders and questionnaire/media/review/delivery/RSVP/management; owner Android review"
+    },
+    "botanicaCloudAcceptanceEntry46_20261011": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_46_CLOUD_TESTS_RECOVERED_2026-10-11.md",
+      "liveBotanicaTestOrdersDelivered": 4,
+      "distinctTestVariants": 2,
+      "allHaveReviewApprovalAndCloudflareFinalUrl": true,
+      "realPhysicalAndroidReviewed": false,
+      "photoAuthenticQualityValidated": false,
+      "recipientRsvpPersistenceInCloud": false,
+      "managementLinkedToLiveLicense": false,
+      "ownerSessionWasValid": true,
+      "userMustNotRerunOrders": true,
+      "ownerUiNowReadOnly": true,
+      "ownerUiUrl": "https://guest-weddlysmartdesign.pages.dev/guest/qa/owner-botanica-acceptance.html",
+      "gatePassed": 5,
+      "gatePending": 6,
+      "commercialSaleApproved": false,
+      "newSpendEuros": 0
     }
   },
   "commercialGate": {
     "source": "guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json",
     "requiredPerNewTemplate": 11,
-    "currentBotanicaPass": 3,
-    "currentBotanicaPending": 8,
-    "realOrderE2e": "NOT EXECUTED IN LIVE CLOUD",
+    "currentBotanicaPass": 5,
+    "currentBotanicaPending": 6,
+    "realOrderE2e": "PASS",
     "recipientRsvpPersistence": "PASS in isolated local Supabase; NOT VERIFIED LIVE POST/GET",
     "ownerAndroid": "NOT CERTIFIED",
-    "ownerTouchMaxMinutes": 5
+    "ownerTouchMaxMinutes": 5,
+    "realOrderE2eScope": "Two distinct Botánica Cloud TEST orders each executed twice: authorized questionnaire, image upload, change/approval, delivery Cloudflare; excludes RSVP/licensed management, final Android and owner touch."
   },
   "precedence": {
     "productPolicy": "guest/GUEST_CANONICAL_MASTER_DO_NOT_DRIFT_2026-10-07.md",
