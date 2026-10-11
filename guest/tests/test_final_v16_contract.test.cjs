@@ -25,4 +25,36 @@ assert.match(delivery,/isTest&&spec\.status==='certification-pending'/,'test cap
 assert.match(delivery,/spec\.status==='commercially-frozen'/,'production still needs commercial seal');
 assert.match(delivery,/VISTA DE PRUEBA · NO ENVIAR A INVITADOS/,'test-order deliveries visibly marked');
 assert.match(viewer,/spec\.status!=='commercially-frozen'&&order\?\.mode!=='test'/,'shared viewer retains no production pending');
-console.log('PASS trusted V16 pending-test final rendering only; production sale guard + V15 HTTPS guard preserved, no new design logic');
+
+// Cross-surface PARITY CONTRACT (not a live Cloud parity certification):
+// Both APIs must resolve the SAME saved config. Media URLs are deliberately
+// issued with different TTLs and are therefore not comparable as literal text.
+const take=(name,next)=>{
+ const begin=v16.indexOf("if(action==='"+name+"')");
+ const end=v16.indexOf("if(action==='"+next+"')",begin+1);
+ assert(begin>=0&&end>begin,'missing contiguous API action branch '+name);
+ return v16.slice(begin,end);
+};
+const reviewApi=take('review_load','review_respond');
+const finalApi=take('public_load','active_for_member');
+for(const [label,segment] of [['review',reviewApi],['final',finalApi]]){
+ assert.match(segment,/findByToken\(c,String\(b\.token\|\|''\),'(?:review|public)_token_hash'\)/,
+  label+' must be capability-scoped');
+ assert.match(segment,/hydrateConfig\(order\.resolved_config\|\|\{\},files\)/,
+  label+' must hydrate the same persisted resolved_config');
+ assert.match(segment,/config\}\}/,label+' must return the hydrated config');
+}
+assert.match(reviewApi,/signedFiles\(c,order,7200\)/,'review-media TTL remains bounded');
+assert.match(finalApi,/signedFiles\(c,order,86400\)/,'final-media TTL remains bounded');
+const reviewPage=get('guest-review-v1.html');
+for(const [label,page] of [['review',reviewPage],['final',delivery]]){
+ assert.match(page,/guest-catalog-owner-viewer-v2\.js/,'same owner renderer for '+label);
+ assert.match(page,/GUEST_CATALOG_OWNER_VIEWER_V2\.show\(/,'same shared viewer call for '+label);
+ assert.match(page,/GUEST_CATALOG_OWNER_RENDERERS_V2\.json/,'same registry for '+label);
+}
+assert.match(finalApi,/order\.status!=='delivered'/,'final may not load before delivery');
+assert.match(reviewApi,/review_not_ready/,'review gated until order reaches review');
+assert.match(runtime,/if\(!ctx\.rsvpToken\)return '#'/,
+ 'unlicensed demo/TEST must not be presented as live RSVP');
+
+console.log('PASS offline shared review/final config-source and renderer parity contract; trusted V16 pending-test final rendering only; production sale guard + V15 HTTPS guard preserved, no new design logic');
