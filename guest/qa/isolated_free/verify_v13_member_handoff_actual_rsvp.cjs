@@ -20,9 +20,9 @@ async function rest(table,{method='GET',query='',data}={}){
  if(!res.ok)throw Error('LOCAL_REST_'+table+'_'+res.status+'_'+String(j.code||j.message||'unknown').slice(0,90));
  return j;
 }
-async function edge(pathPart,{method='GET',qs='',body,member}={}){
+async function edge(pathPart,{method='GET',qs='',body,member,manager}={}){
  const u=origin+'/functions/v1/'+pathPart+(qs?'?'+qs:'');
- const res=await fetch(u,{method,redirect:'error',headers:{apikey:anon,Authorization:'Bearer '+anon,'content-type':'application/json',...(member?{'x-weddly-token':member}:{})},body:body===undefined?undefined:JSON.stringify(body)});
+ const res=await fetch(u,{method,redirect:'error',headers:{apikey:anon,Authorization:'Bearer '+anon,'content-type':'application/json',...(member?{'x-weddly-token':member}:{}),...(manager?{'x-weddly-manager':manager}:{})},body:body===undefined?undefined:JSON.stringify(body)});
  const j=await res.json().catch(()=>({}));
  return {status:res.status,data:j};
 }
@@ -36,7 +36,20 @@ function localBrowser(member,publicLink=''){
  };
  page.window=page;return page;
 }
+function managerToken(key){
+ const payload=Buffer.from(JSON.stringify({ownerId:'11111111-2222-4333-8444-555555555555',exp:Date.now()+600000})).toString('base64url');
+ return 'v1.'+payload+'.'+crypto.createHmac('sha256',key).update('wsd-owner-manager-v1|'+payload).digest('hex');
+}
+async function getLocalManager(){
+ for(const key of new Set([env.SECRET_KEY,env.GUEST_LOCAL_SECRET_KEY,env.SERVICE_ROLE_KEY,env.GUEST_LOCAL_SERVICE_ROLE_KEY].filter(Boolean))){
+  const token=managerToken(key);
+  const q=await edge('guest-invitation-flow',{method:'POST',body:{action:'status'},manager:token});
+  if(q.status===200&&q.data.ok===true)return token;
+ }
+ throw Error('QA_MANAGER_LOCAL_AUTH_UNAVAILABLE');
+}
 async function main(){
+ const owner=await getLocalManager();
  const rows=await rest('guest_invitation_orders',{query:'?select=id,mode,template_id,template_version,status,delivery_url,license_id&status=eq.delivered&template_id=eq.botanica&mode=eq.test&order=created_at.asc'});
  assert.equal(rows.length,2,'reuse the TWO real V13 synthetic Botánica orders already created');
  for(let i=0;i<2;i++){
@@ -46,10 +59,17 @@ async function main(){
    assert.equal(new URL(order.delivery_url).origin,site);
    c.member='synthetic-member-'+c.id+'-'+'x'.repeat(56);
    c.rsvpToken='synthetic-linked-rsvp-'+c.id+'-'+ 'z'.repeat(24);
-   await rest('licenses',{method:'POST',data:{id:lid,source:'manual',status:'active',wedding_id:wid,metadata:{local_only:true}}});
+   await rest('licenses',{method:'POST',data:{id:lid,source:'tester',status:'active',wedding_id:wid,metadata:{product:'guests',tester_label:'GUEST QA '+c.id,grant_type:'tester',local_only:true}}});
    await rest('wedding_members',{method:'POST',data:{wedding_id:wid,license_id:lid,member_hash:hash(c.member),status:'active'}});
-   const changed=await rest('guest_invitation_orders',{method:'PATCH',query:'?id=eq.'+order.id,data:{license_id:lid}});
-   assert.equal(changed.length,1);
+   const forbiddenLink=await edge('guest-invitation-flow',{method:'POST',body:{action:'link_test_license',orderId:order.id,licenseId:lid}});
+   assert.equal(forbiddenLink.status,403,'unauthorized linking must fail');
+   const linked=await edge('guest-invitation-flow',{method:'POST',manager:owner,body:{action:'link_test_license',orderId:order.id,licenseId:lid}});
+   assert.equal(linked.status,200,JSON.stringify(linked.data));
+   assert.equal(linked.data.status,'linked_test_guest_management');
+   const linkedAgain=await edge('guest-invitation-flow',{method:'POST',manager:owner,body:{action:'link_test_license',orderId:order.id,licenseId:lid}});
+   assert.equal(linkedAgain.status,200);assert.equal(linkedAgain.data.alreadyLinked,true);
+   const readBack=await rest('guest_invitation_orders',{query:'?select=license_id&id=eq.'+order.id});
+   assert.equal(readBack.length,1);assert.equal(readBack[0].license_id,lid);
    await rest('guest_app_state',{method:'POST',data:{wedding_id:wid,version:0,state:{guests:{
        [c.guest]:{name:'Synthetic '+c.id+' One',invitationUnitId:c.unit,invitationUnitLabel:'Fictitious Household '+c.id},
        [c.guest+'-2']:{name:'Synthetic '+c.id+' Two',invitationUnitId:c.unit,invitationUnitLabel:'Fictitious Household '+c.id}
@@ -124,6 +144,6 @@ async function main(){
  assert.equal(otherU.status,404,'foreign invitation unit must remain isolated');
  const badMember=await edge('guest-invitation-flow',{method:'POST',member:'synthetic-invalid-'+ 'z'.repeat(55),body:{action:'active_for_member'}});
  assert.equal(badMember.status,403,'unlicensed member must not resolve invitation');
- console.log('PASS V13 + GUEST catalog bridge + final delivery runtime + ACTUAL RSVP v4 GET/POST + guest_app_state + licensed management, TWO distinct synthetic weddings with tenant isolation. ALL .invalid delivery pages are FAKE; no external HTTPS link, no actual Android, no production.');
+ console.log('PASS V18 GUEST-only owner-authenticated pairing (negative 403 + atomic + idempotent), actual TEST member bridge, RSVP real GET/POST + state + management, two distinct synthetic weddings; LOCAL ONLY, no actual public pages, no production.');
 }
 main().catch(e=>{console.error('LOCAL_V13_GUEST_HANDOFF_FAILED:',e.stack||e);process.exitCode=1});
