@@ -106,6 +106,7 @@ async function verify(){
  assert.doesNotMatch(text,/stripe\.com\/checkout|Stripe\(/i);
  const routes=[
   '/guest/catalog-questionnaire.html',
+  '/guest/qa/owner-botanica-acceptance.html',
   '/guest-review-v1.html',
   '/guest/catalog-final.html',
   '/guest/guest-catalog-delivery-runtime-v1.js',
