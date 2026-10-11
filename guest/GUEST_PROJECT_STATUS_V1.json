@@ -1567,6 +1567,29 @@
         "VEIL LIGHT",
         "Botanica frozen visual"
       ]
+    },
+    "botanicaRuntimeAuditEntry42_20261011": {
+      "status": "PARTIAL_EXTERNAL_NEGATIVE_QA_PASS_RUNTIME_POSITIVE_E2E_NOT_VERIFIED",
+      "source": "guest/GUEST_BOTANICA_RUNTIME_AUDIT_2026-10-11.md; Library bitacora Entry42",
+      "ownerSupabaseConfigAlreadyReportedComplete": true,
+      "ownerMustNotRepeatSetup": true,
+      "functionV16MetadataActive": true,
+      "functionReadbackSource": "V15_67621_characters_sha_e343b56befa4328253bf08ff3797fbbae7a111c18c7918fa7549f330769ac5c9",
+      "runtimeV16ModeVerified": false,
+      "cloudflareOriginEffectVerified": false,
+      "liveCloudBotanicaTestOrders": 0,
+      "cloudObservedOtherTestOrders": "VEIL test: two delivered and one designing",
+      "smokeCommit": "4535a7648675b5fa4c4374c86233f0d8157e1c3e",
+      "publicSmokeRun": 38127722835,
+      "publicSmokeResult": "success; exact assets, protected sales, invalid public token 403, unauthenticated manager 403",
+      "catalogQARun": 38127722813,
+      "catalogQAResult": "success",
+      "independentQARun": 38127722812,
+      "independentQAResult": "success",
+      "expectedOnlyNextAction": "Authorized real manager session -> two cloud TEST Botánica orders with questionnaire/photos/review/delivery/member RSVP/management -> owner physical Android QA",
+      "commercialGates": "3 PASS, 8 PENDING",
+      "commercialStatus": "BOTANICA_NO_GO",
+      "noDeployRetriesWithoutDiagnosis": true
     }
   },
   "commercialGate": {
