@@ -1,5 +1,7 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+**ENTRADA 63 — GUÍA VISIBLE DE REVISIÓN:** [Abrir documentación](GUEST_BOTANICA_ENTRY_63_OWNER_TOUCH_REVIEW_GUIDE_2026-10-11.md). La propietaria debe comprobar cinco puntos concretos al medir tiempo: portada QA Tiempo/Botánica, 12/06/2027, historia ficticia, sede única a 17:00, composición móvil y navegación hasta cierre. La pantalla `guest/qa/owner-botanica-touch-benchmark.html` ya muestra los valores ANTES de iniciar el cronómetro y exige marcar los cinco controles antes de enviar revisión TEST. Si un punto falla, no enviar; reportar. **9/11 PASS, pendientes owner-touch humano y Centro GUEST operativo; NO-GO venta**. Verificar QA y Cloudflare exact-byte antes de solicitar la acción. No repetir pedidos, RSVP ni paridad.
+
 **ACTUALIZACIÓN 62:** [Paridad Cloud shared/split comprobada en Android](GUEST_BOTANICA_ENTRY_62_OWNER_REAL_PARITY_ANDROID_2026-10-11.md). 9/11 aprobados; siguen pendientes Centro operativo y tiempo activo. Venta bloqueada.
 
 ## ENTRADA 61 — CIERRE DE QA EN VERDE / VALIDACIÓN REAL DE PROPIETARIA PENDIENTE
