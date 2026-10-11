@@ -118,6 +118,10 @@ Consultar [auditoría de V4.6 real](GUEST_BOTANICA_ENTRY_57_CENTER_REAL_V46_AUDI
 
 [Entrada 62, evidencia autenticada](GUEST_BOTANICA_ENTRY_62_OWNER_REAL_PARITY_ANDROID_2026-10-11.md): los dos pedidos Cloud (shared, split) dieron «DATOS IDÉNTICOS» revisión/final y el vídeo de propietaria mostró los dos dentro del visor genérico en Android. **Paridad PASS; 9/11 aprobados, 2 pendientes**: integración en Centro GUEST operativo y medición real de tiempo activo. El Centro congelado V4.6 VEIL-only no fue alterado. NO-GO comercial, D03 no iniciado; no repetir paridad, pedidos o RSVP.
 
+## Entrada 63 — instrucciones reales antes de medir trabajo
+
+[Entrada 63 — guía de revisión](GUEST_BOTANICA_ENTRY_63_OWNER_TOUCH_REVIEW_GUIDE_2026-10-11.md). La propietaria señaló que no podía medirse una revisión sin saber **qué tenía que inspeccionar**. Se incorporaron antes de iniciar una lista de datos ficticios **exactos** y cinco controles obligatorios en la página de tiempo activo. Portada QA Tiempo / Botánica, 12/06/2027, Story personalizada, una sede a 17:00, legibilidad/composición, navegación y CTA de confirmación. Si hay fallo, no pulsar enviar. El timer mide revisión activa desde visor cargado hasta `send_review`, no creación total. Tests estático/browser y HTTP Cloudflare ampliados. Primer fallo QA contó el selector JavaScript como sexta casilla: corregido patrón del TEST sin cambiar requisitos. **9/11 PASS, 2 PENDING, NO-GO comercial.** No repetir RSVP ni paridad, Biblioteca v24 intacta.
+
 ## 6. Restricciones permanentes
 
 - NO tocar **ONE, ONE Partner, STUDIO, VEIL LIGHT congelado, `main`, master V14.7 Botánica** ni credenciales/servicios ajenos.
