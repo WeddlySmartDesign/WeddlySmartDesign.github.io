@@ -1,6 +1,6 @@
 {
   "schemaVersion": "guest-project-status-v1",
-  "asOf": "2026-10-10",
+  "asOf": "2026-10-11",
   "entryPoint": "guest/START_HERE.md",
   "repository": "WeddlySmartDesign/WeddlySmartDesign.github.io",
   "branch": "guest-independent",
@@ -1385,6 +1385,76 @@
         "artifact": "guest-platform-neutral-static-stage-no-live",
         "zipSize": 9082460
       }
+    },
+    "paidCatalogSingleHttpsHostRelease20261011": {
+      "status": "GUEST_EDGE_V15_AND_CHECKOUT_V23_ACTIVE; PUBLIC_HOST_NOT_CONNECTED; BOTANICA_NO_GO",
+      "sourceOfTruth": "Library cumulative bitacora Entry 36; guest/START_HERE.md; GUEST_CLOUDFLARE_PAGES_FREE_DEPLOY_2026-10-10.md",
+      "checkout": {
+        "slug": "guest-stripe-checkout",
+        "version": 23,
+        "status": "ACTIVE",
+        "cloudDigest": "9b865715fe11b646c0d2a416f9d3b1161b212682db8f932b782951680a172e8c",
+        "source": "guest/backend/guest-stripe-checkout/index.ts",
+        "sourceChangeCommit": "4581576dab71ecda2178ea84713d96ca9400e333",
+        "testCommit": "1090952c4cde30578aa6d90b1e043df6ec36fafa",
+        "rollbackVersion": 22,
+        "rollbackRepoCommit": "a6fe1c5fe4e07520d1b6a8a4f37a97ea95fd2a23",
+        "rollbackCloudDigest": "9c2628eb373d59e4595579529bffc9e45c347daae6936e4eefae9b785db69d0b",
+        "behavior": "paid catalog requires valid GUEST_CATALOG_PUBLIC_ORIGIN BEFORE Stripe session; generated questionnaire link uses exactly that configured static HTTPS origin; legacy buying untouched",
+        "liveRealPaymentTested": false
+      },
+      "invitationFlow": {
+        "slug": "guest-invitation-flow",
+        "version": 15,
+        "status": "ACTIVE",
+        "cloudDigest": "e343b56befa4328253bf08ff3797fbbae7a111c18c7918fa7549f330769ac5c9",
+        "sourceLibrary": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_V15_EDGE_GENERADO_VALIDADO_2026-10-11.ts",
+        "sourceSha256": "3ec968731ba09c6df76abac667ebe1fa3f6de916b82efe1b64c17bfca4ace0ad",
+        "sourceBytes": 67735,
+        "generator": "guest/tools/route_paid_catalog_urls_v15.cjs",
+        "checkoutSessionIdRequiredForPaidHostRules": true,
+        "behavior": "Paid production catalog review URL and final delivery URL require exact preconfigured HTTPS GUEST static origin; rejects fallback to legacy website or spoofed review link; test and legacy paths unaffected",
+        "rollbackVersion": 14,
+        "rollbackLibrary": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_V14_EDGE_VALIDADO_2026-10-10.ts",
+        "rollbackCloudDigest": "84bdc6814b9738081036b7fb144da7d5556d64ab24c3f6b858ef1dc79e50e63e",
+        "noCustomerProdE2E": true
+      },
+      "qa": {
+        "catalogContinuityPassRun": 38122398432,
+        "independentPassRun": 38122366631,
+        "isolatedV15PassRun": 38122463030,
+        "isolatedGeneratedSourceArtifactId": 11695822664,
+        "syntheticOnly": true,
+        "noChargesOrRealClientEmails": true
+      },
+      "unchangedCloudFunctions": {
+        "weddlyApp": 70,
+        "weddingSync": 18,
+        "guestRsvp": 4,
+        "guestLicenseAccess": 3,
+        "guestOrdersAdmin": 3
+      },
+      "remainingBlocker": "Owner OAuth connects NEW free Cloudflare Pages to ONLY GitHub repo WeddlySmartDesign/WeddlySmartDesign.github.io, production branch guest-independent; observe real pages.dev then verify public assets and Android/Cloud E2E",
+      "hostingConnected": false,
+      "knownPublicOrigin": null,
+      "publicOriginEnvConfigured": "NOT VERIFIED/ASSUME UNCONFIGURED",
+      "botanica": {
+        "version": "14.7",
+        "visualMasterSha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+        "commercialStatus": "NO-GO",
+        "formalGatesPassed": 3,
+        "formalGatesTotal": 11,
+        "liveCommercialOrderTested": false
+      },
+      "noNewSpend": true,
+      "protected": [
+        "ONE",
+        "ONE Partner",
+        "STUDIO",
+        "VEIL LIGHT",
+        "Botanica visual",
+        "main"
+      ]
     }
   },
   "commercialGate": {
