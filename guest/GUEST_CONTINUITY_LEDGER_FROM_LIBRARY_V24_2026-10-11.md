@@ -102,6 +102,10 @@ Gate `recipient-rsvp`: **PASS funcional en Cloud GUEST TEST**, alcance descrito 
 
 Consultar [auditoría de V4.6 real](GUEST_BOTANICA_ENTRY_57_CENTER_REAL_V46_AUDIT_2026-10-11.md): renderer congelado solo admite VEIL LIGHT y no Botánica; existe temporizador de trabajo local, pero no resultados de Botánica en Cloud ni medición validada. La suite independiente sigue verde y la de continuidad continúa bloqueada por el campo exacto del estado (Entrada 56). **8/11 con evidencia, 3 pendientes, NO-GO**. No repetir RSVP, no rehacer invitaciones ni modificar centro congelado.
 
+## Última nota de continuidad — Entrada 59
+
+[Entrada 59: correcciones de staging y estado no aplicadas por bloqueos de la herramienta](GUEST_BOTANICA_ENTRY_59_STAGING_PIN_ATTEMPT_2026-10-11.md). Tras auditar V4.6, se comprobó que el centro congelado solo resuelve VEIL LIGHT, tiene temporizador local por pedido y su checksum difiere del preparado por el stager. Intentos de edición bloqueados: NO modificar estado ficticiamente ni declarar CI verde. **8/11 con evidencia, tres pendientes, NO-GO comercial**; CI de continuidad rojo por campo literal, independiente verde. No repetir los pedidos, RSVP ni revisiones visuales. La Biblioteca histórica se conserva intacta.
+
 ## 6. Restricciones permanentes
 
 - NO tocar **ONE, ONE Partner, STUDIO, VEIL LIGHT congelado, `main`, master V14.7 Botánica** ni credenciales/servicios ajenos.
