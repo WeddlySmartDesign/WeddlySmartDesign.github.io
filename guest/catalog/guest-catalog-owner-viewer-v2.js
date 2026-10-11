@@ -37,7 +37,8 @@ async function show({order,config,host,registry,signal}){
   const onLoad=()=>{
    // Treat only the actual template as ready, never an empty about:blank load.
    try{const win=iframe.contentWindow;
-    if(!win||win.location.href==='about:blank'||typeof win[spec.applyApi]!=='function')return;
+    if(!win||win.location?.href==='about:blank')return;
+    if(typeof win[spec.applyApi]!=='function')return finish('iframe_adapter_missing:'+id);
     finish();
    }catch{finish('iframe_cross_origin')}
   };

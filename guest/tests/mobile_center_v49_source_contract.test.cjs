@@ -16,7 +16,7 @@ assert.match(script,/SOURCE_DRIFT_/);assert.match(script,/botanica_only_test_ord
 assert.match(script,/guestCatalogRemote\(order,cfg\)/);
 assert.match(script,/if\(guestCatalogRemoteActive&&window\.__guestCatalogClose\)/);
 assert.match(ext,/e\.origin!==target\|\|e\.source!==iframe\.contentWindow/);
-assert.match(v,/win\.location\.href==='about:blank'/);
+assert.match(v,/win\.location\?\.href==='about:blank'/);
 assert.match(v,/typeof win\[spec\.applyApi\]!=='function'/);
 assert.doesNotMatch(v,/iframe\.addEventListener\('load',onLoad,\{once:true\}\)/);
 assert(v.indexOf("iframe.src=url;host.replaceChildren(iframe)")>0,'set src before attach');
