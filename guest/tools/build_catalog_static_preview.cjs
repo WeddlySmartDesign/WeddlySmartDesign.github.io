@@ -46,7 +46,8 @@ const files=[
  'guest-review-v1.html',
  'guest/catalog-questionnaire.html',
  'guest/guest-catalog-delivery-runtime-v1.js',
- 'guest/catalog/guest-catalog-owner-viewer-v2.js'
+ 'guest/catalog/guest-catalog-owner-viewer-v2.js',
+ 'guest/catalog/owner-center-remote-bridge.html'
 ].map(name=>write(name,read(name)));
 const viewRegistry=structuredClone(registry);
 const designs=[];
