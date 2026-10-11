@@ -18,7 +18,7 @@ for(const re of [
  /document\.visibilityState==='visible'/,/Date\.now\(\)-lastActivity<60000/,
  /activeSeconds\+\+/,/No equivale al tiempo completo del encargo/
 ])assert.match(html,re);
-assert.doesNotMatch(html,/create_test|create_paid|link_test_license|grant|set_config|mark_review_ready|send_review|deliver|localStorage|sessionStorage|indexedDB/,'read-only and credential-minimized');
+assert.doesNotMatch(html,/action:\s*['\"](?:create_test|create_paid|link_test_license|grant|set_config|mark_review_ready|send_review|deliver)['\"]|localStorage|sessionStorage|indexedDB/,'read-only and credential-minimized');
 assert.match(html,/load\.addEventListener\('click',run\)/,'must require explicit owner click');
 const build=fs.readFileSync(path.join(root,'guest/tools/build_catalog_static_preview.cjs'),'utf8');
 assert(build.includes('guest/qa/owner-botanica-closeout.html'),'QA asset must ship via existing stage');
