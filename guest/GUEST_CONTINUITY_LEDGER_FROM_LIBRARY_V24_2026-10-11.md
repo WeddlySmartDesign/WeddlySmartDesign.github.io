@@ -80,6 +80,14 @@ Fuente estructurada obligatoria: `guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json
 
 Se añadió diagnóstico **read-only** revisión vs final a la recuperación privada de la propietaria, sin nuevas creaciones, y un QA estático de paridad. [QA catálogo previo 38143153914](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38143153914) SUCCESS, más ejecución de QA independiente a verificar en HEAD. **Siguiente paso:** validar camino legítimo de licencia GUEST TEST y receptor RSVP persona/unidad, sin afectar ONE, licencia comercial, `main` ni master visual. Después renderer gestor y tiempo activo. **La Entrada 53 NO ha sido sincronizada en Biblioteca v24**, no reintentar la sobrescritura fallida.
 
+## 5 ter. Entrada 54 — puente verdadero de licencia TEST GUEST y RSVP (11/10/2026)
+
+Leer [**Entrada 54**](GUEST_BOTANICA_ENTRY_54_V18_RSVP_TEST_LICENSE_2026-10-11.md). **Backend GUEST v18 ACTIVE** (bundle SHA `5a4d2e87415dabe7beecda03776e7745d12a7a2a44fe7cefd214852734bcaad2`): una sola nueva acción del gestor autorizada `link_test_license` que permite vincular **únicamente un pedido TEST de destinatario ficticio y estado delivered** a **licencia GUEST tester 7d, activada y con boda/miembro**, sin tocar ONE ni checkout. [Supabase TEMPORAL 38143844078](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38143844078) **PASS**: vínculo por gestor, 403 sin autorización, idempotencia, dos bodas, RSVP persona/unidad, persistencia y gestión. **Supabase Cloud:** código V18 real confirmado, pero **0 licencias GUEST tester y 0 pedidos Botánica vinculados tras deploy**; no dar por validado su E2E sin prueba legítima.
+
+Página privada para UNA acción autorizada, sin repetir pedidos: `https://guest-weddlysmartdesign.pages.dev/guest/qa/owner-botanica-rsvp-e2e.html`, verificada por [Cloudflare HTTPS 38144681000](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38144681000). Tras login propietaria, prepara licencia de **7 días** GUEST QA reutilizable, activa boda ficticia, enlaza uno de los pedidos existentes y comprueba dos respuestas ficticias y read-after-write, sin pagos. **Todavía no ejecutada por la propietaria.** El QA estático adicional de esta página existe, pero su registro explícito en el workflow quedó bloqueado por la herramienta: no afirmar suite incorporada. Biblioteca v24 sin modificación.
+
+**Estado 7/11, cuatro pendientes:** renderer gestor, paridad review/final cloud con propietario, RSVP Cloud auténtico persona/unidad, tiempo activo. NO desbloquear venta ni D03. Próximo paso exacto: ejecución con código de propietaria SOLO dentro de la nueva pantalla y captura de texto resultado sin tokens. Después verificar contadores Cloud y gate. No rehacer licencias ni usar Stripe.
+
 ## 6. Restricciones permanentes
 
 - NO tocar **ONE, ONE Partner, STUDIO, VEIL LIGHT congelado, `main`, master V14.7 Botánica** ni credenciales/servicios ajenos.
