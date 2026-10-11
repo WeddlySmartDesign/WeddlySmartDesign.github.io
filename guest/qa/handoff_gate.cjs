@@ -74,6 +74,11 @@ function validate(){
  for(const [gateKey,statusKey] of completionEvidence){
   requireIt((s.commercialGate[statusKey]==='PASS')===(gates[gateKey]?.pass===true),'current-state/evidence disagreement: '+statusKey);
  }
+ if(s.system.deploymentCertified===true){
+  requireIt(s.runtime.botanicaTestOnlyDeployed===true&&s.runtime.ownerGenericV2Deployed===true&&
+    Array.isArray(s.runtime.lastObservedSupports)&&s.runtime.lastObservedSupports.includes('botanica'),
+    'common system deployment cannot be certified without runtime and owner renderer live evidence');
+ }
  if(s.runtime.botanicaTestOnlyDeployed)requireIt(gates['backend-test-only']?.pass===true,'test backend falsely marked deployed');
  if(s.runtime.ownerGenericV2Deployed)requireIt(gates.renderer?.pass===true,'owner viewer falsely marked deployed');
  if(complete){
