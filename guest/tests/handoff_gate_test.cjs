@@ -25,13 +25,18 @@ const required=[
  'guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json',
  '.github/workflows/guest-botanica-contract-qa.yml'
 ];
-function sandbox(){const temp=fs.mkdtempSync(path.join(os.tmpdir(),'guest-handoff-'));for(const p of required){const dst=path.join(temp,p);fs.mkdirSync(path.dirname(dst),{recursive:true});fs.copyFileSync(path.join(sourceRoot,p),dst)}return temp}
+// Copy every currently PASS evidence source into mutation sandboxes automatically.
+// This keeps evidence validation strict without hardcoding each future design/entry.
+const evidenceRecord=JSON.parse(fs.readFileSync(path.join(sourceRoot,'guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json'),'utf8'));
+const passEvidenceSources=Object.values(evidenceRecord.templates||{}).flatMap(t=>t.basis==='pre-existing-commercial-seal'?[t.source]:Object.values(t.gates||{}).filter(g=>g.pass===true).map(g=>g.source)).filter(Boolean);
+function sandbox(){const temp=fs.mkdtempSync(path.join(os.tmpdir(),'guest-handoff-'));for(const p of new Set([...required,...passEvidenceSources])){const dst=path.join(temp,p);fs.mkdirSync(path.dirname(dst),{recursive:true});fs.copyFileSync(path.join(sourceRoot,p),dst)}return temp}
 function run(root){return cp.spawnSync(process.execPath,[script,'--root',root],{encoding:'utf8',timeout:10000})}
 function mutate(root,rel,fn){const f=path.join(root,rel),obj=JSON.parse(fs.readFileSync(f,'utf8'));fn(obj);fs.writeFileSync(f,JSON.stringify(obj,null,2)+'\n')}
 const cases=[
  ['wrong candidate version',(r)=>mutate(r,'guest/GUEST_PROJECT_STATUS_V1.json',j=>{j.designs.botanica.version='14.6'})],
  ['false commercial status',(r)=>mutate(r,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',j=>{j.templates.find(x=>x.id==='botanica').status='commercially-frozen'})],
  ['missing source file',(r)=>fs.rmSync(path.join(r,'guest/DESIGN_NEW_RUNBOOK.md'))],
+ ['accepted renderer evidence deleted',(r)=>{const e=JSON.parse(fs.readFileSync(path.join(r,'guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json'),'utf8'));fs.rmSync(path.join(r,e.templates.botanica.gates.renderer.source))}],
  ['historical masquerades as current',(r)=>fs.writeFileSync(path.join(r,'guest/CURRENT_STATE.md'),'# D02 V14.6 — ESTADO VIGENTE\n')],
  ['candidate hash replaced',(r)=>mutate(r,'guest/GUEST_PROJECT_STATUS_V1.json',j=>{j.designs.botanica.candidateSha256='0'.repeat(64)})],
  ['verified E2E reverted without evidence change',(r)=>mutate(r,'guest/GUEST_PROJECT_STATUS_V1.json',j=>{j.commercialGate.realOrderE2e='NOT EXECUTED IN LIVE CLOUD'})],
