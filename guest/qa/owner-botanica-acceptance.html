@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://dnjsxequwgtyyauuofxj.supabase.co; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>Certificación privada GUEST · Botánica</title>
+<style>
+:root{color-scheme:light}*{box-sizing:border-box}body{background:#f6f2ec;color:#3e322d;font:16px/1.5 system-ui,-apple-system,Arial,sans-serif;margin:0;padding:24px}main{max-width:540px;margin:auto}header{text-align:center}h1{font:400 34px/1.08 Georgia,serif;margin:12px 0}h2{font:400 24px Georgia,serif}p{line-height:1.6}small,.muted{color:#716761}label{display:block;font-weight:700;margin:18px 0 8px}input{border:1px solid #c8bcb0;border-radius:9px;background:white;padding:14px;font:inherit;width:100%;min-height:50px}button{background:#3e322d;color:white;border:0;border-radius:10px;padding:15px 18px;font:700 16px system-ui;width:100%;margin-top:14px;cursor:pointer}button:disabled{opacity:.45;cursor:default}a{color:#514035;word-break:break-all}.card{background:white;padding:18px;border:1px solid #e5dbd0;border-radius:15px;margin:16px 0}.error{color:#a12828;font-weight:700}.ok{color:#285735;font-weight:700}.steps{font-size:14px;white-space:pre-wrap;background:#ece7e0;padding:14px;border-radius:10px;max-height:220px;overflow:auto} .result{border-top:1px solid #e5dbd0;padding:12px 0}button:focus-visible,input:focus-visible{outline:3px solid #8e7261}
+</style></head><body><main><header><small>GUEST by WeddlySmartDesign</small><h1>Certificación de Botánica</h1><p>Solo para la propietaria. Dos pedidos ficticios completos en Supabase real, sin cobros ni correos.</p></header>
+<section class="card"><h2>Acceso del gestor</h2><p>Introduce el <strong>código de recuperación habitual del Centro GUEST</strong>. Se envía directamente a la función oficial de Supabase y no se guarda en esta página.</p>
+<label for="code">Código del Centro GUEST</label><input id="code" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Código del gestor">
+<button id="run" type="button">Ejecutar las dos pruebas</button>
+<p class="muted"><small>Solo se crean pedidos TEST de Botánica. No habilita venta, Stripe, emails o diseños nuevos. No compartas este código por chat.</small></p></section>
+<section class="card" aria-live="polite"><h2>Comprobaciones</h2><div id="status">Pendiente de autorización del gestor.</div><div class="steps" id="steps">Aún no se ha ejecutado ninguna operación.</div><div id="results"></div></section>
+<p class="muted"><small>Los enlaces finales contienen una capacidad privada de prueba. Ábrelos únicamente tú en Android, no los publiques ni reenvíes a invitados. No sirve para certificar ventas hasta completar las comprobaciones de gestión y la autorización comercial.</small></p>
+</main><script>
+(()=>{'use strict';
+const SERVICE='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/';
+const FLOW=SERVICE+'guest-invitation-flow',LOGIN=SERVICE+'weddly-owner-manager';
+const HOST='https://guest-weddlysmartdesign.pages.dev';
+const byId=id=>document.getElementById(id),steps=byId('steps'),results=byId('results');
+const status=byId('status'),button=byId('run'),secret=byId('code');
+let running=false;
+const safePrint=x=>String(x||'').replace(/v1\.[A-Za-z0-9_-]+\.[a-f0-9]{64}/gi,'[AUTH REDACTED]').slice(0,180);
+function show(message,kind){status.textContent=message;status.className=kind||'';}
+function note(s){steps.textContent+=(steps.textContent.startsWith('Aún no')?'':'\n')+s;steps.scrollTop=steps.scrollHeight;}
+async function post(url,params,managerToken){
+ const headers={'Content-Type':'application/json'};
+ if(managerToken)headers['x-weddly-manager']=managerToken;
+ const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),30000);
+ try{
+  const res=await fetch(url,{method:'POST',headers,body:JSON.stringify(params),redirect:'error',cache:'no-store',signal:ctrl.signal});
+  const body=await res.json().catch(()=>({}));
+  if(!res.ok||body.ok!==true){
+    const msg=safePrint(body.error||'HTTP_'+res.status);
+    const validation=Array.isArray(body.errors)?' ('+body.errors.map(safePrint).join(', ')+')':'';
+    throw Error(msg+validation);
+  }
+  return body;
+ }finally{clearTimeout(timer)}
+}
+async function uploadStory(token){
+ const b64='iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/l7kAAAAASUVORK5CYII=';
+ const bytes=Uint8Array.from(atob(b64),v=>v.charCodeAt(0));
+ const form=new FormData();
+ form.set('action','upload');form.set('slot','story');form.set('token',token);
+ form.set('file',new Blob([bytes],{type:'image/png'}),'qa-botanica.png');
+ const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),35000);
+ try{const r=await fetch(FLOW,{method:'POST',body:form,cache:'no-store',signal:ctrl.signal});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok||j.ok!==true)throw Error('Subida: '+safePrint(j.error||r.status));return j;
+ }finally{clearTimeout(timer)}
+}
+function example(n){
+ const common={couple:{name1:'QA Botánica',name2:n===1?'Dos sedes':'Una sede',date:'2027-06-12'},
+  confirmation:{reviewed:true},agenda:{enabled:false},gallery:{enabled:false},
+  practical:{bus:{enabled:false},gift:{enabled:false},playlist:{enabled:false}}};
+ return n===1?Object.assign(common,{story:{enabled:true,textMode:'none'},
+  locations:{mode:'split',ceremony:{name:'Ceremonia ficticia',time:'12:30'},celebration:{name:'Celebración ficticia',time:'15:00'}}}):
+  Object.assign(common,{story:{enabled:true,textMode:'custom',customText:'Historia de prueba para comprobar el cuestionario.'},
+  locations:{mode:'shared',shared:{name:'Lugar ficticio',time:'17:00'}}});
+}
+function linkCard(number,id,review,final){
+ const box=document.createElement('section');box.className='result';
+ const title=document.createElement('h3');title.textContent='Pedido TEST '+number+' · completado';box.append(title);
+ const small=document.createElement('small');small.textContent='Referencia interna '+id;box.append(small);
+ for(const [label,url] of [['Abrir revisión',review],['Abrir invitación final en Android',final]]){
+  const p=document.createElement('p'),a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noreferrer noopener';a.textContent=label;p.append(a);box.append(p);
+ }
+ results.append(box);
+}
+async function run(){
+ if(running)return;
+ const code=secret.value.trim();
+ if(code.length<20){show('Introduce tu código habitual de gestor.','error');return}
+ running=true;button.disabled=true;steps.textContent='';results.replaceChildren();show('Validando acceso…');
+ let manager=null;
+ try{
+  const auth=await post(LOGIN,{action:'login',recoveryCode:code});
+  secret.value=''; // no persistent credentials
+  manager=auth.managerToken;
+  if(typeof manager!=='string'||!manager.startsWith('v1.'))throw Error('Respuesta de acceso inválida');
+  await post(FLOW,{action:'status'},manager);
+  note('Acceso oficial del gestor: OK');
+  for(const n of [1,2]){
+   note('Pedido '+n+': creando TEST Botánica…');
+   const order=await post(FLOW,{action:'create_test',templateId:'botanica',email:'qa-botanica@example.invalid'},manager);
+   if(!order.id||!order.qToken||!order.rToken||!order.pToken)throw Error('Faltan capacidades de prueba');
+   note('Pedido '+n+': creado; cuestionario…');
+   const q=example(n);const loaded=await post(FLOW,{action:'load',token:order.qToken});
+   if(loaded.order?.templateId!=='botanica')throw Error('Plantilla incorrecta');
+   if(n===1){await uploadStory(order.qToken);note('Pedido 1: fotografía ficticia guardada');}
+   await post(FLOW,{action:'save',token:order.qToken,questionnaire:q});
+   await post(FLOW,{action:'submit',token:order.qToken,questionnaire:q});
+   await post(FLOW,{action:'start_design',orderId:order.id},manager);
+   await post(FLOW,{action:'mark_review_ready',orderId:order.id},manager);
+   const review=HOST+'/guest-review-v1.html?t='+encodeURIComponent(order.rToken);
+   await post(FLOW,{action:'send_review',orderId:order.id,reviewUrl:review},manager);
+   const reviewed=await post(FLOW,{action:'review_load',token:order.rToken});
+   if(reviewed.order?.config?.template?.id!=='botanica')throw Error('El visor no recibió Botánica');
+   if(n===2){
+    note('Pedido 2: solicitando un cambio real…');
+    await post(FLOW,{action:'review_respond',token:order.rToken,decision:'changes',note:'Ajuste de historia, prueba controlada.'});
+    q.story.customText='Historia ajustada tras la revisión de prueba.';
+    await post(FLOW,{action:'save',token:order.qToken,questionnaire:q});
+    await post(FLOW,{action:'submit',token:order.qToken,questionnaire:q});
+    await post(FLOW,{action:'start_design',orderId:order.id},manager);
+    await post(FLOW,{action:'mark_review_ready',orderId:order.id},manager);
+    await post(FLOW,{action:'send_review',orderId:order.id,reviewUrl:review},manager);
+    const revised=await post(FLOW,{action:'review_load',token:order.rToken});
+    if(revised.order?.config?.story?.textMode!=='custom')throw Error('El cambio no se refleja en revisión');
+   }
+   await post(FLOW,{action:'review_respond',token:order.rToken,decision:'approve'});
+   const final=HOST+'/guest/catalog-final.html?p='+encodeURIComponent(order.pToken);
+   const delivery=await post(FLOW,{action:'deliver',orderId:order.id,invitationUrl:final},manager);
+   if(delivery.status!=='delivered')throw Error('No se entregó el pedido');
+   const live=await post(FLOW,{action:'public_load',token:order.pToken});
+   if(live.order?.mode!=='test'||live.order?.config?.template?.id!=='botanica')throw Error('V17 TEST no validada');
+   linkCard(n,order.id,review,final);
+   note('Pedido '+n+': entrega real Supabase + origen Cloudflare + modo TEST: OK');
+  }
+  show('DOS PEDIDOS TEST COMPLETADOS. Abre los enlaces finales en Android.','ok');
+ }catch(e){show('Prueba detenida: '+safePrint(e.message||e)+'. Se conservan las comprobaciones anteriores.','error');note('Error: '+safePrint(e.message||e));}
+ finally{manager=null;secret.value='';button.disabled=false;running=false}
+}
+button.addEventListener('click',run);
+})();
+</script></body></html>
