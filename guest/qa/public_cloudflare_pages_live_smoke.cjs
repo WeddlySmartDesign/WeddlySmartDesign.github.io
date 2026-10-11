@@ -34,9 +34,9 @@ function getViaCurl(rel,maxBytes){
     {encoding:'utf8',timeout:29000});
   if(cli.status!==0)throw Error('curl_status_'+cli.status+' '+String(cli.stderr||'').trim().slice(0,170));
   const raw=fs.readFileSync(file);assert(raw.length>0&&raw.length<=maxBytes);
-  const lines=fs.readFileSync(headerFile,'utf8').split(/\\r?\\n/);
-  const statusLine=lines.find(l=>/^HTTP\\//.test(l))||'';
-  assert.match(statusLine,/\\s200\\s/,'curl unexpected response: '+statusLine);
+  const lines=fs.readFileSync(headerFile,'utf8').split('\n').map(line=>line.trim());
+  const statusLine=lines.find(line=>line.startsWith('HTTP/'))||'';
+  assert(statusLine.includes(' 200 '),'curl unexpected response: '+statusLine);
   const headers=new Headers();
   for(const line of lines){const sep=line.indexOf(':');if(sep>0)headers.set(line.slice(0,sep).trim(),line.slice(sep+1).trim())}
   return{data:raw,headers,code:200};
