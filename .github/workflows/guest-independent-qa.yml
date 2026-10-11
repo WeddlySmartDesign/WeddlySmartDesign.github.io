@@ -359,6 +359,8 @@ jobs:
         run: node guest/qa/catalog_public_final_review_browser_test.js
       - name: GUEST shared questionnaire mobile E2E (mocked, no Cloud)
         run: node guest/qa/catalog_common_questionnaire_browser_test.cjs
+      - name: GUEST live Cloudflare frozen Botánica review/final parity browser (synthetic API)
+        run: node guest/qa/live_botanica_review_final_parity_browser.cjs
 
   b8-checkout-return:
     runs-on: ubuntu-latest
