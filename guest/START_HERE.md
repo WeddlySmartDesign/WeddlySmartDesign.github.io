@@ -1,5 +1,13 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## Entrada 37 — 11/10/2026 · Diseños siguientes: SOLO diseño, nunca repetir plataforma
+
+**Regla ratificada por la propietaria:** para diseños 03–1000, la novedad creativa es únicamente HTML visual + ficha visual-plugin.json. El registro, publicación, pagos, cuestionario, revisión, entrega, personalización, RSVP y gestión deben reutilizar GUEST; la propietaria solo revisa en móvil. Toda modificación por nombre de diseño al core se tratará como regresión y se resolverá una sola vez, con pruebas ficticias D03/D1000. Contrato: guest/GUEST_NEW_DESIGN_ONLY_VISUAL_CONTRACT_2026-10-10.md y bitácora Entrada 37.
+
+**Cambio externo confirmado por captura de la usuaria:** Cloudflare Pages Git conectado, portada precomercial visible en https://guest-weddlysmartdesign.pages.dev/. Las antiguas entradas que decían «sin Pages» son históricas. No está acreditado HTTP externo para todos los recursos ni una venta/RSVP/Android real.
+
+**Pendiente innegociable ANTES de D03 real:** el actual comando Cloudflare usa --template botanica y el builder estático publica solo una candidata; completar UNA VEZ el builder de catálogo multi-diseño y probar que un HTML+manifiesto nuevos se integran sin cambiar comando/checkout/backend/host. Botánica conserva 3/11 gates PASS, 8 pendientes, NO-GO. No activar ventas ni tocar ONE, Partner, STUDIO, VEIL, visual Botánica o main. Cero gasto incremental.
+
 ## ÚLTIMA VERIFICACIÓN — ENTRADA 36 · 11/10/2026 · V15 / V23 CLOUD ACTIVO, AÚN SIN PAGES
 
 **No reiniciar GUEST.** Checkout `guest-stripe-checkout` **V23 ACTIVE** digest `9b865715fe11b646c0d2a416f9d3b1161b212682db8f932b782951680a172e8c`; invitaciones `guest-invitation-flow` **V15 ACTIVE** digest `e343b56befa4328253bf08ff3797fbbae7a111c18c7918fa7549f330769ac5c9`. Ambos releídos en Cloud, fuente V15 bit a bit igual al archivo de CI aislado guardado en Biblioteca `GUEST_V15_EDGE_GENERADO_VALIDADO_2026-10-11.ts`, SHA256 `3ec968731ba09c6df76abac667ebe1fa3f6de916b82efe1b64c17bfca4ace0ad`; CI aislado real `38122463030` **SUCCESS**, contrato catálogo `38122398432` **SUCCESS** e Independent `38122366631` **SUCCESS**. Rollback GUEST invitaciones V14 en Library; checkout V22 en repo commit `a6fe1c5f`. ONE `weddly-app` v70, `wedding-sync` v18 intactos.
