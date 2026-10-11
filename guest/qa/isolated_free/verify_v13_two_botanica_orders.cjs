@@ -2,7 +2,7 @@
 'use strict';
 /* CERTIFICATION-IN-PROGRESS. Runs ONLY against ephemeral 127.0.0.1 Supabase,
  * synthetic license, two synthetic couples. NO real cloud/service credentials.
- * The resulting fake invitationUrl is not a public working page. */
+ * Exercises TEST review and final URL shape against a synthetic static host.\n * The QA host does NOT resolve and NO real Cloudflare, email or customers are accessed. */
 const fs=require('node:fs'),assert=require('node:assert/strict'),crypto=require('node:crypto');
 const lines=fs.readFileSync(process.argv[2]||'', 'utf8').split(/\r?\n/);
 const env=Object.fromEntries(lines.map(l=>{const i=l.indexOf('=');return i>0?[l.slice(0,i),l.slice(i+1).trim().replace(/^["']|["']$/g,'')]:[]}).filter(x=>x.length===2));
@@ -12,7 +12,7 @@ const anon=env.GUEST_LOCAL_ANON_KEY||env.ANON_KEY;
 if(!anon)throw Error('NO_RUNNER_LOCAL_ANON');
 const API=base.origin+'/functions/v1/guest-invitation-flow';
 const OWNER_ID='11111111-2222-4333-8444-555555555555';
-const targetSite='https://guest-ci-local.invalid';
+const targetSite='https://guest-static-qa.pages.dev';
 const fakeEmail='fake-couple@example.invalid';
 async function call(action,data={},owner='',expect=200){
  const headers={'content-type':'application/json',apikey:anon,Authorization:'Bearer '+anon};
@@ -105,10 +105,14 @@ async function main(){
   assert.equal(started.config.template.id,'botanica');assert.equal(String(started.config.template.version),'14.7');
   if(number===1)assert.equal(started.config.story.textMode,'none','photo-only story must remain NONE, never preset');
   await call('mark_review_ready',{orderId:create.id},owner);
+  const reviewUrl=targetSite+'/guest-review-v1.html?t='+encodeURIComponent(create.rToken);
+  const reviewSent=await call('send_review',{orderId:create.id,reviewUrl},owner);
+  assert.equal(reviewSent.reviewUrl,reviewUrl,'TEST review uses exact configured static host');
+  assert.equal(reviewSent.localTest,false,'supplied TEST review URL exercises public link branch without sending email');
   const review=await call('review_load',{token:create.rToken});
   assert.equal(review.order.config.template.id,'botanica');
   await call('review_respond',{token:create.rToken,decision:'approve'});
-  const inviteUrl=targetSite+'/invitation/'+create.id;
+  const inviteUrl=targetSite+'/guest/catalog-final.html?p='+encodeURIComponent(create.pToken);
   const delivered=await call('deliver',{orderId:create.id,invitationUrl:inviteUrl},owner);
   assert.equal(delivered.status,'delivered');
   const publicView=await call('public_load',{token:create.pToken});
@@ -117,10 +121,10 @@ async function main(){
   assert.equal(String(publicView.order.config.template.version),'14.7');
   const columns=['template','story','locations','agenda','practical','rsvp'];
   for(const c of columns)assert.deepEqual(withoutShortLivedMediaSignature(publicView.order.config[c]),withoutShortLivedMediaSignature(review.order.config[c]),'review/final parity (exclude expiring media signature): '+c);
-  completed.push({orderMode:'test',template:'botanica',storyMode:q.story.textMode,locations:q.locations.mode,review:true,approved:true,deliveryRecord:true,publicLoad:true});
+  completed.push({orderMode:'test',template:'botanica',storyMode:q.story.textMode,locations:q.locations.mode,review:true,reviewStaticHost:true,approved:true,deliveryRecord:true,finalStaticHost:true,publicLoad:true});
  }
  assert.equal(completed.length,2);
  await verifyPaidBridge(owner);
- console.log('PASS actual local V13 lifecycle: TWO synthetic Botánica orders via manager auth, questionnaire/save/submit, design, review, approval, delivery and public_load, photo-only none and custom, review/final parity. NO working public pages, no real RSVP endpoint, no email/checkout/production.');
+ console.log('PASS isolated V16 TWO synthetic Botánica orders, questionnaire/upload, static-host review and final URL contract, approval, delivery, server-confirmed TEST public_load and parity. NO working public orders, no customer email/checkout/production.');
 }
 main().catch(e=>{console.error('LOCAL_V13_E2E_FAILED:',e.message);process.exitCode=1});
