@@ -27,7 +27,12 @@ async function render(browser,variant,kind){
  try{
   const u=BASE+(kind==='review'?'/guest-review-v1.html?t=':'/guest/catalog-final.html?p=')+TOKEN;
   await p.goto(u,{waitUntil:'domcontentloaded',timeout:45000});
-  await p.frameLocator('iframe').locator('body').waitFor({state:'visible',timeout:60000});
+  try{await p.locator('iframe').waitFor({state:'attached',timeout:65000});}
+  catch(e){
+   const state=await p.locator('#state').innerText().catch(()=>'(no state)'),
+    count=await p.locator('iframe').count();
+   throw Error('NO_IFRAME '+kind+' '+variant.title+' state='+state.slice(0,230)+' iframeCount='+count+' pageErrors='+errors.slice(0,4).join('; ')+' original='+String(e).slice(0,120));
+  }
   await p.waitForTimeout(1200);
   const frame=p.frameLocator('iframe');
   const info=await frame.locator('body').evaluate(el=>({
