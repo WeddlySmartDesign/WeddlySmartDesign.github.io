@@ -1,0 +1,107 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src 'self' https://dnjsxequwgtyyauuofxj.supabase.co; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; frame-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>Centro GUEST · Tiempo activo real Botánica TEST</title>
+<style>body{background:#f6f0ea;color:#473930;font:16px/1.5 system-ui,Arial,sans-serif;margin:0;padding:20px}main{max-width:650px;margin:auto}h1{font:400 36px/1.1 Georgia,serif}h2{font:400 23px Georgia,serif}p{line-height:1.55}.card{background:white;border:1px solid #dacfc1;border-radius:16px;padding:20px;margin:14px 0}.muted,small{color:#76675c}input{display:block;width:100%;border:1px solid #c7b9ac;padding:14px;border-radius:10px;box-sizing:border-box;font:inherit;min-height:50px;margin:9px 0 15px}button{width:100%;padding:15px;background:#46372e;color:white;border:0;border-radius:10px;font-weight:700;font-size:16px;margin:10px 0;min-height:50px}button:disabled{opacity:.5}.accent{background:#ede5dc;color:#45362d}#view{height:70vh;max-height:720px;border:1px solid #d4c8b9;border-radius:10px;overflow:hidden}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;background:#f3eee7;padding:14px;border-radius:10px}.ok{color:#296241;font-weight:700}.error{color:#a12f2b;font-weight:700}[hidden]{display:none!important}</style>
+</head><body><main><p class="muted">GUEST by WeddlySmartDesign · Solo TEST · Sin envíos ni ventas</p>
+<h1>Medir un encargo Botánica normal</h1><p>Prepara automáticamente una única boda ficticia de prueba para <strong>medir tu trabajo real de revisión hasta «Enviar revisión»</strong>. Si la preparación se interrumpe, recupera ese mismo pedido. No envía emails a parejas ni realiza cobros.</p>
+<section class="card"><h2>Autorización</h2><label for="code">Código de propietaria del Centro GUEST</label><input id="code" type="password" autocomplete="off" autocapitalize="none" spellcheck="false"><button id="prepare">Preparar encargo TEST (reutilizar si existe)</button><small>Esta es la única prueba nueva que requiere tu intervención real para medir el tiempo; no volverá a crear pedidos si ya existe la prueba de tiempo.</small></section>
+<section class="card" aria-live="polite"><h2>Estado</h2><p id="status">Sin comenzar.</p><pre id="steps">Pendiente de acceso.</pre></section>
+<section class="card" id="task" hidden><h2>Revisión de propietaria</h2><p>Revisa nombres, fecha, historia, sede y cierre dentro de la invitación. El contador solo suma segundos con esta pantalla visible y actividad reciente (60 s). Se inicia cuando se carga la invitación.</p>
+<p>Tiempo activo <strong id="clock">0:00</strong> · objetivo ≤5:00</p>
+<div id="view"></div><button id="send">He revisado · enviar revisión TEST y cerrar tiempo</button><p class="muted"><small>Botánica no se vende. Este botón marca «lista» y «revisión enviada» solo en el pedido ficticio, sin correo.</small></p></section>
+<section class="card" id="done" hidden><h2>Resultado</h2><p id="final"></p><small>Envía únicamente captura de este resultado, sin mostrar códigos, enlaces ni otros datos privados.</small></section>
+</main><script src="/guest/catalog/guest-catalog-owner-viewer-v2.js"></script>
+<script>(()=>{'use strict';
+const FLOW='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow',LOGIN='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-owner-manager';
+const MAIL='qa-touch-botanica@example.invalid',el=id=>document.getElementById(id);
+let manager=null,order=null,viewer=null,active=0,lastActivity=Date.now(),timer=null,busy=false;
+const note=s=>{el('steps').textContent+=(el('steps').textContent==='Pendiente de acceso.'?'':'\n')+s};
+const show=(s,err=false)=>{el('status').textContent=s;el('status').className=err?'error':'ok'};
+const stamp=()=>{lastActivity=Date.now()};
+for(const ev of ['pointerdown','touchstart','touchmove','keydown','wheel'])document.addEventListener(ev,stamp,{passive:true});
+const fmt=n=>Math.floor(n/60)+':'+String(n%60).padStart(2,'0');
+async function api(url,payload,token){
+ const head={'content-type':'application/json'};if(token)head['x-weddly-manager']=token;
+ const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),30000);
+ try{const r=await fetch(url,{method:'POST',headers:head,body:JSON.stringify(payload),cache:'no-store',redirect:'error',signal:ctl.signal});
+ const data=await r.json().catch(()=>({}));if(!r.ok||!data.ok)throw Error(String(data.error||r.status).slice(0,100));return data}
+ finally{clearTimeout(timer)}
+}
+const questionnaire=()=>({
+ couple:{name1:'QA Tiempo',name2:'Botánica',date:'2027-06-12'},
+ story:{enabled:true,textMode:'custom',customText:'Historia ficticia para una medición de propietario.'},
+ locations:{mode:'shared',shared:{name:'Lugar ficticio para medición',time:'17:00'}},
+ agenda:{enabled:false},gallery:{enabled:false},
+ practical:{bus:{enabled:false},gift:{enabled:false},playlist:{enabled:false}},
+ confirmation:{reviewed:true}
+});
+async function chooseOrder(){
+ const listed=await api(FLOW,{action:'list'},manager);
+ const rows=(listed.orders||[]).filter(o=>o.mode==='test'&&o.templateId==='botanica'&&o.buyerEmail===MAIL)
+ .sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+ if(rows.length){
+  const d=await api(FLOW,{action:'detail',orderId:rows[0].id},manager);const o=d.order||{};
+  if(['submitted','designing','review_ready'].includes(o.status)){note('Pedido de tiempo ya existente recuperado; no se crea otro.');return o}
+  if(o.status==='review_sent'){show('Esta medición ya terminó. No generamos otra.');el('final').textContent='Prueba de tiempo ya cerrada en GUEST; utiliza el resultado de la sesión anterior.';el('done').hidden=false;return null}
+  throw Error('Existe una prueba de tiempo previa en estado '+o.status+'. No se crean duplicados.');
+ }
+ note('Preparando UN pedido de tiempo ficticio TEST.');
+ const created=await api(FLOW,{action:'create_test',templateId:'botanica',email:MAIL},manager);
+ if(!created.id||!created.qToken)throw Error('No se pudo crear el pedido TEST');
+ const q=questionnaire();
+ await api(FLOW,{action:'save',token:created.qToken,questionnaire:q});
+ await api(FLOW,{action:'submit',token:created.qToken,questionnaire:q});
+ const d=await api(FLOW,{action:'detail',orderId:created.id},manager);
+ return d.order;
+}
+async function prepare(){
+ if(busy)return;let code=el('code').value.trim();
+ if(code.length<20){show('Introduce el código completo.',true);return}
+ busy=true;el('prepare').disabled=true;show('Preparando acceso privado…');el('steps').textContent='';
+ try{
+  const auth=await api(LOGIN,{action:'login',recoveryCode:code});el('code').value='';code='';manager=auth.managerToken;
+  if(!manager?.startsWith('v1.'))throw Error('Sesión inválida');
+  order=await chooseOrder();if(!order)return;
+  if(order.status==='submitted'){await api(FLOW,{action:'start_design',orderId:order.id},manager);const d=await api(FLOW,{action:'detail',orderId:order.id},manager);order=d.order}
+  if(!['designing','review_ready'].includes(order.status))throw Error('Estado no medible: '+order.status);
+  const registryResponse=await fetch('/guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',{cache:'no-store'});
+  if(!registryResponse.ok)throw Error('Catálogo del visor no disponible');
+  const reg=await registryResponse.json(),spec=reg.templates?.botanica;
+  if(spec?.mode!=='iframe'||spec.status!=='certification-pending'||spec.src!=='/guest/catalog-assets/botanica/14.7/index.html')throw Error('Master visual de certificación no disponible');
+  const cfg=order.hydratedConfig;
+  if(cfg?.template?.id!=='botanica'||String(cfg.template.version)!=='14.7')throw Error('Plantilla equivocada');
+  el('task').hidden=false;
+  viewer=await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order:{template_id:'botanica',template_version:'14.7',mode:'test'},config:cfg,host:el('view'),registry:reg});
+  const frame=el('view').querySelector('iframe');
+  try{for(const ev of ['touchstart','touchmove','pointerdown','wheel','keydown'])frame.contentWindow.document.addEventListener(ev,stamp,{passive:true})}catch{}
+  // Starting only AFTER automated order preparation and successful real visual render.
+  active=0;stamp();if(timer)clearInterval(timer);
+  timer=setInterval(()=>{if(document.visibilityState==='visible'&&Date.now()-lastActivity<60000){active++;el('clock').textContent=fmt(active)}},1000);
+  show('Invitación Botánica lista para tu revisión. Temporizador activo.');
+  el('task').scrollIntoView({block:'start',behavior:'smooth'});
+ }catch(e){show('No se pudo preparar: '+String(e.message||e).slice(0,150),true);note('No pulses repetidamente. El encargo podrá recuperarse si quedó creado.');manager=null;}
+ finally{el('code').value='';el('prepare').disabled=false;busy=false}
+}
+async function finish(){
+ if(busy||!manager||!order)return;
+ busy=true;el('send').disabled=true;show('Cerrando revisión TEST…');
+ try{
+  const id=order.id;
+  if(order.status==='designing'){await api(FLOW,{action:'mark_review_ready',orderId:id},manager)}
+  const sent=await api(FLOW,{action:'send_review',orderId:id},manager);
+  if(sent.status!=='review_sent'||sent.localTest!==true)throw Error('Revisión no confirmada como TEST');
+  const d=await api(FLOW,{action:'detail',orderId:id},manager);
+  if(d.order?.status!=='review_sent'||d.order.mode!=='test')throw Error('No se confirmó el estado final en Cloud');
+  if(timer)clearInterval(timer);timer=null;
+  el('task').hidden=true;el('done').hidden=false;
+  el('final').textContent='Revisión Botánica TEST enviada sin correo. Tiempo ACTIVO de propietaria: '+fmt(active)+' · '+(active<=300?'OBJETIVO ≤5:00 CUMPLIDO':'SUPERADO OBJETIVO 5:00')+'. Pedido confirmado en Supabase.';
+  show('Medición completa · revisión enviada realmente.');
+  el('done').scrollIntoView({block:'start',behavior:'smooth'});
+  if(viewer){viewer.close();viewer=null}manager=null;
+ }catch(e){show('La revisión no está cerrada: '+String(e.message||e).slice(0,130),true);note('No se ha confirmado el envío; no asumir éxito.');el('send').disabled=false}
+ finally{busy=false}
+}
+el('prepare').addEventListener('click',prepare);el('send').addEventListener('click',finish);
+})();</script></body></html>
