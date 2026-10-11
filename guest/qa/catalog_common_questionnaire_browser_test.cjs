@@ -49,19 +49,19 @@ async function test(browser,{split,none}){
   await page.locator('#email').fill('test@example.invalid');
   await next(1);
   if(none){
-   await page.locator('input[name=storyPreset][value=none]').check();
+   await page.locator('label.choice:has(input[name="storyPreset"][value="none"])').click();
    await page.locator('#next').click();
    assert.equal(await page.locator('.step.on').getAttribute('data-step'),'1','photo-only cannot advance without image');
    assert.match(await page.locator('#msg').innerText(),/solo una fotografía/i);
    await page.locator('#storyFile').setInputFiles({name:'qa-photo.png',mimeType:'image/png',buffer:PNG});
    await page.waitForFunction(()=>document.getElementById('storyFileInfo')?.textContent.includes('qa-photo.png'));
   }else{
-   await page.locator('input[name=storyPreset][value=custom]').check();
+   await page.locator('label.choice:has(input[name="storyPreset"][value="custom"])').click();
    await page.locator('#storyCustom').fill('Historia modificada y aprobada.');
   }
   await next(2);
   if(split){
-   await page.locator('input[name=locMode][value=split]').check();
+   await page.locator('label.choice:has(input[name="locMode"][value="split"])').click();
    await page.locator('#cerName').fill('Ceremonia de prueba');
    await page.locator('#cerTime').fill('12:30');
    await page.locator('#celName').fill('Celebración de prueba');
@@ -71,15 +71,15 @@ async function test(browser,{split,none}){
    await page.locator('#sharedTime').fill('17:00');
   }
   await next(3);
-  await page.locator('#agendaEnabled').uncheck();
+  await page.locator('label.switchrow:has(#agendaEnabled)').click();
   await next(4);
   await next(5);
-  await page.locator('#galleryEnabled').uncheck();
+  await page.locator('label.switchrow:has(#galleryEnabled)').click();
   await next(6);
   const review=await page.locator('#review').innerText();
   if(split){assert(review.includes('Ceremonia de prueba')&&review.includes('Celebración de prueba'));}
   else{assert(review.includes('Lugar único de prueba')&&review.includes('Historia modificada y aprobada.'));}
-  await page.locator('#reviewed').check();
+  await page.locator('label.confirm:has(#reviewed)').click();
   await page.locator('#submit').click();
   await page.waitForFunction(()=>document.getElementById('done')?.classList.contains('on'));
   const submitted=calls.filter(c=>c.action==='submit');assert.equal(submitted.length,1);
