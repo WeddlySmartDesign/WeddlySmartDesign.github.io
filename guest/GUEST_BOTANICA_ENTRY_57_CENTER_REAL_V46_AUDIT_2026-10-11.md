@@ -1,0 +1,22 @@
+# GUEST/Botánica — Entrada 57 · auditoría directa de Centro GUEST V4.6 real y tiempo activo
+
+**11/10/2026.** Fuente: archivo de propietaria **real**, obtenido en solo lectura desde Biblioteca, `/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_6_CLEAN_FROZEN.html`; 30.038.021 bytes, SHA256 local **`a95984b658e560a9c3fca4bd92315b41c1b92cc4f6d47fffeed890da6f1f2133`**. Este archivo se conservó íntegro, sin modificar, publicar ni subir a GitHub. GitHub branch aislada `guest-independent`; master visual Botánica sin cambios. Es una verificación específica del centro, no la ficción de probarlo en Android.
+
+## Diagnóstico reproducible
+
+1. **Bloqueo renderer actual:** el Centro V4.6 congelado contiene `const CATALOG_RENDERERS={'veil-light': ...}` y `rendererFor(order)` solo resuelve ese registro; para `botanica` devolverá `template_renderer_unavailable:botanica`. Que el final público de Botánica funcione en Android **no implica** que la versión congelada del centro soporte Botánica.
+2. Existe desde antes una **ruta genérica preparada y testeada en aislamiento**: `guest/tools/stage_owner_center_v2.cjs`, `guest/catalog/guest-catalog-owner-viewer-v2.js`, `guest/catalog/guest-owner-stage-overlay-v2.js`. El stager no altera el master, genera un centro alternativo de **staging offline `connect-src none`**; NO debe confundirse con centro operativo para pedidos Cloud.
+3. **Deriva de huella en staging:** la constante `CENTER_SHA` del stager es **`0832f4fac4ae51f5a3e305a0d06284a3ff4bb1a121ece4a4e8b01e5368605c7a`**, distinta del SHA de la versión V4.6 realmente congelada en Biblioteca. Por diseño, intentar usar V4.6 con el CLI actual dará `preproduction_center_sha256_mismatch`. No bajar restricciones de SHA sin pin explícito, QA y sin tocar centro original.
+4. En la V4.6 real YA EXISTE instrumentación **`TOUCH_KEY='guest_owner_touch_v1'`** y `TOUCH_DONE_KEY='guest_owner_touch_done_v1'`, ambas en `localStorage` del centro. Se mide tiempo activo por pedido `current`; un `setInterval` suma segundos solo si `document.visibilityState==='visible'` y hubo actividad de usuario dentro del último minuto. El botón `wpCertTest` automatiza la creación de un pedido VEIL LIGHT y reinicia contador; `wpSend` ejecuta `send_review`, detiene el contador y comunica `Tiempo activo final` y si `<=5:00`. **No hay evidencia de que estos contadores se envíen a Supabase; no aparecen en el flujo de invitados ni se pueden inferir de timestamps de pedidos.**
+5. La V4.6 `wpCertTest` crea `templateId:'veil-light'` con correo de propietaria (normal del centro). Por tanto **NO sirve para certificar el trabajo activo de Botánica sin adaptar el centro de manera genérica**, sin crear nuevos pedidos repetidos. No activar venta ni inventar un tiempo.
+6. La QA de continuidad de GitHub sigue FAIL por la discrepancia textual exacta `commercialGate.recipientRsvpPersistence='PASS real ...'` versus `PASS` requerido. La corrección de JSON completo fue bloqueada por herramienta; ver [Entrada 56](GUEST_BOTANICA_ENTRY_56_QA_EXACT_STATUS_BLOCKER_2026-10-11.md). **NO alterar tests para ocultarlo**. QA independiente en último HEAD comprobado `88ec3b7` SUCCESS. Los ocho gates de evidencia incluida RSVP Cloud siguen 8 PASS / 3 PENDING.
+
+## Decisiones
+
+- No tocar ni recodificar V4.6 congelado por sorpresa.
+- No usar la aplicación Android de Centro VEIL como demostración falsa de Botánica.
+- Para mejorar el gate renderer sin sustituir el centro congelado, preparar una vista **QA read-only del propietario autenticado**, que reutilice el viewer genérico, mismo Botánica 14.7 y datos reales TEST, alojada solo en Cloudflare stage, sin ventas. **Eso no basta por sí solo para aprobar el centro instalado.**
+- `owner-touch`: medir únicamente cuando haya flujo de Botánica real de propietario con timer de trabajo (sin cronómetros del chat, CI ni timestamps); no marcar PASS retroactivamente.
+- Prioridad adicional: corregir un único campo JSON `recipientRsvpPersistence` a `PASS` mediante una edición de archivo autorizada; la evidencia larga queda en Entrada 55 y campos de alcance, no se pierde.
+
+**Estado:** Botánica **8/11 con evidencia**; QA de continuidad **rojo** por JSON; tres gates pendientes `renderer`, `review-final-parity`, `owner-touch`; **NO-GO comercial, D03 no iniciado**. No cambios en ONE, ONE Partner, STUDIO, VEIL LIGHT, `main`, master Botánica, Supabase ni Stripe en esta auditoría. Biblioteca v24 histórica intacta.
