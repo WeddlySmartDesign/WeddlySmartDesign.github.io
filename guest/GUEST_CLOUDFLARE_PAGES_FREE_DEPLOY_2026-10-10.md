@@ -3,6 +3,12 @@
 **Fecha:** 10/10/2026 · **Alcance:** preproducción. No habilita ventas, no cambia `main`.  
 **Autorización de la propietaria:** "Te autorizo", relativa a conseguir un alojamiento gratuito y cerrar integración, conservando **coste incremental 0 €**.
 
+## Nota de ejecución comprobada 11/10/2026 · GUEST V15/V23
+
+**Cloud confirmado, pero SIN ALOJAMIENTO PUBLICADO:** `guest-invitation-flow` **V15 ACTIVE** (digest `e343b56befa4328253bf08ff3797fbbae7a111c18c7918fa7549f330769ac5c9`) y `guest-stripe-checkout` **V23 ACTIVE** (digest `9b865715fe11b646c0d2a416f9d3b1161b212682db8f932b782951680a172e8c`). GitHub Actions aislado `38122463030` SUCCESS y contrato `38122398432` SUCCESS. Sin nuevos costes, sin tocar ONE/STUDIO/main ni activar Botánica (3/11 PASS, NO-GO).
+
+Ambas funciones consumen la **misma variable de entorno de proyecto** `GUEST_CATALOG_PUBLIC_ORIGIN` para coordinar compra, cuestionario, revisión y entrega final. Hasta publicar una URL real y validarla, **no configurarla con valores inventados y no habilitar catálogo**. Si está ausente, el nuevo checkout rechaza iniciar pago de plantilla. El origen NO sustituye `WEDDLY_SITE_ORIGIN` de las compras existentes. Tras OAuth de Cloudflare Git, comprobar URL anónima y configurar solo el dominio exacto comprobado; verificar ese cambio mediante una prueba, **no afirmar que el secreto esté aplicado por escribirlo en un documento**. La propietaria solo necesita autorizar OAuth, no editar ni programar.
+
 ## Decisión confirmada
 
 - Cloudflare Pages Free permite archivos individuales de hasta **25 MiB** y solicita **0 € por las peticiones a archivos estáticos**. Botánica ocupa 11.635.635 bytes y cabe.
