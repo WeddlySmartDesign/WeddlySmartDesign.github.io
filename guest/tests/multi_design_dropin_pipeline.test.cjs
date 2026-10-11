@@ -19,7 +19,8 @@ try{
   'guest/catalog-final.html','guest-review-v1.html','guest/catalog-questionnaire.html','guest/qa/owner-botanica-acceptance.html','guest/qa/owner-botanica-rsvp-e2e.html',
   'guest/qa/owner-botanica-closeout.html',
   'guest/qa/owner-botanica-touch-benchmark.html',
-  'guest/guest-catalog-delivery-runtime-v1.js','guest/catalog/guest-catalog-owner-viewer-v2.js'
+  'guest/guest-catalog-delivery-runtime-v1.js','guest/catalog/guest-catalog-owner-viewer-v2.js',
+  'guest/catalog/owner-center-remote-bridge.html'
  ];
  common.forEach(copy);
  const chunksRoot='guest/catalog-assets/botanica/14.7/source-chunks';
