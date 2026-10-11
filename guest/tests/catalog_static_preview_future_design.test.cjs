@@ -23,7 +23,7 @@ try{
  const chunksSrc=path.join(root,'guest/catalog-assets/botanica/14.7/source-chunks');
  const chunksDst=path.join(guest,'catalog-assets/botanica/14.7/source-chunks');
  fs.mkdirSync(path.dirname(chunksDst),{recursive:true});fs.cpSync(chunksSrc,chunksDst,{recursive:true});
- for(const p of ['guest/catalog-final.html','guest-review-v1.html','guest/catalog-questionnaire.html','guest/qa/owner-botanica-acceptance.html','guest/guest-catalog-delivery-runtime-v1.js','guest/catalog/guest-catalog-owner-viewer-v2.js']){
+ for(const p of ['guest/catalog-final.html','guest-review-v1.html','guest/catalog-questionnaire.html','guest/qa/owner-botanica-acceptance.html','guest/qa/owner-botanica-rsvp-e2e.html','guest/guest-catalog-delivery-runtime-v1.js','guest/catalog/guest-catalog-owner-viewer-v2.js']){
   const to=path.join(tmp,p);fs.mkdirSync(path.dirname(to),{recursive:true});fs.copyFileSync(path.join(root,p),to);
  }
  const dest=path.join(tmp,'export');
