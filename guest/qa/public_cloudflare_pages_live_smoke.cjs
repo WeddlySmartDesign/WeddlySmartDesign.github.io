@@ -118,7 +118,8 @@ async function verify(){
   '/guest-review-v1.html',
   '/guest/catalog-final.html',
   '/guest/guest-catalog-delivery-runtime-v1.js',
-  '/guest/catalog/guest-catalog-owner-viewer-v2.js'
+  '/guest/catalog/guest-catalog-owner-viewer-v2.js',
+  '/guest/catalog/owner-center-remote-bridge.html'
  ];
  for(const route of routes){
    const remote=await getWithRetry(route);
