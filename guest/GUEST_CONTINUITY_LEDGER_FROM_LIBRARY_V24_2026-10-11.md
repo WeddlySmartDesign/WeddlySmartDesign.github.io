@@ -88,6 +88,12 @@ Página privada para UNA acción autorizada, sin repetir pedidos: `https://guest
 
 **Estado 7/11, cuatro pendientes:** renderer gestor, paridad review/final cloud con propietario, RSVP Cloud auténtico persona/unidad, tiempo activo. NO desbloquear venta ni D03. Próximo paso exacto: ejecución con código de propietaria SOLO dentro de la nueva pantalla y captura de texto resultado sin tokens. Después verificar contadores Cloud y gate. No rehacer licencias ni usar Stripe.
 
+## 5 quater. Entrada 55 — PRIMER RSVP TEST CLOUD PERSISTIDO EN GESTIÓN (11/10/2026)
+
+[**Leer Entrada 55 de evidencia y continuidad**](GUEST_BOTANICA_ENTRY_55_CLOUD_RSVP_OWNER_ANDROID_2026-10-11.md). La propietaria ejecutó la certificación GUEST TEST v18 en Android. Su captura corresponde a un momento **intermedio**, pero los datos POSTERIORES verificables de Supabase Cloud acreditan **1 Botánica TEST entregada vinculada a licencia GUEST de prueba** (antes 0), **2 submissions de origen `guest`, `applied_at` verdadero**, asistencia **sí/no**, y `guest_app_state` confirmada/rechazada para las **dos personas ficticias de la misma unidad**. Los dos vídeos abren la **misma** invitación Botánica «Una sede»; son enlaces para **persona** y **unidad**, no dos diseños nuevos. **No hacer otra ejecución ni crear pedidos**. No se observa pulsación física del CTA ni pantalla RSVP en los vídeos; ese límite se conserva expresamente.
+
+Gate `recipient-rsvp`: **PASS funcional en Cloud GUEST TEST**, alcance descrito en Entrada 55. **Estado ahora 8/11 PASS, 3 PENDING (`renderer` centro gestor, `review-final-parity`, `owner-touch`), NO-GO venta y NO D03.** A partir de esta entrada, párrafos históricos anteriores de este índice que mencionan 7/11 o “0 Botánica vinculada” son fotografías fechadas y quedan **superados por Entrada 55 y los dos JSON estructurados**. La Biblioteca histórica sigue intacta en v24; no intentar sobrescribirla.
+
 ## 6. Restricciones permanentes
 
 - NO tocar **ONE, ONE Partner, STUDIO, VEIL LIGHT congelado, `main`, master V14.7 Botánica** ni credenciales/servicios ajenos.
