@@ -1803,20 +1803,34 @@
       "gatePasses": 9,
       "gatePending": 2,
       "commercialSale": "NO_GO"
+    },
+    "botanicaEntry64OwnerTouch": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_64_OWNER_TOUCH_REAL_2026-10-11.md",
+      "ownerVideo": "1000095282.mp4",
+      "activeSeconds": 41,
+      "ownerReviewChecks": 5,
+      "testReviewSentInRealCloud": true,
+      "syntheticOrderCount": 1,
+      "fullProductionElapsedMeasured": false,
+      "ownerTouchGatePass": true,
+      "remainingGate": "renderer",
+      "saleApproved": false
     }
   },
   "commercialGate": {
     "source": "guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json",
     "requiredPerNewTemplate": 11,
-    "currentBotanicaPass": 9,
-    "currentBotanicaPending": 2,
+    "currentBotanicaPass": 10,
+    "currentBotanicaPending": 1,
     "realOrderE2e": "PASS",
     "recipientRsvpPersistence": "PASS",
     "ownerAndroid": "PASS",
     "ownerTouchMaxMinutes": 5,
     "realOrderE2eScope": "Two distinct Botánica Cloud TEST orders each executed twice: authorized questionnaire, image upload, change/approval, delivery Cloudflare; excludes RSVP/licensed management, final Android and owner touch.",
     "ownerAndroidScope": "Physical Android verified by two owner-supplied videos and explicit owner approval of both invitations; visual rendering/vertical scrolling only, not RSVP, review parity, full-size photography or owner touch time.",
-    "recipientRsvpPersistenceScope": "PASS real GUEST Cloud Botánica TEST link to authorized tester license; individual yes + individual no RSVP submissions source=guest applied and reflected in management guest_app_state, same unit. Not a physical CTA click in Android videos."
+    "recipientRsvpPersistenceScope": "PASS real GUEST Cloud Botánica TEST link to authorized tester license; individual yes + individual no RSVP submissions source=guest applied and reflected in management guest_app_state, same unit. Not a physical CTA click in Android videos.",
+    "ownerTouchDurationMinutes": 0.6833333333333333,
+    "ownerTouchScope": "PASS real Android human test owner QA visual review 5/5 checks; 41 seconds active until TEST review_sent confirmed independently in Cloud. Excludes original design, automatic setup, full sale fulfillment."
   },
   "precedence": {
     "productPolicy": "guest/GUEST_CANONICAL_MASTER_DO_NOT_DRIFT_2026-10-07.md",
@@ -1981,15 +1995,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 63,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_63_OWNER_TOUCH_REVIEW_GUIDE_2026-10-11.md",
+    "latestEntry": 64,
+    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_64_OWNER_TOUCH_REAL_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Entry63 first: touch benchmark now displays exact expected Botánica fictional data BEFORE timer and requires 5 owner checkboxes; owner real touch not executed. Check current HEAD QA catalog/independent and Cloudflare live smoke, then owner does SINGLE test; next renderer actual operative GUEST center (QA generic browser already visually tested). Keep 9/11 NO-GO.",
+    "resumption": "Read Entry64 first: owner-touch PASS (0:41 Android recording, 5/5 checklist, one Cloud Botánica TEST review_sent). Gate 10/11, only operative GUEST Center renderer pending. Continue isolated generic Center staging/validation without touching frozen V4.6/ONE/STUDIO/Partner/VEIL/main; no repeat owner tests or new orders. NO-GO commercial.",
     "commercialStatus": "BOTANICA_NO_GO",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
