@@ -1,5 +1,9 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 73 — ARCHIVOS DEFINITIVOS PREPRODUCCIÓN LISTOS, DESPLIEGUE/ANDROID AÚN NO CERTIFICADOS
+
+[**Estado y entregables actuales**](GUEST_BOTANICA_ENTRY_73_GENERIC_PACKAGE_READY_DEPLOY_PENDING_2026-10-11.md). Botánica 11/11 técnico PASS; QA catálogo [38168800192](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38168800192) y QA independiente [38168800214](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38168800214) ambos SUCCESS. Copias permanentes verificadas: [Centro genérico V4.9 Android candidato](https://drive.google.com/file/d/1dRdOET4UwaaWJsUKGo_jn-5pkxY52sGh/view?usp=drivesdk) y [ZIP Cloudflare Pages NO-SALE](https://drive.google.com/file/d/1JaYGOPr6056DC2tax2buUHmWq3UAhloo/view?usp=drivesdk). **Falta publicarlo en Cloudflare staging y comprobar V4.9 en Android real**; no habilitar venta ni D03 automáticamente. Todo lo anterior preservado, sin costes adicionales.
+
 ## ENTRADA 72 — CONTROLES MODERNOS DE COMPATIBILIDAD Y V4.9 GENÉRICO (11/10/2026)
 
 [**Reconciliación**](GUEST_BOTANICA_ENTRY_72_SHARED_VERSIONED_READINESS_2026-10-11.md). Se archivan los cinco flags V12/V3/V4.6 como legado false; cinco controles actuales de Supabase V18/Cloudflare/Android V4.8 quedan PASS con evidencia explícita y prueba de ausencia de fuente. Botánica 11/11 técnica. V4.9 genérico construida y guardada en Google Drive, pero aún requiere publicación del visor actualizado y validación del APK real para certificar escalabilidad D03+. **Venta y Stripe siguen desactivados hasta autorización expresa**.

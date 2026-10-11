@@ -173,3 +173,8 @@ Consultar [auditoría de V4.6 real](GUEST_BOTANICA_ENTRY_57_CENTER_REAL_V46_AUDI
 ## Entrada 72 — pruebas compartidas de versiones actuales (11/10/2026)
 
 [Detalle](GUEST_BOTANICA_ENTRY_72_SHARED_VERSIONED_READINESS_2026-10-11.md): cinco flags históricos false archivados, cinco versiones actuales V18/Cloudflare/V4.8 PASS con fuentes verificables, CI protegido contra fuente ausente. Centro genérico V4.9 candidato SHA 4a163fbb..., Drive Weddly. Todavía no probado Android o deployed visor nuevo en Cloudflare; venta NO. Botánica 11/11 técnico no repetir.
+
+
+## Entrada 73 — paquetes persistentes y límite de certificación (11/10/2026)
+
+[Detalle](GUEST_BOTANICA_ENTRY_73_GENERIC_PACKAGE_READY_DEPLOY_PENDING_2026-10-11.md). GitHub CI SUCCESS en 7a17be3 (38168800192 catálogo / 38168800214 independiente). V4.9 Android de catálogo 45.561.955 bytes SHA4a163f... y ZIP Cloudflare 9.104.983 bytes guardados en Drive Weddly, manifest PREPRODUCTION_DO_NOT_SELL. **No atribuir despliegue a staging ni prueba APK V4.9; ambas aún requieren validación real**, igual que autorización de ventas. Botánica V4.8 y todas sus pruebas quedan congeladas. Biblioteca v24 intacta.
