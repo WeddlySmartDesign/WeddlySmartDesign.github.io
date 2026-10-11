@@ -1744,11 +1744,12 @@
     "currentBotanicaPass": 8,
     "currentBotanicaPending": 3,
     "realOrderE2e": "PASS",
-    "recipientRsvpPersistence": "PASS real GUEST Cloud Botánica TEST link to authorized tester license; individual yes + individual no RSVP submissions source=guest applied and reflected in management guest_app_state, same unit. Not a physical CTA click in Android videos.",
+    "recipientRsvpPersistence": "PASS",
     "ownerAndroid": "PASS",
     "ownerTouchMaxMinutes": 5,
     "realOrderE2eScope": "Two distinct Botánica Cloud TEST orders each executed twice: authorized questionnaire, image upload, change/approval, delivery Cloudflare; excludes RSVP/licensed management, final Android and owner touch.",
-    "ownerAndroidScope": "Physical Android verified by two owner-supplied videos and explicit owner approval of both invitations; visual rendering/vertical scrolling only, not RSVP, review parity, full-size photography or owner touch time."
+    "ownerAndroidScope": "Physical Android verified by two owner-supplied videos and explicit owner approval of both invitations; visual rendering/vertical scrolling only, not RSVP, review parity, full-size photography or owner touch time.",
+    "recipientRsvpPersistenceScope": "PASS real GUEST Cloud Botánica TEST link to authorized tester license; individual yes + individual no RSVP submissions source=guest applied and reflected in management guest_app_state, same unit. Not a physical CTA click in Android videos."
   },
   "precedence": {
     "productPolicy": "guest/GUEST_CANONICAL_MASTER_DO_NOT_DRIFT_2026-10-07.md",
