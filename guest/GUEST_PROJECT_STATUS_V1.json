@@ -1968,7 +1968,18 @@
       "ownerVisualIssue": "Floating ellipsis menu overlaps heading in Android screenshot",
       "activeTimerIssue": "V4.9 may increment touch duration after review_sent when local TOUCH_DONE flag missing; source setInterval condition does not check server order status",
       "previous41secBenchmarkInvalidated": false,
-      "paidSaleAuthorized": false
+      "paidSaleAuthorized": false,
+      "invitationOpenedInV49OwnerConfirmed": true,
+      "returnToCenterInV49OwnerConfirmed": true
+    },
+    "botanicaEntry75V49Navigation": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_75_V49_ANDROID_RETURN_2026-10-11.md",
+      "physicalAndroidOpenedExistingInvitation": true,
+      "ownerConfirmedReturnToCenter": true,
+      "evidence": "Confirmación textual directa: 'Hecho. Se ve la invitación y al pulsar a centro guest se vuelve'",
+      "returnClickFilmed": false,
+      "genericThirdDesignRendered": false,
+      "commercialAuthorized": false
     }
   },
   "commercialGate": {
@@ -2150,15 +2161,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 74,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_74_V49_ANDROID_CENTER_OWNER_VISUAL_2026-10-11.md",
+    "latestEntry": 75,
+    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_75_V49_ANDROID_RETURN_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Entrada 74: V4.9 real Android instalado y shell/listado/selector de TEST pedidos visualmente PASS en tres capturas; botón flotante solapa encabezado. Cronómetro cuenta al abrir review_sent cuando falta marca local isTouchDone; fallo detectado, medición 41s anterior permanece válida. V4.9 apertura+retorno NO mostrada y motor genérico remoto D03+ NO probado. Cloudflare GitHub autodeploy ya conectado, no pedir ZIP manual; pendiente live smoke de visor bytes actualizados. Venta NO, D03 no iniciado. No repetir prueba Botánica V4.8.",
+    "resumption": "Entrada 75: propietario confirmó que V4.9 Android abre Botánica y CENTRO GUEST regresa correctamente. Navegación real PASS según testimonio, sin vídeo del clic. Gate Botánica 11/11 técnico intacto. Visor remoto genérico D03+ sigue PENDING; no confundir con render embebido Botánica. Cloudflare autodeploy GitHub conectado; confirmar recursos HTTPS. Venta no autorizada. Menú y cronómetro review_sent agrupados para arreglo futuro. No repetir prueba Botánica.",
     "commercialStatus": "BOTANICA_DESIGN_TECHNICAL_GATES_11_OF_11_SALE_NOT_AUTHORIZED",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
