@@ -1,5 +1,9 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 77 — HANDOFF: EL NUEVO CHAT EMPIEZA POR EL DISEÑO, NO POR LA PLATAFORMA (11/10/2026)
+
+[**Contrato obligatorio y punto de continuidad**](GUEST_ENTRY_77_PLATFORM_HANDOFF_FOR_NEXT_VISUAL_2026-10-11.md). Entorno visual/Cloudflare/QA preparado. **Actualizador genérico del catálogo del backend TEST implementado y QA PASS**, con comprobación de compatibilidad sobre V18 real en lectura; no hubo despliegue ni creación de ID sin diseño. Propietaria aporta **solo HTML/ZIP del diseño nuevo**; el asistente hace manifiesto, adaptación, registro, compilación, backend TEST controlado y QA. **Único gate inevitable del motor común:** comprobar por primera vez el render remoto real del nuevo diseño en Android, en su revisión final. V5.0 aún candidata Android. Botánica 11/11 intacta, ningún cambio ONE/Partner/STUDIO/VEIL, venta NO activada. No gastar tiempo otra vez reconstruyendo plataforma.
+
 ## ENTRADA 76 — PREPARADO PARA INCORPORAR NUEVO DISEÑO (11/10/2026)
 
 [**Ver expediente y procedimiento completo**](GUEST_ENTRY_76_NEXT_DESIGN_INTAKE_READY_2026-10-11.md). **CI catálogo, independiente y Cloudflare live SUCCESS** (38174810959 / 38174810996 / 38174810966). Versión candidata **Centro V5.0** conservada [en Drive](https://drive.google.com/file/d/1wxxHCy8XhI5YiFPsMZGAQi6agrh3Lf9T/view?usp=drivesdk), máster Botánica intacto: corrige cronómetro finalizado y reserva menú Android; **aún no testada Android**. **Nuevo diseño aún no aportado/registrado**: recibir HTML/ZIP y crear nosotros manifest. **Importante:** el backend Supabase V18 desplegado todavía tiene un catálogo estático de VEIL+Botánica, por lo que la primera prueba de diseño nuevo requerirá actualizar de forma controlada su registro TEST, nunca una nueva app o checkout. Ruta remota genérica Android sigue pendiente hasta ver el nuevo diseño. Sin ventas ni repetición de Botánica.

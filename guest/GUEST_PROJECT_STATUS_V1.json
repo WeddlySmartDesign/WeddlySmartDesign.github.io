@@ -2003,6 +2003,33 @@
       },
       "genericOwnerBridgeAcceptedInAndroidWithThirdDesign": false,
       "commercialSaleEnabled": false
+    },
+    "nextDesignPlatformEntry77": {
+      "source": "guest/GUEST_ENTRY_77_PLATFORM_HANDOFF_FOR_NEXT_VISUAL_2026-10-11.md",
+      "baselineCodeCommit": "9a004893741dff2a2d10923877e7dfc8eee55298",
+      "backendUpdater": "guest/tools/prepare_live_catalog_registry.cjs",
+      "backendUpdaterTest": "guest/tests/prepare_live_catalog_registry.test.cjs",
+      "catalogQASuccess": 38175844570,
+      "liveBackendVersionInspected": 18,
+      "liveBackendPatched": false,
+      "simulatedCatalogPatchOnly": true,
+      "newDesignReceived": false,
+      "ownerTasks": [
+        "provide actual new design HTML or ZIP",
+        "review completed visual on mobile"
+      ],
+      "agentTasks": [
+        "create manifest",
+        "adapt visual plugin",
+        "register on guest-independent",
+        "update TEST backend after ID exists",
+        "run existing QA",
+        "verify Cloudflare",
+        "test actual generic Android preview",
+        "document immutable visual"
+      ],
+      "genericAndroidThirdDesignVerified": false,
+      "salesAuthorized": false
     }
   },
   "commercialGate": {
@@ -2029,11 +2056,10 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Receive actual new approved design as HTML (and assets or ZIP); do not assume name/ID/version or ask owner to create a manifest. Inspect and adapt only that template to GUEST_APPLY_CONFIG common schema.",
-    "Register new ID and master with register_visual_template.cjs, no changes to ONE/Partner/STUDIO/VEIL/Botánica, keep certification-pending/testOnly, verify Cloudflare static build bundles all templates and original hashes.",
-    "Generate backend template registry for TEST via shared generator and verify/authorize safe Supabase rollout: live V18 currently only knows VEIL+Botánica; must not promise an additional design will work from a static-only web deployment. Preserve production guards.",
-    "Use new design for first real Android generic remote rendering/return acceptance; V5.0 candidate timer/menu is prepared but not yet owner-tested, so bundle any needed check into new-design acceptance.",
-    "Commercial checkout and public sale remain blocked until complete real sales QA and explicit authorization."
+    "New chat: receive new design HTML/ZIP; focus owner-facing conversations solely on the design. Do not ask owner to redo Cloudflare/Supabase or old Botánica tests.",
+    "Assistant does all integration: visual-plugin manifest + common API + registration + Cloudflare build/QA + deterministic TEST backend registry candidate prepared from live Edge v18 with no changed order logic; inspect/authorize controlled TEST deployment.",
+    "Acceptance of new design must also validate remote generic renderer in actual Android once; it is not proven yet, but no need to create a separate technical project or repeat D02.",
+    "Keep catalog production/commercial sale/Stripe guarded until explicit authorization. Preserve frozen ONE/Partner/STUDIO/VEIL/Botánica."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
@@ -2185,15 +2211,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 76,
-    "latestDocumentedEntry": "guest/GUEST_ENTRY_76_NEXT_DESIGN_INTAKE_READY_2026-10-11.md",
+    "latestEntry": 77,
+    "latestDocumentedEntry": "guest/GUEST_ENTRY_77_PLATFORM_HANDOFF_FOR_NEXT_VISUAL_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Entrada 76: entorno listo para RECIBIR HTML/ZIP nuevo diseño, aún NO adjuntado ni integrado. CI catálogo 38174810959 PASS, independiente 38174810996 PASS, Cloudflare live 38174810966 PASS exact bytes; venta NO. Centro V5.0 candidato SHA beb09030... 45562515 bytes Drive Weddly (id 1wxxHCy8XhI5YiFPsMZGAQi6agrh3Lf9T), master Botánica intacto; corrige timer review_sent y reserva menú; SIN TEST ANDROID V5.0. Backend Supabase live V18 tiene VEIL+Botánica: nuevas plantillas requieren registro TEST backend generado y despliegue controlado antes de nuevos pedidos. Visor remoto genérico no certificado Android D03+. Esperar HTML/ZIP, crear manifest internamente y probar sin reconstruir motor.",
+    "resumption": "Entrada 77: plataforma común preparada con registrador visual genérico, Cloudflare GitHub auto deploy + live smoke PASS; backend TEST updater determinista creado y CI green 38175844570, V18 real auditado lectura y parche en memoria sin deploy. Botánica 11/11 congelada; V5.0 preparado no Android probado. PRÓXIMO CHAT SOLO traer nuevo HTML/ZIP; asistente se encarga ID, manifest, adaptador, registro, backend TEST controlado, pruebas, Cloudflare y QA. No repetir sistema/ONE/STUDIO/Botánica. ÚNICA validación que necesita tercer diseño: render remoto genérico Android. No ventas sin autorización.",
     "commercialStatus": "BOTANICA_DESIGN_TECHNICAL_GATES_11_OF_11_SALE_NOT_AUTHORIZED",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
@@ -2217,6 +2243,7 @@
     "entry72": "guest/GUEST_BOTANICA_ENTRY_72_SHARED_VERSIONED_READINESS_2026-10-11.md",
     "entry73": "guest/GUEST_BOTANICA_ENTRY_73_GENERIC_PACKAGE_READY_DEPLOY_PENDING_2026-10-11.md",
     "entry74": "guest/GUEST_BOTANICA_ENTRY_74_V49_ANDROID_CENTER_OWNER_VISUAL_2026-10-11.md",
-    "entry76": "guest/GUEST_ENTRY_76_NEXT_DESIGN_INTAKE_READY_2026-10-11.md"
+    "entry76": "guest/GUEST_ENTRY_76_NEXT_DESIGN_INTAKE_READY_2026-10-11.md",
+    "entry77": "guest/GUEST_ENTRY_77_PLATFORM_HANDOFF_FOR_NEXT_VISUAL_2026-10-11.md"
   }
 }

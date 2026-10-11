@@ -1,5 +1,7 @@
 # GUEST — Runbook de incorporación de diseños 03–1000
 
+**Regla de continuidad Entrada 77:** la propietaria solo proporciona HTML/ZIP con medios y revisa el diseño acabado. Ningún paso técnico siguiente se delega a ella. Cuando haya registro de nuevo `template_id`, el asistente genera la actualización TEST de backend usando `guest/tools/prepare_live_catalog_registry.cjs --input <fuente-live-vigente> --output <candidata-nueva> --require-template <id>` y verifica versión y guardas ANTES de despliegue TEST. La herramienta no despliega ni autoriza cobros; no hay forma de probar la ruta remota real de un nuevo ID en Android antes de recibirlo. [Expediente](GUEST_ENTRY_77_PLATFORM_HANDOFF_FOR_NEXT_VISUAL_2026-10-11.md).
+
 **Entrada obligatoria:** [START_HERE.md](START_HERE.md). El máster canónico, el esquema común, el manual de QA y los registros vivos siguen siendo fuentes obligatorias. Aplicar este proceso a **cada** nueva plantilla visual. No reemplaza las pruebas reales ni la aprobación artística.
 
 **Entrega de un diseño ya existente:** basta con recibir el HTML autocontenido o un ZIP con el HTML y todos los recursos; el responsable técnico crea internamente `visual-plugin.json`, el identificador/versionado y el adaptador común. No pedir a la propietaria crear manifiestos, ejecutar comandos ni configurar Cloudflare/Supabase.
