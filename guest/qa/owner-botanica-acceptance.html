@@ -83,6 +83,7 @@ async function run(){
    note('Pedido '+(i+1)+': enlace HTTPS y Botánica TEST verificados.');
   }
   show('DOS PRUEBAS RECUPERADAS. Pulsa «Abrir invitación final en Android».','ok');
+  results.scrollIntoView({behavior:'smooth',block:'start'});
  }catch(e){show('No se pudieron recuperar los enlaces: '+safePrint(e.message||e)+'. No se ha creado ningún pedido nuevo.','error');note('Error: '+safePrint(e.message||e));}
  finally{manager=null;secret.value='';button.disabled=false;running=false}
 }
