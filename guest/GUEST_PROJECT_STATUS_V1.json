@@ -1815,6 +1815,24 @@
       "ownerTouchGatePass": true,
       "remainingGate": "renderer",
       "saleApproved": false
+    },
+    "botanicaEntry65StandaloneCenterV47": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_65_ANDROID_CENTER_V47_RELEASE_2026-10-11.md",
+      "artifact": "GUEST_MOBILE_CENTER_V4_7_BOTANICA_TEST_INTEGRATED_2026-10-11.html",
+      "artifactSizeBytes": 45557384,
+      "artifactSha256": "3ce9f5fa97a623c0b358336d11bbcd58db586a4e60c34e93b24abcc44e1c0484",
+      "persistentLibraryPath": "/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_7_BOTANICA_TEST_INTEGRATED_2026-10-11.html",
+      "zipPersistentLibraryPath": "/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_7_BOTANICA_TEST_ANDROID_2026-10-11.zip",
+      "parentV46Sha256": "a95984b658e560a9c3fca4bd92315b41c1b92cc4f6d47fffeed890da6f1f2133",
+      "approvedMasterV147Sha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+      "sourceBuilder": "guest/tools/build_mobile_center_v47_from_library.py",
+      "staticBrowserVmVerified": true,
+      "browserGuiVerified": false,
+      "browserBlocker": "ERR_BLOCKED_BY_ADMINISTRATOR file:// and localhost in container",
+      "actualOwnerAndroidV47Imported": false,
+      "commercialSaleApproved": false,
+      "gateCountPassed": 10,
+      "gateCountPending": 1
     }
   },
   "commercialGate": {
@@ -1995,15 +2013,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 64,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_64_OWNER_TOUCH_REAL_2026-10-11.md",
+    "latestEntry": 65,
+    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_65_ANDROID_CENTER_V47_RELEASE_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Read Entry64 first: owner-touch PASS (0:41 Android recording, 5/5 checklist, one Cloud Botánica TEST review_sent). Gate 10/11, only operative GUEST Center renderer pending. Continue isolated generic Center staging/validation without touching frozen V4.6/ONE/STUDIO/Partner/VEIL/main; no repeat owner tests or new orders. NO-GO commercial.",
+    "resumption": "Read Entry65. Standalone native APK importable V4.7 GUEST Center HTML built 45,557,384 bytes SHA256 3ce9f5fa97a623c0b358336d11bbcd58db586a4e60c34e93b24abcc44e1c0484, stored in Library /GUEST/MOBILE_CENTER; builder + QA in GitHub. Only final operative owner Center renderer gate pending: owner Android APK menu Update center -> import HTML -> select EXISTING delivered Botánica TEST -> Ver invitación -> CENTRO GUEST. No further RSVP, new orders, touch benchmarks. NO-GO sale and D03.",
     "commercialStatus": "BOTANICA_NO_GO",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
