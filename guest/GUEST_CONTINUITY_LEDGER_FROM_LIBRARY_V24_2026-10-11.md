@@ -110,6 +110,10 @@ Consultar [auditoría de V4.6 real](GUEST_BOTANICA_ENTRY_57_CENTER_REAL_V46_AUDI
 
 [Entrada 60 — Tres gates pendientes y vías de prueba](GUEST_BOTANICA_ENTRY_60_LAST_THREE_GATES_CLOSEOUT_2026-10-11.md). **El CI de continuidad documental fue reparado** corrigiendo valor literal PASS y fixture de evidencia de RSVP real; historial preservado. Preparados dos paneles TEST separados: `owner-botanica-closeout.html` (paridad revisión/final y visor común de dos pedidos ya entregados, solo lectura) y `owner-botanica-touch-benchmark.html` (medición de propietario sobre un pedido nuevo de prueba estrictamente único, reutilizable). Los paneles NO equivalen a verificación humana: **8/11 con evidencia, 3 PENDING, NO-GO comercial**. El probe de navegador GitHub externo no consiguió leer iframe y se mantiene no certificado, separado de CI. Verificar QA y publicación antes de pedir a la propietaria que utilice las pantallas. No repetir RSVP ni tocar congelados.
 
+## ENTRADA 61 — QA completos 3/3 GREEN; límites de gate humano
+
+[Entrada 61 — publicación y pruebas verificadas](GUEST_BOTANICA_ENTRY_61_ALL_GREEN_OWNER_ACCEPTANCE_READY_2026-10-11.md). En HEAD `6170dd6d08d6a734c438710b603633862d9d15f7`: catálogo [38154081311](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38154081311), QA independiente [38154081299](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38154081299), Cloudflare exact bytes [38154081464](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38154081464), los tres **SUCCESS**. Disponible página read-only de paridad y visor GUEST y página separada que mide tiempo activo solo después de acción propietaria; links y procedimientos completos en Entrada 61. **8/11 PASS y 3 pendientes, venta NO-GO**. No repetir pedidos TEST ya aprobados, RSVP ni rediseño. Solo pendiente resultados humanos que no se pueden simular, y posterior aceptación del Centro operativo.
+
 ## 6. Restricciones permanentes
 
 - NO tocar **ONE, ONE Partner, STUDIO, VEIL LIGHT congelado, `main`, master V14.7 Botánica** ni credenciales/servicios ajenos.
