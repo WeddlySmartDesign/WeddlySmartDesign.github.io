@@ -5,12 +5,12 @@
 <title>Certificación privada GUEST · Botánica</title>
 <style>
 :root{color-scheme:light}*{box-sizing:border-box}body{background:#f6f2ec;color:#3e322d;font:16px/1.5 system-ui,-apple-system,Arial,sans-serif;margin:0;padding:24px}main{max-width:540px;margin:auto}header{text-align:center}h1{font:400 34px/1.08 Georgia,serif;margin:12px 0}h2{font:400 24px Georgia,serif}p{line-height:1.6}small,.muted{color:#716761}label{display:block;font-weight:700;margin:18px 0 8px}input{border:1px solid #c8bcb0;border-radius:9px;background:white;padding:14px;font:inherit;width:100%;min-height:50px}button{background:#3e322d;color:white;border:0;border-radius:10px;padding:15px 18px;font:700 16px system-ui;width:100%;margin-top:14px;cursor:pointer}button:disabled{opacity:.45;cursor:default}a{color:#514035;word-break:break-all}.card{background:white;padding:18px;border:1px solid #e5dbd0;border-radius:15px;margin:16px 0}.error{color:#a12828;font-weight:700}.ok{color:#285735;font-weight:700}.steps{font-size:14px;white-space:pre-wrap;background:#ece7e0;padding:14px;border-radius:10px;max-height:220px;overflow:auto} .result{border-top:1px solid #e5dbd0;padding:12px 0}button:focus-visible,input:focus-visible{outline:3px solid #8e7261}
-</style></head><body><main><header><small>GUEST by WeddlySmartDesign</small><h1>Certificación de Botánica</h1><p>Solo para la propietaria. Dos pedidos ficticios completos en Supabase real, sin cobros ni correos.</p></header>
+</style></head><body><main><header><small>GUEST by WeddlySmartDesign</small><h1>Certificación de Botánica</h1><p>Pruebas Botánica ya completadas en Supabase. Recupera aquí los enlaces finales sin generar nuevos pedidos.</p></header>
 <section class="card"><h2>Acceso del gestor</h2><p>Introduce el <strong>código de recuperación habitual del Centro GUEST</strong>. Se envía directamente a la función oficial de Supabase y no se guarda en esta página.</p>
 <label for="code">Código del Centro GUEST</label><input id="code" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Código del gestor">
-<button id="run" type="button">Ejecutar las dos pruebas</button>
-<p class="muted"><small>Solo se crean pedidos TEST de Botánica. No habilita venta, Stripe, emails o diseños nuevos. No compartas este código por chat.</small></p></section>
-<section class="card" aria-live="polite"><h2>Comprobaciones</h2><div id="status">Pendiente de autorización del gestor.</div><div class="steps" id="steps">Aún no se ha ejecutado ninguna operación.</div><div id="results"></div></section>
+<button id="run" type="button">Recuperar mis pruebas finalizadas</button>
+<p class="muted"><small>Solo consulta los pedidos TEST ya entregados. No crea pedidos, cobra, envía emails ni habilita venta. No compartas este código por chat.</small></p></section>
+<section class="card" aria-live="polite"><h2>Comprobaciones</h2><div id="status">Los pedidos ya están entregados. Introduce el código para ver los enlaces.</div><div class="steps" id="steps">Aún no se han recuperado los enlaces.</div><div id="results"></div></section>
 <p class="muted"><small>Los enlaces finales contienen una capacidad privada de prueba. Ábrelos únicamente tú en Android, no los publiques ni reenvíes a invitados. No sirve para certificar ventas hasta completar las comprobaciones de gestión y la autorización comercial.</small></p>
 </main><script>
 (()=>{'use strict';
@@ -72,7 +72,7 @@ async function run(){
  if(running)return;
  const code=secret.value.trim();
  if(code.length<20){show('Introduce tu código habitual de gestor.','error');return}
- running=true;button.disabled=true;steps.textContent='';results.replaceChildren();show('Validando acceso…');
+ running=true;button.disabled=true;steps.textContent='';results.replaceChildren();show('Recuperando pedidos completados…');
  let manager=null;
  try{
   const auth=await post(LOGIN,{action:'login',recoveryCode:code});
@@ -81,45 +81,30 @@ async function run(){
   if(typeof manager!=='string'||!manager.startsWith('v1.'))throw Error('Respuesta de acceso inválida');
   await post(FLOW,{action:'status'},manager);
   note('Acceso oficial del gestor: OK');
-  for(const n of [1,2]){
-   note('Pedido '+n+': creando TEST Botánica…');
-   const order=await post(FLOW,{action:'create_test',templateId:'botanica',email:'qa-botanica@example.invalid'},manager);
-   if(!order.id||!order.qToken||!order.rToken||!order.pToken)throw Error('Faltan capacidades de prueba');
-   note('Pedido '+n+': creado; cuestionario…');
-   const q=example(n);const loaded=await post(FLOW,{action:'load',token:order.qToken});
-   if(loaded.order?.templateId!=='botanica')throw Error('Plantilla incorrecta');
-   if(n===1){await uploadStory(order.qToken);note('Pedido 1: fotografía ficticia guardada');}
-   await post(FLOW,{action:'save',token:order.qToken,questionnaire:q});
-   await post(FLOW,{action:'submit',token:order.qToken,questionnaire:q});
-   await post(FLOW,{action:'start_design',orderId:order.id},manager);
-   await post(FLOW,{action:'mark_review_ready',orderId:order.id},manager);
-   const review=HOST+'/guest-review-v1.html?t='+encodeURIComponent(order.rToken);
-   await post(FLOW,{action:'send_review',orderId:order.id,reviewUrl:review},manager);
-   const reviewed=await post(FLOW,{action:'review_load',token:order.rToken});
-   if(reviewed.order?.config?.template?.id!=='botanica')throw Error('El visor no recibió Botánica');
-   if(n===2){
-    note('Pedido 2: solicitando un cambio real…');
-    await post(FLOW,{action:'review_respond',token:order.rToken,decision:'changes',note:'Ajuste de historia, prueba controlada.'});
-    q.story.customText='Historia ajustada tras la revisión de prueba.';
-    await post(FLOW,{action:'save',token:order.qToken,questionnaire:q});
-    await post(FLOW,{action:'submit',token:order.qToken,questionnaire:q});
-    await post(FLOW,{action:'start_design',orderId:order.id},manager);
-    await post(FLOW,{action:'mark_review_ready',orderId:order.id},manager);
-    await post(FLOW,{action:'send_review',orderId:order.id,reviewUrl:review},manager);
-    const revised=await post(FLOW,{action:'review_load',token:order.rToken});
-    if(revised.order?.config?.story?.textMode!=='custom')throw Error('El cambio no se refleja en revisión');
-   }
-   await post(FLOW,{action:'review_respond',token:order.rToken,decision:'approve'});
-   const final=HOST+'/guest/catalog-final.html?p='+encodeURIComponent(order.pToken);
-   const delivery=await post(FLOW,{action:'deliver',orderId:order.id,invitationUrl:final},manager);
-   if(delivery.status!=='delivered')throw Error('No se entregó el pedido');
-   const live=await post(FLOW,{action:'public_load',token:order.pToken});
-   if(live.order?.mode!=='test'||live.order?.config?.template?.id!=='botanica')throw Error('V17 TEST no validada');
-   linkCard(n,order.id,review,final);
-   note('Pedido '+n+': entrega real Supabase + origen Cloudflare + modo TEST: OK');
+  const listed=await post(FLOW,{action:'list'},manager);
+  const delivered=(Array.isArray(listed.orders)?listed.orders:[])
+   .filter(o=>o.templateId==='botanica'&&o.mode==='test'&&o.status==='delivered'&&o.buyerEmail==='qa-botanica@example.invalid')
+   .sort((a,b)=>String(b.deliveredAt||b.createdAt||'').localeCompare(String(a.deliveredAt||a.createdAt||'')))
+   .slice(0,2);
+  if(delivered.length!==2)throw Error('No encuentro dos pruebas entregadas. No se ha creado ningún pedido nuevo.');
+  note('Se han encontrado dos pruebas Botánica entregadas.');
+  for(let i=0;i<delivered.length;i++){
+   const order=delivered[i];
+   const details=await post(FLOW,{action:'detail',orderId:order.id},manager);
+   const data=details.order||{},p=data.publicToken,r=data.reviewToken;
+   if(typeof p!=='string'||!p||typeof r!=='string'||!r)throw Error('No se pudieron recuperar los accesos del pedido');
+   const final=new URL(data.delivery_url||'');
+   if(final.origin!==HOST||final.pathname!=='/guest/catalog-final.html'||final.searchParams.get('p')!==p)
+    throw Error('La URL de entrega no coincide con la autorizada');
+   const check=await post(FLOW,{action:'public_load',token:p});
+   if(check.order?.mode!=='test'||check.order?.config?.template?.id!=='botanica')
+    throw Error('El enlace de prueba no supera el control V17');
+   const review=HOST+'/guest-review-v1.html?t='+encodeURIComponent(r);
+   linkCard(i+1,order.id,review,final.href);
+   note('Pedido '+(i+1)+': enlace HTTPS y Botánica TEST verificados.');
   }
-  show('DOS PEDIDOS TEST COMPLETADOS. Abre los enlaces finales en Android.','ok');
- }catch(e){show('Prueba detenida: '+safePrint(e.message||e)+'. Se conservan las comprobaciones anteriores.','error');note('Error: '+safePrint(e.message||e));}
+  show('DOS PRUEBAS RECUPERADAS. Pulsa «Abrir invitación final en Android».','ok');
+ }catch(e){show('No se pudieron recuperar los enlaces: '+safePrint(e.message||e)+'. No se ha creado ningún pedido nuevo.','error');note('Error: '+safePrint(e.message||e));}
  finally{manager=null;secret.value='';button.disabled=false;running=false}
 }
 button.addEventListener('click',run);
