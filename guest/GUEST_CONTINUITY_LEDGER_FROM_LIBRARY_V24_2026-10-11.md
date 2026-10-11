@@ -106,6 +106,10 @@ Consultar [auditoría de V4.6 real](GUEST_BOTANICA_ENTRY_57_CENTER_REAL_V46_AUDI
 
 [Entrada 59: correcciones de staging y estado no aplicadas por bloqueos de la herramienta](GUEST_BOTANICA_ENTRY_59_STAGING_PIN_ATTEMPT_2026-10-11.md). Tras auditar V4.6, se comprobó que el centro congelado solo resuelve VEIL LIGHT, tiene temporizador local por pedido y su checksum difiere del preparado por el stager. Intentos de edición bloqueados: NO modificar estado ficticiamente ni declarar CI verde. **8/11 con evidencia, tres pendientes, NO-GO comercial**; CI de continuidad rojo por campo literal, independiente verde. No repetir los pedidos, RSVP ni revisiones visuales. La Biblioteca histórica se conserva intacta.
 
+## ENTRADA 60 · Estado actualizado de cierre técnico
+
+[Entrada 60 — Tres gates pendientes y vías de prueba](GUEST_BOTANICA_ENTRY_60_LAST_THREE_GATES_CLOSEOUT_2026-10-11.md). **El CI de continuidad documental fue reparado** corrigiendo valor literal PASS y fixture de evidencia de RSVP real; historial preservado. Preparados dos paneles TEST separados: `owner-botanica-closeout.html` (paridad revisión/final y visor común de dos pedidos ya entregados, solo lectura) y `owner-botanica-touch-benchmark.html` (medición de propietario sobre un pedido nuevo de prueba estrictamente único, reutilizable). Los paneles NO equivalen a verificación humana: **8/11 con evidencia, 3 PENDING, NO-GO comercial**. El probe de navegador GitHub externo no consiguió leer iframe y se mantiene no certificado, separado de CI. Verificar QA y publicación antes de pedir a la propietaria que utilice las pantallas. No repetir RSVP ni tocar congelados.
+
 ## 6. Restricciones permanentes
 
 - NO tocar **ONE, ONE Partner, STUDIO, VEIL LIGHT congelado, `main`, master V14.7 Botánica** ni credenciales/servicios ajenos.
