@@ -1387,7 +1387,7 @@
       }
     },
     "paidCatalogSingleHttpsHostRelease20261011": {
-      "status": "GUEST_EDGE_V15_AND_CHECKOUT_V23_ACTIVE; PUBLIC_HOST_NOT_CONNECTED; BOTANICA_NO_GO",
+      "status": "GUEST_EDGE_V15_AND_CHECKOUT_V23_ACTIVE; PUBLIC_CLOUDFLARE_STAGE_VERIFIED; BOTANICA_NO_GO",
       "sourceOfTruth": "Library cumulative bitacora Entry 36; guest/START_HERE.md; GUEST_CLOUDFLARE_PAGES_FREE_DEPLOY_2026-10-10.md",
       "checkout": {
         "slug": "guest-stripe-checkout",
@@ -1434,10 +1434,10 @@
         "guestLicenseAccess": 3,
         "guestOrdersAdmin": 3
       },
-      "remainingBlocker": "Owner OAuth connects NEW free Cloudflare Pages to ONLY GitHub repo WeddlySmartDesign/WeddlySmartDesign.github.io, production branch guest-independent; observe real pages.dev then verify public assets and Android/Cloud E2E",
-      "hostingConnected": false,
-      "knownPublicOrigin": null,
-      "publicOriginEnvConfigured": "NOT VERIFIED/ASSUME UNCONFIGURED",
+      "remainingBlocker": "Cloudflare Pages public and immutable assets VERIFIED in CI 38124631014; configure/verify GUEST_CATALOG_PUBLIC_ORIGIN then 2 genuine test orders and recipient RSVP on Android (Botanica NO-GO 3/11)",
+      "hostingConnected": true,
+      "knownPublicOrigin": "https://guest-weddlysmartdesign.pages.dev",
+      "publicOriginEnvConfigured": "UNVERIFIED; must configure in Supabase Edge Function secrets before any paid catalog handoff",
       "botanica": {
         "version": "14.7",
         "visualMasterSha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
@@ -1458,16 +1458,33 @@
     },
     "publicCloudflareStageObserved20261011": {
       "host": "https://guest-weddlysmartdesign.pages.dev",
-      "state": "OWNER_BROWSER_SCREENSHOT_CONFIRMED_PREPRODUCTION_LANDING",
-      "screenshot": "User screenshot of public Cloudflare Pages landing headed GUEST by WeddlySmartDesign with Ver diseño en el móvil button, 2026-10-11",
-      "connectedGit": true,
-      "knownDeployScope": "guest-independent precommercial single-template staging; no sale",
-      "independentNetworkProbe": "NOT VERIFIED: external tool inaccessible from this environment",
-      "pendingAssetHttpVerification": true,
-      "pendingAndroid": true,
+      "state": "EXTERNAL_GITHUB_RUNNER_HTTP_AND_BYTES_VERIFIED_PREPRODUCTION",
+      "verifiedAt": "2026-10-11",
+      "publicAssetsLive": true,
+      "independentNetworkProbe": "GITHUB_ACTIONS_RUN_38124631014_PASS",
+      "exactMasterBytes": 11635635,
+      "exactMasterSha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+      "verifiedPaths": [
+        "/",
+        "/guest/catalog-questionnaire.html",
+        "/guest-review-v1.html",
+        "/guest/catalog-final.html",
+        "/guest/guest-catalog-delivery-runtime-v1.js",
+        "/guest/catalog/guest-catalog-owner-viewer-v2.js",
+        "/guest/catalog-assets/botanica/14.7/index.html",
+        "/guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json",
+        "/GUEST_STAGE_MANIFEST.json"
+      ],
+      "canonicalCloudflareRedirects": "308 /guest/catalog-questionnaire.html -> /guest/catalog-questionnaire; analogous review, final and visual index routes; same HTTPS origin only; smoke now accepts those exact clean routes",
+      "security": "HTTP 200 after 308, SHA256 byte-exact, X-Robots-Tag noindex, staging manifest PREPRODUCTION_DO_NOT_SELL, registry botanica certification-pending",
+      "deployedGitBranch": "guest-independent",
+      "noCommercialPurchasesEnabled": true,
+      "productionNotCertified": true,
       "pendingSupabaseOriginConfiguration": true,
-      "noProofOfCommercialSale": true,
-      "checkpointPrecedingEntriesSuperseded": "Historic statements no Pages at Entries 35 and 36 were correct at those times, now obsolete for static landing"
+      "pendingTwoLiveOrdersAndRsvp": true,
+      "pendingAndroid": true,
+      "formalBotanicaGates": "3/11 PASS, 8 PENDING",
+      "noNewCosts": true
     },
     "futureDesignNoReworkContract20261011": {
       "desiredUserWorkflow": "Design finished HTML + visual-plugin.json; user only mobile preview/approval; no recurrent architecture/backend/checkout/questionnaire/RSVP/host configuration",
@@ -1494,7 +1511,7 @@
         "botanicRealPublishedE2E": false,
         "catalogBuildPublishesMultipleTemplatesWithoutPerIdHostEdit": false,
         "designs03And1000OnlyVisualSyntheticTestsExecutedOnSharedMultiTemplateBuild": false,
-        "publicHttpAssetProof": false,
+        "publicHttpAssetProof": true,
         "AndroidPhysicalAcceptance": false,
         "formalBotanicaGates": "3/11 PASS; 8 PENDING"
       },
