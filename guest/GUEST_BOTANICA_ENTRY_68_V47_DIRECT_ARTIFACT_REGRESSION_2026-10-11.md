@@ -1,0 +1,22 @@
+# GUEST — Entrada 68 · QA adicional del artefacto Android V4.7 y protección de regresión común
+
+Fecha: 11/10/2026. Rama exclusivamente `guest-independent`. Sin cambios en GUEST productivo, APK, Supabase, Cloudflare, Stripe, ONE, Partner, STUDIO, VEIL, `main`, masters congelados o Biblioteca histórica.
+
+## Hechos verificados directamente en esta intervención
+1. Se recuperaron por referencia real desde **Biblioteca personal**: `/GUEST/MOBILE_CENTER/GUEST_MOBILE_CENTER_V4_7_BOTANICA_TEST_INTEGRATED_2026-10-11.html` (45.557.384 bytes), variante genérica experimental, APK V1 y manifiesto. Se materializaron para inspección en contenedor; no se modificaron los originales.
+2. El SHA-256 del **archivo binario completo V4.7 integrado** se verificó como `3ce9f5fa97a623c0b358336d11bbcd58db586a4e60c34e93b24abcc44e1c0484`; el Botánica embebido de 11.635.635 bytes decodificado de base64 coincide con SHA-256 `fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a`. Ningún visual se editó.
+3. **Prueba Node VM sobre el JavaScript extraído del archivo REAL de 45 MB**: PASS en dos pedidos TEST sintéticos (`shared`, `split`), selección sucesiva de invitaciones, rechazo de carga tardía de iframe anterior, inyección del `config` aislado mediante clone, protección de versión 14.7, rechazo explícito de producción, navegación botón `CENTRO GUEST`/cierre y reapertura. El archivo de ejecución temporal se mantiene solo como evidencia local; **no es un test APK real ni UI browser**.
+4. Se versionó prueba **reproducible en GitHub sin publicar el master privado**: `guest/tests/mobile_center_v47_runtime_lifecycle.test.cjs`; extrae el renderer de la fuente reproducible `guest/tools/build_mobile_center_v47_from_library.py` y simula el DOM únicamente para verificar interacciones/race conditions. Se incorporó al workflow `.github/workflows/guest-botanica-contract-qa.yml`. Código en commits `d50de2059d7514a4a799745bd744967b1a5703c1` y corrección de la prueba `7dd1ae15be1f60e68dfe0681394d4773e925641a`.
+5. El primer CI intermedio falló **por una expresión de la prueba nueva** que no admitía el salto de línea entre `</script>` y el cierre triple-comilla `'''` del builder Python. No fue un fallo del producto. Se corrigió en el segundo commit. [Catálogo QA 38165932102](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38165932102) **SUCCESS** después de la corrección. [Independent QA 38165932138](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38165932138) tenía estado **completed / success** en la lectura antes de esta entrada; verificar de nuevo su resultado y el QA del HEAD documental tras commit. No afirmar PASS si no se ha completado.
+
+## Lo que **NO** se ha podido certificar
+- **No hay WebView/Android físico vinculado a esta sesión**. Los tests anteriores fallaron con `ERR_BLOCKED_BY_ADMINISTRATOR` en navegación local y no se ha forzado ningún bypass. La emulación del DOM, hash de archivos y CI no equivalen al click físico en el APK Android.
+- La variante genérica remota V4.7 de 30.041.945 bytes es un **candidato separado** y todavía no sustituye al archivo oficial integrado; el registro comercial de Botánica sigue `certification-pending`. No inferir D03–D1000 certificación en Android desde fixtures de CI.
+- No se ha activado compra, correo ni despliegue comercial; no se han creado pedidos adicionales ni utilizado credenciales/sesiones.
+
+## Estado y siguiente acción única
+**10/11 PASS, renderer Android APK operativo PENDING, comercial NO-GO, diseño 03 NO empezado.** Archivo oficial disponible en Biblioteca y enlazable de nuevo sin reconstrucción.
+
+**Acción física mínima e insustituible:** propietaria abre el APK ya instalado en su Android → menú **Actualizar centro** → selecciona el archivo V4.7 integrado oficial descargado → entra con su código directamente en la app → abre uno de los pedidos Botánica TEST ya existentes → toca **Ver invitación** → vuelve mediante **CENTRO GUEST**. Enviar solo resultado de funcionamiento o captura de error, sin secretos. **No repetir pruebas anteriores, no instalar servicios, no crear pedidos, no reabrir Botánica visual.** Si se observa fallo, resolver exactamente su causa; si PASS genuino, cerrar renderer, verificar admisión/QA y después pedir autorización comercial separada.
+
+Regla permanente: tras nuevas actuaciones, conservar nuevo registro en GitHub append-only, no sobrescribir bitácora Biblioteca v24. Documentar resultados antes de cambiar estado.

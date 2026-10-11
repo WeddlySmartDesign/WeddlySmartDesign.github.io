@@ -1,5 +1,9 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 68 — ARCHIVO ANDROID V4.7 REAL Y REGRESIÓN AUTOMÁTICA VERIFICADOS
+
+[Auditoría actual y punto de cierre](GUEST_BOTANICA_ENTRY_68_V47_DIRECT_ARTIFACT_REGRESSION_2026-10-11.md). Recuperados los 45.557.384 bytes oficiales V4.7 desde Biblioteca: SHA256 y master Botánica embebido idénticos al aprobado. Prueba adicional sobre motor extraído del HTML real PASS para una/dos sedes, regreso a Centro y aislamiento de cargas; regresión añadida al CI de catálogo en commit `7dd1ae15` (run 38165932102 **SUCCESS**). **NO confundir estos tests con APK Android físico**: sigue **10/11 PASS, renderer en APK PENDING, NO-GO comercial**. Solo queda importación oficial V4.7 en Android real → Ver invitación TEST → CENTRO GUEST. No crear pedidos ni repetir pasos ya cerrados. La variante genérica remota es todavía experimental; no prometer producción plug-and-play de D03. No tocar ONE/Partner/STUDIO/VEIL/main/master ni Biblioteca v24.
+
 ## ENTRADA 67 — AUDITORÍA DE PENDIENTES Y CONTINUIDAD SIN CAMBIOS DE PRODUCTO (11/10/2026)
 
 [Leer auditoría actual](GUEST_BOTANICA_ENTRY_67_PENDING_AUDIT_2026-10-11.md). **HEAD previo `f185630fe63e`: ambos QA principales SUCCESS (runs 38159610788 y 38159610883)**. Botánica se mantiene **10/11 PASS, 1 PENDING — renderer en APK Android V4.7 real; venta NO-GO, D03 sin empezar**. Las pruebas RSVP/Android visual/paridad/41 s ya están documentadas como cerradas en su alcance; **no repetirlas**. El Centro genérico remoto es experimental y no equivale a la V4.7 integrada oficial; la venta/Stripe necesita permiso posterior. Además el catálogo completo exige todavía nuevos diseños (mínimo 5, objetivo 6). La presente auditoría corrige instrucciones activas obsoletas 3/11 en el JSON, sin cambiar gates. El **único paso humano inmediato** sigue siendo importar V4.7 desde Biblioteca y probar Ver invitación → CENTRO GUEST dentro del APK.
