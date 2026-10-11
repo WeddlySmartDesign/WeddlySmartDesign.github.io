@@ -28,7 +28,9 @@ function safeCanonicalRoute(original,finalUrl){
  assert.equal(dst.origin,expected.origin,'cross-origin redirect forbidden');
  assert.equal(dst.search,'','public staging assets must have no query parameters');
  assert.equal(dst.hash,'','no fragments on static files');
- const paths=new Set([original,original.replace(/\\.html$/,''),original.replace(/\\/index\\.html$/,'/')]);
+ const cleanHtml=original.endsWith('.html')?original.slice(0,-5):original;
+ const cleanIndex=original.endsWith('/index.html')?original.slice(0,-10):original;
+ const paths=new Set([original,cleanHtml,cleanIndex]);
  assert(paths.has(dst.pathname),'redirect to unrelated static path is forbidden: '+dst.pathname);
 }
 function getViaCurl(rel,maxBytes){
