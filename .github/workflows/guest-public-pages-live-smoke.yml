@@ -1,0 +1,36 @@
+name: GUEST Public Cloudflare Pages Live Smoke (NO SALE)
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - guest/qa/public_cloudflare_pages_live_smoke.cjs
+      - .github/workflows/guest-public-pages-live-smoke.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: guest-public-pages-smoke
+  cancel-in-progress: true
+jobs:
+  public-preproduction-no-secrets:
+    name: External HTTPS files match frozen Botánica and never enable sales
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    env:
+      SUPABASE_ACCESS_TOKEN: ""
+      STRIPE_SECRET_KEY: ""
+      CLOUDFLARE_API_TOKEN: ""
+      VERCEL_TOKEN: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify zero cloud/checkout write credentials
+        run: |
+          test -z "$SUPABASE_ACCESS_TOKEN"
+          test -z "$STRIPE_SECRET_KEY"
+          test -z "$CLOUDFLARE_API_TOKEN"
+          test -z "$VERCEL_TOKEN"
+      - name: Check production Pages external HTTPS and exact frozen assets
+        run: node guest/qa/public_cloudflare_pages_live_smoke.cjs
