@@ -114,6 +114,10 @@ Consultar [auditoría de V4.6 real](GUEST_BOTANICA_ENTRY_57_CENTER_REAL_V46_AUDI
 
 [Entrada 61 — publicación y pruebas verificadas](GUEST_BOTANICA_ENTRY_61_ALL_GREEN_OWNER_ACCEPTANCE_READY_2026-10-11.md). En HEAD `6170dd6d08d6a734c438710b603633862d9d15f7`: catálogo [38154081311](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38154081311), QA independiente [38154081299](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38154081299), Cloudflare exact bytes [38154081464](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38154081464), los tres **SUCCESS**. Disponible página read-only de paridad y visor GUEST y página separada que mide tiempo activo solo después de acción propietaria; links y procedimientos completos en Entrada 61. **8/11 PASS y 3 pendientes, venta NO-GO**. No repetir pedidos TEST ya aprobados, RSVP ni rediseño. Solo pendiente resultados humanos que no se pueden simular, y posterior aceptación del Centro operativo.
 
+## Entrada 62 — Paridad REAL y visor QA vistos en Android
+
+[Entrada 62, evidencia autenticada](GUEST_BOTANICA_ENTRY_62_OWNER_REAL_PARITY_ANDROID_2026-10-11.md): los dos pedidos Cloud (shared, split) dieron «DATOS IDÉNTICOS» revisión/final y el vídeo de propietaria mostró los dos dentro del visor genérico en Android. **Paridad PASS; 9/11 aprobados, 2 pendientes**: integración en Centro GUEST operativo y medición real de tiempo activo. El Centro congelado V4.6 VEIL-only no fue alterado. NO-GO comercial, D03 no iniciado; no repetir paridad, pedidos o RSVP.
+
 ## 6. Restricciones permanentes
 
 - NO tocar **ONE, ONE Partner, STUDIO, VEIL LIGHT congelado, `main`, master V14.7 Botánica** ni credenciales/servicios ajenos.
