@@ -32,6 +32,7 @@ jobs:
           node guest/tests/catalog_public_origin_v14.test.cjs
           node guest/tests/paid_catalog_urls_v15_contract.test.cjs
           node guest/tests/test_final_v16_contract.test.cjs
+          node guest/tests/test_license_pairing_v18_contract.test.cjs
           node guest/tests/catalog_static_preview_future_design.test.cjs
           node guest/tests/owner_botanica_acceptance_contract.test.cjs
           node guest/tests/multi_design_dropin_pipeline.test.cjs
