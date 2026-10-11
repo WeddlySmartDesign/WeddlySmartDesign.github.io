@@ -43,7 +43,7 @@ async function chooseOrder(){
  .sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
  if(rows.length){
   const d=await api(FLOW,{action:'detail',orderId:rows[0].id},manager);const o=d.order||{};
-  if(['submitted','designing','review_ready'].includes(o.status)){note('Pedido de tiempo ya existente recuperado; no se crea otro.');return o}
+  if(['draft','submitted','designing','review_ready'].includes(o.status)){note('Pedido de tiempo ya existente recuperado; no se crea otro.');return o}
   if(o.status==='review_sent'){show('Esta medición ya terminó. No generamos otra.');el('final').textContent='Prueba de tiempo ya cerrada en GUEST; utiliza el resultado de la sesión anterior.';el('done').hidden=false;return null}
   throw Error('Existe una prueba de tiempo previa en estado '+o.status+'. No se crean duplicados.');
  }
@@ -64,6 +64,7 @@ async function prepare(){
   const auth=await api(LOGIN,{action:'login',recoveryCode:code});el('code').value='';code='';manager=auth.managerToken;
   if(!manager?.startsWith('v1.'))throw Error('Sesión inválida');
   order=await chooseOrder();if(!order)return;
+  if(order.status==='draft'){const q=questionnaire(),token=order.questionnaireToken;if(!token)throw Error('Falta token del pedido existente');await api(FLOW,{action:'save',token,questionnaire:q});await api(FLOW,{action:'submit',token,questionnaire:q});const d=await api(FLOW,{action:'detail',orderId:order.id},manager);order=d.order}
   if(order.status==='submitted'){await api(FLOW,{action:'start_design',orderId:order.id},manager);const d=await api(FLOW,{action:'detail',orderId:order.id},manager);order=d.order}
   if(!['designing','review_ready'].includes(order.status))throw Error('Estado no medible: '+order.status);
   const registryResponse=await fetch('/guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',{cache:'no-store'});
