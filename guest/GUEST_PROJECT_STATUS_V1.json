@@ -1750,6 +1750,22 @@
       "commercialSaleApproved": false,
       "pass": 8,
       "pending": 3
+    },
+    "botanicaEntry61PublishedLastGateWorkflow": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_61_ALL_GREEN_OWNER_ACCEPTANCE_READY_2026-10-11.md",
+      "baselineCiHead": "6170dd6d08d6a734c438710b603633862d9d15f7",
+      "catalogQa": 38154081311,
+      "independentQa": 38154081299,
+      "cloudflareLiveSmoke": 38154081464,
+      "allSuccessOnBaseline": true,
+      "authOwnerParityUrl": "https://guest-weddlysmartdesign.pages.dev/guest/qa/owner-botanica-closeout.html",
+      "authOwnerTouchUrl": "https://guest-weddlysmartdesign.pages.dev/guest/qa/owner-botanica-touch-benchmark.html",
+      "ownerLiveParityExecuted": false,
+      "ownerActiveReviewMeasured": false,
+      "realCenterApproved": false,
+      "commercialSaleApproved": false,
+      "passed": 8,
+      "pending": 3
     }
   },
   "commercialGate": {
@@ -1928,15 +1944,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 60,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_60_LAST_THREE_GATES_CLOSEOUT_2026-10-11.md",
+    "latestEntry": 61,
+    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_61_ALL_GREEN_OWNER_ACCEPTANCE_READY_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Read Entry60 and START_HERE. Check QA and Cloudflare exact deployment for /guest/qa/owner-botanica-closeout.html and /guest/qa/owner-botanica-touch-benchmark.html. Two actual owner UI actions required for parity and active-time evidence. Do NOT mark 11/11 or sale-ready without observed result and real Center certification.",
+    "resumption": "Read Entry61 first; CI catalog 38154081311, independent 38154081299, Cloudflare 38154081464 all green on 6170dd6d. Owner must validate two URLs in Android with existing code (owner-botanica-closeout.html read-only, owner-botanica-touch-benchmark.html one unique synthetic test). Do not mark gates without authentic owner evidence; 8/11 remains NO-GO.",
     "commercialStatus": "BOTANICA_NO_GO",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
