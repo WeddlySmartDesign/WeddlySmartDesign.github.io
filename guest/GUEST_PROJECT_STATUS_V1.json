@@ -1590,6 +1590,28 @@
       "commercialGates": "3 PASS, 8 PENDING",
       "commercialStatus": "BOTANICA_NO_GO",
       "noDeployRetriesWithoutDiagnosis": true
+    },
+    "botanicaIsolatedStaticUrlEntry43_20261011": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_43_URL_QA_2026-10-11.md / Library Entry43",
+      "deployment16ProvenInEdgeLogs": true,
+      "sourceReadbackShowsV15": true,
+      "positivePublicLoadModeProvenOnLive": false,
+      "cloudOriginEffectProven": false,
+      "localTwoBotanicaOrdersReviewFinalRsvpPassed": true,
+      "localSmokeRun": 38129305501,
+      "localSmokeConclusion": "success",
+      "catalogRun": 38129305486,
+      "catalogConclusion": "success",
+      "independentRun": 38129305483,
+      "independentConclusion": "success",
+      "localCodeCommit": "1dce8758e8520fcb090fe7f56cbc173f6058249e",
+      "cloudBotanicaOrderCount": 0,
+      "ownerSupabaseConfigAlreadyReportedComplete": true,
+      "needsLegitimateManagerSession": true,
+      "commercialGatesPass": 3,
+      "commercialGatesPending": 8,
+      "commercialSaleApproved": false,
+      "noNewSpend": true
     }
   },
   "commercialGate": {
