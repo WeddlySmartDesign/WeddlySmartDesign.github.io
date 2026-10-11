@@ -4,7 +4,7 @@
 // Simulates only WebView DOM hooks. Not an Android physical or live Cloud test.
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const src=fs.readFileSync(path.join(__dirname,'../tools/build_mobile_center_v47_from_library.py'),'utf8');
-const engineTag=src.match(/ENGINE = r'''(<script id="guest-v47-renderer-engine">[\s\S]*?<\/script>)'''/);
+const engineTag=src.match(/ENGINE = r'''(<script id="guest-v47-renderer-engine">[\s\S]*?<\/script>)\s*'''/);
 assert(engineTag,'real builder must expose its exact renderer engine');
 const script=engineTag[1].replace(/^<script[^>]*>/,'').replace(/<\/script>$/,'');
 new vm.Script(script);
