@@ -82,11 +82,18 @@ async function run(){
    linkCard(i+1,order.id,review,final.href);
    // Read-only LIVE parity audit: independent review and final capabilities
    // for the same already-delivered TEST order. Never mutate/order/claim sale.
+   // Signed media URLs intentionally have different TTLs (review vs final).
+   // Compare immutable object origins+paths while preserving every other field,
+   // including RSVP query strings, places, names, and story content.
+   const compareConfig=(data)=>JSON.stringify(data,(key,value)=>{
+    if(typeof value!=='string'||!value.startsWith('https://dnjsxequwgtyyauuofxj.supabase.co/storage/v1/object/sign/guest-invitation-uploads/'))return value;
+    try{const u=new URL(value);return u.origin+u.pathname}catch{return value}
+   });
    let parity='SIN COMPROBAR';
    try{
     const reviewed=await post(FLOW,{action:'review_load',token:r});
     if(reviewed.order?.id===check.order?.id&&
-      JSON.stringify(reviewed.order?.config)===JSON.stringify(check.order?.config))
+      compareConfig(reviewed.order?.config)===compareConfig(check.order?.config))
       parity='CONFIGURACIÓN IDÉNTICA';
     else parity='REVISAR DIFERENCIAS';
    }catch{parity='NO DISPONIBLE';}
