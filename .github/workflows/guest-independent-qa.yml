@@ -361,6 +361,8 @@ jobs:
         run: node guest/qa/catalog_common_questionnaire_browser_test.cjs
       - name: GUEST owner Center mobile real renderer and touch flow (mocked API)
         run: node guest/qa/owner_botanica_closeout_browser_test.cjs
+      - name: GUEST V4.7 mobile Center real cross-origin bridge, TEST and production guard
+        run: node guest/qa/owner_center_bridge_browser_test.cjs
       # External live-browser parity remains a separate unverified gate: the
       # Cloudflare CI browser failed to load the nested frozen iframe.
       # Never equate mock QA with live parity. See GUEST_CLOSEOUT status.
