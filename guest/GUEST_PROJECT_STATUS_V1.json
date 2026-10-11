@@ -1845,6 +1845,24 @@
       "productionSaleApproved": false,
       "gatePassed": 10,
       "gatePending": 1
+    },
+    "botanicaEntry69AndroidV48": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_69_ANDROID_ADAPTER_V48_FIX_2026-10-11.md",
+      "originalFailure": "V4.7 real APK: adapter_not_found screenshot 1000095303.jpg",
+      "causeHypothesis": "iframe appended as blank before srcdoc; once-only load listener can consume about:blank",
+      "candidateArtifactName": "GUEST_MOBILE_CENTER_V4_8_BOTANICA_ANDROID_RENDERER_FIXED_2026-10-11.html",
+      "candidateSizeBytes": 45558028,
+      "candidateSha256": "5a35f482bce23684496a227f3e9161093a9ef93dd6c9d9fc99dfc41ec7b56835",
+      "originalV47Sha256": "3ce9f5fa97a623c0b358336d11bbcd58db586a4e60c34e93b24abcc44e1c0484",
+      "unchangedVisualMasterSha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+      "persistentDriveUrl": "https://drive.google.com/file/d/14UMLniCMMJJvtawWffRDWOm0nNrNe2Kw/view?usp=drivesdk",
+      "libraryStorageLimitObserved": true,
+      "sourceBuilder": "guest/tools/build_mobile_center_v48_from_v47.py",
+      "test": "guest/tests/mobile_center_v48_boot_order_regression.py",
+      "binaryOfflineHarnessPass": true,
+      "androidV48PhysicallyVerified": false,
+      "rendererGatePass": false,
+      "commercialSaleApproved": false
     }
   },
   "commercialGate": {
@@ -2025,15 +2043,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 68,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_68_V47_DIRECT_ARTIFACT_REGRESSION_2026-10-11.md",
+    "latestEntry": 69,
+    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_69_ANDROID_ADAPTER_V48_FIX_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Entrada 68. V4.7 integrado 45.557.384 bytes y master embebido hash PASS. QA Node sobre artefacto real PASS; runner CI con fixtures PASS catálogo 38165932102. Estado 10/11, renderer APK Android real pendiente; propietaria debe importar HTML oficial en APK, abrir Botánica TEST ya entregado y volver a CENTRO GUEST. NO-GO, no D03, no nuevo pedido, RSVP, medición ni despliegue. Luego registrar resultado y pedir aprobación comercial aparte.",
+    "resumption": "Entrada 69: pantalla Android V4.7 dio adapter_not_found; V4.8 reconstruida desde binario V4.7 SHA-pinned, master intacto, cambio srcdoc-before-attach + no consumir blank onload, cabecera y botón. Artefacto V4.8 45558028 bytes SHA256 5a35f482... en Google Drive/Weddly (id 14UMLniCMMJJvtawWffRDWOm0nNrNe2Kw). Candidata NO certificada en Android real. Única acción: importar V4.8 y abrir pedido Botánica TEST existente y regresar al Centro. Estado 10/11 NO-GO, no D03. No volver a repetir Supabase, RSVP, pedidos ni medición.",
     "commercialStatus": "BOTANICA_NO_GO",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
@@ -2050,6 +2068,7 @@
       38159610788,
       38159610883
     ],
-    "entry68": "guest/GUEST_BOTANICA_ENTRY_68_V47_DIRECT_ARTIFACT_REGRESSION_2026-10-11.md"
+    "entry68": "guest/GUEST_BOTANICA_ENTRY_68_V47_DIRECT_ARTIFACT_REGRESSION_2026-10-11.md",
+    "entry69": "guest/GUEST_BOTANICA_ENTRY_69_ANDROID_ADAPTER_V48_FIX_2026-10-11.md"
   }
 }

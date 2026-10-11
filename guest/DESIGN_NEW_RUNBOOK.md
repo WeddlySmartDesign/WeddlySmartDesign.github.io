@@ -48,6 +48,8 @@ El script trabaja **exclusivamente offline**: comprueba el SHA del Centro candid
 
 - [ ] Probar flujo de contexto de invitado `rt`, `g` **o** `u`, `lang`; conservar RSVP existente y su almacenamiento. No crear envío paralelo.
 
+**Regresión Android obligatoria del visor compartido:** nunca insertar un iframe vacío antes de fijar `srcdoc` o su URL, ni consumir el primer `load` con `{once:true}` sin comprobar que contiene el documento esperado. Rechazar `about:blank` inicial, cargar `config` solo tras detectar el adaptador real, rechazar generaciones obsoletas y probar regreso al Centro. Registrar prueba específica, no confiar únicamente en DOM sintético; véase [Entrada 69](GUEST_BOTANICA_ENTRY_69_ANDROID_ADAPTER_V48_FIX_2026-10-11.md).
+
 ## Fase 3 — certificación comercial por diseño (sigue siendo obligatoria)
 
 - [ ] Dos pedidos **reales en modo test** con datos muy diferentes, a través del cuestionario compartido, sin ediciones de diseño entre ellos.
