@@ -25,7 +25,7 @@ assert.doesNotMatch(extension,/localStorage|sessionStorage|create_test|create_pa
 const inner=remote.match(/<script>\s*([\s\S]*?)<\/script>/);
 assert(inner,'remote bridge inline script present');new vm.Script(inner[1],{filename:'owner-bridge.js'});
 assert.match(remote,/noindex,nofollow,noarchive/);
-assert.match(remote,/e\.source!==window\.parent/);
+assert.match(remote,/event\.source!==window\.parent/);
 assert.match(remote,/spec\.status!=='commercially-frozen'&&d\.order\?\.mode!=='test'/);
 assert.match(remote,/GUEST_CATALOG_OWNER_VIEWER_V2\.show/);
 assert.match(remote,/guest-catalog-error-v1/);
