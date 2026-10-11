@@ -7,6 +7,7 @@ on:
       - guest/qa/isolated_free/**
       - guest/tools/allow_catalog_public_origin_v14.cjs
       - guest/tools/route_paid_catalog_urls_v15.cjs
+      - guest/tools/enable_test_final_v16.cjs
       - guest/qa/isolated_free/verify_v13_two_botanica_orders.cjs
       - guest/tools/prepare_test_only_backend_v13.cjs
   workflow_dispatch:
@@ -53,7 +54,8 @@ jobs:
           node guest/tools/prepare_test_only_backend_v13.cjs --input guest/qa/isolated_free/edge_guest_flow_v12_readonly_snapshot.ts --output /tmp/guest-v13-pristine-ci.ts
           node guest/tools/allow_catalog_public_origin_v14.cjs --input /tmp/guest-v13-pristine-ci.ts --output /tmp/guest-v14-origin-guard-ci.ts
           node guest/tools/route_paid_catalog_urls_v15.cjs --input /tmp/guest-v14-origin-guard-ci.ts --output /tmp/guest-v15-host-parity-ci.ts
-          node guest/qa/isolated_free/patch_local_signed_https.cjs /tmp/guest-v15-host-parity-ci.ts supabase/functions/guest-invitation-flow/index.ts
+          node guest/tools/enable_test_final_v16.cjs --input /tmp/guest-v15-host-parity-ci.ts --output /tmp/guest-v16-test-final-ci.ts
+          node guest/qa/isolated_free/patch_local_signed_https.cjs /tmp/guest-v16-test-final-ci.ts supabase/functions/guest-invitation-flow/index.ts
           test -s supabase/functions/guest-invitation-flow/index.ts
           mkdir -p supabase/functions/guest-rsvp
           cp guest/qa/isolated_free/edge_guest_rsvp_v4_readonly_snapshot.ts supabase/functions/guest-rsvp/index.ts
@@ -94,12 +96,12 @@ jobs:
           fi
           node guest/qa/isolated_free/verify_rsvp_actual_edge.cjs local-api-env.txt
           node guest/qa/isolated_free/verify_v13_member_handoff_actual_rsvp.cjs local-api-env.txt
-      - name: Save V15 source ONLY after real isolated runtime PASS
+      - name: Save V16 source ONLY after real isolated runtime PASS
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: guest-v15-host-parity-validated-source-review-only
-          path: /tmp/guest-v15-host-parity-ci.ts
+          name: guest-v16-test-final-validated-source-review-only
+          path: /tmp/guest-v16-test-final-ci.ts
           if-no-files-found: error
           retention-days: 1
       - name: Stop local-only stack
