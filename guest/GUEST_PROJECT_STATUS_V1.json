@@ -1736,6 +1736,20 @@
       "newOrdersCreated": false,
       "saleApproved": false,
       "gate": "recipient-rsvp PASS with explicit scope"
+    },
+    "botanicaEntry60Closeout": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_60_LAST_THREE_GATES_CLOSEOUT_2026-10-11.md",
+      "cloudRsvpPersisted": true,
+      "catalogContinuityStatusFixed": true,
+      "ownerCloseoutReadOnlyPage": "https://guest-weddlysmartdesign.pages.dev/guest/qa/owner-botanica-closeout.html",
+      "activeTouchRealTestPage": "https://guest-weddlysmartdesign.pages.dev/guest/qa/owner-botanica-touch-benchmark.html",
+      "ownerRealCloseoutExecuted": false,
+      "ownerRealActiveTimeMeasured": false,
+      "ownerProductionCenterRendererCertified": false,
+      "externalBrowserCloudflareIframeQA": "NOT_PASS_TIMEOUT",
+      "commercialSaleApproved": false,
+      "pass": 8,
+      "pending": 3
     }
   },
   "commercialGate": {
@@ -1914,15 +1928,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 55,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_55_CLOUD_RSVP_OWNER_ANDROID_2026-10-11.md",
+    "latestEntry": 60,
+    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_60_LAST_THREE_GATES_CLOSEOUT_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Verify HEAD + two QA actions, read Entry55; recipient-rsvp Cloud persistence PASS; finish renderer in actual GUEST center, review-final parity via authorized read-only per-order diagnostic, owner active-time measurement. No re-run QA owner RSVP. No sale or D03.",
+    "resumption": "Read Entry60 and START_HERE. Check QA and Cloudflare exact deployment for /guest/qa/owner-botanica-closeout.html and /guest/qa/owner-botanica-touch-benchmark.html. Two actual owner UI actions required for parity and active-time evidence. Do NOT mark 11/11 or sale-ready without observed result and real Center certification.",
     "commercialStatus": "BOTANICA_NO_GO",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
