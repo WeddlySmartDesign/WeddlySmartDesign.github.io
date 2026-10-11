@@ -13,12 +13,12 @@ const registry={schemaVersion:'guest-catalog-owner-renderers-v2',templates:{
  botanica:{id:'botanica',version:'14.7',mode:'iframe',applyApi:'BOTANICA_APPLY_CONFIG',status:'commercially-frozen',src:'/guest/catalog-assets/botanica/14.7/index.html'}
 }};
 const mockAsset='<html><body><main id="rendered"></main><script>window.BOTANICA_APPLY_CONFIG=c=>{window.__received=c;document.querySelector("#rendered").textContent=c.couple.name1+" + "+c.couple.name2+" RSVP "+c.rsvp.route};</script></body></html>';
-async function intercept(page,actions,{certified=true}={}){
+async function intercept(page,actions,{certified=true,pendingTest=false}={}){
  await page.route('**/guest/catalog-assets/botanica/14.7/index.html',r=>r.fulfill({status:200,contentType:'text/html',body:mockAsset}));
- if(certified)await page.route('**/guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify(registry)}));
+ if(certified||pendingTest)await page.route('**/guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify(pendingTest?{...registry,templates:{botanica:{...registry.templates.botanica,status:'certification-pending'}}}:registry)}));
  await page.route('https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow',async r=>{
    const b=r.request().postDataJSON();actions.push(b);
-   const body=b.action==='public_load'?{ok:true,order:{id:'fake',config}}:
+   const body=b.action==='public_load'?{ok:true,order:{id:'fake',mode:pendingTest?'test':'production',config}}:
        b.action==='review_load'?{ok:true,order:{id:'fake',status:'review_sent',config,revisionCount:0}}:
        b.action==='review_respond'?{ok:true,status:b.decision==='approve'?'approved':'changes_requested'}:{ok:false,error:'blocked'};
    await r.fulfill({status:body.ok?200:400,contentType:'application/json',body:JSON.stringify(body)});
@@ -53,6 +53,16 @@ async function intercept(page,actions,{certified=true}={}){
   await forbidden.waitForFunction(()=>document.getElementById('state').textContent.includes('No hemos podido abrir'));
   assert.equal(await forbidden.locator('iframe').count(),0,'pending Botánica cannot be shown as commercial final');
   await forbidden.close();
+  // Authenticated synthetic TEST order CAN preview pending final visual,
+  // but must show an unmistakable warning and never imply a sale.
+  const pending=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true}),testActions=[];
+  await intercept(pending,testActions,{pendingTest:true});
+  await pending.goto(base+'/guest/catalog-final.html?p='+encodeURIComponent(t),{waitUntil:'domcontentloaded'});
+  await pending.waitForFunction(()=>document.getElementById('wsdCatalogDeliveryStatus')?.dataset.state==='ready');
+  assert(await pending.locator('#guestTestOnlyBanner').isVisible(),'test capability must show NO ENVIAR banner');
+  assert(await pending.frameLocator('iframe').locator('#rendered').isVisible(),'pending test order should render without any sale promotion');
+  assert.equal(testActions.length,1);
+  await pending.close();
   // Common client approval on a safely mocked certified asset.
   const approved=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true}),reviewActions=[];
   await intercept(approved,reviewActions);
@@ -77,6 +87,6 @@ async function intercept(page,actions,{certified=true}={}){
   await changes.waitForFunction(()=>document.getElementById('done')?.textContent.includes('recibido los cambios'));
   assert(changeActions.some(x=>x.action==='review_respond'&&x.decision==='changes'&&x.note==='Cambiad la hora'));
   await changes.close();
-  console.log('PASS generic final/review browser: real shared runtime, same-origin iframe, RSVP context, pending-sale block, approve/change API, empty-note block. NO LIVE data.');
+  console.log('PASS generic final/review browser: trusted test-only pending master visible with warning; pending production refused; shared RSVP, approve/change, no sale. NO LIVE data.');
  }finally{await browser.close()}
 })().catch(e=>{console.error(e.stack||e);process.exitCode=1});
