@@ -126,6 +126,17 @@ async function verify(){
    assert.equal(sha(remote.data),sha(local),'public file does not match isolated repository: '+route);
    console.log('PASS exact public asset '+route+' bytes='+remote.data.length);
  }
+ const closeout=fs.readFileSync(path.join(root,'guest/qa/owner-botanica-closeout.html'),'utf8');
+ assert.match(closeout,/review_load/);
+ assert.match(closeout,/public_load/);
+ assert.match(closeout,/GUEST_CATALOG_OWNER_VIEWER_V2\.show/);
+ assert.doesNotMatch(closeout,/action:'create_test'/,'parity screen must not create orders');
+ const touch=fs.readFileSync(path.join(root,'guest/qa/owner-botanica-touch-benchmark.html'),'utf8');
+ assert.match(touch,/qa-touch-botanica@example\.invalid/);
+ assert.match(touch,/action:'send_review'/);
+ assert.match(touch,/No se ha confirmado el envío/);
+ // These two exact-byte comparisons above are mandatory before asking the
+ // owner to exercise the visual and active-work closeout in Android.
  const graphic=await getWithRetry('/guest/catalog-assets/botanica/14.7/index.html',{maxBytes:15000000});
  assert.equal(graphic.data.length,visualBytes,'Botánica approved bytes mismatch');
  assert.equal(sha(graphic.data),visualHash,'Botánica visual is not the frozen master');
