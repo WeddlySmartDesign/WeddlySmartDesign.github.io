@@ -137,7 +137,7 @@ async function verify(){
  assert.match(touch,/No se ha confirmado el envío/);
  assert.match(touch,/Antes de iniciar el cronómetro/,'owner must know expected content before starting');
  assert.match(touch,/Marca cada comprobación/,'five-point real review checklist included in deployed HTML');
- assert.equal((touch.match(/name="reviewCheck"/g)||[]).length,5,'five mobile owner review assertions deployed');
+ assert.equal((touch.match(/<input type="checkbox" name="reviewCheck"/g)||[]).length,5,'five mobile owner review assertions deployed');
  // These two exact-byte comparisons above are mandatory before asking the
  // owner to exercise the visual and active-work closeout in Android.
  const graphic=await getWithRetry('/guest/catalog-assets/botanica/14.7/index.html',{maxBytes:15000000});
