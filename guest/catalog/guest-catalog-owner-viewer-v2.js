@@ -29,19 +29,25 @@ async function show({order,config,host,registry,signal}){
  iframe.setAttribute('referrerpolicy','no-referrer');iframe.setAttribute('loading','eager');
  // Never flash the frozen demonstration names while a customer's config is loading.
  iframe.style.cssText='display:block;width:100%;height:100%;border:0;visibility:hidden;';
- host.replaceChildren(iframe);
+ // Do not attach an empty iframe; it may emit about:blank load on Android.
  await new Promise((resolve,reject)=>{
   let completed=false,timer;
   const clean=()=>{clearTimeout(timer);signal?.removeEventListener('abort',onAbort);iframe.removeEventListener?.('load',onLoad);iframe.removeEventListener?.('error',onError)};
   const finish=(reason)=>{if(completed)return;completed=true;clean();if(reason){if(iframe.isConnected)iframe.remove();reject(new Error('guest_owner_viewer:'+reason))}else resolve()};
-  const onLoad=()=>finish();
+  const onLoad=()=>{
+   // Treat only the actual template as ready, never an empty about:blank load.
+   try{const win=iframe.contentWindow;
+    if(!win||win.location.href==='about:blank'||typeof win[spec.applyApi]!=='function')return;
+    finish();
+   }catch{finish('iframe_cross_origin')}
+  };
   const onError=()=>finish('iframe_load_failed');
   const onAbort=()=>finish('preview_cancelled');
   if(signal?.aborted){finish('preview_cancelled');return}
-  iframe.addEventListener('load',onLoad,{once:true});iframe.addEventListener('error',onError,{once:true});
+  iframe.addEventListener('load',onLoad);iframe.addEventListener('error',onError,{once:true});
   signal?.addEventListener('abort',onAbort,{once:true});
   timer=setTimeout(()=>finish('iframe_load_timeout'),IFRAME_LOAD_TIMEOUT_MS);
-  try{iframe.src=url}catch{finish('iframe_navigation_failed')}
+  try{iframe.src=url;host.replaceChildren(iframe)}catch{finish('iframe_navigation_failed')}
  });
  if(signal?.aborted){if(iframe.isConnected)iframe.remove();fail('preview_cancelled')}
  if(!iframe.isConnected)fail('preview_detached');
