@@ -65,9 +65,9 @@
           "why": "No generated delivered final link from live order."
         },
         "recipient-rsvp": {
-          "pass": false,
-          "source": "guest/GUEST_D02_BOTANICA_ESTADO_BLOQUEO_REAL_2026-10-09.md",
-          "why": "RSVP helper unit tests pass; no live state persistence test."
+          "pass": true,
+          "source": "guest/GUEST_BOTANICA_ENTRY_55_CLOUD_RSVP_OWNER_ANDROID_2026-10-11.md",
+          "why": "Real Cloud GUEST TEST Botánica order linked to authorized guests tester license; 2 real guest-source submissions yes/no applied in guest_rsvp_submissions and read-after-write as confirmed/declined for same unit in guest_app_state, plus Android person/unit invitation links shown. Physical CTA click not seen on video; do not claim manual UI RSVP tested."
         },
         "owner-android": {
           "pass": true,
