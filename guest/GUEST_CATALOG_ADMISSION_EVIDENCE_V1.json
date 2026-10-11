@@ -75,9 +75,9 @@
           "why": "Owner confirmed both final TEST invitations were visually good on physical Android, with video reviews for one-venue custom story and two-venue story-none. RSVP, parity, media quality and owner touch remain separately gated."
         },
         "owner-touch": {
-          "pass": false,
-          "source": "guest/GUEST_D02_BOTANICA_CIERRE_TECNICO_GATES_PENDIENTES_2026-10-09.md",
-          "why": "Active time has not been measured for a Botánica real order."
+          "pass": true,
+          "source": "guest/GUEST_BOTANICA_ENTRY_64_OWNER_TOUCH_REAL_2026-10-11.md",
+          "why": "Owner Android screen recording demonstrates five-point review completed and final active time 0:41 (<5min) with TEST send_review confirmation. Independently verified exactly one Botánica synthetic benchmark order in REAL Supabase Cloud status=review_sent. Counts time on loaded visual to sending review, not entire invitation production."
         },
         "media-integrity": {
           "pass": true,
