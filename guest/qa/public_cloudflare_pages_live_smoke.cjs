@@ -23,19 +23,28 @@ function assertSiteUrl(url){
  assert.equal(u.origin,origin);
  assert.equal(u.protocol,'https:');
 }
+function safeCanonicalRoute(original,finalUrl){
+ const dst=new URL(finalUrl),expected=new URL(origin+original);
+ assert.equal(dst.origin,expected.origin,'cross-origin redirect forbidden');
+ assert.equal(dst.search,'','public staging assets must have no query parameters');
+ assert.equal(dst.hash,'','no fragments on static files');
+ const paths=new Set([original,original.replace(/\\.html$/,''),original.replace(/\\/index\\.html$/,'/')]);
+ assert(paths.has(dst.pathname),'redirect to unrelated static path is forbidden: '+dst.pathname);
+}
 function getViaCurl(rel,maxBytes){
  const url=origin+rel;assertSiteUrl(url);
  const temp=fs.mkdtempSync(path.join(os.tmpdir(),'guest-pages-qa-'));
  const file=path.join(temp,'public.body'),headerFile=path.join(temp,'public.headers');
  try{
   const cli=child.spawnSync('curl',['--silent','--show-error','--fail','--max-time','25',
-    '--max-filesize',String(maxBytes),'--proto','=https','--max-redirs','0',
-    '--dump-header',headerFile,'--output',file,url],
+    '--max-filesize',String(maxBytes),'--proto','=https','--proto-redir','=https','--location','--max-redirs','2',
+    '--dump-header',headerFile,'--output',file,'--write-out','%{url_effective}',url],
     {encoding:'utf8',timeout:29000});
   if(cli.status!==0)throw Error('curl_status_'+cli.status+' '+String(cli.stderr||'').trim().slice(0,170));
+  safeCanonicalRoute(rel,String(cli.stdout||'').trim());
   const raw=fs.readFileSync(file);assert(raw.length>0&&raw.length<=maxBytes);
   const lines=fs.readFileSync(headerFile,'utf8').split('\n').map(line=>line.trim());
-  const statusLine=lines.find(line=>line.startsWith('HTTP/'))||'';
+  const statusLine=lines.filter(line=>line.startsWith('HTTP/')).at(-1)||'';
   assert(statusLine.includes(' 200 '),'curl unexpected response: '+statusLine);
   const headers=new Headers();
   for(const line of lines){const sep=line.indexOf(':');if(sep>0)headers.set(line.slice(0,sep).trim(),line.slice(sep+1).trim())}
@@ -47,9 +56,9 @@ async function getWithRetry(rel,{retries=3,maxBytes=17000000}={}){
  let error;
  for(let i=0;i<retries;i++){
   try{
-   const r=await fetch(url,{redirect:'error',signal:AbortSignal.timeout(18000),headers:{'accept':'text/html,application/json,*/*','connection':'close'}});
+   const r=await fetch(url,{redirect:'follow',signal:AbortSignal.timeout(18000),headers:{'accept':'text/html,application/json,*/*','connection':'close'}});
    if(!r.ok)throw Error('HTTP_'+r.status);
-   assert.equal(new URL(r.url).origin,origin,'redirected to a different origin');
+   safeCanonicalRoute(rel,r.url);
    const length=Number(r.headers.get('content-length')||0);
    assert(!length||length<maxBytes,'unexpected remote file too large');
    const data=Buffer.from(await r.arrayBuffer());
