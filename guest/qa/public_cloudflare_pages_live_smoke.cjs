@@ -98,6 +98,11 @@ function verifyAnonymousGuards(){
 
 async function verify(){
  // Public page confirms preproduction ONLY. It is not a wedding checkout.
+ const recovery=fs.readFileSync(path.join(root,'guest/qa/owner-botanica-acceptance.html'),'utf8');
+ assert.match(recovery,/Recuperar mis pruebas finalizadas/);
+ assert.match(recovery,/action:'list'/);
+ assert.match(recovery,/action:'detail'/);
+ assert.doesNotMatch(recovery,/action:'create_test'/,'Recovery page must NEVER create duplicate orders');
  const landing=await getWithRetry('/');
  const text=landing.data.toString('utf8');
  assert.match(text,/GUEST by WeddlySmartDesign/);
