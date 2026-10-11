@@ -1455,6 +1455,54 @@
         "Botanica visual",
         "main"
       ]
+    },
+    "publicCloudflareStageObserved20261011": {
+      "host": "https://guest-weddlysmartdesign.pages.dev",
+      "state": "OWNER_BROWSER_SCREENSHOT_CONFIRMED_PREPRODUCTION_LANDING",
+      "screenshot": "User screenshot of public Cloudflare Pages landing headed GUEST by WeddlySmartDesign with Ver diseño en el móvil button, 2026-10-11",
+      "connectedGit": true,
+      "knownDeployScope": "guest-independent precommercial single-template staging; no sale",
+      "independentNetworkProbe": "NOT VERIFIED: external tool inaccessible from this environment",
+      "pendingAssetHttpVerification": true,
+      "pendingAndroid": true,
+      "pendingSupabaseOriginConfiguration": true,
+      "noProofOfCommercialSale": true,
+      "checkpointPrecedingEntriesSuperseded": "Historic statements no Pages at Entries 35 and 36 were correct at those times, now obsolete for static landing"
+    },
+    "futureDesignNoReworkContract20261011": {
+      "desiredUserWorkflow": "Design finished HTML + visual-plugin.json; user only mobile preview/approval; no recurrent architecture/backend/checkout/questionnaire/RSVP/host configuration",
+      "normativeDocument": "guest/GUEST_NEW_DESIGN_ONLY_VISUAL_CONTRACT_2026-10-10.md",
+      "canonicalLibraryEntry": 37,
+      "scope": "GUEST catalogue designs 03...1000; ONE, Partner, STUDIO, VEIL and main frozen",
+      "existingAutomations": [
+        "guest/tools/register_visual_template.cjs",
+        "guest/tools/build_catalog_static_preview.cjs",
+        "guest/tools/build_catalog_delivery.js",
+        "guest/tests/visual_plugin_onboarding.test.cjs"
+      ],
+      "nonNegotiableNoNewPerDesignCode": [
+        "GUEST paid checkout",
+        "GUEST invitation-flow",
+        "common questionnaire",
+        "customer review/final",
+        "RSVP",
+        "guests/management",
+        "owner center",
+        "Cloudflare build command"
+      ],
+      "acceptanceBeforePromise": {
+        "botanicRealPublishedE2E": false,
+        "catalogBuildPublishesMultipleTemplatesWithoutPerIdHostEdit": false,
+        "designs03And1000OnlyVisualSyntheticTestsExecutedOnSharedMultiTemplateBuild": false,
+        "publicHttpAssetProof": false,
+        "AndroidPhysicalAcceptance": false,
+        "formalBotanicaGates": "3/11 PASS; 8 PENDING"
+      },
+      "currentCloudflareBuildCommand": "node guest/tools/build_catalog_static_preview.cjs --output \"$PWD/dist\" --template botanica",
+      "currentGap": "Existing static preview builder emits one pending template per invocation; needs one-time catalog-driven multiple-template build + CI before asserting drop-in next designs",
+      "policy": "Any per-template backend/checkout/form/RSVP/admin/owner/host edit is a shared-platform regression; stop and fix once with D03/D1000 automated tests, not a new design-specific workaround",
+      "noAdditionalToolSpendEuros": 0,
+      "saleStatus": "BOTANICA_NO_GO"
     }
   },
   "commercialGate": {
