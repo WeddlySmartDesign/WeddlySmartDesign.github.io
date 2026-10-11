@@ -1,5 +1,7 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+**ACTUALIZACIÓN 62:** [Paridad Cloud shared/split comprobada en Android](GUEST_BOTANICA_ENTRY_62_OWNER_REAL_PARITY_ANDROID_2026-10-11.md). 9/11 aprobados; siguen pendientes Centro operativo y tiempo activo. Venta bloqueada.
+
 ## ENTRADA 61 — CIERRE DE QA EN VERDE / VALIDACIÓN REAL DE PROPIETARIA PENDIENTE
 
 **Documento obligatorio:** [`GUEST_BOTANICA_ENTRY_61_ALL_GREEN_OWNER_ACCEPTANCE_READY_2026-10-11.md`](GUEST_BOTANICA_ENTRY_61_ALL_GREEN_OWNER_ACCEPTANCE_READY_2026-10-11.md). En HEAD `6170dd6d08d6a734c438710b603633862d9d15f7` tres workflows CI (catálogo, independiente navegador, smoke externo Cloudflare) SUCCESS; las dos pantallas de revisión/gestor y tiempo activo están publicadas con SHA de Botánica intacto. **NO confundir CI verde con 11/11 comercial: estado REAL 8/11, 3 PENDING (renderer propietario, paridad real revisión-final, tiempo activo humano), NO-GO venta y D03 bloqueado.** Solo falta revisión Android con sesión legítima de propietaria: `/guest/qa/owner-botanica-closeout.html` y `/guest/qa/owner-botanica-touch-benchmark.html`. La primera es SOLO LECTURA sobre los dos pedidos ya entregados; la segunda admite un ÚNICO pedido adicional exclusivamente para medir tiempo activo real y envío de revisión TEST sin correo. No repetir RSVP ni configurar infraestructura. No tocar ONE, STUDIO, Partner, VEIL, `main` ni master. Registrar resultados y verificar readback antes de cambiar gates. Biblioteca v24 intacta.
