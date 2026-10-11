@@ -112,6 +112,7 @@ async function verify(){
  const routes=[
   '/guest/catalog-questionnaire.html',
   '/guest/qa/owner-botanica-acceptance.html',
+  '/guest/qa/owner-botanica-rsvp-e2e.html',
   '/guest-review-v1.html',
   '/guest/catalog-final.html',
   '/guest/guest-catalog-delivery-runtime-v1.js',
