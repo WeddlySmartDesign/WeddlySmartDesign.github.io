@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src https://dnjsxequwgtyyauuofxj.supabase.co; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>GUEST · Certificación RSVP de Botánica</title>
+<style>body{background:#f6f1eb;color:#3f3028;font:16px/1.52 system-ui,Arial,sans-serif;margin:0;padding:22px}*{box-sizing:border-box}main{max-width:540px;margin:auto}h1{font:400 36px Georgia,serif;line-height:1.13}h2{font:400 23px Georgia,serif}p{line-height:1.6}.card{background:#fff;padding:20px;border-radius:16px;border:1px solid #e3d8c9;margin:14px 0}label{display:block;font-weight:700;margin:15px 0 7px}input{width:100%;padding:14px;font:inherit;min-height:50px;border:1px solid #c9beb1;border-radius:10px}button{display:block;width:100%;padding:15px;border:0;border-radius:10px;background:#433329;color:white;font:bold 16px system-ui;min-height:50px;margin:15px 0;cursor:pointer}button:disabled{opacity:.5;cursor:default}.muted,small{color:#74695e}.ok{color:#245c38;font-weight:700}.err{color:#9f302b;font-weight:700}.log{white-space:pre-wrap;font-size:14px;background:#f1ece5;padding:14px;border-radius:9px;max-height:250px;overflow:auto}a{color:#624633;word-break:break-word}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #aa815c}</style></head>
+<body><main>
+<p class="muted">GUEST by WeddlySmartDesign · Certificación privada</p>
+<h1>Botánica: respuestas y gestión</h1>
+<p>Esta comprobación utiliza <strong>un pedido TEST ya entregado</strong> y crea únicamente una licencia GUEST de prueba de siete días, una boda ficticia y dos respuestas ficticias. No crea nuevos pedidos, no cobra y no envía correos.</p>
+<section class="card"><h2>Autorización de la propietaria</h2>
+<label for="code">Código de propietaria del Centro GUEST</label>
+<input id="code" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Código que ya tienes">
+<button id="run" type="button">Comprobar RSVP y gestión (solo TEST)</button>
+<small>No compartas el código en el chat. Solo se envía al servicio oficial de autenticación.</small></section>
+<section class="card" aria-live="polite"><h2>Resultado</h2><p id="status">Sin ejecutar.</p><div id="log" class="log">Pendiente de autorización.</div><div id="links"></div></section>
+<p class="muted"><small>El enlace de cada invitación contiene tokens privados de prueba. No lo envíes a invitados reales. Si se interrumpe, no vuelvas a pulsar inmediatamente: consulta el resultado para evitar acciones repetidas.</small></p>
+</main>
+<script>
+(()=>{'use strict';
+const ROOT='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/';
+const OWNER=ROOT+'weddly-owner-manager',LICENSE=ROOT+'guest-license-access',FLOW=ROOT+'guest-invitation-flow',STATE=ROOT+'guest-state',ENSURE=ROOT+'guest-rsvp-ensure',RSVP=ROOT+'guest-rsvp';
+const HOST='https://guest-weddlysmartdesign.pages.dev';
+const LABEL='GUEST QA BOTANICA 2026-10-11',EMAIL='qa-botanica@example.invalid';
+const WEDDING_GUESTS={
+ 'qa-botanica-person-1':{name:'QA Persona Uno',invitationUnitId:'qa-botanica-unit-1',invitationUnitLabel:'Familia QA Botánica'},
+ 'qa-botanica-person-2':{name:'QA Persona Dos',invitationUnitId:'qa-botanica-unit-1',invitationUnitLabel:'Familia QA Botánica'}
+};
+const el=id=>document.getElementById(id),status=el('status'),log=el('log'),links=el('links'),button=el('run'),field=el('code');
+let running=false;
+const msg=(s)=>{log.textContent+=(log.textContent==='Pendiente de autorización.'?'':'\n')+s;log.scrollTop=log.scrollHeight};
+const errorText=e=>String(e?.message||e||'Error').slice(0,150).replace(/v1\.[A-Za-z0-9_-]+\.[a-f0-9]{64}/g,'[código protegido]');
+async function request(url,{method='POST',body,manager,member}={}){
+ const headers={};if(body!==undefined)headers['content-type']='application/json';
+ if(manager)headers['x-weddly-manager']=manager;if(member)headers['x-weddly-token']=member;
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),30000);
+ try{
+  const res=await fetch(url,{method,headers,body:body===undefined?undefined:JSON.stringify(body),cache:'no-store',redirect:'error',signal:controller.signal});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok||data.ok!==true)throw Error(String(data.error||'HTTP '+res.status));
+  return data;
+ }finally{clearTimeout(timer)}
+}
+async function oneTimeLicense(manager){
+ const all=await request(OWNER,{body:{action:'list'},manager});
+ const existing=(all.testers||[]).filter(t=>t.label===LABEL&&t.product==='guests'&&t.status==='active'&&!t.expired).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)))[0];
+ if(existing){
+  msg('Licencia GUEST TEST existente encontrada; no se crea otra.');
+  const reused=await request(OWNER,{body:{action:'reissue',licenseId:existing.id},manager});
+  const link=new URL(reused.testerLink);
+  const encoded=link.hash.startsWith('#tester=')?link.hash.slice(8):'';
+  if(!encoded)throw Error('No se ha podido recuperar el acceso de prueba');
+  return{licenseId:existing.id,activationCode:decodeURIComponent(encoded)};
+ }
+ msg('Creando una sola licencia GUEST TEST válida 7 días…');
+ const grant=await request(OWNER,{body:{action:'grant',product:'guests',kind:'7',label:LABEL},manager});
+ if(!grant.licenseId||!grant.activationCode)throw Error('No se recibió la licencia TEST');
+ return{licenseId:grant.licenseId,activationCode:grant.activationCode};
+}
+function validateOrder(data){
+ const o=data.order||{},u=new URL(o.delivery_url||'');
+ if(o.mode!=='test'||o.status!=='delivered'||o.template_id!=='botanica'||
+    String(o.buyer_email||'')!==EMAIL||u.origin!==HOST||
+    u.pathname!=='/guest/catalog-final.html'||u.searchParams.get('p')!==o.publicToken)
+    throw Error('El pedido existente no supera las comprobaciones de seguridad');
+ return o;
+}
+async function findOrder(manager,licenseId){
+ const listed=await request(FLOW,{body:{action:'list'},manager});
+ const candidates=(listed.orders||[]).filter(o=>o.mode==='test'&&o.status==='delivered'&&o.templateId==='botanica'&&o.buyerEmail===EMAIL).sort((a,b)=>String(b.deliveredAt).localeCompare(String(a.deliveredAt)));
+ for(const candidate of candidates){
+  const details=await request(FLOW,{body:{action:'detail',orderId:candidate.id},manager});
+  const order=validateOrder(details);
+  if(order.license_id===licenseId)return order;
+  if(!order.license_id)return order;
+ }
+ throw Error('No hay pedidos ficticios Botánica disponibles sin modificar otros');
+}
+function showLink(label,u){const p=document.createElement('p'),a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noreferrer noopener';a.textContent=label;p.append(a);links.append(p)}
+async function run(){
+ if(running)return;
+ const code=field.value.trim();
+ if(code.length<20){status.textContent='Introduce el código completo de propietaria.';status.className='err';return}
+ running=true;button.disabled=true;log.textContent='';links.replaceChildren();status.textContent='Validando autorización…';status.className='';
+ let manager='',member='',activation='';
+ try{
+  const auth=await request(OWNER,{body:{action:'login',recoveryCode:code}});field.value='';
+  manager=auth.managerToken;
+  if(!manager?.startsWith('v1.'))throw Error('La sesión de propietaria no es válida');
+  await request(FLOW,{body:{action:'status'},manager});msg('Autorización de propietaria: OK.');
+  const licensed=await oneTimeLicense(manager);activation=licensed.activationCode;
+  const access=await request(LICENSE,{body:{action:'activate',activationCode:activation}});
+  activation='';member=access.memberToken;
+  if(!member||!access.weddingId)throw Error('Fallo al activar la boda ficticia de GUEST');
+  msg('Boda GUEST TEST activada (sin costes).');
+  const order=await findOrder(manager,licensed.licenseId);
+  const link=await request(FLOW,{body:{action:'link_test_license',orderId:order.id,licenseId:licensed.licenseId},manager});
+  if(link.status!=='linked_test_guest_management'&&link.alreadyLinked!==true)throw Error('No se enlazó la invitación');
+  msg('Pedido Botánica TEST asociado a la licencia de gestión correcta.');
+  const got=await request(STATE,{method:'GET',member});
+  const old=got.state&&typeof got.state==='object'&&!Array.isArray(got.state)?got.state:{};
+  const guests={...(old.guests||{})};
+  for(const [id,v] of Object.entries(WEDDING_GUESTS))guests[id]={...(guests[id]||{}),...v};
+  await request(STATE,{method:'PUT',member,body:{version:got.version||0,state:{...old,guests}}});
+  const ensured=await request(ENSURE,{body:{},member});
+  if(!ensured.publicToken)throw Error('No se obtuvo el formulario RSVP de prueba');
+  msg('Dos invitados ficticios y su unidad preparados.');
+  const active=await request(FLOW,{body:{action:'active_for_member'},member});
+  if(!active.active||active.invitation?.orderId!==order.id)throw Error('La gestión no encuentra el pedido correcto');
+  const base=new URL(active.invitation.shareBaseUrl);
+  if(base.origin!==HOST||base.pathname!=='/guest/catalog-final.html')throw Error('El dominio final no coincide');
+  const token=ensured.publicToken;
+  const single=new URL(base.href);single.searchParams.set('rt',token);single.searchParams.set('g','qa-botanica-person-1');single.searchParams.set('lang','es');
+  const family=new URL(base.href);family.searchParams.set('rt',token);family.searchParams.set('u','qa-botanica-unit-1');family.searchParams.set('lang','es');
+  const qs=new URLSearchParams({token,guest:'qa-botanica-person-1'});
+  const prePerson=await request(RSVP+'?'+qs.toString(),{method:'GET'});
+  const qu=new URLSearchParams({token,unit:'qa-botanica-unit-1'});
+  const preUnit=await request(RSVP+'?'+qu.toString(),{method:'GET'});
+  if(prePerson.guest?.id!=='qa-botanica-person-1'||preUnit.unit?.members?.length!==2)throw Error('Destinatarios de RSVP incorrectos');
+  for(const [id,name,attend] of [['qa-botanica-person-1','QA Persona Uno',true],['qa-botanica-person-2','QA Persona Dos',false]]){
+   await request(RSVP,{body:{action:'submit',token,guest_key:id,name,attend,client_submission_id:'guest-botanica-qa-20261011-'+id}});
+  }
+  msg('Confirmaciones individuales: enviadas en el RSVP real.');
+  const managed=await request(RSVP+'?manage=1',{method:'GET',member});
+  const all=Array.isArray(managed.submissions)?managed.submissions:[];
+  for(const id of Object.keys(WEDDING_GUESTS)){
+   if(!all.some(x=>x.guest_key===id&&x.form_id===ensured.formId))throw Error('La respuesta '+id+' no aparece en gestión');
+  }
+  const readback=await request(STATE,{method:'GET',member});
+  if(readback.state?.guests?.['qa-botanica-person-1']?.rsvp!=='confirmed'||
+     readback.state?.guests?.['qa-botanica-person-2']?.rsvp!=='declined')
+    throw Error('La asistencia no se ha propagado a la gestión de invitados');
+  msg('Gestión real: dos respuestas y estados guardados y recuperados. PASS.');
+  showLink('Abrir invitación TEST · persona',single);
+  showLink('Abrir invitación TEST · unidad de dos',family);
+  status.textContent='RSVP y gestión GUEST TEST: prueba completa superada. Guarda una captura de este resultado sin URLs.';status.className='ok';
+ }catch(e){status.textContent='Prueba no terminada: '+errorText(e);status.className='err';msg('Error: '+errorText(e));}
+ finally{activation='';member='';manager='';field.value='';running=false;button.disabled=false;status.scrollIntoView({behavior:'smooth',block:'start'})}
+}
+button.addEventListener('click',run);
+})();
+</script></body></html>
