@@ -1980,6 +1980,29 @@
       "returnClickFilmed": false,
       "genericThirdDesignRendered": false,
       "commercialAuthorized": false
+    },
+    "nextDesignIntakeEntry76": {
+      "source": "guest/GUEST_ENTRY_76_NEXT_DESIGN_INTAKE_READY_2026-10-11.md",
+      "readyToReceiveFiles": true,
+      "designReceived": false,
+      "designRegistered": false,
+      "backendThirdTemplateLive": false,
+      "technicalQa": {
+        "catalog": 38174810959,
+        "independent": 38174810996,
+        "cloudflareLive": 38174810966,
+        "allSuccessful": true
+      },
+      "v50": {
+        "file": "GUEST_MOBILE_CENTER_V5_0_CATALOG_PREPARED_TEST_NO_SALE_2026-10-11.html",
+        "bytes": 45562515,
+        "sha256": "beb090309452251e207fc2ac37e82c6d8e5e96390a8ee6c62633ce5ab0cf4a1f",
+        "driveUrl": "https://drive.google.com/file/d/1wxxHCy8XhI5YiFPsMZGAQi6agrh3Lf9T/view?usp=drivesdk",
+        "botanicaMasterUnchanged": true,
+        "physicalAndroidAccepted": false
+      },
+      "genericOwnerBridgeAcceptedInAndroidWithThirdDesign": false,
+      "commercialSaleEnabled": false
     }
   },
   "commercialGate": {
@@ -2006,10 +2029,11 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "Botánica V4.8 in physical APK and CENTRO GUEST return accepted (Entry 70): all 11 design technical evidence gates PASS. Do not request more Botánica videos or repeat existing RSVP/orders/time.",
-    "Before any sale, reconcile five historical sharedBlockers (v12/V3/V4.6) against deployed versions and official owner center; --admit botanica remains fail-closed while false. Do not set these flags true without proofs.",
-    "Commercially-frozen promotion, payment and checkout enablement require separate verified commercial release review and express user authorization; do not auto-activate Stripe.",
-    "Generic remote owner center to accept D03+ with visual asset+manifest still needs actual operating deployment/WebView proof: V4.8 only embeds Botánica TEST. Do not change ONE, Partner, STUDIO, VEIL LIGHT or main."
+    "Receive actual new approved design as HTML (and assets or ZIP); do not assume name/ID/version or ask owner to create a manifest. Inspect and adapt only that template to GUEST_APPLY_CONFIG common schema.",
+    "Register new ID and master with register_visual_template.cjs, no changes to ONE/Partner/STUDIO/VEIL/Botánica, keep certification-pending/testOnly, verify Cloudflare static build bundles all templates and original hashes.",
+    "Generate backend template registry for TEST via shared generator and verify/authorize safe Supabase rollout: live V18 currently only knows VEIL+Botánica; must not promise an additional design will work from a static-only web deployment. Preserve production guards.",
+    "Use new design for first real Android generic remote rendering/return acceptance; V5.0 candidate timer/menu is prepared but not yet owner-tested, so bundle any needed check into new-design acceptance.",
+    "Commercial checkout and public sale remain blocked until complete real sales QA and explicit authorization."
   ],
   "constraints": [
     "Never copy historical V14.6 status as current",
@@ -2161,15 +2185,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 75,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_75_V49_ANDROID_RETURN_2026-10-11.md",
+    "latestEntry": 76,
+    "latestDocumentedEntry": "guest/GUEST_ENTRY_76_NEXT_DESIGN_INTAKE_READY_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Entrada 75: propietario confirmó que V4.9 Android abre Botánica y CENTRO GUEST regresa correctamente. Navegación real PASS según testimonio, sin vídeo del clic. Gate Botánica 11/11 técnico intacto. Visor remoto genérico D03+ sigue PENDING; no confundir con render embebido Botánica. Cloudflare autodeploy GitHub conectado; confirmar recursos HTTPS. Venta no autorizada. Menú y cronómetro review_sent agrupados para arreglo futuro. No repetir prueba Botánica.",
+    "resumption": "Entrada 76: entorno listo para RECIBIR HTML/ZIP nuevo diseño, aún NO adjuntado ni integrado. CI catálogo 38174810959 PASS, independiente 38174810996 PASS, Cloudflare live 38174810966 PASS exact bytes; venta NO. Centro V5.0 candidato SHA beb09030... 45562515 bytes Drive Weddly (id 1wxxHCy8XhI5YiFPsMZGAQi6agrh3Lf9T), master Botánica intacto; corrige timer review_sent y reserva menú; SIN TEST ANDROID V5.0. Backend Supabase live V18 tiene VEIL+Botánica: nuevas plantillas requieren registro TEST backend generado y despliegue controlado antes de nuevos pedidos. Visor remoto genérico no certificado Android D03+. Esperar HTML/ZIP, crear manifest internamente y probar sin reconstruir motor.",
     "commercialStatus": "BOTANICA_DESIGN_TECHNICAL_GATES_11_OF_11_SALE_NOT_AUTHORIZED",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
@@ -2192,6 +2216,7 @@
     "entry71": "guest/GUEST_BOTANICA_ENTRY_71_TECHNICAL_CLOSEOUT_AND_LIVE_GUARDS_2026-10-11.md",
     "entry72": "guest/GUEST_BOTANICA_ENTRY_72_SHARED_VERSIONED_READINESS_2026-10-11.md",
     "entry73": "guest/GUEST_BOTANICA_ENTRY_73_GENERIC_PACKAGE_READY_DEPLOY_PENDING_2026-10-11.md",
-    "entry74": "guest/GUEST_BOTANICA_ENTRY_74_V49_ANDROID_CENTER_OWNER_VISUAL_2026-10-11.md"
+    "entry74": "guest/GUEST_BOTANICA_ENTRY_74_V49_ANDROID_CENTER_OWNER_VISUAL_2026-10-11.md",
+    "entry76": "guest/GUEST_ENTRY_76_NEXT_DESIGN_INTAKE_READY_2026-10-11.md"
   }
 }

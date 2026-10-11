@@ -2,6 +2,10 @@
 
 **Entrada obligatoria:** [START_HERE.md](START_HERE.md). El máster canónico, el esquema común, el manual de QA y los registros vivos siguen siendo fuentes obligatorias. Aplicar este proceso a **cada** nueva plantilla visual. No reemplaza las pruebas reales ni la aprobación artística.
 
+**Entrega de un diseño ya existente:** basta con recibir el HTML autocontenido o un ZIP con el HTML y todos los recursos; el responsable técnico crea internamente `visual-plugin.json`, el identificador/versionado y el adaptador común. No pedir a la propietaria crear manifiestos, ejecutar comandos ni configurar Cloudflare/Supabase.
+
+**Precaución de despliegue backend (Entrada 76):** que el builder de Cloudflare incorpore D03+ no significa que la Edge Function actual acepte dicho `template_id`: live V18 conoce VEIL/Botánica. Usar generador común de registro de backend en TEST, verificar y desplegar bajo control autorizado antes de ensayar nuevos pedidos. No habilitar producción ni usar datos de clientes. [Leer Entrada 76](GUEST_ENTRY_76_NEXT_DESIGN_INTAKE_READY_2026-10-11.md).
+
 ## Fase 0 — prerrequisito que NO se puede omitir
 
 - [ ] Infraestructura V2 integrada **en el Mobile Center distribuido y backend de pruebas legítimamente autorizado**, no solo simulada.

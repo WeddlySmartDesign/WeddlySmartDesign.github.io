@@ -1,5 +1,9 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 76 — PREPARADO PARA INCORPORAR NUEVO DISEÑO (11/10/2026)
+
+[**Ver expediente y procedimiento completo**](GUEST_ENTRY_76_NEXT_DESIGN_INTAKE_READY_2026-10-11.md). **CI catálogo, independiente y Cloudflare live SUCCESS** (38174810959 / 38174810996 / 38174810966). Versión candidata **Centro V5.0** conservada [en Drive](https://drive.google.com/file/d/1wxxHCy8XhI5YiFPsMZGAQi6agrh3Lf9T/view?usp=drivesdk), máster Botánica intacto: corrige cronómetro finalizado y reserva menú Android; **aún no testada Android**. **Nuevo diseño aún no aportado/registrado**: recibir HTML/ZIP y crear nosotros manifest. **Importante:** el backend Supabase V18 desplegado todavía tiene un catálogo estático de VEIL+Botánica, por lo que la primera prueba de diseño nuevo requerirá actualizar de forma controlada su registro TEST, nunca una nueva app o checkout. Ruta remota genérica Android sigue pendiente hasta ver el nuevo diseño. Sin ventas ni repetición de Botánica.
+
 ## ENTRADA 75 — V4.9 ABRE Y REGRESA AL CENTRO EN ANDROID REAL (11/10/2026)
 
 [**Aceptar navegación sin repetir prueba**](GUEST_BOTANICA_ENTRY_75_V49_ANDROID_RETURN_2026-10-11.md). La propietaria confirma que **«Se ve la invitación y al pulsar a centro guest se vuelve»** en el Centro V4.9. Apertura/retorno PASS según confirmación directa (sin vídeo del clic). Botánica 11/11 técnico queda cerrado. **Pendiente independiente: visor remoto genérico para D03+**; los pedidos anteriores usan el renderizador incrustado. Venta y Stripe no autorizados. Menú superpuesto y temporizador de revisión enviada agrupados para corrección futura, sin nuevas pruebas Botánica.
