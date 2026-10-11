@@ -38,27 +38,6 @@ async function post(url,params,managerToken){
   return body;
  }finally{clearTimeout(timer)}
 }
-async function uploadStory(token){
- const b64='iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/l7kAAAAASUVORK5CYII=';
- const bytes=Uint8Array.from(atob(b64),v=>v.charCodeAt(0));
- const form=new FormData();
- form.set('action','upload');form.set('slot','story');form.set('token',token);
- form.set('file',new Blob([bytes],{type:'image/png'}),'qa-botanica.png');
- const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),35000);
- try{const r=await fetch(FLOW,{method:'POST',body:form,cache:'no-store',signal:ctrl.signal});
-  const j=await r.json().catch(()=>({}));
-  if(!r.ok||j.ok!==true)throw Error('Subida: '+safePrint(j.error||r.status));return j;
- }finally{clearTimeout(timer)}
-}
-function example(n){
- const common={couple:{name1:'QA Botánica',name2:n===1?'Dos sedes':'Una sede',date:'2027-06-12'},
-  confirmation:{reviewed:true},agenda:{enabled:false},gallery:{enabled:false},
-  practical:{bus:{enabled:false},gift:{enabled:false},playlist:{enabled:false}}};
- return n===1?Object.assign(common,{story:{enabled:true,textMode:'none'},
-  locations:{mode:'split',ceremony:{name:'Ceremonia ficticia',time:'12:30'},celebration:{name:'Celebración ficticia',time:'15:00'}}}):
-  Object.assign(common,{story:{enabled:true,textMode:'custom',customText:'Historia de prueba para comprobar el cuestionario.'},
-  locations:{mode:'shared',shared:{name:'Lugar ficticio',time:'17:00'}}});
-}
 function linkCard(number,id,review,final){
  const box=document.createElement('section');box.className='result';
  const title=document.createElement('h3');title.textContent='Pedido TEST '+number+' · completado';box.append(title);
