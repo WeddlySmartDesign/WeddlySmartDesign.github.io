@@ -1542,6 +1542,31 @@
       "policy": "Any per-template backend/checkout/form/RSVP/admin/owner/host edit is a shared-platform regression; stop and fix once with D03/D1000 automated tests, not a new design-specific workaround",
       "noAdditionalToolSpendEuros": 0,
       "saleStatus": "BOTANICA_NO_GO"
+    },
+    "ownerSupabaseConfiguredHandoff20261011": {
+      "status": "OWNER_REPORTED_COMPLETE_NOT_YET_BEHAVIORALLY_VERIFIED",
+      "reportedByOwner": "Ya he completado la configuración de supabase.",
+      "expectedEnvironmentKey": "GUEST_CATALOG_PUBLIC_ORIGIN",
+      "expectedPublicUrl": "https://guest-weddlysmartdesign.pages.dev",
+      "targetSharedProject": "dnjsxequwgtyyauuofxj",
+      "doNotRequestUserRepeatsSetup": true,
+      "secretReadbackAvailable": false,
+      "verifyViaAuthorizedRuntimeEffects": true,
+      "sourceOfTruth": "guest/GUEST_HANDOFF_NEW_CHAT_2026-10-11.md and Library Entry41",
+      "cloudFunctionReadbackCaution": "guest-invitation-flow metadata v16 ACTIVE but retrieved source/digest match prior V15; checkout metadata v24 but returned digest prior V23; don't treat counts as proof of execution; don't blindly redeploy",
+      "testOrdersOnRealCloudComplete": false,
+      "ownerPhysicalAndroidReviewed": false,
+      "commercialSaleAuthorized": false,
+      "botanicaFormalGates": "3/11 PASS; 8 pending",
+      "zeroNewCost": true,
+      "isolation": [
+        "main",
+        "ONE",
+        "ONE Partner",
+        "STUDIO",
+        "VEIL LIGHT",
+        "Botanica frozen visual"
+      ]
     }
   },
   "commercialGate": {
