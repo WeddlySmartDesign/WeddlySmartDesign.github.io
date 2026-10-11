@@ -86,7 +86,7 @@ function verifyAnonymousGuards(){
    '--data-binary',JSON.stringify({action:c.action,token:c.token}),
    '--write-out','\\n%{http_code}',endpoint],{encoding:'utf8',timeout:24000,maxBuffer:200000});
   assert.equal(call.status,0,'negative access request unavailable: '+String(call.stderr||'').slice(0,120));
-  const marker=call.stdout.lastIndexOf('\\n'),code=call.stdout.slice(marker+1).trim();
+  const marker=call.stdout.lastIndexOf('\n'),code=call.stdout.slice(marker+1).trim();
   assert.equal(code,'403','anonymous '+c.action+' must deny with HTTP 403');
   const response=JSON.parse(call.stdout.slice(0,marker));
   assert.equal(response.ok,false);
