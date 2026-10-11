@@ -122,6 +122,10 @@ Consultar [auditoría de V4.6 real](GUEST_BOTANICA_ENTRY_57_CENTER_REAL_V46_AUDI
 
 [Entrada 63 — guía de revisión](GUEST_BOTANICA_ENTRY_63_OWNER_TOUCH_REVIEW_GUIDE_2026-10-11.md). La propietaria señaló que no podía medirse una revisión sin saber **qué tenía que inspeccionar**. Se incorporaron antes de iniciar una lista de datos ficticios **exactos** y cinco controles obligatorios en la página de tiempo activo. Portada QA Tiempo / Botánica, 12/06/2027, Story personalizada, una sede a 17:00, legibilidad/composición, navegación y CTA de confirmación. Si hay fallo, no pulsar enviar. El timer mide revisión activa desde visor cargado hasta `send_review`, no creación total. Tests estático/browser y HTTP Cloudflare ampliados. Primer fallo QA contó el selector JavaScript como sexta casilla: corregido patrón del TEST sin cambiar requisitos. **9/11 PASS, 2 PENDING, NO-GO comercial.** No repetir RSVP ni paridad, Biblioteca v24 intacta.
 
+## Entrada 64 — Tiempo humano real medido 0:41 (11/10/2026)
+
+[Entrada 64 y fuentes verificadas](GUEST_BOTANICA_ENTRY_64_OWNER_TOUCH_REAL_2026-10-11.md). El vídeo Android 1000095282.mp4 presenta cinco comprobaciones marcadas, una revisión humana real Botánica y **0 minutos 41 segundos activos**, inferior al máximo de 5:00; la pantalla confirma envío TEST sin correo. SQL de lectura en Supabase real confirma exactamente un pedido sintético de esta medición Botánica TEST en estado **review_sent**. El gate owner-touch queda **PASS en el alcance de revisión activa hasta send_review**, no ciclo comercial total. **Estado VIGENTE: 10/11, 1 PENDING: integración del renderer en el Centro GUEST operativo**, distinta del visor genérico QA. Botánica NO-GO comercial y D03 detenido. No repetir prueba de tiempo, RSVP ni paridad y no tocar Centro V4.6 congelado. Mantener Biblioteca histórica v24 intacta.
+
 ## 6. Restricciones permanentes
 
 - NO tocar **ONE, ONE Partner, STUDIO, VEIL LIGHT congelado, `main`, master V14.7 Botánica** ni credenciales/servicios ajenos.
