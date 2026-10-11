@@ -57,7 +57,7 @@ async function showPreview(button,host,o,cfg,registry){
   const id=cfg?.template?.id,version=String(cfg?.template?.version||'');
   if(o.mode!=='test'||id!=='botanica'||version!=='14.7')throw Error('Solo Botánica 14.7 TEST');
   const reg=structuredClone(registry),spec=reg?.templates?.[id];
-  if(spec?.status!=='certification-pending'||spec.mode!=='iframe'||spec.src!==null)throw Error('Registro GUEST sin seguridad TEST');
+  if(spec?.status!=='certification-pending'||spec.mode!=='iframe'||(spec.src!==null&&spec.src!=='/guest/catalog-assets/botanica/14.7/index.html'))throw Error('Registro GUEST sin seguridad TEST');
   spec.src='/guest/catalog-assets/botanica/14.7/index.html';
   activeViewer=await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order:{template_id:id,template_version:version,mode:'test'},config:cfg,host,registry:reg});
   iframeActivity(host);trackActivity();el('timerBox').hidden=false;
