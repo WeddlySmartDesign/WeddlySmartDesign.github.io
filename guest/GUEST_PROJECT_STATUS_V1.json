@@ -1694,6 +1694,28 @@
       "formalGatesPassed": 7,
       "formalGatesPending": 4,
       "saleStatus": "NO_GO"
+    },
+    "botanicaEntry54RealTestPairingV18": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_54_V18_RSVP_TEST_LICENSE_2026-10-11.md",
+      "edgeVersion": 18,
+      "edgeBundleSha256": "5a4d2e87415dabe7beecda03776e7745d12a7a2a44fe7cefd214852734bcaad2",
+      "onlyNewAction": "link_test_license",
+      "managerHMACRequired": true,
+      "onlySyntheticDeliveredTestAndGuestsTester": true,
+      "isolatedSupabaseRun": 38143844078,
+      "isolatedSupabaseResult": "success",
+      "isolatedRealRSVPPersonAndUnitAndManagement": true,
+      "ownerRealE2EPage": "https://guest-weddlysmartdesign.pages.dev/guest/qa/owner-botanica-rsvp-e2e.html",
+      "livePageVerifiedRun": 38144681000,
+      "livePageVerified": true,
+      "ownerRealE2EExecuted": false,
+      "cloudGuestTesterLicensesPostDeploy": 0,
+      "linkedBotanicaCloudTestOrdersPostDeploy": 0,
+      "affectedOtherSupabaseFunctions": false,
+      "extraCostEuros": 0,
+      "gatedSale": "NO_GO",
+      "contractStaticSourceCreated": true,
+      "contractDedicatedCIInclusionBlocked": true
     }
   },
   "commercialGate": {
@@ -1871,8 +1893,8 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 53,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_53_PARITY_RSVP_EVIDENCE_2026-10-11.md",
+    "latestEntry": 54,
+    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_54_V18_RSVP_TEST_LICENSE_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
@@ -1884,6 +1906,8 @@
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
     "githubEntry53": "guest/GUEST_BOTANICA_ENTRY_53_PARITY_RSVP_EVIDENCE_2026-10-11.md",
-    "githubEntry53InLibraryVerified": false
+    "githubEntry53InLibraryVerified": false,
+    "githubEntry54": "guest/GUEST_BOTANICA_ENTRY_54_V18_RSVP_TEST_LICENSE_2026-10-11.md",
+    "githubEntry54InLibraryVerified": false
   }
 }
