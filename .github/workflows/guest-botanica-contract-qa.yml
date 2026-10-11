@@ -35,6 +35,7 @@ jobs:
           node guest/tests/test_license_pairing_v18_contract.test.cjs
           node guest/tests/catalog_static_preview_future_design.test.cjs
           node guest/tests/owner_botanica_acceptance_contract.test.cjs
+          node guest/tests/owner_botanica_closeout_contract.test.cjs
           node guest/tests/multi_design_dropin_pipeline.test.cjs
           node guest/tests/invitation_config_schema_contract.test.cjs
           node guest/tests/backend_config_contract_v1.test.cjs
