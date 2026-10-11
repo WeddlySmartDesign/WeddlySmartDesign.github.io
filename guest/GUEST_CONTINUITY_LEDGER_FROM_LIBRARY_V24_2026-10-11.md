@@ -168,3 +168,8 @@ Consultar [auditoría de V4.6 real](GUEST_BOTANICA_ENTRY_57_CENTER_REAL_V46_AUDI
 ## Entrada 71 — QA de evidencia 11/11 y backend live (11/10/2026)
 
 [Informe y próximos pasos](GUEST_BOTANICA_ENTRY_71_TECHNICAL_CLOSEOUT_AND_LIVE_GUARDS_2026-10-11.md). Corregida la prueba de continuidad dinámica para evidencias nuevas, sin debilitarla, commit `e38254b`, ambos QA SUCCESS 38167615888 / 38167615980. Supabase fuente V18 activa y Botánica testOnly, RSVP V5, checkout V24 fail-closed por opción comercial autorizada. **Botánica 11/11 técnico, no venta aún; otros diseños no iniciados**. Cinco sharedBlockers V12/V3/V4.6 históricos aún requieren reconciliación; futuro Centro genérico remoto requiere publicación de asset pinneado, registry y aceptación en APK. No repetir tests de D02 ni alterar ONE/Partner/STUDIO/VEIL, main o Biblioteca v24.
+
+
+## Entrada 72 — pruebas compartidas de versiones actuales (11/10/2026)
+
+[Detalle](GUEST_BOTANICA_ENTRY_72_SHARED_VERSIONED_READINESS_2026-10-11.md): cinco flags históricos false archivados, cinco versiones actuales V18/Cloudflare/V4.8 PASS con fuentes verificables, CI protegido contra fuente ausente. Centro genérico V4.9 candidato SHA 4a163fbb..., Drive Weddly. Todavía no probado Android o deployed visor nuevo en Cloudflare; venta NO. Botánica 11/11 técnico no repetir.

@@ -87,8 +87,14 @@ if(candidate){
   if(status?.missing?.length)problems.push('NOT ADMISSIBLE '+candidate+': '+status.missing.join(', '));
   // New templates must also have an explicit shared compatibility check, not only the local QA report.
   if(evidence.templates[candidate]?.basis==='new-template-gated'){
-    const unresolved=Object.entries(evidence.sharedBlockers||{}).filter(([,v])=>v!==true).map(([k])=>k);
+    const current=evidence.sharedBlockers||{},sources=evidence.sharedBlockerEvidence||{};
+    const unresolved=Object.entries(current).filter(([,v])=>v!==true).map(([k])=>k);
     if(unresolved.length)problems.push('SHARED CONTRACT NOT READY: '+unresolved.join(', '));
+    for(const [key,pass] of Object.entries(current)){
+      check(typeof pass==='boolean','Invalid current shared readiness: '+key);
+      check(fileExists(sources[key]),'Missing shared-readiness evidence: '+key);
+    }
+    if(Object.keys(sources).length!==Object.keys(current).length)problems.push('SHARED EVIDENCE COUNT DRIFT');
   }
 }
 const result={ok:problems.length===0,mode:candidate?'admission':'consistency',candidate,templates:perTemplate,sharedBlockers:evidence.sharedBlockers,errors:problems,warnings};

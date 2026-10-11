@@ -1,5 +1,9 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 72 — CONTROLES MODERNOS DE COMPATIBILIDAD Y V4.9 GENÉRICO (11/10/2026)
+
+[**Reconciliación**](GUEST_BOTANICA_ENTRY_72_SHARED_VERSIONED_READINESS_2026-10-11.md). Se archivan los cinco flags V12/V3/V4.6 como legado false; cinco controles actuales de Supabase V18/Cloudflare/Android V4.8 quedan PASS con evidencia explícita y prueba de ausencia de fuente. Botánica 11/11 técnica. V4.9 genérico construida y guardada en Google Drive, pero aún requiere publicación del visor actualizado y validación del APK real para certificar escalabilidad D03+. **Venta y Stripe siguen desactivados hasta autorización expresa**.
+
 ## ENTRADA 71 — CIERRE QA 11/11 Y ESTADO REAL DEL BACKEND (11/10/2026)
 
 [**Informe verificado](GUEST_BOTANICA_ENTRY_71_TECHNICAL_CLOSEOUT_AND_LIVE_GUARDS_2026-10-11.md)**. Botánica V4.8 **11/11 gates técnicos PASS** (Android vídeo y retorno CENTRO GUEST confirmado). La regresión del sandbox de evidencias de Entrada 70 se resolvió genéricamente en commit `e38254b`; [catálogo 38167615888](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38167615888) y [QA independiente 38167615980](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38167615980) **SUCCESS**. Inspección solo lectura Supabase: `guest-invitation-flow` **V18 ACTIVE Botánica TEST-only**, `guest-rsvp` V5 ACTIVE y checkout V24 ACTIVE con salvaguarda `GUEST_CATALOG_SALE_OPTIONS` para ofertas selladas (Secret no leído). **Queda separado** conciliar cinco flags históricos v12/V3/V4.6, certificar Centro genérico remoto para futuros diseños y autorizar venta/Stripe; no afirmar catálogo comercial terminado. **No repetir nada de Botánica.** Sin cambios de software en esta entrada.

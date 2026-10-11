@@ -93,11 +93,26 @@
     }
   },
   "sharedBlockers": {
+    "backend-v18-botanica-test-only": true,
+    "schemaVersion-emitted-by-live-v18": true,
+    "story-none-preserved-by-live-v18": true,
+    "story-none-hosted-common-questionnaire": true,
+    "botanica-owner-renderer-android-v48": true
+  },
+  "safety": "Evidence is a state record, not a deployment authorization. All missing new-template gates must PASS with independently verifiable evidence before commercial certification. Publishing and payment enablement require a separate deliberate approval.",
+  "sharedBlockersLegacyV1": {
     "production-backend-supports-botanica": false,
     "schemaVersion-emitted-by-backend-v12": false,
     "story-none-preserved-by-backend-v12": false,
     "story-none-available-in-frozen-questionnaire-v3": false,
     "botanica-renderer-registered-in-frozen-center-v4_6": false
   },
-  "safety": "Evidence is a state record, not a deployment authorization. All missing new-template gates must PASS with independently verifiable evidence before commercial certification. Publishing and payment enablement require a separate deliberate approval."
+  "sharedBlockerEvidence": {
+    "backend-v18-botanica-test-only": "guest/GUEST_BOTANICA_ENTRY_71_TECHNICAL_CLOSEOUT_AND_LIVE_GUARDS_2026-10-11.md",
+    "schemaVersion-emitted-by-live-v18": "guest/GUEST_BOTANICA_ENTRY_71_TECHNICAL_CLOSEOUT_AND_LIVE_GUARDS_2026-10-11.md",
+    "story-none-preserved-by-live-v18": "guest/GUEST_BOTANICA_ENTRY_71_TECHNICAL_CLOSEOUT_AND_LIVE_GUARDS_2026-10-11.md",
+    "story-none-hosted-common-questionnaire": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
+    "botanica-owner-renderer-android-v48": "guest/GUEST_BOTANICA_ENTRY_70_V48_ANDROID_RENDERER_ACCEPTED_2026-10-11.md"
+  },
+  "sharedBlockersMigrationNote": "Legacy V12/V3/V4.6 snapshots remain false forever; current readings refer to ACTIVE V18, Cloudflare shared questionnaire, and physical Android V4.8. Technical admission is not production sale or approval of generic V4.9."
 }
