@@ -10,6 +10,8 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
 const crypto=require('node:crypto');
+const os=require('node:os');
+const child=require('node:child_process');
 const root=path.resolve(__dirname,'../..');
 const origin='https://guest-weddlysmartdesign.pages.dev';
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
@@ -21,12 +23,31 @@ function assertSiteUrl(url){
  assert.equal(u.origin,origin);
  assert.equal(u.protocol,'https:');
 }
-async function getWithRetry(rel,{retries=7,maxBytes=17000000}={}){
+function getViaCurl(rel,maxBytes){
+ const url=origin+rel;assertSiteUrl(url);
+ const temp=fs.mkdtempSync(path.join(os.tmpdir(),'guest-pages-qa-'));
+ const file=path.join(temp,'public.body'),headerFile=path.join(temp,'public.headers');
+ try{
+  const cli=child.spawnSync('curl',['--silent','--show-error','--fail','--max-time','25',
+    '--max-filesize',String(maxBytes),'--proto','=https','--max-redirs','0',
+    '--dump-header',headerFile,'--output',file,url],
+    {encoding:'utf8',timeout:29000});
+  if(cli.status!==0)throw Error('curl_status_'+cli.status+' '+String(cli.stderr||'').trim().slice(0,170));
+  const raw=fs.readFileSync(file);assert(raw.length>0&&raw.length<=maxBytes);
+  const lines=fs.readFileSync(headerFile,'utf8').split(/\\r?\\n/);
+  const statusLine=lines.find(l=>/^HTTP\\//.test(l))||'';
+  assert.match(statusLine,/\\s200\\s/,'curl unexpected response: '+statusLine);
+  const headers=new Headers();
+  for(const line of lines){const sep=line.indexOf(':');if(sep>0)headers.set(line.slice(0,sep).trim(),line.slice(sep+1).trim())}
+  return{data:raw,headers,code:200};
+ }finally{fs.rmSync(temp,{recursive:true,force:true})}
+}
+async function getWithRetry(rel,{retries=3,maxBytes=17000000}={}){
  const url=origin+rel;assertSiteUrl(url);
  let error;
  for(let i=0;i<retries;i++){
   try{
-   const r=await fetch(url,{redirect:'error',signal:AbortSignal.timeout(22000),headers:{'accept':'text/html,application/json,*/*'}});
+   const r=await fetch(url,{redirect:'error',signal:AbortSignal.timeout(18000),headers:{'accept':'text/html,application/json,*/*','connection':'close'}});
    if(!r.ok)throw Error('HTTP_'+r.status);
    assert.equal(new URL(r.url).origin,origin,'redirected to a different origin');
    const length=Number(r.headers.get('content-length')||0);
@@ -34,10 +55,12 @@ async function getWithRetry(rel,{retries=7,maxBytes=17000000}={}){
    const data=Buffer.from(await r.arrayBuffer());
    assert(data.length>0&&data.length<=maxBytes,'missing or unexpectedly large response');
    return {data,headers:r.headers,code:r.status};
-  }catch(e){error=e;if(i+1<retries)await sleep(8000)}
+  }catch(e){error=e;if(i===0)console.log('INFO undici transport '+rel+' '+String(e?.cause?.code||e?.message||'failed').slice(0,95));if(i+1<retries)await sleep(1600)}
  }
- throw new Error('PUBLIC_FILE_UNAVAILABLE '+rel+' '+String(error?.message||error).slice(0,140));
+ console.log('INFO independent curl transport fallback for '+rel);
+ try{return getViaCurl(rel,maxBytes)}catch(e){throw new Error('PUBLIC_FILE_UNAVAILABLE '+rel+' [node '+String(error?.message||error).slice(0,95)+', curl '+String(e?.message||e).slice(0,180)+']')}
 }
+
 async function verify(){
  // Public page confirms preproduction ONLY. It is not a wedding checkout.
  const landing=await getWithRetry('/');
