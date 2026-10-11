@@ -1954,6 +1954,21 @@
         "design-05",
         "design-06"
       ]
+    },
+    "botanicaEntry74V49OwnerEvidence": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_74_V49_ANDROID_CENTER_OWNER_VISUAL_2026-10-11.md",
+      "date": "2026-10-11",
+      "androidV49CenterInstalled": true,
+      "ordersDropdownVisible": true,
+      "realOrdersListVisible": true,
+      "invitedTemplateOpenedInV49Observed": false,
+      "genericRemoteRendererD03Tested": false,
+      "cloudflareGitAutoDeployConfirmedByOwnerScreenshots": true,
+      "latestLiveExactBytesValidated": false,
+      "ownerVisualIssue": "Floating ellipsis menu overlaps heading in Android screenshot",
+      "activeTimerIssue": "V4.9 may increment touch duration after review_sent when local TOUCH_DONE flag missing; source setInterval condition does not check server order status",
+      "previous41secBenchmarkInvalidated": false,
+      "paidSaleAuthorized": false
     }
   },
   "commercialGate": {
@@ -2135,15 +2150,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 73,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_73_GENERIC_PACKAGE_READY_DEPLOY_PENDING_2026-10-11.md",
+    "latestEntry": 74,
+    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_74_V49_ANDROID_CENTER_OWNER_VISUAL_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Entrada 73: Botánica 11/11 certificación técnica; cinco shared flags actuales PASS, cinco legacy históricos false preservados. V4.9 genérico 45561955 bytes SHA4a163... en Drive Weddly; staging ZIP 9104983 bytes Drive Weddly. Ambos artifacts verificados. QA último código y contrato PASS. Cloudflare staging no desplegado en esta sesión, y APK V4.9 no probado físicamente; no declararlos PASS. Stripe NO, catálogo D03+ no iniciado. Próximo mínimo: publicar ZIP de preproducción en Cloudflare (sin venta), QA live smoke, importar V4.9 al APK y validar motor genérico. Requiere acceso real a Cloudflare/Android; no repetir pruebas Botánica.",
+    "resumption": "Entrada 74: V4.9 real Android instalado y shell/listado/selector de TEST pedidos visualmente PASS en tres capturas; botón flotante solapa encabezado. Cronómetro cuenta al abrir review_sent cuando falta marca local isTouchDone; fallo detectado, medición 41s anterior permanece válida. V4.9 apertura+retorno NO mostrada y motor genérico remoto D03+ NO probado. Cloudflare GitHub autodeploy ya conectado, no pedir ZIP manual; pendiente live smoke de visor bytes actualizados. Venta NO, D03 no iniciado. No repetir prueba Botánica V4.8.",
     "commercialStatus": "BOTANICA_DESIGN_TECHNICAL_GATES_11_OF_11_SALE_NOT_AUTHORIZED",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
@@ -2165,6 +2180,7 @@
     "entry70": "guest/GUEST_BOTANICA_ENTRY_70_V48_ANDROID_RENDERER_ACCEPTED_2026-10-11.md",
     "entry71": "guest/GUEST_BOTANICA_ENTRY_71_TECHNICAL_CLOSEOUT_AND_LIVE_GUARDS_2026-10-11.md",
     "entry72": "guest/GUEST_BOTANICA_ENTRY_72_SHARED_VERSIONED_READINESS_2026-10-11.md",
-    "entry73": "guest/GUEST_BOTANICA_ENTRY_73_GENERIC_PACKAGE_READY_DEPLOY_PENDING_2026-10-11.md"
+    "entry73": "guest/GUEST_BOTANICA_ENTRY_73_GENERIC_PACKAGE_READY_DEPLOY_PENDING_2026-10-11.md",
+    "entry74": "guest/GUEST_BOTANICA_ENTRY_74_V49_ANDROID_CENTER_OWNER_VISUAL_2026-10-11.md"
   }
 }

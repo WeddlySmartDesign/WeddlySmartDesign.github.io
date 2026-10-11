@@ -178,3 +178,8 @@ Consultar [auditoría de V4.6 real](GUEST_BOTANICA_ENTRY_57_CENTER_REAL_V46_AUDI
 ## Entrada 73 — paquetes persistentes y límite de certificación (11/10/2026)
 
 [Detalle](GUEST_BOTANICA_ENTRY_73_GENERIC_PACKAGE_READY_DEPLOY_PENDING_2026-10-11.md). GitHub CI SUCCESS en 7a17be3 (38168800192 catálogo / 38168800214 independiente). V4.9 Android de catálogo 45.561.955 bytes SHA4a163f... y ZIP Cloudflare 9.104.983 bytes guardados en Drive Weddly, manifest PREPRODUCTION_DO_NOT_SELL. **No atribuir despliegue a staging ni prueba APK V4.9; ambas aún requieren validación real**, igual que autorización de ventas. Botánica V4.8 y todas sus pruebas quedan congeladas. Biblioteca v24 intacta.
+
+
+## Entrada 74 — V4.9 importado en Android: aceptación parcial del shell (11/10/2026)
+
+[Detalle](GUEST_BOTANICA_ENTRY_74_V49_ANDROID_CENTER_OWNER_VISUAL_2026-10-11.md). Tres capturas propietaria muestran V4.9 instalado, selector pedidos y estados. Motor genérico remoto no activado, retorno V4.9 no filmado. Menú solapa título; contador crece en review_sent si carece de marca local de cierre: corregir al consolidar próxima versión, sin invalidar benchmark V4.8. Cloudflare YA autodespliega la rama: no subir ZIP. Falta smoke externo actual. No vender ni repetir D02.

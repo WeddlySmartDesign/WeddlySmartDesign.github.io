@@ -1,5 +1,9 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 74 — V4.9 ANDROID INSTALADO, SHELL/PEDIDOS VISIBLES; RENDER GENÉRICO PENDIENTE (11/10/2026)
+
+[**Evidencia, defectos y límite de validación**](GUEST_BOTANICA_ENTRY_74_V49_ANDROID_CENTER_OWNER_VISUAL_2026-10-11.md). Tres capturas de Android confirman Centro V4.9 real, selector, varios pedidos TEST y panel. Se detecta menú flotante sobre el título y cronómetro que puede sumar estando el pedido en «Revisión enviada», por no basarse en el estado Cloud si se abre desde otra sesión; **no repetir la medición anterior**. **V4.9 shell PASS, pero no se ha visto pulsar «Ver invitación» ni se ha ejercido D03+ remoto**. Cloudflare YA tiene GitHub autodeploy conectado y compilación correcta; **no pedir subir ZIP manual**, falta live smoke de bytes actuales. Botánica 11/11 técnico sigue PASS, venta NO, D03 sin empezar.
+
 ## ENTRADA 73 — ARCHIVOS DEFINITIVOS PREPRODUCCIÓN LISTOS, DESPLIEGUE/ANDROID AÚN NO CERTIFICADOS
 
 [**Estado y entregables actuales**](GUEST_BOTANICA_ENTRY_73_GENERIC_PACKAGE_READY_DEPLOY_PENDING_2026-10-11.md). Botánica 11/11 técnico PASS; QA catálogo [38168800192](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38168800192) y QA independiente [38168800214](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38168800214) ambos SUCCESS. Copias permanentes verificadas: [Centro genérico V4.9 Android candidato](https://drive.google.com/file/d/1dRdOET4UwaaWJsUKGo_jn-5pkxY52sGh/view?usp=drivesdk) y [ZIP Cloudflare Pages NO-SALE](https://drive.google.com/file/d/1JaYGOPr6056DC2tax2buUHmWq3UAhloo/view?usp=drivesdk). **Falta publicarlo en Cloudflare staging y comprobar V4.9 en Android real**; no habilitar venta ni D03 automáticamente. Todo lo anterior preservado, sin costes adicionales.
