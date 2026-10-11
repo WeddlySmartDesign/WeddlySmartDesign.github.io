@@ -1,5 +1,8 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 50 — 11/10/2026 · LAS DOS INVITACIONES VISUALES ANDROID APROBADAS
+
+**Leer primero** [GUEST_BOTANICA_ENTRY_50_OWNER_ANDROID_VISUAL_OK_2026-10-11.md](GUEST_BOTANICA_ENTRY_50_OWNER_ANDROID_VISUAL_OK_2026-10-11.md). La propietaria confirmó que el error era del chat y que **ambas invitaciones Botánica estaban bien en Android** (vídeos Entradas 48 y 49). Gate **owner-android visual PASS**, con límites explícitos: no valida RSVP/gestión, paridad review-final, foto real ni tiempo de trabajo. **6/11 PASS, 5 pendientes, NO-GO comercial**, venta bloqueada y D03 no iniciado. NO pedir repetir vídeos, crear pedidos, entrar en Supabase o modificar el master aprobado. Continuidad en la bitácora de Biblioteca y evidencia de GitHub.
 ## ENTRADA 49 — 11/10/2026 · AMBOS RECORRIDOS ANDROID RECIBIDOS Y REVISADOS
 
 **Ver:** [`guest/GUEST_BOTANICA_ENTRY_49_ANDROID_TEST2_2026-10-11.md`](GUEST_BOTANICA_ENTRY_49_ANDROID_TEST2_2026-10-11.md) y **la bitácora acumulativa de Biblioteca, Entrada 49**. La propietaria ya envió **dos vídeos Android distintos**: 1 sede + historia revisada, y 2 sedes (12:30 y 15:00) + historia sin texto. Se verificaron carga y navegación, portada, contador, ubicaciones y cierre. **NO repetir vídeos ni crear pedidos**: Supabase tiene 4 Botánica TEST/delivered. El vídeo NO acredita fotografía real (archivo 1×1) ni RSVP: TEST final `?p=` sin `rt/g/u`, `rsvp.route='#'`; tampoco cotejo completo revisión/final, gestión con licencia o tiempo activo. **No modificar master ni dar 11/11**. Admisión conservadora **5/11 PASS, 6 PENDING, NO-GO venta**; diseño 03 bloqueado. Solo trabajar los gates pendientes, sin tocar ONE, STUDIO, Partner, VEIL LIGHT ni `main`; coste 0 €.
