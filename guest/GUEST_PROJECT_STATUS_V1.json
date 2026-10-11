@@ -1783,6 +1783,26 @@
       "gatePassed": 9,
       "gatePending": 2,
       "commercialSaleApproved": false
+    },
+    "botanicaEntry63TouchInstructions": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_63_OWNER_TOUCH_REVIEW_GUIDE_2026-10-11.md",
+      "benchUrl": "https://guest-weddlysmartdesign.pages.dev/guest/qa/owner-botanica-touch-benchmark.html",
+      "expectedNames": [
+        "QA Tiempo",
+        "Botánica"
+      ],
+      "date": "2027-06-12",
+      "story": "Historia ficticia para una medición de propietario.",
+      "oneVenue": "Lugar ficticio para medición",
+      "venueTime": "17:00",
+      "ownerChecklistSize": 5,
+      "ownerMustConfirmAllBeforeSend": true,
+      "touchTimerMeasures": "visible-active-personal-review-until-real-TEST-send_review",
+      "measuresEntireOrderFulfillment": false,
+      "realOwnerTrialPerformed": false,
+      "gatePasses": 9,
+      "gatePending": 2,
+      "commercialSale": "NO_GO"
     }
   },
   "commercialGate": {
@@ -1961,15 +1981,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 62,
-    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_62_OWNER_REAL_PARITY_ANDROID_2026-10-11.md",
+    "latestEntry": 63,
+    "latestDocumentedEntry": "guest/GUEST_BOTANICA_ENTRY_63_OWNER_TOUCH_REVIEW_GUIDE_2026-10-11.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Read Entry62 + START_HERE; Cloud parity PASS in both real delivered Botánica orders (shared/split), generic QA viewer seen on owner Android. Remain 2 gates: renderer integration in actual operative GUEST Center (NOT frozen V4.6) and owner-touch time ≤5min measured in authentic owner review. Ask owner to run only touch benchmark page; never repeat RSVP or parity. NO sale.",
+    "resumption": "Entry63 first: touch benchmark now displays exact expected Botánica fictional data BEFORE timer and requires 5 owner checkboxes; owner real touch not executed. Check current HEAD QA catalog/independent and Cloudflare live smoke, then owner does SINGLE test; next renderer actual operative GUEST center (QA generic browser already visually tested). Keep 9/11 NO-GO.",
     "commercialStatus": "BOTANICA_NO_GO",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
