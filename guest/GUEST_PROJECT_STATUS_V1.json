@@ -1650,18 +1650,32 @@
       "gatePending": 6,
       "commercialSaleApproved": false,
       "newSpendEuros": 0
+    },
+    "botanicaOwnerAndroidVisualEntry50_20261011": {
+      "source": "guest/GUEST_BOTANICA_ENTRY_50_OWNER_ANDROID_VISUAL_OK_2026-10-11.md",
+      "ownerVisualApproved": true,
+      "actualAndroidVideos": 2,
+      "coveredVariants": [
+        "one venue + revised story",
+        "two venues + story none"
+      ],
+      "rsvpPersistedWithAuthenticatedRecipient": false,
+      "commercialSaleApproved": false,
+      "gatePassed": 6,
+      "gatePending": 5
     }
   },
   "commercialGate": {
     "source": "guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json",
     "requiredPerNewTemplate": 11,
-    "currentBotanicaPass": 5,
-    "currentBotanicaPending": 6,
+    "currentBotanicaPass": 6,
+    "currentBotanicaPending": 5,
     "realOrderE2e": "PASS",
     "recipientRsvpPersistence": "PASS in isolated local Supabase; NOT VERIFIED LIVE POST/GET",
-    "ownerAndroid": "NOT CERTIFIED",
+    "ownerAndroid": "PASS",
     "ownerTouchMaxMinutes": 5,
-    "realOrderE2eScope": "Two distinct Botánica Cloud TEST orders each executed twice: authorized questionnaire, image upload, change/approval, delivery Cloudflare; excludes RSVP/licensed management, final Android and owner touch."
+    "realOrderE2eScope": "Two distinct Botánica Cloud TEST orders each executed twice: authorized questionnaire, image upload, change/approval, delivery Cloudflare; excludes RSVP/licensed management, final Android and owner touch.",
+    "ownerAndroidScope": "Physical Android verified by two owner-supplied videos and explicit owner approval of both invitations; visual rendering/vertical scrolling only, not RSVP, review parity, full-size photography or owner touch time."
   },
   "precedence": {
     "productPolicy": "guest/GUEST_CANONICAL_MASTER_DO_NOT_DRIFT_2026-10-07.md",
