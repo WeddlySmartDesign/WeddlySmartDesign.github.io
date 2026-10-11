@@ -80,7 +80,21 @@ async function run(){
     throw Error('El enlace de prueba no supera el control V17');
    const review=HOST+'/guest-review-v1.html?t='+encodeURIComponent(r);
    linkCard(i+1,order.id,review,final.href);
-   note('Pedido '+(i+1)+': enlace HTTPS y Botánica TEST verificados.');
+   // Read-only LIVE parity audit: independent review and final capabilities
+   // for the same already-delivered TEST order. Never mutate/order/claim sale.
+   let parity='SIN COMPROBAR';
+   try{
+    const reviewed=await post(FLOW,{action:'review_load',token:r});
+    if(reviewed.order?.id===check.order?.id&&
+      JSON.stringify(reviewed.order?.config)===JSON.stringify(check.order?.config))
+      parity='CONFIGURACIÓN IDÉNTICA';
+    else parity='REVISAR DIFERENCIAS';
+   }catch{parity='NO DISPONIBLE';}
+   const card=results.lastElementChild;
+   const pcheck=document.createElement('p');pcheck.className=parity==='CONFIGURACIÓN IDÉNTICA'?'ok':'muted';
+   pcheck.textContent='Paridad de datos revisión/final: '+parity;
+   card.append(pcheck);
+   note('Pedido '+(i+1)+': enlace HTTPS y Botánica TEST verificados; paridad de datos: '+parity+'.');
   }
   show('DOS PRUEBAS RECUPERADAS. Pulsa «Abrir invitación final en Android».','ok');
   results.scrollIntoView({behavior:'smooth',block:'start'});
