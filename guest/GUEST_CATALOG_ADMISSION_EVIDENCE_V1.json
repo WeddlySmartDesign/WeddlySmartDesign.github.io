@@ -35,9 +35,9 @@
       "basis": "new-template-gated",
       "gates": {
         "common-questionnaire": {
-          "pass": false,
-          "source": "guest/GUEST_D02_BOTANICA_CIERRE_TECNICO_GATES_PENDIENTES_2026-10-09.md",
-          "why": "Candidate form is isolated; common form not deployed; backend none-mode mismatch."
+          "pass": true,
+          "source": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
+          "why": "Shared Cloudflare questionnaire deployed, two mobile Chromium 7-step flows validated with mocked API (one venue/custom Story, two venues/photo-only), and V17 backend compatible with four actual Cloud orders independently. NOT a real browser-to-Cloud submission test."
         },
         "backend-test-only": {
           "pass": true,
