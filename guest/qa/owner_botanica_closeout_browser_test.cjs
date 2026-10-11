@@ -47,7 +47,6 @@ async function test(browser,type){
    await page.frameLocator('iframe').locator('#rendered').waitFor({state:'visible'});
    assert.equal(await page.locator('input[name="reviewCheck"]').count(),5,'review must have all five checks');
    assert.equal(await page.locator('#send').isDisabled(),true,'cannot send without actual reviewed steps');
-   await page.locator('input[name="reviewCheck"]').check({force:true});
    for(const c of await page.locator('input[name="reviewCheck"]').all())await c.check();
    assert.equal(await page.locator('#send').isEnabled(),true);
    await page.locator('#send').click();
