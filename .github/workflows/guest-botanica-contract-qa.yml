@@ -43,6 +43,7 @@ jobs:
           node --check guest/tests/mobile_center_v47_integrated_contract.cjs
           node guest/tests/mobile_center_v47_generic_contract.test.cjs
           node guest/tests/mobile_center_v49_source_contract.test.cjs
+          node guest/tests/mobile_center_v50_status_menu_contract.test.cjs
           node guest/tests/mobile_center_v47_runtime_lifecycle.test.cjs
           node guest/tests/multi_design_dropin_pipeline.test.cjs
           node guest/tests/invitation_config_schema_contract.test.cjs

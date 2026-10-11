@@ -127,6 +127,11 @@ async function verify(){
    assert.equal(sha(remote.data),sha(local),'public file does not match isolated repository: '+route);
    console.log('PASS exact public asset '+route+' bytes='+remote.data.length);
  }
+ // Verify the deployed common preview will not consume Android's empty iframe load.
+ const genericViewer=fs.readFileSync(path.join(root,'guest/catalog/guest-catalog-owner-viewer-v2.js'),'utf8');
+ assert.match(genericViewer,/win\.location\?\.href==='about:blank'/);
+ assert.match(genericViewer,/iframe_adapter_missing/);
+ console.log('PASS generic remote viewer current-source contract; exact HTTPS bytes matched above');
  const closeout=fs.readFileSync(path.join(root,'guest/qa/owner-botanica-closeout.html'),'utf8');
  assert.match(closeout,/review_load/);
  assert.match(closeout,/public_load/);
