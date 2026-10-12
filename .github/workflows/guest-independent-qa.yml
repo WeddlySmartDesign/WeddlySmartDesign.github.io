@@ -30,6 +30,8 @@ jobs:
           node-version: '22'
       - name: Catalog invitation bridge contract
         run: node guest/qa/catalog_invitation_bridge_test.js
+      - name: Limoneros secured REAL owner TEST E2E protocol (static only)
+        run: node guest/tests/owner_limoneros_full_e2e_contract.test.cjs
 
   b6-shell-mobile:
     runs-on: ubuntu-latest
