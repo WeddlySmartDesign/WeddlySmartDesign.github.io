@@ -110,7 +110,7 @@ function validate(){
   // generic for all D03+, not a Limoneros or design-03 exception.
   for(const t of reg.templates||[]){
    if(['veil-light','botanica'].includes(t.id))continue;
-   const rec=s.designs[t.id],view=o.templates?.[t.id],ev=e.templates?.[t.id];
+   const rec=s.designs[t.id],view=owner.templates?.[t.id],ev=e.templates?.[t.id];
    requireIt(t.status==='certification-pending'&&rec?.status==='certification-pending'&&
     rec?.commerciallyCertified!==true&&rec?.commercialReady!==true&&
     t.scalabilityCertified!==true&&t.operationalPilotPass!==true&&t.visualRobustnessPass!==true&&
