@@ -157,7 +157,7 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
   display:block;
   width:min(100%,470px);
   max-width:100%;
-  height:clamp(205px,33svh,330px);
+  height:clamp(225px,37svh,360px);
   max-height:none;
   aspect-ratio:auto;
   margin:clamp(8px,1.4svh,17px) auto -8px;
@@ -180,9 +180,9 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
 #story .media-photo[data-fit="full"]:not(.invisible){
   object-fit:contain;
   height:auto;
-  max-height:42svh;
+  max-height:46svh;
 }
 @media(max-width:360px){
-  #story .media-photo:not(.invisible){height:clamp(188px,31svh,282px)}
+  #story .media-photo:not(.invisible){height:clamp(205px,35svh,310px)}
   #story .media-photo[data-fit="full"]:not(.invisible){height:auto}
 }
