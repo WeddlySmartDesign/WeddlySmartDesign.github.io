@@ -70,6 +70,30 @@ function photoHref(value){
  if(!raw)return null;
  try{const u=new URL(raw,document.baseURI);return ['https:','http:','blob:'].includes(u.protocol)?u.href:null}catch{return null}
 }
+function installGalleryCarousel(){
+ const scene=byId('gallery'),track=byId('gallery-items');
+ if(!scene||!track)return;
+ scene.querySelector('.d03-gallery-nav')?.remove();
+ const images=Array.from(track.querySelectorAll('img'));
+ if(!images.length)return;
+ scene.classList.add('d03-gallery-carousel');
+ track.setAttribute('role','region');
+ track.setAttribute('aria-label','Galería de fotografías');
+ images.forEach((im,i)=>{im.setAttribute('aria-label','Fotografía '+(i+1)+' de '+images.length)});
+ if(images.length===1)return;
+ const nav=document.createElement('div');nav.className='d03-gallery-nav';
+ const hint=document.createElement('span');hint.textContent='Desliza para ver';
+ const dots=document.createElement('div');dots.className='d03-gallery-dots';
+ const btns=images.map((im,i)=>{
+  const b=document.createElement('button');b.type='button';b.className='d03-gallery-dot';
+  b.setAttribute('aria-label','Ver foto '+(i+1));
+  b.addEventListener('click',()=>track.scrollTo({left:i*track.clientWidth,behavior:'smooth'}));
+  dots.append(b);return b;
+ });
+ const update=()=>{const idx=Math.max(0,Math.min(btns.length-1,Math.round(track.scrollLeft/Math.max(1,track.clientWidth))));btns.forEach((b,i)=>b.setAttribute('aria-current',i===idx?'true':'false'))};
+ nav.append(hint,dots);scene.querySelector('.scene-inner').append(nav);
+ track.addEventListener('scroll',update,{passive:true});update();track.scrollLeft=0;
+}
 function enhanceLimonerosScenes(config){
  const story=config.story||{},storyPhoto=byId('story-photo');
  // A cover photo must not silently impersonate an absent story photo.
@@ -182,7 +206,7 @@ window.GUEST_APPLY_CONFIG=function(config){
   accommodation:a.enabled&&a.mode!=='none'?{...a,message:a.name||a.note||a.bookingCode||a.address||'Alojamiento'}:a,
   gift:g.enabled&&g.mode!=='none'?{...g,message:g.displayText||g.details||'Regalos'}:g
  }};
- const res=original(proxy);applyPractical(config);enhanceLimonerosScenes(config);
+ const res=original(proxy);applyPractical(config);enhanceLimonerosScenes(config);installGalleryCarousel();
  const closingLine=byId('closing-line');if(closingLine&&config.closing?.line==null){closingLine.textContent='';closingLine.classList.add('invisible')}
  return {...res,visibleScenes:document.querySelectorAll('[data-bg]:not(.invisible)').length};
 };
