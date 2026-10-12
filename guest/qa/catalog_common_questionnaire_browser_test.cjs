@@ -10,7 +10,7 @@ const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitatio
 const TOKEN='fictional-questionnaire-capability-for-offline-browser-only-0123456789';
 const PNG=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/l7kAAAAASUVORK5CYII=','base64');
 
-async function test(browser,{split,none}){
+async function test(browser,{split,none,song=false}){
  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,serviceWorkers:'block'});
  const page=await ctx.newPage(),calls=[],errors=[],blocked=[];
  page.on('pageerror',e=>errors.push(e.message));
@@ -73,6 +73,11 @@ async function test(browser,{split,none}){
   await next(3);
   await page.locator('label.switchrow:has(#agendaEnabled)').click();
   await next(4);
+  if(song){
+   await page.locator('#playlistEnabled').check();
+   await page.locator('#playlistUrl').fill('https://example.com/pedir-cancion');
+   await page.locator('#playlistPrompt').fill('¿Qué canción no puede faltar?');
+  }
   await next(5);
   await page.locator('label.switchrow:has(#galleryEnabled)').click();
   await next(6);
@@ -87,6 +92,11 @@ async function test(browser,{split,none}){
   assert.equal(q.locations.mode,split?'split':'shared');
   assert.equal(q.story.textMode,none?'none':'custom');
   assert.equal(q.gallery.enabled,false);
+  if(song){
+   assert.equal(q.practical.playlist.mode,'guest_request','Owner's song request must survive real questionnaire UI');
+   assert.equal(q.practical.playlist.url,'https://example.com/pedir-cancion');
+   assert.equal(q.practical.playlist.prompt,'¿Qué canción no puede faltar?');
+  }
   assert.equal(q.confirmation.reviewed,true);
   assert.equal(q.contact.email,'test@example.invalid');
   if(none)assert.equal(calls.filter(c=>c.action==='upload').length,1);
@@ -96,4 +106,4 @@ async function test(browser,{split,none}){
   console.log('PASS real shared QUESTIONNAIRE mobile Chromium '+(split?'TWO venues + photo only':'ONE venue + custom Story')+': seven steps, validation, review, synthetic upload, save and submit. API fully intercepted; NO LIVE Cloud.');
  }finally{await ctx.close()}
 }
-(async()=>{const b=await chromium.launch({headless:true});try{await test(b,{split:false,none:false});await test(b,{split:true,none:true})}finally{await b.close()}})().catch(e=>{console.error('GUEST shared questionnaire mobile QA FAILED:',e.stack||e);process.exitCode=1;});
+(async()=>{const b=await chromium.launch({headless:true});try{await test(b,{split:false,none:false});await test(b,{split:true,none:true});await test(b,{split:false,none:false,song:true})}finally{await b.close()}})().catch(e=>{console.error('GUEST shared questionnaire mobile QA FAILED:',e.stack||e);process.exitCode=1;});
