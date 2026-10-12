@@ -543,3 +543,29 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
    animation:none!important;opacity:1!important;transform:none!important;
  }
 }
+
+/* Real questionnaire-derived timetable becomes a delicate two-column grouping
+   rather than four identical lines; the rest of the transport details remain. */
+#practical .d03-bus .practical-details .d03-travel-time{
+  display:inline-block!important;
+  vertical-align:baseline!important;
+  white-space:normal!important;
+  margin:4px clamp(13px,4vw,24px) 7px 0!important;
+  font-variant-numeric:tabular-nums;
+  font-size:clamp(20px,5.1vw,23px)!important;
+  color:#4c3040!important;
+}
+#practical .d03-accommodation .practical-details>.practical-line:first-child{
+  font-size:clamp(24px,6.1vw,29px)!important;
+  line-height:1.17!important;
+}
+@media(max-width:360px){
+ #practical .d03-bus .practical-details .d03-travel-time{
+   font-size:19px!important;
+   margin-right:15px!important;
+ }
+ #practical .d03-accommodation .location-links .link:nth-child(3){
+   margin-left:auto!important;
+   margin-right:auto!important;
+ }
+}
