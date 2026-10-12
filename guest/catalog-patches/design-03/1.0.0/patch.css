@@ -986,3 +986,47 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
 @media(max-width:360px){
   #gallery{padding-top:max(220px,27svh)!important}
 }
+
+/* D03 Closing V2 — subtle RSVP action, like the approved Lugar controls.
+   Do not cover or restyle the owner's animated night-painted background. */
+#closing .closing-footer{gap:clamp(10px,1.9svh,16px)!important}
+#closing .rsvp-button{
+ display:inline-flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ box-sizing:border-box!important;
+ width:auto!important;
+ max-width:min(88vw,320px)!important;
+ min-width:min(250px,75vw)!important;
+ min-height:50px!important;
+ margin:0 auto!important;
+ padding:11px 25px!important;
+ border:1px solid rgba(255,246,229,.56)!important;
+ border-radius:999px!important;
+ background:rgba(24,29,60,.12)!important;
+ box-shadow:none!important;
+ backdrop-filter:none!important;
+ color:#fff9ee!important;
+ font:400 clamp(20px,5vw,24px)/1.2 var(--serif)!important;
+ letter-spacing:.008em!important;
+ text-transform:none!important;
+ text-decoration:none!important;
+ text-shadow:0 1px 4px rgba(15,20,40,.64)!important;
+ cursor:pointer;
+}
+#closing .rsvp-button:hover,
+#closing .rsvp-button:active{
+ background:rgba(24,29,60,.29)!important;
+ border-color:rgba(255,246,229,.75)!important;
+}
+#closing .rsvp-button:focus-visible{
+ outline:2px solid #fff2dc!important;
+ outline-offset:3px!important;
+}
+@media(max-width:360px){
+ #closing .rsvp-button{
+   min-width:min(235px,77vw)!important;
+   padding-inline:17px!important;
+   font-size:20px!important;
+ }
+}
