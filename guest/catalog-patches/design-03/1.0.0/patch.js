@@ -6,7 +6,14 @@ if(typeof original!=='function')throw Error('GUEST_D03_ORIGINAL_RENDERER_MISSING
 const txt=v=>v==null?'':String(v).trim();
 const byId=id=>document.getElementById(id);
 function href(v){if(!v)return null;try{const u=new URL(v,document.baseURI);return u.protocol==='https:'||u.protocol==='http:'?u.href:null}catch{return null}}
-function addLine(container,lines){let items=lines.map(txt).filter(Boolean);if(!items.length)return;const p=document.createElement('p');p.className='practical-details';for(const item of items){const s=document.createElement('span');s.className='practical-line'+(/^(?:Ida|Vuelta):/.test(item)?' d03-travel-time':'');s.textContent=item;p.append(s)}container.append(p)}
+function addLine(container,lines){let items=lines.map(txt).filter(Boolean);if(!items.length)return;const p=document.createElement('p');p.className='practical-details';for(const item of items){const s=document.createElement('span');s.className='practical-line'+(/^(?:Ida|Vuelta):/.test(item)?' d03-travel-time':'');
+ if(/^(?:Ida|Vuelta):/.test(item)){
+  const parts=item.match(/^(Ida|Vuelta):\s*(.*)$/);
+  const label=document.createElement('span');label.className='d03-time-label';label.textContent=parts[1]+': ';
+  const value=document.createElement('strong');value.className='d03-time-value';value.textContent=parts[2];
+  s.append(label,value);
+ }else{s.textContent=item}
+ p.append(s)}container.append(p)}
 function addBlock(root,title,lines,links=[],more=null,kind=''){
  if(!lines.some(x=>txt(x))&&!links.some(x=>href(x[0]))&&!more)return;
  const block=document.createElement('section');block.className='practical-item'+(kind?' d03-'+kind:'');
