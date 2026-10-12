@@ -94,6 +94,8 @@ const server=http.createServer((req,res)=>{
        timeline:getComputedStyle(sel('#agenda .agenda-list'),'::before').content,
        rhombi:all('#agenda .moment').map(e=>getComputedStyle(e,'::before').content),
        birdSpace:rect('#practical .section-kicker').top-rect('#practical').top,
+       cinematicVideos:['cover-video','closing-video'].map(id=>{const v=document.getElementById(id);return {id,loop:v.loop,muted:v.muted,playsInline:v.playsInline,source:v.querySelector('source')?.getAttribute('src')}}),
+       closingRsvp:(()=>{const e=sel('#closing .rsvp-button'),c=getComputedStyle(e);return {text:e?.textContent.trim(),radius:parseFloat(c.borderTopLeftRadius),bg:c.backgroundColor,height:parseFloat(c.minHeight),href:e?.getAttribute('href')}})(),
        darkEnd:sel('#practical').classList.contains('d03-four-practical-gradient'),
        lastPracticalLinkColor:(()=>{const e=all('#practical .practical-item:last-child .link').at(-1);return e?getComputedStyle(e).color:null})()
       };
@@ -101,6 +103,11 @@ const server=http.createServer((req,res)=>{
     console.log('D03 scene QA',width,mode,JSON.stringify(data),'errors=',errors.join('|'));
     assert.equal(errors.length,0,'JavaScript errors: '+errors.join(' | '));
     assert.equal(data.pageWidth<=width,true,'horizontal overflow');
+    assert.ok(data.cinematicVideos.every(v=>v.loop===true&&v.muted===true&&v.playsInline===true),'Original cover/closing videos must stay muted inline and loop');
+    assert.ok(data.cinematicVideos.every(v=>/\.mp4(?:$|\?)/i.test(v.source||'')),'Never replace original cinematic MP4 with static poster');
+    assert.equal(data.closingRsvp.text,'Confirmar asistencia');
+    assert.ok(data.closingRsvp.radius>=20&&data.closingRsvp.height>=48,'Closing RSVP must be the approved discreet tappable round-outline style');
+    assert.equal(data.closingRsvp.bg,'rgba(24, 29, 60, 0.12)','RSVP must not use a visually intrusive block');
     assert.equal(data.places,rich?2:1);
     assert.equal(data.placeLinks,rich?4:2);
     assert.ok(data.venueKicker.px>=(width<=360?17:18)&&data.venueKicker.weight>=600,'Nos vemos aquí remains too thin or small');
