@@ -186,3 +186,18 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
   #story .media-photo:not(.invisible){height:clamp(205px,35svh,310px)}
   #story .media-photo[data-fit="full"]:not(.invisible){height:auto}
 }
+
+/* D03 Historia: larger VISIBLE subjects when the questionnaire selects crop.
+   Earlier max-height change was inert for the landscape photo in "full" fit:
+   intrinsic aspect ratio set height below max-height. Preserve the "full" option. */
+#story .media-photo:not(.invisible):not([data-fit="full"]){
+  height:clamp(280px,43svh,410px);
+  object-fit:cover;
+  margin-top:clamp(6px,1.2svh,12px);
+  margin-bottom:-5px;
+}
+@media(max-width:360px){
+  #story .media-photo:not(.invisible):not([data-fit="full"]){
+    height:clamp(270px,41svh,360px);
+  }
+}
