@@ -54,3 +54,15 @@ Cada configuración debe funcionar **sin editar HTML/CSS, ritmos, fotografías o
 - El modo **`practical.playlist.mode='guest_request'`** significa pedir/proponer una canción. CTA «Pedir canción» (o equivalente editorial de propuesta), **jamás «Escuchar playlist»**. Solo dibujar CTA si el cuestionario ha aportado `playlist.url` HTTP(S) válido destinado a recibir propuestas; no crear direcciones, formularios ni acción falsa.
 - El modo **`external_link`** sirve para un enlace a la lista existente: «Ver playlist»; no fingir que recogerá propuestas. Modo `none`, deshabilitado o sin URL válida: ningún botón ficticio. La invitación sigue coherente con solo el texto si el modo está activo sin URL.
 - **La pregunta comercial «Enlace para pedir canciones» del cuestionario GUEST se corresponde con el valor canónico `guest_request`.** Comprobar ese mapeo en el constructor real, plantilla y pruebas antes de cada entrega. Cualquier ambigüedad o discrepancia entre cuestionario, schema y render impide certificar el diseño.
+
+
+## Galería — norma universal de carrusel, NUNCA mosaico o collage
+
+Para **todas las plantillas actuales y futuras**, cuando el cuestionario activa galería de pareja, su presentación por defecto es **una fotografía protagonista por vez en un carrusel táctil**. Queda prohibido sustituirlo por una cuadrícula/collage de fotografías salvo aprobación **expresa y particular** de la autora, incluso si un motor CSS genérico define `gallery-grid`. Leer `GUEST_INVITATION_MASTER_CONFIGURATION_MATRIX_V1.md §11` antes de integrar.
+
+- 0 fotografías o galería OFF: sección y controles desaparecen, sin huecos ni foto inventada.
+- 1 fotografía: imagen editorial, sin indicadores ni sugerencia de deslizar.
+- 2, 3 o 4 fotografías: una sola visible, `overflow-x:auto` + `scroll-snap-type:x mandatory` en móvil, indicadores discretos con selección real y sin botones de flechas; gestos, teclado y selección accesible, sin autoplay.
+- Respetar el `fit:crop|full`, `focusX/focusY`, alt y orden de cada imagen recibidos del cuestionario; no reencuadrar por defecto ni inventar fotos, textos, enlaces o un nuevo cuestionario.
+- Las fotos pueden mezclar orientaciones; comprobar que no se cortan rostros ni contexto importante y que no hay overflow lateral a 320, 360, 390 y 430 CSS px. Validar la galería en el **diseño completo** con las fotos ya aportadas y los casos sin galería.
+- Bloqueo de certificación: prueba automatizada 0/1/2/3/4 fotos, primera diapositiva visible, indicador y gesto/selección que realmente cambia de foto, última imagen alcanzable, sin controles huérfanos. No dar por aprobado por haber dejado escrito el CSS.
