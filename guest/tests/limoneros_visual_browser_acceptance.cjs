@@ -33,7 +33,15 @@ const server=http.createServer((req,res)=>{
     const url=origin+'/guest/catalog-assets/design-03/1.0.0/index.html?qa='+mode;
     await page.goto(url,{waitUntil:'domcontentloaded',timeout:35000});
     await page.waitForFunction(expected=>document.documentElement.dataset.guestReviewFixture===expected,mode,{timeout:15000});
-    await page.waitForTimeout(800);
+    await page.waitForTimeout(500);
+    // Media in the real renderer are loaded lazily. View the original scenes
+    // before asserting naturalWidth; offscreen pictures are intentionally deferred.
+    if(mode==='full'){
+      for(const sec of ['story','locations','gallery']){
+        await page.locator('#'+sec).scrollIntoViewIfNeeded();
+      }
+      await page.waitForTimeout(500);
+    }
     const data=await page.evaluate(()=>{
       const sel=s=>document.querySelector(s),all=s=>[...document.querySelectorAll(s)];
       const visible=s=>{const e=sel(s);return !!e&&!e.classList.contains('invisible')&&getComputedStyle(e).display!=='none'};
@@ -53,6 +61,7 @@ const server=http.createServer((req,res)=>{
        birdSpace:rect('#practical .section-kicker').top-rect('#practical').top
       };
     });
+    console.log('D03 scene QA',width,mode,JSON.stringify(data),'errors=',errors.join('|'));
     assert.equal(errors.length,0,'JavaScript errors: '+errors.join(' | '));
     assert.equal(data.pageWidth<=width,true,'horizontal overflow');
     assert.equal(data.places,mode==='full'?2:1);
