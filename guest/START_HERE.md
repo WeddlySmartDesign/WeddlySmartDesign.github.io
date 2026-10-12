@@ -1,5 +1,10 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 85 — LIMONEROS: PARCHE EDITORIAL PUBLICADO + QA CUESTIONARIO SINTÉTICO (12/10/2026)
+
+[**Resultado y continuidad**](GUEST_ENTRY_85_D03_PATCH_LIVE_AND_QUESTIONNAIRE_REGRESSION_2026-10-12.md). La versión visual corregida ya está publicada en Cloudflare, HTTP 200 + HTML SHA exacto + 15/15 MP4/JPG idénticos y noindex (run `38235402146` SUCCESS); CSS y JS editoriales y puente al cuestionario realmente incorporados. Actualizados los triggers de CI: ahora falla si Cloudflare está desactualizado. Stage NO-SALE `38235417193` SUCCESS. Prueba dinámica de campos del cuestionario en VM sintética `38235740279` SUCCESS (4 módulos activos y opcionales desactivados). **NO confundir con dos pedidos TEST reales:** consulta Supabase registra 0 pedidos design-03. **Pendientes estrictos:** dos E2E TEST por gestor autenticado, revisión/final/RSVP, primera verificación renderer D03 en Android físico y aprobación artística. Sigue `certification-pending`, NO SALE. No volver a pedir archivos ni reconstruir diseño.
+
+
 ## ENTRADA 84 — LIMONEROS: CORRECCIÓN EDITORIAL + PARIDAD CON CUESTIONARIO TEST (12/10/2026)
 
 [**Estado verificado, corrección y continuación**](GUEST_ENTRY_84_D03_VISUAL_FIX_AND_SCHEMA_MAPPING_2026-10-12.md). Se incorporó a `guest-independent` un patch TEST de aspecto y campos del cuestionario, anclado al SHA del máster V1, sin alterar los vídeos/fondos ni tocar Botánica/VEIL/ONE/STUDIO. Enlace de prueba D03: https://guest-weddlysmartdesign.pages.dev/guest/catalog-assets/design-03/1.0.0/index.html, **confirmar nuevo build y readback antes de declarar publicado el patch**. Recorte de botones rectangulares, tipografía editorial, cierre sin nombres solapados y transporte/alojamiento/regalos/música con campos reales. QA Chromium móvil sintético 320/360/390/430; prueba de sintaxis Github PASS; venta sigue NO. Estado canónico D03 `certification-pending`, QA remota/Android y una aprobación visual pendientes. NO volver a pedir diseños ni reabrir subida de blobs.
