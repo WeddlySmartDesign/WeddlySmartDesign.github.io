@@ -71,6 +71,12 @@ const server=http.createServer((req,res)=>{
        }),
        gallery:visible('#gallery'),galleryImages:all('#gallery-items img').length,
        galleryLoaded:all('#gallery-items img').every(e=>e.complete&&e.naturalWidth>0),
+       galleryArt:(()=>{
+         const g=sel('#gallery'),k=g?.querySelector('.section-kicker'),i=g?.querySelector('#gallery-items img');
+         if(!g||!k||!i)return null;
+         const c=getComputedStyle(i),gr=g.getBoundingClientRect(),kr=k.getBoundingClientRect();
+         return {kickerOffset:kr.top-gr.top,mask:c.maskImage,shadow:c.boxShadow}
+       })(),
        galleryFirstLoaded:(()=>{const e=sel('#gallery-items img');return !e||(e.complete&&e.naturalWidth>0)})(),
        gallerySources:all('#gallery-items img').every(e=>!!e.src),
        galleryCarousel:sel('#gallery-items')?{
@@ -139,6 +145,9 @@ const server=http.createServer((req,res)=>{
       assert.equal(data.gallerySources,true,'All optional photos must have a valid source');
     }else assert.equal(data.galleryLoaded,true);
     if(hasGallery){
+      assert.ok(data.galleryArt.kickerOffset>=218,'Painted swallows must remain above Gallery title at mobile widths');
+      assert.ok((data.galleryArt.mask.match(/linear-gradient/g)||[]).length>=2,'Gallery photos must blend into paper on ALL edges');
+      assert.equal(data.galleryArt.shadow,'none','Carousel photo must not have a rectangular card shadow');
       assert.equal(data.galleryCarousel.display,'flex','Gallery must be a horizontal carousel, NOT collage');
       assert.ok(data.galleryCarousel.scrollSnap.includes('mandatory'),'Gallery swipe must snap to one photo');
       assert.ok(data.galleryCarousel.widths.every(x=>Math.abs(x-data.galleryCarousel.viewport)<=2),'Each slide must show one primary photo');
