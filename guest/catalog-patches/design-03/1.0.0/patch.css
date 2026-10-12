@@ -143,3 +143,46 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
  color:#fff8ed!important;border-color:rgba(255,250,240,.86)!important;
  text-shadow:0 1px 4px rgba(22,22,58,.80)!important
 }
+
+/* D03 Historia · editorial photo integration, author-approved direction, 12 Oct.
+   Rectangular photograph edges dissolve into the author's original painted paper;
+   no frames, arcs, image backgrounds, generic UI or typography substitution. */
+#story .scene-inner{max-width:510px}
+#story .scene-paragraph{
+  margin-bottom:0;
+  color:#503343;
+  text-wrap:pretty;
+}
+#story .media-photo:not(.invisible){
+  display:block;
+  width:min(100%,470px);
+  max-width:100%;
+  height:clamp(205px,33svh,330px);
+  max-height:none;
+  aspect-ratio:auto;
+  margin:clamp(8px,1.4svh,17px) auto -8px;
+  object-fit:cover;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  background:transparent;
+  /* Intersect top/bottom and side fades to eliminate hard photo edges without
+     clipping the center of the photo or creating a circular/arched photo. */
+  -webkit-mask-image:
+    linear-gradient(to bottom,transparent 0%,#000 17%,#000 74%,transparent 100%),
+    linear-gradient(to right,transparent 0%,#000 11%,#000 89%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:
+    linear-gradient(to bottom,transparent 0%,#000 17%,#000 74%,transparent 100%),
+    linear-gradient(to right,transparent 0%,#000 11%,#000 89%,transparent 100%);
+  mask-composite:intersect;
+}
+#story .media-photo[data-fit="full"]:not(.invisible){
+  object-fit:contain;
+  height:auto;
+  max-height:42svh;
+}
+@media(max-width:360px){
+  #story .media-photo:not(.invisible){height:clamp(188px,31svh,282px)}
+  #story .media-photo[data-fit="full"]:not(.invisible){height:auto}
+}
