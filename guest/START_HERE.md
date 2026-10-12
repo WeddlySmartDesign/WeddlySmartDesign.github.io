@@ -1,5 +1,9 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 104 — D04–D08: DETALLES EDITORIALES SIN TARJETAS NI ICONOS DE APP (12/10/2026)
+
+La autora: las tarjetas recargan y restan elegancia y los iconos parecen de app. Ahora sedes y detalles van **sin cajas ni iconos**, en composición editorial: numeración con la tipografía de cada piel (romanos caligráficos en Azulejo, 01–04 déco en Gala, romanos en cursiva en Invernadero, Reflejo y Caja), filetes finos con un adorno tipográfico propio entre bloques (rombo, ❦, ○, ♪) y enlaces de texto subrayados con trazo. La agenda que avanza se mantiene. Matriz **460/460 PASS**. NO SALE.
+
 ## ENTRADA 103 — D04–D08: CADA DISEÑO CON IDENTIDAD PROPIA (12/10/2026)
 
 La autora pidió que no fueran idénticos por dentro, sin huecos, con una agenda que avance y unos detalles que no sean una lista con botones genéricos. Ahora cada piel tiene tipografías, tarjetas, botones y una agenda propias que avanzan con el desplazamiento: Azulejo cerámico, Gala déco de laca y oro, Invernadero de cristal y tallo, Reflejo con títulos reflejados y ondas, Caja de música de latón y pentagrama. Las escenas centrales se ajustan a su contenido y las palomas aparecen con menos frecuencia. Tabla en [GUEST_SKIN_ENGINE_D04_D08_2026-10-12.md](GUEST_SKIN_ENGINE_D04_D08_2026-10-12.md). Matriz **460/460 PASS**. Pendiente: aprobación de la autora, backend TEST y pedidos reales. NO SALE.

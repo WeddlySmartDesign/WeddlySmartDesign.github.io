@@ -143,44 +143,47 @@ h3{font:400 clamp(28px,7vw,40px)/1.1 var(--serif);margin:0 0 6px}
 img.feather.rv{transform:scale(1.07);filter:blur(3px);transition:opacity 1.5s ease,transform 2.4s cubic-bezier(.2,.8,.2,1),filter 1.4s ease}
 img.feather.rv.in{transform:none;filter:none}
 @media(prefers-reduced-motion:reduce){.rv,.rv-head .section-kicker,.rv-head h2,img.feather.rv,.motif{opacity:1!important;transform:none!important;clip-path:none!important;filter:none!important;letter-spacing:.11em;transition:none!important;animation:none!important}.rv-head .rule-orn path{stroke-dashoffset:0}.rv-head .rule-orn circle{opacity:1}#fx{display:none}}
-/* ===== base de tarjetas e iconos (cada piel la transforma) ===== */
-.pr-icon{display:block;width:34px;height:34px;margin:0 auto 8px;color:var(--accent)}
-.pr-icon svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
-#practical-items{display:grid;gap:16px;margin-top:6px}
-.practical-item{position:relative;width:100%;max-width:380px;padding:24px 20px 20px}
-.practical-item+.practical-item{border-top:0}
-.location{position:relative;padding:22px 18px 20px;max-width:380px}.location+.location{border-top:0;margin-top:16px;padding-top:22px}
-.location .pr-icon{width:30px;height:30px}
-.link{border-radius:0;background:transparent;border:0;border-bottom:1px solid currentColor;padding:10px 4px 6px;min-height:44px;font:500 13px/1.2 var(--label);text-transform:uppercase;letter-spacing:.16em;color:var(--accent)}
-.location-links,.practical-item .location-links{gap:6px 22px}
-.practical-title{font-family:var(--label);text-transform:var(--label-case);letter-spacing:calc(var(--label-track) + .04em)}
+/* ===== composición editorial sin tarjetas: numeración, filetes y adornos tipográficos ===== */
+.pr-icon{display:none}
+#practical-items{display:block;max-width:400px;margin:6px auto 0;counter-reset:pr}
+.practical-item{position:relative;counter-increment:pr;display:grid;grid-template-columns:54px 1fr;column-gap:14px;align-items:start;text-align:left;width:100%;max-width:none;padding:28px 0 24px}
+.practical-item::before{content:counter(pr,var(--pr-style,upper-roman));grid-column:1;grid-row:1/span 8;font:var(--numeral-font,400 40px/1 var(--title));color:var(--accent);opacity:.9;text-align:center;padding-top:1px}
+.practical-item>*{grid-column:2}
+.practical-item+.practical-item{border-top:1px solid var(--line)}
+.practical-item+.practical-item::after,.location+.location::before{content:var(--glyph,"◆");position:absolute;left:50%;top:0;transform:translate(-50%,-55%);padding:0 12px;background:var(--paper);color:var(--accent);font:400 13px/1 Georgia,'DejaVu Serif',serif}
+.practical-title{margin:0 0 6px;font-size:calc(clamp(16px,4.4vw,19px)*var(--label-size));text-align:left;font-family:var(--label);text-transform:var(--label-case);letter-spacing:calc(var(--label-track) + .02em)}
+.practical-details{margin:0 0 8px;max-width:none;text-align:left}
+.practical-item .location-links{justify-content:flex-start;gap:4px 22px}
+.practical-item.times .practical-details{justify-content:flex-start}
+.travel-time{align-items:flex-start}
+.practical-item details{margin:2px 0 0;width:auto}
+.practical-item summary{justify-content:flex-start;padding:8px 0}
+.location{position:relative;margin:0 auto;padding:20px 0 18px;max-width:400px}
+.location+.location{border-top:1px solid var(--line);margin-top:10px;padding-top:30px}
+.link{border-radius:0;background:transparent;border:0;border-bottom:1px solid currentColor;padding:12px 0 5px;min-height:44px;font:500 12.5px/1.2 var(--label);text-transform:uppercase;letter-spacing:.18em;color:var(--accent)}
+.link::after{content:"";display:inline-block;width:14px;height:1px;margin-left:8px;background:currentColor;vertical-align:middle;transition:width .3s}
+.link:hover::after{width:22px}
+.location-links{gap:4px 24px}
+.practical-item summary{font-family:var(--label);text-transform:var(--label-case);font-size:12.5px;letter-spacing:.16em;color:var(--accent)}
 .location-type{font-family:var(--label);text-transform:var(--label-case);letter-spacing:calc(var(--label-track) + .06em)}
 .travel-time .time-label{font-family:var(--label);text-transform:var(--label-case)}
 .time-value,.location-time{font-family:var(--num)}
-.practical-item summary{font-family:var(--label);text-transform:var(--label-case);font-size:13px;letter-spacing:.14em}
 
 /* ===== AZULEJO · cerámica pintada a mano, cobalto ===== */
 html[data-skin=azulejo]{--title:'Chorus',var(--script);--serif:'Lora',Georgia,serif;--label:'Lora',Georgia,serif;--num:'Lora',Georgia,serif;--label-case:uppercase;--label-track:.24em;--label-size:.68}
+html[data-skin=azulejo]{--glyph:'◆';--pr-style:upper-roman;--numeral-font:400 44px/1 'Chorus',serif}
 html[data-skin=azulejo] h2{font-size:clamp(50px,13vw,74px);letter-spacing:.01em}
 html[data-skin=azulejo] .moment-time{font-style:italic}
-html[data-skin=azulejo] .practical-item,html[data-skin=azulejo] .location{background:#fbf8f2;box-shadow:inset 0 0 0 1px var(--accent),inset 0 0 0 5px #fbf8f2,inset 0 0 0 6px rgba(35,64,138,.55)}
-html[data-skin=azulejo] .practical-item::before,html[data-skin=azulejo] .practical-item::after,html[data-skin=azulejo] .location::before,html[data-skin=azulejo] .location::after{content:"";position:absolute;width:15px;height:15px;top:-5px;left:-5px;background:
- radial-gradient(circle,#fbf8f2 0 2px,transparent 2.5px),var(--accent);transform:rotate(45deg)}
-html[data-skin=azulejo] .practical-item::after,html[data-skin=azulejo] .location::after{left:auto;right:-5px;top:auto;bottom:-5px}
-html[data-skin=azulejo] .pr-icon{width:48px;height:48px;padding:9px;border-radius:50%;background:var(--accent);color:#fbf8f2}
 html[data-skin=azulejo] .agenda-track{left:22px;width:2px;background:repeating-linear-gradient(to bottom,var(--line) 0 6px,transparent 6px 11px)}
 html[data-skin=azulejo] .moment-node{width:22px;height:22px;left:12px;top:16px;background:#fbf8f2;box-shadow:inset 0 0 0 3px #fbf8f2}
 html[data-skin=azulejo] .moment.on .moment-node{background:var(--accent);box-shadow:inset 0 0 0 3px #fbf8f2,0 0 0 4px rgba(35,64,138,.14)}
 
 /* ===== GALA · art déco, laca negra y oro ===== */
 html[data-skin=gala]{--title:var(--script);--serif:'Baskerville',Georgia,serif;--label:'Adventor',Futura,sans-serif;--num:'Adventor',Futura,sans-serif;--label-case:uppercase;--label-track:.32em;--label-size:.6;--gold:linear-gradient(100deg,#6e5016 0%,#a8822f 30%,#d2b06a 48%,#9a7428 66%,#6e5016 100%)}
+html[data-skin=gala]{--glyph:'◆';--pr-style:decimal-leading-zero;--numeral-font:400 24px/1.2 'Adventor',sans-serif}
+html[data-skin=gala] .practical-item::before{letter-spacing:.12em;color:#94712d;padding-top:4px}
+html[data-skin=gala] .link{color:#7d5f22}
 html[data-skin=gala] h2{background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 .08em}
-html[data-skin=gala] .practical-item,html[data-skin=gala] .location{background:#121114;color:#f4ead6;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px)}
-html[data-skin=gala] .practical-item::before,html[data-skin=gala] .location::before{content:"";position:absolute;inset:7px;border:1px solid rgba(214,178,96,.65);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);pointer-events:none}
-html[data-skin=gala] .practical-title,html[data-skin=gala] .location-type,html[data-skin=gala] .pr-icon,html[data-skin=gala] .link,html[data-skin=gala] .practical-item summary,html[data-skin=gala] .time-label{color:#d9bd78}
-html[data-skin=gala] .location-address,html[data-skin=gala] .practical-item details .practical-details{color:#cfc3ad}
-html[data-skin=gala] .link{border:1px solid rgba(214,178,96,.7);padding:11px 16px 9px;font-size:11.5px}
-html[data-skin=gala] .practical-item summary{border-bottom-color:rgba(214,178,96,.6)}
 html[data-skin=gala] .agenda-list{max-width:380px}
 html[data-skin=gala] .agenda-track{left:50%;background:rgba(148,113,45,.35)}
 html[data-skin=gala] .agenda-track::after{background:linear-gradient(#d9bd78,#94712d)}
@@ -193,12 +196,9 @@ html[data-skin=gala] .moment-label{grid-column:2;grid-row:1;align-self:center;fo
 
 /* ===== INVERNADERO · cristal, hierro blanco y verde ===== */
 html[data-skin=invernadero]{--title:'Pagella',Palatino,serif;--label:'Poppins',sans-serif;--num:'Poppins',sans-serif;--label-case:uppercase;--label-track:.3em;--label-size:.6}
+html[data-skin=invernadero]{--glyph:'❦';--pr-style:lower-roman;--numeral-font:italic 400 40px/1 'Pagella',serif}
+html[data-skin=invernadero] .link{font-weight:400;font-size:11.5px;letter-spacing:.22em}
 html[data-skin=invernadero] h2{font-style:italic;font-size:clamp(44px,12vw,66px);letter-spacing:-.01em}
-html[data-skin=invernadero] .practical-item,html[data-skin=invernadero] .location{background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(236,244,238,.5));border:1px solid rgba(255,255,255,.95);box-shadow:0 14px 34px rgba(34,64,47,.10),inset 0 0 0 5px rgba(255,255,255,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-html[data-skin=invernadero] .location{border-radius:190px 190px 10px 10px;padding-top:46px}
-html[data-skin=invernadero] .practical-item{border-radius:16px}
-html[data-skin=invernadero] .location::before{content:"";position:absolute;left:50%;top:10px;bottom:10px;width:1px;background:linear-gradient(rgba(255,255,255,.9),rgba(255,255,255,0) 30%);pointer-events:none}
-html[data-skin=invernadero] .link{font-weight:400;letter-spacing:.2em;font-size:11.5px;border:1px solid rgba(61,106,81,.45);border-radius:999px;padding:11px 18px 10px;background:rgba(255,255,255,.55)}
 html[data-skin=invernadero] .agenda-track{left:24px;width:2px;background:rgba(61,106,81,.18);border-radius:2px}
 html[data-skin=invernadero] .agenda-track::after{background:linear-gradient(#7aa56f,#3d6a51)}
 html[data-skin=invernadero] .moment-node{left:9px;top:12px;width:30px;height:30px;border:0;background:none;transform:scale(0) rotate(-40deg);transform-origin:20% 80%}
@@ -209,16 +209,13 @@ html[data-skin=invernadero] .moment-time{font-weight:300;font-size:14px;letter-s
 
 /* ===== REFLEJO · agua, crepúsculo y rosa ===== */
 html[data-skin=reflejo]{--title:'Lora',Georgia,serif;--serif:'Lora',Georgia,serif;--label:'GaramondSC',Georgia,serif;--num:'Garamond',Georgia,serif;--label-track:.18em;--label-size:.9}
+html[data-skin=reflejo]{--glyph:'○';--pr-style:upper-roman;--numeral-font:italic 400 38px/1 'Lora',serif}
+html[data-skin=reflejo] .link{font:italic 400 17px/1.2 var(--serif);text-transform:none;letter-spacing:.02em}
 html[data-skin=reflejo] h2{font-style:italic;font-size:clamp(48px,13vw,72px);position:relative;margin-bottom:46px}
 html[data-skin=reflejo] h2::after{content:attr(data-text);position:absolute;left:0;right:0;top:82%;transform:scaleY(-1);opacity:.22;-webkit-mask-image:linear-gradient(to top,#000,transparent 70%);mask-image:linear-gradient(to top,#000,transparent 70%);animation:ripple 5s ease-in-out infinite;pointer-events:none;filter:blur(.6px)}
 @keyframes ripple{0%,100%{transform:scaleY(-1) skewX(0)}50%{transform:scaleY(-1.06) skewX(-4deg)}}
 html[data-skin=reflejo] .rule-orn{display:none}
-html[data-skin=reflejo] .practical-item,html[data-skin=reflejo] .location{background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.2) 70%,rgba(138,90,99,.07));border-top:1px solid rgba(138,90,99,.35);border-bottom:1px solid rgba(138,90,99,.12)}
-html[data-skin=reflejo] .pr-icon{position:relative}
-html[data-skin=reflejo] .in .pr-icon::after,html[data-skin=reflejo] .pr-visible .pr-icon::after{content:"";position:absolute;inset:-8px;border:1px solid var(--accent);border-radius:50%;animation:ring 3.2s ease-out infinite}
 @keyframes ring{from{transform:scale(.6);opacity:.6}to{transform:scale(1.8);opacity:0}}
-html[data-skin=reflejo] .link{font:italic 400 17px/1.2 var(--serif);text-transform:none;letter-spacing:.02em;border-bottom-color:rgba(138,90,99,.5)}
-html[data-skin=reflejo] .link::after{content:" ↗";font-style:normal;font-size:.85em}
 html[data-skin=reflejo] .moment-node{border-radius:50%;transform:scale(.6)}
 html[data-skin=reflejo] .moment.on .moment-node{transform:scale(1)}
 html[data-skin=reflejo] .moment.on .moment-node::after{content:"";position:absolute;inset:-1px;border:1px solid var(--accent);border-radius:50%;animation:ring 2.6s ease-out infinite}
@@ -226,12 +223,10 @@ html[data-skin=reflejo] .moment-time{font-style:italic;font-size:21px}
 
 /* ===== CAJA DE MÚSICA · latón, terciopelo y pentagrama ===== */
 html[data-skin=caja]{--serif:'Bonum',Georgia,serif;--label:'Bonum',Georgia,serif;--num:'Bonum',Georgia,serif;--label-case:uppercase;--label-track:.26em;--label-size:.62;--brass:linear-gradient(100deg,#7e5a2a,#c99a55 35%,#f0d29a 50%,#b5853f 70%,#7e5a2a);--brass-ink:linear-gradient(100deg,#5e3f17,#9a6c2c 35%,#c79a55 50%,#8a5f26 70%,#5e3f17)}
+html[data-skin=caja]{--glyph:'♪';--pr-style:upper-roman;--numeral-font:italic 400 38px/1 'Bonum',serif}
+html[data-skin=caja] .practical-item::before{background:var(--brass-ink);-webkit-background-clip:text;background-clip:text;color:transparent}
+html[data-skin=caja] .link{color:#7a5222}
 html[data-skin=caja] h2{background:var(--brass-ink);-webkit-background-clip:text;background-clip:text;color:transparent;padding:0 .08em}
-html[data-skin=caja] .practical-item,html[data-skin=caja] .location{background:
- radial-gradient(circle at 12px 12px,#e2c387 0 2.4px,#8d6631 3px,transparent 3.6px),radial-gradient(circle at calc(100% - 12px) 12px,#e2c387 0 2.4px,#8d6631 3px,transparent 3.6px),
- radial-gradient(circle at 12px calc(100% - 12px),#e2c387 0 2.4px,#8d6631 3px,transparent 3.6px),radial-gradient(circle at calc(100% - 12px) calc(100% - 12px),#e2c387 0 2.4px,#8d6631 3px,transparent 3.6px),
- linear-gradient(170deg,#fffaf0,#f1e3c8);border:1px solid #b4884a;box-shadow:inset 0 0 0 4px #fbf3e2,inset 0 0 0 5px rgba(180,136,74,.55),0 10px 26px rgba(70,40,15,.12);border-radius:3px}
-html[data-skin=caja] .link{background:var(--brass);color:#2d1e10;border:0;border-radius:3px;padding:12px 18px 10px;font-size:11.5px;letter-spacing:.2em;box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 2px 6px rgba(80,50,15,.25)}
 html[data-skin=caja] .agenda-track{left:16px;width:22px;background:repeating-linear-gradient(to right,rgba(138,97,49,.35) 0 1px,transparent 1px 5.25px);opacity:.9}
 html[data-skin=caja] .agenda-track::after{left:9px;width:4px;background:linear-gradient(#f0d29a,#b5853f);box-shadow:0 0 10px rgba(240,210,154,.8)}
 html[data-skin=caja] .moment-node{border:0;background:none;transform:scale(.6);left:10px;top:6px;width:34px;height:36px}
