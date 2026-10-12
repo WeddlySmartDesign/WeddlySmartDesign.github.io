@@ -569,3 +569,94 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
    margin-right:auto!important;
  }
 }
+
+/* D03 V12 — practical video review: real hierarchy, not four text columns.
+   Bus times become a paired typographic event; hotel actions are a clear
+   hierarchy of two first-line actions and one separated reservation action.
+   Keep the fine watercolor, birds, original fonts and zero boxed panels. */
+#practical .d03-bus .practical-details{
+  display:flex!important;flex-wrap:wrap!important;
+  column-gap:clamp(17px,5vw,36px)!important;
+  row-gap:8px!important;align-items:start!important;
+}
+#practical .d03-bus .practical-details .practical-line:not(.d03-travel-time){
+  flex:1 1 100%!important;max-width:33ch!important;
+}
+#practical .d03-bus .practical-details .d03-travel-time{
+  flex:0 0 auto!important;
+  display:inline-flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  gap:1px!important;
+  padding:4px 0 3px!important;
+  margin:0!important;
+  color:#4b2e41!important;
+  font-variant-numeric:tabular-nums;
+}
+#practical .d03-bus .d03-time-label{
+  font:500 clamp(16px,4.25vw,19px)/1.12 var(--smallcaps)!important;
+  letter-spacing:.085em!important;
+  color:#67445a!important;
+}
+#practical .d03-bus .d03-time-value{
+  font:400 clamp(29px,7.7vw,36px)/1.05 var(--serif)!important;
+  color:#492a3b!important;
+}
+#practical .practical-item .location-links .link{
+  text-align:center!important;
+  border:1px solid rgba(87,53,71,.40)!important;
+  border-bottom:1px solid rgba(87,53,71,.40)!important;
+  border-radius:999px!important;
+  background:rgba(255,249,239,.12)!important;
+  color:#4c2f40!important;
+  min-height:44px!important;
+  padding:10px 15px 9px!important;
+  font:500 clamp(16px,4.35vw,19px)/1.18 var(--smallcaps)!important;
+  letter-spacing:.03em!important;
+  text-decoration:none!important;
+  box-shadow:none!important;
+}
+#practical .practical-item .location-links .link:hover,
+#practical .practical-item .location-links .link:active{
+  background:rgba(255,249,239,.31)!important;
+}
+#practical .d03-accommodation .location-links{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  justify-content:stretch!important;
+  gap:9px 11px!important;
+  width:100%!important;
+}
+#practical .d03-accommodation .location-links .link{
+  width:100%!important;min-width:0!important;
+  padding-inline:6px!important;
+  text-align:center!important;
+  overflow-wrap:normal!important;
+}
+#practical .d03-accommodation .location-links .link:last-child:nth-child(odd){
+  grid-column:1/-1!important;
+  justify-self:center!important;
+  width:min(100%,152px)!important;
+}
+#practical .d03-accommodation details{
+  margin-top:10px!important;
+}
+#practical .d03-accommodation details>summary,
+#practical .d03-gift details>summary{
+  padding:10px 10px!important;
+  min-height:44px!important;
+  border:0!important;
+  border-bottom:1px solid rgba(87,53,71,.47)!important;
+  border-radius:0!important;
+  font:500 clamp(17px,4.35vw,19px)/1.15 var(--smallcaps)!important;
+}
+@media(max-width:360px){
+  #practical .d03-bus .d03-time-value{font-size:29px!important}
+  #practical .d03-accommodation .location-links{gap:7px!important}
+  #practical .d03-accommodation .location-links .link{font-size:15px!important;padding-inline:4px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #practical .practical-item.d03-practical-ready.d03-practical-visible{
+  opacity:1!important;transform:none!important;animation:none!important
+ }
+}
