@@ -71,6 +71,8 @@ const server=http.createServer((req,res)=>{
        }),
        gallery:visible('#gallery'),galleryImages:all('#gallery-items img').length,
        galleryLoaded:all('#gallery-items img').every(e=>e.complete&&e.naturalWidth>0),
+       galleryFirstLoaded:(()=>{const e=sel('#gallery-items img');return !e||(e.complete&&e.naturalWidth>0)})(),
+       gallerySources:all('#gallery-items img').every(e=>!!e.src),
        galleryCarousel:sel('#gallery-items')?{
          display:getComputedStyle(sel('#gallery-items')).display,
          scrollSnap:getComputedStyle(sel('#gallery-items')).scrollSnapType,
@@ -132,7 +134,10 @@ const server=http.createServer((req,res)=>{
     assert.equal(data.placeImage,rich);
     assert.equal(data.gallery,hasGallery);
     assert.equal(data.galleryImages,hasGallery?4:0);
-    assert.equal(data.galleryLoaded,true);
+    if(hasGallery){
+      assert.equal(data.galleryFirstLoaded,true,'Primary carousel slide image should load when scene enters view');
+      assert.equal(data.gallerySources,true,'All optional photos must have a valid source');
+    }else assert.equal(data.galleryLoaded,true);
     if(hasGallery){
       assert.equal(data.galleryCarousel.display,'flex','Gallery must be a horizontal carousel, NOT collage');
       assert.ok(data.galleryCarousel.scrollSnap.includes('mandatory'),'Gallery swipe must snap to one photo');
