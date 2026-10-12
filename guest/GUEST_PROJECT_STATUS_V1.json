@@ -1,6 +1,6 @@
 {
   "schemaVersion": "guest-project-status-v1",
-  "asOf": "2026-10-11",
+  "asOf": "2026-10-12",
   "entryPoint": "guest/START_HERE.md",
   "repository": "WeddlySmartDesign/WeddlySmartDesign.github.io",
   "branch": "guest-independent",
@@ -289,7 +289,14 @@
       }
     },
     "design-03": {
-      "status": "not-started"
+      "name": "Limoneros",
+      "status": "visual-input-received-not-registered",
+      "checkpoint": "guest/GUEST_ENTRY_78_D03_LIMONEROS_INTERRUPTED_INTAKE_2026-10-12.md",
+      "resources": "original video and ZIP attachments supplied in prior chat; bytes unavailable in current working container",
+      "localDraft": "reported in prior chat, not independently recovered or verified",
+      "integrationVerified": false,
+      "qaVerified": false,
+      "commercialReady": false
     },
     "design-04": {
       "status": "not-started"
