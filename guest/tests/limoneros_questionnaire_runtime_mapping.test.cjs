@@ -10,6 +10,10 @@ const path=require('node:path');
 const js=fs.readFileSync(path.join(__dirname,'../catalog-patches/design-03/1.0.0/patch.js'),'utf8');
 const schema=JSON.parse(fs.readFileSync(path.join(__dirname,'../GUEST_INVITATION_CONFIG_SCHEMA_V1.json'),'utf8'));
 for(const key of ['bus','accommodation','gift','playlist'])assert.ok(schema.properties.practical.properties[key]);
+const questionnaire=fs.readFileSync(path.join(__dirname,'../catalog-questionnaire.html'),'utf8');
+assert.ok(questionnaire.includes('Enlace para pedir canciones'),'Questionnaire must describe actual song submission, not listening');
+assert.ok(questionnaire.includes("mode:chk('playlistEnabled')?'guest_request':'none'"),'Questionnaire must serialize the existing schema guest_request mode for song suggestions');
+
 
 class Element {
  constructor(tag,id=''){
