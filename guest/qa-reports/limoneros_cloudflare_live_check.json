@@ -1,6 +1,6 @@
 {
   "schemaVersion": "guest-d03-cloudflare-stage-evidence-v2",
-  "checkedAtUtc": "2026-10-12T09:48:57.930669+00:00",
+  "checkedAtUtc": "2026-10-12T09:50:04.055600+00:00",
   "url": "https://guest-weddlysmartdesign.pages.dev/guest/catalog-assets/design-03/1.0.0/index.html",
   "testOnly": true,
   "commercialApproved": false,
@@ -8,5 +8,5 @@
   "androidPhysicalVerified": false,
   "online": false,
   "stageBuildPassed": false,
-  "error": "RuntimeError: CLOUDFLARE_STAGE_BUILD_FAILED: /home/runner/work/WeddlySmartDesign.github.io/WeddlySmartDesign.github.io/guest/tools/build_catalog_static_preview.cjs:150\n const stage=stageLargeVisualLosslessly(visual,name,t.version);\\n stage.html=applyOptionalVisualPatch(stage.html,name,t.version,expected);\n                                                               ^\n\nSyntaxError: Invalid or unexpected token\n    at wrapSafe (node:internal/modules/cjs/loader:1713:18)\n    at Module._compile (node:internal/modules/cjs/loader:1755:20)\n    at Object..js (node:internal/modules/cjs/loader:1913:10)\n    at Module.load (node:internal/modules/cjs/loader:1505:32)\n    at Function._load (node:internal/modules/cjs/loader:1309:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n    at node:internal/main/run_main_module:36:49\n\nNode.js v22.23.3\n"
+  "error": "RuntimeError: CLOUDFLARE_STAGE_BUILD_FAILED: /home/runner/work/WeddlySmartDesign.github.io/WeddlySmartDesign.github.io/guest/tools/build_catalog_static_preview.cjs:26\n    throw Error('CATALOG_TEMPLATE_UNCERTIFIED_OR_DRIFT:'+name);\n    ^\n\nError: CATALOG_TEMPLATE_UNCERTIFIED_OR_DRIFT:design-03\n    at Object.<anonymous> (/home/runner/work/WeddlySmartDesign.github.io/WeddlySmartDesign.github.io/guest/tools/build_catalog_static_preview.cjs:26:11)\n    at Module._compile (node:internal/modules/cjs/loader:1781:14)\n    at Object..js (node:internal/modules/cjs/loader:1913:10)\n    at Module.load (node:internal/modules/cjs/loader:1505:32)\n    at Function._load (node:internal/modules/cjs/loader:1309:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n    at node:internal/main/run_main_module:36:49\n\nNode.js v22.23.3\n"
 }
