@@ -303,10 +303,16 @@
       "originalCandidateZipSha256": "001ea39f5f47475102547777e34935f1732a6f8dcc0b46e5bbfba87fb3520f96",
       "visualCandidateSource": "guest/GUEST_ENTRY_79_D03_LIMONEROS_CANDIDATE_V1_RECOVERED_2026-10-12.md",
       "integrationVerified": true,
-      "cloudflareVerified": false,
+      "cloudflareVerified": true,
       "backendTestDeployed": false,
       "androidPhysicalVerified": false,
-      "commercialReady": false
+      "commercialReady": false,
+      "publicTestPreviewUrl": "https://guest-weddlysmartdesign.pages.dev/guest/catalog-assets/design-03/1.0.0/index.html",
+      "cloudflarePublishedHtmlSha256": "794929303a5f8c0c11253b80a85bffc3e9a3244b916397fac57ed70ba777d0ea",
+      "cloudflarePublishedHtmlBytes": 1025775,
+      "cloudflareMediaFilesVerified": 15,
+      "cloudflareReadbackEvidence": "guest/qa-reports/limoneros_cloudflare_live_check.json",
+      "cloudflareReadbackEvidenceDate": "2026-10-12T09:29:16Z"
     },
     "design-04": {
       "status": "not-started"
