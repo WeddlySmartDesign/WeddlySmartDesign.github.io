@@ -147,7 +147,8 @@ for(const [name,t] of candidates){
  if(sha(visual)!==expected||!visual.includes(Buffer.from('window.'+t.applyApi)))
     throw Error('FROZEN_VISUAL_SHA256_OR_RENDERER_MISMATCH:'+name);
  const dest='guest/catalog-assets/'+name+'/'+t.version+'/index.html';
- const stage=stageLargeVisualLosslessly(visual,name,t.version);\n stage.html=applyOptionalVisualPatch(stage.html,name,t.version,expected);
+ const stage=stageLargeVisualLosslessly(visual,name,t.version);
+ stage.html=applyOptionalVisualPatch(stage.html,name,t.version,expected);
  files.push(write(dest,stage.html));
  viewRegistry.templates[name].src='/'+dest;
  designs.push({templateId:name,version:t.version,status:t.status,masterSha256:expected,deployedHtmlSha256:sha(stage.html),mediaAssets:stage.mediaCount,losslessMediaExternalization:stage.externalized,visualIncluded:true});
