@@ -319,7 +319,7 @@
       "backendGuardVerified": true,
       "backendTestDeploymentEvidence": "guest/GUEST_ENTRY_83_D03_LIMONEROS_LIVE_VERIFIED_BACKEND_TEST_V19_2026-10-12.md",
       "backendRealE2eVerified": false,
-      "checkpoint": "guest/GUEST_ENTRY_99_D03_GALLERY_PAINTED_FADE_BIRDS_SAFE_2026-10-12.md",
+      "checkpoint": "guest/GUEST_ENTRY_100_D03_GALLERY_CLOSING_APPROVAL_VIDEO_LOOP_2026-10-12.md",
       "visualCandidateVersion": "2-review-only",
       "visualCandidateSha256": "43249ed1728d790cbb7e43eadd9c2180e167aaab0c86c53280866cc7c2cf2a1e",
       "visualCandidateBytes": 28677081,
@@ -447,7 +447,7 @@
       },
       "galleryReviewFile": "/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/LIMONEROS_D03_GALERIA_CARRUSEL_REAL_2026-10-12.html",
       "galleryReviewSha256": "603bc2fbba6171218bb5f53a6582fcd43f54ac08d65e2af028e9e74f7962ca96",
-      "galleryVisualOwnerApproved": false,
+      "galleryVisualOwnerApproved": true,
       "galleryPaperFade": true,
       "galleryBirdClearanceCssPx": 230,
       "galleryBrowserBirdClearanceAsserted": true,
@@ -472,7 +472,15 @@
         "compositeFeatherMask": true,
         "paintedBirdsTitleCollision": false,
         "htmlOverflow": false
-      }
+      },
+      "galleryOwnerApprovalDate": "2026-10-12",
+      "closingVisualOwnerApproved": true,
+      "closingRsvpButtonOwnerApproved": true,
+      "coverAndClosingVideoLoopOwnerApproved": true,
+      "closingOwnerApprovalDate": "2026-10-12",
+      "closingOriginalVideoReplayLoopPatched": true,
+      "closingVideoLoopPatchCommit": "2cbf6100c69b02909c0fe2ea336926ccc88c4a95",
+      "closingButtonStylePatchCommit": "be94b11badd6b618aea7243227ec890ecce21547"
     },
     "design-04": {
       "status": "not-started"
