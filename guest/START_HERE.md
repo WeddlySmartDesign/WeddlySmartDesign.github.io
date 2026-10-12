@@ -1,5 +1,10 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 89 — LIMONEROS HISTORIA: FOTO FUNDIDA EN PINTURA (12/10/2026)
+
+[**Estado verificado y punto de continuidad**](GUEST_ENTRY_89_D03_HISTORIA_PHOTO_PAPER_BLEND_2026-10-12.md). Microbloque Historia ejecutable corregido en `guest/catalog-patches/design-03/1.0.0/patch.css`: máscara doble de desvanecimiento sobre los bordes de la foto, SIN borde/marco/arco/sombra ni cambio de fuentes o vídeo. CI Chromium **9/9 PASS** a 320/390/430 (run `38255054520`). HTML privado actualizado con **las cinco fotografías de la autora** guardado en Biblioteca `/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/LIMONEROS_D03_HISTORIA_INTEGRADA_REVISION_2026-10-12.html` (SHA256 `0ce8eff125c82bfb900ec3e27645b109852441d89aaf860635740d0e0caeb63b`). **PENDIENTE aprobación visual de Historia, no pasar a Lugares**. No confundir CI sintético con aprobación de fotos reales. No declarar despliegue Cloudflare de esta última CSS sin nueva lectura HTTPS exacta. TEST ONLY / NO SALE.
+
+
 ## ENTRADA 88 — AUDITORÍA VISUAL DEL VÍDEO REAL DE LA AUTORA (12/10/2026)
 
 **Leer primero:** [GUEST_ENTRY_88_D03_OWNER_VIDEO_VISUAL_AUDIT_2026-10-12.md](GUEST_ENTRY_88_D03_OWNER_VIDEO_VISUAL_AUDIT_2026-10-12.md). La autora envió un vídeo de 39,61 s del HTML privado con sus fotografías. La inspección muestra que el QA técnico verde NO garantiza calidad editorial: Historia con fotografía rectangular superpuesta; foto de celebración situada como cabecera general de Lugares; Agenda aún parece lista; Práctico tiene exceso de densidad; Galería 2×2 y vacío inferior; y Cierre mezcla texto superpuesto con golondrinas/banda del vídeo. **El nuevo flujo es corregir pantalla a pantalla, empezando por Historia**, comprobando siempre diseño real y variante máxima/reducida del cuestionario. No marcar visualOwnerApproved ni commercialReady. No pedir más fotos ni tocar máster congelado. La Entrada 87 conserva los cambios que ya quedaron publicados y su HTML privado de revisión; **la Entrada 88 no implementa cambios estéticos**.
