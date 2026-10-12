@@ -71,6 +71,16 @@ const server=http.createServer((req,res)=>{
        }),
        gallery:visible('#gallery'),galleryImages:all('#gallery-items img').length,
        galleryLoaded:all('#gallery-items img').every(e=>e.complete&&e.naturalWidth>0),
+       galleryCarousel:sel('#gallery-items')?{
+         display:getComputedStyle(sel('#gallery-items')).display,
+         scrollSnap:getComputedStyle(sel('#gallery-items')).scrollSnapType,
+         viewport:sel('#gallery-items').clientWidth,
+         scrollWidth:sel('#gallery-items').scrollWidth,
+         widths:all('#gallery-items img').map(e=>Math.round(e.getBoundingClientRect().width)),
+         navDots:all('#gallery .d03-gallery-dot').length,
+         selected:all('#gallery .d03-gallery-dot[aria-current="true"]').length,
+         hint:sel('#gallery .d03-gallery-nav span')?.textContent||null,
+       }:null,
        arrows:all('#locations .link,#practical .link').map(e=>getComputedStyle(e,'::after').content),
        boxes:all('#practical .practical-item').map(e=>getComputedStyle(e).backgroundColor),
        timeline:getComputedStyle(sel('#agenda .agenda-list'),'::before').content,
@@ -123,6 +133,16 @@ const server=http.createServer((req,res)=>{
     assert.equal(data.gallery,hasGallery);
     assert.equal(data.galleryImages,hasGallery?4:0);
     assert.equal(data.galleryLoaded,true);
+    if(hasGallery){
+      assert.equal(data.galleryCarousel.display,'flex','Gallery must be a horizontal carousel, NOT collage');
+      assert.ok(data.galleryCarousel.scrollSnap.includes('mandatory'),'Gallery swipe must snap to one photo');
+      assert.ok(data.galleryCarousel.widths.every(x=>Math.abs(x-data.galleryCarousel.viewport)<=2),'Each slide must show one primary photo');
+      assert.ok(data.galleryCarousel.scrollWidth>=3.9*data.galleryCarousel.viewport,'All four photos must be independently swipeable');
+      assert.equal(data.galleryCarousel.navDots,4,'Visible photo position indicators required');
+      assert.equal(data.galleryCarousel.selected,1,'Exactly one selected photo indicator');
+    }else{
+      assert.equal(data.galleryCarousel.navDots,0,'Disabled gallery must have no stray controls');
+    }
     assert.ok(data.arrows.every(a=>a==='none'||a==='normal'),'forbidden arrow decorations');
     assert.ok(data.boxes.every(c=>c==='rgba(0, 0, 0, 0)'||c==='transparent'),'rectangular practical backgrounds');
     assert.ok(data.timeline==='none'||data.timeline==='normal','timeline reappeared');
@@ -131,6 +151,19 @@ const server=http.createServer((req,res)=>{
     if(mode==='without-gallery'){
       assert.equal(data.darkEnd,true,'dark background safety class missing');
       assert.equal(data.lastPracticalLinkColor,'rgb(255, 248, 237)','last music link invisible against navy');
+    }
+    if(width===390&&hasGallery){
+      const track=page.locator('#gallery-items');
+      await page.locator('#gallery .d03-gallery-dot:nth-child(3)').click();
+      await page.waitForTimeout(750);
+      const move=await track.evaluate(e=>({left:e.scrollLeft,width:e.clientWidth}));
+      assert.ok(move.left>move.width*1.75,'Carousel position indicators must navigate to third photo');
+      assert.equal(await page.locator('#gallery .d03-gallery-dot[aria-current="true"]').count(),1);
+      const select=await page.locator('#gallery .d03-gallery-dot[aria-current="true"]').getAttribute('aria-label');
+      assert.equal(select,'Ver foto 3','Third photo indicator must become active');
+      await page.locator('#gallery .d03-gallery-dot:first-child').click();
+      await page.waitForTimeout(750);
+      assert.ok(await track.evaluate(e=>e.scrollLeft<e.clientWidth*.2),'Carousel must return to first photo');
     }
     if(width===390&&rich){
       for(const section of (hasGallery?['story','locations','agenda','practical','gallery']:['practical'])){
