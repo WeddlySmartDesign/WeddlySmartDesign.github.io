@@ -98,7 +98,7 @@ const server=http.createServer((req,res)=>{
     assert.equal(data.moments,rich?5:1);
     assert.equal(data.practical,rich?4:0);
     if(rich){
-      assert.ok(data.practicalArt.every(i=>i.font.includes('Pinyon')&&i.px>=40),'Use author's embedded editorial script, not generic list font');
+      assert.ok(data.practicalArt.every(i=>i.font.includes('Pinyon')&&i.px>=40),'Use the embedded Pinyon editorial script, not generic list font');
       assert.ok(data.practicalArt.every(i=>i.background==='rgba(0, 0, 0, 0)'),'No rectangular card backgrounds in practical');
       assert.ok(data.practicalArt.flatMap(i=>i.links).every(l=>l.height>=42),'Practical actions must remain touchable');
       if(width>=390){
