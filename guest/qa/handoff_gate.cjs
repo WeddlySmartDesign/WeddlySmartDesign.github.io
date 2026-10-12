@@ -105,7 +105,19 @@ function validate(){
  const wf=fs.readFileSync(file('.github/workflows/guest-botanica-contract-qa.yml'),'utf8');
  requireIt(wf.includes('node guest/qa/handoff_gate.cjs')&&wf.includes('node guest/tests/handoff_gate_test.cjs'),'CI no longer runs the single handoff gate and mutation test');
  if(s.system.deploymentCertified!==true){
-  for(const t of reg.templates||[])requireIt(['veil-light','botanica'].includes(t.id),'new design onboarded before shared V2 E2E certification: '+t.id);
+  // The shared commercial E2E gate does NOT prohibit TEST-only visual catalog
+  // intake (Entry 77). It prohibits premature certification/sale. This is
+  // generic for all D03+, not a Limoneros or design-03 exception.
+  for(const t of reg.templates||[]){
+   if(['veil-light','botanica'].includes(t.id))continue;
+   const rec=s.designs[t.id],view=o.templates?.[t.id],ev=e.templates?.[t.id];
+   requireIt(t.status==='certification-pending'&&rec?.status==='certification-pending'&&
+    rec?.commerciallyCertified!==true&&rec?.commercialReady!==true&&
+    t.scalabilityCertified!==true&&t.operationalPilotPass!==true&&t.visualRobustnessPass!==true&&
+    view?.mode==='iframe'&&view?.src===null&&view?.status==='certification-pending'&&
+    ev?.basis==='new-template-gated'&&ev?.version===t.version,
+    'uncertified shared platform permits only fail-closed TEST visual intake: '+t.id);
+  }
  }
  requireIt(Array.isArray(s.runtime.lastObservedSupports)&&s.runtime.lastObservedSupports.includes('veil-light'),'certified VEIL no longer supported by last-observed backend');
  const counts={passed:pass,pending:reqs.length-pass,total:reqs.length};
