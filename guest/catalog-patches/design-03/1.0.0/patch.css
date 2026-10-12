@@ -759,7 +759,7 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
   bottom:0!important;
 }
 @media(max-width:360px){
- #practical{padding-top:max(170px,21svh)!important}
+ #practical{padding-top:max(184px,22svh)!important}
  #practical .practical-title{font-size:clamp(34px,9.3vw,42px)!important}
  #practical #practical-items{gap:8px!important}
  #practical .practical-item,#practical .practical-item+.practical-item{
