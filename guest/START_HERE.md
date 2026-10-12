@@ -1,5 +1,10 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 79 — D03 LIMONEROS V1 RECUPERADO DE BIBLIOTECA (12/10/2026)
+
+[**Recovery verificado del máster ya construido y QA existente**](GUEST_ENTRY_79_D03_LIMONEROS_CANDIDATE_V1_RECOVERED_2026-10-12.md). **RECTIFICA la hipótesis de pérdida de Entrada 78:** la Biblioteca conserva `GUEST_D03_LIMONEROS_MASTER_V1_TEST_NO_SALE.zip` íntegro (24.903.943 B) con `master.html` autocontenido (28.673.474 B, SHA256 `a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482`), manifiesto y dos capturas de QA. Chromium móvil local 320/360/390/430 documentado y JS sintaxis revalidada. **NO pedir de nuevo los ZIP ni rehacer HTML/medios/QA local**. Pendiente transferencia del máster original a chunks en GitHub, registro TEST, CI, Cloudflare, backend TEST y Android remoto D03; venta NO.
+
+
 ## ENTRADA 78 — D03 LIMONEROS RECIBIDO EN CHAT, INTEGRACIÓN NO PERSISTIDA (12/10/2026)
 
 [**Punto exacto de recuperación**](GUEST_ENTRY_78_D03_LIMONEROS_INTERRUPTED_INTAKE_2026-10-12.md). La propietaria entregó vídeos y ZIP; en el chat anterior se declaró un borrador técnico local con cinco fondos, **sin copia ni integración verificable en GitHub/Drive/Biblioteca en la revisión actual**. Diseño 03 aún **NO registrado/QA/no-sale**. Continuar desde recursos originales (recuperarlos o re-adjuntar los mismos ZIP si son inaccesibles), sin rediseñar ni rehacer plataforma. Botánica y productos congelados intactos.
