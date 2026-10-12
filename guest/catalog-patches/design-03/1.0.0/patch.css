@@ -359,3 +359,187 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
    opacity:1!important;transform:none!important;animation:none!important;
  }
 }
+
+/* D03 V10 · PRÁCTICO — original paper as an editorial spread, NOT a list.
+   The FOUR canonical questionnaire modules form open offset vignettes:
+   no rectangular cards, icons, arrows, invented copy or decorations over birds.
+   Fluid for any number 0–4 and any missing optional link. */
+#practical{
+  align-items:flex-start!important;
+  padding-top:max(220px,28svh)!important;
+  padding-bottom:max(56px,env(safe-area-inset-bottom))!important;
+}
+#practical .scene-inner{
+  width:min(100%,520px)!important;
+  max-width:520px!important;
+  min-height:0!important;
+  margin:0 auto!important;
+}
+#practical .section-kicker{
+  color:#45283b!important;
+  font:600 clamp(19px,4.9vw,23px)/1.25 var(--smallcaps)!important;
+  letter-spacing:.075em!important;
+}
+#practical h2{
+  margin-bottom:clamp(16px,3svh,26px)!important;
+}
+#practical #practical-items{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:clamp(18px,3svh,32px)!important;
+  width:100%!important;
+  max-width:465px!important;
+  margin:8px auto 0!important;
+  padding:0 4px!important;
+}
+#practical .practical-item,
+#practical .practical-item+.practical-item{
+  position:relative!important;
+  isolation:isolate;
+  width:91%!important;
+  max-width:410px!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:clamp(15px,2.8svh,27px) 6px clamp(22px,3.5svh,33px)!important;
+  background:none!important;
+  box-shadow:none!important;
+  border:0!important;
+  border-radius:0!important;
+  overflow:visible!important;
+}
+#practical .practical-item:nth-child(odd){
+  align-self:flex-start!important;
+  text-align:left!important;
+}
+#practical .practical-item:nth-child(even){
+  align-self:flex-end!important;
+  text-align:right!important;
+}
+#practical .practical-item::before{
+  content:"";position:absolute;z-index:-1;pointer-events:none;
+  inset:6% -3% 4%;
+  background:radial-gradient(ellipse 48% 42% at 51% 42%,rgba(255,247,231,.31),transparent 98%);
+  border:0!important;border-radius:0!important;
+}
+#practical .practical-item::after{
+  content:"";position:absolute;
+  left:6px;bottom:5px;
+  width:clamp(60px,17vw,92px);height:1px;
+  background:linear-gradient(90deg,rgba(96,57,77,.53),transparent);
+}
+#practical .practical-item:nth-child(even)::after{
+  left:auto;right:6px;
+  background:linear-gradient(270deg,rgba(96,57,77,.53),transparent);
+}
+#practical .practical-item:last-child::after{display:none!important}
+#practical .practical-title{
+  font:400 clamp(47px,12vw,62px)/.92 var(--script)!important;
+  letter-spacing:0!important;
+  text-transform:none!important;
+  color:#4b2c40!important;
+  margin:0 0 clamp(10px,1.9svh,15px)!important;
+  text-shadow:0 1px 0 rgba(255,252,245,.6)!important;
+  overflow-wrap:anywhere;
+}
+#practical .practical-details{
+  display:block!important;
+  font:400 clamp(20px,5.15vw,24px)/1.36 var(--serif)!important;
+  color:#4a3040!important;
+  max-width:33ch!important;
+  margin:0 0 12px!important;
+  white-space:normal!important;
+  text-align:inherit!important;
+  overflow-wrap:break-word!important;
+}
+#practical .practical-details .practical-line{
+  display:block!important;
+  margin:0 0 5px!important;
+}
+#practical .practical-item .location-links{
+  display:flex!important;flex-wrap:wrap!important;
+  justify-content:flex-start!important;align-items:center!important;
+  gap:4px clamp(11px,2.8vw,18px)!important;
+  margin:6px 0 0!important;
+  max-width:100%!important;
+}
+#practical .practical-item:nth-child(even) .location-links{
+  justify-content:flex-end!important;
+}
+#practical .practical-item .location-links .link{
+  min-height:44px!important;min-width:0!important;
+  padding:10px 2px 7px!important;
+  border:0!important;
+  border-bottom:1px solid rgba(91,56,75,.61)!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  backdrop-filter:none!important;
+  color:#543547!important;
+  font:500 clamp(17px,4.4vw,20px)/1.17 var(--smallcaps)!important;
+  letter-spacing:.025em!important;
+  text-shadow:none!important;
+  text-decoration:none!important;
+}
+#practical .practical-item .location-links .link::after{
+  content:none!important;display:none!important
+}
+#practical .practical-item details{margin-top:clamp(6px,1.6svh,13px)!important}
+#practical .practical-item details summary{
+  display:inline-flex!important;align-items:center!important;
+  justify-content:center!important;
+  min-height:44px!important;
+  padding:9px 2px 5px!important;
+  color:#57364a!important;
+  background:transparent!important;
+  border:0!important;
+  border-bottom:1px solid rgba(91,56,75,.61)!important;
+  font:500 clamp(17px,4.4vw,20px)/1.2 var(--smallcaps)!important;
+  letter-spacing:.025em!important;
+  list-style:none!important;cursor:pointer;
+  text-decoration:none!important;
+}
+#practical .practical-item details summary::-webkit-details-marker{display:none!important}
+#practical .practical-item details summary::marker{content:""!important}
+#practical .practical-item details .practical-details{
+  margin-top:12px!important;
+}
+#practical .practical-item a:focus-visible,
+#practical .practical-item summary:focus-visible{
+  outline:2px solid #6b455b!important;outline-offset:3px!important;
+}
+#practical .practical-item.d03-practical-ready{
+  opacity:1;transform:none;
+}
+#practical .practical-item.d03-practical-ready.d03-practical-visible{
+  animation:d03PracticalIn 850ms cubic-bezier(.2,.76,.22,1) both!important;
+}
+@keyframes d03PracticalIn{
+  0%{opacity:.12;transform:translateY(18px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+/* Original four-fond gradient darkens near the last module when gallery
+   is absent. The author's safety override remains stronger there. */
+#practical.d03-four-practical-gradient .practical-item:nth-child(4) .practical-title,
+#practical.d03-four-practical-gradient .practical-item:nth-child(4) .practical-details,
+#practical.d03-four-practical-gradient .practical-item:nth-child(4) .practical-line,
+#practical.d03-four-practical-gradient .practical-item:nth-child(4) .location-links .link,
+#practical.d03-four-practical-gradient .practical-item:nth-child(4) summary{
+  color:#fff8ed!important;border-color:rgba(255,250,240,.74)!important;
+  text-shadow:0 1px 4px rgba(22,22,58,.8)!important;
+}
+@media(max-width:360px){
+ #practical{padding-top:max(210px,27svh)!important}
+ #practical .practical-title{font-size:clamp(41px,12vw,53px)!important}
+ #practical .practical-details{font-size:clamp(19px,5.3vw,22px)!important}
+ #practical #practical-items{gap:16px!important}
+ #practical .practical-item,
+ #practical .practical-item+.practical-item{width:94%!important;padding-inline:3px!important}
+ #practical .practical-item .location-links{gap:2px 10px!important}
+ #practical .practical-item .location-links .link,
+ #practical .practical-item details summary{font-size:16px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #practical .practical-item.d03-practical-ready.d03-practical-visible{
+   animation:none!important;opacity:1!important;transform:none!important;
+ }
+}
