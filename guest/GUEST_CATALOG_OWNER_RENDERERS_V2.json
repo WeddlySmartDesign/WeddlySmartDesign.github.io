@@ -17,6 +17,14 @@
       "applyApi": "BOTANICA_APPLY_CONFIG",
       "status": "certification-pending",
       "note": "No published asset URL; isolated local V14.7 master preserved in Library, do not invent a public URL"
+    },
+    "design-03": {
+      "id": "design-03",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending"
     }
   }
 }

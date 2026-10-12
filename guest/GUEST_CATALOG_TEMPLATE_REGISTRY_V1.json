@@ -44,6 +44,23 @@
       ],
       "defaultTypographyVariant": "classic",
       "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-03",
+      "displayName": "LIMONEROS",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
     }
   ]
 }

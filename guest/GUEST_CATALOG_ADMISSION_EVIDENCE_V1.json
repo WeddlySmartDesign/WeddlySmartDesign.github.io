@@ -90,6 +90,67 @@
           "why": "V14 visually approved; V14.7 technical changes require final Android check."
         }
       }
+    },
+    "design-03": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Not independently certified for design-03"
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Not independently certified for design-03"
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Not independently certified for design-03"
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Not independently certified for design-03"
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Not independently certified for design-03"
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Not independently certified for design-03"
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Not independently certified for design-03"
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Not independently certified for design-03"
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Not independently certified for design-03"
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Not independently certified for design-03"
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Not independently certified for design-03"
+        }
+      }
     }
   },
   "sharedBlockers": {
