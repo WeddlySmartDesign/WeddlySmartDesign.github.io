@@ -1,5 +1,10 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 93 — AGENDA: ENTRADA ESCALONADA REAL DE LOS MOMENTOS (12/10/2026)
+
+[**Diagnóstico, código y prueba temporal real en Chromium**](GUEST_ENTRY_93_D03_AGENDA_SEQUENTIAL_SCROLL_ANIMATION_2026-10-12.md). La autora indicó «No veo ningún movimiento» tras anteriores intentos CSS. **Corregido el disparador JS real**: observador de toda la escena, comienza al ser visible el 36%, un momento nuevo cada 560 ms y fade/subida de 900 ms, sin movimiento permanente. Si se abandona Agenda y se regresa, se reproduce de nuevo. **QA Chromium 38265776236 SUCCESS**, medición de opacidad a 140ms = [0.488,0,0,0,0], ~1.1s = [1,0.982,0.132,0,0], ~3.5s = [1,1,1,1,1]; regreso también comprobado. Respetar `prefers-reduced-motion`. HTML privado con cinco fotos de la autora guardado en Biblioteca `/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/LIMONEROS_D03_AGENDA_ENTRADA_SECUENCIAL_REAL_2026-10-12.html`. **Pendiente de aprobación artística de Agenda**; no confundir QA técnico con aprobación ni venta. Mantener como anterior Registro 92 de Lugar, no editar sus CTA ya validados.
+
+
 ## ENTRADA 92 — LUGAR: CTA MÁS DISCRETOS, SIN MÁS RONDAS INNECESARIAS (12/10/2026)
 
 [**Leer último cambio y siguiente microbloque**](GUEST_ENTRY_92_D03_LUGAR_DISCREET_CTA_ONE_PASS_2026-10-12.md). La autora aceptó foto fundida y pidió menos protagonismo a los botones; estaba cansada de tantas iteraciones. **Último ajuste aplicado al CSS REAL** (commit `7867cac2`): botones «Cómo llegar»/«Web» de menor anchura, contorno fino, prácticamente transparentes, tipografía smallcaps original 400, mínimo 44px pulsables, sin flechas/sombra. Prueba Chromium con fotos reales: 320/390/430, 3/3 PASS; CI sintético 9/9 PASS. HTML privado de revisión con las cinco fotos y esta variante está en Biblioteca `/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/LIMONEROS_D03_LUGAR_BOTONES_SUTILES_FINAL_2026-10-12.html`. **No declarar aprobación estética final; no pedir más revisiones de botones salvo solicitud expresa. Siguiente bloque: AGENDA**. NO SALE; foto y fuentes originales conservadas.
