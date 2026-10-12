@@ -107,10 +107,10 @@ function applyOptionalVisualPatch(stagedHtml,name,version,sourceSha){
  const css=fs.readFileSync(cssPath,'utf8'),js=fs.readFileSync(jsPath,'utf8');
  if(!css||!js||js.includes('</script>'))throw Error('INVALID_VISUAL_PATCH:'+name);
  let html=stagedHtml.toString('utf8');
- if((html.match(/<\\/style>/g)||[]).length!==1)throw Error('VISUAL_PATCH_STYLE_ANCHOR:'+name);
+ if(html.split('</style>').length!==2)throw Error('VISUAL_PATCH_STYLE_ANCHOR:'+name);
  const hook='window.GUEST_APPLY_CONFIG=render;';
  if(html.split(hook).length!==2)throw Error('VISUAL_PATCH_RENDER_HOOK:'+name);
- html=html.replace('</style>',css+'\\n</style>').replace(hook,hook+'\\n'+js);
+ html=html.replace('</style>',css+'\n</style>').replace(hook,hook+'\n'+js);
  return Buffer.from(html,'utf8');
 }
 const designs=[];
