@@ -30,6 +30,20 @@ La autora vio la parte central sosa, sin fotos ni galería, y sin los botones de
 Configurable en `skin.json`: `motif`, `motifIdle` (`rotate|float|flap|glow`) y `fx` (`doves|dust|butterflies|petals|rise`).
 Si un diseño ya registrado sigue `certification-pending`, se regenera con `--sync-catalog`, que actualiza su copia de catálogo y su SHA.
 
+## Identidad propia por diseño (revisión v3)
+
+Mismos módulos y mismos datos del cuestionario, pero cada piel tiene su **sistema editorial** (`templates/_skin-engine/skins.css`, activado con `layout` en `skin.json`, tipografías libres incrustadas con `fonts`):
+
+| Diseño | Tipografías | Tarjetas (sedes y detalles) | Agenda que avanza con el desplazamiento |
+| --- | --- | --- | --- |
+| Azulejo | TeX Gyre Chorus + Lora | azulejo con doble filete cobalto, esquinas de rombo e icono en medallón | línea punteada cobalto que se llena; rombos que se pintan |
+| Gala | Pinyon dorado + TeX Gyre Adventor + GFS Baskerville | laca negra con marco déco dorado de esquinas cortadas | eje central dorado, hora y momento a cada lado, rombos que brillan |
+| Invernadero | TeX Gyre Pagella cursiva + Poppins Light | paneles de cristal esmerilado; sedes con forma de ventana en arco | tallo verde que crece y hojas que brotan en cada momento |
+| Reflejo | Lora cursiva con reflejo animado en el agua | láminas con veladura y onda alrededor del icono | puntos que emiten ondas al encenderse |
+| Caja de música | Pinyon latón + TeX Gyre Bonum | placas de latón con tornillos y botones de latón | pentagrama con notas que se iluminan y laten |
+
+Las escenas interiores ya no ocupan una pantalla completa cada una (solo la primera y la última), así que desaparecen los huecos entre Lugar, Agenda y Detalles. Las palomas de Azulejo pasan de vez en cuando y aletean más despacio.
+
 ## Diseños registrados
 
 | ID | Nombre | Portada | Cierre |

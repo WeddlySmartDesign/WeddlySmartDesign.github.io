@@ -25,12 +25,19 @@ const v=skin.theme;const required=['paper','ink','soft','accent','line','btn','c
 for(const k of required)if(!v[k])throw new Error('skin.theme missing '+k);
 const vars=Object.entries(v).map(([k,x])=>`--${k}:${x};`).join('');
 const bg=list=>list.map(r=>JSON.stringify(dataUri(media(r)))).join(',');
-let html=fs.readFileSync(path.join(engineDir,'engine.html'),'utf8');
+let html=fs.readFileSync(path.join(engineDir,'engine.html'),'utf8').replace('/*SKINS_CSS*/',()=>fs.readFileSync(path.join(engineDir,'skins.css'),'utf8'));
+// Tipografías libres (OFL / GUST) incrustadas: solo las que usa cada piel.
+const FONTS={Pinyon:[['Pinyon.ttf','truetype',400,'normal']],Garamond:[['Garamond.woff','woff',400,'normal']],GaramondSC:[['GaramondSC.otf','opentype',400,'normal']],
+ Chorus:[['Chorus.otf','opentype',400,'normal']],Lora:[['Lora.ttf','truetype','400 700','normal'],['Lora-Italic.ttf','truetype','400 700','italic']],
+ Adventor:[['Adventor.otf','opentype',400,'normal']],Baskerville:[['Baskerville.otf','opentype',400,'normal']],
+ Pagella:[['Pagella.otf','opentype',400,'normal'],['Pagella-Italic.otf','opentype',400,'italic']],Poppins:[['Poppins-Light.ttf','truetype',300,'normal'],['Poppins.ttf','truetype',400,'normal']],
+ Bonum:[['Bonum.otf','opentype',400,'normal'],['Bonum-Italic.otf','opentype',400,'italic']]};
+function fontFaces(list){return [...new Set(list)].map(f=>{if(!FONTS[f])throw new Error('Unknown font '+f);return FONTS[f].map(([file,fmt,w,st])=>`@font-face{font-family:'${f}';src:url('${dataUri(path.join(engineDir,'fonts',file))}') format('${fmt}');font-weight:${w};font-style:${st};font-display:swap}`).join('\n')}).join('\n')}
 const rep={
  ID:skin.id,VERSION:skin.version,NAME:skin.displayName,NAME_UPPER:skin.displayName.toUpperCase(),TAP_LABEL:skin.tapLabel||'Toca para abrir',
  THEME_VARS:vars,COVER_TEXT_POS:skin.coverTextPosition,CLOSING_TEXT_POS:skin.closingTextPosition||'bottom:max(5svh,calc(env(safe-area-inset-bottom) + 14px))',CLOSING_SCRIM:skin.closingScrimPosition||'bottom:0;height:52%;background:var(--closing-scrim)',COVER_SCRIM:skin.coverScrim,
  COVER_TEXT_AT:String(Number(skin.coverTextAt)),CLOSING_TEXT_AT:String(Number(skin.closingTextAt)),
- FONT_SCRIPT:dataUri(path.join(engineDir,'fonts/Pinyon.ttf')),FONT_SERIF:dataUri(path.join(engineDir,'fonts/Garamond.woff')),FONT_SC:dataUri(path.join(engineDir,'fonts/GaramondSC.otf')),
+ FONT_FACES:fontFaces(['Pinyon','Garamond','GaramondSC',...(skin.fonts||[])]),LAYOUT:skin.layout||'base',
  COVER_VIDEO:dataUri(media(skin.media.coverVideo)),COVER_POSTER:poster(skin.media.coverVideo),
  CLOSING_VIDEO:dataUri(media(skin.media.closingVideo)),CLOSING_POSTER:poster(skin.media.closingVideo),
  BG5:bg(skin.media.backgrounds5),

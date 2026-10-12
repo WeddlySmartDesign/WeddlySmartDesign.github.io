@@ -55,5 +55,10 @@
   "count": 36
  },
  "motif": "skin-assets/motif.webp",
- "motifIdle": "rotate"
+ "motifIdle": "rotate",
+ "layout": "gala",
+ "fonts": [
+  "Adventor",
+  "Baskerville"
+ ]
 }

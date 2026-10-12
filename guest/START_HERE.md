@@ -1,5 +1,9 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 103 — D04–D08: CADA DISEÑO CON IDENTIDAD PROPIA (12/10/2026)
+
+La autora pidió que no fueran idénticos por dentro, sin huecos, con una agenda que avance y unos detalles que no sean una lista con botones genéricos. Ahora cada piel tiene tipografías, tarjetas, botones y una agenda propias que avanzan con el desplazamiento: Azulejo cerámico, Gala déco de laca y oro, Invernadero de cristal y tallo, Reflejo con títulos reflejados y ondas, Caja de música de latón y pentagrama. Las escenas centrales se ajustan a su contenido y las palomas aparecen con menos frecuencia. Tabla en [GUEST_SKIN_ENGINE_D04_D08_2026-10-12.md](GUEST_SKIN_ENGINE_D04_D08_2026-10-12.md). Matriz **460/460 PASS**. Pendiente: aprobación de la autora, backend TEST y pedidos reales. NO SALE.
+
 ## ENTRADA 102 — D04–D08: PARTE CENTRAL PREMIUM + DEMO COMPLETA CON FOTOS (12/10/2026)
 
 Tras los vídeos Android de la autora («la parte central se queda sosa; faltan fotos de pareja y lugar, la galería y los botones de los campos»), corregido **una vez en el motor común** para los cinco diseños: vista de revisión por defecto con el escenario máximo y fotos de ejemplo (en pedidos reales solo se pinta el cuestionario), titulares que se escriben con filete dibujado, entradas escalonadas, fotos que aparecen desde desenfoque, sello animado del adorno de cada diseño y ambiente propio (palomas, polvo dorado, mariposas, pétalos, motas de luz). Detalle en [GUEST_SKIN_ENGINE_D04_D08_2026-10-12.md](GUEST_SKIN_ENGINE_D04_D08_2026-10-12.md). Matriz sintética de nuevo **460/460 PASS**. Sigue pendiente la aprobación visual de la autora, el backend TEST y los pedidos reales. NO SALE.

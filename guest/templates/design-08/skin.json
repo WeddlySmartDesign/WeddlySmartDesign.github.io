@@ -55,5 +55,9 @@
   "count": 30
  },
  "motif": "skin-assets/motif.webp",
- "motifIdle": "glow"
+ "motifIdle": "glow",
+ "layout": "caja",
+ "fonts": [
+  "Bonum"
+ ]
 }

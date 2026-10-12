@@ -66,5 +66,9 @@
   ]
  },
  "motif": "skin-assets/motif.webp",
- "motifIdle": "float"
+ "motifIdle": "float",
+ "layout": "reflejo",
+ "fonts": [
+  "Lora"
+ ]
 }

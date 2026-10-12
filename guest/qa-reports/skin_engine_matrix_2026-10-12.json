@@ -33,38 +33,38 @@
   "design-04": {
    "displayName": "AZULEJO",
    "version": "1.0.0",
-   "masterSha256": "730068e1a3bbb002ff89000c1327f3be12e1dc3f9b70995af30e28eced6505d5",
+   "masterSha256": "3f99cadf53609121a54c6385c5f43f056c76fb698adede42cc8bcc8b326b00d6",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-05": {
    "displayName": "GALA",
    "version": "1.0.0",
-   "masterSha256": "49e486898e42cce04dba230c1e65c2c9fd01c80b4d4874b92af98519f30eae47",
+   "masterSha256": "9998bbe9c97304025f76bf50b0ad3d1390a6647db02c9803ddf3915d81520777",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-06": {
    "displayName": "INVERNADERO",
    "version": "1.0.0",
-   "masterSha256": "9acb0ab20741c8a0995a6f5224dd72c70feb5dbf428e075b38b25e12c8f0b952",
+   "masterSha256": "8439f9e3e29790bb98576df687fa03555a4b94823932e834816234829dcd6b69",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-07": {
    "displayName": "REFLEJO",
    "version": "1.0.0",
-   "masterSha256": "7a1fc3a292e74e3225387bc0a72efadecd472a540c7bcf90e9c13b81dcd79fd1",
+   "masterSha256": "607b2cce7e13e454b7c08f2e727f522053d845c8a7d6f405c7c88bcc2ef6997a",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-08": {
    "displayName": "CAJA DE MÚSICA",
    "version": "1.0.0",
-   "masterSha256": "868cf28536705c5363795c1ca4a0588f7420961736df48a0052df8b2999b6bc7",
+   "masterSha256": "b30c6fea03fceffae157e314f9be99fdf822480dd77531a468601baad88bc155",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   }
  },
- "revision": "v2: movimiento premium en escenas interiores, sello y ambiente por piel, demo completa con fotos de ejemplo"
+ "revision": "v3: identidad propia por diseño (tipografías, tarjetas, agenda que avanza con el desplazamiento), sin huecos entre escenas"
 }
