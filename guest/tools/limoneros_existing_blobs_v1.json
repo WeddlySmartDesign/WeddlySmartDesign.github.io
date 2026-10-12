@@ -1,0 +1,204 @@
+{
+  "schemaVersion": "guest-existing-blob-transfer-v1",
+  "id": "design-03",
+  "version": "1.0.0",
+  "masterBytes": 28673474,
+  "masterSha256": "a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482",
+  "parts": [
+    {
+      "name": "001.txt",
+      "bytes": 750000,
+      "gitBlobSha": "f72b94d6bb2bb829ff2c74d493e27600d0e2fe16"
+    },
+    {
+      "name": "002.txt",
+      "bytes": 750000,
+      "gitBlobSha": "ed37f6c159e1d43ba746a7ffa11f837e918e5236"
+    },
+    {
+      "name": "003.txt",
+      "bytes": 750000,
+      "gitBlobSha": "4fafc460c99f912dbbcbc62209128ff45f2b160b"
+    },
+    {
+      "name": "004.txt",
+      "bytes": 750000,
+      "gitBlobSha": "79143175494345fd2ca7b42ee7babac63e747c99"
+    },
+    {
+      "name": "005.txt",
+      "bytes": 750000,
+      "gitBlobSha": "1c9379a67e4b9fecabf4e357a79b517840d3405b"
+    },
+    {
+      "name": "006.txt",
+      "bytes": 750000,
+      "gitBlobSha": "ad0e6a4dafcf30c73f3258d7a1260dbe05d6ecd2"
+    },
+    {
+      "name": "007.txt",
+      "bytes": 750000,
+      "gitBlobSha": "4484d36755835ddf1af87145929da82bc4d7825c"
+    },
+    {
+      "name": "008.txt",
+      "bytes": 750000,
+      "gitBlobSha": "a3f9240d08f45eac8597e904d5b2d97371db23a5"
+    },
+    {
+      "name": "009.txt",
+      "bytes": 750000,
+      "gitBlobSha": "943e07c2a1016fe552033d15b9b8bf4b368e46cc"
+    },
+    {
+      "name": "010.txt",
+      "bytes": 750000,
+      "gitBlobSha": "07f9408f0486b5dd3f655310c78a143969948e25"
+    },
+    {
+      "name": "011.txt",
+      "bytes": 750000,
+      "gitBlobSha": "268994251fe5cb76c00e2ace9536dd67ec2e371c"
+    },
+    {
+      "name": "012.txt",
+      "bytes": 750000,
+      "gitBlobSha": "8275aa587b477b19f3b3f006d56467ba80add343"
+    },
+    {
+      "name": "013.txt",
+      "bytes": 750000,
+      "gitBlobSha": "20a9383cf601fdca8b17ff48b51b7db94309806b"
+    },
+    {
+      "name": "014.txt",
+      "bytes": 750000,
+      "gitBlobSha": "fef4620fa4e274316de3a2878d5af9ae87c0a1c8"
+    },
+    {
+      "name": "015.txt",
+      "bytes": 750000,
+      "gitBlobSha": "055aa188241d069f11354b76fddb8ec73a07b0b2"
+    },
+    {
+      "name": "016.txt",
+      "bytes": 750000,
+      "gitBlobSha": "d180c2194d4f879647bdc73292bcd05171336f6b"
+    },
+    {
+      "name": "017.txt",
+      "bytes": 750000,
+      "gitBlobSha": "4f58b94f8a033ababa3d5cf3785106fd75ed4154"
+    },
+    {
+      "name": "018.txt",
+      "bytes": 750000,
+      "gitBlobSha": "460b516391502bf50dca624103e734b415d92066"
+    },
+    {
+      "name": "019.txt",
+      "bytes": 750000,
+      "gitBlobSha": "31fcbe72c26b0b3e34b496d88d1472ef47e5a225"
+    },
+    {
+      "name": "020.txt",
+      "bytes": 750000,
+      "gitBlobSha": "7406f10a457371cd7dcfe1bc1e3c4037fabf98c0"
+    },
+    {
+      "name": "021.txt",
+      "bytes": 750000,
+      "gitBlobSha": "6ce7b05bcb2bff850dd9dcdbd2497643b68d509d"
+    },
+    {
+      "name": "022.txt",
+      "bytes": 750000,
+      "gitBlobSha": "9ad43cd8a8f35bec0ff80cc1fa970599813422f3"
+    },
+    {
+      "name": "023.txt",
+      "bytes": 750000,
+      "gitBlobSha": "ee1661af804e303b8a340096e04685c747f01d74"
+    },
+    {
+      "name": "024.txt",
+      "bytes": 750000,
+      "gitBlobSha": "0688b3e5152310996401f1813621cc322d25de4b"
+    },
+    {
+      "name": "025.txt",
+      "bytes": 750000,
+      "gitBlobSha": "06c8b1606de5c1bb0d7c344dfc691fc0152eea93"
+    },
+    {
+      "name": "026.txt",
+      "bytes": 750000,
+      "gitBlobSha": "34da13e7b5539b9fd538cb9ecac48908964df8eb"
+    },
+    {
+      "name": "027.txt",
+      "bytes": 750000,
+      "gitBlobSha": "00c0a8cf305eb7d7706742b7996549cd14396113"
+    },
+    {
+      "name": "028.txt",
+      "bytes": 750000,
+      "gitBlobSha": "e2581ea49ed9565d6b23a0c61d549cfe8987f197"
+    },
+    {
+      "name": "029.txt",
+      "bytes": 750000,
+      "gitBlobSha": "fb43449d6690df88a308c9afaff727e10b0aa7a7"
+    },
+    {
+      "name": "030.txt",
+      "bytes": 750000,
+      "gitBlobSha": "b972763745e80e2dd5fc6887efbd83e0688514bd"
+    },
+    {
+      "name": "031.txt",
+      "bytes": 750000,
+      "gitBlobSha": "7346bdcc9c1fe8817bb3e4d0f936209d6dac6bf7"
+    },
+    {
+      "name": "032.txt",
+      "bytes": 750000,
+      "gitBlobSha": "bb92145d2a22a60d305acf5540ed9c99e11cfe65"
+    },
+    {
+      "name": "033.txt",
+      "bytes": 750000,
+      "gitBlobSha": "889c70f3ddf3a5aec20ad2a98827be2520432385"
+    },
+    {
+      "name": "034.txt",
+      "bytes": 750000,
+      "gitBlobSha": "76d698cd0b487804975bb5854235a918f0e3b35b"
+    },
+    {
+      "name": "035.txt",
+      "bytes": 750000,
+      "gitBlobSha": "35fc476fcd39a185dc6c54af64e38a7b7f03860f"
+    },
+    {
+      "name": "036.txt",
+      "bytes": 750000,
+      "gitBlobSha": "295691b830358f9ed5a3cd19026c204d3f18184a"
+    },
+    {
+      "name": "037.txt",
+      "bytes": 750000,
+      "gitBlobSha": "eeace19a16b8dbc458bce4ec65a88849452a960c"
+    },
+    {
+      "name": "038.txt",
+      "bytes": 750000,
+      "gitBlobSha": "a5d731077abc333046d7b133ab6b2feaf898c9d9"
+    },
+    {
+      "name": "039.txt",
+      "bytes": 173474,
+      "gitBlobSha": "277cd0aefce9ff4d2389d3fb7d27f3244d60b5e4"
+    }
+  ]
+}
