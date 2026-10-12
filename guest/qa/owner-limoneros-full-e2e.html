@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src https://dnjsxequwgtyyauuofxj.supabase.co; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>GUEST · Certificación RSVP de Limoneros</title>
+<style>body{background:#f6f1eb;color:#3f3028;font:16px/1.52 system-ui,Arial,sans-serif;margin:0;padding:22px}*{box-sizing:border-box}main{max-width:540px;margin:auto}h1{font:400 36px Georgia,serif;line-height:1.13}h2{font:400 23px Georgia,serif}p{line-height:1.6}.card{background:#fff;padding:20px;border-radius:16px;border:1px solid #e3d8c9;margin:14px 0}label{display:block;font-weight:700;margin:15px 0 7px}input{width:100%;padding:14px;font:inherit;min-height:50px;border:1px solid #c9beb1;border-radius:10px}button{display:block;width:100%;padding:15px;border:0;border-radius:10px;background:#433329;color:white;font:bold 16px system-ui;min-height:50px;margin:15px 0;cursor:pointer}button:disabled{opacity:.5;cursor:default}.muted,small{color:#74695e}.ok{color:#245c38;font-weight:700}.err{color:#9f302b;font-weight:700}.log{white-space:pre-wrap;font-size:14px;background:#f1ece5;padding:14px;border-radius:9px;max-height:250px;overflow:auto}a{color:#624633;word-break:break-word}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid #aa815c}</style></head>
+<body><main>
+<p class="muted">GUEST by WeddlySmartDesign · Certificación privada</p>
+<h1>Limoneros: respuestas y gestión</h1>
+<p>Esta prueba crea y verifica <strong>dos pedidos TEST reales de Limoneros</strong> en Supabase: uno reducido y otro completo con fotografías sintéticas. Comprueba revisión, entrega, paridad, dos RSVP y gestión. Solo utiliza datos ficticios: no cobra, no envía correos y no publica fotografías privadas.</p>
+<section class="card"><h2>Autorización de la propietaria</h2>
+<label for="code">Código de propietaria del Centro GUEST</label>
+<input id="code" type="password" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Código que ya tienes">
+<button id="run" type="button">Ejecutar certificación Limoneros (solo TEST)</button>
+<small>No compartas el código en el chat. Solo se envía al servicio oficial de autenticación.</small></section>
+<section class="card" aria-live="polite"><h2>Resultado</h2><p id="status">Sin ejecutar.</p><div id="log" class="log">Pendiente de autorización.</div><div id="links"></div></section>
+<p class="muted"><small>El enlace de cada invitación contiene tokens privados de prueba. No lo envíes a invitados reales. Si se interrumpe, no vuelvas a pulsar inmediatamente: consulta el resultado para evitar acciones repetidas.</small></p>
+</main>
+<script>
+(()=>{'use strict';
+const ROOT='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/';
+const OWNER=ROOT+'weddly-owner-manager',LICENSE=ROOT+'guest-license-access',FLOW=ROOT+'guest-invitation-flow',STATE=ROOT+'guest-state',ENSURE=ROOT+'guest-rsvp-ensure',RSVP=ROOT+'guest-rsvp';
+const HOST='https://guest-weddlysmartdesign.pages.dev';
+const LABEL='GUEST QA LIMONEROS E2E 2026-10-12',EMAIL='qa-limoneros-full@example.invalid',EMAIL_MIN='qa-limoneros-minimal@example.invalid';
+const WEDDING_GUESTS={
+ 'qa-limoneros-person-1':{name:'QA Persona Uno',invitationUnitId:'qa-limoneros-unit-1',invitationUnitLabel:'Familia QA Limoneros'},
+ 'qa-limoneros-person-2':{name:'QA Persona Dos',invitationUnitId:'qa-limoneros-unit-1',invitationUnitLabel:'Familia QA Limoneros'}
+};
+const el=id=>document.getElementById(id),status=el('status'),log=el('log'),links=el('links'),button=el('run'),field=el('code');
+let running=false;
+const msg=(s)=>{log.textContent+=(log.textContent==='Pendiente de autorización.'?'':'\n')+s;log.scrollTop=log.scrollHeight};
+const errorText=e=>String(e?.message||e||'Error').slice(0,150).replace(/v1\.[A-Za-z0-9_-]+\.[a-f0-9]{64}/g,'[código protegido]');
+async function request(url,{method='POST',body,manager,member}={}){
+ const headers={};if(body!==undefined)headers['content-type']='application/json';
+ if(manager)headers['x-weddly-manager']=manager;if(member)headers['x-weddly-token']=member;
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),30000);
+ try{
+  const res=await fetch(url,{method,headers,body:body===undefined?undefined:JSON.stringify(body),cache:'no-store',redirect:'error',signal:controller.signal});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok||data.ok!==true)throw Error(String(data.error||'HTTP '+res.status));
+  return data;
+ }finally{clearTimeout(timer)}
+}
+async function oneTimeLicense(manager){
+ const all=await request(OWNER,{body:{action:'list'},manager});
+ const existing=(all.testers||[]).filter(t=>t.label===LABEL&&t.product==='guests'&&t.status==='active'&&!t.expired).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)))[0];
+ if(existing){
+  msg('Licencia GUEST TEST existente encontrada; no se crea otra.');
+  const reused=await request(OWNER,{body:{action:'reissue',licenseId:existing.id},manager});
+  const link=new URL(reused.testerLink);
+  const encoded=link.hash.startsWith('#tester=')?link.hash.slice(8):'';
+  if(!encoded)throw Error('No se ha podido recuperar el acceso de prueba');
+  return{licenseId:existing.id,activationCode:decodeURIComponent(encoded)};
+ }
+ msg('Creando una sola licencia GUEST TEST válida 7 días…');
+ const grant=await request(OWNER,{body:{action:'grant',product:'guests',kind:'7',label:LABEL},manager});
+ if(!grant.licenseId||!grant.activationCode)throw Error('No se recibió la licencia TEST');
+ return{licenseId:grant.licenseId,activationCode:grant.activationCode};
+}
+function validateOrder(data){
+ const o=data.order||{},u=new URL(o.delivery_url||'');
+ if(o.mode!=='test'||o.status!=='delivered'||o.template_id!=='design-03'||
+    String(o.buyer_email||'')!==EMAIL||u.origin!==HOST||
+    u.pathname!=='/guest/catalog-final.html'||u.searchParams.get('p')!==o.publicToken)
+    throw Error('El pedido existente no supera las comprobaciones de seguridad');
+ return o;
+}
+
+/* All durable test data is synthetic. Order credentials live only in JS memory.
+   This routine NEVER calls create_paid, Stripe, or any production mode. */
+function scenario(full){
+ const couple={name1:full?'QA Limonera':'QA Nerea',name2:full?'QA Limonero':'QA Hugo',
+  date:'2027-09-18',coverPlaceEnabled:true,coverPlace:'Murcia',coverTimeEnabled:false,
+  typographyVariant:'classic'};
+ const locations=full?{mode:'split',
+   ceremony:{name:'Jardín QA',time:'18:00',address:'Murcia',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia',websiteUrl:'https://example.com/ceremonia'},
+   celebration:{name:'Finca QA',time:'20:00',address:'Murcia',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia',websiteUrl:'https://example.com/celebracion'},
+   dressCodeEnabled:true,dressCode:'Elegante'}
+  :{mode:'shared',shared:{name:'Jardín de prueba',time:'18:30',address:'Murcia',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia'},dressCodeEnabled:false};
+ return{couple,
+  story:{enabled:true,textMode:full?'none':'preset',presetId:'story-03'},
+  locations,
+  agenda:{enabled:full,moments:full?[
+    {time:'18:00',label:'Ceremonia'},{time:'19:15',label:'Cóctel'},
+    {time:'21:00',label:'Cena'},{time:'23:30',label:'Baile'},
+    {time:'02:00',label:'Último baile'}]:[]},
+  practical:full?{
+    bus:{enabled:true,pickupPoints:['Centro QA'],outboundTimes:['17:00'],returnTimes:['02:30'],note:'Trayecto de demostración'},
+    accommodation:{enabled:true,mode:'recommended',name:'Hotel QA',websiteUrl:'https://example.com/hotel',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia'},
+    gift:{enabled:true,mode:'short_text',message:'Vuestra presencia es nuestro regalo',displayText:'Vuestra compañía'},
+    playlist:{enabled:true,mode:'guest_request',prompt:'¿Qué canción no puede faltar?',url:'https://example.com/pedir-cancion'}
+  }:{
+    bus:{enabled:false},accommodation:{enabled:false,mode:'none'},
+    gift:{enabled:false,mode:'none'},playlist:{enabled:false,mode:'none'}
+  },
+  gallery:{enabled:full},countdown:{enabled:true},
+  closing:{mode:'custom',customLine:'Os esperamos con ilusión'},
+  confirmation:{reviewed:true}
+ };
+}
+async function fakePhoto(slot){
+ const c=document.createElement('canvas');c.width=1080;c.height=720;
+ const ctx=c.getContext('2d'),g=ctx.createLinearGradient(0,0,c.width,c.height);
+ g.addColorStop(0,'#d1b9b1');g.addColorStop(1,'#819a91');
+ ctx.fillStyle=g;ctx.fillRect(0,0,c.width,c.height);
+ ctx.fillStyle='#383440';ctx.font='44px Georgia';ctx.fillText('GUEST TEST · foto sintética',90,170);
+ ctx.font='28px Georgia';ctx.fillText(slot,90,226);
+ const blob=await new Promise(ok=>c.toBlob(ok,'image/png'));
+ if(!blob)throw Error('No se pudo generar la foto QA');
+ return new File([blob],slot+'.png',{type:'image/png'});
+}
+async function uploadTestPhoto(token,slot){
+ const data=new FormData();data.append('action','upload');data.append('token',token);data.append('slot',slot);
+ data.append('file',await fakePhoto(slot));
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),45000);
+ try{
+  const response=await fetch(FLOW,{method:'POST',body:data,cache:'no-store',redirect:'error',signal:controller.signal});
+  const result=await response.json().catch(()=>({}));
+  if(!response.ok||result.ok!==true)throw Error(result.error||'photo_upload_failed');
+  return result;
+ }finally{clearTimeout(timer)}
+}
+function canonicalConfig(value){
+ const clone=JSON.parse(JSON.stringify(value||{}));
+ function visit(node){
+  if(!node||typeof node!=='object')return;
+  if(node.src&&typeof node.src==='string'){
+   try{const u=new URL(node.src);if(u.pathname.includes('/storage/v1/object/sign/')){
+     node.src=u.origin+u.pathname;
+   }}catch{}
+  }
+  for(const v of Object.values(node))visit(v);
+ }
+ visit(clone);return JSON.stringify(clone);
+}
+async function ensureOneOrder(manager,full){
+ const email=full?EMAIL:EMAIL_MIN;
+ const all=await request(FLOW,{body:{action:'list'},manager});
+ const candidate=(all.orders||[]).filter(o=>o.templateId==='design-03'&&o.mode==='test'&&o.buyerEmail===email)
+  .sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)))[0];
+ let order=candidate?(await request(FLOW,{body:{action:'detail',orderId:candidate.id},manager})).order:null;
+ if(!order){
+  const created=await request(FLOW,{body:{action:'create_test',templateId:'design-03',email},manager});
+  order=(await request(FLOW,{body:{action:'detail',orderId:created.id},manager})).order;
+  msg((full?'Completo':'Reducido')+': pedido TEST real creado.');
+ }else msg((full?'Completo':'Reducido')+': se recupera el mismo pedido TEST, sin duplicarlo.');
+ const id=order.id;
+ async function detail(){order=(await request(FLOW,{body:{action:'detail',orderId:id},manager})).order}
+ const qToken=order.questionnaireToken,rToken=order.reviewToken,pToken=order.publicToken;
+ if(!qToken||!rToken||!pToken)throw Error('Faltan las tres capacidades privadas de prueba');
+ if(order.status==='draft'){
+  const questionnaire=scenario(full);
+  await request(FLOW,{body:{action:'save',token:qToken,questionnaire}});
+  if(full){
+   const wanted=['story','venue','gallery-1','gallery-2','gallery-3','gallery-4'];
+   const loaded=await request(FLOW,{body:{action:'load',token:qToken}});
+   const already=new Set((loaded.order?.files||[]).map(f=>f.slot));
+   for(const slot of wanted)if(!already.has(slot)){
+    await uploadTestPhoto(qToken,slot);
+    msg('Foto QA sintética '+slot+' subida.');
+   }
+  }
+  await request(FLOW,{body:{action:'submit',token:qToken,questionnaire}});
+  await detail();
+ }
+ if(order.status==='submitted'){
+  await request(FLOW,{body:{action:'start_design',orderId:id},manager});await detail();
+ }
+ if(order.status==='designing'){
+  await request(FLOW,{body:{action:'mark_review_ready',orderId:id},manager});await detail();
+ }
+ if(order.status==='review_ready'){
+  const sent=await request(FLOW,{body:{action:'send_review',orderId:id},manager});
+  if(sent.localTest!==true)throw Error('La revisión no ha sido marcada como TEST');
+  await detail();
+ }
+ if(order.status==='review_sent'){
+  const rev=await request(FLOW,{body:{action:'review_load',token:rToken}});
+  if(rev.order?.config?.template?.id!=='design-03')throw Error('Review renderiza diseño equivocado');
+  await request(FLOW,{body:{action:'review_respond',token:rToken,decision:'approve'}});
+  await detail();
+ }
+ if(order.status==='approved'){
+  const url=HOST+'/guest/catalog-final.html?p='+encodeURIComponent(pToken);
+  await request(FLOW,{body:{action:'deliver',orderId:id,invitationUrl:url},manager});
+  await detail();
+ }
+ if(order.status!=='delivered'||order.mode!=='test'||order.template_id!=='design-03')throw Error('No se obtuvo entrega TEST de Limoneros');
+ const review=await request(FLOW,{body:{action:'review_load',token:rToken}});
+ const final=await request(FLOW,{body:{action:'public_load',token:pToken}});
+ const a=review.order?.config,b=final.order?.config;
+ if(a?.template?.id!=='design-03'||b?.template?.id!=='design-03')throw Error('Paridad de template rota');
+ if(canonicalConfig(a)!==canonicalConfig(b))throw Error('Paridad real REVIEW / FINAL FAIL');
+ if(full){
+  if(a?.locations?.items?.length!==2||a?.agenda?.moments?.length!==5||a?.gallery?.photos?.length!==4)
+   throw Error('El pedido completo pierde lugares, momentos o fotos');
+  if(a?.practical?.playlist?.mode!=='guest_request')throw Error('Backend convirtió Pedir canción en playlist de escucha');
+  if(a?.practical?.accommodation?.mode!=='recommended')throw Error('Hotel debe respetar cuestionario');
+  if(a?.practical?.playlist?.url!=='https://example.com/pedir-cancion')throw Error('URL de canciones alterada');
+ }else{
+  if(a?.locations?.items?.length!==1||a?.gallery?.enabled||a?.agenda?.enabled)
+    throw Error('Pedido reducido crea secciones no elegidas');
+ }
+ const url=order.delivery_url||HOST+'/guest/catalog-final.html?p='+encodeURIComponent(pToken);
+ if(!url.startsWith(HOST+'/guest/catalog-final.html?p='))throw Error('La URL de entrega no está en el host TEST autorizado');
+ msg((full?'Completo':'Reducido')+': pedido entregado, review/final iguales, opciones comprobadas. PASS.');
+ return {order,publicToken:pToken,url};
+}
+async function ensureOrders(manager){
+ // Fail-closed paid order guard. This request never inserts: the backend
+ // rejects TEST-only design-03 before selecting any purchase/license.
+ let rejected=false;
+ try{await request(FLOW,{body:{action:'create_paid',templateId:'design-03',licenseId:'00000000-0000-0000-0000-000000000000'},manager})}
+ catch(e){rejected=String(e.message).includes('template_test_only')}
+ if(!rejected)throw Error('FALLO CRÍTICO: el backend no bloquea venta de Limoneros');
+ msg('Venta de Limoneros bloqueada en backend: PASS.');
+ const minimal=await ensureOneOrder(manager,false);
+ const full=await ensureOneOrder(manager,true);
+ return{minimal,full};
+}
+async function findOrder(manager,licenseId){
+ const listed=await request(FLOW,{body:{action:'list'},manager});
+ const candidates=(listed.orders||[]).filter(o=>o.mode==='test'&&o.status==='delivered'&&o.templateId==='design-03'&&o.buyerEmail===EMAIL).sort((a,b)=>String(b.deliveredAt).localeCompare(String(a.deliveredAt)));
+ for(const candidate of candidates){
+  const details=await request(FLOW,{body:{action:'detail',orderId:candidate.id},manager});
+  const order=validateOrder(details);
+  if(order.license_id===licenseId)return order;
+  if(!order.license_id)return order;
+ }
+ throw Error('No hay pedidos Limoneros TEST entregados para asociar al gestor');
+}
+function showLink(label,u){const p=document.createElement('p'),a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noreferrer noopener';a.textContent=label;p.append(a);links.append(p)}
+async function run(){
+ if(running)return;
+ const code=field.value.trim();
+ if(code.length<20){status.textContent='Introduce el código completo de propietaria.';status.className='err';return}
+ running=true;button.disabled=true;log.textContent='';links.replaceChildren();status.textContent='Validando autorización…';status.className='';
+ let manager='',member='',activation='';
+ try{
+  const auth=await request(OWNER,{body:{action:'login',recoveryCode:code}});field.value='';
+  manager=auth.managerToken;
+  if(!manager?.startsWith('v1.'))throw Error('La sesión de propietaria no es válida');
+  await request(FLOW,{body:{action:'status'},manager});msg('Autorización de propietaria: OK.');
+  const proven=await ensureOrders(manager);
+  showLink('Pedido reducido entregado · Limoneros',new URL(proven.minimal.url));
+  showLink('Pedido completo entregado · Limoneros',new URL(proven.full.url));
+  const licensed=await oneTimeLicense(manager);activation=licensed.activationCode;
+  const access=await request(LICENSE,{body:{action:'activate',activationCode:activation}});
+  activation='';member=access.memberToken;
+  if(!member||!access.weddingId)throw Error('Fallo al activar la boda ficticia de GUEST');
+  msg('Boda GUEST TEST activada (sin costes).');
+  const order=await findOrder(manager,licensed.licenseId);
+  const link=await request(FLOW,{body:{action:'link_test_license',orderId:order.id,licenseId:licensed.licenseId},manager});
+  if(link.status!=='linked_test_guest_management'&&link.alreadyLinked!==true)throw Error('No se enlazó la invitación');
+  msg('Pedido Limoneros TEST asociado a la licencia de gestión correcta.');
+  const got=await request(STATE,{method:'GET',member});
+  const old=got.state&&typeof got.state==='object'&&!Array.isArray(got.state)?got.state:{};
+  const guests={...(old.guests||{})};
+  for(const [id,v] of Object.entries(WEDDING_GUESTS))guests[id]={...(guests[id]||{}),...v};
+  await request(STATE,{method:'PUT',member,body:{version:got.version||0,state:{...old,guests}}});
+  const ensured=await request(ENSURE,{body:{},member});
+  if(!ensured.publicToken)throw Error('No se obtuvo el formulario RSVP de prueba');
+  msg('Dos invitados ficticios y su unidad preparados.');
+  const active=await request(FLOW,{body:{action:'active_for_member'},member});
+  if(!active.active||active.invitation?.orderId!==order.id)throw Error('La gestión no encuentra el pedido correcto');
+  const base=new URL(active.invitation.shareBaseUrl);
+  if(base.origin!==HOST||base.pathname!=='/guest/catalog-final.html')throw Error('El dominio final no coincide');
+  const token=ensured.publicToken;
+  const single=new URL(base.href);single.searchParams.set('rt',token);single.searchParams.set('g','qa-limoneros-person-1');single.searchParams.set('lang','es');
+  const family=new URL(base.href);family.searchParams.set('rt',token);family.searchParams.set('u','qa-limoneros-unit-1');family.searchParams.set('lang','es');
+  const qs=new URLSearchParams({token,guest:'qa-limoneros-person-1'});
+  const prePerson=await request(RSVP+'?'+qs.toString(),{method:'GET'});
+  const qu=new URLSearchParams({token,unit:'qa-limoneros-unit-1'});
+  const preUnit=await request(RSVP+'?'+qu.toString(),{method:'GET'});
+  if(prePerson.guest?.id!=='qa-limoneros-person-1'||preUnit.unit?.members?.length!==2)throw Error('Destinatarios de RSVP incorrectos');
+  for(const [id,name,attend] of [['qa-limoneros-person-1','QA Persona Uno',true],['qa-limoneros-person-2','QA Persona Dos',false]]){
+   await request(RSVP,{body:{action:'submit',token,guest_key:id,name,attend,client_submission_id:'guest-limoneros-qa-20261012-'+id}});
+  }
+  msg('Confirmaciones individuales: enviadas en el RSVP real.');
+  const managed=await request(RSVP+'?manage=1',{method:'GET',member});
+  const all=Array.isArray(managed.submissions)?managed.submissions:[];
+  for(const id of Object.keys(WEDDING_GUESTS)){
+   if(!all.some(x=>x.guest_key===id&&x.form_id===ensured.formId))throw Error('La respuesta '+id+' no aparece en gestión');
+  }
+  const readback=await request(STATE,{method:'GET',member});
+  if(readback.state?.guests?.['qa-limoneros-person-1']?.rsvp!=='confirmed'||
+     readback.state?.guests?.['qa-limoneros-person-2']?.rsvp!=='declined')
+    throw Error('La asistencia no se ha propagado a la gestión de invitados');
+  msg('Gestión real: dos respuestas y estados guardados y recuperados. PASS.');
+  showLink('Abrir invitación TEST · persona',single);
+  showLink('Abrir invitación TEST · unidad de dos',family);
+  status.textContent='RSVP y gestión GUEST TEST: prueba completa superada. Guarda una captura de este resultado sin URLs.';status.className='ok';
+ }catch(e){status.textContent='Prueba no terminada: '+errorText(e);status.className='err';msg('Error: '+errorText(e));}
+ finally{activation='';member='';manager='';field.value='';running=false;button.disabled=false;status.scrollIntoView({behavior:'smooth',block:'start'})}
+}
+button.addEventListener('click',run);
+})();
+</script></body></html>
