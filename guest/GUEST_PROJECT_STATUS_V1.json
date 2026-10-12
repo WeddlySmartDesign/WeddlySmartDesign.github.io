@@ -319,7 +319,7 @@
       "backendGuardVerified": true,
       "backendTestDeploymentEvidence": "guest/GUEST_ENTRY_83_D03_LIMONEROS_LIVE_VERIFIED_BACKEND_TEST_V19_2026-10-12.md",
       "backendRealE2eVerified": false,
-      "checkpoint": "guest/GUEST_ENTRY_100_D03_GALLERY_CLOSING_APPROVAL_VIDEO_LOOP_2026-10-12.md",
+      "checkpoint": "guest/GUEST_ENTRY_101_D03_PRECOMMERCIAL_LIVE_BACKEND_V20_AND_OWNER_E2E_READY_2026-10-12.md",
       "visualCandidateVersion": "2-review-only",
       "visualCandidateSha256": "43249ed1728d790cbb7e43eadd9c2180e167aaab0c86c53280866cc7c2cf2a1e",
       "visualCandidateBytes": 28677081,
@@ -480,7 +480,40 @@
       "closingOwnerApprovalDate": "2026-10-12",
       "closingOriginalVideoReplayLoopPatched": true,
       "closingVideoLoopPatchCommit": "2cbf6100c69b02909c0fe2ea336926ccc88c4a95",
-      "closingButtonStylePatchCommit": "be94b11badd6b618aea7243227ec890ecce21547"
+      "closingButtonStylePatchCommit": "be94b11badd6b618aea7243227ec890ecce21547",
+      "deployedTestBackend": {
+        "projectId": "dnjsxequwgtyyauuofxj",
+        "function": "guest-invitation-flow",
+        "version": 20,
+        "status": "ACTIVE",
+        "guard": "testOnly",
+        "playlistModeConditional": "design-03 guest_request -> guest_request, all other templates unchanged",
+        "readbackVerified": true
+      },
+      "backendTestDeploymentVersion": 20,
+      "realD03OrdersObserved": 0,
+      "realD03OrdersObservedDate": "2026-10-12",
+      "canonicalAdmissionGatesPassed": [
+        "common-questionnaire",
+        "backend-test-only",
+        "media-integrity"
+      ],
+      "canonicalAdmissionGatesPending": [
+        "renderer",
+        "config-matrix",
+        "two-real-test-orders",
+        "review-final-parity",
+        "recipient-rsvp",
+        "owner-android",
+        "owner-touch",
+        "approved-visual"
+      ],
+      "ownerAuthenticatedE2eRunner": "guest/qa/owner-limoneros-full-e2e.html",
+      "ownerAuthenticatedE2eRunnerLibrary": "/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/GUEST_LIMONEROS_D03_CERTIFICACION_2_PEDIDOS_TEST.html",
+      "ownerAuthenticatedE2eRunnerSha256": "b2a48320da52b5196ec693178fb946cf2264219fae7671aeca2e449b5db51ef5",
+      "ownerAuthenticatedE2eRunnerMockPassed": true,
+      "ownerAuthenticatedE2eExecuted": false,
+      "ownerCodeAvailableToChat": false
     },
     "design-04": {
       "status": "not-started"
