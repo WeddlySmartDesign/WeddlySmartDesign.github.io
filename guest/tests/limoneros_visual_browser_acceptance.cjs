@@ -49,6 +49,8 @@ const server=http.createServer((req,res)=>{
       const rect=s=>{const e=sel(s);if(!e)return null;let r=e.getBoundingClientRect();return{top:r.top,bottom:r.bottom}};
       return {viewport:innerWidth,pageWidth:document.documentElement.scrollWidth,
        storyImage:visible('#story-photo')&&sel('#story-photo').naturalWidth>0,
+       storyPhotoHeight:Math.round(sel('#story-photo').getBoundingClientRect().height),
+       storyPhotoFit:sel('#story-photo').dataset.fit,
        storyMask:getComputedStyle(sel('#story-photo')).maskImage,
        storyShadow:getComputedStyle(sel('#story-photo')).boxShadow,
        storyRadius:getComputedStyle(sel('#story-photo')).borderRadius,
@@ -75,6 +77,10 @@ const server=http.createServer((req,res)=>{
     assert.equal(data.moments,rich?5:1);
     assert.equal(data.practical,rich?4:0);
     assert.equal(data.storyImage,rich);
+    if(rich){
+      assert.equal(data.storyPhotoFit,'crop','QA must test visibly enlarged landscape crop, not unaffected full-fit');
+      assert.ok(data.storyPhotoHeight>=270,'Historia photo remains visually too small');
+    }
     // Historia art acceptance gate: real template must dissolve rectangular
     // photo edges to the painted background, without a frame or arc.
     if(rich){
