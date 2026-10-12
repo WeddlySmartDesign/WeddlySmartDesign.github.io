@@ -5,6 +5,9 @@ on:
     paths:
       - '.github/workflows/guest-limoneros-live-probe.yml'
       - 'guest/tools/build_catalog_static_preview.cjs'
+      - 'guest/catalog-patches/design-03/**'
+      - 'guest/GUEST_PROJECT_STATUS_V1.json'
+      - 'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json'
 permissions:
   contents: write
 concurrency:
@@ -43,6 +46,17 @@ jobs:
             html=(out/rel).read_bytes()
             assets=[f for f in manifest['files'] if f['name'].startswith('guest/catalog-assets/design-03/1.0.0/media/')]
             source=(root/rel).read_bytes()
+            patch_dir=root/'guest/catalog-patches/design-03/1.0.0'
+            patch_meta=json.loads((patch_dir/'patch-manifest.json').read_text())
+            patch_css=(patch_dir/'patch.css').read_text()
+            patch_js=(patch_dir/'patch.js').read_text()
+            assert patch_meta['sourceMasterSha256']==sha(source) and patch_meta['commercialRelease'] is False
+            # Verify the actual build includes the latest typography and schema bridge
+            built_text=html.decode('utf-8')
+            assert patch_css in built_text and patch_js in built_text, 'VISUAL_PATCH_NOT_EMBEDDED'
+            assert 'limonerosClosingIntro' in built_text and 'pickupPoints' in built_text
+            report.update(visualPatchLocalEmbedded=True,visualPatchCssSha256=sha(patch_css.encode()),
+              visualPatchJsSha256=sha(patch_js.encode()),visualPatchLiveExact=False)
             assert sha(source)==design['masterSha256']=='a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482'
             assert len(html)<24*1024*1024 and len(assets)>=15
             assert len(html)>900000 and design['losslessMediaExternalization']
@@ -61,7 +75,7 @@ jobs:
                   robots=resp.headers.get('X-Robots-Tag','')
                   status=resp.status
                 if status==200 and sha(body)==sha(html) and 'noindex' in robots:
-                  report.update(httpsStatus=200,liveHtmlExact=True,noIndex=True,liveHtmlBytes=len(body))
+                  report.update(httpsStatus=200,liveHtmlExact=True,noIndex=True,liveHtmlBytes=len(body),visualPatchLiveExact=True)
                   failures=[]
                   checked=[]
                   for f in assets:
@@ -104,3 +118,14 @@ jobs:
           git commit -m 'test(guest): record real D03 published media checks' || exit 0
           git pull --rebase origin guest-independent
           git push origin HEAD:guest-independent
+      - name: Fail closed if latest editorial patch is not published exactly
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('guest/qa-reports/limoneros_cloudflare_live_check.json').read_text())
+          required=['stageBuildPassed','visualPatchLocalEmbedded','visualPatchLiveExact','liveHtmlExact','liveMediaExact','online','stageNoSale']
+          missing=[key for key in required if r.get(key) is not True]
+          if missing: raise SystemExit('D03 PREVIEW NOT CERTIFIED: '+', '.join(missing)+'; '+str(r.get('lastHttpsObservation',r.get('error','')))[:400])
+          print('PASS D03 latest editorial patch, exact public HTML, 15/15 media, no-sale')
+          PY
