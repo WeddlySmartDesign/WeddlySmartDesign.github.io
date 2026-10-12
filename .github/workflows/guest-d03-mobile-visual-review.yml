@@ -1,4 +1,4 @@
-name: GUEST D03 Full Photo Mobile Visual QA (TEST ONLY)
+name: GUEST D03 Synthetic Media Mobile Layout QA (TEST ONLY)
 on:
   push:
     branches: [guest-independent]
@@ -28,13 +28,13 @@ jobs:
           test -n "$CHROME"
           echo "CHROME_BIN=$CHROME" >> "$GITHUB_ENV"
           echo "NODE_PATH=$RUNNER_TEMP/d03-qa-deps/node_modules" >> "$GITHUB_ENV"
-      - name: Verify photos, gallery, 2/5/4 and absent modules, NO arrows, NO rhombi, birds clear
+      - name: Verify image slots, gallery, 2/5/4, absent modules, no arrows or rhombi, birds clear
         run: node guest/tests/limoneros_visual_browser_acceptance.cjs "$RUNNER_TEMP/d03-stage" "$RUNNER_TEMP/d03-browser-report"
       - name: Preserve screenshots and exact executed assertions
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: guest-d03-real-photo-mobile-visual-qa
+          name: guest-d03-synthetic-mobile-layout-qa
           path: ${{ runner.temp }}/d03-browser-report/
           retention-days: 7
           if-no-files-found: warn
