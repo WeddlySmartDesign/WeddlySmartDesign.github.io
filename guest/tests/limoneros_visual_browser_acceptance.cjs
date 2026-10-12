@@ -2,7 +2,7 @@
 'use strict';
 /* D03 PRE-SALE reviewer screenshot acceptance.
  * Builds source from immutable master; opens the same Cloudflare-stage HTML
- * with opt-in /?qa=full and /?qa=reduced fixtures. Does NOT create orders.
+ * with explicit synthetic-image full, reduced and no-gallery fixtures. Does NOT create orders.
  * Outputs evidence only. No screenshot can certify owner artistic acceptance. */
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path');
 const assert=require('node:assert/strict');
@@ -24,7 +24,7 @@ const server=http.createServer((req,res)=>{
  const origin='http://127.0.0.1:'+server.address().port;
  fs.mkdirSync(out,{recursive:true});
  const browser=await chromium.launch({executablePath:process.env.CHROME_BIN||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage','--autoplay-policy=no-user-gesture-required']});
- const report={type:'D03 QAFULL browser, NOT commercial nor authenticated E2E',checkedAt:new Date().toISOString(),cases:[]};
+ const report={type:'D03 SYNTHETIC MEDIA browser, NOT author-photo preview / commercial / authenticated E2E',checkedAt:new Date().toISOString(),cases:[]};
  try{
   for(const width of [320,390,430]){
    for(const mode of ['full','reduced','without-gallery']){
@@ -59,7 +59,9 @@ const server=http.createServer((req,res)=>{
        boxes:all('#practical .practical-item').map(e=>getComputedStyle(e).backgroundColor),
        timeline:getComputedStyle(sel('#agenda .agenda-list'),'::before').content,
        rhombi:all('#agenda .moment').map(e=>getComputedStyle(e,'::before').content),
-       birdSpace:rect('#practical .section-kicker').top-rect('#practical').top
+       birdSpace:rect('#practical .section-kicker').top-rect('#practical').top,
+       darkEnd:sel('#practical').classList.contains('d03-four-practical-gradient'),
+       lastPracticalLinkColor:(()=>{const e=all('#practical .practical-item:last-child .link').at(-1);return e?getComputedStyle(e).color:null})()
       };
     });
     console.log('D03 scene QA',width,mode,JSON.stringify(data),'errors=',errors.join('|'));
@@ -79,6 +81,10 @@ const server=http.createServer((req,res)=>{
     assert.ok(data.timeline==='none'||data.timeline==='normal','timeline reappeared');
     assert.ok(data.rhombi.every(c=>c==='none'||c==='normal'),'rhombi reappeared');
     if(rich)assert.ok(data.birdSpace>=180,'practical heading intrudes on painted birds');
+    if(mode==='without-gallery'){
+      assert.equal(data.darkEnd,true,'dark background safety class missing');
+      assert.equal(data.lastPracticalLinkColor,'rgb(255, 248, 237)','last music link invisible against navy');
+    }
     if(width===390&&rich){
       for(const section of (hasGallery?['story','locations','agenda','practical','gallery']:['practical'])){
        let el=page.locator('#'+section);
