@@ -1,0 +1,47 @@
+#!/usr/bin/env node
+'use strict';
+// This is a SOURCE-ONLY security and protocol check. It never creates orders,
+// performs auth, sends mail, calls Stripe, or uses external services.
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'../..');
+const html=fs.readFileSync(path.join(root,'guest/qa/owner-limoneros-full-e2e.html'),'utf8');
+const builder=fs.readFileSync(path.join(root,'guest/tools/build_catalog_static_preview.cjs'),'utf8');
+const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi)];
+assert.equal(scripts.length,1,'exactly one inert inline script');
+new vm.Script(scripts[0][1],{filename:'owner-limoneros-full-e2e.js'});
+assert.match(builder,/guest\/qa\/owner-limoneros-full-e2e\.html/);
+assert.match(html,/noindex,nofollow,noarchive/);
+assert.match(html,/no-referrer/);
+assert.match(html,/connect-src https:\/\/dnjsxequwgtyyauuofxj\.supabase\.co/);
+assert.match(html,/action:'login',recoveryCode:code/,'interactive owner login, no stored privilege');
+assert.match(html,/manager=auth\.managerToken/);
+assert.match(html,/action:'create_test',templateId:'design-03',email/);
+assert.match(html,/action:'create_paid',templateId:'design-03',licenseId:'00000000-0000-0000-0000-000000000000'/,'negative no-write paid guard');
+assert.match(html,/template_test_only/,'paid rejection must be confirmed');
+assert.match(html,/action:'save',token:qToken,questionnaire/);
+assert.match(html,/action:'submit',token:qToken,questionnaire/);
+assert.match(html,/action:'upload'/);
+assert.match(html,/gallery-1','gallery-2','gallery-3','gallery-4'/);
+assert.match(html,/new File\(\[blob\],slot\+'\.png'/,'synthetic media only');
+assert.match(html,/action:'start_design'/);
+assert.match(html,/action:'mark_review_ready'/);
+assert.match(html,/action:'send_review'/);
+assert.match(html,/localTest!==true/,'email-safe TEST review');
+assert.match(html,/action:'review_load'/);
+assert.match(html,/action:'review_respond',token:rToken,decision:'approve'/);
+assert.match(html,/action:'deliver',orderId:id,invitationUrl:url/);
+assert.match(html,/action:'public_load'/);
+assert.match(html,/canonicalConfig\(a\)!==canonicalConfig\(b\)/,'persisted review/final parity');
+assert.match(html,/playlist\?\.mode!=='guest_request'/,'song request semantic backend guard');
+assert.match(html,/active_for_member/);
+assert.match(html,/action:'link_test_license'/);
+assert.match(html,/action:'submit',token,guest_key:id,name,attend/);
+assert.match(html,/RSVP\+'\?manage=1'/);
+assert.match(html,/guest_app_state|readback\.state\?\.guests/);
+assert.match(html,/\@example\.invalid/);
+assert.match(html,/product:'guests',kind:'7'/,'temporary tester grant only');
+assert.match(html,/if\(running\)return/);
+assert.match(html,/field\.value='';running=false/,'wipe auth credential after action');
+assert.doesNotMatch(html,/localStorage|sessionStorage|indexedDB|document\.cookie|gtag\(|fetch\([^)]*stripe/i);
+assert.doesNotMatch(html,/photo=.+https:\/\/(?:[a-z]+\.)?unsplash/i);
+console.log('PASS D03 owner-only REAL test runner contract: 2 safeguarded TEST orders + synthetic uploads + review/final + guarded RSVP, no paid/mail/secret persistence. DOES NOT certify cloud E2E until executed with owner authorization.');
