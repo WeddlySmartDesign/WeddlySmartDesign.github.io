@@ -63,6 +63,11 @@ function enhanceLimonerosScenes(config){
    storyPhoto.classList.add('invisible');
  }
  const root=byId('locations'),items=byId('location-items'),pic=config.locations?.heroPhoto;
+ // Web del lugar is an overlong label for the compact native venue action.
+ // The link remains generated only when the questionnaire provides websiteUrl.
+ for(const action of root?.querySelectorAll('.location-links a')||[]){
+   if(action.textContent.trim()==='Web del lugar')action.textContent='Web';
+ }
  const valid=photoHref(pic);
  let figure=byId('d03-location-photo');
  if(figure&&!valid){figure.remove();figure=null}
