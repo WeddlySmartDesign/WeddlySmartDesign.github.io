@@ -1,5 +1,14 @@
 # GUEST — Runbook de incorporación de diseños 03–1000
 
+## PUERTA DE ENTRADA UNIVERSAL — LECTURA OBLIGATORIA ANTES DE CUALQUIER DISEÑO
+
+[**Contrato vinculante para TODOS los diseños GUEST (D01–D1000)**](GUEST_UNIVERSAL_DESIGN_ACCEPTANCE_CONTRACT_V1.md). **Antes de diseñar, integrar, retocar, solicitar fotografías o pedir una revisión**, leer contrato universal + `GUEST_INVITATION_MASTER_CONFIGURATION_MATRIX_V1.md` + esquema `GUEST_INVITATION_CONFIG_SCHEMA_V1.json` + fixtures normales/estrés. Es una obligación del producto, **NO una regla del diseño de turno**.
+
+**Bloqueo de salida visual (sin excepciones):** comprobar correspondencia de los campos REALES del cuestionario, incluidos todos los URLs y opciones condicionales, contra `resolved_config`; escenario MAX+FOTOS (foto pareja y celebración/galería, 2 sedes, 5 momentos, 4 prácticos simultáneos); normal/estrés históricos; variantes con campos, fotos, sedes y módulos ausentes; 320/360/390/430, cero invenciones y cero retoques manuales por pareja. El stress histórico tiene galería OFF y **no** sustituye MAX+FOTOS. Documentar evidencia PASS/FAIL/PENDING por diseño **antes** de presentar la web corregida a la propietaria. Test offline ≠ pedido real/RSVP/Android.
+
+**Responsabilidad del operador:** reutilizar fotos ya aportadas, aplicar ajustes a la web REAL y conservar la estética del arte recibido; la propietaria no repite instrucciones, no crea fixtures ni hace QA técnico. Si un nuevo diseño exige lógica especial de cuestionario, backend o RSVP, corregir una vez el motor compartido, no introducir excepciones locales.
+
+
 **Regla de continuidad Entrada 77:** la propietaria solo proporciona HTML/ZIP con medios y revisa el diseño acabado. Ningún paso técnico siguiente se delega a ella. Cuando haya registro de nuevo `template_id`, el asistente genera la actualización TEST de backend usando `guest/tools/prepare_live_catalog_registry.cjs --input <fuente-live-vigente> --output <candidata-nueva> --require-template <id>` y verifica versión y guardas ANTES de despliegue TEST. La herramienta no despliega ni autoriza cobros; no hay forma de probar la ruta remota real de un nuevo ID en Android antes de recibirlo. [Expediente](GUEST_ENTRY_77_PLATFORM_HANDOFF_FOR_NEXT_VISUAL_2026-10-11.md).
 
 **Entrada obligatoria:** [START_HERE.md](START_HERE.md). El máster canónico, el esquema común, el manual de QA y los registros vivos siguen siendo fuentes obligatorias. Aplicar este proceso a **cada** nueva plantilla visual. No reemplaza las pruebas reales ni la aprobación artística.
