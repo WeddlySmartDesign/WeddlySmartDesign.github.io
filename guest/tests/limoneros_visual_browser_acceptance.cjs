@@ -56,6 +56,11 @@ const server=http.createServer((req,res)=>{
        storyRadius:getComputedStyle(sel('#story-photo')).borderRadius,
        placeImage:!!sel('#d03-location-photo img')&&sel('#d03-location-photo img').naturalWidth>0,
        places:all('#location-items .location').length,placeLinks:all('#location-items .link').length,
+       venueLabels:all('#location-items .location .location-type').map(e=>({text:e.textContent,px:parseFloat(getComputedStyle(e).fontSize),weight:Number(getComputedStyle(e).fontWeight),color:getComputedStyle(e).color})),
+       venueKicker:(()=>{const e=sel('#locations .section-kicker');const c=getComputedStyle(e);return{px:parseFloat(c.fontSize),weight:Number(c.fontWeight),color:c.color}})(),
+       venueActions:all('#location-items .link').map(e=>{const c=getComputedStyle(e);return{text:e.textContent,px:parseFloat(c.fontSize),weight:Number(c.fontWeight),background:c.backgroundColor,border:parseFloat(c.borderTopWidth),radius:parseFloat(c.borderTopLeftRadius),target:e.href}}),
+       placeImageMask:sel('#d03-location-photo img')?getComputedStyle(sel('#d03-location-photo img')).maskImage:'none',
+       placeImageShadow:sel('#d03-location-photo img')?getComputedStyle(sel('#d03-location-photo img')).boxShadow:'none',
        moments:all('#agenda .moment').length,
        practical:all('#practical .practical-item').length,
        gallery:visible('#gallery'),galleryImages:all('#gallery-items img').length,
@@ -74,6 +79,16 @@ const server=http.createServer((req,res)=>{
     assert.equal(data.pageWidth<=width,true,'horizontal overflow');
     assert.equal(data.places,rich?2:1);
     assert.equal(data.placeLinks,rich?4:2);
+    assert.ok(data.venueKicker.px>=19&&data.venueKicker.weight>=600,'Nos vemos aquí remains too thin or small');
+    assert.ok(data.venueLabels.every(x=>x.px>=19&&x.weight>=600),'Ceremonia / Celebración remain too thin or small');
+    assert.ok(data.venueActions.every(x=>x.px>=16&&x.weight>=600&&x.border>=1&&x.radius>=20),'CTA still renders as faint underlined text instead of a button');
+    assert.ok(data.venueActions.every(x=>/rgba\(255, 249, 239, 0\.8[0-9]+\)/.test(x.background)),'CTA needs actual contrast background');
+    assert.ok(data.venueActions.filter(x=>x.text==='Web').length===data.places,'Venue website button should be Web');
+    assert.ok(data.venueActions.filter(x=>x.text==='Cómo llegar').length===data.places,'Each venue must keep its own map URL');
+    if(rich){
+      assert.ok((data.placeImageMask.match(/linear-gradient/g)||[]).length>=2,'Venue photo requires watercolor feathering');
+      assert.equal(data.placeImageShadow,'none','Venue photo must not look like a card');
+    }
     assert.equal(data.moments,rich?5:1);
     assert.equal(data.practical,rich?4:0);
     assert.equal(data.storyImage,rich);
