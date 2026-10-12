@@ -90,22 +90,49 @@ function enhanceLimonerosScenes(config){
    const y=Math.max(0,Math.min(100,Number(pic?.focusY??50)));
    img.style.objectPosition=x+'% '+y+'%';
  }
- // Motion begins when moments actually enter the viewport, rather than
- // animating out of sight on page load. All counts 1..5 use one renderer.
+ // Scene-level reveal: a single visible sequence, not five independent
+ // observers that can all finish before a person reaches the agenda.
+ // Replays only if the user leaves and returns to the scene.
  if(agendaObserver){agendaObserver.disconnect();agendaObserver=null}
- const list=byId('moments');
- if(list&&typeof IntersectionObserver==='function'&&list.children.length){
-   agendaObserver=new IntersectionObserver(entries=>{
-     for(const entry of entries)if(entry.isIntersecting){
-       entry.target.classList.add('d03-visible');
-       agendaObserver?.unobserve(entry.target);
+ const agenda=byId('agenda'),list=byId('moments'),rows=list?[...list.children]:[];
+ if(agenda){
+   agenda.classList.remove('d03-sequence-ready','d03-sequence-start');
+ }
+ if(agenda&&rows.length){
+   const reduced=typeof window.matchMedia==='function'&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+   if(reduced){
+     rows.forEach(row=>row.classList.remove('d03-ready','d03-visible'));
+   }else{
+     agenda.classList.add('d03-sequence-ready');
+     rows.forEach((row,i)=>{
+       row.classList.remove('d03-visible');
+       row.classList.add('d03-ready');
+       row.style.setProperty('--d03-step',String(i*560)+'ms');
+     });
+     if(typeof IntersectionObserver==='function'){
+       let armed=true;
+       agendaObserver=new IntersectionObserver(entries=>{
+         for(const entry of entries){
+           if(entry.intersectionRatio<.13){
+             armed=true;
+             continue;
+           }
+           if(armed&&entry.intersectionRatio>=.36){
+             armed=false;
+             agenda.classList.remove('d03-sequence-start');
+             // Restart the visible five-step choreography if returning from
+             // another section, never pulse continuously while stationary.
+             void agenda.offsetWidth;
+             agenda.classList.add('d03-sequence-start');
+           }
+         }
+       },{threshold:[0,.12,.36,.55]});
+       agendaObserver.observe(agenda);
+     }else{
+       // Never strand content invisible in an old embedded browser.
+       agenda.classList.add('d03-sequence-start');
      }
-   },{threshold:.16,rootMargin:'0px 0px -6% 0px'});
-   [...list.children].forEach((row,i)=>{
-     row.style.setProperty('--d03-delay',Math.min(i*105,420)+'ms');
-     row.classList.add('d03-ready');
-     agendaObserver.observe(row);
-   });
+   }
  }
 }
 
