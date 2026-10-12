@@ -1,6 +1,6 @@
 {
   "schemaVersion": "guest-d03-cloudflare-stage-evidence-v2",
-  "checkedAtUtc": "2026-10-12T14:00:04.859786+00:00",
+  "checkedAtUtc": "2026-10-12T14:01:12.776315+00:00",
   "url": "https://guest-weddlysmartdesign.pages.dev/guest/catalog-assets/design-03/1.0.0/index.html",
   "testOnly": true,
   "commercialApproved": false,
@@ -8,128 +8,17 @@
   "androidPhysicalVerified": false,
   "visualPatchLocalEmbedded": true,
   "visualPatchCssSha256": "8ed1c0aef3e6cf68a5fc339db08e1c804a66f151b471e7864ec36ac9a6226af5",
-  "visualPatchJsSha256": "13f16c4bb6b64b174b1f1aab536a178fe583fa833a531c2e86dcc14f736d626e",
-  "visualPatchLiveExact": true,
+  "visualPatchJsSha256": "a6029c7fab3a91719f5a1f9f7ea49d5ddc330064ec5dc488cdf4d1eb0cb86a6d",
+  "visualPatchLiveExact": false,
   "stageBuildPassed": true,
   "sourceSha256": "a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482",
-  "publishedHtmlSha256": "0ef7c715b54c6aeaa64810fbbebc8559777adb28d946ba4ca58b06f7bd850001",
-  "publishedHtmlBytes": 1055476,
+  "publishedHtmlSha256": "6c42496ec704c4b86010d0606971138d0c39464c4686167ee6555639eed77689",
+  "publishedHtmlBytes": 1055782,
   "mediaFiles": 15,
   "largestMediaBytes": 8587255,
   "exactReconstructionVerified": true,
   "stageNoSale": true,
-  "httpsStatus": 200,
-  "liveHtmlExact": true,
-  "noIndex": true,
-  "liveHtmlBytes": 1055476,
-  "mediaDiagnostics": [
-    {
-      "name": "0afbf00149e732a48bf4c76d.jpg",
-      "http": 200,
-      "bytes": 333461,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    },
-    {
-      "name": "4badf39ccac905a9b40ba35d.mp4",
-      "http": 200,
-      "bytes": 8587255,
-      "shaMatches": true,
-      "mime": "video/mp4"
-    },
-    {
-      "name": "e47aff063a8eb830c5c0d5c4.jpg",
-      "http": 200,
-      "bytes": 236245,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    },
-    {
-      "name": "ef30c9ae628a90d19e2f45d7.mp4",
-      "http": 200,
-      "bytes": 5471729,
-      "shaMatches": true,
-      "mime": "video/mp4"
-    },
-    {
-      "name": "a9af1e075f63a294092e2af6.jpg",
-      "http": 200,
-      "bytes": 569267,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    },
-    {
-      "name": "a5587dffb86e47b6ed23867e.jpg",
-      "http": 200,
-      "bytes": 583310,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    },
-    {
-      "name": "8d13922419e923846f632dcd.jpg",
-      "http": 200,
-      "bytes": 572809,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    },
-    {
-      "name": "7ac10ba2c65e5dfc55ce4fd6.jpg",
-      "http": 200,
-      "bytes": 561757,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    },
-    {
-      "name": "ce98ce0edcf45ce0fbe5c72c.jpg",
-      "http": 200,
-      "bytes": 519496,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    },
-    {
-      "name": "91246515ea0675cf8b405669.jpg",
-      "http": 200,
-      "bytes": 569258,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    },
-    {
-      "name": "45a9e4305d1a0058531cf83b.jpg",
-      "http": 200,
-      "bytes": 583238,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    },
-    {
-      "name": "94a6f2c47b753bc47051a539.jpg",
-      "http": 200,
-      "bytes": 570114,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    },
-    {
-      "name": "6d3cc49713e435f7e1108078.jpg",
-      "http": 200,
-      "bytes": 524086,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    },
-    {
-      "name": "fbadbf780783c001ede89274.jpg",
-      "http": 200,
-      "bytes": 524540,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    },
-    {
-      "name": "ccffdf4b308884911bd92d66.jpg",
-      "http": 200,
-      "bytes": 529338,
-      "shaMatches": true,
-      "mime": "image/jpeg"
-    }
-  ],
-  "mediaErrors": [],
-  "liveMediaExact": true,
-  "online": true
+  "online": false,
+  "lastHttpsObservation": "status=200, bytes=1055476, sha256=0ef7c715b54c6aeaa64810fbbebc8559777adb28d946ba4ca58b06f7bd850001, robots=noindex, nofollow, noarchive",
+  "liveMediaExact": false
 }
