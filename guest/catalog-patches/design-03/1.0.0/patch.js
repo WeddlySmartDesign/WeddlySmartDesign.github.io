@@ -38,10 +38,12 @@ function applyPractical(config){
  }
  const a=p.accommodation||{};
  if(a.enabled&&a.mode!=='none'){
-  const more=[a.address&&'Dirección: '+a.address,a.bookingName&&'Reserva a nombre de '+a.bookingName,a.bookingCode&&'Código: '+a.bookingCode,a.discountText,a.deadline&&'Hasta: '+a.deadline,a.priceText,a.phone&&'Teléfono: '+a.phone,a.note];
+  // Extra details are hidden only when they genuinely add new information.
+  // Never repeat note/discount/price already displayed below the hotel name.
+  const more=[a.address&&'Dirección: '+a.address,a.bookingName&&a.bookingName!==a.bookingCode&&'Reserva a nombre de '+a.bookingName,a.bookingCode&&'Código: '+a.bookingCode,a.deadline&&'Hasta: '+a.deadline,a.phone&&'Teléfono: '+a.phone];
   const links=[[a.websiteUrl,'Ver hotel'],[a.mapsUrl,'Cómo llegar']];
   if(a.mode==='external_booking')links.push([a.externalBookingUrl,'Reservar']);
-  addBlock(root,'Alojamiento',[a.name||(!window.__GUEST_SUPPRESS_DEMO__?a.message:null),a.note,a.discountText,a.priceText],links,{label:'Datos del alojamiento',lines:more},'accommodation')
+  addBlock(root,'Alojamiento',[a.name||(!window.__GUEST_SUPPRESS_DEMO__?a.message:null),a.note,a.discountText,a.priceText],links,{label:'Información adicional',lines:more.filter(Boolean)},'accommodation')
  }
  const g=p.gift||{};
  if(g.enabled&&g.mode!=='none'){
@@ -228,9 +230,9 @@ if(!window.__GUEST_SUPPRESS_DEMO__ && window.location && window.addEventListener
      ]:[{time:'18:30',label:'Ceremonia'}]},
      practical:{
        bus:{enabled:full,pickupPoints:['Plaza de prueba'],outboundTimes:['17:15'],returnTimes:['02:00'],note:'Horario de transporte de muestra',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia'},
-       accommodation:{enabled:full,mode:'external_booking',name:'Hotel de ejemplo',address:'Murcia',websiteUrl:'https://example.com/',
-         mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia',externalBookingUrl:'https://example.com/',
-         bookingCode:'DEMO',bookingName:'Lucía y Pablo',note:'Datos ficticios de prueba'},
+       accommodation:{enabled:full,mode:'recommended',name:'Hotel de ejemplo',address:null,websiteUrl:'https://example.com/',
+         mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia',externalBookingUrl:null,
+         bookingCode:null,bookingName:null,note:null},
        gift:{enabled:full,mode:'short_text',displayText:'Vuestra presencia es nuestro mejor regalo',details:'Texto de muestra'},
        playlist:{enabled:full,mode:'external_link',prompt:'¿Qué canción no puede faltar?',url:'https://open.spotify.com/'}
      },
