@@ -81,8 +81,8 @@ const server=http.createServer((req,res)=>{
     assert.equal(data.placeLinks,rich?4:2);
     assert.ok(data.venueKicker.px>=19&&data.venueKicker.weight>=600,'Nos vemos aquí remains too thin or small');
     assert.ok(data.venueLabels.every(x=>x.px>=19&&x.weight>=600),'Ceremonia / Celebración remain too thin or small');
-    assert.ok(data.venueActions.every(x=>x.px>=16&&x.weight>=600&&x.border>=1&&x.radius>=20),'CTA still renders as faint underlined text instead of a button');
-    assert.ok(data.venueActions.every(x=>/rgba\(255, 249, 239, 0\.8[0-9]+\)/.test(x.background)),'CTA needs actual contrast background');
+    assert.ok(data.venueActions.every(x=>x.px>=16&&x.weight>=400&&x.border>=0.9&&x.radius>=20),'CTA must be an elegant, readable, understated touch target');
+    assert.ok(data.venueActions.every(x=>x.background==='rgba(255, 249, 239, 0.14)'),'CTA fill must be delicate so the authored art remains dominant');
     assert.ok(data.venueActions.filter(x=>x.text==='Web').length===data.places,'Venue website button should be Web');
     assert.ok(data.venueActions.filter(x=>x.text==='Cómo llegar').length===data.places,'Each venue must keep its own map URL');
     if(rich){
