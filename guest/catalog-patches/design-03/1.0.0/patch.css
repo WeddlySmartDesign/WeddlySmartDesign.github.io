@@ -917,3 +917,72 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
  #gallery #gallery-items{scroll-behavior:auto!important}
  #gallery .d03-gallery-dot::before{transition:none}
 }
+
+/* D03 gallery V2: the authored swallows belong ABOVE the editorial title,
+   never through it. Fade ALL gallery photos into the original background:
+   same visual language as Historia and Lugar, with carousel swipe intact.
+   No cards, rigid photo rectangles, artificial gradients behind the image,
+   extra arrows, or modifications to the authored media. */
+#gallery{
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  min-height:0!important;
+  height:auto!important;
+  padding-top:max(230px,27svh)!important;
+  padding-bottom:clamp(42px,6svh,72px)!important;
+  overflow:hidden!important;
+}
+#gallery .scene-inner{
+  position:relative!important;
+  width:min(100%,540px)!important;
+  height:auto!important;
+  max-width:540px!important;
+  margin:0 auto!important;
+}
+#gallery .section-kicker{
+  margin-top:0!important;
+  color:#4c2b42!important;
+  font:600 clamp(18px,4.65vw,22px)/1.23 var(--smallcaps)!important;
+  letter-spacing:.085em!important;
+  text-shadow:0 1px 0 rgba(255,250,245,.42)!important;
+}
+#gallery h2{
+  margin:0 0 clamp(9px,1.8svh,17px)!important;
+}
+#gallery #gallery-items{
+  margin-top:clamp(10px,1.6svh,17px)!important;
+  max-width:480px!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#gallery #gallery-items img,
+#gallery #gallery-items img:only-child{
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  background:transparent!important;
+  /* Cross-fade only the perimeter, preserving faces and image center. */
+  -webkit-mask-image:
+    linear-gradient(to bottom,transparent 0%,#000 14%,#000 77%,transparent 100%),
+    linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:
+    linear-gradient(to bottom,transparent 0%,#000 14%,#000 77%,transparent 100%),
+    linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%);
+  mask-composite:intersect;
+}
+#gallery .d03-gallery-nav{
+  margin:clamp(1px,.7svh,8px) auto 0!important;
+  gap:4px!important;
+}
+#gallery .d03-gallery-nav>span{
+  color:#fff9ed!important;
+  font:500 clamp(15px,3.9vw,18px)/1.2 var(--smallcaps)!important;
+  text-shadow:0 1px 4px rgba(20,19,58,.75)!important;
+}
+@media(max-width:360px){
+  #gallery{padding-top:max(220px,27svh)!important}
+}
