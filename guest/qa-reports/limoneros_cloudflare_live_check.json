@@ -1,6 +1,6 @@
 {
   "schemaVersion": "guest-d03-cloudflare-stage-evidence-v2",
-  "checkedAtUtc": "2026-10-12T16:16:23.298158+00:00",
+  "checkedAtUtc": "2026-10-12T16:23:39.740001+00:00",
   "url": "https://guest-weddlysmartdesign.pages.dev/guest/catalog-assets/design-03/1.0.0/index.html",
   "testOnly": true,
   "commercialApproved": false,
@@ -8,12 +8,12 @@
   "androidPhysicalVerified": false,
   "visualPatchLocalEmbedded": true,
   "visualPatchCssSha256": "8e0995e91ef8703ed2faef50f9d38d82aeb645a4956acd1bb6a556b55ff67e55",
-  "visualPatchJsSha256": "2579d6482a20ffdbe64bdc7db4fcd1dccb1fa1c66a9b94f600c3a2cda769fd6c",
+  "visualPatchJsSha256": "51a9e963909c1a1703715a17ae648b93960a267c98780774b9fe22768b5fe84c",
   "visualPatchLiveExact": true,
   "stageBuildPassed": true,
   "sourceSha256": "a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482",
-  "publishedHtmlSha256": "1bf1d1573f18d5f2c7617aec0e2f4a51ebda89a3fcb179ca7b81f513f4b59bd9",
-  "publishedHtmlBytes": 1076310,
+  "publishedHtmlSha256": "c9f99f1fc2187239bec52dc1524162cbb2147192182f9bac9c8fc11359d9bc99",
+  "publishedHtmlBytes": 1076500,
   "mediaFiles": 15,
   "largestMediaBytes": 8587255,
   "exactReconstructionVerified": true,
@@ -21,7 +21,7 @@
   "httpsStatus": 200,
   "liveHtmlExact": true,
   "noIndex": true,
-  "liveHtmlBytes": 1076310,
+  "liveHtmlBytes": 1076500,
   "mediaDiagnostics": [
     {
       "name": "0afbf00149e732a48bf4c76d.jpg",
