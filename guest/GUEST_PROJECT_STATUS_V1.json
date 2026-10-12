@@ -290,7 +290,7 @@
     },
     "design-03": {
       "version": "1.0.0",
-      "status": "certification-pending",
+      "status": "visual-candidate-v2-local-qa-pass-awaiting-review-and-integration",
       "catalogAsset": "guest/catalog-assets/design-03/1.0.0/index.html",
       "adapter": "guest/guest-catalog-template-design-03-adapter-v1.js",
       "visualMasterSha256": "a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482",
@@ -302,7 +302,7 @@
       "originalCandidateLibraryFile": "GUEST_D03_LIMONEROS_MASTER_V1_TEST_NO_SALE.zip",
       "originalCandidateZipSha256": "001ea39f5f47475102547777e34935f1732a6f8dcc0b46e5bbfba87fb3520f96",
       "visualCandidateSource": "guest/GUEST_ENTRY_79_D03_LIMONEROS_CANDIDATE_V1_RECOVERED_2026-10-12.md",
-      "integrationVerified": true,
+      "integrationVerified": false,
       "cloudflareVerified": true,
       "backendTestDeployed": true,
       "androidPhysicalVerified": false,
@@ -318,7 +318,22 @@
       "backendTestOnly": true,
       "backendGuardVerified": true,
       "backendTestDeploymentEvidence": "guest/GUEST_ENTRY_83_D03_LIMONEROS_LIVE_VERIFIED_BACKEND_TEST_V19_2026-10-12.md",
-      "backendRealE2eVerified": false
+      "backendRealE2eVerified": false,
+      "checkpoint": "guest/GUEST_ENTRY_81_D03_LIMONEROS_VISUAL_AND_QUESTIONNAIRE_REMEDIATION_2026-10-12.md",
+      "visualCandidateVersion": "2-review-only",
+      "visualCandidateSha256": "43249ed1728d790cbb7e43eadd9c2180e167aaab0c86c53280866cc7c2cf2a1e",
+      "visualCandidateBytes": 28677081,
+      "v2ReproductionPatchLibrary": "/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/patch_limoneros_v2.py",
+      "questionnaireSchema": "guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json",
+      "questionnaireOfflineVariantsVerified": 4,
+      "mobileWidthsVerified": [
+        320,
+        360,
+        390,
+        430
+      ],
+      "ownerVisualApproved": false,
+      "libraryFullCandidateCopyStored": false
     },
     "design-04": {
       "status": "not-started"
@@ -2240,15 +2255,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 79,
-    "latestDocumentedEntry": "guest/GUEST_ENTRY_79_D03_LIMONEROS_CANDIDATE_V1_RECOVERED_2026-10-12.md",
+    "latestEntry": 81,
+    "latestDocumentedEntry": "guest/GUEST_ENTRY_81_D03_LIMONEROS_VISUAL_AND_QUESTIONNAIRE_REMEDIATION_2026-10-12.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Design-03 Limoneros visual V1 original FOUND and recovered as ZIP Library. Do not request user files again, do not rebuild HTML or rerun completed local subset. Continue preserving 28,673,474-byte master SHA a6fa4d81...; transfer chunks GitHub, register TEST, CI/Cloudflare, backend TEST, one Android generic renderer review. Sale NO.",
+    "resumption": "D03 Limoneros V1 Library ZIP intact; V2 aesthetic+questionnaire remediation patch and browser QA archived in Library. Rebuild V2 via patch_limoneros_v2.py, verify SHA256 43249ed..., then integrate V2 with media externalization, GitHub TEST/Cloudflare, Android TEST; request one owner visual signoff. Do NOT integrate V1 as approved, do NOT ask for originals or enable sale.",
     "commercialStatus": "BOTANICA_DESIGN_TECHNICAL_GATES_11_OF_11_SALE_NOT_AUTHORIZED",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
