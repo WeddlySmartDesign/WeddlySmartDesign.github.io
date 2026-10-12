@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive"><meta name="color-scheme" content="light">
+<!-- GUEST skin engine v1 · motor común de secciones; cada diseño solo aporta su «piel» (tema + medios). -->
+<title>{{NAME}} · GUEST by WeddlySmartDesign · TEST</title>
+<style>
+@font-face{font-family:Pinyon;src:url('{{FONT_SCRIPT}}') format('truetype');font-display:swap}
+@font-face{font-family:Garamond;src:url('{{FONT_SERIF}}') format('woff');font-display:swap}
+@font-face{font-family:GaramondSC;src:url('{{FONT_SC}}') format('opentype');font-display:swap}
+:root{--sans:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--serif:Garamond,Georgia,serif;--smallcaps:GaramondSC,Georgia,serif;--script:Pinyon,'Brush Script MT',cursive;
+{{THEME_VARS}}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font:400 18px/1.45 var(--serif);background:var(--paper);overflow-x:hidden}
+button,a{-webkit-tap-highlight-color:transparent}a{color:inherit}.invisible{display:none!important}
+#stage-notice{position:fixed;z-index:99;top:0;left:0;right:0;color:#29242b;background:rgba(255,250,244,.95);font:500 12px/1.2 var(--sans);padding:4px 10px;text-align:center;pointer-events:none}
+/* ---------- escenas interiores ---------- */
+[data-scene]{position:relative;isolation:isolate;min-height:100svh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:clamp(64px,10svh,96px) max(30px,env(safe-area-inset-right)) max(64px,env(safe-area-inset-bottom));overflow:hidden;background-color:var(--paper);background-size:100% 100%;background-repeat:no-repeat;background-position:50% 50%}
+.scene-inner{position:relative;z-index:2;width:min(100%,520px);margin:0 auto;text-align:center}
+.section-kicker{font:600 clamp(16px,4.4vw,20px)/1.25 var(--smallcaps);letter-spacing:.11em;margin:0 0 10px;color:var(--ink)}
+h1,h2,h3,p{margin-top:0}h1,h2{font-weight:400}
+h2{font:400 clamp(54px,14vw,84px)/1.05 var(--script);margin:0 0 18px;color:var(--accent)}
+h3{font:400 clamp(28px,7vw,40px)/1.1 var(--serif);margin:0 0 6px}
+.scene-paragraph{font-size:clamp(20px,5.2vw,24px);line-height:1.42;overflow-wrap:anywhere;white-space:pre-line;max-width:31ch;margin:0 auto 14px}
+.scene-small{font:400 clamp(17px,4.6vw,20px)/1.35 var(--serif);overflow-wrap:anywhere;margin-top:18px}
+.feather{display:block;border:0;border-radius:0;box-shadow:none;background:transparent;
+ -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 13%,#000 80%,transparent 100%),linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%);
+ -webkit-mask-composite:source-in;mask-image:linear-gradient(to bottom,transparent 0%,#000 13%,#000 80%,transparent 100%),linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%);mask-composite:intersect}
+.feather[data-fit="full"]{-webkit-mask-image:none;mask-image:none;object-fit:contain!important;height:auto!important;max-height:46svh}
+#story-photo{width:min(100%,470px);height:clamp(230px,37svh,360px);margin:6px auto 0;object-fit:cover}
+.link,.rsvp-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 18px;border:1px solid var(--line);border-radius:999px;text-decoration:none;font:500 15px/1.2 var(--smallcaps);letter-spacing:.06em;color:var(--ink);background:var(--btn);max-width:100%;overflow-wrap:anywhere}
+.link:focus-visible,.rsvp-button:focus-visible,.entry-button:focus-visible,summary:focus-visible,.gallery-dot:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+/* lugares */
+.location-photo{margin:4px auto 20px;max-width:min(100%,460px)}
+.location-hero-photo{width:100%;height:clamp(210px,29svh,286px);object-fit:cover}
+.location{margin:16px auto 0}.location+.location{margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
+.location-type{font:600 15px/1.3 var(--smallcaps);letter-spacing:.14em;margin:0 0 4px;color:var(--soft)}
+.location-name{font:400 clamp(27px,7vw,38px)/1.05 var(--serif);margin:0 0 4px}
+.location-time{font:400 23px/1.1 var(--serif);margin:0 0 6px}
+.location-address{font:400 clamp(17px,4.6vw,20px)/1.3 var(--serif);margin:0 0 10px;color:var(--soft)}
+.location-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:4px}
+/* agenda */
+.agenda-list{max-width:340px;margin:14px auto 0;text-align:left}
+.moment{display:grid;grid-template-columns:76px 1fr;align-items:baseline;column-gap:16px;padding:11px 2px;border-bottom:1px solid var(--line)}
+.moment:last-child{border-bottom:0}
+.moment-time{font:400 22px/1 var(--serif);color:var(--accent);font-variant-numeric:tabular-nums}
+.moment-label{font:400 clamp(21px,5.6vw,25px)/1.15 var(--serif);overflow-wrap:anywhere}
+#agenda.seq-ready .moment{opacity:0;transform:translate3d(0,30px,0)}
+#agenda.seq-ready.seq-start .moment{animation:momentIn 900ms cubic-bezier(.19,1,.3,1) both;animation-delay:var(--step,0ms)}
+@keyframes momentIn{from{opacity:0;transform:translate3d(0,30px,0)}to{opacity:1;transform:none}}
+/* práctico */
+.practical-item{margin:0 auto;max-width:350px;padding:14px 0}
+.practical-item+.practical-item{border-top:1px solid var(--line)}
+.practical-title{font:600 clamp(17px,4.5vw,20px)/1.25 var(--smallcaps);letter-spacing:.09em;margin:0 0 6px;color:var(--accent)}
+.practical-details{font:400 clamp(19px,4.9vw,22px)/1.3 var(--serif);margin:0 auto 8px;overflow-wrap:anywhere;max-width:33ch}
+.practical-line{display:block;white-space:pre-line}.practical-line+.practical-line{margin-top:3px}
+.practical-item.times .practical-details{display:flex;flex-wrap:wrap;justify-content:center;column-gap:22px;row-gap:3px}
+.practical-item.times .practical-line:not(.travel-time){flex:1 1 100%}
+.travel-time{display:inline-flex!important;flex-direction:column;align-items:center;font-variant-numeric:tabular-nums}
+.time-label{font:500 14px/1.2 var(--smallcaps);letter-spacing:.1em;color:var(--soft)}.time-value{font:500 22px/1.15 var(--serif)}
+.practical-item.accommodation .practical-details>.practical-line:first-child{font-size:clamp(22px,5.7vw,27px);line-height:1.17}
+.practical-item details{margin:6px auto 0;width:min(100%,310px)}
+.practical-item summary{list-style:none;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 6px;cursor:pointer;font:500 16px/1.2 var(--smallcaps);letter-spacing:.05em;border-bottom:1px solid var(--line)}
+.practical-item summary::-webkit-details-marker{display:none}.practical-item summary::marker{content:""}
+.practical-item details .practical-details{margin-top:10px;font-size:clamp(18px,4.7vw,20px)}
+#practical .practical-item.pr-ready{opacity:0;transform:translateY(18px)}
+#practical .practical-item.pr-ready.pr-visible{animation:prIn 850ms cubic-bezier(.2,.76,.22,1) both}
+@keyframes prIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+/* galería: carrusel, nunca collage */
+#gallery-items{display:flex;flex-wrap:nowrap;align-items:center;width:100%;max-width:480px;margin:10px auto 0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain}
+#gallery-items::-webkit-scrollbar{display:none}
+#gallery-items img{flex:0 0 100%;width:100%;min-width:100%;height:clamp(245px,43svh,385px);object-fit:cover;scroll-snap-align:center;scroll-snap-stop:always}
+.gallery-nav{display:flex;flex-direction:column;align-items:center;gap:2px;margin:6px auto 0}
+.gallery-nav>span{font:500 clamp(15px,3.9vw,18px)/1.2 var(--smallcaps);letter-spacing:.05em;color:var(--soft)}
+.gallery-dots{display:flex;justify-content:center;gap:2px}
+.gallery-dot{width:42px;height:42px;border:0;border-radius:50%;background:transparent;padding:0;display:grid;place-items:center;cursor:pointer}
+.gallery-dot::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--line);transition:transform .15s}
+.gallery-dot[aria-current="true"]::before{background:var(--accent);transform:scale(1.4)}
+/* ---------- portada ---------- */
+#cover,#closing{padding:0;min-height:100svh;min-height:100dvh;display:block;overflow:hidden;background:var(--cover-bg)}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none;z-index:0}
+.cover-text,.closing-text{position:absolute;z-index:2;left:22px;right:22px;text-align:center;color:var(--cover-ink);text-shadow:var(--cover-halo);opacity:0;transform:translateY(10px);transition:opacity 1.2s ease,transform 1.2s ease}
+.cover-text{{{COVER_TEXT_POS}}}
+#cover.opened .cover-text,#closing.revealed .closing-text{opacity:1;transform:none}
+.cover-scrim,.closing-scrim{position:absolute;left:0;right:0;z-index:1;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
+.cover-scrim{{{COVER_SCRIM}}}
+#cover.opened .cover-scrim,#closing.revealed .closing-scrim{opacity:1}
+.cover-tag{font:600 clamp(15px,4vw,19px)/1.2 var(--smallcaps);letter-spacing:.16em;margin:0 0 6px}
+.cover-names{font:400 clamp(58px,15vw,96px)/.86 var(--script);margin:0;overflow-wrap:anywhere;color:var(--cover-names)}
+.cover-names span{display:block}.cover-names .amp{font:400 .36em/1 var(--serif);margin:.08em 0}
+.cover-date{font:600 clamp(16px,4.4vw,21px)/1.25 var(--smallcaps);letter-spacing:.16em;margin:14px 0 0}
+.cover-place{font:400 clamp(17px,4.5vw,20px)/1.2 var(--serif);margin:6px 0 0}
+.countdown{font:600 15px/1.3 var(--smallcaps);letter-spacing:.11em;margin:10px 0 0}
+.cover-bottom{position:absolute;z-index:3;left:20px;right:20px;bottom:max(6svh,calc(env(safe-area-inset-bottom) + 18px));display:flex;justify-content:center;opacity:0;transition:opacity 1s ease .4s;pointer-events:none}
+#cover.opened .cover-bottom{opacity:1;pointer-events:auto}
+.entry-button{font:600 16px/1.2 var(--smallcaps);letter-spacing:.08em;border:1px solid var(--cover-btn-line);border-radius:999px;padding:13px 26px;min-height:50px;background:var(--cover-btn);color:var(--cover-btn-ink);cursor:pointer;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.tap-hint{position:absolute;z-index:3;left:0;right:0;bottom:max(9svh,calc(env(safe-area-inset-bottom) + 30px));display:flex;flex-direction:column;align-items:center;gap:12px;border:0;background:none;color:var(--hint-ink);cursor:pointer;font:500 clamp(17px,4.6vw,20px)/1.2 var(--serif);font-style:italic;letter-spacing:.1em;text-shadow:var(--hint-halo);transition:opacity .6s;padding:14px 0;min-height:64px}
+.tap-hint .dot{width:11px;height:11px;border-radius:50%;background:var(--hint-ink);animation:pulse 2.2s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--hint-pulse)}100%{box-shadow:0 0 0 24px rgba(0,0,0,0)}}
+#cover.playing .tap-hint,#cover.opened .tap-hint{opacity:0;pointer-events:none}
+/* ---------- cierre ---------- */
+.closing-scrim{{{CLOSING_SCRIM}}}
+.closing-text{{{CLOSING_TEXT_POS}}}
+.closing-text{color:var(--closing-ink);text-shadow:var(--closing-halo);display:flex;flex-direction:column;align-items:center;gap:6px}
+.closing-caption{font:400 clamp(19px,5.2vw,25px)/1.2 var(--serif);margin:0;max-width:30ch}
+.closing-sign{font:400 clamp(40px,11vw,66px)/1.05 var(--script);margin:2px 0 0;overflow-wrap:anywhere}
+.close-date{font:600 15px/1.2 var(--smallcaps);letter-spacing:.14em;margin:0 0 8px}
+.closing-text .rsvp-button{min-width:220px;min-height:52px;font-size:16px;color:var(--closing-btn-ink);background:var(--closing-btn);border-color:var(--closing-btn-line);text-shadow:none}
+[data-scene].is-last{padding-bottom:max(19svh,120px)}
+#cover.long-names .cover-names{font-size:clamp(44px,11.2vw,72px)}#cover.long-names .cover-tag{margin-bottom:2px}
+@media(max-width:360px){[data-scene]{padding-inline:22px}h2{font-size:46px}.cover-names{font-size:52px}#cover.long-names .cover-names{font-size:40px}.cover-date{font-size:15px;letter-spacing:.12em}.location-name{font-size:26px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.tap-hint .dot{animation:none}.cover-text,.closing-text,.cover-bottom,.cover-scrim,.closing-scrim{transition:none}}
+</style></head><body>
+<div id="stage-notice" aria-hidden="true">GUEST · {{NAME_UPPER}} · REVISIÓN TEST · NO VENTA</div>
+<main id="invitation">
+<section data-scene id="cover" aria-label="Portada">
+<video class="hero-video" id="cover-video" muted playsinline preload="auto" poster="{{COVER_POSTER}}" aria-hidden="true"><source src="{{COVER_VIDEO}}" type="video/mp4"></video>
+<div class="cover-scrim"></div>
+<div class="cover-text"><p class="cover-tag" id="cover-kicker">Nos casamos</p><h1 class="cover-names"><span id="name-1">Lucía</span><span class="amp">&amp;</span><span id="name-2">Pablo</span></h1><p class="cover-date" id="cover-date"></p><p class="cover-place" id="cover-place"></p><p class="countdown" id="countdown"></p></div>
+<button type="button" class="tap-hint" id="open-cover" aria-label="Abrir la invitación"><span class="dot"></span><span>{{TAP_LABEL}}</span></button>
+<div class="cover-bottom"><button type="button" class="entry-button" id="enter" aria-label="Descubrir la invitación">Descubrir ↓</button></div>
+</section>
+<section data-scene id="story" data-bg data-module="story"><div class="scene-inner"><p class="section-kicker">Nuestra historia</p><h2>Érase una vez…</h2><p class="scene-paragraph" id="story-text"></p><img class="feather invisible" id="story-photo" alt="Fotografía de la pareja"></div></section>
+<section data-scene id="locations" data-bg data-module="locations"><div class="scene-inner"><p class="section-kicker">Nos vemos aquí</p><h2>El gran día</h2><div id="location-items"></div><p class="scene-small invisible" id="dresscode"></p></div></section>
+<section data-scene id="agenda" data-bg data-module="agenda"><div class="scene-inner"><p class="section-kicker">Para que no te pierdas nada</p><h2>El programa</h2><div class="agenda-list" id="moments"></div></div></section>
+<section data-scene id="practical" data-bg data-module="practical"><div class="scene-inner"><p class="section-kicker">Todo lo que necesitas saber</p><h2>Los detalles</h2><div id="practical-items"></div></div></section>
+<section data-scene id="gallery" data-bg data-module="gallery"><div class="scene-inner"><p class="section-kicker">Un poco de nosotros</p><h2>Recuerdos</h2><div id="gallery-items"></div></div></section>
+<section data-scene id="closing" aria-label="Confirmación de asistencia y despedida">
+<video class="hero-video" id="closing-video" muted playsinline preload="metadata" poster="{{CLOSING_POSTER}}" aria-hidden="true"><source src="{{CLOSING_VIDEO}}" type="video/mp4"></video>
+<div class="closing-scrim"></div>
+<div class="closing-text"><p class="closing-caption" id="closing-line"></p><p class="closing-sign" id="closing-names"></p><p class="close-date" id="closing-date"></p><a class="rsvp-button" id="rsvp-link" href="#" aria-label="Confirmar asistencia">Confirmar asistencia</a></div>
+</section>
+</main>
+<script>
+(()=>{'use strict';
+const TEMPLATE={id:'{{ID}}',version:'{{VERSION}}'};
+const BG5=[{{BG5}}],BG4=[{{BG4}}];
+const COVER_TEXT_AT={{COVER_TEXT_AT}},CLOSING_TEXT_AT={{CLOSING_TEXT_AT}};
+const id=x=>document.getElementById(x),hidden=(e,on)=>e.classList.toggle('invisible',!!on),text=(e,v)=>{e.textContent=String(v??'')};
+const txt=v=>v==null?'':String(v).trim();
+const node=(tag,cls,content)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(content!==undefined)text(e,content);return e};
+const safeUrl=v=>{if(!v)return null;try{const u=new URL(v,document.baseURI);return ['https:','http:'].includes(u.protocol)?u.href:null}catch{return null}};
+const photoUrl=p=>{const s=typeof p==='string'?p:p?.src;if(!s||typeof s!=='string')return null;try{const u=new URL(s,document.baseURI);if(u.protocol==='data:')return /^data:image\//.test(s)?s:null;return ['https:','http:','blob:'].includes(u.protocol)?u.href:null}catch{return null}};
+const clamp=(v,d=50)=>Math.max(0,Math.min(100,Number.isFinite(Number(v))?Number(v):d));
+const reduced=()=>typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function setImage(el,p){const url=photoUrl(p);hidden(el,!url);if(!url){el.removeAttribute('src');return}el.src=url;el.dataset.fit=p?.fit==='full'?'full':'crop';el.style.objectPosition=clamp(p?.focusX)+'% '+clamp(p?.focusY)+'%';if(p?.alt)el.alt=p.alt}
+function link(url,label){const href=safeUrl(url);if(!href)return null;const a=node('a','link',label);a.href=href;a.rel='noopener noreferrer';a.target='_blank';return a}
+const st={config:null};
+// Textos predefinidos del cuestionario común (idénticos a STORY del backend guest-invitation-flow).
+const STORY_PRESETS={'story-01':'Llevamos años compartiendo planes, viajes, domingos tranquilos y muchas risas. Ahora nos hace muchísima ilusión celebrar el siguiente capítulo con vosotros.','story-02':'No sabemos exactamente cuándo empezó todo, pero sí sabemos que desde entonces la vida es mucho más divertida juntos. Y este día no tendría sentido sin vosotros.','story-03':'Entre planes improvisados, viajes, cenas que se alargan y días de sofá, hemos ido construyendo lo nuestro. Ahora toca celebrarlo con nuestra gente.','story-04':'Después de tantos momentos compartidos, ha llegado uno que queremos vivir rodeados de las personas que forman parte de nuestra historia: vosotros.','story-05':'Nos elegimos hace tiempo y seguimos eligiéndonos cada día. Ahora queremos celebrarlo como más nos gusta: con nuestra familia y amigos cerca.'};
+const dateLabel=d=>{const iso=String(d||'');const v=/^\d{4}-\d{2}-\d{2}$/.test(iso)?new Date(iso+'T12:00:00'):null;return v&&!isNaN(v)?new Intl.DateTimeFormat(st.config?.locale==='en'?'en-GB':'es-ES',{day:'numeric',month:'long',year:'numeric'}).format(v):iso};
+/* ---- lugares ---- */
+function placeSection(i){const a=node('article','location');a.append(node('p','location-type',i.type==='ceremony'?'Ceremonia':i.type==='celebration'?'Celebración':'Ceremonia y celebración'));a.append(node('h3','location-name',i.name||''));if(txt(i.time))a.append(node('p','location-time',i.time));if(txt(i.address))a.append(node('p','location-address',i.address));const links=node('div','location-links');const ml=link(i.mapsUrl,'Cómo llegar'),wl=link(i.websiteUrl,'Web');if(ml)links.append(ml);if(wl)links.append(wl);if(links.childElementCount)a.append(links);return a}
+/* ---- práctico (mapeo canónico del cuestionario; nunca inventar CTA) ---- */
+function addLines(container,lines){const items=lines.map(txt).filter(Boolean);if(!items.length)return;const p=node('p','practical-details');for(const item of items){const s=node('span','practical-line');const m=item.match(/^(Ida|Vuelta):\s*(.*)$/);if(m){s.classList.add('travel-time');s.append(node('span','time-label',m[1]),node('strong','time-value',m[2]))}else s.textContent=item;p.append(s)}container.append(p)}
+function addBlock(root,title,lines,links=[],more=null,kind=''){
+ const hasMore=more&&more.lines.some(x=>txt(x));
+ if(!lines.some(x=>txt(x))&&!links.some(x=>safeUrl(x[0]))&&!hasMore)return;
+ const b=node('section','practical-item'+(kind?' '+kind:''));b.append(node('p','practical-title',title));addLines(b,lines);
+ const row=node('div','location-links');for(const [u,l] of links){const a=link(u,l);if(a)row.append(a)}if(row.childElementCount)b.append(row);
+ if(hasMore){const d=node('details'),s=node('summary',null,more.label);d.append(s);addLines(d,more.lines);b.append(d)}
+ root.append(b)}
+function applyPractical(config){
+ const root=id('practical-items'),p=config.practical||{};root.replaceChildren();
+ const b=p.bus||{};
+ if(b.enabled){const lines=[];const j=a=>(a||[]).map(txt).filter(Boolean).join(' · ');
+  if(j(b.pickupPoints))lines.push('Paradas: '+j(b.pickupPoints));if(j(b.outboundTimes))lines.push('Ida: '+j(b.outboundTimes));if(j(b.returnTimes))lines.push('Vuelta: '+j(b.returnTimes));if(b.note)lines.push(b.note);
+  addBlock(root,'Transporte',lines,[[b.mapsUrl,'Cómo llegar']],null,'times')}
+ const a=p.accommodation||{};
+ if(a.enabled&&a.mode!=='none'){
+  const more=[a.address&&'Dirección: '+a.address,a.bookingName&&a.bookingName!==a.bookingCode&&'Reserva a nombre de '+a.bookingName,a.bookingCode&&'Código: '+a.bookingCode,a.deadline&&'Hasta: '+a.deadline,a.phone&&'Teléfono: '+a.phone].filter(Boolean);
+  const links=[[a.websiteUrl,'Ver hotel'],[a.mapsUrl,'Cómo llegar']];if(a.mode==='external_booking')links.push([a.externalBookingUrl,'Reservar']);
+  addBlock(root,'Alojamiento',[a.name,a.note,a.discountText,a.priceText],links,{label:'Información adicional',lines:more},'accommodation')}
+ const g=p.gift||{};
+ if(g.enabled&&g.mode!=='none'){
+  const more=[g.details,g.accountHolder&&'Titular: '+g.accountHolder,g.iban&&'IBAN: '+g.iban,g.bicSwift&&'BIC/SWIFT: '+g.bicSwift,g.bizumRecipient&&'Destinatario: '+g.bizumRecipient,g.bizumPhone&&'Bizum: '+g.bizumPhone];
+  addBlock(root,'Regalos',[g.displayText],[[g.externalUrl,g.linkLabel||'Ver lista de regalos']],{label:'Ver datos',lines:more},'gift')}
+ const m=p.playlist||{};
+ if(m.enabled&&m.mode!=='none'){addBlock(root,'Nuestra música',[m.prompt],[[m.url,m.mode==='guest_request'?'Pedir canción':'Ver playlist']],null,'playlist')}
+ hidden(id('practical'),!root.childElementCount)}
+/* ---- galería en carrusel ---- */
+function applyGallery(config){
+ const scene=id('gallery'),track=id('gallery-items');track.replaceChildren();scene.querySelector('.gallery-nav')?.remove();
+ const photos=config.gallery?.enabled?(config.gallery.photos||[]).filter(pp=>photoUrl(pp)).slice(0,4):[];
+ photos.forEach((pp,i)=>{const im=node('img','feather');im.src=photoUrl(pp);im.alt=pp.alt||'Fotografía de la pareja';im.loading=i?'lazy':'eager';im.dataset.fit=pp.fit==='full'?'full':'crop';im.style.objectPosition=clamp(pp.focusX)+'% '+clamp(pp.focusY)+'%';im.setAttribute('aria-label','Fotografía '+(i+1)+' de '+photos.length);track.append(im)});
+ hidden(scene,!photos.length);if(!photos.length)return;
+ track.setAttribute('role','region');track.setAttribute('aria-label','Galería de fotografías');track.scrollLeft=0;
+ if(photos.length<2)return;
+ const nav=node('div','gallery-nav'),dots=node('div','gallery-dots');nav.append(node('span',null,'Desliza para ver'),dots);
+ const btns=photos.map((_,i)=>{const b=node('button','gallery-dot');b.type='button';b.setAttribute('aria-label','Ver foto '+(i+1));b.addEventListener('click',()=>track.scrollTo({left:i*track.clientWidth,behavior:reduced()?'auto':'smooth'}));dots.append(b);return b});
+ const upd=()=>{const k=Math.max(0,Math.min(btns.length-1,Math.round(track.scrollLeft/Math.max(1,track.clientWidth))));btns.forEach((b,i)=>b.setAttribute('aria-current',i===k?'true':'false'))};
+ track.onscroll=upd;scene.querySelector('.scene-inner').append(nav);upd()}
+/* ---- animaciones de entrada (agenda escalonada, práctico) ---- */
+let agendaObs=null,practicalObs=null;
+function installReveals(){
+ agendaObs?.disconnect();practicalObs?.disconnect();
+ const agenda=id('agenda'),rows=[...id('moments').children];agenda.classList.remove('seq-ready','seq-start');
+ if(rows.length&&!reduced()&&typeof IntersectionObserver==='function'){agenda.classList.add('seq-ready');rows.forEach((r,i)=>r.style.setProperty('--step',(i*560)+'ms'));let armed=true;
+  agendaObs=new IntersectionObserver(es=>{for(const e of es){if(e.intersectionRatio<.13){armed=true;continue}if(armed&&e.intersectionRatio>=.36){armed=false;agenda.classList.remove('seq-start');void agenda.offsetWidth;agenda.classList.add('seq-start')}}},{threshold:[0,.12,.36,.55]});agendaObs.observe(agenda)}
+ const mods=[...id('practical-items').children];
+ if(mods.length&&!reduced()&&typeof IntersectionObserver==='function'){practicalObs=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){e.target.classList.add('pr-visible');practicalObs.unobserve(e.target)}},{threshold:.18,rootMargin:'0px 0px -5% 0px'});mods.forEach(m=>{m.classList.add('pr-ready');practicalObs.observe(m)})}}
+/* ---- render principal ---- */
+function render(config){
+ if(!config||config.schemaVersion!=='guest-invitation-config-v1')throw new Error('GUEST_SKIN_CONFIG_SCHEMA');
+ if(config.template?.id!==TEMPLATE.id||config.template?.version!==TEMPLATE.version)throw new Error('GUEST_SKIN_TEMPLATE_VERSION');
+ st.config=config;document.documentElement.lang=(config.locale||'es').startsWith('en')?'en':'es';
+ const n1=config.couple?.name1||'',n2=config.couple?.name2||'',date=dateLabel(config.wedding?.date);
+ text(id('name-1'),n1);text(id('name-2'),n2);id('cover').classList.toggle('long-names',Math.max(n1.length,n2.length)>12);
+ text(id('cover-date'),config.cover?.showTime&&config.wedding?.time?date+' · '+config.wedding.time:date);
+ hidden(id('cover-place'),!config.cover?.showPlace||!txt(config.wedding?.coverPlace));text(id('cover-place'),config.wedding?.coverPlace||'');
+ const count=id('countdown');hidden(count,!config.countdown?.enabled);
+ if(config.countdown?.enabled){const days=Math.max(0,Math.ceil((new Date(config.wedding.date+'T12:00:00').getTime()-Date.now())/86400000));text(count,days>1?'Faltan '+days+' días':days===1?'¡Falta 1 día!':'¡Llegó nuestro día!')}
+ // historia: texto y/o foto propia; la foto de portada nunca suplanta a la de la historia
+ const story=config.story||{},body=story.textMode==='none'?'':(txt(story.body)||(story.textMode==='preset'?(STORY_PRESETS[story.presetId]||''):''));
+ hidden(id('story'),!story.enabled||(!body&&!photoUrl(story.photo)));text(id('story-text'),body);hidden(id('story-text'),!body);setImage(id('story-photo'),story.photo);
+ // lugares (1 o 2 sedes, enlaces de cada sede) + foto del lugar + vestimenta
+ const loc=id('location-items');loc.replaceChildren();for(const x of config.locations?.items||[])loc.append(placeSection(x));
+ let fig=id('location-photo');const hero=config.locations?.heroPhoto;
+ if(photoUrl(hero)&&loc.childElementCount){if(!fig){fig=node('figure','location-photo');fig.id='location-photo';const im=node('img','location-hero-photo feather');im.alt='Fotografía del lugar';im.loading='lazy';fig.append(im);loc.parentNode.insertBefore(fig,loc)}setImage(fig.querySelector('img'),hero)}else fig?.remove();
+ const dress=config.locations?.dressCode;hidden(id('dresscode'),!dress?.enabled||!txt(dress?.text));text(id('dresscode'),txt(dress?.text)?'Código de vestimenta · '+dress.text:'');
+ hidden(id('locations'),!loc.childElementCount);
+ // agenda
+ const moments=id('moments');moments.replaceChildren();for(const m of config.agenda?.moments||[]){if(!txt(m.label)&&!txt(m.time))continue;const r=node('div','moment');r.append(node('span','moment-time',m.time||''),node('span','moment-label',m.label||''));moments.append(r)}
+ hidden(id('agenda'),!config.agenda?.enabled||!moments.childElementCount);
+ applyPractical(config);applyGallery(config);
+ // cierre
+ const line=txt(config.closing?.line);text(id('closing-line'),line);hidden(id('closing-line'),!line);
+ text(id('closing-names'),n1&&n2?n1+' & '+n2:n1||n2);text(id('closing-date'),date);
+ const r=id('rsvp-link');text(r,config.rsvp?.ctaLabel||'Confirmar asistencia');const rt=safeUrl(config.rsvp?.route);r.href=rt||'#';r.setAttribute('aria-disabled',rt?'false':'true');r.dataset.rsvpConfigured=rt?'true':'false';
+ // fondos de la autora: la primera escena continúa la portada y la última enlaza con el cierre
+ document.querySelectorAll('[data-bg]').forEach(s=>s.classList.remove('is-last'));const scenes=[...document.querySelectorAll('[data-bg]:not(.invisible)')],n=scenes.length;
+ scenes.forEach((s,k)=>{s.classList.toggle('is-last',k===n-1);let bg,idx;if(n===5){idx=k+1;bg=BG5[k]}else{idx=n===4?k+1:Math.max(1,Math.min(4,Math.round(1+k*3/Math.max(1,n-1))));bg=BG4[idx-1]}s.style.backgroundImage='url('+bg+')';s.dataset.backgroundIndex=String(idx)});
+ installReveals();
+ return {id:TEMPLATE.id,version:TEMPLATE.version,visibleScenes:n,sceneKinds:scenes.map(s=>s.id),rsvpReady:!!rt};
+}
+window.GUEST_APPLY_CONFIG=render;
+/* ---- portada: espera el toque, se abre y muestra los datos ---- */
+const cover=id('cover'),cv=id('cover-video');let opened=false,coverTimer=null;
+function revealCover(){if(opened)return;opened=true;cover.classList.add('opened')}
+function openCover(){if(cover.classList.contains('playing')||opened)return;cover.classList.add('playing');
+ if(reduced()){try{cv.currentTime=Math.max(0,(cv.duration||COVER_TEXT_AT)-.05)}catch{}revealCover();return}
+ const pr=cv.play();if(pr&&pr.catch)pr.catch(()=>revealCover());
+ coverTimer=setTimeout(revealCover,(COVER_TEXT_AT+2.5)*1000)}
+cv.addEventListener('timeupdate',()=>{if(cv.currentTime>=COVER_TEXT_AT)revealCover()});cv.addEventListener('ended',revealCover);cv.addEventListener('error',revealCover);
+id('open-cover').addEventListener('click',openCover);cover.addEventListener('click',e=>{if(!opened&&!e.target.closest('button'))openCover()});
+id('enter').addEventListener('click',()=>{const next=document.querySelector('[data-bg]:not(.invisible)')||id('closing');next.scrollIntoView({behavior:reduced()?'auto':'smooth'})});
+/* ---- cierre: se reproduce una vez al llegar y se queda en el último fotograma ---- */
+const closing=id('closing'),xv=id('closing-video');let closingStarted=false;
+function revealClosing(){closing.classList.add('revealed')}
+xv.addEventListener('timeupdate',()=>{if(xv.currentTime>=CLOSING_TEXT_AT)revealClosing()});xv.addEventListener('ended',revealClosing);xv.addEventListener('error',revealClosing);
+function startClosing(){if(closingStarted)return;closingStarted=true;if(reduced()){xv.preload='auto';try{xv.currentTime=Math.max(0,(xv.duration||CLOSING_TEXT_AT)-.05)}catch{}revealClosing();return}const pr=xv.play();if(pr&&pr.catch)pr.catch(()=>revealClosing());setTimeout(revealClosing,(CLOSING_TEXT_AT+2.5)*1000)}
+if(typeof IntersectionObserver==='function'){new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting))startClosing()},{threshold:.4}).observe(closing)}else startClosing();
+document.addEventListener('visibilitychange',()=>{if(document.hidden){cv.pause();xv.pause()}});
+id('rsvp-link').addEventListener('click',ev=>{if(id('rsvp-link').dataset.rsvpConfigured!=='true')ev.preventDefault()});
+/* ---- demostración y fixtures de revisión TEST (nunca en un pedido real) ---- */
+const demo={schemaVersion:'guest-invitation-config-v1',locale:'es',template:{id:TEMPLATE.id,version:TEMPLATE.version,typographyVariant:'classic'},couple:{name1:'Lucía',name2:'Pablo'},wedding:{date:'2027-09-18',time:'19:30',coverPlace:'Murcia'},cover:{photo:null,showPlace:true,showTime:false},countdown:{enabled:true},story:{enabled:true,textMode:'custom',body:'No sabemos exactamente cuándo empezó todo. Solo sabemos que queremos seguir escribiendo nuestra historia con vosotros a nuestro lado.',photo:null},locations:{mode:'split',dressCode:{enabled:true,text:'Elegante, con un toque de color'},items:[{type:'ceremony',time:'18:30',name:'Jardín de la Luz',address:'Camino de los Olivos, Murcia',mapsUrl:null},{type:'celebration',time:'20:00',name:'Finca del Mar',address:'Murcia',mapsUrl:null}]},agenda:{enabled:true,moments:[{time:'18:30',label:'Ceremonia'},{time:'19:30',label:'Cóctel de bienvenida'},{time:'21:00',label:'Cena'},{time:'23:30',label:'Baile'}]},practical:{bus:{enabled:true,pickupPoints:['Plaza Circular'],outboundTimes:['17:45'],returnTimes:['02:00'],note:null},accommodation:{enabled:true,mode:'recommended',name:'Hotel de ejemplo',note:'Tenemos opciones cercanas a la finca.'},gift:{enabled:true,mode:'short_text',displayText:'Vuestra compañía es nuestro mejor regalo.'},playlist:{enabled:true,mode:'guest_request',prompt:'¿Qué canción no puede faltar?',url:null}},rsvp:{ctaLabel:'Confirmar asistencia',route:null},gallery:{enabled:false,photos:[]},closing:{line:'Lo más bonito será celebrarlo juntos.'}};
+function qaPhoto(seed,fit='crop'){const c=[['#f0dccb','#a67a73'],['#e9d5c9','#8c9280'],['#d7cbd5','#7e7187'],['#d6d2bd','#9d8f70'],['#ded0ce','#b18c9b']][seed%5];const svg='<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="850" viewBox="0 0 1280 850"><rect width="1280" height="850" fill="'+c[0]+'"/><circle cx="930" cy="200" r="168" fill="#fff8e7" opacity=".55"/><path d="M0 620Q280 420 640 655T1280 550V850H0Z" fill="'+c[1]+'" opacity=".46"/><path d="M0 735Q330 635 770 770T1280 690V850H0Z" fill="'+c[1]+'" opacity=".62"/></svg>';return {src:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg),fit,focusX:50,focusY:50}}
+function fixture(mode){const full=mode!=='reduced',U='https://www.google.com/maps/search/?api=1&query=Murcia',W='https://example.com/';
+ const loc=(type,time,name,address)=>({type,time,name,address,mapsUrl:U,websiteUrl:W});
+ return {...structuredClone(demo),story:{enabled:true,textMode:full?'custom':'preset',body:demo.story.body,photo:full?qaPhoto(0):null},
+  locations:{mode:full?'split':'shared',heroPhoto:full?qaPhoto(3):null,dressCode:{enabled:full,text:full?'Elegante, con un toque de color':null},items:full?[loc('ceremony','18:30','Jardín de la Luz','Camino de los Olivos, Murcia'),loc('celebration','20:00','Finca del Mar','Murcia')]:[loc('shared','18:30','Jardín de la Luz','Murcia')]},
+  agenda:{enabled:true,moments:full?[{time:'18:30',label:'Ceremonia'},{time:'19:30',label:'Cóctel de bienvenida'},{time:'21:00',label:'Cena'},{time:'23:30',label:'Baile'},{time:'02:00',label:'Último baile'}]:[{time:'18:30',label:'Ceremonia'}]},
+  practical:{bus:{enabled:full,pickupPoints:['Plaza de prueba'],outboundTimes:['17:15'],returnTimes:['02:00'],note:'Horario de transporte de muestra',mapsUrl:U},accommodation:{enabled:full,mode:'recommended',name:'Hotel de ejemplo',websiteUrl:W,mapsUrl:U},gift:{enabled:full,mode:'short_text',displayText:'Vuestra presencia es nuestro mejor regalo',details:'Texto de muestra'},playlist:{enabled:full,mode:'guest_request',prompt:'¿Qué canción no puede faltar?',url:'https://example.com/pedir-cancion'}},
+  gallery:{enabled:mode==='full',photos:mode==='full'?[qaPhoto(0),qaPhoto(1),qaPhoto(2),qaPhoto(4,'full')]:[]}}}
+if(!window.__GUEST_SUPPRESS_DEMO__){
+ const q=new URLSearchParams(location.search).get('qa');
+ if(['full','reduced','without-gallery'].includes(q)){render(fixture(q));document.documentElement.dataset.guestReviewFixture=q}else render(demo);
+}
+window.__GUEST_SKIN__={fixture,demo,openCover,startClosing};
+})();
+</script></body></html>

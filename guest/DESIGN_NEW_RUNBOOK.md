@@ -1,5 +1,9 @@
 # GUEST — Runbook de incorporación de diseños 03–1000
 
+## ATAJO D04+ — MOTOR COMÚN DE SECCIONES
+
+Si el diseño nuevo aporta vídeo de portada, vídeo de cierre y fondos de 4/5 pantallas, **no se integra un HTML propio**: se crea su `skin.json` y se genera con el motor común. Ver [GUEST_SKIN_ENGINE_D04_D08_2026-10-12.md](GUEST_SKIN_ENGINE_D04_D08_2026-10-12.md).
+
 ## PUERTA DE ENTRADA UNIVERSAL — LECTURA OBLIGATORIA ANTES DE CUALQUIER DISEÑO
 
 [**Contrato vinculante para TODOS los diseños GUEST (D01–D1000)**](GUEST_UNIVERSAL_DESIGN_ACCEPTANCE_CONTRACT_V1.md). **Antes de diseñar, integrar, retocar, solicitar fotografías o pedir una revisión**, leer contrato universal + `GUEST_INVITATION_MASTER_CONFIGURATION_MATRIX_V1.md` + esquema `GUEST_INVITATION_CONFIG_SCHEMA_V1.json` + fixtures normales/estrés. Es una obligación del producto, **NO una regla del diseño de turno**.

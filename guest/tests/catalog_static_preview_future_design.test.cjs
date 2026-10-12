@@ -10,6 +10,10 @@ try{
  fs.copyFileSync(path.join(root,'guest/tools/build_catalog_static_preview.cjs'),path.join(guest,'tools/build_catalog_static_preview.cjs'));
  const registry=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json')));
  const status=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_PROJECT_STATUS_V1.json')));
+ // Aislar el escenario sintético: los diseños reales ya registrados (D04+) no forman parte
+ // de esta copia temporal y no deben hacer fallar la prueba genérica del empaquetador.
+ for(const k of Object.keys(registry.templates))if(!['botanica','veil-light'].includes(k))delete registry.templates[k];
+ for(const k of Object.keys(status.designs))if(!['botanica','veil-light'].includes(k)&&status.designs[k].status!=='not-started')delete status.designs[k];
  const html=Buffer.from('<!doctype html><html><body><script>window.GUEST_APPLY_CONFIG=function(){return true}</script></body></html>');
  registry.templates['design-03']={id:'design-03',version:'1.0.0',mode:'iframe',src:null,applyApi:'GUEST_APPLY_CONFIG',status:'certification-pending'};
  status.designs['design-03']={version:'1.0.0',status:'certification-pending',candidateSha256:sha(html)};

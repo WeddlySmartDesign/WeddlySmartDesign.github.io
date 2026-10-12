@@ -1,0 +1,10 @@
+{
+  "id": "design-05",
+  "displayName": "GALA",
+  "version": "1.0.0",
+  "rendererApi": "GUEST_APPLY_CONFIG",
+  "masterHtml": "master.html",
+  "typographyVariants": [
+    "classic"
+  ]
+}

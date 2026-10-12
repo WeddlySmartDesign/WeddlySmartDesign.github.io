@@ -1,0 +1,69 @@
+{
+ "schemaVersion": "guest-skin-engine-qa-v1",
+ "date": "2026-10-12",
+ "engine": "guest/templates/_skin-engine/engine.html",
+ "builder": "guest/tools/build_skin_master.cjs",
+ "scope": "SYNTHETIC OFFLINE Chromium (Playwright) — NOT E2E, NOT Android, NOT sale",
+ "widths": [
+  320,
+  360,
+  390,
+  430
+ ],
+ "scenarios": [
+  "qa=full (MAX+FOTOS: 2 sedes, 5 momentos, 4 prácticos, galería 4)",
+  "qa=reduced",
+  "qa=without-gallery",
+  "GUEST_CATALOG_CERT_SCENARIO_NORMAL_V1 via backend buildConfig",
+  "GUEST_CATALOG_CERT_SCENARIO_STRESS_V1 via backend buildConfig",
+  "galería 0/1/2/3/4 con navegación real por puntos",
+  "ausencias: sin historia, solo texto, solo foto, sin agenda, 1 y 3 momentos, práctico 0 y 1, sin URLs, 1 sede, sin cuenta atrás, nombres largos, solo lugares"
+ ],
+ "checks": 460,
+ "fails": 0,
+ "criteria": [
+  "sin desbordamiento horizontal",
+  "sin enlaces sin URL http(s)",
+  "sin bloques/controles huérfanos",
+  "controles táctiles >=42px",
+  "sin errores JS",
+  "galería: nº fotos y puntos correctos, punto final navega"
+ ],
+ "designs": {
+  "design-04": {
+   "displayName": "AZULEJO",
+   "version": "1.0.0",
+   "masterSha256": "3509a6001e7895816952ab892aa988d5e816bf003914a742363994761c4c0a66",
+   "status": "certification-pending",
+   "ownerVisualApproval": "PENDING"
+  },
+  "design-05": {
+   "displayName": "GALA",
+   "version": "1.0.0",
+   "masterSha256": "35ee2d126ad66eddf6c1b2848ffa3ae59dd6c188f5d5524475c3d3e569050563",
+   "status": "certification-pending",
+   "ownerVisualApproval": "PENDING"
+  },
+  "design-06": {
+   "displayName": "INVERNADERO",
+   "version": "1.0.0",
+   "masterSha256": "1045a6cc349c26c9526623ebd3d511922a84edad62f2008a9545e00551ed5b44",
+   "status": "certification-pending",
+   "ownerVisualApproval": "PENDING"
+  },
+  "design-07": {
+   "displayName": "REFLEJO",
+   "version": "1.0.0",
+   "masterSha256": "66a782d1dda140cd7483028e797cc2e223e8773905e89aee6876d0b0b16c432e",
+   "status": "certification-pending",
+   "ownerVisualApproval": "PENDING"
+  },
+  "design-08": {
+   "displayName": "CAJA DE MÚSICA",
+   "version": "1.0.0",
+   "masterSha256": "77fbed5a2de9786c48c20ad3f2e039b6b262795f3e2a15f93e4b752bc62554ba",
+   "status": "certification-pending",
+   "ownerVisualApproval": "PENDING"
+  }
+ }
+}

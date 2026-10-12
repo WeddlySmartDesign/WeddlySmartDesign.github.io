@@ -1,0 +1,52 @@
+{
+ "id": "design-05",
+ "version": "1.0.0",
+ "displayName": "GALA",
+ "coverTextAt": 3.6,
+ "closingTextAt": 7.0,
+ "coverTextPosition": "top:max(8svh,calc(env(safe-area-inset-top) + 40px))",
+ "coverScrim": "top:0;height:50%;background:linear-gradient(180deg,rgba(252,249,243,.62) 0%,rgba(252,249,243,.38) 55%,rgba(252,249,243,0) 100%)",
+ "theme": {
+  "paper": "#f4ede1",
+  "ink": "#2d2618",
+  "soft": "#6b5a3e",
+  "accent": "#94712d",
+  "line": "rgba(148,113,45,.38)",
+  "btn": "rgba(255,255,255,.5)",
+  "cover-bg": "#0d0d10",
+  "cover-ink": "#2b2216",
+  "cover-names": "#3d2f17",
+  "cover-halo": "0 0 18px rgba(255,255,255,.95),0 0 4px rgba(255,255,255,.9)",
+  "cover-btn": "rgba(255,250,238,.85)",
+  "cover-btn-ink": "#2b2216",
+  "cover-btn-line": "rgba(148,113,45,.6)",
+  "hint-ink": "#ecd28f",
+  "hint-halo": "0 1px 10px rgba(0,0,0,.8)",
+  "hint-pulse": "rgba(236,210,143,.55)",
+  "closing-scrim": "linear-gradient(to top,rgba(8,16,38,.86) 0%,rgba(8,16,38,.55) 50%,rgba(8,16,38,0) 100%)",
+  "closing-ink": "#fff6e6",
+  "closing-halo": "0 1px 10px rgba(0,0,0,.55)",
+  "closing-btn": "rgba(255,248,231,.95)",
+  "closing-btn-ink": "#2b2230",
+  "closing-btn-line": "rgba(255,248,231,.95)"
+ },
+ "tapLabel": "Toca para abrir",
+ "media": {
+  "coverVideo": "videos/portada.mp4",
+  "closingVideo": "videos/cierre.mp4",
+  "backgrounds5": [
+   "fondos-5-pantallas/fondo-1.jpg",
+   "fondos-5-pantallas/fondo-2.jpg",
+   "fondos-5-pantallas/fondo-3.jpg",
+   "fondos-5-pantallas/fondo-4.jpg",
+   "fondos-5-pantallas/fondo-5.jpg"
+  ],
+  "backgrounds4": [
+   "fondos-4-pantallas/fondo-1.jpg",
+   "fondos-4-pantallas/fondo-2.jpg",
+   "fondos-4-pantallas/fondo-3.jpg",
+   "fondos-4-pantallas/fondo-4.jpg"
+  ]
+ },
+ "mediaSource": "Entrega «Gala» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas"
+}

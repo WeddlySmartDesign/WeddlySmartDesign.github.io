@@ -1,0 +1,52 @@
+{
+ "id": "design-04",
+ "version": "1.0.0",
+ "displayName": "AZULEJO",
+ "coverTextAt": 3.3,
+ "closingTextAt": 8.6,
+ "coverTextPosition": "top:max(8svh,calc(env(safe-area-inset-top) + 40px))",
+ "coverScrim": "top:0;height:50%;background:linear-gradient(180deg,rgba(252,249,243,.62) 0%,rgba(252,249,243,.38) 55%,rgba(252,249,243,0) 100%)",
+ "theme": {
+  "paper": "#f7f1e6",
+  "ink": "#1f355f",
+  "soft": "#4d6086",
+  "accent": "#23408a",
+  "line": "rgba(35,64,138,.30)",
+  "btn": "rgba(255,255,255,.55)",
+  "cover-bg": "#e9e4da",
+  "cover-ink": "#1d3466",
+  "cover-names": "#1d3466",
+  "cover-halo": "0 0 18px rgba(255,255,255,.95),0 0 4px rgba(255,255,255,.9)",
+  "cover-btn": "rgba(255,255,255,.82)",
+  "cover-btn-ink": "#1d3466",
+  "cover-btn-line": "rgba(29,52,102,.45)",
+  "hint-ink": "#fffaf0",
+  "hint-halo": "0 1px 10px rgba(14,30,70,.85),0 0 3px rgba(14,30,70,.7)",
+  "hint-pulse": "rgba(255,250,240,.6)",
+  "closing-scrim": "linear-gradient(to top,rgba(250,246,238,.94) 0%,rgba(250,246,238,.72) 48%,rgba(250,246,238,0) 100%)",
+  "closing-ink": "#1d3466",
+  "closing-halo": "0 0 14px rgba(255,255,255,.9)",
+  "closing-btn": "#23408a",
+  "closing-btn-ink": "#fffaf0",
+  "closing-btn-line": "#23408a"
+ },
+ "tapLabel": "Toca para abrir",
+ "media": {
+  "coverVideo": "videos/portada.mp4",
+  "closingVideo": "videos/cierre.mp4",
+  "backgrounds5": [
+   "fondos-5-pantallas/fondo-1.jpg",
+   "fondos-5-pantallas/fondo-2.jpg",
+   "fondos-5-pantallas/fondo-3.jpg",
+   "fondos-5-pantallas/fondo-4.jpg",
+   "fondos-5-pantallas/fondo-5.jpg"
+  ],
+  "backgrounds4": [
+   "fondos-4-pantallas/fondo-1.jpg",
+   "fondos-4-pantallas/fondo-2.jpg",
+   "fondos-4-pantallas/fondo-3.jpg",
+   "fondos-4-pantallas/fondo-4.jpg"
+  ]
+ },
+ "mediaSource": "Entrega «Azulejo» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas"
+}
