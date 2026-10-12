@@ -26,7 +26,7 @@ function applyPractical(config){
   if(b.pickupPoints?.length)lines.push('Paradas: '+b.pickupPoints.map(txt).filter(Boolean).join(' · '));
   if(b.outboundTimes?.length)lines.push('Ida: '+b.outboundTimes.map(txt).filter(Boolean).join(' · '));
   if(b.returnTimes?.length)lines.push('Vuelta: '+b.returnTimes.map(txt).filter(Boolean).join(' · '));
-  if(b.note)lines.push(b.note);
+  if(b.note)lines.push(b.note);else if(!window.__GUEST_SUPPRESS_DEMO__&&b.message)lines.push(b.message);
   addBlock(root,'Transporte',lines,[[b.mapsUrl,'Cómo llegar']]);
  }
  const a=p.accommodation||{};
@@ -34,12 +34,12 @@ function applyPractical(config){
   const more=[a.address&&'Dirección: '+a.address,a.bookingName&&'Reserva a nombre de '+a.bookingName,a.bookingCode&&'Código: '+a.bookingCode,a.discountText,a.deadline&&'Hasta: '+a.deadline,a.priceText,a.phone&&'Teléfono: '+a.phone,a.note];
   const links=[[a.websiteUrl,'Ver hotel'],[a.mapsUrl,'Cómo llegar']];
   if(['external_booking','room_block'].includes(a.mode))links.push([a.externalBookingUrl,'Reservar']);
-  addBlock(root,'Alojamiento',[a.name,a.note,a.discountText,a.priceText],links,{label:'Datos del alojamiento',lines:more})
+  addBlock(root,'Alojamiento',[a.name||(!window.__GUEST_SUPPRESS_DEMO__?a.message:null),a.note,a.discountText,a.priceText],links,{label:'Datos del alojamiento',lines:more})
  }
  const g=p.gift||{};
  if(g.enabled&&g.mode!=='none'){
   const more=[g.details,g.accountHolder&&'Titular: '+g.accountHolder,g.iban&&'IBAN: '+g.iban,g.bicSwift&&'BIC/SWIFT: '+g.bicSwift,g.bizumRecipient&&'Destinatario: '+g.bizumRecipient,g.bizumPhone&&'Bizum: '+g.bizumPhone];
-  addBlock(root,'Regalos',[g.displayText],[[g.externalUrl,g.linkLabel||'Ver lista de regalos']],{label:'Ver datos',lines:more})
+  addBlock(root,'Regalos',[g.displayText||(!window.__GUEST_SUPPRESS_DEMO__?g.message:null)],[[g.externalUrl,g.linkLabel||'Ver lista de regalos']],{label:'Ver datos',lines:more})
  }
  const m=p.playlist||{};
  if(m.enabled&&m.mode!=='none')addBlock(root,'Nuestra música',[m.prompt],[[m.url,m.mode==='guest_request'?'Proponer canción':'Escuchar playlist']]);
@@ -56,6 +56,7 @@ window.GUEST_APPLY_CONFIG=function(config){
   gift:g.enabled&&g.mode!=='none'?{...g,message:g.displayText||g.details||'Regalos'}:g
  }};
  const res=original(proxy);applyPractical(config);
+ const closingLine=byId('closing-line');if(closingLine&&config.closing?.line==null){closingLine.textContent='';closingLine.classList.add('invisible')}
  return {...res,visibleScenes:document.querySelectorAll('[data-bg]:not(.invisible)').length};
 };
 })();
