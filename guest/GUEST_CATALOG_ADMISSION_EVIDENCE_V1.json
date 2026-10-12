@@ -96,14 +96,14 @@
       "basis": "new-template-gated",
       "gates": {
         "common-questionnaire": {
-          "pass": false,
-          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
-          "why": "Not independently certified for design-03"
+          "pass": true,
+          "source": "guest/GUEST_ENTRY_101_D03_PRECOMMERCIAL_LIVE_BACKEND_V20_AND_OWNER_E2E_READY_2026-10-12.md",
+          "why": "Shared commercial 7-step questionnaire in real mobile Chromium: 3 variants incl 1/2 venue, custom/photo-only Story and song request, URL/mode mapped exactly; external API mocked. Backend V20 real code and shared schema audited separately. NOT two live cloud orders."
         },
         "backend-test-only": {
-          "pass": false,
-          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
-          "why": "Not independently certified for design-03"
+          "pass": true,
+          "source": "guest/GUEST_ENTRY_101_D03_PRECOMMERCIAL_LIVE_BACKEND_V20_AND_OWNER_E2E_READY_2026-10-12.md",
+          "why": "Real Supabase guest-invitation-flow V20 ACTIVE exact-source readback: D03 1.0.0 testOnly guard preserved; playlist guest_request mapped only for D03; VEIL/Botanica behavior byte-equivalent V19. NO owner-authorized test orders yet and production creation remains blocked."
         },
         "renderer": {
           "pass": false,
@@ -141,9 +141,9 @@
           "why": "Not independently certified for design-03"
         },
         "media-integrity": {
-          "pass": false,
-          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
-          "why": "Not independently certified for design-03"
+          "pass": true,
+          "source": "guest/GUEST_ENTRY_83_D03_LIMONEROS_LIVE_VERIFIED_BACKEND_TEST_V19_2026-10-12.md",
+          "why": "D03 original master SHA untouched; live Cloudflare verified 15/15 media with exact 2 MP4 and 13 JPG SHA and sizes, no corruption, videos 8.5s/9s as originally authored. Supplemental Chromium mobile and loop check Entry100."
         },
         "approved-visual": {
           "pass": false,
