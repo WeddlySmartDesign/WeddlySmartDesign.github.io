@@ -23,6 +23,27 @@ try{
   'guest/catalog/owner-center-remote-bridge.html'
  ];
  common.forEach(copy);
+ // ISOLATED CATALOG FIXTURE: this test simulates onboarding from the two
+ // original designs, even after real D03/D04/... have been registered.
+ // Never use mutable live catalog IDs as if they were still unregistered.
+ // Modify only the disposable tmp copy, NOT the repository originals.
+ const keep=new Set(['veil-light','botanica']);
+ const resetJson=(rel,mutate)=>{
+   const file=path.join(tmp,rel),j=JSON.parse(fs.readFileSync(file,'utf8'));
+   mutate(j);fs.writeFileSync(file,JSON.stringify(j,null,2)+'\\n');
+ };
+ resetJson('guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',j=>{
+   j.templates=j.templates.filter(t=>keep.has(t.id));
+ });
+ resetJson('guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json',j=>{
+   for(const id of Object.keys(j.templates))if(!keep.has(id))delete j.templates[id];
+ });
+ resetJson('guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',j=>{
+   for(const id of Object.keys(j.templates))if(!keep.has(id))delete j.templates[id];
+ });
+ resetJson('guest/GUEST_PROJECT_STATUS_V1.json',j=>{
+   for(const id of Object.keys(j.designs))if(!keep.has(id))j.designs[id]={status:'not-started'};
+ });
  const chunksRoot='guest/catalog-assets/botanica/14.7/source-chunks';
  const to=path.join(tmp,chunksRoot);fs.mkdirSync(path.dirname(to),{recursive:true});
  fs.cpSync(path.join(root,chunksRoot),to,{recursive:true});
