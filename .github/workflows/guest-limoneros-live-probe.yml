@@ -1,52 +1,91 @@
-name: GUEST Limoneros Live Probe (TEST only)
+name: GUEST Limoneros Real Published Preview QA
 on:
   push:
     branches: [guest-independent]
-    paths: ['.github/workflows/guest-limoneros-live-probe.yml']
+    paths:
+      - '.github/workflows/guest-limoneros-live-probe.yml'
+      - 'guest/tools/build_catalog_static_preview.cjs'
 permissions:
   contents: write
 concurrency:
-  group: guest-limoneros-live-probe-once
+  group: guest-limoneros-online-qa
   cancel-in-progress: false
 jobs:
-  verify-cloudflare-https:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
           ref: guest-independent
           persist-credentials: true
-      - name: Check Cloudflare HTTPS real master, record evidence regardless of result
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build actual Cloudflare output then check HTTPS including every image and video
         run: |
           python3 - <<'PY'
-          import hashlib,json,urllib.request,urllib.error,datetime
+          import hashlib,json,urllib.request,datetime,time,subprocess
           from pathlib import Path
-          p=Path('guest/qa-reports/limoneros_cloudflare_live_check.json')
-          p.parent.mkdir(parents=True,exist_ok=True)
-          url='https://guest-weddlysmartdesign.pages.dev/guest/catalog-assets/design-03/1.0.0/index.html'
-          expected='a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482'
-          r={'schemaVersion':'guest-d03-cloudflare-probe-v1','checkedAtUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'url':url,'expectedSourceSha256':expected,'expectedSourceBytes':28673474,'commercialApproved':False,'testOnly':True}
+          root=Path.cwd()
+          out=Path('/tmp/guest-limoneros-stage-reality')
+          rel='guest/catalog-assets/design-03/1.0.0/index.html'
+          origin='https://guest-weddlysmartdesign.pages.dev'
+          report={'schemaVersion':'guest-d03-cloudflare-stage-evidence-v2','checkedAtUtc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            'url':origin+'/'+rel,'testOnly':True,'commercialApproved':False,'backendTestDeployed':False,'androidPhysicalVerified':False}
+          def sha(b):return hashlib.sha256(b).hexdigest()
           try:
-              req=urllib.request.Request(url,headers={'User-Agent':'GUEST-TEST-only-probe/1.0'})
-              with urllib.request.urlopen(req,timeout=55) as response:
-                  h=hashlib.sha256();size=0
-                  while True:
-                      b=response.read(1024*1024)
-                      if not b:break
-                      h.update(b);size+=len(b)
-                  r.update(httpStatus=response.status,contentType=response.headers.get('Content-Type'),robots=response.headers.get('X-Robots-Tag'),bytes=size,sha256=h.hexdigest(),shaMatchesOriginal=(h.hexdigest()==expected and size==28673474))
-                  r['online']=response.status==200 and size>1000000
+            cmd=['node','guest/tools/build_catalog_static_preview.cjs','--output',str(out),'--template','botanica']
+            built=subprocess.run(cmd,text=True,capture_output=True,timeout=170)
+            if built.returncode:raise RuntimeError('CLOUDFLARE_STAGE_BUILD_FAILED: '+(built.stdout+built.stderr)[-1500:])
+            manifest=json.loads((out/'GUEST_STAGE_MANIFEST.json').read_text())
+            design=next(d for d in manifest['designs'] if d['templateId']=='design-03')
+            html=(out/rel).read_bytes()
+            assets=[f for f in manifest['files'] if f['name'].startswith('guest/catalog-assets/design-03/1.0.0/media/')]
+            source=(root/rel).read_bytes()
+            assert sha(source)==design['masterSha256']=='a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482'
+            assert len(html)<24*1024*1024 and len(assets)>=15
+            assert len(html)>900000 and design['losslessMediaExternalization']
+            assert manifest['commercialApproved'] is False
+            report.update(stageBuildPassed=True,sourceSha256=sha(source),publishedHtmlSha256=sha(html),
+              publishedHtmlBytes=len(html),mediaFiles=len(assets),largestMediaBytes=max(f['size'] for f in assets),
+              exactReconstructionVerified=True,stageNoSale=True)
+            # The GitHub-provided Pages autodeploy may lag the initiating push.
+            # Poll until the HTTPS file is byte-exact with the compiled version.
+            last=None
+            for attempt in range(13):
+              try:
+                request=urllib.request.Request(origin+'/'+rel,headers={'User-Agent':'GUEST-preview-real-qa/2.0'})
+                with urllib.request.urlopen(request,timeout=30) as resp:
+                  body=resp.read(24*1024*1024+1)
+                  robots=resp.headers.get('X-Robots-Tag','')
+                  status=resp.status
+                if status==200 and sha(body)==sha(html) and 'noindex' in robots:
+                  report.update(httpsStatus=200,liveHtmlExact=True,noIndex=True,liveHtmlBytes=len(body))
+                  for f in assets:
+                    with urllib.request.urlopen(origin+'/'+f['name'],timeout=35) as m:
+                      mb=m.read(f['size']+1)
+                    assert len(mb)==f['size'] and sha(mb)==f['sha256'], 'media mismatch '+f['name']
+                  report.update(liveMediaExact=True,online=True)
+                  break
+                last=f'status={status}, bytes={len(body)}, sha256={sha(body)}, robots={robots}'
+              except Exception as e:
+                last=type(e).__name__+': '+str(e)[:300]
+              if attempt<12:time.sleep(15)
+            if not report.get('online'):
+              report.update(online=False,lastHttpsObservation=last,liveMediaExact=False)
           except Exception as e:
-              r.update(online=False,error=f'{type(e).__name__}: {str(e)[:350]}')
-          p.write_text(json.dumps(r,ensure_ascii=False,indent=2)+'\n')
-          print(json.dumps(r,ensure_ascii=False,indent=2))
+            report.update(online=False,stageBuildPassed=report.get('stageBuildPassed',False),error=type(e).__name__+': '+str(e)[:1300])
+          p=root/'guest/qa-reports/limoneros_cloudflare_live_check.json'
+          p.parent.mkdir(parents=True,exist_ok=True)
+          p.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
+          print(json.dumps(report,ensure_ascii=False,indent=2),flush=True)
           PY
-      - name: Commit evidence to isolated GUEST branch
+      - name: Persist evidence on GUEST branch only
         run: |
-          git config user.name 'GUEST Test Probe'
+          git config user.name 'GUEST Preview QA'
           git config user.email 'actions@users.noreply.github.com'
           git add guest/qa-reports/limoneros_cloudflare_live_check.json
-          git commit -m 'test(guest): record actual Limoneros HTTPS availability, no sale' || exit 0
+          git commit -m 'test(guest): record real D03 published media checks' || exit 0
           git pull --rebase origin guest-independent
           git push origin HEAD:guest-independent
