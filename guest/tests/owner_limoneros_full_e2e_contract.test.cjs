@@ -20,7 +20,7 @@ assert.match(html,/action:'create_paid',templateId:'design-03',licenseId:'000000
 assert.match(html,/template_test_only/,'paid rejection must be confirmed');
 assert.match(html,/action:'save',token:qToken,questionnaire/);
 assert.match(html,/action:'submit',token:qToken,questionnaire/);
-assert.match(html,/action:'upload'/);
+assert.match(html,/data\.append\('action','upload'\)/,'photo upload stays on canonical private questionnaire endpoint');
 assert.match(html,/gallery-1','gallery-2','gallery-3','gallery-4'/);
 assert.match(html,/new File\(\[blob\],slot\+'\.png'/,'synthetic media only');
 assert.match(html,/action:'start_design'/);
