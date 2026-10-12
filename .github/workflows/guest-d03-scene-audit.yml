@@ -1,0 +1,33 @@
+name: GUEST D03 Scene Source Audit (NO SALE)
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - 'guest/tools/d03_scene_source_audit.cjs'
+      - '.github/workflows/guest-d03-scene-audit.yml'
+permissions:
+  contents: write
+concurrency:
+  group: guest-d03-source-audit
+  cancel-in-progress: false
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: guest-independent
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node guest/tools/d03_scene_source_audit.cjs
+      - name: Persist source audit on GUEST branch
+        run: |
+          git config user.name 'GUEST Scene QA'
+          git config user.email 'actions@users.noreply.github.com'
+          git add guest/qa-reports/d03_scene_source_audit.json
+          git commit -m 'test(guest-d03): record DOM/CSS/renderer audit without media' || exit 0
+          git pull --rebase origin guest-independent
+          git push origin HEAD:guest-independent
