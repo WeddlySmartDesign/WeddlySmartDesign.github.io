@@ -4,6 +4,7 @@ on:
     branches: [guest-independent]
     paths:
       - '.github/workflows/guest-limoneros-install.yml'
+      - 'guest/qa/handoff_gate.cjs'
   workflow_dispatch:
 permissions:
   contents: write
