@@ -44,3 +44,13 @@ Cada configuración debe funcionar **sin editar HTML/CSS, ritmos, fotografías o
 **Condición de salida:** ninguna nueva plantilla se considera visualmente terminada, comercialmente certificada ni `commercially-frozen` sin matriz completa y evidencias; toda candidata no aprobada permanece `certification-pending`, TEST-only y NO-SALE. No activar Stripe ni modificar ONE/Partner/STUDIO/VEIL/Botánica congelados.
 
 **Error de procedimiento registrado el 12/10/2026:** se solicitó repetidamente a la propietaria que recordara las variantes 2 sedes/5 momentos/4 prácticos/fotos y se trató la correspondencia con el cuestionario como una regla particular del D03. Ambas actuaciones contradicen el contrato canónico previo. En adelante se debe leer este documento ANTES de cualquier nuevo diseño; no pedir esas instrucciones ni fotografías ya entregadas otra vez.
+
+
+## Regla universal de semántica y jerarquía visual de Práctico (12/10/2026)
+
+**Obligatoria para TODAS las plantillas actuales y futuras, no solo Limoneros:**
+- Cada título secundario debe utilizar una tipografía ya aprobada en la jerarquía de su plantilla. No convertir arbitrariamente cuatro apartados prácticos en cuatro nuevos títulos caligráficos grandes si el resto del diseño utiliza titulares secundarios editoriales. Validar composición de TODA la invitación.
+- Cada enlace y desplegable debe resultar claramente pulsable, tener tamaño táctil suficiente (mínimo 44 px), contraste de texto comprobado en móvil y estilo integrado con el fondo. No flechas, botones inventados o tipografías genéricas que rompan el arte aprobado.
+- El modo **`practical.playlist.mode='guest_request'`** significa pedir/proponer una canción. CTA «Pedir canción» (o equivalente editorial de propuesta), **jamás «Escuchar playlist»**. Solo dibujar CTA si el cuestionario ha aportado `playlist.url` HTTP(S) válido destinado a recibir propuestas; no crear direcciones, formularios ni acción falsa.
+- El modo **`external_link`** sirve para un enlace a la lista existente: «Ver playlist»; no fingir que recogerá propuestas. Modo `none`, deshabilitado o sin URL válida: ningún botón ficticio. La invitación sigue coherente con solo el texto si el modo está activo sin URL.
+- **La pregunta comercial «Enlace para pedir canciones» del cuestionario GUEST se corresponde con el valor canónico `guest_request`.** Comprobar ese mapeo en el constructor real, plantilla y pruebas antes de cada entrega. Cualquier ambigüedad o discrepancia entre cuestionario, schema y render impide certificar el diseño.
