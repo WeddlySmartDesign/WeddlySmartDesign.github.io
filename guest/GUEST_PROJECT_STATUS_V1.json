@@ -290,12 +290,27 @@
     },
     "design-03": {
       "name": "Limoneros",
-      "status": "visual-input-received-not-registered",
-      "checkpoint": "guest/GUEST_ENTRY_78_D03_LIMONEROS_INTERRUPTED_INTAKE_2026-10-12.md",
-      "resources": "original video and ZIP attachments supplied in prior chat; bytes unavailable in current working container",
-      "localDraft": "reported in prior chat, not independently recovered or verified",
+      "version": "1.0.0",
+      "status": "visual-candidate-v1-recovered-qa-local-pass-subset",
+      "checkpoint": "guest/GUEST_ENTRY_79_D03_LIMONEROS_CANDIDATE_V1_RECOVERED_2026-10-12.md",
+      "originalLibraryFolder": "/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/",
+      "originalCandidateLibraryFile": "GUEST_D03_LIMONEROS_MASTER_V1_TEST_NO_SALE.zip",
+      "zipBytes": 24903943,
+      "zipSha256": "001ea39f5f47475102547777e34935f1732a6f8dcc0b46e5bbfba87fb3520f96",
+      "masterFile": "master.html",
+      "masterBytes": 28673474,
+      "masterSha256": "a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482",
+      "selfContained": true,
+      "rendererApi": "GUEST_APPLY_CONFIG",
+      "screenshots": [
+        "QA_mobile_390.png",
+        "QA_cover_end.png"
+      ],
+      "localQa": "LOCAL_CHROMIUM_HEADLESS_PASS_SUBSET (reported original package); JS node --check independently PASS on 2026-10-12",
       "integrationVerified": false,
-      "qaVerified": false,
+      "cloudflareVerified": false,
+      "backendTestDeployed": false,
+      "androidPhysicalVerified": false,
       "commercialReady": false
     },
     "design-04": {
@@ -2063,7 +2078,7 @@
     "historicalChronology": "guest/CURRENT_STATE.md and all dated Botánica checkpoint sections below their read-first banners"
   },
   "nextOperations": [
-    "New chat: receive new design HTML/ZIP; focus owner-facing conversations solely on the design. Do not ask owner to redo Cloudflare/Supabase or old Botánica tests.",
+    "D03 Limoneros source is already preserved in Library ZIP and independently extracted. DO NOT ASK USER FOR ZIP OR REDO VISUAL DESIGN. Transfer existing exact HTML (28,673,474 bytes SHA a6fa4d81...) via GitHub catalog chunks and register D03 V1.",
     "Assistant does all integration: visual-plugin manifest + common API + registration + Cloudflare build/QA + deterministic TEST backend registry candidate prepared from live Edge v18 with no changed order logic; inspect/authorize controlled TEST deployment.",
     "Acceptance of new design must also validate remote generic renderer in actual Android once; it is not proven yet, but no need to create a separate technical project or repeat D02.",
     "Keep catalog production/commercial sale/Stripe guarded until explicit authorization. Preserve frozen ONE/Partner/STUDIO/VEIL/Botánica."
@@ -2218,15 +2233,15 @@
   },
   "continuity": {
     "currentIndex": "guest/GUEST_CONTINUITY_LEDGER_FROM_LIBRARY_V24_2026-10-11.md",
-    "latestEntry": 77,
-    "latestDocumentedEntry": "guest/GUEST_ENTRY_77_PLATFORM_HANDOFF_FOR_NEXT_VISUAL_2026-10-11.md",
+    "latestEntry": 79,
+    "latestDocumentedEntry": "guest/GUEST_ENTRY_79_D03_LIMONEROS_CANDIDATE_V1_RECOVERED_2026-10-12.md",
     "historicLibraryFile": "/GUEST by WeddlySmartDesign/Normativa/Continuidad GUEST/GUEST_BITACORA_COMPLETA_ACTUALIZADA_2026-10-10.md",
     "historicLibraryVersionConfirmed": 24,
     "historicLibraryStatus": "FROZEN_INTACT_DO_NOT_OVERWRITE_AFTER_REPEATED_CHAT_TOOL_FAILURES",
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "Entrada 77: plataforma común preparada con registrador visual genérico, Cloudflare GitHub auto deploy + live smoke PASS; backend TEST updater determinista creado y CI green 38175844570, V18 real auditado lectura y parche en memoria sin deploy. Botánica 11/11 congelada; V5.0 preparado no Android probado. PRÓXIMO CHAT SOLO traer nuevo HTML/ZIP; asistente se encarga ID, manifest, adaptador, registro, backend TEST controlado, pruebas, Cloudflare y QA. No repetir sistema/ONE/STUDIO/Botánica. ÚNICA validación que necesita tercer diseño: render remoto genérico Android. No ventas sin autorización.",
+    "resumption": "Design-03 Limoneros visual V1 original FOUND and recovered as ZIP Library. Do not request user files again, do not rebuild HTML or rerun completed local subset. Continue preserving 28,673,474-byte master SHA a6fa4d81...; transfer chunks GitHub, register TEST, CI/Cloudflare, backend TEST, one Android generic renderer review. Sale NO.",
     "commercialStatus": "BOTANICA_DESIGN_TECHNICAL_GATES_11_OF_11_SALE_NOT_AUTHORIZED",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
