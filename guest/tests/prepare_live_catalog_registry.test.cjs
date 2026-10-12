@@ -10,7 +10,9 @@ const marker=';\n// Call assertCatalogOrderMode(spec,mode) inside ALL order-crea
 const generated=generation.stdout;
 const json=JSON.parse(generated.slice(generated.indexOf(tag)+tag.length,generated.indexOf(marker)));
 assert(json['veil-light']&&json.botanica);
-const old={'veil-light':json['veil-light'],botanica:json.botanica};
+// Baseline must track ALL designs already registered, not assume D03 is forever missing.
+// New synthetic additions remain isolated regardless of future D04..D1000.
+const old={...json};
 const live=
  "/* unrelated existing backend must remain byte-identical */\n"+
  tag+JSON.stringify(old,null,2)+marker+
