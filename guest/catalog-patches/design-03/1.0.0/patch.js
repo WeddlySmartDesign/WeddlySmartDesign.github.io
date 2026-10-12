@@ -123,8 +123,19 @@ if(!window.__GUEST_SUPPRESS_DEMO__ && window.location && window.addEventListener
  const fixtureMode=new URLSearchParams(window.location.search).get('qa');
  if(fixtureMode==='full'||fixtureMode==='reduced'){
   const runFixture=()=>{
-   const base=window.location.origin+'/guest/test-images/';
-   const photo=(filename,fit='crop')=>({src:base+filename,fit,focusX:50,focusY:50});
+   // Public opt-in QA uses generated non-photographic media placeholders.
+   // The five real author-supplied photographs remain only in the private Library QA file.
+   const qaColors={'couple.jpg':['#f0dccb','#a67a73'],'couple2.jpg':['#e9d5c9','#8c9280'],'couple3.jpg':['#d7cbd5','#7e7187'],'venue.jpg':['#d6d2bd','#9d8f70'],'celebration.webp':['#ded0ce','#b18c9b']};
+   const photo=(filename,fit='crop')=>{
+     const colors=qaColors[filename]||qaColors['couple.jpg'];
+     const svg='<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="850" viewBox="0 0 1280 850">'+
+       '<rect width="1280" height="850" fill="'+colors[0]+'"/>'+
+       '<circle cx="930" cy="200" r="168" fill="#fff8e7" opacity=".55"/>'+
+       '<path d="M0 620Q280 420 640 655T1280 550V850H0Z" fill="'+colors[1]+'" opacity=".46"/>'+
+       '<path d="M0 735Q330 635 770 770T1280 690V850H0Z" fill="'+colors[1]+'" opacity=".62"/>'+
+       '</svg>';
+     return {src:URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'})),fit,focusX:50,focusY:50};
+   };
    const full=fixtureMode==='full';
    const loc=(type,time,name,address)=>({type,time,name,address,
      mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia',
@@ -169,7 +180,7 @@ if(!window.__GUEST_SUPPRESS_DEMO__ && window.location && window.addEventListener
    document.documentElement.dataset.guestReviewFixture=fixtureMode;
    const ribbon=document.createElement('div');
    ribbon.id='guest-demo-fixture-notice';
-   ribbon.textContent='DEMOSTRACIÓN VISUAL · DATOS DE PRUEBA · NO VENTA';
+   ribbon.textContent='DEMOSTRACIÓN TÉCNICA · IMÁGENES DE PRUEBA · NO VENTA';
    ribbon.setAttribute('role','note');
    Object.assign(ribbon.style,{position:'fixed',zIndex:'30',top:'0',left:'0',right:'0',padding:'5px 8px',
      background:'rgba(255,251,243,.93)',color:'#563d4b',font:'11px/1.2 sans-serif',
