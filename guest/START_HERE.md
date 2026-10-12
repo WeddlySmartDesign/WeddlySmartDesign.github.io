@@ -1,5 +1,10 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 80 — LIMONEROS: 39 BLOBS PRESERVADOS Y INSTALADOR SEGURO CREADO (12/10/2026)
+
+[**Leer punto exacto técnico**](GUEST_ENTRY_80_LIMONEROS_BLOB_TRANSFER_AND_INSTALL_2026-10-12.md). ZIP original y QA local recuperados; **39/39 bloques binarios de 750 KB ya presentes por SHA en GitHub**, 037/038 transferidos ahora y cotejados byte exacto. Manifiesto, instalador y workflow en `guest-independent`. La ejecución/commit final de instalación **aún no verificados**; comprobar GitHub Actions y el HEAD antes de prometer Cloudflare/Android. Corregida prueba sintética que asumía D03 libre permanentemente. No pedir archivos ni retransferir bloques; no tocar diseños congelados, pago ni venta.
+
+
 ## ENTRADA 79 — D03 LIMONEROS V1 RECUPERADO DE BIBLIOTECA (12/10/2026)
 
 [**Recovery verificado del máster ya construido y QA existente**](GUEST_ENTRY_79_D03_LIMONEROS_CANDIDATE_V1_RECOVERED_2026-10-12.md). **RECTIFICA la hipótesis de pérdida de Entrada 78:** la Biblioteca conserva `GUEST_D03_LIMONEROS_MASTER_V1_TEST_NO_SALE.zip` íntegro (24.903.943 B) con `master.html` autocontenido (28.673.474 B, SHA256 `a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482`), manifiesto y dos capturas de QA. Chromium móvil local 320/360/390/430 documentado y JS sintaxis revalidada. **NO pedir de nuevo los ZIP ni rehacer HTML/medios/QA local**. Pendiente transferencia del máster original a chunks en GitHub, registro TEST, CI, Cloudflare, backend TEST y Android remoto D03; venta NO.
