@@ -319,7 +319,7 @@
       "backendGuardVerified": true,
       "backendTestDeploymentEvidence": "guest/GUEST_ENTRY_83_D03_LIMONEROS_LIVE_VERIFIED_BACKEND_TEST_V19_2026-10-12.md",
       "backendRealE2eVerified": false,
-      "checkpoint": "guest/GUEST_ENTRY_98_D03_GALLERY_CANONICAL_SWIPE_2026-10-12.md",
+      "checkpoint": "guest/GUEST_ENTRY_99_D03_GALLERY_PAINTED_FADE_BIRDS_SAFE_2026-10-12.md",
       "visualCandidateVersion": "2-review-only",
       "visualCandidateSha256": "43249ed1728d790cbb7e43eadd9c2180e167aaab0c86c53280866cc7c2cf2a1e",
       "visualCandidateBytes": 28677081,
@@ -447,7 +447,32 @@
       },
       "galleryReviewFile": "/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/LIMONEROS_D03_GALERIA_CARRUSEL_REAL_2026-10-12.html",
       "galleryReviewSha256": "603bc2fbba6171218bb5f53a6582fcd43f54ac08d65e2af028e9e74f7962ca96",
-      "galleryVisualOwnerApproved": false
+      "galleryVisualOwnerApproved": false,
+      "galleryPaperFade": true,
+      "galleryBirdClearanceCssPx": 230,
+      "galleryBrowserBirdClearanceAsserted": true,
+      "galleryPrivateReviewFile": "/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/LIMONEROS_D03_GALERIA_FUNDIDA_GOLONDRINAS_LIBRES_2026-10-12.html",
+      "galleryPrivateReviewSha256": "299b7e0f6a0e9d86cf8604eb42085509b2220a5fbdc16c1851a2db1232d6bb61",
+      "galleryLastVisualQa": {
+        "widths": [
+          320,
+          390,
+          430
+        ],
+        "photoStates": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "cases": 15,
+        "success": 15,
+        "realAuthorPhotos": true,
+        "compositeFeatherMask": true,
+        "paintedBirdsTitleCollision": false,
+        "htmlOverflow": false
+      }
     },
     "design-04": {
       "status": "not-started"
