@@ -91,6 +91,28 @@ function stageLargeVisualLosslessly(original,id,version){
  for(const [rel,asset] of assets)files.push(write(rel,asset.bytes));
  return{html:output,mediaCount:assets.size,externalized:true};
 }
+// Optional *staging-only* visual corrections. Immutable uploaded author masters stay byte-identical.
+// Patch is pinned to the SHA of the original; a new master requires explicit re-review.
+// No other design is affected unless it explicitly ships a manifest and both patch files.
+function applyOptionalVisualPatch(stagedHtml,name,version,sourceSha){
+ const dir=path.join(root,'guest/catalog-patches',name,version);
+ const manifest=path.join(dir,'patch-manifest.json');
+ if(!fs.existsSync(manifest))return stagedHtml;
+ const meta=JSON.parse(fs.readFileSync(manifest,'utf8'));
+ if(meta.schemaVersion!=='guest-visual-stage-patch-v1'||meta.templateId!==name||
+    meta.templateVersion!==version||meta.sourceMasterSha256!==sourceSha||
+    meta.commercialRelease!==false)throw Error('UNAPPROVED_VISUAL_PATCH_SOURCE:'+name);
+ const cssPath=path.join(dir,'patch.css'),jsPath=path.join(dir,'patch.js');
+ if(!fs.existsSync(cssPath)||!fs.existsSync(jsPath))throw Error('INCOMPLETE_VISUAL_PATCH:'+name);
+ const css=fs.readFileSync(cssPath,'utf8'),js=fs.readFileSync(jsPath,'utf8');
+ if(!css||!js||js.includes('</script>'))throw Error('INVALID_VISUAL_PATCH:'+name);
+ let html=stagedHtml.toString('utf8');
+ if((html.match(/<\\/style>/g)||[]).length!==1)throw Error('VISUAL_PATCH_STYLE_ANCHOR:'+name);
+ const hook='window.GUEST_APPLY_CONFIG=render;';
+ if(html.split(hook).length!==2)throw Error('VISUAL_PATCH_RENDER_HOOK:'+name);
+ html=html.replace('</style>',css+'\\n</style>').replace(hook,hook+'\\n'+js);
+ return Buffer.from(html,'utf8');
+}
 const designs=[];
 for(const [name,t] of candidates){
  const entry=status.designs[name];
@@ -125,7 +147,7 @@ for(const [name,t] of candidates){
  if(sha(visual)!==expected||!visual.includes(Buffer.from('window.'+t.applyApi)))
     throw Error('FROZEN_VISUAL_SHA256_OR_RENDERER_MISMATCH:'+name);
  const dest='guest/catalog-assets/'+name+'/'+t.version+'/index.html';
- const stage=stageLargeVisualLosslessly(visual,name,t.version);
+ const stage=stageLargeVisualLosslessly(visual,name,t.version);\n stage.html=applyOptionalVisualPatch(stage.html,name,t.version,expected);
  files.push(write(dest,stage.html));
  viewRegistry.templates[name].src='/'+dest;
  designs.push({templateId:name,version:t.version,status:t.status,masterSha256:expected,deployedHtmlSha256:sha(stage.html),mediaAssets:stage.mediaCount,losslessMediaExternalization:stage.externalized,visualIncluded:true});
