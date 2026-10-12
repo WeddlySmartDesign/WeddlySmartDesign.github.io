@@ -62,11 +62,26 @@ jobs:
                   status=resp.status
                 if status==200 and sha(body)==sha(html) and 'noindex' in robots:
                   report.update(httpsStatus=200,liveHtmlExact=True,noIndex=True,liveHtmlBytes=len(body))
+                  failures=[]
+                  checked=[]
                   for f in assets:
-                    with urllib.request.urlopen(origin+'/'+f['name'],timeout=35) as m:
-                      mb=m.read(f['size']+1)
-                    assert len(mb)==f['size'] and sha(mb)==f['sha256'], 'media mismatch '+f['name']
-                  report.update(liveMediaExact=True,online=True)
+                    uri=origin+'/'+f['name']
+                    try:
+                      reqm=urllib.request.Request(uri,headers={
+                        'User-Agent':'Mozilla/5.0 (Linux; Android 16) AppleWebKit/537.36 Chrome/140.0.0.0 Mobile Safari/537.36',
+                        'Referer':origin+'/guest/catalog-assets/design-03/1.0.0/'})
+                      with urllib.request.urlopen(reqm,timeout=35) as m:
+                        mb=m.read(f['size']+1)
+                        status=m.status
+                        mime=m.headers.get('Content-Type','')
+                      correct=len(mb)==f['size'] and sha(mb)==f['sha256']
+                      checked.append({'name':f['name'].split('/')[-1],'http':status,'bytes':len(mb),'shaMatches':correct,'mime':mime})
+                      if not correct:failures.append(f['name']+' sha_or_size_mismatch')
+                    except Exception as ex:
+                      checked.append({'name':f['name'].split('/')[-1],'error':type(ex).__name__+': '+str(ex)[:140]})
+                      failures.append(f['name']+' '+type(ex).__name__+': '+str(ex)[:140])
+                  report.update(mediaDiagnostics=checked,mediaErrors=failures,liveMediaExact=(len(failures)==0),online=(len(failures)==0))
+                  if failures:last=' | '.join(failures[:3])
                   break
                 last=f'status={status}, bytes={len(body)}, sha256={sha(body)}, robots={robots}'
               except Exception as e:
