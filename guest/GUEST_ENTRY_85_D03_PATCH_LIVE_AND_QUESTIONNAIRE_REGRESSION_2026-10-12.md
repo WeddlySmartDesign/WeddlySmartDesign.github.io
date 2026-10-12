@@ -33,3 +33,13 @@ Se continúa desde Entrada 84 sin recibir ni modificar de nuevo los vídeos, fon
 4. Solo después, cerrar gates de D03, congelar su versión y realizar **proceso comercial separado bajo autorización expresa**. Hasta entonces `commercialReady=false`, `ownerVisualApproved=false`, `backendRealE2eVerified=false`, `androidPhysicalVerified=false`.
 
 **Continuidad:** no pedir de nuevo los materiales, no rehacer el HTML, no rediseñar el motor. El siguiente trabajo es **pedido autenticado TEST + paridad/RSVP + Android**. El nuevo HTML de Limoneros (patch) **sí está publicado**; el pendiente ya no es despliegue del parche.
+
+
+## Actualización — portada de Limoneros corregida en el HTML publicado (12/10/2026)
+
+**Solicitud visual concreta de la propietaria:** en la portada, «NOS CASAMOS» y «Faltan X días» se veían demasiado pequeños. **Se modificó el CSS REAL**, no la captura de imagen, sin tocar arte, medios, nombres ni otros textos:
+
+- En `guest/catalog-patches/design-03/1.0.0/patch.css`, `.cover-tag` / `#cover .cover-tag` ahora usan `font-size:clamp(23px,6.4vw,29px)`, `line-height:1.18` para «NOS CASAMOS».
+- `.countdown` ahora usa `font:400 clamp(22px,6vw,27px)/1.2 var(--smallcaps)`, con `letter-spacing:.065em`, para «Faltan X días». El número de días sigue siendo dinámico desde la fecha del cuestionario, no una cifra escrita en la plantilla.
+- Código: commit `89645e3055002786cb501024ebcf6593f3b17a0e`. Controles de catálogo y paquete NO-SALE PASS. **Readback REAL** HTTPS de la nueva versión: [GitHub Actions 38239237591](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/38239237591) SUCCESS, HTML byte-exacto, CSS nuevo embebido y 15/15 MP4/JPG sin cambios, HTTP 200; evidencia `guest/qa-reports/limoneros_cloudflare_live_check.json`, 2026-10-12T10:54:34Z.
+- **No declarar aprobación estética** hasta que la propietaria vea la portada actualizada en móvil. Pendientes las demás pantallas y la matriz universal de máximo/ausencias; no inferir que toda la plantilla está terminada. Permanece TEST-only/NO-SALE.
