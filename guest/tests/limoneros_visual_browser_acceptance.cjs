@@ -98,9 +98,11 @@ const server=http.createServer((req,res)=>{
     assert.equal(data.moments,rich?5:1);
     assert.equal(data.practical,rich?4:0);
     if(rich){
-      assert.ok(data.practicalArt.every(i=>i.font.includes('Pinyon')&&i.px>=34),'Use smaller but still legible original Pinyon typography, not a plain list font');
+      assert.ok(data.practicalArt.every(i=>i.font.includes('GaramondSC')&&i.px>=19),'Práctico subheads must match Ceremony/Celebration with the original GaramondSC, not compete with main scene script');
       assert.ok(data.practicalArt.every(i=>i.background==='rgba(0, 0, 0, 0)'),'No rectangular card backgrounds in practical');
       assert.ok(data.practicalArt.flatMap(i=>i.links).every(l=>l.height>=42),'Practical actions must remain touchable');
+      assert.ok(data.practicalArt.flatMap(i=>i.links).every(l=>!(/escuchar playlist/i).test(l.label)),'Do not invent a listening action for a song-request questionnaire');
+      assert.equal(data.practicalArt[3].links[0]?.label,'Pedir canción','Music CTA must request a song when mode=guest_request');
       if(width>=390){
         assert.ok(data.practicalArt[1].x-data.practicalArt[0].x>=20,'Practical modules must have alternating editorial composition');
       }
