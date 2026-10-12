@@ -30,7 +30,7 @@ try{
  const keep=new Set(['veil-light','botanica']);
  const resetJson=(rel,mutate)=>{
    const file=path.join(tmp,rel),j=JSON.parse(fs.readFileSync(file,'utf8'));
-   mutate(j);fs.writeFileSync(file,JSON.stringify(j,null,2)+'\\n');
+   mutate(j);fs.writeFileSync(file,JSON.stringify(j,null,2));
  };
  resetJson('guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',j=>{
    j.templates=j.templates.filter(t=>keep.has(t.id));
