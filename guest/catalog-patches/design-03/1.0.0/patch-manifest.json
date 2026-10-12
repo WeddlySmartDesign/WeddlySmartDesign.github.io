@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "guest-visual-stage-patch-v1",
+  "templateId": "design-03",
+  "templateVersion": "1.0.0",
+  "sourceMasterSha256": "a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482",
+  "purpose": "Restore author's premium visual language and canonical questionnaire field mapping; staging-only; no sale",
+  "commercialRelease": false
+}
