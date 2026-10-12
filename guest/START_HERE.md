@@ -1,5 +1,10 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 83 — LIMONEROS D03 PREVIEW HTTPS LIVE PASS + BACKEND TEST V19 ACTIVO (12/10/2026)
+
+[**RESULTADO VERIFICADO Y PUNTO DE CONTINUIDAD**](GUEST_ENTRY_83_D03_LIMONEROS_LIVE_VERIFIED_BACKEND_TEST_V19_2026-10-12.md). [**ABRIR LIMONEROS EN EL MÓVIL**](https://guest-weddlysmartdesign.pages.dev/guest/catalog-assets/design-03/1.0.0/index.html). Cloudflare entrega realmente el HTML correcto (1.025.775 bytes) y **15/15 archivos de medios, dos MP4 y 13 JPG, todos HTTP 200 y SHA idéntico**; el HTML original de 28.673.474 bytes no ha cambiado. Separación multimedia automática y sin pérdidas para **todos los siguientes diseños grandes**. Prueba detallada: `guest/qa-reports/limoneros_cloudflare_live_check.json` (`online:true`, `liveMediaExact:true`). Supabase `guest-invitation-flow` **V19 ACTIVE** leído tras deploy: design-03 añadido **sólo TEST, `testOnly:true`**, VEIL/Botánica y guards intactos. **Pendiente** 2 pedidos TEST funcionales reales, paridad, RSVP, Centro GUEST Android V5, revisión visual propietaria; **NO vender, 0 autorización de venta**. No reconstruir ni volver a subir Limoneros.
+
+
 ## ENTRADA 81 — LIMONEROS V1 YA INCORPORADO EN GITHUB, SÓLO TEST (12/10/2026)
 
 [**Registro y comprobaciones reales**](GUEST_ENTRY_81_LIMONEROS_V1_REGISTERED_TEST_ONLY_2026-10-12.md). Commit `75b60376`: `design-03` **LIMONEROS V1.0.0** incluido en `guest-independent` con sus dos vídeos, cinco fondos y plugin; `master.html` **28.673.474 bytes, SHA256 a6fa4d81...**, readback SHA Git exacto `020c468...`. Registries de catálogo, owner y evidencia coherentes: `certification-pending`, **0/11 gates de venta**, NO-SALE, sin Stripe. QA local + staging antes del commit superados; **pendiente verificar CI actual y Cloudflare HTTPS, backend V18 TEST, Android remoto D03 y aprobación visual**. No volver a subir archivos ni construir el diseño. Documentadas las dos correcciones genéricas: fixture QA y handoff TEST-only.
