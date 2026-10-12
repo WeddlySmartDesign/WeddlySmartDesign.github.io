@@ -48,5 +48,16 @@
    "fondos-4-pantallas/fondo-4.jpg"
   ]
  },
- "mediaSource": "Entrega «Azulejo» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas"
+ "mediaSource": "Entrega «Azulejo» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas",
+ "fx": {
+  "kind": "doves",
+  "every": 6500,
+  "sprites": [
+   "skin-assets/dove0.webp",
+   "skin-assets/dove1.webp",
+   "skin-assets/dove2.webp"
+  ]
+ },
+ "motif": "skin-assets/motif.webp",
+ "motifIdle": "float"
 }

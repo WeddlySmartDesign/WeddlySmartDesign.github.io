@@ -50,5 +50,21 @@
  },
  "mediaSource": "Entrega «Reflejo» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas",
  "closingTextPosition": "top:max(7svh,calc(env(safe-area-inset-top) + 34px))",
- "closingScrimPosition": "top:0;height:52%;background:linear-gradient(180deg,rgba(10,12,28,.84) 0%,rgba(10,12,28,.5) 55%,rgba(10,12,28,0) 100%)"
+ "closingScrimPosition": "top:0;height:52%;background:linear-gradient(180deg,rgba(10,12,28,.84) 0%,rgba(10,12,28,.5) 55%,rgba(10,12,28,0) 100%)",
+ "fx": {
+  "kind": "petals",
+  "count": 10,
+  "sprites": [
+   "skin-assets/petal0.webp",
+   "skin-assets/petal1.webp",
+   "skin-assets/petal2.webp",
+   "skin-assets/petal3.webp",
+   "skin-assets/petal4.webp",
+   "skin-assets/petal5.webp",
+   "skin-assets/petal6.webp",
+   "skin-assets/petal7.webp"
+  ]
+ },
+ "motif": "skin-assets/motif.webp",
+ "motifIdle": "float"
 }

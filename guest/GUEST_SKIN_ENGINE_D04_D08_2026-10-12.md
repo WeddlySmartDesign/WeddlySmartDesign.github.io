@@ -17,6 +17,19 @@ Cada diseño se estaba integrando como un HTML propio y luego se corregía secci
 
 **Asignación de fondos:** con 5 escenas visibles se usan los fondos de 5 pantallas en orden. Con 4 o menos, los de 4 pantallas: la primera escena siempre continúa la portada y la última enlaza con el cierre. La última escena reserva espacio inferior para no poner texto sobre la franja de transición.
 
+## Movimiento premium (revisión v2, tras vídeos Android de la autora)
+
+La autora vio la parte central sosa, sin fotos ni galería, y sin los botones de los campos. Corregido en el **motor**, válido para los cinco:
+- **Vista de revisión completa por defecto:** sin `?qa`, la página muestra el escenario máximo con **fotos de ejemplo** (historia, foto del lugar y galería de 4), dos sedes con «Cómo llegar» y «Web», cinco momentos y los cuatro prácticos con «Ver hotel», «Reservar», «Ver datos» y «Pedir canción». En un pedido real se ignora (`__GUEST_SUPPRESS_DEMO__`) y solo se pinta lo que llega del cuestionario.
+- **Titulares:** el antetítulo se abre en espaciado, el título caligráfico se «escribe» de izquierda a derecha y se dibuja un filete ornamental.
+- **Contenido:** párrafos, sedes, fotos y galería entran escalonados; las fotos aparecen desde un leve desenfoque y zoom; la agenda conserva su entrada momento a momento.
+- **Sello de la piel:** el adorno de cada diseño (azulejo de palomas, sol de Gala, mariposa, pétalo, arco de la caja) abre la primera escena con su propio movimiento.
+- **Ambiente de la piel**, solo sobre las escenas interiores: palomas que cruzan aleteando (Azulejo), polvo dorado (Gala), mariposas (Invernadero), pétalos cayendo (Reflejo) y motas de luz ascendiendo (Caja de música). Se desactiva con `prefers-reduced-motion` y sobre los vídeos.
+- El vídeo de cierre se precarga al acercarse para que no aparezca en negro.
+
+Configurable en `skin.json`: `motif`, `motifIdle` (`rotate|float|flap|glow`) y `fx` (`doves|dust|butterflies|petals|rise`).
+Si un diseño ya registrado sigue `certification-pending`, se regenera con `--sync-catalog`, que actualiza su copia de catálogo y su SHA.
+
 ## Diseños registrados
 
 | ID | Nombre | Portada | Cierre |

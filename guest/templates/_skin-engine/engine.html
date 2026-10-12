@@ -110,8 +110,37 @@ h3{font:400 clamp(28px,7vw,40px)/1.1 var(--serif);margin:0 0 6px}
 #cover.long-names .cover-names{font-size:clamp(44px,11.2vw,72px)}#cover.long-names .cover-tag{margin-bottom:2px}
 @media(max-width:360px){[data-scene]{padding-inline:22px}h2{font-size:46px}.cover-names{font-size:52px}#cover.long-names .cover-names{font-size:40px}.cover-date{font-size:15px;letter-spacing:.12em}.location-name{font-size:26px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.tap-hint .dot{animation:none}.cover-text,.closing-text,.cover-bottom,.cover-scrim,.closing-scrim{transition:none}}
+
+/* ---------- movimiento premium de las escenas interiores ---------- */
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:5;opacity:0;transition:opacity .9s ease}
+#fx.on{opacity:1}
+.motif{display:block;width:clamp(78px,22vw,104px);height:auto;margin:0 auto 14px;opacity:0;transform:translateY(14px) scale(.9);transition:opacity 1.4s ease,transform 1.6s cubic-bezier(.2,.8,.2,1)}
+.in .motif,.motif.in{opacity:1;transform:none}
+.motif.idle-rotate{animation:motifRotate 60s linear infinite}
+.motif.idle-float{animation:motifFloat 6s ease-in-out infinite}
+.motif.idle-flap{animation:motifFlap 1.9s ease-in-out infinite}
+.motif.idle-glow{animation:motifGlow 4.5s ease-in-out infinite}
+@keyframes motifRotate{to{rotate:360deg}}
+@keyframes motifFloat{0%,100%{translate:0 0}50%{translate:0 -6px}}
+@keyframes motifFlap{0%,100%{scale:1 1}50%{scale:.62 1}}
+@keyframes motifGlow{0%,100%{filter:drop-shadow(0 0 0 rgba(255,215,150,0))}50%{filter:drop-shadow(0 0 10px rgba(255,215,150,.75))}}
+.section-kicker,h2,.rule-orn{will-change:opacity}
+.rv-head .section-kicker{opacity:0;letter-spacing:.32em;transition:opacity 1.1s ease,letter-spacing 1.6s cubic-bezier(.2,.8,.2,1)}
+.rv-head h2{clip-path:inset(-20% 100% -20% 0);transition:clip-path 1.7s cubic-bezier(.6,.05,.2,1) .25s}
+.rv-head .rule-orn path{stroke-dasharray:240;stroke-dashoffset:240;transition:stroke-dashoffset 1.8s ease .8s}
+.rv-head .rule-orn circle{opacity:0;transition:opacity .6s ease 1.9s}
+.rv-head.in .section-kicker{opacity:1;letter-spacing:.11em}
+.rv-head.in h2{clip-path:inset(-20% -5% -20% 0)}
+.rv-head.in .rule-orn path{stroke-dashoffset:0}.rv-head.in .rule-orn circle{opacity:1}
+.rule-orn{display:block;width:150px;height:14px;margin:-8px auto 16px;color:var(--accent)}
+.rv{opacity:0;transform:translate3d(0,26px,0);transition:opacity 1s ease,transform 1.2s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d,0ms)}
+.rv.in{opacity:1;transform:none}
+img.feather.rv{transform:scale(1.07);filter:blur(3px);transition:opacity 1.5s ease,transform 2.4s cubic-bezier(.2,.8,.2,1),filter 1.4s ease}
+img.feather.rv.in{transform:none;filter:none}
+@media(prefers-reduced-motion:reduce){.rv,.rv-head .section-kicker,.rv-head h2,img.feather.rv,.motif{opacity:1!important;transform:none!important;clip-path:none!important;filter:none!important;letter-spacing:.11em;transition:none!important;animation:none!important}.rv-head .rule-orn path{stroke-dashoffset:0}.rv-head .rule-orn circle{opacity:1}#fx{display:none}}
 </style></head><body>
 <div id="stage-notice" aria-hidden="true">GUEST · {{NAME_UPPER}} · REVISIÓN TEST · NO VENTA</div>
+<canvas id="fx" aria-hidden="true"></canvas>
 <main id="invitation">
 <section data-scene id="cover" aria-label="Portada">
 <video class="hero-video" id="cover-video" muted playsinline preload="auto" poster="{{COVER_POSTER}}" aria-hidden="true"><source src="{{COVER_VIDEO}}" type="video/mp4"></video>
@@ -230,9 +259,55 @@ function render(config){
  // fondos de la autora: la primera escena continúa la portada y la última enlaza con el cierre
  document.querySelectorAll('[data-bg]').forEach(s=>s.classList.remove('is-last'));const scenes=[...document.querySelectorAll('[data-bg]:not(.invisible)')],n=scenes.length;
  scenes.forEach((s,k)=>{s.classList.toggle('is-last',k===n-1);let bg,idx;if(n===5){idx=k+1;bg=BG5[k]}else{idx=n===4?k+1:Math.max(1,Math.min(4,Math.round(1+k*3/Math.max(1,n-1))));bg=BG4[idx-1]}s.style.backgroundImage='url('+bg+')';s.dataset.backgroundIndex=String(idx)});
- installReveals();
+ installReveals();installMotion();
  return {id:TEMPLATE.id,version:TEMPLATE.version,visibleScenes:n,sceneKinds:scenes.map(s=>s.id),rsvpReady:!!rt};
 }
+
+/* ---- movimiento premium: titulares, bloques, fotos, sello y ambiente de la piel ---- */
+const MOTIF='{{MOTIF}}',MOTIF_IDLE='{{MOTIF_IDLE}}',FX={{FX}};
+const ORN='<svg class="rule-orn" viewBox="0 0 150 14" aria-hidden="true"><path d="M2 7 H62 M88 7 H148" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="75" cy="7" r="3.2" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="66" cy="7" r="1.3" fill="currentColor"/><circle cx="84" cy="7" r="1.3" fill="currentColor"/></svg>';
+document.querySelectorAll('[data-bg] .scene-inner').forEach(inner=>{const h=inner.querySelector('h2');if(h&&!inner.querySelector('.rule-orn'))h.insertAdjacentHTML('afterend',ORN);inner.classList.add('rv-head')});
+let rvObs=null;
+function installMotion(){
+ rvObs?.disconnect();
+ const scenes=[...document.querySelectorAll('[data-bg]:not(.invisible)')];
+ document.querySelectorAll('.motif').forEach(m=>m.remove());
+ if(MOTIF&&scenes[0]){const m=node('img','motif'+(MOTIF_IDLE?' idle-'+MOTIF_IDLE:''));m.src=MOTIF;m.alt='';m.setAttribute('aria-hidden','true');scenes[0].querySelector('.scene-inner').prepend(m)}
+ const items=[];
+ for(const sc of scenes){let k=0;sc.querySelectorAll('.scene-paragraph,.location,.location-photo,.scene-small,#gallery-items,.gallery-nav,#story-photo').forEach(e=>{if(e.closest('.invisible'))return;e.classList.add('rv');e.style.setProperty('--d',(Math.min(k++,5)*140)+'ms');items.push(e)})}
+ const heads=scenes.map(s=>s.querySelector('.scene-inner'));
+ if(reduced()||typeof IntersectionObserver!=='function'){[...items,...heads,...document.querySelectorAll('.motif')].forEach(e=>e.classList.add('in'));return}
+ rvObs=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){e.target.classList.add('in');e.target.querySelector?.(':scope>.motif')?.classList.add('in');rvObs.unobserve(e.target)}},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+ [...items,...heads].forEach(e=>rvObs.observe(e))}
+/* ambiente: lienzo fijo y ligero; solo visible sobre las escenas interiores */
+const fx=id('fx'),fctx=fx.getContext('2d');let fxOn=false,fxRaf=0,fxT0=performance.now(),parts=[],sprites=[];
+(FX.sprites||[]).forEach(src=>{const im=new Image();im.src=src;sprites.push(im)});
+const rnd=(a,b)=>a+Math.random()*(b-a);
+function fxSize(){const d=Math.min(2,devicePixelRatio||1);fx.width=innerWidth*d;fx.height=innerHeight*d;fctx.setTransform(d,0,0,d,0,0)}
+function spawn(init){const W=innerWidth,H=innerHeight,k=FX.kind;
+ if(k==='dust'||k==='rise')return {x:rnd(0,W),y:init?rnd(0,H):(k==='rise'?H+10:-10),r:rnd(.6,2.1),vy:k==='rise'?rnd(-14,-6):rnd(4,11),vx:rnd(-4,4),ph:rnd(0,6.3),tw:rnd(1.2,3)};
+ if(k==='petals')return {x:rnd(-20,W),y:init?rnd(-40,H):-30,s:rnd(14,24),vy:rnd(16,30),vx:rnd(-6,10),rot:rnd(0,6.3),vr:rnd(-.8,.8),ph:rnd(0,6.3),fz:rnd(.8,1.8),im:(Math.random()*sprites.length)|0};
+ if(k==='doves'||k==='butterflies'){const dir=Math.random()<.5?1:-1;return {x:dir>0?-90:W+90,y:rnd(H*.15,H*.75),dir,vx:dir*rnd(k==='doves'?60:26,k==='doves'?85:38),vy:rnd(-12,4),s:k==='doves'?rnd(46,62):rnd(26,36),ph:rnd(0,6.3),born:performance.now()}}
+ return null}
+function fxReset(){parts=[];const n=FX.kind==='dust'||FX.kind==='rise'?(FX.count||34):FX.kind==='petals'?(FX.count||9):0;for(let i=0;i<n;i++)parts.push(spawn(true))}
+let nextFlyer=0;
+function fxFrame(now){if(!fxOn){fxRaf=0;return}const W=innerWidth,H=innerHeight,dt=Math.min(.05,(now-fxT0)/1000);fxT0=now;fctx.clearRect(0,0,W,H);const k=FX.kind,t=now/1000;
+ if(k==='dust'||k==='rise'){for(const p of parts){p.y+=p.vy*dt;p.x+=(p.vx+Math.sin(t*.6+p.ph)*5)*dt;if(p.y<-12||p.y>H+12)Object.assign(p,spawn(false));const a=.35+.45*Math.max(0,Math.sin(t*p.tw+p.ph));const g=fctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4);g.addColorStop(0,`rgba(${FX.color},${a})`);g.addColorStop(1,`rgba(${FX.color},0)`);fctx.fillStyle=g;fctx.beginPath();fctx.arc(p.x,p.y,p.r*4,0,6.3);fctx.fill()}}
+ else if(k==='petals'){for(const p of parts){p.y+=p.vy*dt;p.x+=(p.vx+Math.sin(t*.9+p.ph)*14)*dt;p.rot+=p.vr*dt;if(p.y>H+30)Object.assign(p,spawn(false));const im=sprites[p.im];if(!im?.complete)continue;fctx.save();fctx.globalAlpha=.85;fctx.translate(p.x,p.y);fctx.rotate(p.rot);fctx.scale(1,Math.cos(t*p.fz+p.ph));fctx.drawImage(im,-p.s/2,-p.s/2*im.height/im.width,p.s,p.s*im.height/im.width);fctx.restore()}}
+ else{ // aves o mariposas que cruzan de vez en cuando, una a una
+  if(!parts.length&&now>nextFlyer){parts.push(spawn(false))}
+  for(const p of parts){p.x+=p.vx*dt;p.y+=(p.vy+Math.sin(t*1.3+p.ph)*(k==='butterflies'?22:8))*dt;
+   fctx.save();fctx.translate(p.x,p.y);fctx.scale(p.dir<0?-1:1,1);
+   if(k==='doves'&&sprites.length){const n=sprites.length,ph=(t*7+p.ph)%(2*(n-1)),i=ph<n?Math.floor(ph):Math.floor(2*(n-1)-ph);const im=sprites[Math.max(0,Math.min(n-1,i))];if(im.complete){const w=p.s*im.width/170;fctx.globalAlpha=.95;fctx.drawImage(im,-w/2,-w/2*im.height/im.width,w,w*im.height/im.width)}}
+   else if(sprites[0]?.complete){const im=sprites[0];fctx.scale(.35+.65*Math.abs(Math.cos(t*9+p.ph)),1);fctx.globalAlpha=.92;fctx.drawImage(im,-p.s/2,-p.s/2*im.height/im.width,p.s,p.s*im.height/im.width)}
+   fctx.restore()}
+  parts=parts.filter(p=>p.x>-120&&p.x<W+120);if(!parts.length&&nextFlyer<now)nextFlyer=now+(FX.every||7000)}
+ fxRaf=requestAnimationFrame(fxFrame)}
+function setFx(on){if(!FX.kind||reduced())return;if(on===fxOn)return;fxOn=on;fx.classList.toggle('on',on);if(on){fxSize();if(!parts.length)fxReset();fxT0=performance.now();if(!fxRaf)fxRaf=requestAnimationFrame(fxFrame)}}
+addEventListener('resize',()=>{if(fxOn)fxSize()});
+const media=[id('cover'),id('closing')],vis=new Map();
+if(typeof IntersectionObserver==='function'){const io=new IntersectionObserver(es=>{for(const e of es)vis.set(e.target,e.intersectionRatio);const m=Math.max(...media.map(x=>vis.get(x)||0));setFx(m<.45&&!document.hidden)},{threshold:[0,.2,.45,.7,1]});media.forEach(x=>io.observe(x))}
+
 window.GUEST_APPLY_CONFIG=render;
 /* ---- portada: espera el toque, se abre y muestra los datos ---- */
 const cover=id('cover'),cv=id('cover-video');let opened=false,coverTimer=null;
@@ -249,22 +324,25 @@ const closing=id('closing'),xv=id('closing-video');let closingStarted=false;
 function revealClosing(){closing.classList.add('revealed')}
 xv.addEventListener('timeupdate',()=>{if(xv.currentTime>=CLOSING_TEXT_AT)revealClosing()});xv.addEventListener('ended',revealClosing);xv.addEventListener('error',revealClosing);
 function startClosing(){if(closingStarted)return;closingStarted=true;if(reduced()){xv.preload='auto';try{xv.currentTime=Math.max(0,(xv.duration||CLOSING_TEXT_AT)-.05)}catch{}revealClosing();return}const pr=xv.play();if(pr&&pr.catch)pr.catch(()=>revealClosing());setTimeout(revealClosing,(CLOSING_TEXT_AT+2.5)*1000)}
-if(typeof IntersectionObserver==='function'){new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting))startClosing()},{threshold:.4}).observe(closing)}else startClosing();
+if(typeof IntersectionObserver==='function'){new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting))startClosing()},{threshold:.4}).observe(closing);
+ const pre=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){xv.preload='auto';try{xv.load()}catch{}pre.disconnect()}},{rootMargin:'0px 0px 150% 0px'});pre.observe(closing)}else startClosing();
 document.addEventListener('visibilitychange',()=>{if(document.hidden){cv.pause();xv.pause()}});
 id('rsvp-link').addEventListener('click',ev=>{if(id('rsvp-link').dataset.rsvpConfigured!=='true')ev.preventDefault()});
 /* ---- demostración y fixtures de revisión TEST (nunca en un pedido real) ---- */
 const demo={schemaVersion:'guest-invitation-config-v1',locale:'es',template:{id:TEMPLATE.id,version:TEMPLATE.version,typographyVariant:'classic'},couple:{name1:'Lucía',name2:'Pablo'},wedding:{date:'2027-09-18',time:'19:30',coverPlace:'Murcia'},cover:{photo:null,showPlace:true,showTime:false},countdown:{enabled:true},story:{enabled:true,textMode:'custom',body:'No sabemos exactamente cuándo empezó todo. Solo sabemos que queremos seguir escribiendo nuestra historia con vosotros a nuestro lado.',photo:null},locations:{mode:'split',dressCode:{enabled:true,text:'Elegante, con un toque de color'},items:[{type:'ceremony',time:'18:30',name:'Jardín de la Luz',address:'Camino de los Olivos, Murcia',mapsUrl:null},{type:'celebration',time:'20:00',name:'Finca del Mar',address:'Murcia',mapsUrl:null}]},agenda:{enabled:true,moments:[{time:'18:30',label:'Ceremonia'},{time:'19:30',label:'Cóctel de bienvenida'},{time:'21:00',label:'Cena'},{time:'23:30',label:'Baile'}]},practical:{bus:{enabled:true,pickupPoints:['Plaza Circular'],outboundTimes:['17:45'],returnTimes:['02:00'],note:null},accommodation:{enabled:true,mode:'recommended',name:'Hotel de ejemplo',note:'Tenemos opciones cercanas a la finca.'},gift:{enabled:true,mode:'short_text',displayText:'Vuestra compañía es nuestro mejor regalo.'},playlist:{enabled:true,mode:'guest_request',prompt:'¿Qué canción no puede faltar?',url:null}},rsvp:{ctaLabel:'Confirmar asistencia',route:null},gallery:{enabled:false,photos:[]},closing:{line:'Lo más bonito será celebrarlo juntos.'}};
+const DEMO_PHOTOS={{DEMO_PHOTOS}};
+function demoPhoto(k,fit='crop',fy=50){return DEMO_PHOTOS[k]?{src:DEMO_PHOTOS[k],fit,focusX:50,focusY:fy,alt:'Fotografía de ejemplo'}:null}
 function qaPhoto(seed,fit='crop'){const c=[['#f0dccb','#a67a73'],['#e9d5c9','#8c9280'],['#d7cbd5','#7e7187'],['#d6d2bd','#9d8f70'],['#ded0ce','#b18c9b']][seed%5];const svg='<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="850" viewBox="0 0 1280 850"><rect width="1280" height="850" fill="'+c[0]+'"/><circle cx="930" cy="200" r="168" fill="#fff8e7" opacity=".55"/><path d="M0 620Q280 420 640 655T1280 550V850H0Z" fill="'+c[1]+'" opacity=".46"/><path d="M0 735Q330 635 770 770T1280 690V850H0Z" fill="'+c[1]+'" opacity=".62"/></svg>';return {src:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg),fit,focusX:50,focusY:50}}
 function fixture(mode){const full=mode!=='reduced',U='https://www.google.com/maps/search/?api=1&query=Murcia',W='https://example.com/';
  const loc=(type,time,name,address)=>({type,time,name,address,mapsUrl:U,websiteUrl:W});
- return {...structuredClone(demo),story:{enabled:true,textMode:full?'custom':'preset',body:demo.story.body,photo:full?qaPhoto(0):null},
-  locations:{mode:full?'split':'shared',heroPhoto:full?qaPhoto(3):null,dressCode:{enabled:full,text:full?'Elegante, con un toque de color':null},items:full?[loc('ceremony','18:30','Jardín de la Luz','Camino de los Olivos, Murcia'),loc('celebration','20:00','Finca del Mar','Murcia')]:[loc('shared','18:30','Jardín de la Luz','Murcia')]},
+ return {...structuredClone(demo),story:{enabled:true,textMode:full?'custom':'preset',body:demo.story.body,photo:full?(mode==='demo'?demoPhoto('story','crop',45):qaPhoto(0)):null},
+  locations:{mode:full?'split':'shared',heroPhoto:full?(mode==='demo'?demoPhoto('venue','crop',62):qaPhoto(3)):null,dressCode:{enabled:full,text:full?'Elegante, con un toque de color':null},items:full?[loc('ceremony','18:30','Jardín de la Luz','Camino de los Olivos, Murcia'),loc('celebration','20:00','Finca del Mar','Murcia')]:[loc('shared','18:30','Jardín de la Luz','Murcia')]},
   agenda:{enabled:true,moments:full?[{time:'18:30',label:'Ceremonia'},{time:'19:30',label:'Cóctel de bienvenida'},{time:'21:00',label:'Cena'},{time:'23:30',label:'Baile'},{time:'02:00',label:'Último baile'}]:[{time:'18:30',label:'Ceremonia'}]},
   practical:{bus:{enabled:full,pickupPoints:['Plaza de prueba'],outboundTimes:['17:15'],returnTimes:['02:00'],note:'Horario de transporte de muestra',mapsUrl:U},accommodation:{enabled:full,mode:'recommended',name:'Hotel de ejemplo',websiteUrl:W,mapsUrl:U},gift:{enabled:full,mode:'short_text',displayText:'Vuestra presencia es nuestro mejor regalo',details:'Texto de muestra'},playlist:{enabled:full,mode:'guest_request',prompt:'¿Qué canción no puede faltar?',url:'https://example.com/pedir-cancion'}},
-  gallery:{enabled:mode==='full',photos:mode==='full'?[qaPhoto(0),qaPhoto(1),qaPhoto(2),qaPhoto(4,'full')]:[]}}}
+  gallery:{enabled:mode==='full'||mode==='demo',photos:mode==='demo'?[demoPhoto('g1'),demoPhoto('g2'),demoPhoto('g3'),demoPhoto('g4','crop',35)].filter(Boolean):mode==='full'?[qaPhoto(0),qaPhoto(1),qaPhoto(2),qaPhoto(4,'full')]:[]}}}
 if(!window.__GUEST_SUPPRESS_DEMO__){
  const q=new URLSearchParams(location.search).get('qa');
- if(['full','reduced','without-gallery'].includes(q)){render(fixture(q));document.documentElement.dataset.guestReviewFixture=q}else render(demo);
+ if(['full','reduced','without-gallery'].includes(q)){render(fixture(q));document.documentElement.dataset.guestReviewFixture=q}else render(fixture('demo'));
 }
 window.__GUEST_SKIN__={fixture,demo,openCover,startClosing};
 })();

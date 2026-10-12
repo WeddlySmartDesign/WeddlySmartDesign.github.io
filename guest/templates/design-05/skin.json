@@ -48,5 +48,12 @@
    "fondos-4-pantallas/fondo-4.jpg"
   ]
  },
- "mediaSource": "Entrega «Gala» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas"
+ "mediaSource": "Entrega «Gala» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas",
+ "fx": {
+  "kind": "dust",
+  "color": "214,178,96",
+  "count": 36
+ },
+ "motif": "skin-assets/motif.webp",
+ "motifIdle": "rotate"
 }

@@ -48,5 +48,14 @@
    "fondos-4-pantallas/fondo-4.jpg"
   ]
  },
- "mediaSource": "Entrega «Invernadero» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas"
+ "mediaSource": "Entrega «Invernadero» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas",
+ "fx": {
+  "kind": "butterflies",
+  "every": 5200,
+  "sprites": [
+   "skin-assets/butterfly.webp"
+  ]
+ },
+ "motif": "skin-assets/motif.webp",
+ "motifIdle": "flap"
 }

@@ -33,11 +33,22 @@ const rep={
  FONT_SCRIPT:dataUri(path.join(engineDir,'fonts/Pinyon.ttf')),FONT_SERIF:dataUri(path.join(engineDir,'fonts/Garamond.woff')),FONT_SC:dataUri(path.join(engineDir,'fonts/GaramondSC.otf')),
  COVER_VIDEO:dataUri(media(skin.media.coverVideo)),COVER_POSTER:poster(skin.media.coverVideo),
  CLOSING_VIDEO:dataUri(media(skin.media.closingVideo)),CLOSING_POSTER:poster(skin.media.closingVideo),
- BG5:bg(skin.media.backgrounds5),BG4:bg(skin.media.backgrounds4)};
+ BG5:bg(skin.media.backgrounds5),
+ MOTIF:skin.motif?dataUri(path.join(path.dirname(skinPath),skin.motif)):'',MOTIF_IDLE:skin.motifIdle||'',
+ FX:JSON.stringify({...(skin.fx||{}),sprites:((skin.fx||{}).sprites||[]).map(r=>dataUri(path.join(path.dirname(skinPath),r)))}),
+ DEMO_PHOTOS:JSON.stringify(Object.fromEntries(['story','venue','g1','g2','g3','g4'].map(k=>[k,dataUri(path.join(engineDir,'demo-photos',k+'.jpg'))]))),BG4:bg(skin.media.backgrounds4)};
 if(skin.media.backgrounds5.length!==5||skin.media.backgrounds4.length!==4)throw new Error('Backgrounds must be 5 + 4');
 html=html.replace(/\{\{([A-Z0-9_]+)\}\}/g,(m,k)=>{if(!(k in rep))throw new Error('Unknown placeholder '+k);return rep[k]});
 if(/\{\{[A-Z_]+\}\}/.test(html))throw new Error('Unresolved placeholder');
 fs.writeFileSync(out,html);
 const manifest={id:skin.id,displayName:skin.displayName,version:skin.version,rendererApi:'GUEST_APPLY_CONFIG',masterHtml:path.basename(out),typographyVariants:['classic']};
 fs.writeFileSync(path.join(path.dirname(out),'visual-plugin.json'),JSON.stringify(manifest,null,2)+'\n');
-console.log(JSON.stringify({ok:true,out,bytes:fs.statSync(out).size,sha256:crypto.createHash('sha256').update(html).digest('hex')},null,1));
+// --sync-catalog: si el diseño ya está registrado y sigue certification-pending (sin pedidos), actualiza su copia de catálogo y SHA.
+let synced=false;
+if(args.includes('--sync-catalog')){
+ const root=path.join(__dirname,'../..'),statusPath=path.join(root,'guest/GUEST_PROJECT_STATUS_V1.json'),st=JSON.parse(fs.readFileSync(statusPath,'utf8'));
+ const d=st.designs[skin.id];if(!d)throw new Error('Not registered yet: use register_visual_template.cjs --apply');
+ if(d.status!=='certification-pending'||d.commerciallyCertified)throw new Error('Refusing to change a certified/frozen design: '+skin.id);
+ const asset=path.join(root,d.catalogAsset);fs.writeFileSync(asset,html);const h=crypto.createHash('sha256').update(html).digest('hex');
+ d.visualMasterSha256=h;d.candidateSha256=h;fs.writeFileSync(statusPath,JSON.stringify(st,null,2)+'\n');synced=true}
+console.log(JSON.stringify({ok:true,synced,out,bytes:fs.statSync(out).size,sha256:crypto.createHash('sha256').update(html).digest('hex')},null,1));
