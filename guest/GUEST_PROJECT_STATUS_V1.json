@@ -304,7 +304,7 @@
       "visualCandidateSource": "guest/GUEST_ENTRY_79_D03_LIMONEROS_CANDIDATE_V1_RECOVERED_2026-10-12.md",
       "integrationVerified": true,
       "cloudflareVerified": true,
-      "backendTestDeployed": false,
+      "backendTestDeployed": true,
       "androidPhysicalVerified": false,
       "commercialReady": false,
       "publicTestPreviewUrl": "https://guest-weddlysmartdesign.pages.dev/guest/catalog-assets/design-03/1.0.0/index.html",
@@ -312,7 +312,13 @@
       "cloudflarePublishedHtmlBytes": 1025775,
       "cloudflareMediaFilesVerified": 15,
       "cloudflareReadbackEvidence": "guest/qa-reports/limoneros_cloudflare_live_check.json",
-      "cloudflareReadbackEvidenceDate": "2026-10-12T09:29:16Z"
+      "cloudflareReadbackEvidenceDate": "2026-10-12T09:29:16Z",
+      "backendTestDeployedFunction": "guest-invitation-flow",
+      "backendTestDeployedVersion": 19,
+      "backendTestOnly": true,
+      "backendGuardVerified": true,
+      "backendTestDeploymentEvidence": "guest/GUEST_ENTRY_83_D03_LIMONEROS_LIVE_VERIFIED_BACKEND_TEST_V19_2026-10-12.md",
+      "backendRealE2eVerified": false
     },
     "design-04": {
       "status": "not-started"
