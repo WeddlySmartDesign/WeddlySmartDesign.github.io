@@ -33,7 +33,7 @@ function applyPractical(config){
  if(a.enabled&&a.mode!=='none'){
   const more=[a.address&&'Dirección: '+a.address,a.bookingName&&'Reserva a nombre de '+a.bookingName,a.bookingCode&&'Código: '+a.bookingCode,a.discountText,a.deadline&&'Hasta: '+a.deadline,a.priceText,a.phone&&'Teléfono: '+a.phone,a.note];
   const links=[[a.websiteUrl,'Ver hotel'],[a.mapsUrl,'Cómo llegar']];
-  if(['external_booking','room_block'].includes(a.mode))links.push([a.externalBookingUrl,'Reservar']);
+  if(a.mode==='external_booking')links.push([a.externalBookingUrl,'Reservar']);
   addBlock(root,'Alojamiento',[a.name||(!window.__GUEST_SUPPRESS_DEMO__?a.message:null),a.note,a.discountText,a.priceText],links,{label:'Datos del alojamiento',lines:more})
  }
  const g=p.gift||{};
@@ -45,6 +45,63 @@ function applyPractical(config){
  if(m.enabled&&m.mode!=='none')addBlock(root,'Nuestra música',[m.prompt],[[m.url,m.mode==='guest_request'?'Proponer canción':'Escuchar playlist']]);
  scene.classList.toggle('invisible',root.childElementCount===0);
 }
+
+/* D03 non-destructive scene improvements: same canonical config, no bespoke inputs. */
+let agendaObserver=null;
+function photoHref(value){
+ const raw=typeof value==='string'?value:value?.src;
+ if(!raw)return null;
+ try{const u=new URL(raw,document.baseURI);return ['https:','http:','blob:'].includes(u.protocol)?u.href:null}catch{return null}
+}
+function enhanceLimonerosScenes(config){
+ const story=config.story||{},storyPhoto=byId('story-photo');
+ // A cover photo must not silently impersonate an absent story photo.
+ if(storyPhoto&&!photoHref(story.photo)){
+   storyPhoto.removeAttribute('src');
+   storyPhoto.classList.add('invisible');
+ }
+ const root=byId('locations'),items=byId('location-items'),pic=config.locations?.heroPhoto;
+ const valid=photoHref(pic);
+ let figure=byId('d03-location-photo');
+ if(figure&&!valid){figure.remove();figure=null}
+ if(valid&&root&&items&&items.parentNode){
+   if(!figure){
+     figure=document.createElement('figure');
+     figure.id='d03-location-photo';
+     figure.className='location-photo';
+     const img=document.createElement('img');
+     img.className='location-hero-photo';
+     img.alt='Fotografía del lugar';
+     img.loading='lazy';
+     figure.append(img);
+     items.parentNode.insertBefore(figure,items);
+   }
+   const img=figure.querySelector('img');
+   img.src=valid;
+   img.dataset.fit=pic?.fit==='full'?'full':'crop';
+   const x=Math.max(0,Math.min(100,Number(pic?.focusX??50)));
+   const y=Math.max(0,Math.min(100,Number(pic?.focusY??50)));
+   img.style.objectPosition=x+'% '+y+'%';
+ }
+ // Motion begins when moments actually enter the viewport, rather than
+ // animating out of sight on page load. All counts 1..5 use one renderer.
+ if(agendaObserver){agendaObserver.disconnect();agendaObserver=null}
+ const list=byId('moments');
+ if(list&&typeof IntersectionObserver==='function'&&list.children.length){
+   agendaObserver=new IntersectionObserver(entries=>{
+     for(const entry of entries)if(entry.isIntersecting){
+       entry.target.classList.add('d03-visible');
+       agendaObserver?.unobserve(entry.target);
+     }
+   },{threshold:.16,rootMargin:'0px 0px -6% 0px'});
+   [...list.children].forEach((row,i)=>{
+     row.style.setProperty('--d03-delay',Math.min(i*105,420)+'ms');
+     row.classList.add('d03-ready');
+     agendaObserver.observe(row);
+   });
+ }
+}
+
 window.GUEST_APPLY_CONFIG=function(config){
  // The original renderer allocates the author's graded backgrounds before its
  // Practical content is replaced. Supply real schema-derived placeholders to
@@ -55,7 +112,7 @@ window.GUEST_APPLY_CONFIG=function(config){
   accommodation:a.enabled&&a.mode!=='none'?{...a,message:a.name||a.note||a.bookingCode||a.address||'Alojamiento'}:a,
   gift:g.enabled&&g.mode!=='none'?{...g,message:g.displayText||g.details||'Regalos'}:g
  }};
- const res=original(proxy);applyPractical(config);
+ const res=original(proxy);applyPractical(config);enhanceLimonerosScenes(config);
  const closingLine=byId('closing-line');if(closingLine&&config.closing?.line==null){closingLine.textContent='';closingLine.classList.add('invisible')}
  return {...res,visibleScenes:document.querySelectorAll('[data-bg]:not(.invisible)').length};
 };
