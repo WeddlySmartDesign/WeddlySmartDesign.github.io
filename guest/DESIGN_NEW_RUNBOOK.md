@@ -6,16 +6,22 @@
 
 **Entrega de un diseño ya existente:** basta con recibir el HTML autocontenido o un ZIP con el HTML y todos los recursos; el responsable técnico crea internamente `visual-plugin.json`, el identificador/versionado y el adaptador común. No pedir a la propietaria crear manifiestos, ejecutar comandos ni configurar Cloudflare/Supabase.
 
-**Precaución de despliegue backend (Entrada 76):** que el builder de Cloudflare incorpore D03+ no significa que la Edge Function actual acepte dicho `template_id`: live V18 conoce VEIL/Botánica. Usar generador común de registro de backend en TEST, verificar y desplegar bajo control autorizado antes de ensayar nuevos pedidos. No habilitar producción ni usar datos de clientes. [Leer Entrada 76](GUEST_ENTRY_76_NEXT_DESIGN_INTAKE_READY_2026-10-11.md).
+**PROCEDIMIENTO OPERATIVO VERIFICADO EN D03 (Entrada 83, 12/10/2026):** cuando la autora ya entrega un diseño completo, NO hacer nuevas fases creativas, NO reconstruir vídeos/fondos, NO repetir las pruebas locales ya verificadas y NO pedir archivos existentes en Biblioteca. El origen se conserva por SHA256. Registrar una sola vez `master.html` + plugin en `guest-independent`; el comando Cloudflare existente `node guest/tools/build_catalog_static_preview.cjs --output "$PWD/dist" --template botanica` incluye todos los diseños. **Si el máster supera 24 MiB, el builder ahora extrae automáticamente datos `data:image/*;base64` / `data:video/mp4;base64` a `media/`, comprueba el SHA256 de reconstrucción exacta del original y emite sólo archivos menores al límite de Cloudflare.** La autora no extrae ni sube nada. D03: 28.673.474 bytes origen → 1.025.775 bytes HTML + 15 medios originales, HTTP 200, SHA exactos (informe `guest/qa-reports/limoneros_cloudflare_live_check.json`). **Una página que responda 200 con fallback NO basta**: exigir coincidencia de HTML y recursos remotos y `noindex`. El backend actual es **Supabase V19 ACTIVO**, VEIL LIGHT intacto y Botánica y D03 `testOnly:true`; para D04+ generar/validar incremento seguro del catálogo en TEST sin tocar el flujo de ventas. [Evidencia real](GUEST_ENTRY_83_D03_LIMONEROS_LIVE_VERIFIED_BACKEND_TEST_V19_2026-10-12.md).
 
-## Fase 0 — prerrequisito que NO se puede omitir
+**Precaución de despliegue backend (actualización Entrada 83):** que el builder de Cloudflare incorpore D04+ no significa que la Edge Function actual acepte dicho `template_id`: live V19 reconoce VEIL/Botánica/D03 en sus modos protegidos. Usar generador común de registro de backend en TEST, verificar y desplegar bajo control autorizado antes de ensayar nuevos pedidos. No habilitar producción ni usar datos de clientes. [Leer Entrada 76](GUEST_ENTRY_76_NEXT_DESIGN_INTAKE_READY_2026-10-11.md).
+
+## Fase 0 — prerrequisito de CERTIFICACIÓN COMERCIAL (no bloquea visual TEST)
+
+**IMPORTANTE:** las verificaciones de Fase 0 bloquean *venta*, no la simple incorporación y previsualización de un nuevo diseño como `certification-pending`. No repetir Botánica ni rediseñar una plantilla aportada para terminar la plataforma; se puede continuar visual TEST antes de E2E Android, siempre sin habilitar venta.
 
 - [ ] Infraestructura V2 integrada **en el Mobile Center distribuido y backend de pruebas legítimamente autorizado**, no solo simulada.
 - [ ] Cuestionario único reconoce todos los estados permitidos (`preset/custom/none`, foto-only, regalos, datos opcionales) y la Edge Function emite un contrato que pasa su esquema.
 - [ ] Prueba regresión VEIL y Botánica real, dos pedidos independientes, URL final y RSVP persistente; evidencia E2E, prueba en Android y tiempo activo medido.
 - [ ] Registrar el `PASS` del sistema común y la versión que se ha desplegado. Si alguno está pendiente, **NO empezar a implementar lógica de producto alrededor del diseño nuevo**. Trabajar solo en arte conceptual si ello no oculta el bloqueo.
 
-## Fase 1 — nueva identidad visual (solo diseño)
+## Fase 1 — nueva identidad visual (solo si la autora AÚN no la ha entregado)
+
+**Si el diseño ya está entregado por la autora y aprobado como material de partida, esta fase creativa NO se ejecuta.** Se inspecciona/valida el HTML existente y se integra; la adaptación técnica debe preservar sus medios, gradientes y composición. El resto de puntos sirven únicamente para diseño que todavía no exista.
 
 - [ ] Investigación competitiva premium real; seleccionar referencias y documentar la mejora concreta. Evitar look IA/Canva, arcos, marcos y collage artificial.
 - [ ] Definir un universo propio: paleta, tipografía, escala móvil, ritmo/animaciones, integración de fotografía, fondos, apertura y cierre. No clonar D01/D02.
