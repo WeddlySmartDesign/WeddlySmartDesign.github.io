@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "guest-d03-cloudflare-probe-v1",
+  "checkedAtUtc": "2026-10-12T09:20:09.677420+00:00",
+  "url": "https://guest-weddlysmartdesign.pages.dev/guest/catalog-assets/design-03/1.0.0/index.html",
+  "expectedSourceSha256": "a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482",
+  "expectedSourceBytes": 28673474,
+  "commercialApproved": false,
+  "testOnly": true,
+  "httpStatus": 200,
+  "contentType": "text/html; charset=utf-8",
+  "robots": "noindex, nofollow, noarchive",
+  "bytes": 877,
+  "sha256": "9c2c2d328a72502e9e8b2da3149284c224d4671574e1302f32ca77ea41f6b292",
+  "shaMatchesOriginal": false,
+  "online": false
+}
