@@ -1,0 +1,26 @@
+# Entrada 84 — LIMONEROS: corrección de botones/typografía y cuestionario real, candidato TEST (12/10/2026)
+
+## Incidencia comunicada y evidencia
+La autora mostró vídeo móvil `1000095397.mp4` (38,87 s) y señaló que el V1 destruía el encanto de sus vídeos y gradientes mediante botones/typografía genéricos y, además, ignoraba campos del cuestionario. Se extrajeron fotogramas y se compararon con el V1 (fuente Library recuperada; SHA256 `a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482`). No pedir otra vez ZIP ni rediseñar.
+
+**Estado anterior relevante:** Entrada 81 de remedio local V2 y Entrada 83 con V1 HTTPS real y backend V19 TEST. La versión visual V2 local no implica que se haya publicado. La parte de *vídeos/medios del diseño* ya estaba en GitHub y Cloudflare; no repetir blobs.
+
+## Cambios reales incorporados a guest-independent (sin tocar máster original)
+- `guest/catalog-patches/design-03/1.0.0/patch.css`: controles tipo grabado/editorial; sin cajones rectangulares de navegación, fuente serifa/smallcaps del propio máster; CTA final integrado en noche; elimina banner visual de TEST de la ilustración (meta noindex y guards comerciales siguen); elimina nombres grandes sobre el vídeo del cierre, donde las golondrinas ya sostienen una cinta manuscrita. El texto del cierre se desvanece ANTES de que llegue la cinta.
+- `guest/catalog-patches/design-03/1.0.0/patch.js`: puente *idempotente* de renderizado para `guest-invitation-config-v1` que preserva `window.GUEST_APPLY_CONFIG(config)` y RSVP. Transporte = `pickupPoints/outboundTimes/returnTimes/note/mapsUrl`; alojamiento = `mode/name/address/websiteUrl/mapsUrl/externalBookingUrl/bookingCode/bookingName/deadline/discountText/phone/priceText/note`; regalos = `mode/displayText/details/iban/bicSwift/bizumPhone/externalUrl`; playlist = `mode/prompt/url`. Sólo enlaces HTTP(S) reales. Códigos y datos sensibles de regalos quedan tras «Ver datos». La frase de cierre no se inventa cuando `closing.line` es null. No crea motor RSVP paralelo.
+- `guest/catalog-patches/design-03/1.0.0/patch-manifest.json` ancla SOLO D03 `1.0.0` al SHA exacto del original e impide marcar venta.
+- `guest/tools/build_catalog_static_preview.cjs` aplica automáticamente un patch **únicamente cuando existe manifiesto explícito** y su SHA origen corresponde al máster visual registrado. Corrección de sintaxis incluida (commit `60136cc`). Ningún otro diseño tiene un manifiesto de patch ni se ve afectado.
+- `guest/tests/limoneros_visual_patch_contract.test.cjs` añadido al `guest/qa/catalog_preflight_v2.cjs`: chequeos contra esquema real, medios originales, estado TEST y sintaxis.
+- Reparación de una inconsistencia previa de continuidad: en `guest/GUEST_PROJECT_STATUS_V1.json` D03 debe figurar `certification-pending` (como registro canónico del catálogo) y guardar por separado la versión visual candidata. El valor previo `visual-candidate-v2-local-qa-pass-awaiting-review-and-integration` en `designs.design-03.status` impedía la compilación por deriva; se devolvió a `certification-pending`. La candidata V2 anterior en Library no se borra.
+
+## Verificaciones **realmente hechas**
+- Chromium local con **master ORIGINAL embebido + corrección visual y campos canónicos**, a 320/360/390/430 px: ancho documento = ancho viewport, sin errores JS, conserva los dos vídeos; 390 px con dos sedes, 5 momentos, cuatro módulos, sin historia y sin galería: entradas de transporte, alojamiento, regalo y playlist visibles; enlaces externos condicionales, detalle de reserva y regalo expandibles. Las capturas están disponibles en contenedor de trabajo de la sesión: `/mnt/data/limoneros_audit/new_cover.png`, `new_locations.png`, `stress_practical.png`, `new_closing.png`. El candidato local probó un patch semánticamente equivalente; **no presentar local como verificación HTTPS/Android**.
+- Lectura directa GitHub después de commits: builder, JS patch, preflight y test contract con sintaxis JavaScript PASS en V8; `sourceMasterSha256` de manifest coincide con registro.
+- No se ha modificado el SHA del máster V1 ni los MP4/JPEG.
+- **Pendiente verificar** ejecución GitHub Actions tras el último commit y HTTP de la página nueva; publicar corregido no es sinónimo de PASS Android. En la fecha de la entrada la URL previa es `https://guest-weddlysmartdesign.pages.dev/guest/catalog-assets/design-03/1.0.0/index.html`, pero la corrección nueva sólo se considerará desplegada tras readback o test real.
+- No pedidos reales E2E de D03, no aceptación visual de la autora, no certificación comercial. Pago/Stripe y venta PROHIBIDOS.
+
+## Continuar sin intervención técnica de la propietaria
+1. Verificar build Cloudflare + salida HTTPS real del patch: HTML incluye `limonerosClosingIntro`, `pickupPoints` y CSS editorial, medios 15/15 inalterados. Si no, investigar CI sin retroceder diseño.
+2. QA con dos configs TEST auténticas del cuestionario y enlace RSVP; corregir únicamente defectos encontrados. Validación Android del render remoto UNA SOLA VEZ cuando esté listo.
+3. Solicitar aprobación artística de la propietaria sólo mediante enlace móvil real corregido. Tras aprobación, congelar versión; si rechaza, mantener esta candidata como TEST. No confundir candidato con producto vendido.
