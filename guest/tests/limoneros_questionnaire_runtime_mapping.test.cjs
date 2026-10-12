@@ -59,11 +59,19 @@ function richConfig(){
  assert.equal(items[2].textContent.includes('Vuestra compañía es el mejor regalo'),true);
  assert.equal(items[3].textContent.includes('¿Qué canción no puede faltar?'),true);
  const nodes=allNodes(elements['practical-items']),links=nodes.filter(n=>n.tag==='a'),details=nodes.filter(n=>n.tag==='details');
- assert.equal(links.length,5);assert.equal(details.length,2);
+ assert.equal(links.length,4,'Room block exposes hotel/map, not a Reservar CTA');assert.equal(details.length,2);
  assert.equal(details.some(n=>n.textContent.includes('Código: BODA-PRUEBA')),true);
  assert.equal(details.some(n=>n.textContent.includes('IBAN: ES0000000000000000000000')),true);
  assert.equal(details.some(n=>n.textContent.includes('Bizum: 600000001')),true);
  assert.equal(elements['practical'].classList.contains('invisible'),false);
+}
+{
+ const {window,elements}=init(),c=richConfig();
+ c.practical.accommodation.mode='external_booking';
+ window.GUEST_APPLY_CONFIG(c);
+ const links=allNodes(elements['practical-items']).filter(n=>n.tag==='a');
+ assert.equal(links.length,5,'External booking must expose live Reservar link');
+ assert.ok(links.some(n=>n.textContent==='Reservar'));
 }
 {
  const {window,elements}=init(),c=richConfig();
