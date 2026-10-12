@@ -94,6 +94,73 @@ function installGalleryCarousel(){
  nav.append(hint,dots);scene.querySelector('.scene-inner').append(nav);
  track.addEventListener('scroll',update,{passive:true});update();track.scrollLeft=0;
 }
+/* Fix for original ONE-SHOT media: cover MP4 is 8.5s, closing MP4 is 9s.
+   Both were correctly authored videos, but source markup played only once.
+   Never replace videos or force a fake CSS animation onto the paintings. */
+let d03VideoObserver=null;
+let d03VideoBound=false;
+function installCinematicPlayback(){
+ const cover=byId('cover-video'),closing=byId('closing-video');
+ if(!cover||!closing)return;
+ const reduced=typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+ for(const video of [cover,closing]){
+   video.muted=true;video.defaultMuted=true;video.playsInline=true;
+   video.setAttribute('muted','');video.setAttribute('playsinline','');
+   video.loop=true;video.setAttribute('loop','');
+   video.preload='auto';
+ }
+ if(reduced){cover.pause();closing.pause();return}
+ const safePlay=video=>{
+   if(document.hidden||!video.paused)return;
+   const promise=video.play();
+   if(promise&&typeof promise.catch==='function')promise.catch(()=>{});
+ };
+ // An original closing observer marks the scene "started" only once.
+ // Loop the real MP4 and restart its first caption on the video restart,
+ // otherwise subsequent loops would lack the original opening typography.
+ let oldTime=0;
+ function restartClosingCaption(){
+   const section=byId('closing');if(!section)return;
+   section.classList.remove('started');
+   void section.offsetWidth;
+   section.classList.add('started');
+ }
+ if(!d03VideoBound){
+   closing.addEventListener('timeupdate',()=>{
+     if(oldTime>7.8&&closing.currentTime<.32)restartClosingCaption();
+     oldTime=closing.currentTime;
+   });
+   const resync=()=>{
+     if(document.hidden){cover.pause();closing.pause();return}
+     if(cover.getBoundingClientRect().bottom>0&&cover.getBoundingClientRect().top<innerHeight*.65)safePlay(cover);
+     if(closing.getBoundingClientRect().bottom>innerHeight*.2&&closing.getBoundingClientRect().top<innerHeight*.7)safePlay(closing);
+   };
+   document.addEventListener('visibilitychange',resync);
+   window.addEventListener('pageshow',resync);
+   // A muted inline video can play on normal mobile browsers. On a browser
+   // that defers autoplay, first real contact is a permitted user gesture.
+   document.addEventListener('pointerdown',()=>{if(!document.hidden)resync()},{passive:true});
+   d03VideoBound=true;
+ }
+ if(d03VideoObserver)d03VideoObserver.disconnect();
+ if(typeof IntersectionObserver==='function'){
+   d03VideoObserver=new IntersectionObserver(entries=>{
+     for(const entry of entries){
+       const video=entry.target.querySelector('video');
+       if(!video)continue;
+       if(entry.isIntersecting){
+         if(video===closing&&video.paused&&video.currentTime>0){
+           try{video.currentTime=0}catch{}
+           oldTime=0;restartClosingCaption();
+         }
+         safePlay(video);
+       }else video.pause();
+     }
+   },{threshold:.22});
+   d03VideoObserver.observe(byId('cover'));
+   d03VideoObserver.observe(byId('closing'));
+ }else{safePlay(cover)}
+}
 function enhanceLimonerosScenes(config){
  const story=config.story||{},storyPhoto=byId('story-photo');
  // A cover photo must not silently impersonate an absent story photo.
@@ -206,7 +273,7 @@ window.GUEST_APPLY_CONFIG=function(config){
   accommodation:a.enabled&&a.mode!=='none'?{...a,message:a.name||a.note||a.bookingCode||a.address||'Alojamiento'}:a,
   gift:g.enabled&&g.mode!=='none'?{...g,message:g.displayText||g.details||'Regalos'}:g
  }};
- const res=original(proxy);applyPractical(config);enhanceLimonerosScenes(config);installGalleryCarousel();
+ const res=original(proxy);applyPractical(config);enhanceLimonerosScenes(config);installGalleryCarousel();installCinematicPlayback();
  const closingLine=byId('closing-line');if(closingLine&&config.closing?.line==null){closingLine.textContent='';closingLine.classList.add('invisible')}
  return {...res,visibleScenes:document.querySelectorAll('[data-bg]:not(.invisible)').length};
 };
