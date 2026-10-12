@@ -116,4 +116,69 @@ window.GUEST_APPLY_CONFIG=function(config){
  const closingLine=byId('closing-line');if(closingLine&&config.closing?.line==null){closingLine.textContent='';closingLine.classList.add('invisible')}
  return {...res,visibleScenes:document.querySelectorAll('[data-bg]:not(.invisible)').length};
 };
+
+/* Explicit TEST-ONLY full/absent fixture for author visual review.
+   Never activate in an authenticated order or regular public invitation. */
+if(!window.__GUEST_SUPPRESS_DEMO__ && window.location && window.addEventListener){
+ const fixtureMode=new URLSearchParams(window.location.search).get('qa');
+ if(fixtureMode==='full'||fixtureMode==='reduced'){
+  const runFixture=()=>{
+   const base=window.location.origin+'/guest/test-images/';
+   const photo=(filename,fit='crop')=>({src:base+filename,fit,focusX:50,focusY:50});
+   const full=fixtureMode==='full';
+   const loc=(type,time,name,address)=>({type,time,name,address,
+     mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia',
+     websiteUrl:'https://example.com/'});
+   const config={
+     schemaVersion:'guest-invitation-config-v1',locale:'es',
+     template:{id:'design-03',version:'1.0.0',typographyVariant:'classic'},
+     couple:{name1:'Lucía',name2:'Pablo'},
+     wedding:{date:'2027-09-18',time:'18:30',coverPlace:'Murcia'},
+     cover:{photo:null,showPlace:true,showTime:false},
+     countdown:{enabled:true},
+     story:{enabled:true,textMode:full?'custom':'preset',
+       body:'No sabemos exactamente cuándo empezó todo. Solo sabemos que queremos seguir escribiendo nuestra historia con vosotros a nuestro lado.',
+       photo:full?photo('couple.jpg'):null},
+     locations:{mode:full?'split':'shared',heroPhoto:full?photo('venue.jpg'):null,
+       dressCode:{enabled:full,text:full?'Elegante, con un toque de color':null},
+       items:full?[
+         loc('ceremony','18:30','Jardín de la Luz','Camino de los Olivos, Murcia'),
+         loc('celebration','20:00','Finca de los Limoneros','Murcia')
+       ]:[loc('shared','18:30','Jardín de la Luz','Murcia')]},
+     agenda:{enabled:true,moments:full?[
+       {time:'18:30',label:'Ceremonia'},
+       {time:'19:30',label:'Cóctel de bienvenida'},
+       {time:'21:00',label:'Cena'},
+       {time:'23:30',label:'Baile'},
+       {time:'02:00',label:'Último baile'}
+     ]:[{time:'18:30',label:'Ceremonia'}]},
+     practical:{
+       bus:{enabled:full,pickupPoints:['Plaza de prueba'],outboundTimes:['17:15'],returnTimes:['02:00'],note:'Horario de transporte de muestra',mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia'},
+       accommodation:{enabled:full,mode:'external_booking',name:'Hotel de ejemplo',address:'Murcia',websiteUrl:'https://example.com/',
+         mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia',externalBookingUrl:'https://example.com/',
+         bookingCode:'DEMO',bookingName:'Lucía y Pablo',note:'Datos ficticios de prueba'},
+       gift:{enabled:full,mode:'short_text',displayText:'Vuestra presencia es nuestro mejor regalo',details:'Texto de muestra'},
+       playlist:{enabled:full,mode:'external_link',prompt:'¿Qué canción no puede faltar?',url:'https://open.spotify.com/'}
+     },
+     gallery:{enabled:full,photos:full?[
+       photo('couple.jpg'),photo('couple2.jpg'),photo('couple3.jpg'),photo('celebration.webp','full')]:[]},
+     rsvp:{ctaLabel:'Confirmar asistencia',route:null},
+     closing:{line:'Lo más bonito será celebrarlo juntos.'}
+   };
+   window.GUEST_APPLY_CONFIG(config);
+   document.documentElement.dataset.guestReviewFixture=fixtureMode;
+   const ribbon=document.createElement('div');
+   ribbon.id='guest-demo-fixture-notice';
+   ribbon.textContent='DEMOSTRACIÓN VISUAL · DATOS DE PRUEBA · NO VENTA';
+   ribbon.setAttribute('role','note');
+   Object.assign(ribbon.style,{position:'fixed',zIndex:'30',top:'0',left:'0',right:'0',padding:'5px 8px',
+     background:'rgba(255,251,243,.93)',color:'#563d4b',font:'11px/1.2 sans-serif',
+     textAlign:'center',letterSpacing:'.055em',pointerEvents:'none'});
+   document.body.append(ribbon);
+  };
+  if(document.readyState==='loading')window.addEventListener('DOMContentLoaded',runFixture,{once:true});
+  else window.setTimeout(runFixture,0);
+ }
+}
+
 })();
