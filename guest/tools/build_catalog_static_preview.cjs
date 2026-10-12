@@ -50,6 +50,47 @@ const files=[
  'guest/catalog/owner-center-remote-bridge.html'
 ].map(name=>write(name,read(name)));
 const viewRegistry=structuredClone(registry);
+// Cloudflare Pages has a per-file size cap. Large premium visual masters often
+// contain base64-embedded author videos/images: externalize only at staging time.
+// The registered SOURCE remains byte-identical and SHA-pinned in GitHub.
+// This works for D03, D04... without updating a design-specific upload workflow.
+function stageLargeVisualLosslessly(original,id,version){
+ const limit=24*1024*1024; // below Cloudflare Pages' 25 MiB per-asset limit
+ if(original.length<=limit)return{html:original,mediaCount:0,externalized:false};
+ const html=original.toString('utf8');
+ if(Buffer.byteLength(html,'utf8')!==original.length)
+   throw Error('VISUAL_SOURCE_NOT_UTF8:'+id);
+ const assets=new Map();
+ const regex=/data:(image\/(?:jpeg|png|webp)|video\/mp4);base64,([A-Za-z0-9+/=]+)/g;
+ let count=0;
+ const rewritten=html.replace(regex,(_,mime,encoded)=>{
+   const bytes=Buffer.from(encoded,'base64');
+   if(!bytes.length||bytes.toString('base64')!==encoded)
+     throw Error('VISUAL_MEDIA_BASE64_NOT_CANONICAL:'+id);
+   const ext=({'image/jpeg':'jpg','image/png':'png','image/webp':'webp','video/mp4':'mp4'})[mime];
+   const filename=sha(bytes).slice(0,24)+'.'+ext;
+   const rel='guest/catalog-assets/'+id+'/'+version+'/media/'+filename;
+   const previous=assets.get(rel);
+   if(previous&&!previous.bytes.equals(bytes))
+     throw Error('VISUAL_MEDIA_DIGEST_COLLISION:'+id);
+   assets.set(rel,{bytes,mime});
+   count++;
+   return './media/'+filename;
+ });
+ if(count===0)throw Error('VISUAL_TOO_LARGE_WITHOUT_SPLITTABLE_MEDIA:'+id);
+ const output=Buffer.from(rewritten,'utf8');
+ if(output.length>limit)throw Error('VISUAL_SPLIT_STILL_EXCEEDS_HOST_LIMIT:'+id);
+ // Lossless round-trip is mandatory: the author's immutable SOURCE must be
+ // reconstructible byte-for-byte from the files produced for Cloudflare.
+ const restored=rewritten.replace(/\.\/media\/([0-9a-f]{24}\.(?:jpg|png|webp|mp4))/g,(ref,filename)=>{
+   const asset=assets.get('guest/catalog-assets/'+id+'/'+version+'/media/'+filename);
+   return asset?'data:'+asset.mime+';base64,'+asset.bytes.toString('base64'):ref;
+ });
+ if(sha(Buffer.from(restored,'utf8'))!==sha(original))
+   throw Error('VISUAL_MEDIA_SPLIT_NOT_LOSSLESS:'+id);
+ for(const [rel,asset] of assets)files.push(write(rel,asset.bytes));
+ return{html:output,mediaCount:assets.size,externalized:true};
+}
 const designs=[];
 for(const [name,t] of candidates){
  const entry=status.designs[name];
@@ -84,9 +125,10 @@ for(const [name,t] of candidates){
  if(sha(visual)!==expected||!visual.includes(Buffer.from('window.'+t.applyApi)))
     throw Error('FROZEN_VISUAL_SHA256_OR_RENDERER_MISMATCH:'+name);
  const dest='guest/catalog-assets/'+name+'/'+t.version+'/index.html';
- files.push(write(dest,visual));
+ const stage=stageLargeVisualLosslessly(visual,name,t.version);
+ files.push(write(dest,stage.html));
  viewRegistry.templates[name].src='/'+dest;
- designs.push({templateId:name,version:t.version,status:t.status,masterSha256:expected,visualIncluded:true});
+ designs.push({templateId:name,version:t.version,status:t.status,masterSha256:expected,deployedHtmlSha256:sha(stage.html),mediaAssets:stage.mediaCount,losslessMediaExternalization:stage.externalized,visualIncluded:true});
 }
 // Only staging copies get temporary src pointers. Canonical registry remains
 // certification-gated; published HTML never by itself authorizes a purchase.
