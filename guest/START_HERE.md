@@ -1,5 +1,10 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## OBLIGATORIO EN TODOS LOS DISEÑOS — NO REINTERPRETAR COMO NORMA DE LIMONEROS (12/10/2026)
+
+**Leer ANTES DE TRABAJAR EN EL SIGUIENTE DISEÑO:** [GUEST_UNIVERSAL_DESIGN_ACCEPTANCE_CONTRACT_V1.md](GUEST_UNIVERSAL_DESIGN_ACCEPTANCE_CONTRACT_V1.md) + [DESIGN_NEW_RUNBOOK.md](DESIGN_NEW_RUNBOOK.md). La norma global ya existía en la matriz maestra y los escenarios canónicos: **UNA plantilla desde UN cuestionario real, cobertura completa de TODOS sus campos aplicables sin inventar datos; máximo con FOTOS + 2 lugares + 5 momentos + los 4 prácticos y pruebas de ausencias; sin editar por pareja**. El estrés V1 original tiene galería OFF: ejecutar además MAX+FOTOS. No pedir reiteración de reglas ni archivos ya recibidos. La propietaria solo revisa visualmente la web REAL terminada; el asistente resuelve todo lo técnico y documenta evidencia. La falta de respeto a estas instrucciones en Limoneros fue un error de ejecución, no una carencia del contrato. **Es prioridad general D01–D1000, incluso en chats nuevos.**
+
+
 ## ENTRADA 85 — LIMONEROS: PARCHE EDITORIAL PUBLICADO + QA CUESTIONARIO SINTÉTICO (12/10/2026)
 
 [**Resultado y continuidad**](GUEST_ENTRY_85_D03_PATCH_LIVE_AND_QUESTIONNAIRE_REGRESSION_2026-10-12.md). La versión visual corregida ya está publicada en Cloudflare, HTTP 200 + HTML SHA exacto + 15/15 MP4/JPG idénticos y noindex (run `38235402146` SUCCESS); CSS y JS editoriales y puente al cuestionario realmente incorporados. Actualizados los triggers de CI: ahora falla si Cloudflare está desactualizado. Stage NO-SALE `38235417193` SUCCESS. Prueba dinámica de campos del cuestionario en VM sintética `38235740279` SUCCESS (4 módulos activos y opcionales desactivados). **NO confundir con dos pedidos TEST reales:** consulta Supabase registra 0 pedidos design-03. **Pendientes estrictos:** dos E2E TEST por gestor autenticado, revisión/final/RSVP, primera verificación renderer D03 en Android físico y aprobación artística. Sigue `certification-pending`, NO SALE. No volver a pedir archivos ni reconstruir diseño.
