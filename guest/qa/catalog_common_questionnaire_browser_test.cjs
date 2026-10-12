@@ -93,7 +93,7 @@ async function test(browser,{split,none,song=false}){
   assert.equal(q.story.textMode,none?'none':'custom');
   assert.equal(q.gallery.enabled,false);
   if(song){
-   assert.equal(q.practical.playlist.mode,'guest_request','Owner's song request must survive real questionnaire UI');
+   assert.equal(q.practical.playlist.mode,'guest_request','Guest song request must survive the actual questionnaire UI');
    assert.equal(q.practical.playlist.url,'https://example.com/pedir-cancion');
    assert.equal(q.practical.playlist.prompt,'¿Qué canción no puede faltar?');
   }
