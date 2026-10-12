@@ -319,7 +319,7 @@
       "backendGuardVerified": true,
       "backendTestDeploymentEvidence": "guest/GUEST_ENTRY_83_D03_LIMONEROS_LIVE_VERIFIED_BACKEND_TEST_V19_2026-10-12.md",
       "backendRealE2eVerified": false,
-      "checkpoint": "guest/GUEST_ENTRY_86_D03_FOUR_SCENES_IMPLEMENTED_AND_PHOTO_MATRIX_2026-10-12.md",
+      "checkpoint": "guest/GUEST_ENTRY_94_D03_PRACTICAL_EDITORIAL_COMPOSITION_2026-10-12.md",
       "visualCandidateVersion": "2-review-only",
       "visualCandidateSha256": "43249ed1728d790cbb7e43eadd9c2180e167aaab0c86c53280866cc7c2cf2a1e",
       "visualCandidateBytes": 28677081,
@@ -358,7 +358,35 @@
         390,
         430
       ],
-      "localBrowserPhotoMatrixLibrary": "/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/LIMONEROS_D03_MATRIX_QA_15_SCENARIOS_2026-10-12.json"
+      "localBrowserPhotoMatrixLibrary": "/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/LIMONEROS_D03_MATRIX_QA_15_SCENARIOS_2026-10-12.json",
+      "practicalEditorialPatchApplied": true,
+      "practicalEditorialReviewFile": "/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/LIMONEROS_D03_PRACTICO_EDITORIAL_2026-10-12.html",
+      "practicalEditorialReviewSha256": "98d5648b868a3808d0ec0a64fe50d28893e564437516291d7846d010878cd86f",
+      "practicalEditorialVisualOwnerApproved": false,
+      "practicalEditorialRealPhotoQA": {
+        "widths": [
+          320,
+          390,
+          430
+        ],
+        "pass": true,
+        "source": "private TEST HTML from stage with 5 author photos",
+        "libraryReport": "/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/LIMONEROS_D03_PRACTICO_EDITORIAL_MOBILE_QA_2026-10-12.json"
+      },
+      "practicalCanonicalModulesVerified": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "practicalCI": {
+        "independent": "38268790036",
+        "mobileSynthetic": "38268789992",
+        "catalog": "38268789904",
+        "published": "38268790128"
+      },
+      "agendaEditorialApproved": false
     },
     "design-04": {
       "status": "not-started"
