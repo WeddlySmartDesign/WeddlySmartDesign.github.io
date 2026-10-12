@@ -201,3 +201,73 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
     height:clamp(270px,41svh,360px);
   }
 }
+
+/* D03 Lugar · 12 Oct · legibility corrections from owner Android screenshot.
+   Preserve the approved watercolor-blended venue photograph; native fonts. */
+#locations .location-photo{
+  margin:clamp(10px,1.8svh,16px) auto clamp(20px,3svh,28px);
+  max-width:min(100%,460px);
+}
+#locations .location-hero-photo{
+  display:block;width:100%;height:clamp(220px,31svh,320px);max-height:none;
+  aspect-ratio:auto;object-fit:cover;object-position:center;
+  border:0;border-radius:0;box-shadow:none;background:transparent;
+  -webkit-mask-image:
+    linear-gradient(to bottom,transparent 0%,#000 16%,#000 78%,transparent 100%),
+    linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:
+    linear-gradient(to bottom,transparent 0%,#000 16%,#000 78%,transparent 100%),
+    linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%);
+  mask-composite:intersect;
+}
+#locations .location-hero-photo[data-fit="full"]{
+  object-fit:contain;height:auto;max-height:39svh;
+}
+#locations .section-kicker{
+  font:600 clamp(19px,5.15vw,24px)/1.2 var(--smallcaps);
+  letter-spacing:.09em;color:#4a2b40;
+  text-shadow:0 1px 0 rgba(255,251,245,.45);
+}
+#locations .location-type{
+  font:600 clamp(19px,5.05vw,23px)/1.2 var(--smallcaps);
+  letter-spacing:.075em;color:#4a2b40;
+  margin:0 auto 9px;text-shadow:0 1px 0 rgba(255,251,245,.4);
+}
+#locations .location-links{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;margin:14px auto 8px;max-width:410px;
+}
+#locations .location-links .link{
+  display:flex;align-items:center;justify-content:center;
+  min-width:0!important;width:100%;min-height:50px!important;
+  padding:11px 9px!important;
+  background:rgba(255,249,239,.86)!important;
+  border:1.5px solid #684153!important;
+  border-bottom:1.5px solid #684153!important;
+  border-radius:999px!important;
+  box-shadow:0 3px 10px rgba(73,46,62,.08)!important;
+  backdrop-filter:none!important;
+  color:#4b2d3d!important;
+  font:600 clamp(17px,4.6vw,20px)/1.2 var(--smallcaps)!important;
+  letter-spacing:.045em!important;text-align:center;
+  text-decoration:none!important;text-shadow:none;
+  -webkit-tap-highlight-color:rgba(100,53,76,.13);
+}
+#locations .location-links .link::after{content:none!important;display:none!important}
+#locations .location-links .link:hover,
+#locations .location-links .link:active{
+  background:rgba(255,252,247,.96)!important;
+  border-color:#513146!important;
+}
+#locations .location-links .link:focus-visible{
+  outline:2px solid #513146!important;outline-offset:3px;
+}
+@media(max-width:360px){
+ #locations .location-hero-photo{height:clamp(210px,29svh,286px)}
+ #locations .location-links{gap:8px}
+ #locations .location-links .link{
+   font-size:clamp(16px,4.7vw,18px)!important;
+   padding:10px 6px!important;
+ }
+}
