@@ -6,10 +6,10 @@ if(typeof original!=='function')throw Error('GUEST_D03_ORIGINAL_RENDERER_MISSING
 const txt=v=>v==null?'':String(v).trim();
 const byId=id=>document.getElementById(id);
 function href(v){if(!v)return null;try{const u=new URL(v,document.baseURI);return u.protocol==='https:'||u.protocol==='http:'?u.href:null}catch{return null}}
-function addLine(container,lines){let items=lines.map(txt).filter(Boolean);if(!items.length)return;const p=document.createElement('p');p.className='practical-details';for(const item of items){const s=document.createElement('span');s.className='practical-line';s.textContent=item;p.append(s)}container.append(p)}
-function addBlock(root,title,lines,links=[],more=null){
+function addLine(container,lines){let items=lines.map(txt).filter(Boolean);if(!items.length)return;const p=document.createElement('p');p.className='practical-details';for(const item of items){const s=document.createElement('span');s.className='practical-line'+(/^(?:Ida|Vuelta):/.test(item)?' d03-travel-time':'');s.textContent=item;p.append(s)}container.append(p)}
+function addBlock(root,title,lines,links=[],more=null,kind=''){
  if(!lines.some(x=>txt(x))&&!links.some(x=>href(x[0]))&&!more)return;
- const block=document.createElement('section');block.className='practical-item';
+ const block=document.createElement('section');block.className='practical-item'+(kind?' d03-'+kind:'');
  const h=document.createElement('p');h.className='practical-title';h.textContent=title;block.append(h);addLine(block,lines);
  const row=document.createElement('div');row.className='location-links';
  for(const [link,label] of links){const url=href(link);if(!url)continue;const a=document.createElement('a');a.className='link';a.href=url;a.rel='noopener noreferrer';a.target='_blank';a.textContent=label;row.append(a)}
@@ -27,22 +27,22 @@ function applyPractical(config){
   if(b.outboundTimes?.length)lines.push('Ida: '+b.outboundTimes.map(txt).filter(Boolean).join(' · '));
   if(b.returnTimes?.length)lines.push('Vuelta: '+b.returnTimes.map(txt).filter(Boolean).join(' · '));
   if(b.note)lines.push(b.note);else if(!window.__GUEST_SUPPRESS_DEMO__&&b.message)lines.push(b.message);
-  addBlock(root,'Transporte',lines,[[b.mapsUrl,'Cómo llegar']]);
+  addBlock(root,'Transporte',lines,[[b.mapsUrl,'Cómo llegar']],null,'bus');
  }
  const a=p.accommodation||{};
  if(a.enabled&&a.mode!=='none'){
   const more=[a.address&&'Dirección: '+a.address,a.bookingName&&'Reserva a nombre de '+a.bookingName,a.bookingCode&&'Código: '+a.bookingCode,a.discountText,a.deadline&&'Hasta: '+a.deadline,a.priceText,a.phone&&'Teléfono: '+a.phone,a.note];
   const links=[[a.websiteUrl,'Ver hotel'],[a.mapsUrl,'Cómo llegar']];
   if(a.mode==='external_booking')links.push([a.externalBookingUrl,'Reservar']);
-  addBlock(root,'Alojamiento',[a.name||(!window.__GUEST_SUPPRESS_DEMO__?a.message:null),a.note,a.discountText,a.priceText],links,{label:'Datos del alojamiento',lines:more})
+  addBlock(root,'Alojamiento',[a.name||(!window.__GUEST_SUPPRESS_DEMO__?a.message:null),a.note,a.discountText,a.priceText],links,{label:'Datos del alojamiento',lines:more},'accommodation')
  }
  const g=p.gift||{};
  if(g.enabled&&g.mode!=='none'){
   const more=[g.details,g.accountHolder&&'Titular: '+g.accountHolder,g.iban&&'IBAN: '+g.iban,g.bicSwift&&'BIC/SWIFT: '+g.bicSwift,g.bizumRecipient&&'Destinatario: '+g.bizumRecipient,g.bizumPhone&&'Bizum: '+g.bizumPhone];
-  addBlock(root,'Regalos',[g.displayText||(!window.__GUEST_SUPPRESS_DEMO__?g.message:null)],[[g.externalUrl,g.linkLabel||'Ver lista de regalos']],{label:'Ver datos',lines:more})
+  addBlock(root,'Regalos',[g.displayText||(!window.__GUEST_SUPPRESS_DEMO__?g.message:null)],[[g.externalUrl,g.linkLabel||'Ver lista de regalos']],{label:'Ver datos',lines:more},'gift')
  }
  const m=p.playlist||{};
- if(m.enabled&&m.mode!=='none')addBlock(root,'Nuestra música',[m.prompt],[[m.url,m.mode==='guest_request'?'Proponer canción':'Escuchar playlist']]);
+ if(m.enabled&&m.mode!=='none')addBlock(root,'Nuestra música',[m.prompt],[[m.url,m.mode==='guest_request'?'Proponer canción':'Escuchar playlist']],null,'playlist');
  scene.classList.toggle('invisible',root.childElementCount===0);
  const hasGallery=Boolean(config.gallery?.enabled&&Array.isArray(config.gallery.photos)&&config.gallery.photos.length);
  scene.classList.toggle('d03-four-practical-gradient',!hasGallery&&root.childElementCount===4);
