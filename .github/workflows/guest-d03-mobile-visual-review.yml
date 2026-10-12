@@ -1,0 +1,40 @@
+name: GUEST D03 Full Photo Mobile Visual QA (TEST ONLY)
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - 'guest/catalog-patches/design-03/**'
+      - 'guest/tests/limoneros_visual_browser_acceptance.cjs'
+      - '.github/workflows/guest-d03-mobile-visual-review.yml'
+permissions:
+  contents: read
+jobs:
+  d03-visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: guest-independent
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build the REAL immutable-source Cloudflare stage (NO SALE)
+        run: node guest/tools/build_catalog_static_preview.cjs --output "$RUNNER_TEMP/d03-stage" --template botanica
+      - name: Prepare Chromium browser QA with zero deployment changes
+        run: |
+          npm install --no-save --prefix "$RUNNER_TEMP/d03-qa-deps" playwright-core@1.56.1
+          CHROME="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium)"
+          test -n "$CHROME"
+          echo "CHROME_BIN=$CHROME" >> "$GITHUB_ENV"
+          echo "NODE_PATH=$RUNNER_TEMP/d03-qa-deps/node_modules" >> "$GITHUB_ENV"
+      - name: Verify photos, gallery, 2/5/4 and absent modules, NO arrows, NO rhombi, birds clear
+        run: node guest/tests/limoneros_visual_browser_acceptance.cjs "$RUNNER_TEMP/d03-stage" "$RUNNER_TEMP/d03-browser-report"
+      - name: Preserve screenshots and exact executed assertions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: guest-d03-real-photo-mobile-visual-qa
+          path: ${{ runner.temp }}/d03-browser-report/
+          retention-days: 7
+          if-no-files-found: warn
