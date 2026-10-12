@@ -133,3 +133,13 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
 #gallery .gallery-grid img:only-child{height:auto;max-height:48svh;object-fit:contain}
 @media(max-width:360px){#practical{padding-top:max(190px,25svh)!important}#agenda .moment-label{font-size:25px!important}}
 @media(prefers-reduced-motion:reduce){#agenda .moment{opacity:1!important;transform:none!important}}
+
+/* The author's 4-background sequence darkens at its foot when gallery is OFF.
+   Do not place dark music links on navy artwork; NO card or gradient box. */
+#practical.d03-four-practical-gradient .practical-item:nth-child(4) .practical-title,
+#practical.d03-four-practical-gradient .practical-item:nth-child(4) .practical-details,
+#practical.d03-four-practical-gradient .practical-item:nth-child(4) .practical-line,
+#practical.d03-four-practical-gradient .practical-item:nth-child(4) .location-links .link{
+ color:#fff8ed!important;border-color:rgba(255,250,240,.86)!important;
+ text-shadow:0 1px 4px rgba(22,22,58,.80)!important
+}
