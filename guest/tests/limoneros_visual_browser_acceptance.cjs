@@ -27,10 +27,11 @@ const server=http.createServer((req,res)=>{
  const report={type:'D03 QAFULL browser, NOT commercial nor authenticated E2E',checkedAt:new Date().toISOString(),cases:[]};
  try{
   for(const width of [320,390,430]){
-   for(const mode of ['full','reduced']){
+   for(const mode of ['full','reduced','without-gallery']){
     const page=await browser.newPage({viewport:{width,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true,reducedMotion:'reduce'});
     const errors=[];page.on('pageerror',e=>errors.push(e.message));
     const url=origin+'/guest/catalog-assets/design-03/1.0.0/index.html?qa='+mode;
+    const rich=mode!=='reduced',hasGallery=mode==='full';
     await page.goto(url,{waitUntil:'domcontentloaded',timeout:35000});
     await page.waitForFunction(expected=>document.documentElement.dataset.guestReviewFixture===expected,mode,{timeout:15000});
     await page.waitForTimeout(500);
@@ -64,25 +65,25 @@ const server=http.createServer((req,res)=>{
     console.log('D03 scene QA',width,mode,JSON.stringify(data),'errors=',errors.join('|'));
     assert.equal(errors.length,0,'JavaScript errors: '+errors.join(' | '));
     assert.equal(data.pageWidth<=width,true,'horizontal overflow');
-    assert.equal(data.places,mode==='full'?2:1);
-    assert.equal(data.placeLinks,mode==='full'?4:2);
-    assert.equal(data.moments,mode==='full'?5:1);
-    assert.equal(data.practical,mode==='full'?4:0);
-    assert.equal(data.storyImage,mode==='full');
-    assert.equal(data.placeImage,mode==='full');
-    assert.equal(data.gallery,mode==='full');
-    assert.equal(data.galleryImages,mode==='full'?4:0);
+    assert.equal(data.places,rich?2:1);
+    assert.equal(data.placeLinks,rich?4:2);
+    assert.equal(data.moments,rich?5:1);
+    assert.equal(data.practical,rich?4:0);
+    assert.equal(data.storyImage,rich);
+    assert.equal(data.placeImage,rich);
+    assert.equal(data.gallery,hasGallery);
+    assert.equal(data.galleryImages,hasGallery?4:0);
     assert.equal(data.galleryLoaded,true);
     assert.ok(data.arrows.every(a=>a==='none'||a==='normal'),'forbidden arrow decorations');
     assert.ok(data.boxes.every(c=>c==='rgba(0, 0, 0, 0)'||c==='transparent'),'rectangular practical backgrounds');
     assert.ok(data.timeline==='none'||data.timeline==='normal','timeline reappeared');
     assert.ok(data.rhombi.every(c=>c==='none'||c==='normal'),'rhombi reappeared');
-    if(mode==='full')assert.ok(data.birdSpace>=180,'practical heading intrudes on painted birds');
-    if(width===390&&mode==='full'){
-      for(const section of ['story','locations','agenda','practical','gallery']){
+    if(rich)assert.ok(data.birdSpace>=180,'practical heading intrudes on painted birds');
+    if(width===390&&rich){
+      for(const section of (hasGallery?['story','locations','agenda','practical','gallery']:['practical'])){
        let el=page.locator('#'+section);
        await el.scrollIntoViewIfNeeded();
-       await el.screenshot({path:path.join(out,'limoneros_v4_'+section+'_390.png'),animations:'disabled',timeout:25000});
+       await el.screenshot({path:path.join(out,'limoneros_v4_'+section+(hasGallery?'':'_no_gallery')+'_390.png'),animations:'disabled',timeout:25000});
       }
     }
     report.cases.push({width,mode,pass:true,data,jsErrors:errors});
