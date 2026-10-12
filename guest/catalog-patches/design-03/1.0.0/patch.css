@@ -17,8 +17,10 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
 .entry-button{font:400 clamp(21px,5vw,25px)/1.15 var(--serif);letter-spacing:.01em;border:0;border-bottom:1px solid rgba(255,248,238,.9);border-radius:0;padding:11px 7px;background:transparent;color:#fff9ed;text-shadow:0 2px 9px rgba(36,18,28,.86);min-height:49px;box-shadow:none;backdrop-filter:none}
 .entry-button:hover{background:transparent}
 .cover-bottom{bottom:max(5.3svh,calc(env(safe-area-inset-bottom) + 14px));gap:8px}
-.countdown{font:400 clamp(16px,4.1vw,19px)/1.2 var(--smallcaps);letter-spacing:.09em}
+.countdown{font:400 clamp(22px,6vw,27px)/1.2 var(--smallcaps);letter-spacing:.065em}
 .cover-tag,.cover-date,.close-date{font-weight:400}
+/* D03 cover: bigger 'NOS CASAMOS' and days countdown on real responsive template */
+#cover .cover-tag,.cover-tag{font-size:clamp(23px,6.4vw,29px);line-height:1.18}
 .cover-place{font:400 clamp(18px,4.5vw,22px)/1.2 var(--serif)}
 #closing .closing-text{top:26svh}
 @keyframes limonerosClosingIntro{0%{opacity:0}8%,22%{opacity:1}34%,100%{opacity:0}}
