@@ -1,5 +1,10 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 81 — LIMONEROS V1 YA INCORPORADO EN GITHUB, SÓLO TEST (12/10/2026)
+
+[**Registro y comprobaciones reales**](GUEST_ENTRY_81_LIMONEROS_V1_REGISTERED_TEST_ONLY_2026-10-12.md). Commit `75b60376`: `design-03` **LIMONEROS V1.0.0** incluido en `guest-independent` con sus dos vídeos, cinco fondos y plugin; `master.html` **28.673.474 bytes, SHA256 a6fa4d81...**, readback SHA Git exacto `020c468...`. Registries de catálogo, owner y evidencia coherentes: `certification-pending`, **0/11 gates de venta**, NO-SALE, sin Stripe. QA local + staging antes del commit superados; **pendiente verificar CI actual y Cloudflare HTTPS, backend V18 TEST, Android remoto D03 y aprobación visual**. No volver a subir archivos ni construir el diseño. Documentadas las dos correcciones genéricas: fixture QA y handoff TEST-only.
+
+
 ## ENTRADA 80 — LIMONEROS: 39 BLOBS PRESERVADOS Y INSTALADOR SEGURO CREADO (12/10/2026)
 
 [**Leer punto exacto técnico**](GUEST_ENTRY_80_LIMONEROS_BLOB_TRANSFER_AND_INSTALL_2026-10-12.md). ZIP original y QA local recuperados; **39/39 bloques binarios de 750 KB ya presentes por SHA en GitHub**, 037/038 transferidos ahora y cotejados byte exacto. Manifiesto, instalador y workflow en `guest-independent`. La ejecución/commit final de instalación **aún no verificados**; comprobar GitHub Actions y el HEAD antes de prometer Cloudflare/Android. Corregida prueba sintética que asumía D03 libre permanentemente. No pedir archivos ni retransferir bloques; no tocar diseños congelados, pago ni venta.
