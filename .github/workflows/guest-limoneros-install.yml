@@ -1,0 +1,28 @@
+name: GUEST Limoneros Immutable Install
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - '.github/workflows/guest-limoneros-install.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: guest-limoneros-once-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  immutable-test-only-install:
+    if: github.ref == 'refs/heads/guest-independent'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Fetch exact GUEST branch
+        uses: actions/checkout@v4
+        with:
+          ref: guest-independent
+          persist-credentials: true
+          fetch-depth: 0
+      - name: Reassemble original from verified existing git blobs, admit TEST-only, run QA and commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 guest/tools/install_limoneros_from_existing_blobs.py
