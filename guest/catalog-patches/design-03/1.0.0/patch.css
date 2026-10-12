@@ -772,3 +772,67 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
    padding:10px 6px!important;
  }
 }
+
+/* D03 V14 · owner's Android review, 12 Oct.
+   One typographic hierarchy across ALL scenes: scripted section names stay
+   only for the author's main scene H2; smaller practical headings now share
+   the GaramondSC style of Ceremonia/Celebración, not another giant script.
+   Subtle but legible actions with sufficient ink and minimum 44px tap area.
+   Nothing invented: module labels and actions remain schema-derived. */
+#practical .practical-title{
+  font:600 clamp(20px,5.1vw,24px)/1.22 var(--smallcaps)!important;
+  letter-spacing:.075em!important;
+  text-transform:none!important;
+  text-shadow:0 1px 0 rgba(255,252,246,.45)!important;
+  color:#492c3d!important;
+  overflow-wrap:normal!important;
+  margin:0 0 clamp(7px,1.3svh,11px)!important;
+}
+#practical .practical-item .location-links .link{
+  min-height:44px!important;
+  color:#412638!important;
+  font:600 clamp(17px,4.35vw,19px)/1.2 var(--smallcaps)!important;
+  letter-spacing:.025em!important;
+  text-shadow:0 1px 0 rgba(255,250,242,.65)!important;
+  background:rgba(255,250,241,.47)!important;
+  border:1px solid rgba(75,42,61,.55)!important;
+  border-bottom:1px solid rgba(75,42,61,.55)!important;
+  border-radius:999px!important;
+  padding:10px 12px 9px!important;
+  box-shadow:none!important;
+}
+#practical .practical-item .location-links .link::after{
+  content:none!important;display:none!important;
+}
+#practical .practical-item .location-links .link:hover,
+#practical .practical-item .location-links .link:active{
+  background:rgba(255,251,243,.60)!important;
+}
+#practical .practical-item details summary,
+#practical .d03-accommodation details>summary,
+#practical .d03-gift details>summary{
+  min-height:44px!important;
+  color:#412638!important;
+  font:600 clamp(17px,4.35vw,19px)/1.2 var(--smallcaps)!important;
+  letter-spacing:.025em!important;
+  background:rgba(255,250,241,.47)!important;
+  border:1px solid rgba(75,42,61,.55)!important;
+  border-bottom:1px solid rgba(75,42,61,.55)!important;
+  border-radius:999px!important;
+  padding:10px 14px!important;
+  text-shadow:0 1px 0 rgba(255,250,242,.65)!important;
+}
+#practical .practical-item details summary:focus-visible,
+#practical .practical-item a:focus-visible{
+  outline:2px solid #4b2c3e!important;
+  outline-offset:3px!important;
+}
+#practical .practical-item::after{opacity:.22!important;}
+@media(max-width:360px){
+ #practical .practical-title{font-size:20px!important;}
+ #practical .practical-item .location-links .link,
+ #practical .practical-item details summary{
+   font-size:16px!important;
+   padding:10px 8px!important;
+ }
+}
