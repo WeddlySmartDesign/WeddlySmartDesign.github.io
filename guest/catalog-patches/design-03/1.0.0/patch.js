@@ -51,7 +51,12 @@ function applyPractical(config){
   addBlock(root,'Regalos',[g.displayText||(!window.__GUEST_SUPPRESS_DEMO__?g.message:null)],[[g.externalUrl,g.linkLabel||'Ver lista de regalos']],{label:'Ver datos',lines:more},'gift')
  }
  const m=p.playlist||{};
- if(m.enabled&&m.mode!=='none')addBlock(root,'Nuestra música',[m.prompt],[[m.url,m.mode==='guest_request'?'Proponer canción':'Escuchar playlist']],null,'playlist');
+ if(m.enabled&&m.mode!=='none'){
+  // Never infer a listening use-case from a question asking guests for a song.
+  // A request CTA requires an actual questionnaire URL; no fake internal form.
+  const action=m.mode==='guest_request'?'Pedir canción':'Ver playlist';
+  addBlock(root,'Nuestra música',[m.prompt],[[m.url,action]],null,'playlist');
+ }
  scene.classList.toggle('invisible',root.childElementCount===0);
  const hasGallery=Boolean(config.gallery?.enabled&&Array.isArray(config.gallery.photos)&&config.gallery.photos.length);
  scene.classList.toggle('d03-four-practical-gradient',!hasGallery&&root.childElementCount===4);
@@ -234,7 +239,7 @@ if(!window.__GUEST_SUPPRESS_DEMO__ && window.location && window.addEventListener
          mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia',externalBookingUrl:null,
          bookingCode:null,bookingName:null,note:null},
        gift:{enabled:full,mode:'short_text',displayText:'Vuestra presencia es nuestro mejor regalo',details:'Texto de muestra'},
-       playlist:{enabled:full,mode:'external_link',prompt:'¿Qué canción no puede faltar?',url:'https://open.spotify.com/'}
+       playlist:{enabled:full,mode:'guest_request',prompt:'¿Qué canción no puede faltar?',url:'https://example.com/pedir-cancion'}
      },
      gallery:{enabled:fixtureMode==='full',photos:fixtureMode==='full'?[
        photo('couple.jpg'),photo('couple2.jpg'),photo('couple3.jpg'),photo('celebration.webp','full')]:[]},
