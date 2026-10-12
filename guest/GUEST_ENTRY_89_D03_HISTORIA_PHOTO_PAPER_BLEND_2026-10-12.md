@@ -24,3 +24,7 @@ La autora, tras revisión en vídeo de 39,61 s, acepta integrar la fotografía o
 ## Próximo paso
 
 **Enseñar exclusivamente Historia del HTML privado actualizado a la autora** y atender solo ajustes que ella señale antes de pasar a Lugares. No pedir de nuevo fotos, no añadir botones/flechas/cajas, no alterar fuente original ni avanzar a otros módulos. Mantener `ownerVisualApproved=false`, `commercialReady=false`, `backendRealE2eVerified=false`.
+
+## Feedback Android de la autora y afinado de escala (12/10/2026)
+
+La autora revisó una captura REAL desde Chrome Android del HTML privado con foto original: **«Queda bien. Quizás algo pequeña pero así fundida queda bien»**. Se acepta expresamente **el lenguaje artístico de foto fundida en pintura** de Historia; se interpreta «algo pequeña» como oportunidad de ajuste leve, **no como rechazo del diseño**. Se aplicó en CSS real exclusivo de D03 el commit `ec4ca7ab7ebbf78512e5b4373bed889eaf2088b1`, aumentando de `clamp(205px,33svh,330px)` a `clamp(225px,37svh,360px)`, y móvil estrecho de `clamp(188px,31svh,282px)` a `clamp(205px,35svh,310px)`; `data-fit=full` puede usar hasta `46svh`. **Mask, imagen, tipografías, vídeo y contenido intactos.** La validación de estos nuevos valores por CI y la lectura HTTPS real se deben comprobar; no declarar automáticamente que la propietaria ha visto esta última ampliación. La autora ha aprobado la dirección visual de Historia y podemos avanzar a **Lugares** tras dejar constancia de la ampliación; no significa aprobación global de Limoneros.
