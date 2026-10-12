@@ -63,6 +63,12 @@ const server=http.createServer((req,res)=>{
        placeImageShadow:sel('#d03-location-photo img')?getComputedStyle(sel('#d03-location-photo img')).boxShadow:'none',
        moments:all('#agenda .moment').length,
        practical:all('#practical .practical-item').length,
+       practicalArt:all('#practical .practical-item').map(e=>{
+         const name=e.querySelector('.practical-title');
+         const r=e.getBoundingClientRect();
+         const links=[...e.querySelectorAll('a')].map(a=>{const ar=a.getBoundingClientRect();return {label:a.textContent,height:ar.height,href:a.href}});
+         return {x:r.x,width:r.width,font:getComputedStyle(name).fontFamily,px:parseFloat(getComputedStyle(name).fontSize),background:getComputedStyle(e).backgroundColor,links}
+       }),
        gallery:visible('#gallery'),galleryImages:all('#gallery-items img').length,
        galleryLoaded:all('#gallery-items img').every(e=>e.complete&&e.naturalWidth>0),
        arrows:all('#locations .link,#practical .link').map(e=>getComputedStyle(e,'::after').content),
@@ -91,6 +97,14 @@ const server=http.createServer((req,res)=>{
     }
     assert.equal(data.moments,rich?5:1);
     assert.equal(data.practical,rich?4:0);
+    if(rich){
+      assert.ok(data.practicalArt.every(i=>i.font.includes('Pinyon')&&i.px>=40),'Use author's embedded editorial script, not generic list font');
+      assert.ok(data.practicalArt.every(i=>i.background==='rgba(0, 0, 0, 0)'),'No rectangular card backgrounds in practical');
+      assert.ok(data.practicalArt.flatMap(i=>i.links).every(l=>l.height>=42),'Practical actions must remain touchable');
+      if(width>=390){
+        assert.ok(data.practicalArt[1].x-data.practicalArt[0].x>=20,'Practical modules must have alternating editorial composition');
+      }
+    }
     assert.equal(data.storyImage,rich);
     if(rich){
       assert.equal(data.storyPhotoFit,'crop','QA must test visibly enlarged landscape crop, not unaffected full-fit');
