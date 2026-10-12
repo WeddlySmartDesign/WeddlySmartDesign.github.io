@@ -271,3 +271,49 @@ h2{font-size:clamp(54px,14.8vw,81px);line-height:.94;margin-bottom:21px}
    padding:10px 6px!important;
  }
 }
+
+/* D03 Lugar — final editorial de-emphasis requested by owner, 12 Oct.
+   The original photograph and headings are already approved. Keep actions
+   discoverable but secondary to the places: NO arrows, cards or strong pills. */
+#locations .location-links{
+  grid-template-columns:minmax(0,156px) minmax(0,98px)!important;
+  justify-content:center!important;
+  column-gap:12px!important;
+  row-gap:8px!important;
+  max-width:100%!important;
+  margin:11px auto 12px!important;
+}
+#locations .location-links .link{
+  min-width:0!important;
+  width:100%!important;
+  min-height:44px!important;
+  padding:10px 7px!important;
+  background:rgba(255,249,239,.14)!important;
+  border:1px solid rgba(87,53,71,.37)!important;
+  border-bottom:1px solid rgba(87,53,71,.37)!important;
+  border-radius:999px!important;
+  box-shadow:none!important;
+  color:#543747!important;
+  font:400 clamp(16px,4.1vw,18px)/1.15 var(--smallcaps)!important;
+  letter-spacing:.035em!important;
+  text-shadow:none!important;
+}
+#locations .location-links .link::after{content:none!important;display:none!important}
+#locations .location-links .link:hover,
+#locations .location-links .link:active{
+  background:rgba(255,249,239,.30)!important;
+  border-color:rgba(87,53,71,.58)!important;
+}
+#locations .location-links .link:focus-visible{
+  outline:2px solid #6b455b!important;outline-offset:2px!important;
+}
+@media(max-width:360px){
+  #locations .location-links{
+    grid-template-columns:minmax(0,146px) minmax(0,92px)!important;
+    column-gap:10px!important;
+  }
+  #locations .location-links .link{
+    font-size:16px!important;
+    padding:10px 5px!important;
+  }
+}
