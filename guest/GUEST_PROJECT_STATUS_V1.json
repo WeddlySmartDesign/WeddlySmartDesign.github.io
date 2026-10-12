@@ -319,7 +319,7 @@
       "backendGuardVerified": true,
       "backendTestDeploymentEvidence": "guest/GUEST_ENTRY_83_D03_LIMONEROS_LIVE_VERIFIED_BACKEND_TEST_V19_2026-10-12.md",
       "backendRealE2eVerified": false,
-      "checkpoint": "guest/GUEST_ENTRY_96_D03_AGENDA_PRACTICAL_COMPACT_WHOLE_FLOW_2026-10-12.md",
+      "checkpoint": "guest/GUEST_ENTRY_97_D03_PRACTICAL_TYPOGRAPHY_CTA_AND_SONG_REQUEST_2026-10-12.md",
       "visualCandidateVersion": "2-review-only",
       "visualCandidateSha256": "43249ed1728d790cbb7e43eadd9c2180e167aaab0c86c53280866cc7c2cf2a1e",
       "visualCandidateBytes": 28677081,
@@ -406,7 +406,24 @@
         "agendaPracticalGapPx": 202,
         "practicalHeight390Px": 1060
       },
-      "wholeFlowCompactPublishedReadbackRun": "38275541284"
+      "wholeFlowCompactPublishedReadbackRun": "38275541284",
+      "practicalTypographyCorrected": true,
+      "practicalSongRequestModeVerified": true,
+      "practicalReviewFile": "/GUEST by WeddlySmartDesign/DESIGN_03_LIMONEROS/LIMONEROS_D03_PRACTICO_TITULOS_Y_CANCION_CORREGIDOS_2026-10-12.html",
+      "practicalReviewSha256": "355612f5dc30bbe2a24c4b6bb2c40177140dd21fbb1502698930d9a53b58dcee",
+      "practicalFullPhotoQa": {
+        "widths": [
+          320,
+          390,
+          430
+        ],
+        "success": true,
+        "jsErrors": 0,
+        "scrollOverflow": false,
+        "songCta": "Pedir canción",
+        "ctaMinTapPx": 44,
+        "font": "GaramondSC"
+      }
     },
     "design-04": {
       "status": "not-started"
