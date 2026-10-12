@@ -121,7 +121,7 @@ window.GUEST_APPLY_CONFIG=function(config){
    Never activate in an authenticated order or regular public invitation. */
 if(!window.__GUEST_SUPPRESS_DEMO__ && window.location && window.addEventListener){
  const fixtureMode=new URLSearchParams(window.location.search).get('qa');
- if(fixtureMode==='full'||fixtureMode==='reduced'){
+ if(['full','reduced','without-gallery'].includes(fixtureMode)){
   const runFixture=()=>{
    // Public opt-in QA uses generated non-photographic media placeholders.
    // The five real author-supplied photographs remain only in the private Library QA file.
@@ -136,7 +136,7 @@ if(!window.__GUEST_SUPPRESS_DEMO__ && window.location && window.addEventListener
        '</svg>';
      return {src:URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'})),fit,focusX:50,focusY:50};
    };
-   const full=fixtureMode==='full';
+   const full=fixtureMode!=='reduced';
    const loc=(type,time,name,address)=>({type,time,name,address,
      mapsUrl:'https://www.google.com/maps/search/?api=1&query=Murcia',
      websiteUrl:'https://example.com/'});
@@ -171,7 +171,7 @@ if(!window.__GUEST_SUPPRESS_DEMO__ && window.location && window.addEventListener
        gift:{enabled:full,mode:'short_text',displayText:'Vuestra presencia es nuestro mejor regalo',details:'Texto de muestra'},
        playlist:{enabled:full,mode:'external_link',prompt:'¿Qué canción no puede faltar?',url:'https://open.spotify.com/'}
      },
-     gallery:{enabled:full,photos:full?[
+     gallery:{enabled:fixtureMode==='full',photos:fixtureMode==='full'?[
        photo('couple.jpg'),photo('couple2.jpg'),photo('couple3.jpg'),photo('celebration.webp','full')]:[]},
      rsvp:{ctaLabel:'Confirmar asistencia',route:null},
      closing:{line:'Lo más bonito será celebrarlo juntos.'}
