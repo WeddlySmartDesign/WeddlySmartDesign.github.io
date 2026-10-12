@@ -41,6 +41,7 @@ const files=[
  // Securely owner-authorized acceptance tool: TEST only, not linked from storefront.
  'guest/qa/owner-botanica-acceptance.html',
  'guest/qa/owner-botanica-rsvp-e2e.html',
+ 'guest/qa/owner-limoneros-full-e2e.html',
  'guest/qa/owner-botanica-closeout.html',
  'guest/qa/owner-botanica-touch-benchmark.html',
  'guest-review-v1.html',
