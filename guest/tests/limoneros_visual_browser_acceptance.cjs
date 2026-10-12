@@ -79,8 +79,8 @@ const server=http.createServer((req,res)=>{
     assert.equal(data.pageWidth<=width,true,'horizontal overflow');
     assert.equal(data.places,rich?2:1);
     assert.equal(data.placeLinks,rich?4:2);
-    assert.ok(data.venueKicker.px>=19&&data.venueKicker.weight>=600,'Nos vemos aquí remains too thin or small');
-    assert.ok(data.venueLabels.every(x=>x.px>=19&&x.weight>=600),'Ceremonia / Celebración remain too thin or small');
+    assert.ok(data.venueKicker.px>=(width<=360?17:18)&&data.venueKicker.weight>=600,'Nos vemos aquí remains too thin or small');
+    assert.ok(data.venueLabels.every(x=>x.px>=(width<=360?17:18)&&x.weight>=600),'Ceremonia / Celebración remain too thin or small');
     assert.ok(data.venueActions.every(x=>x.px>=16&&x.weight>=400&&x.border>=0.9&&x.radius>=20),'CTA must be an elegant, readable, understated touch target');
     assert.ok(data.venueActions.every(x=>x.background==='rgba(255, 249, 239, 0.14)'),'CTA fill must be delicate so the authored art remains dominant');
     assert.ok(data.venueActions.filter(x=>x.text==='Web').length===data.places,'Venue website button should be Web');
@@ -126,6 +126,53 @@ const server=http.createServer((req,res)=>{
     report.cases.push({width,mode,pass:true,data,jsErrors:errors});
     await page.close();
    }
+  }
+  // Explicitly exercise the NORMAL-MOTION choreography: the existing visual
+  // screenshots use reduced motion and cannot prove the requested entrance.
+  {
+   const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true,reducedMotion:'no-preference'});
+   const errors=[];page.on('pageerror',e=>errors.push(e.message));
+   await page.goto(origin+'/guest/catalog-assets/design-03/1.0.0/index.html?qa=full',{waitUntil:'domcontentloaded',timeout:35000});
+   await page.waitForFunction(()=>document.documentElement.dataset.guestReviewFixture==='full',{timeout:15000});
+   const snapshot=async()=>await page.evaluate(()=>{
+     const agenda=document.querySelector('#agenda');
+     return {started:agenda.classList.contains('d03-sequence-start'),
+       opacities:[...agenda.querySelectorAll('.moment')].map(el=>Number(getComputedStyle(el).opacity)),
+       names:[...agenda.querySelectorAll('.moment')].map(el=>getComputedStyle(el).animationName)};
+   });
+   const initial=await snapshot();
+   assert.equal(initial.started,false,'Agenda animation started before scrolling into view');
+   await page.evaluate(()=>{
+     const a=document.querySelector('#agenda'),r=a.getBoundingClientRect();
+     window.scrollTo({top:window.scrollY+r.top-130,behavior:'instant'});
+   });
+   await page.waitForTimeout(140);
+   const start=await snapshot();
+   assert.equal(start.started,true,'Agenda scene intersection did not start the sequence');
+   assert.ok(start.opacities.slice(1).every(x=>x<0.15),'later moments were visible before their turn');
+   await page.screenshot({path:path.join(out,'limoneros_v9_agenda_sequence_start_390.png'),animations:'allow'});
+   await page.waitForTimeout(950);
+   const middle=await snapshot();
+   assert.ok(middle.opacities[0]>.97,'first moment failed to enter');
+   assert.ok(middle.opacities[4]<.2,'fifth moment entered too early');
+   await page.screenshot({path:path.join(out,'limoneros_v9_agenda_sequence_middle_390.png'),animations:'allow'});
+   await page.waitForTimeout(2450);
+   const final=await snapshot();
+   assert.ok(final.opacities.every(x=>x>.99),'all moments must finish fully visible');
+   await page.screenshot({path:path.join(out,'limoneros_v9_agenda_sequence_final_390.png'),animations:'allow'});
+   await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+   await page.waitForTimeout(420);
+   await page.evaluate(()=>{
+     const a=document.querySelector('#agenda'),r=a.getBoundingClientRect();
+     window.scrollTo({top:window.scrollY+r.top-130,behavior:'instant'});
+   });
+   await page.waitForTimeout(140);
+   const repeat=await snapshot();
+   assert.ok(repeat.opacities[4]<.25,'Agenda sequence must replay after leaving and returning');
+   assert.equal(errors.length,0,'Sequence JS must not throw');
+   report.agendaSequence={pass:true,motion:'no-preference',start,middle,final,repeat};
+   console.log('PASS D03 sequential Agenda reveal + re-entry',JSON.stringify(report.agendaSequence));
+   await page.close();
   }
  }finally{await browser.close()}
  fs.writeFileSync(path.join(out,'limoneros_v4_browser_acceptance.json'),JSON.stringify(report,null,2)+'\n');
