@@ -44,6 +44,8 @@ function applyPractical(config){
  const m=p.playlist||{};
  if(m.enabled&&m.mode!=='none')addBlock(root,'Nuestra música',[m.prompt],[[m.url,m.mode==='guest_request'?'Proponer canción':'Escuchar playlist']]);
  scene.classList.toggle('invisible',root.childElementCount===0);
+ const hasGallery=Boolean(config.gallery?.enabled&&Array.isArray(config.gallery.photos)&&config.gallery.photos.length);
+ scene.classList.toggle('d03-four-practical-gradient',!hasGallery&&root.childElementCount===4);
 }
 
 /* D03 non-destructive scene improvements: same canonical config, no bespoke inputs. */
