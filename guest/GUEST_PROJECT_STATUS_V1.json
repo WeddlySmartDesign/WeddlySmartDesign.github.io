@@ -290,7 +290,7 @@
     },
     "design-03": {
       "version": "1.0.0",
-      "status": "visual-candidate-v2-local-qa-pass-awaiting-review-and-integration",
+      "status": "certification-pending",
       "catalogAsset": "guest/catalog-assets/design-03/1.0.0/index.html",
       "adapter": "guest/guest-catalog-template-design-03-adapter-v1.js",
       "visualMasterSha256": "a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482",
@@ -302,7 +302,7 @@
       "originalCandidateLibraryFile": "GUEST_D03_LIMONEROS_MASTER_V1_TEST_NO_SALE.zip",
       "originalCandidateZipSha256": "001ea39f5f47475102547777e34935f1732a6f8dcc0b46e5bbfba87fb3520f96",
       "visualCandidateSource": "guest/GUEST_ENTRY_79_D03_LIMONEROS_CANDIDATE_V1_RECOVERED_2026-10-12.md",
-      "integrationVerified": false,
+      "integrationVerified": true,
       "cloudflareVerified": true,
       "backendTestDeployed": true,
       "androidPhysicalVerified": false,
@@ -319,7 +319,7 @@
       "backendGuardVerified": true,
       "backendTestDeploymentEvidence": "guest/GUEST_ENTRY_83_D03_LIMONEROS_LIVE_VERIFIED_BACKEND_TEST_V19_2026-10-12.md",
       "backendRealE2eVerified": false,
-      "checkpoint": "guest/GUEST_ENTRY_81_D03_LIMONEROS_VISUAL_AND_QUESTIONNAIRE_REMEDIATION_2026-10-12.md",
+      "checkpoint": "guest/GUEST_ENTRY_84_D03_VISUAL_FIX_AND_SCHEMA_MAPPING_2026-10-12.md",
       "visualCandidateVersion": "2-review-only",
       "visualCandidateSha256": "43249ed1728d790cbb7e43eadd9c2180e167aaab0c86c53280866cc7c2cf2a1e",
       "visualCandidateBytes": 28677081,
@@ -333,7 +333,10 @@
         430
       ],
       "ownerVisualApproved": false,
-      "libraryFullCandidateCopyStored": false
+      "libraryFullCandidateCopyStored": false,
+      "visualRefinement": "SHA-pinned guest/catalog-patches/design-03/1.0.0 staging candidate, source master unchanged; owner approval pending",
+      "visualPatchDeploymentVerified": false,
+      "visualOwnerApproval": false
     },
     "design-04": {
       "status": "not-started"
@@ -2263,7 +2266,7 @@
     "githubEntry51": "guest/GUEST_BOTANICA_ENTRY_51_QUESTIONNAIRE_AND_RSVP_BOUNDARY_2026-10-11.md",
     "githubEntry51InLibraryVerified": false,
     "recordingRule": "APPEND_NEW_GITHUB_ENTRY_EACH_MEANINGFUL_STEP_AND_UPDATE_START_HERE_AND_STRUCTURED_EVIDENCE_ONLY_ON_VERIFIED_CHANGE",
-    "resumption": "D03 Limoneros V1 Library ZIP intact; V2 aesthetic+questionnaire remediation patch and browser QA archived in Library. Rebuild V2 via patch_limoneros_v2.py, verify SHA256 43249ed..., then integrate V2 with media externalization, GitHub TEST/Cloudflare, Android TEST; request one owner visual signoff. Do NOT integrate V1 as approved, do NOT ask for originals or enable sale.",
+    "resumption": "D03 base master V1 and media registered and HTTPS/Backend TEST V19 previously verified. New stage-only CSS/JS patch is committed to guest/catalog-patches/design-03/1.0.0 with source SHA pin; original media intact. Do NOT ask user for files or redo blobs. Static builder now injects editorial controls and schema mapping; verify GitHub QA/Cloudflare HTTP readback and Android, get owner visual approval once. Current v2 Library is a separate older candidate and should not be duplicated or treated as approved.",
     "commercialStatus": "BOTANICA_DESIGN_TECHNICAL_GATES_11_OF_11_SALE_NOT_AUTHORIZED",
     "noAdditionalOrders": true,
     "noOwnerSetupRepeat": true,
