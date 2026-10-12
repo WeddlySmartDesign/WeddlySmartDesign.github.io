@@ -1,5 +1,10 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 78 — D03 LIMONEROS RECIBIDO EN CHAT, INTEGRACIÓN NO PERSISTIDA (12/10/2026)
+
+[**Punto exacto de recuperación**](GUEST_ENTRY_78_D03_LIMONEROS_INTERRUPTED_INTAKE_2026-10-12.md). La propietaria entregó vídeos y ZIP; en el chat anterior se declaró un borrador técnico local con cinco fondos, **sin copia ni integración verificable en GitHub/Drive/Biblioteca en la revisión actual**. Diseño 03 aún **NO registrado/QA/no-sale**. Continuar desde recursos originales (recuperarlos o re-adjuntar los mismos ZIP si son inaccesibles), sin rediseñar ni rehacer plataforma. Botánica y productos congelados intactos.
+
+
 ## ENTRADA 77 — HANDOFF: EL NUEVO CHAT EMPIEZA POR EL DISEÑO, NO POR LA PLATAFORMA (11/10/2026)
 
 [**Contrato obligatorio y punto de continuidad**](GUEST_ENTRY_77_PLATFORM_HANDOFF_FOR_NEXT_VISUAL_2026-10-11.md). Entorno visual/Cloudflare/QA preparado. **Actualizador genérico del catálogo del backend TEST implementado y QA PASS**, con comprobación de compatibilidad sobre V18 real en lectura; no hubo despliegue ni creación de ID sin diseño. Propietaria aporta **solo HTML/ZIP del diseño nuevo**; el asistente hace manifiesto, adaptación, registro, compilación, backend TEST controlado y QA. **Único gate inevitable del motor común:** comprobar por primera vez el render remoto real del nuevo diseño en Android, en su revisión final. V5.0 aún candidata Android. Botánica 11/11 intacta, ningún cambio ONE/Partner/STUDIO/VEIL, venta NO activada. No gastar tiempo otra vez reconstruyendo plataforma.
