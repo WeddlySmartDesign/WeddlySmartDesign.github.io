@@ -49,6 +49,9 @@ const server=http.createServer((req,res)=>{
       const rect=s=>{const e=sel(s);if(!e)return null;let r=e.getBoundingClientRect();return{top:r.top,bottom:r.bottom}};
       return {viewport:innerWidth,pageWidth:document.documentElement.scrollWidth,
        storyImage:visible('#story-photo')&&sel('#story-photo').naturalWidth>0,
+       storyMask:getComputedStyle(sel('#story-photo')).maskImage,
+       storyShadow:getComputedStyle(sel('#story-photo')).boxShadow,
+       storyRadius:getComputedStyle(sel('#story-photo')).borderRadius,
        placeImage:!!sel('#d03-location-photo img')&&sel('#d03-location-photo img').naturalWidth>0,
        places:all('#location-items .location').length,placeLinks:all('#location-items .link').length,
        moments:all('#agenda .moment').length,
@@ -72,6 +75,13 @@ const server=http.createServer((req,res)=>{
     assert.equal(data.moments,rich?5:1);
     assert.equal(data.practical,rich?4:0);
     assert.equal(data.storyImage,rich);
+    // Historia art acceptance gate: real template must dissolve rectangular
+    // photo edges to the painted background, without a frame or arc.
+    if(rich){
+      assert.ok((data.storyMask.match(/linear-gradient/g)||[]).length>=2,'Historia lacks independent soft horizontal/vertical edge masks');
+      assert.equal(data.storyShadow,'none','Historia photo still looks like a framed card');
+      assert.equal(data.storyRadius,'0px','Historia photo has a rounded frame');
+    }
     assert.equal(data.placeImage,rich);
     assert.equal(data.gallery,hasGallery);
     assert.equal(data.galleryImages,hasGallery?4:0);
