@@ -73,6 +73,28 @@ function richConfig(){
  assert.equal(links.length,5,'External booking must expose live Reservar link');
  assert.ok(links.some(n=>n.textContent==='Reservar'));
 }
+/* Universal sparse states: no fixed four-element visual layout. */
+for(const count of [1,2,3]){
+ const {window,elements}=init(),c=richConfig();
+ Object.values(c.practical).forEach((part,index)=>{part.enabled=index<count});
+ const oldSnapshot=JSON.stringify(c);
+ window.GUEST_APPLY_CONFIG(c);
+ assert.equal(elements['practical-items'].childElementCount,count,'Exactly active modules must render: '+count);
+ assert.equal(elements['practical'].classList.contains('invisible'),false);
+ assert.equal(JSON.stringify(c),oldSnapshot,'Rendering changed questionnaire fixture');
+ const rendered=elements['practical-items'].children.map(n=>n.textContent);
+ assert.ok(rendered.every(t=>t.length>0),'No blank visual block when optional fields absent');
+}
+{
+ const {window,elements}=init(),c=richConfig();
+ c.practical.bus.mapsUrl=null;
+ c.practical.accommodation.websiteUrl=null;
+ c.practical.accommodation.mapsUrl=null;
+ c.practical.playlist.url=null;
+ window.GUEST_APPLY_CONFIG(c);
+ const links=allNodes(elements['practical-items']).filter(n=>n.tag==='a');
+ assert.equal(links.length,0,'Do not invent map/hotel/playlist links when questionnaire has none');
+}
 {
  const {window,elements}=init(),c=richConfig();
  for(const part of Object.values(c.practical)){part.enabled=false;}
