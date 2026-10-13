@@ -33,52 +33,52 @@
   "design-04": {
    "displayName": "AZULEJO",
    "version": "1.0.0",
-   "masterSha256": "13d728d700601d8965dbe14ad8303a3f05452f73b3972f0851bf5ef4852ac874",
+   "masterSha256": "3baf54cd315eb52c8009aa012f9653147340a84e94468a26b91ae46029be8243",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-05": {
    "displayName": "GALA",
    "version": "1.0.0",
-   "masterSha256": "1352d07206858a792c974e49612b61cd41b5e6f4598a0779c7214ed1bbcdaf12",
+   "masterSha256": "ddf531cab484412fc9eeea55784b82b87c6df97491841e9366bb5e4867a4913d",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-06": {
    "displayName": "INVERNADERO",
    "version": "1.0.0",
-   "masterSha256": "7aa5ce9d1b4989e96c6c7e2a0c076a00f23f6b98105ef5e1bad266a4583d15da",
+   "masterSha256": "dc9778eb97271e2b53ce14edc3bcbb2bd13af91b3bdd3cc027e0a5242f3f6530",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-07": {
    "displayName": "REFLEJO",
    "version": "1.0.0",
-   "masterSha256": "69a7b455f8043d011eee896e1a4188e938974be327d291276366b112e595ecfb",
+   "masterSha256": "53de377b1e01d5f416e873752921fa1e92e95bc6d861f1725259ff997bf3f570",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-08": {
    "displayName": "CAJA DE MÚSICA",
    "version": "1.0.0",
-   "masterSha256": "8a2ff4d0c32e22aff520385fe9074cb7010c12d3208a6395f1ca7cc647f8c661",
+   "masterSha256": "a488f20950d9d748f796f9f9d5d4a4af8807939890c0b76e16abf07e49387fed",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-09": {
    "displayName": "LIMONEROS · VERSIÓN CLAUDE",
    "version": "1.0.0",
-   "masterSha256": "cf509e1c8d56b4f6bc7fc743e1a261197d5576527d6448c108b36e8a984d108b",
+   "masterSha256": "f1563fda8da3feb43d7a2407d2ed54f88153274d20891e6c4475d569ebc27dba",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-10": {
    "displayName": "CUENTO DE PAPEL",
    "version": "1.0.0",
-   "masterSha256": "1d7bdfa05e4a04743804fb64ce0bbaf9367f469ab110dd45aa6ecb6f11600c2b",
+   "masterSha256": "918df3276c80d3a12f3c20c129acf19d63d579948981264838866c42f9b607fe",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   }
  },
- "revision": "v6: interiores propios en los cinco diseños (Azulejo: azulejos que giran y contraventanas; Gala: reloj déco y tiques de guardarropa; Invernadero: tallo con hojas y sobres de semillas; Reflejo: velas flotantes y espejos; Caja de música: partitura y cajones). Comprobación común guest/qa/skin_interior_checks.py PASS en los cinco; matriz 460/0 · v7: design-09 Limoneros (versión Claude, alternativa a design-03 para que la autora elija; design-03 intacto). Matriz 552/0 · v7.1: design-09 más sereno tras la revisión de la autora (detalles abiertos como carta impresa, programa completo a la vista con el momento del sol destacado, sin indicaciones de «toca») · v8: design-09 vuelve a la versión anterior con limones pintados (Recraft de la autora) en vez de rombos y sin golondrinas; design-10 Cuento de papel con interior propio. Matriz 644/0 · v8.1: design-09 usa las ramas completas pintadas (los limones sueltos parecían manchas) · v8.2: design-09 detalles como ramitas pintadas que se mecen al tocarlas; separador filete dorado · v8.3: design-09 detalles como sobres con lacre marfil y buganvilla prensada (elegido por la autora) · v9: motor con botón «volver a ver» en portada y cierre (los datos y el botón de confirmar no se ocultan), cierre arranca al 70 % visible, franjas de continuidad superpuestas a la primera y última sección (sin trozos de fondo vacío). Interior PASS ×7, matriz 644/0 · v10: medios de D04+ siempre servidos aparte (la portada responde al instante); al volver a ver, los textos se apartan hasta el final; franjas con bordes fundidos; Cuento con sol y nubes de papel recortados de su portada · v10.1: D10 portada con apertura del libro y aparición de la escena más lentas (vídeo retemporizado con interpolación; 9 s → 14,4 s; textos a 9 s) y sol separador completo · v10.2: D10 texto de portada más arriba y compacto (nombres en una línea) para no coincidir con las golondrinas del final del vídeo · v10.3: D10 retemporizado con fundido (sin interpolación de movimiento, que deformaba la iglesia y el libro): libro ×2,5, escena ×1,6, 12,2 s, textos a 6,6 s; texto de portada algo más bajo · v10.4: D10 la tapa ya no gira y desaparece: el libro cerrado se funde despacio (1,2 s) en la escena; 10,7 s, textos a 5,6 s · v10.5: D10 vuelve a la apertura v10.3 (la autora prefiere el giro ralentizado al fundido); pendiente: vídeo nuevo de la apertura del libro · v11: D08 la melodía se apaga al cerrarse la caja en el vídeo final · v12: D04 azulejos giran más despacio; detalles como arcos de flores en acuarela (pieza de la autora) con vista al mar que se abren en grande en el mismo sitio; lugares en placas de azulejo · v12.1: D04 vuelven las contraventanas simples (la autora creará versión acuarela en Recraft); lugar compacto; la bandeja abierta se desplaza a la vista · v12.2: D04 contraventanas en acuarela de la autora (Recraft), cerrada→abierta con fundido · v12.3: D04 revisión de conjunto: sin sello repetido entre secciones, friso de azulejos que se pintan (hora debajo), ventanas más pequeñas, sin textos de «toca» · v12.4: D04 interior con la tipografía de la portada (Pinyon + Garamond/GaramondSC), sin marco lateral de azulejos, lugar tipográfico sereno, velo cálido en fotos · v12.5: D04 lugar con viñeta en acuarela por sede (arco en ceremonia, velero en celebración), funciona con o sin foto"
+ "revision": "v6: interiores propios en los cinco diseños (Azulejo: azulejos que giran y contraventanas; Gala: reloj déco y tiques de guardarropa; Invernadero: tallo con hojas y sobres de semillas; Reflejo: velas flotantes y espejos; Caja de música: partitura y cajones). Comprobación común guest/qa/skin_interior_checks.py PASS en los cinco; matriz 460/0 · v7: design-09 Limoneros (versión Claude, alternativa a design-03 para que la autora elija; design-03 intacto). Matriz 552/0 · v7.1: design-09 más sereno tras la revisión de la autora (detalles abiertos como carta impresa, programa completo a la vista con el momento del sol destacado, sin indicaciones de «toca») · v8: design-09 vuelve a la versión anterior con limones pintados (Recraft de la autora) en vez de rombos y sin golondrinas; design-10 Cuento de papel con interior propio. Matriz 644/0 · v8.1: design-09 usa las ramas completas pintadas (los limones sueltos parecían manchas) · v8.2: design-09 detalles como ramitas pintadas que se mecen al tocarlas; separador filete dorado · v8.3: design-09 detalles como sobres con lacre marfil y buganvilla prensada (elegido por la autora) · v9: motor con botón «volver a ver» en portada y cierre (los datos y el botón de confirmar no se ocultan), cierre arranca al 70 % visible, franjas de continuidad superpuestas a la primera y última sección (sin trozos de fondo vacío). Interior PASS ×7, matriz 644/0 · v10: medios de D04+ siempre servidos aparte (la portada responde al instante); al volver a ver, los textos se apartan hasta el final; franjas con bordes fundidos; Cuento con sol y nubes de papel recortados de su portada · v10.1: D10 portada con apertura del libro y aparición de la escena más lentas (vídeo retemporizado con interpolación; 9 s → 14,4 s; textos a 9 s) y sol separador completo · v10.2: D10 texto de portada más arriba y compacto (nombres en una línea) para no coincidir con las golondrinas del final del vídeo · v10.3: D10 retemporizado con fundido (sin interpolación de movimiento, que deformaba la iglesia y el libro): libro ×2,5, escena ×1,6, 12,2 s, textos a 6,6 s; texto de portada algo más bajo · v10.4: D10 la tapa ya no gira y desaparece: el libro cerrado se funde despacio (1,2 s) en la escena; 10,7 s, textos a 5,6 s · v10.5: D10 vuelve a la apertura v10.3 (la autora prefiere el giro ralentizado al fundido); pendiente: vídeo nuevo de la apertura del libro · v11: D08 la melodía se apaga al cerrarse la caja en el vídeo final · v12: D04 azulejos giran más despacio; detalles como arcos de flores en acuarela (pieza de la autora) con vista al mar que se abren en grande en el mismo sitio; lugares en placas de azulejo · v12.1: D04 vuelven las contraventanas simples (la autora creará versión acuarela en Recraft); lugar compacto; la bandeja abierta se desplaza a la vista · v12.2: D04 contraventanas en acuarela de la autora (Recraft), cerrada→abierta con fundido · v12.3: D04 revisión de conjunto: sin sello repetido entre secciones, friso de azulejos que se pintan (hora debajo), ventanas más pequeñas, sin textos de «toca» · v12.4: D04 interior con la tipografía de la portada (Pinyon + Garamond/GaramondSC), sin marco lateral de azulejos, lugar tipográfico sereno, velo cálido en fotos · v12.5: D04 lugar con viñeta en acuarela por sede (arco en ceremonia, velero en celebración), funciona con o sin foto · v13: fotos de demostración reales de la autora en todos los diseños; D04 lugar tipo carta (hora | filete | sede) sobre aguada de acuarela, fotos con borde de acuarela y velo cálido, programa sin casillas vacías, caligrafía solo en títulos (44 px). Matriz 644/0"
 }
