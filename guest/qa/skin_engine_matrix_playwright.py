@@ -1,6 +1,6 @@
 import asyncio,json,copy
 from playwright.async_api import async_playwright
-IDS=['design-04','design-05','design-06','design-07','design-08','design-09']
+IDS=['design-04','design-05','design-06','design-07','design-08','design-09','design-10']
 R='/home/claude/guest-wt/guest/'
 SC=json.load(open('/tmp/claude-0/qa/scen.json'));normal=SC['normal'];stress=SC['stress']
 def cfg(x):

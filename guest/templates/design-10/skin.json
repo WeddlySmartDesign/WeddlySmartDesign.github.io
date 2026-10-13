@@ -1,0 +1,51 @@
+{
+ "id": "design-10",
+ "version": "1.0.0",
+ "displayName": "CUENTO DE PAPEL",
+ "coverTextAt": 6.4,
+ "closingTextAt": 8.2,
+ "coverTextPosition": "top:max(7svh,calc(env(safe-area-inset-top) + 34px))",
+ "coverScrim": "top:0;height:46%;background:linear-gradient(180deg,rgba(236,244,248,.55) 0%,rgba(236,244,248,.3) 55%,rgba(236,244,248,0) 100%)",
+ "theme": {
+  "paper": "#eee8d8",
+  "ink": "#2f3b66",
+  "soft": "#5d6a8a",
+  "accent": "#b5684a",
+  "line": "rgba(47,59,102,.28)",
+  "btn": "rgba(255,255,255,.55)",
+  "cover-bg": "#cfc8b8",
+  "cover-ink": "#2f3b66",
+  "cover-names": "#2f3b66",
+  "cover-halo": "0 0 18px rgba(255,255,255,.95),0 0 4px rgba(255,255,255,.9)",
+  "cover-btn": "rgba(255,255,255,.88)",
+  "cover-btn-ink": "#2f3b66",
+  "cover-btn-line": "rgba(47,59,102,.4)",
+  "hint-ink": "#2f3b66",
+  "hint-halo": "0 0 14px rgba(255,255,255,.95)",
+  "hint-pulse": "rgba(47,59,102,.35)",
+  "closing-scrim": "linear-gradient(to top,rgba(16,24,56,.88) 0%,rgba(16,24,56,.55) 50%,rgba(16,24,56,0) 100%)",
+  "closing-ink": "#fbf6ea",
+  "closing-halo": "0 1px 10px rgba(0,0,0,.55)",
+  "closing-btn": "rgba(251,246,234,.95)",
+  "closing-btn-ink": "#2f3b66",
+  "closing-btn-line": "rgba(251,246,234,.95)"
+ },
+ "tapLabel": "Toca para abrir",
+ "media": {
+  "coverVideo": "videos/portada.mp4",
+  "closingVideo": "videos/cierre.mp4",
+  "backgrounds5": ["fondos-5-pantallas/fondo-1.jpg","fondos-5-pantallas/fondo-2.jpg","fondos-5-pantallas/fondo-3.jpg","fondos-5-pantallas/fondo-4.jpg","fondos-5-pantallas/fondo-5.jpg"],
+  "backgrounds4": ["fondos-4-pantallas/fondo-1.jpg","fondos-4-pantallas/fondo-2.jpg","fondos-4-pantallas/fondo-3.jpg","fondos-4-pantallas/fondo-4.jpg"]
+ },
+ "mediaSource": "Entrega «Cuento de papel» (ZIP de la autora): video/portada.mp4, video/cierre.mp4, fondos 4 y 5 pantallas",
+ "fx": {},
+ "motif": "",
+ "motifIdle": "",
+ "layout": "cuento",
+ "fonts": ["Bonum","GaramondSC","Garamond"],
+ "interior": {
+  "css": "interior.css",
+  "js": "interior.js",
+  "assets": {"TEX":"skin-assets/texture.jpg","BANDTOP":"skin-assets/band-top.jpg","BANDBOT":"skin-assets/band-bot.jpg"}
+ }
+}

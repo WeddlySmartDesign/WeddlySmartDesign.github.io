@@ -19,7 +19,7 @@
   "galería 0/1/2/3/4 con navegación real por puntos",
   "ausencias: sin historia, solo texto, solo foto, sin agenda, 1 y 3 momentos, práctico 0 y 1, sin URLs, 1 sede, sin cuenta atrás, nombres largos, solo lugares"
  ],
- "checks": 552,
+ "checks": 644,
  "fails": 0,
  "criteria": [
   "sin desbordamiento horizontal",
@@ -68,10 +68,17 @@
   "design-09": {
    "displayName": "LIMONEROS · VERSIÓN CLAUDE",
    "version": "1.0.0",
-   "masterSha256": "19a0a28405253f16dab45ca8cf387e88efc2aacfe01ad2d8141aabdb2ff56aaa",
+   "masterSha256": "960c151e91f472ce46486c3d52c93340e0d40203ba76503b671503692a7b24be",
+   "status": "certification-pending",
+   "ownerVisualApproval": "PENDING"
+  },
+  "design-10": {
+   "displayName": "CUENTO DE PAPEL",
+   "version": "1.0.0",
+   "masterSha256": "4ce495e0d541bfad75fda5360b3006ae31cf5c99b47f1adb96178b8d9cf50da9",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   }
  },
- "revision": "v6: interiores propios en los cinco diseños (Azulejo: azulejos que giran y contraventanas; Gala: reloj déco y tiques de guardarropa; Invernadero: tallo con hojas y sobres de semillas; Reflejo: velas flotantes y espejos; Caja de música: partitura y cajones). Comprobación común guest/qa/skin_interior_checks.py PASS en los cinco; matriz 460/0 · v7: design-09 Limoneros (versión Claude, alternativa a design-03 para que la autora elija; design-03 intacto). Matriz 552/0 · v7.1: design-09 más sereno tras la revisión de la autora (detalles abiertos como carta impresa, programa completo a la vista con el momento del sol destacado, sin indicaciones de «toca»)"
+ "revision": "v6: interiores propios en los cinco diseños (Azulejo: azulejos que giran y contraventanas; Gala: reloj déco y tiques de guardarropa; Invernadero: tallo con hojas y sobres de semillas; Reflejo: velas flotantes y espejos; Caja de música: partitura y cajones). Comprobación común guest/qa/skin_interior_checks.py PASS en los cinco; matriz 460/0 · v7: design-09 Limoneros (versión Claude, alternativa a design-03 para que la autora elija; design-03 intacto). Matriz 552/0 · v7.1: design-09 más sereno tras la revisión de la autora (detalles abiertos como carta impresa, programa completo a la vista con el momento del sol destacado, sin indicaciones de «toca») · v8: design-09 vuelve a la versión anterior con limones pintados (Recraft de la autora) en vez de rombos y sin golondrinas; design-10 Cuento de papel con interior propio. Matriz 644/0"
 }

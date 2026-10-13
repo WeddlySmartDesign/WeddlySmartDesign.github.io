@@ -73,6 +73,14 @@
       "src": null,
       "applyApi": "GUEST_APPLY_CONFIG",
       "status": "certification-pending"
+    },
+    "design-10": {
+      "id": "design-10",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending"
     }
   }
 }
