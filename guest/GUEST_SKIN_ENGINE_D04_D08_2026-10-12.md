@@ -175,3 +175,5 @@ Vistas juntas, solo Caja de música tenía un interior inconfundible (una sola m
 - **Limoneros**: bordes de pincelada de óleo en las fotos y lugar sobre una pincelada ancha con los colores del atardecer de la portada.
 - **Cuento de papel**: fotos como recortes de papel rasgado con sombra; lugar con colinas de papel por capas al pie y banderita en cada sede.
 Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
+
+**v15.3 (2026-10-13)**: D05 · en la portada el vals avanzaba, se paraba 1 s, retrocedía y daba tirones (fotogramas duplicados). Se usa solo el tramo hacia delante (hasta 5 s), los últimos 30 fotogramas se ralentizan ×2,6 con fundido para frenar suave y la pareja queda abrazada hasta el final. El original se conserva como `portada-original.mp4`.
