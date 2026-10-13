@@ -69,7 +69,10 @@
    "WINC": "skin-assets/win-closed.webp",
    "WINO": "skin-assets/win-open.webp",
    "WMASK": "skin-assets/wash-mask.png",
-   "AGUADA": "skin-assets/aguada.webp"
+   "AGUADA": "skin-assets/aguada.webp",
+   "COVERWASH": "skin-assets/cover-wash.webp",
+   "HINTWASH": "skin-assets/hint-wash.webp",
+   "STROKE": "skin-assets/stroke.webp"
   }
  }
 }

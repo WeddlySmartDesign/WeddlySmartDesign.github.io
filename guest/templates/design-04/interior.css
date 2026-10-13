@@ -87,3 +87,19 @@ html.az .gallery-dot[aria-current=true]::before{background:#23408a}
 @media(prefers-reduced-motion:reduce){.az-rv,.az-fade.az-rv{opacity:1;transform:none;filter:none;transition:none}.az-seal img{transform:none;transition:none}.az-tile,.az-frame img{transition:none}}
 
 .az-gap{display:block;height:34px}
+/* portada: el texto descansa sobre un lavado marfil de acuarela, legible sobre el arco y el cielo */
+html.az #cover .cover-scrim{top:0;height:56%;background:url(%%COVERWASH%%) center top/100% 100% no-repeat}
+html.az #cover .cover-text{top:max(4.5svh,calc(env(safe-area-inset-top) + 24px))}
+html.az #cover .cover-names{font-size:min(54px,7.4svh,13.5vw);line-height:1.1}
+html.az #cover .cover-names span{display:inline}html.az #cover .cover-names .amp{display:inline;font-size:.5em;margin:0 .2em}
+html.az #cover .cover-text{text-shadow:0 0 10px rgba(251,248,242,.9)}
+html.az #cover .cover-date{margin-top:8px}
+/* «toca para abrir»: en tinta azul sobre una mancha marfil, visible sobre los azulejos */
+html.az .tap-hint{color:#1d3466;text-shadow:none}
+html.az .tap-hint>span:last-child{padding:24px 64px;font-size:21px;background:url(%%HINTWASH%%) center/100% 100% no-repeat,url(%%HINTWASH%%) center/86% 80% no-repeat}
+html.az .tap-hint .dot{background:#1d3466;box-shadow:0 0 0 4px rgba(251,248,242,.85)}
+/* pinceladas mínimas: un trazo de acuarela azul bajo cada título */
+html.az .az-title{background:url(%%STROKE%%) center 88%/min(230px,72%) 22px no-repeat}
+/* cierre: mismo lavado marfil, desde abajo, con el texto en tinta azul */
+html.az #closing .closing-scrim{bottom:0;top:auto;height:46%;background:url(%%COVERWASH%%) center top/100% 100% no-repeat;transform:scaleY(-1)}
+html.az #closing .closing-text{color:#1d3466;text-shadow:0 0 10px rgba(251,248,242,.9)}
