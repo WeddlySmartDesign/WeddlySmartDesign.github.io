@@ -137,6 +137,14 @@ h3{font:400 clamp(28px,7vw,40px)/1.1 var(--serif);margin:0 0 6px}
 img.feather.rv{transform:scale(1.07);filter:blur(3px);transition:opacity 1.5s ease,transform 2.4s cubic-bezier(.2,.8,.2,1),filter 1.4s ease}
 img.feather.rv.in{transform:none;filter:none}
 @media(prefers-reduced-motion:reduce){.rv,.rv-head .section-kicker,.rv-head h2,img.feather.rv,.motif{opacity:1!important;transform:none!important;clip-path:none!important;filter:none!important;letter-spacing:.11em;transition:none!important;animation:none!important}.rv-head .rule-orn path{stroke-dashoffset:0}.rv-head .rule-orn circle{opacity:1}#fx{display:none}}
+/* volver a ver portada y cierre: discreto, aparece cuando ya se han visto */
+.replay{position:absolute;z-index:3;top:max(14px,calc(env(safe-area-inset-top) + 10px));right:12px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.55);background:rgba(20,20,28,.16);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);display:grid;place-items:center;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 1s ease}
+.replay svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+#cover.opened .replay,#closing.revealed .replay{opacity:.85;pointer-events:auto}
+.replay:focus-visible{outline:2px solid #fff;outline-offset:2px}
+/* franjas de continuidad: quedan detrás de la primera y la última sección, sin trozos de fondo vacío */
+main>img[class$="-band"]{position:relative;z-index:0}
+main>[data-bg]{position:relative;z-index:1}
 /*SKINS_CSS*/
 /*INTERIOR_CSS*/
 </style></head><body>
@@ -148,6 +156,7 @@ img.feather.rv.in{transform:none;filter:none}
 <div class="cover-scrim"></div>
 <div class="cover-text"><p class="cover-tag" id="cover-kicker">Nos casamos</p><h1 class="cover-names"><span id="name-1">Lucía</span><span class="amp">&amp;</span><span id="name-2">Pablo</span></h1><p class="cover-date" id="cover-date"></p><p class="cover-place" id="cover-place"></p><p class="countdown" id="countdown"></p></div>
 <button type="button" class="tap-hint" id="open-cover" aria-label="Abrir la invitación"><span class="dot"></span><span>{{TAP_LABEL}}</span></button>
+<button type="button" class="replay" id="cover-replay" aria-label="Volver a ver la portada"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.8 4.2v4.4h-4.4"/></svg></button>
 <div class="cover-bottom"><button type="button" class="entry-button" id="enter" aria-label="Descubrir la invitación">Descubrir ↓</button></div>
 </section>
 <section data-scene id="story" data-bg data-module="story"><div class="scene-inner"><p class="section-kicker">Nuestra historia</p><h2>Érase una vez…</h2><p class="scene-paragraph" id="story-text"></p><img class="feather invisible" id="story-photo" alt="Fotografía de la pareja"></div></section>
@@ -158,6 +167,7 @@ img.feather.rv.in{transform:none;filter:none}
 <section data-scene id="closing" aria-label="Confirmación de asistencia y despedida">
 <video class="hero-video" id="closing-video" muted playsinline preload="metadata" poster="{{CLOSING_POSTER}}" aria-hidden="true"><source src="{{CLOSING_VIDEO}}" type="video/mp4"></video>
 <div class="closing-scrim"></div>
+<button type="button" class="replay" id="closing-replay" aria-label="Volver a ver el final"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.8 4.2v4.4h-4.4"/></svg></button>
 <div class="closing-text"><p class="closing-caption" id="closing-line"></p><p class="closing-sign" id="closing-names"></p><p class="close-date" id="closing-date"></p><a class="rsvp-button" id="rsvp-link" href="#" aria-label="Confirmar asistencia">Confirmar asistencia</a></div>
 </section>
 </main>
@@ -289,7 +299,7 @@ function render(config){
  // fondos de la autora: la primera escena continúa la portada y la última enlaza con el cierre
  document.querySelectorAll('[data-bg]').forEach(s=>s.classList.remove('is-last','is-first'));const scenes=[...document.querySelectorAll('[data-bg]:not(.invisible)')],n=scenes.length;
  scenes.forEach((s,k)=>{s.classList.toggle('is-last',k===n-1);s.classList.toggle('is-first',k===0);let bg,idx;if(n===5){idx=k+1;bg=BG5[k]}else{idx=n===4?k+1:Math.max(1,Math.min(4,Math.round(1+k*3/Math.max(1,n-1))));bg=BG4[idx-1]}s.style.backgroundImage='url('+bg+')';s.dataset.backgroundIndex=String(idx)});
- if(window.__GUEST_INTERIOR__){const vm=buildVM(config);window.__GUEST_INTERIOR__.render(vm,{node,txt,safeUrl,photoUrl,clamp,reduced,id});const vis=[...document.querySelectorAll('[data-bg]:not(.invisible)')];return {id:TEMPLATE.id,version:TEMPLATE.version,visibleScenes:vis.length,sceneKinds:vis.map(s=>s.id),rsvpReady:!!rt}}
+ if(window.__GUEST_INTERIOR__){const vm=buildVM(config);window.__GUEST_INTERIOR__.render(vm,{node,txt,safeUrl,photoUrl,clamp,reduced,id});if(typeof seatBands==='function')seatBands();const vis=[...document.querySelectorAll('[data-bg]:not(.invisible)')];return {id:TEMPLATE.id,version:TEMPLATE.version,visibleScenes:vis.length,sceneKinds:vis.map(s=>s.id),rsvpReady:!!rt}}
  installReveals();installMotion();
  return {id:TEMPLATE.id,version:TEMPLATE.version,visibleScenes:n,sceneKinds:scenes.map(s=>s.id),rsvpReady:!!rt};
 }
@@ -355,7 +365,7 @@ const closing=id('closing'),xv=id('closing-video');let closingStarted=false;
 function revealClosing(){closing.classList.add('revealed')}
 xv.addEventListener('timeupdate',()=>{if(xv.currentTime>=CLOSING_TEXT_AT)revealClosing()});xv.addEventListener('ended',revealClosing);xv.addEventListener('error',revealClosing);
 function startClosing(){if(closingStarted)return;closingStarted=true;if(reduced()){xv.preload='auto';try{xv.currentTime=Math.max(0,(xv.duration||CLOSING_TEXT_AT)-.05)}catch{}revealClosing();return}const pr=xv.play();if(pr&&pr.catch)pr.catch(()=>revealClosing());setTimeout(revealClosing,(CLOSING_TEXT_AT+2.5)*1000)}
-if(typeof IntersectionObserver==='function'){new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting))startClosing()},{threshold:.4}).observe(closing);
+if(typeof IntersectionObserver==='function'){new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting))startClosing()},{threshold:.7}).observe(closing);
  const pre=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){xv.preload='auto';try{xv.load()}catch{}pre.disconnect()}},{rootMargin:'0px 0px 150% 0px'});pre.observe(closing)}else startClosing();
 document.addEventListener('visibilitychange',()=>{if(document.hidden){cv.pause();xv.pause()}});
 id('rsvp-link').addEventListener('click',ev=>{if(id('rsvp-link').dataset.rsvpConfigured!=='true')ev.preventDefault()});
@@ -375,6 +385,12 @@ if(!window.__GUEST_SUPPRESS_DEMO__){
  const q=new URLSearchParams(location.search).get('qa');
  if(['full','reduced','without-gallery'].includes(q)){render(fixture(q));document.documentElement.dataset.guestReviewFixture=q}else render(fixture('demo'));
 }
+
+/* ---- volver a ver: reproduce de nuevo sin ocultar los datos ni el botón de confirmar ---- */
+function replay(v){return e=>{e.stopPropagation();try{v.currentTime=0}catch{}const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{})}}
+id('cover-replay').addEventListener('click',replay(cv));id('closing-replay').addEventListener('click',replay(xv));
+/* ---- franjas: la primera sección y la última se superponen a sus franjas ---- */
+function seatBands(){document.querySelectorAll('main>img[class$="-band"]').forEach(b=>{const set=()=>{if(!b.naturalWidth)return;const r=b.naturalHeight/b.naturalWidth*100;if(b.previousElementSibling&&b.previousElementSibling.id==='cover'){b.style.marginBottom=(-r*.75)+'%'}else{b.style.marginTop=(-r*.8)+'%'}};if(b.complete)set();else b.addEventListener('load',set,{once:true})})}
 window.__GUEST_SKIN__={fixture,demo,openCover,startClosing};
 })();
 </script></body></html>

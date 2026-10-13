@@ -109,3 +109,10 @@ Matriz con siete diseños (D04–D10): 644 comprobaciones, 0 fallos. Todo certif
 **v8.2 (2026-10-13)**: la rama grande era demasiado y se perdía el gesto de tocar algo. Cada detalle es ahora una ramita pintada pequeña (giradas como cortadas sueltas); al tocarla se mece y se abre su información. Entre secciones, solo un filete dorado con un punto. Interior PASS.
 
 **v8.3 (2026-10-13)**: tras comparar opciones, la autora elige para design-09 sobres cerrados con lacre marfil y una flor de buganvilla prensada (de sus ilustraciones al óleo, enlaza con la buganvilla de la cancela de la portada). Al tocarlo, el sobre se eleva, el lacre gira y se abre la información. Regla anotada por la autora: ningún adorno debe marcar el inicio de una sección, porque los fondos están pensados para fundirse sin cortes. Interior PASS.
+
+## Revisión v9 (2026-10-13) · motor común
+
+- **Volver a ver**: portada y cierre muestran, una vez vistos, un botón redondo discreto (↻, arriba a la derecha) que reproduce el vídeo desde el principio sin ocultar los nombres, la fecha ni «Confirmar asistencia».
+- El cierre empieza cuando está visible al 70 % (antes 40 %), para que no se reproduzca mientras el invitado aún mira la galería.
+- **Franjas de continuidad**: ya no ocupan un bloque propio. La primera sección se superpone al 75 % inferior de la franja superior y la última sección al 80 % superior de la franja inferior, así no aparecen trozos de fondo vacío al deslizar desde la portada ni antes del cierre (`seatBands()` en el motor; márgenes en % del ancho, responsive).
+Afecta a D04–D10. Interior PASS en los siete; matriz 644/0; catálogo sincronizado.

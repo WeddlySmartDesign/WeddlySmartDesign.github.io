@@ -487,8 +487,8 @@
       "status": "certification-pending",
       "catalogAsset": "guest/catalog-assets/design-04/1.0.0/index.html",
       "adapter": "guest/guest-catalog-template-design-04-adapter-v1.js",
-      "visualMasterSha256": "d87675875b7b42db6564977ab32d3374b5f8b2a7901a5a5b25952e71035bec4a",
-      "candidateSha256": "d87675875b7b42db6564977ab32d3374b5f8b2a7901a5a5b25952e71035bec4a",
+      "visualMasterSha256": "d24017f25424a8ece27735b3f0380bf5609db96c6a76778100d546d14cd34594",
+      "candidateSha256": "d24017f25424a8ece27735b3f0380bf5609db96c6a76778100d546d14cd34594",
       "commerciallyCertified": false,
       "requiredGates": 11
     },
@@ -497,8 +497,8 @@
       "status": "certification-pending",
       "catalogAsset": "guest/catalog-assets/design-05/1.0.0/index.html",
       "adapter": "guest/guest-catalog-template-design-05-adapter-v1.js",
-      "visualMasterSha256": "1a9e7996199afc98d1f8320ab772813ce83d7be18f453c671cfcedab1e739f31",
-      "candidateSha256": "1a9e7996199afc98d1f8320ab772813ce83d7be18f453c671cfcedab1e739f31",
+      "visualMasterSha256": "2dd55d8c34ce7f840aa64f5e5ae3e2f0bd48c342e34866ef68babc5ac046501f",
+      "candidateSha256": "2dd55d8c34ce7f840aa64f5e5ae3e2f0bd48c342e34866ef68babc5ac046501f",
       "commerciallyCertified": false,
       "requiredGates": 11
     },
@@ -507,8 +507,8 @@
       "status": "certification-pending",
       "catalogAsset": "guest/catalog-assets/design-06/1.0.0/index.html",
       "adapter": "guest/guest-catalog-template-design-06-adapter-v1.js",
-      "visualMasterSha256": "a075815c85ebcf6b20f8bd043082936e525ffc5dccaaa437584e9467d0aaafe3",
-      "candidateSha256": "a075815c85ebcf6b20f8bd043082936e525ffc5dccaaa437584e9467d0aaafe3",
+      "visualMasterSha256": "4be653d5a4952e9d209455229a7586dca81da60d1436d82b728acbcd20dc8d74",
+      "candidateSha256": "4be653d5a4952e9d209455229a7586dca81da60d1436d82b728acbcd20dc8d74",
       "commerciallyCertified": false,
       "requiredGates": 11
     },
@@ -517,8 +517,8 @@
       "status": "certification-pending",
       "catalogAsset": "guest/catalog-assets/design-07/1.0.0/index.html",
       "adapter": "guest/guest-catalog-template-design-07-adapter-v1.js",
-      "visualMasterSha256": "0ac6c3fc2575b2b2494e11c00eec55ae521223209214ecba6868605802a04d47",
-      "candidateSha256": "0ac6c3fc2575b2b2494e11c00eec55ae521223209214ecba6868605802a04d47",
+      "visualMasterSha256": "f73fbb5115260c949eac8cc2c17c986c2011fdf76aa300b32b58b7a050a7a079",
+      "candidateSha256": "f73fbb5115260c949eac8cc2c17c986c2011fdf76aa300b32b58b7a050a7a079",
       "commerciallyCertified": false,
       "requiredGates": 11
     },
@@ -527,8 +527,8 @@
       "status": "certification-pending",
       "catalogAsset": "guest/catalog-assets/design-08/1.0.0/index.html",
       "adapter": "guest/guest-catalog-template-design-08-adapter-v1.js",
-      "visualMasterSha256": "8cc601e3f3af59d0880d83a5ffbe20f870ea287462447005c27f7150bdd6acb5",
-      "candidateSha256": "8cc601e3f3af59d0880d83a5ffbe20f870ea287462447005c27f7150bdd6acb5",
+      "visualMasterSha256": "177172167f8129b35b4a95c7b97fda6cb259cd0f851ef9d48ab607cd69eadf00",
+      "candidateSha256": "177172167f8129b35b4a95c7b97fda6cb259cd0f851ef9d48ab607cd69eadf00",
       "commerciallyCertified": false,
       "requiredGates": 11
     },
@@ -537,8 +537,8 @@
       "status": "certification-pending",
       "catalogAsset": "guest/catalog-assets/design-09/1.0.0/index.html",
       "adapter": "guest/guest-catalog-template-design-09-adapter-v1.js",
-      "visualMasterSha256": "2d8f21b8844df9f22d819b1f4051eaf8f9493e4d957805536117a6868693d342",
-      "candidateSha256": "2d8f21b8844df9f22d819b1f4051eaf8f9493e4d957805536117a6868693d342",
+      "visualMasterSha256": "a3c64207ed76602bf2164b3df3fb63a13793261dee80c165b3e7b953a567d902",
+      "candidateSha256": "a3c64207ed76602bf2164b3df3fb63a13793261dee80c165b3e7b953a567d902",
       "commerciallyCertified": false,
       "requiredGates": 11
     },
@@ -547,8 +547,8 @@
       "status": "certification-pending",
       "catalogAsset": "guest/catalog-assets/design-10/1.0.0/index.html",
       "adapter": "guest/guest-catalog-template-design-10-adapter-v1.js",
-      "visualMasterSha256": "4ce495e0d541bfad75fda5360b3006ae31cf5c99b47f1adb96178b8d9cf50da9",
-      "candidateSha256": "4ce495e0d541bfad75fda5360b3006ae31cf5c99b47f1adb96178b8d9cf50da9",
+      "visualMasterSha256": "291b373b28cb685fe52e3d6f909707a4d0276961f266d2f02cac462ebce51efd",
+      "candidateSha256": "291b373b28cb685fe52e3d6f909707a4d0276961f266d2f02cac462ebce51efd",
       "commerciallyCertified": false,
       "requiredGates": 11
     }
