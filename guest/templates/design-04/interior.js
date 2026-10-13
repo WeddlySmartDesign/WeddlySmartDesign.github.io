@@ -31,7 +31,7 @@ function render(vm){
  // detalles: contraventanas (1–4) que se abren
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openWin=null;
  if(D.length){head(inner,'Todo lo que necesitas saber','Los detalles',mark(sec));const wins=el('div','az-wins az-rv'),tray=el('div','az-tray'),tin=el('div','az-tray-in');tray.id='az-tray';tray.append(tin);
-  D.forEach((x,i)=>{const b=el('button','az-win'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','az-tray');const fr=el('span','az-frame');fr.append(el('span','az-sh l'),el('span','az-sh r'));b.append(fr,el('span','az-win-lb',x.title));
+  D.forEach((x,i)=>{const b=el('button','az-win'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','az-tray');const fr=el('span','az-frame');fr.setAttribute('aria-hidden','true');const ci=el('img','c');ci.src='%%WINC%%';ci.alt='';const oi=el('img','o');oi.src='%%WINO%%';oi.alt='';fr.append(ci,oi);b.append(fr,el('span','az-win-lb',x.title));
    b.onclick=()=>{if(openWin===b){b.setAttribute('aria-expanded','false');openWin=null;tray.style.height='0px';return}openWin?.setAttribute('aria-expanded','false');openWin=b;b.setAttribute('aria-expanded','true');fill(tin,x);tray.style.height=(tin.offsetHeight+16)+'px';setTimeout(()=>{const r=tray.getBoundingClientRect();if(r.bottom>innerHeight-20)tray.scrollIntoView({block:'end',behavior:reducedMotion()?'auto':'smooth'})},850)};wins.append(b)});
   inner.append(wins,el('p','az-hint az-rv',D.length>1?'Abre cada ventana':'Abre la ventana'),tray)}
  // galería
