@@ -124,3 +124,5 @@ Afecta a D04–D10. Interior PASS en los siete; matriz 644/0; catálogo sincroni
 - **Franjas**: sus bordes se funden (máscara), sin línea visible donde terminan.
 - **D10 Cuento de papel**: separador = sol de papel recortado de la portada; detalles = nubes de papel reales de la portada (sin numerales); más aire entre la historia y su foto.
 Interior PASS ×7; matriz 644/0; CI local OK.
+
+**v10.1 (2026-10-13)**: D10 · la autora ve brusca la apertura del libro y la aparición de la escena. Se retemporiza la portada (sin tocar el original de la entrega): 1,35–2,0 s ×4 con fundido entre fotogramas, 2,0–3,6 s ×2,5 con interpolación de movimiento; duración 9 → 14,4 s, textos a los 9 s. El sol separador estaba cortado por abajo (en el vídeo lo tapa la colina): se completa el disco por simetría. Interior PASS.
