@@ -63,5 +63,19 @@ function tick(){if(!A)return;const vh=innerHeight,y=A.clock.getBoundingClientRec
  // la aguja siempre avanza en sentido horario hacia la marca actual
  const target=A.marks[cur].ang;if(A.prev==null)A.prev=target;let delta=target-(A.prev%360+360)%360;if(delta<0)delta+=360;if(cur<(A.lastCur??cur)&&delta>0)delta-=360;A.prev+=delta;A.lastCur=cur;A.hand.style.transform=`rotate(${A.prev}deg)`}
 let raf=0;addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;tick()})},{passive:true});addEventListener('resize',()=>tick());
+// sonido: vals de la portada tras tocar las puertas, botón para silenciar; se apaga con el cierre
+const music=new Audio('%%MUSIC%%');music.loop=true;music.volume=0;let fadeT=null,soundOn=false;
+const sb=document.createElement('button');sb.className='ga-snd';sb.type='button';sb.textContent='♪';sb.setAttribute('aria-pressed','false');sb.setAttribute('aria-label','Activar música');
+function setSound(on){soundOn=on;sb.setAttribute('aria-pressed',String(on));sb.setAttribute('aria-label',on?'Silenciar música':'Activar música');clearInterval(fadeT);
+ if(on){const p=music.play();if(p&&p.catch)p.catch(()=>{});fadeT=setInterval(()=>{music.volume=Math.min(.6,music.volume+.03);if(music.volume>=.6)clearInterval(fadeT)},90)}
+ else fadeT=setInterval(()=>{music.volume=Math.max(0,music.volume-.06);if(music.volume<=0){music.pause();clearInterval(fadeT)}},60)}
+sb.onclick=()=>setSound(!soundOn);
+addEventListener('DOMContentLoaded',()=>{document.body.append(sb);const cover=document.getElementById('cover');
+ const start=()=>{if(window.__GUEST_SUPPRESS_SOUND__)return;sb.classList.add('show');setSound(true);cover.removeEventListener('click',start)};cover.addEventListener('click',start);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden&&soundOn)music.pause();else if(!document.hidden&&soundOn)music.play().catch(()=>{})});
+ const xv=document.getElementById('closing-video');
+ if(xv)xv.addEventListener('play',()=>{if(!soundOn)return;const left=Math.max(2,((xv.duration||8)-(xv.currentTime||0))*.9),step=music.volume/(left*10);
+  soundOn=false;sb.setAttribute('aria-pressed','false');sb.setAttribute('aria-label','Activar música');clearInterval(fadeT);
+  fadeT=setInterval(()=>{music.volume=Math.max(0,music.volume-step);if(music.volume<=0){music.pause();clearInterval(fadeT)}},100)})});
 window.__GUEST_INTERIOR__={render};
 })();

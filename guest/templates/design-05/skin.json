@@ -69,7 +69,8 @@
    "BANDTOP": "skin-assets/band-top.jpg",
    "BANDBOT": "skin-assets/band-bot.jpg",
    "WMASK": "skin-assets/wash-mask.png",
-   "AGUADA": "skin-assets/aguada.webp"
+   "AGUADA": "skin-assets/aguada.webp",
+   "MUSIC": "skin-assets/music.m4a"
   }
  }
 }
