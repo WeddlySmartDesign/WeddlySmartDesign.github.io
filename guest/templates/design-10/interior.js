@@ -14,6 +14,7 @@ const NUBES=['%%NUBE1%%','%%NUBE2%%'];
 const RIDGE='M14 106 Q 80 84 170 102 T 326 97';
 const BALLOON='<svg viewBox="0 0 34 48"><path d="M17 1C7 1 1 8 1 17c0 9 9 16 13 21h6c4-5 13-12 13-21C33 8 27 1 17 1z" fill="#f3e9d6"/><path d="M17 1c-5 0-8 8-8 16 0 9 3 16 5 21h3V1z" fill="#d9a441"/><path d="M17 1c5 0 8 8 8 16 0 9-3 16-5 21h-3V1z" fill="#b5684a"/><path d="M14 38l1 5M20 38l-1 5" stroke="#6b5a4a" stroke-width=".8"/><rect x="13.5" y="42.5" width="7" height="5" rx="1" fill="#8a6a4a"/></svg>';
 let A=null,openEnv=null,io=null;
+function post(){document.querySelectorAll('.cu-fade').forEach(im=>{if(im.closest('#gallery-items')||im.parentElement.classList.contains('cu-paper'))return;const w=document.createElement('span');w.className='cu-paper '+[...im.classList].filter(c=>c==='cu-rv').join(' ');im.classList.remove('cu-rv');im.before(w);w.append(im)})}
 function render(vm){
  if(!document.querySelector('.cu-band')){const t=el('img','cu-band');t.src='%%BANDTOP%%';t.alt='';t.setAttribute('aria-hidden','true');document.getElementById('cover').after(t);
   const b=el('img','cu-band');b.src='%%BANDBOT%%';b.alt='';b.setAttribute('aria-hidden','true');document.getElementById('closing').before(b)}
@@ -51,7 +52,7 @@ function render(vm){
  io?.disconnect();const items=[...document.querySelectorAll('.cu-rv')];
  if(reducedMotion()||typeof IntersectionObserver!=='function')items.forEach(e=>e.classList.add('in'));
  else{io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});items.forEach((e,i)=>{e.style.transitionDelay=(i%4)*110+'ms';io.observe(e)})}
- tick()}
+ post();tick()}
 function fill(tin,x){tin.replaceChildren(el('h3',null,x.title));const times=x.lines.filter(l=>/^(Ida|Vuelta):/.test(l)),rest=x.lines.filter(l=>!/^(Ida|Vuelta):/.test(l));
  for(const l of rest.slice(0,1))tin.append(el('p',null,l));if(times.length){const tt=el('div','cu-tt');for(const l of times){const m=l.match(/^(Ida|Vuelta):\s*(.*)$/);const s=el('span',null,m[1]);s.append(el('b',null,m[2]));tt.append(s)}tin.append(tt)}
  for(const l of rest.slice(1))tin.append(el('p',null,l));if(x.links.length)tin.append(links(x.links));

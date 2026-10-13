@@ -10,6 +10,7 @@ function links(list){const r=el('div','iv-links');for(const [u,l] of list){const
 function scene(sec,show){sec.classList.toggle('invisible',!show);sec.replaceChildren();const inner=el('div','iv-in');sec.append(inner);return inner}
 const STEM='M6 96 C 60 96, 80 40, 130 52 S 200 104, 250 70 S 310 22, 334 30';
 let A=null,openEnv=null,io=null;
+function post(){document.querySelectorAll('.iv-venue').forEach(v=>{const t=v.querySelector('.iv-v-time'),k=v.querySelector('.iv-v-k');if(t&&k&&t.textContent){k.after(t);t.style.display='block'}else if(t&&!t.textContent)t.remove()})}
 function render(vm){
  if(!document.querySelector('.iv-band')){const t=el('img','iv-band');t.src='%%BANDTOP%%';t.alt='';t.setAttribute('aria-hidden','true');document.getElementById('cover').after(t);
   const b=el('img','iv-band');b.src='%%BANDBOT%%';b.alt='';b.setAttribute('aria-hidden','true');document.getElementById('closing').before(b)}
@@ -47,7 +48,7 @@ function render(vm){
  io?.disconnect();const items=[...document.querySelectorAll('.iv-rv')];
  if(reducedMotion()||typeof IntersectionObserver!=='function')items.forEach(e=>e.classList.add('in'));
  else{io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});items.forEach((e,i)=>{e.style.transitionDelay=(i%4)*110+'ms';io.observe(e)})}
- tick()}
+ post();tick()}
 function fill(tin,x){tin.replaceChildren(el('h3',null,x.title));const times=x.lines.filter(l=>/^(Ida|Vuelta):/.test(l)),rest=x.lines.filter(l=>!/^(Ida|Vuelta):/.test(l));
  for(const l of rest.slice(0,1))tin.append(el('p',null,l));if(times.length){const tt=el('div','iv-tt');for(const l of times){const m=l.match(/^(Ida|Vuelta):\s*(.*)$/);const s=el('span',null,m[1]);s.append(el('b',null,m[2]));tt.append(s)}tin.append(tt)}
  for(const l of rest.slice(1))tin.append(el('p',null,l));if(x.links.length)tin.append(links(x.links));

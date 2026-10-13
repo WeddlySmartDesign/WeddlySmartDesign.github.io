@@ -12,6 +12,7 @@ function links(list){const r=el('div','ga-links');for(const [u,l] of list){const
 function scene(sec,show){sec.classList.toggle('invisible',!show);sec.replaceChildren();const inner=el('div','ga-in');sec.append(inner);return inner}
 function minutes(t){const m=/^(\d{1,2}):(\d{2})/.exec(t||'');return m?(+m[1]%12)*60+(+m[2]):null}
 let A=null,openTk=null,io=null;
+function post(){const vis=[...document.querySelectorAll('main>[data-bg]')].filter(s=>!s.classList.contains('invisible'));document.querySelectorAll('.ga-night').forEach(s=>s.classList.remove('ga-night'));const last=vis[vis.length-1];if(last&&vis.length>1)last.classList.add('ga-night');}
 function render(vm){
  if(!document.querySelector('.ga-band')){const t=el('img','ga-band');t.src='%%BANDTOP%%';t.alt='';t.setAttribute('aria-hidden','true');document.getElementById('cover').after(t);
   const b=el('img','ga-band');b.src='%%BANDBOT%%';b.alt='';b.setAttribute('aria-hidden','true');document.getElementById('closing').before(b)}
@@ -50,7 +51,7 @@ function render(vm){
  io?.disconnect();const items=[...document.querySelectorAll('.ga-rv')];
  if(reducedMotion()||typeof IntersectionObserver!=='function')items.forEach(e=>e.classList.add('in'));
  else{io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});items.forEach((e,i)=>{e.style.transitionDelay=(i%4)*110+'ms';io.observe(e)})}
- tick()}
+ post();tick()}
 function fill(tin,x){tin.replaceChildren(el('h3',null,x.title));const times=x.lines.filter(l=>/^(Ida|Vuelta):/.test(l)),rest=x.lines.filter(l=>!/^(Ida|Vuelta):/.test(l));
  for(const l of rest.slice(0,1))tin.append(el('p',null,l));if(times.length){const tt=el('div','ga-tt');for(const l of times){const m=l.match(/^(Ida|Vuelta):\s*(.*)$/);const s=el('span',null,m[1]);s.append(el('b',null,m[2]));tt.append(s)}tin.append(tt)}
  for(const l of rest.slice(1))tin.append(el('p',null,l));if(x.links.length)tin.append(links(x.links));

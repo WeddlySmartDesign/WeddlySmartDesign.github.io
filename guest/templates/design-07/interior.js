@@ -8,6 +8,7 @@ function img(p,cls,alt,h){const i=el('img',cls);i.src=p.src;i.alt=p.alt||alt;i.l
 function links(list){const r=el('div','rf-links');for(const [u,l] of list){const a=el('a','link',l);a.href=u;a.target='_blank';a.rel='noopener noreferrer';r.append(a)}return r}
 function scene(sec,show){sec.classList.toggle('invisible',!show);sec.replaceChildren();const inner=el('div','rf-in');sec.append(inner);return inner}
 let A=null,openEnv=null,io=null;
+function post(){document.querySelectorAll('.rf-refl').forEach(e=>e.remove());document.querySelectorAll('.rf-fade').forEach(im=>{if(im.closest('#gallery-items'))return;const r=im.cloneNode();r.className='rf-refl';r.removeAttribute('loading');r.alt='';r.setAttribute('aria-hidden','true');im.after(r)});document.querySelectorAll('.rf-v-name').forEach(n=>{if(n.nextElementSibling&&n.nextElementSibling.classList.contains('rf-v-mirror'))return;const m=document.createElement('div');m.className='rf-v-mirror';m.textContent=n.textContent;m.setAttribute('aria-hidden','true');n.after(m)})}
 function render(vm){
  if(!document.querySelector('.rf-band')){const t=el('img','rf-band');t.src='%%BANDTOP%%';t.alt='';t.setAttribute('aria-hidden','true');document.getElementById('cover').after(t);
   const b=el('img','rf-band');b.src='%%BANDBOT%%';b.alt='';b.setAttribute('aria-hidden','true');document.getElementById('closing').before(b)}
@@ -42,7 +43,7 @@ function render(vm){
  io?.disconnect();const items=[...document.querySelectorAll('.rf-rv')];
  if(reducedMotion()||typeof IntersectionObserver!=='function')items.forEach(e=>e.classList.add('in'));
  else{io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});items.forEach((e,i)=>{e.style.transitionDelay=(i%4)*110+'ms';io.observe(e)})}
- tick()}
+ post();tick()}
 function fill(tin,x){tin.replaceChildren(el('h3',null,x.title));const times=x.lines.filter(l=>/^(Ida|Vuelta):/.test(l)),rest=x.lines.filter(l=>!/^(Ida|Vuelta):/.test(l));
  for(const l of rest.slice(0,1))tin.append(el('p',null,l));if(times.length){const tt=el('div','rf-tt');for(const l of times){const m=l.match(/^(Ida|Vuelta):\s*(.*)$/);const s=el('span',null,m[1]);s.append(el('b',null,m[2]));tt.append(s)}tin.append(tt)}
  for(const l of rest.slice(1))tin.append(el('p',null,l));if(x.links.length)tin.append(links(x.links));

@@ -120,3 +120,23 @@ html.ga a.link{font:400 15px/1 'GaramondSC',Georgia,serif!important;letter-spaci
 
 .ga-tm{font:400 22px/1 'Garamond',Georgia,serif!important;letter-spacing:.06em!important}
 .ga-tt span{font:400 14px/1.4 'GaramondSC',Georgia,serif!important;letter-spacing:.14em!important;text-transform:lowercase!important}.ga-tt b{font:400 26px/1.1 'Garamond',Georgia,serif!important}
+/* === identidad v15 === */
+
+/* fotos: fundido suave, sin forma ni marco (vale para cualquier foto) */
+.ga-fade{-webkit-mask:none!important;mask:none!important;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 14%,#000 80%,transparent 100%),linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%)!important;-webkit-mask-composite:source-in!important;mask-image:linear-gradient(to bottom,transparent 0%,#000 14%,#000 80%,transparent 100%),linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%)!important;mask-composite:intersect!important}
+/* etiquetas en mayúsculas déco doradas, como las puertas de la portada */
+.ga-kicker,.ga-v-k{font:400 10.5px/1.3 'Adventor',sans-serif!important;letter-spacing:.42em!important;text-transform:uppercase!important;color:#9a7428!important}
+html.ga a.link{font:400 10.5px/1 'Adventor',sans-serif!important;letter-spacing:.3em!important;text-transform:uppercase!important}
+/* lugar: tarjeta de entrada a la velada, marfil con canto dorado y esquinas déco */
+.ga-places::before{background:none!important;inset:0!important;border:0;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);background:linear-gradient(160deg,#fffcf4,#f6eedd)!important;box-shadow:0 10px 28px rgba(60,44,12,.10)}
+.ga-places::after{content:"";position:absolute;inset:7px;pointer-events:none;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);box-shadow:inset 0 0 0 1px rgba(168,130,47,.65),inset 0 0 0 4px #fbf5e8,inset 0 0 0 5px rgba(168,130,47,.35)}
+.ga-places{padding:36px 22px 32px!important;margin-top:30px!important}
+.ga-places>*{position:relative;z-index:1}
+.ga-v-time{font:400 22px/1.1 'Adventor',sans-serif!important;letter-spacing:.06em!important}
+/* la noche llega: la última sección pasa del marfil al azul noche del cierre, con letras doradas */
+main>[data-bg].ga-night{background:linear-gradient(#f4ede1 0,#f4ede1 30px,#18223f 380px,#0e1630 100%)!important;color:#efe3c8}
+.ga-night .ga-title{color:#e2c27a!important}.ga-night .ga-kicker{color:#cfae66!important}.ga-night .ga-p,.ga-night .ga-hint,.ga-night .ga-tap{color:#efe3c8}
+.ga-night .ga-dots .gallery-dot::before,html.ga .ga-night .gallery-dot::before{box-shadow:inset 0 0 0 1px #e2c27a}html.ga .ga-night .gallery-dot[aria-current=true]::before{background:#e2c27a}
+.ga-night .ga-places::before{background:linear-gradient(160deg,#fffcf4,#f6eedd)!important}
+main>[data-bg].ga-night .ga-in{padding-top:120px}
+html.ga #closing{margin-top:-1px}

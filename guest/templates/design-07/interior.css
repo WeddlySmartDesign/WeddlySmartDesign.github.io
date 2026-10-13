@@ -125,3 +125,19 @@ html.rf .tap-hint .dot{background:#3b2f33;box-shadow:0 0 0 4px rgba(251,248,242,
 .rf-tt span{font:400 14px/1.4 'GaramondSC',Georgia,serif!important;letter-spacing:.14em!important;text-transform:lowercase!important}.rf-tt b{font:400 26px/1.1 'Garamond',Georgia,serif!important}
 
 .rf-title::after{content:none!important}
+/* === identidad v15 === */
+
+/* fotos: la orilla es una línea recta de agua y la foto se refleja debajo, ondulando */
+.rf-fade{-webkit-mask:none!important;mask:none!important;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 100%),linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%)!important;-webkit-mask-composite:source-in!important;mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 100%),linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%)!important;mask-composite:intersect!important}
+.rf-refl{display:block;max-width:none!important;width:calc(100% + 40px);margin:0 -20px;height:74px;object-fit:cover;object-position:50% 100%;transform:scaleY(-1);opacity:.5;filter:blur(.8px) saturate(.8) brightness(1.05);animation:rf-ripple 6s ease-in-out infinite;
+ -webkit-mask-image:linear-gradient(to top,transparent 0%,#000 100%),linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to top,transparent 0%,#000 100%),linear-gradient(to right,transparent 0%,#000 10%,#000 90%,transparent 100%);mask-composite:intersect;pointer-events:none}
+@keyframes rf-ripple{0%,100%{transform:scaleY(-1) skewX(0)}50%{transform:scaleY(-1.02) skewX(.8deg)}}
+/* lugar: cada sitio sobre una línea de agua, con su nombre reflejado */
+.rf-places::before{display:none!important}
+.rf-places{padding:10px 0 0!important}
+.rf-venue{display:block!important;text-align:center;padding:16px 0 22px!important}
+.rf-venue::after{display:none!important}
+.rf-v-time{display:block;text-align:center!important;padding:0!important;font:400 22px/1 'Garamond',Georgia,serif!important;color:#8a5a63!important;margin:0 0 6px!important}
+.rf-v-name{font:italic 400 30px/1.15 'Lora',Georgia,serif!important;position:relative;padding-bottom:8px;margin:6px 0 0!important;background:linear-gradient(90deg,transparent,rgba(138,90,99,.45),transparent) bottom/80% 1px no-repeat}
+.rf-v-mirror{font:italic 400 30px/1.15 'Lora',Georgia,serif;color:#3b2f33;transform:scaleY(-1);opacity:.14;filter:blur(.7px);margin-top:-4px;height:22px;overflow:hidden;-webkit-mask-image:linear-gradient(to top,transparent,#000);mask-image:linear-gradient(to top,transparent,#000);animation:rf-ripple 6s ease-in-out infinite}
+.rf-v-addr{margin-top:6px!important}.rf-places .rf-links{justify-content:center!important}

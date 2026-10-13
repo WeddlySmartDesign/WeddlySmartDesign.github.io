@@ -166,3 +166,12 @@ La autora da Azulejo por terminado y pide repasar el resto con lo aprendido: ser
 - **Caja de música**: solo fotos con borde de acuarela y velo cálido (su programa de concierto se mantiene).
 - **Limoneros y Cuento**: lugar tipo carta sobre aguada en su color y fotos con borde de acuarela; separadores aprobados (filete con punto, sol de papel) se mantienen.
 Interior PASS en los siete; matriz 644/0; CI local OK.
+
+## Revisión v15 (2026-10-13) · identidad propia de cada interior
+Vistas juntas, solo Caja de música tenía un interior inconfundible (una sola metáfora: el concierto). Antes de cambiar nada se entregó a la autora un ZIP por diseño con el estado anterior (equivale al commit db22cf3). Regla de la autora: nunca encajar las fotos en una forma (debe valer cualquier foto).
+- **Gala**: la invitación vive la noche: la última sección visible pasa del marfil al azul noche del cierre, con letras doradas, y enlaza con los fuegos del balcón. Lugar = tarjeta de entrada marfil con canto dorado y esquinas déco; etiquetas en mayúsculas Adventor doradas. Fotos con fundido suave (sin acuarela).
+- **Invernadero**: las fotos aparecen tras un cristal empañado que se aclara (como la portada). Lugar = etiquetas de herbario con hoja prensada, ligeramente giradas.
+- **Reflejo**: cada foto tiene orilla recta y su reflejo ondulando debajo; en el lugar, cada nombre se refleja bajo una línea de agua.
+- **Limoneros**: bordes de pincelada de óleo en las fotos y lugar sobre una pincelada ancha con los colores del atardecer de la portada.
+- **Cuento de papel**: fotos como recortes de papel rasgado con sombra; lugar con colinas de papel por capas al pie y banderita en cada sede.
+Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.

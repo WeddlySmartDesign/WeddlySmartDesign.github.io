@@ -68,8 +68,8 @@
    "FLOR1": "skin-assets/flor1.webp",
    "FLOR2": "skin-assets/flor2.webp",
    "FLOR3": "skin-assets/flor3.webp",
-   "WMASK": "skin-assets/wash-mask.png",
-   "AGUADA": "skin-assets/aguada.webp"
+   "OILMASK": "skin-assets/oil-mask.png",
+   "BRUSH": "skin-assets/brush.webp"
   }
  }
 }

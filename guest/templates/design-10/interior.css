@@ -87,12 +87,12 @@ html.cu .gallery-dot[aria-current=true]::before{background:#b5684a;box-shadow:no
 /* portada: textos más arriba y compactos para no coincidir con las golondrinas del final del vídeo */
 #cover .cover-text{top:max(6.5svh,calc(env(safe-area-inset-top) + 30px))!important}#cover .cover-tag{margin-bottom:2px}#cover .cover-names{font-size:min(52px,7.2svh,13vw);line-height:1.12}#cover .cover-names span{display:inline}#cover .cover-names .amp{display:inline;font-size:.46em;margin:0 .22em}#cover .cover-date{margin-top:6px}#cover .cover-place{margin-top:2px}#cover .countdown{margin-top:4px}
 /* === repaso v14 === fotos con borde de acuarela y velo */
-.cu-fade{width:calc(100% + 40px)!important;margin:22px -20px 0!important;-webkit-mask:url(%%WMASK%%) center/100% 100% no-repeat!important;mask:url(%%WMASK%%) center/100% 100% no-repeat!important}
+.cu-fade{width:calc(100% + 40px)!important;margin:22px -20px 0!important;-webkit-mask:url(%%TORN%%) center/100% 100% no-repeat!important;mask:url(%%TORN%%) center/100% 100% no-repeat!important}
 .cu-fade.cu-rv.in,#gallery-items .cu-fade{filter:sepia(.1) saturate(.82) brightness(1.04) contrast(.93)}
 html.cu #gallery-items{width:calc(100% + 40px);margin:8px -20px 0}
 
 .cu-places{position:relative;max-width:360px;margin:26px auto 0;padding:34px 18px 30px}
-.cu-places::before{content:"";position:absolute;inset:0 -6px;background:url(%%AGUADA%%) center/100% 100% no-repeat;pointer-events:none}
+.cu-places::before{content:"";position:absolute;inset:0 -6px;background:none;pointer-events:none}
 .cu-venue{position:relative;display:grid;grid-template-columns:76px 1px 1fr;gap:0 16px;align-items:start;text-align:left;padding:12px 0!important;background:none!important}
 .cu-venue::before{content:none!important}
 .cu-venue::after{content:"";grid-column:2;grid-row:1;width:1px;height:100%;background:linear-gradient(transparent,#b5684a88 20%,#b5684a88 80%,transparent)}
@@ -104,3 +104,18 @@ html.cu #gallery-items{width:calc(100% + 40px);margin:8px -20px 0}
 .cu-places .cu-links{justify-content:flex-start;gap:0 18px}
 @media(max-width:360px){.cu-v-name{font-size:22px!important}.cu-venue{grid-template-columns:62px 1px 1fr;gap:0 12px}.cu-v-time{font-size:22px!important}}
 .cu-v-name{font-size:21px!important}.cu-venue{grid-template-columns:70px 1px 1fr!important;gap:0 14px!important}
+/* === identidad v15 === */
+
+/* fotos como recortes de papel rasgado a mano, pegados con su sombra (sin forma: la foto entera se ve) */
+.cu-paper{display:block;margin:22px -14px 0;filter:drop-shadow(0 3px 2px rgba(47,59,102,.22)) drop-shadow(0 8px 14px rgba(47,59,102,.10));transform:rotate(-.6deg)}
+.cu-paper.cu-rv{opacity:0;transform:translateY(16px) rotate(-.6deg);transition:opacity 1.2s ease,transform 1.4s cubic-bezier(.2,.8,.2,1)}
+.cu-paper.cu-rv.in{opacity:1;transform:rotate(-.6deg)}
+.cu-paper .cu-fade{width:100%!important;margin:0!important;-webkit-mask:url(%%TORN%%) center/100% 100% no-repeat!important;mask:url(%%TORN%%) center/100% 100% no-repeat!important;filter:sepia(.1) saturate(.82) brightness(1.04) contrast(.93)!important;transform:none!important}
+html.cu #gallery-items .cu-fade{-webkit-mask:url(%%TORN%%) center/100% 100% no-repeat!important;mask:url(%%TORN%%) center/100% 100% no-repeat!important}
+/* lugar: una pequeña escena de colinas de papel por capas, con una banderita en cada sitio */
+.cu-places::before{background:none!important}
+.cu-places{padding:20px 14px 96px!important}
+.cu-places::after{content:"";position:absolute;left:-20px;right:-20px;bottom:0;height:96px;pointer-events:none;background:
+ url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 96' preserveAspectRatio='none'%3E%3Cpath d='M0 46 Q 70 14 150 38 T 300 30 T 400 40 V96 H0Z' fill='%23c4d6dd'/%3E%3Cpath d='M0 62 Q 90 34 200 56 T 400 52 V96H0Z' fill='%23c9d6c0'/%3E%3Cpath d='M0 80 Q 110 60 220 76 T 400 72 V96H0Z' fill='%23a3bba9'/%3E%3C/svg%3E") center bottom/100% 100% no-repeat;filter:drop-shadow(0 -2px 2px rgba(47,59,102,.16));-webkit-mask-image:linear-gradient(to right,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(to right,transparent,#000 10%,#000 90%,transparent)}
+.cu-v-k::before{content:"";display:inline-block;width:10px;height:8px;margin-right:7px;background:#b5684a;clip-path:polygon(0 0,100% 50%,0 100%);vertical-align:0;box-shadow:none}
+.cu-venue::after{background:linear-gradient(transparent,rgba(107,90,74,.6) 20%,rgba(107,90,74,.6) 80%,transparent)!important;width:1.5px!important}
