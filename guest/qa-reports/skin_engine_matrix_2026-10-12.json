@@ -68,10 +68,10 @@
   "design-09": {
    "displayName": "LIMONEROS · VERSIÓN CLAUDE",
    "version": "1.0.0",
-   "masterSha256": "35b903843c145845cf3e894a4f5837ddb05d6cb198410b196b8903a0c9d1eeb9",
+   "masterSha256": "19a0a28405253f16dab45ca8cf387e88efc2aacfe01ad2d8141aabdb2ff56aaa",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   }
  },
- "revision": "v6: interiores propios en los cinco diseños (Azulejo: azulejos que giran y contraventanas; Gala: reloj déco y tiques de guardarropa; Invernadero: tallo con hojas y sobres de semillas; Reflejo: velas flotantes y espejos; Caja de música: partitura y cajones). Comprobación común guest/qa/skin_interior_checks.py PASS en los cinco; matriz 460/0 · v7: design-09 Limoneros (versión Claude, alternativa a design-03 para que la autora elija; design-03 intacto). Matriz 552/0"
+ "revision": "v6: interiores propios en los cinco diseños (Azulejo: azulejos que giran y contraventanas; Gala: reloj déco y tiques de guardarropa; Invernadero: tallo con hojas y sobres de semillas; Reflejo: velas flotantes y espejos; Caja de música: partitura y cajones). Comprobación común guest/qa/skin_interior_checks.py PASS en los cinco; matriz 460/0 · v7: design-09 Limoneros (versión Claude, alternativa a design-03 para que la autora elija; design-03 intacto). Matriz 552/0 · v7.1: design-09 más sereno tras la revisión de la autora (detalles abiertos como carta impresa, programa completo a la vista con el momento del sol destacado, sin indicaciones de «toca»)"
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Comprobación de interiores propios (D04–D08): nº de momentos y bloques prácticos pintados = datos del
-cuestionario, sin desbordes; tocar un momento anterior lo muestra; abrir un bloque muestra su contenido.
+cuestionario, sin desbordes; tocar un momento anterior lo muestra; abrir un bloque muestra su contenido (o, si el diseño los muestra abiertos, el bloque tiene contenido).
 Uso: python3 guest/qa/skin_interior_checks.py design-08:.cj-note:.cj-drawer:.cj-now design-04:.az-tile:.az-win:.az-now"""
 import asyncio,sys,os
 from playwright.async_api import async_playwright
@@ -20,7 +20,7 @@ async def check(br,spec):
     await pg.click(f'{NOTE} >> nth=0');await pg.wait_for_timeout(400)
     cur=await pg.evaluate(f"[...document.querySelectorAll('{NOW} > div')].findIndex(d=>d.classList.contains('on'))")
     await pg.evaluate(f"document.querySelector('{DRAW}').scrollIntoView({{block:'center',behavior:'instant'}})");await pg.click(f'{DRAW} >> nth=1');await pg.wait_for_timeout(1000)
-    tr=await pg.evaluate(f"(()=>{{const b=document.querySelectorAll('{DRAW}')[1];const t=document.getElementById(b.getAttribute('aria-controls'));return [t.offsetHeight,t.querySelector('h3')?.textContent||'']}})()")
+    tr=await pg.evaluate(f"(()=>{{const b=document.querySelectorAll('{DRAW}')[1];const c=b.getAttribute('aria-controls'),t=c?document.getElementById(c):b;return [t.offsetHeight,t.querySelector('h3')?.textContent||'']}})()")
     if cur!=0 or tr[0]<60:bad.append((w,'interaction',cur,tr))
     if errs:bad.append((w,'errors',errs))
     await pg.close()
