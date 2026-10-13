@@ -2,7 +2,7 @@
  "id": "design-10",
  "version": "1.0.0",
  "displayName": "CUENTO DE PAPEL",
- "coverTextAt": 9.0,
+ "coverTextAt": 6.6,
  "closingTextAt": 8.2,
  "coverTextPosition": "top:max(7svh,calc(env(safe-area-inset-top) + 34px))",
  "coverScrim": "top:0;height:46%;background:linear-gradient(180deg,rgba(236,244,248,.55) 0%,rgba(236,244,248,.3) 55%,rgba(236,244,248,0) 100%)",

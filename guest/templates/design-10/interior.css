@@ -85,4 +85,4 @@ html.cu .gallery-dot[aria-current=true]::before{background:#b5684a;box-shadow:no
 @media(prefers-reduced-motion:reduce){.cu-rv,.cu-fade.cu-rv{opacity:1;transform:none;filter:none;transition:none}.cu-bal,.cu-bal svg,.cu-nube{transition:none}}
 
 /* portada: textos más arriba y compactos para no coincidir con las golondrinas del final del vídeo */
-#cover .cover-text{top:max(2.5svh,calc(env(safe-area-inset-top) + 14px))!important}#cover .cover-tag{margin-bottom:2px}#cover .cover-names{font-size:min(52px,7.2svh,13vw);line-height:1.12}#cover .cover-names span{display:inline}#cover .cover-names .amp{display:inline;font-size:.46em;margin:0 .22em}#cover .cover-date{margin-top:6px}#cover .cover-place{margin-top:2px}#cover .countdown{margin-top:4px}
+#cover .cover-text{top:max(6.5svh,calc(env(safe-area-inset-top) + 30px))!important}#cover .cover-tag{margin-bottom:2px}#cover .cover-names{font-size:min(52px,7.2svh,13vw);line-height:1.12}#cover .cover-names span{display:inline}#cover .cover-names .amp{display:inline;font-size:.46em;margin:0 .22em}#cover .cover-date{margin-top:6px}#cover .cover-place{margin-top:2px}#cover .countdown{margin-top:4px}

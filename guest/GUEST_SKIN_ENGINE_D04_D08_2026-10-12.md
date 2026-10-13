@@ -128,3 +128,5 @@ Interior PASS ×7; matriz 644/0; CI local OK.
 **v10.1 (2026-10-13)**: D10 · la autora ve brusca la apertura del libro y la aparición de la escena. Se retemporiza la portada (sin tocar el original de la entrega): 1,35–2,0 s ×4 con fundido entre fotogramas, 2,0–3,6 s ×2,5 con interpolación de movimiento; duración 9 → 14,4 s, textos a los 9 s. El sol separador estaba cortado por abajo (en el vídeo lo tapa la colina): se completa el disco por simetría. Interior PASS.
 
 **v10.2 (2026-10-13)**: D10 · al terminar la portada, las golondrinas del vídeo tapaban la fecha, el lugar y la cuenta atrás. Sin tocar el vídeo, el bloque de texto sube y se compacta (nombres en una línea, tamaños en función del alto de pantalla); comprobado sobre el último fotograma a 412×732, 390×700 y 360×640.
+
+**v10.3 (2026-10-13)**: la interpolación de movimiento deformaba la iglesia al aparecer y la tapa del libro. Se rehace con fundido entre fotogramas (libro ×2,5, escena ×1,6; 12,2 s; textos a 6,6 s). El texto de portada baja un poco (6,5 svh) sin tocar las golondrinas en 412×732, 390×700 y 360×640.
