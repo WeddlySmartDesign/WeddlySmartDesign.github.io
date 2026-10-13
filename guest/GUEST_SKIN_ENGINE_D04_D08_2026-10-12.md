@@ -130,3 +130,5 @@ Interior PASS ×7; matriz 644/0; CI local OK.
 **v10.2 (2026-10-13)**: D10 · al terminar la portada, las golondrinas del vídeo tapaban la fecha, el lugar y la cuenta atrás. Sin tocar el vídeo, el bloque de texto sube y se compacta (nombres en una línea, tamaños en función del alto de pantalla); comprobado sobre el último fotograma a 412×732, 390×700 y 360×640.
 
 **v10.3 (2026-10-13)**: la interpolación de movimiento deformaba la iglesia al aparecer y la tapa del libro. Se rehace con fundido entre fotogramas (libro ×2,5, escena ×1,6; 12,2 s; textos a 6,6 s). El texto de portada baja un poco (6,5 svh) sin tocar las golondrinas en 412×732, 390×700 y 360×640.
+
+**v10.4 (2026-10-13)**: en el vídeo original la tapa gira hasta quedar de canto y desaparece, y al ralentizarlo se notaba. Se elimina el giro: el libro cerrado se funde despacio (1,2 s) en la escena que va apareciendo; el resto, con fundido ×1,6. Duración 10,7 s; textos a 5,6 s.
