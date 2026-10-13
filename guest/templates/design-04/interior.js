@@ -4,7 +4,7 @@ document.documentElement.classList.add('az');
 const el=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e};
 const reducedMotion=()=>typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 function seal(){const s=el('span','az-seal az-rv');const i=el('img');i.src='%%SEAL%%';i.alt='';s.setAttribute('aria-hidden','true');s.append(i);return s}
-function head(inner,kicker,title,first){if(!first)inner.append(seal());inner.append(el('p','az-kicker az-rv',kicker),el('h2','az-title az-rv',title))}
+function head(inner,kicker,title,first){if(!first)inner.append(el('span','az-gap'));inner.append(el('p','az-kicker az-rv',kicker),el('h2','az-title az-rv',title))}
 function img(p,cls,alt,h){const i=el('img',cls);i.src=p.src;i.alt=p.alt||alt;i.loading='lazy';i.dataset.fit=p.fit;i.style.objectPosition=p.fx+'% '+p.fy+'%';if(h&&p.fit!=='full')i.style.height=h+'px';return i}
 function links(list){const r=el('div','az-links');for(const [u,l] of list){const a=el('a','link',l);a.href=u;a.target='_blank';a.rel='noopener noreferrer';r.append(a)}return r}
 function scene(sec,show){sec.classList.toggle('invisible',!show);sec.replaceChildren();const inner=el('div','az-in');sec.append(inner);return inner}
@@ -24,9 +24,9 @@ function render(vm){
  // agenda: camino de azulejos (1–5) que se dan la vuelta al bajar; cada azulejo se puede tocar
  const M=vm.moments;sec=document.getElementById('agenda');inner=scene(sec,M.length>0);A=null;
  if(M.length){head(inner,'Para que no te pierdas nada','El programa',mark(sec));const path=el('div','az-path');path.setAttribute('role','group');path.setAttribute('aria-label','Momentos del día');const now=el('div','az-now');now.setAttribute('aria-live','polite');
-  const tiles=M.map((m,i)=>{const b=el('button','az-tile');b.type='button';b.setAttribute('aria-label',(m.time?m.time+' ':'')+m.label);b.append(el('span','f'),el('span','b',m.time||'·'));b.onclick=()=>{A.pick=i;A.pickY=scrollY;tick()};path.append(b);
+  const tiles=M.map((m,i)=>{const b=el('button','az-tile');b.type='button';b.setAttribute('aria-label',(m.time?m.time+' ':'')+m.label);b.append(el('span','f'),el('span','b'),el('span','t',m.time||''));b.onclick=()=>{A.pick=i;A.pickY=scrollY;tick()};path.append(b);
    const d=el('div');if(m.time)d.append(el('span','az-tm',m.time));if(m.label)d.append(el('span','az-lb',m.label));now.append(d);return {b,d}});
-  inner.append(path,now);if(M.length>1)inner.append(el('p','az-tap','Toca un azulejo para ver su momento'));A={path,tiles,n:M.length,pick:null,last:-1};
+  inner.append(path,now);A={path,tiles,n:M.length,pick:null,last:-1};
   let x0=null;now.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});now.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<40)return;const c=A.tiles.findIndex(t=>t.d.classList.contains('on'));A.pickY=scrollY;A.pick=Math.max(0,Math.min(A.n-1,c+(dx<0?1:-1)));tick()},{passive:true})}
  // detalles: contraventanas (1–4) que se abren
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openWin=null;

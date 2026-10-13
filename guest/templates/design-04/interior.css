@@ -30,13 +30,16 @@ html.az a.link{display:inline-flex;align-items:center;min-height:44px;padding:12
 html.az a.link::after{content:none}
 .az-dress{margin:22px auto 0;font-style:italic;color:#4d6086}
 /* agenda: camino de azulejos que se dan la vuelta */
-.az-path{display:flex;justify-content:center;gap:8px;margin:26px 0 6px;perspective:700px}
-.az-tile{position:relative;width:min(58px,calc((100vw - 92px)/5));aspect-ratio:1;border:0;padding:0;background:none;cursor:pointer;transform-style:preserve-3d;transition:transform 1.9s cubic-bezier(.45,.05,.25,1)}
+.az-path{display:flex;justify-content:center;gap:10px;margin:24px 0 46px;perspective:700px}
+.az-tile{position:relative;width:min(58px,calc((100vw - 92px)/5));aspect-ratio:1;border:0;padding:0;background:none;cursor:pointer;transform-style:preserve-3d;transition:translate .6s ease}
 .az-tile .f,.az-tile .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:2px;box-shadow:0 2px 6px rgba(20,40,90,.18)}
-.az-tile .f{background:url(%%TILE%%) center/cover}
-.az-tile .b{transform:rotateY(180deg);background:#23408a;color:#fbf8f2;display:grid;place-items:center;font:italic 500 15px/1 'Lora',Georgia,serif;box-shadow:inset 0 0 0 2px #23408a,inset 0 0 0 3px rgba(251,248,242,.55),0 2px 6px rgba(20,40,90,.2)}
-.az-tile.on{transform:rotateY(180deg)}
-.az-tile.cur .b{box-shadow:inset 0 0 0 2px #23408a,inset 0 0 0 3px #fbf8f2,0 6px 14px rgba(20,40,90,.35)}
+.az-tile .f{background:radial-gradient(ellipse at 35% 25%,#fffdf8,#efe7d8 75%);box-shadow:inset 0 0 0 1px rgba(35,64,138,.18),0 2px 6px rgba(20,40,90,.12)}
+.az-tile .b{transform:rotateY(180deg);background:url(%%TILE%%) center/cover}
+.az-tile .t{position:absolute;left:-6px;right:-6px;top:calc(100% + 8px);font:italic 400 14px/1 'Lora',Georgia,serif;color:#4d6086;opacity:.55;transition:opacity .6s,color .6s}
+.az-tile.on .t{opacity:.85}.az-tile.cur .t{opacity:1;color:#23408a}
+.az-tile.on .f{transform:rotateY(180deg)}.az-tile.on .b{transform:rotateY(360deg)}
+.az-tile .f,.az-tile .b{transition:transform 1.9s cubic-bezier(.45,.05,.25,1)}
+.az-tile.cur .b{box-shadow:0 8px 16px rgba(20,40,90,.28)}
 .az-tile.cur{translate:0 -4px}
 .az-tile:focus-visible{outline:2px solid #23408a;outline-offset:3px}
 .az-now{display:grid;margin-top:20px}
@@ -49,7 +52,7 @@ html.az a.link::after{content:none}
 .az-wins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px;max-width:330px;margin:14px auto 0}
 .az-win{border:0;background:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;color:inherit}
 .az-win.solo{grid-column:1/-1}
-.az-frame{position:relative;display:block;width:142px;aspect-ratio:388/374}
+.az-frame{position:relative;display:block;width:108px;aspect-ratio:388/374}
 .az-frame img{position:absolute;inset:0;width:100%;height:100%;max-width:none!important;transition:opacity .9s ease,transform 1.1s cubic-bezier(.3,.9,.25,1)}
 .az-frame .o{opacity:0;transform:scale(.97)}
 .az-win[aria-expanded=true] .az-frame .c{opacity:0;transform:scale(1.02)}
@@ -75,5 +78,7 @@ html.az #gallery-items img{flex:0 0 100%;width:100%!important;min-width:100%;max
 html.az .gallery-dot{width:42px;height:42px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer}
 html.az .gallery-dot::before{content:"";width:7px;height:7px;transform:rotate(45deg);background:rgba(35,64,138,.3)}
 html.az .gallery-dot[aria-current=true]::before{background:#23408a}
-@media(max-width:360px){.az-title{font-size:44px}.az-lb{font-size:34px}.az-v-name{font-size:30px}.az-frame{width:128px}}
+@media(max-width:360px){.az-title{font-size:44px}.az-lb{font-size:34px}.az-v-name{font-size:30px}.az-frame{width:98px}}
 @media(prefers-reduced-motion:reduce){.az-rv,.az-fade.az-rv{opacity:1;transform:none;filter:none;transition:none}.az-seal img{transform:none;transition:none}.az-tile,.az-frame img{transition:none}}
+
+.az-gap{display:block;height:34px}
