@@ -134,3 +134,5 @@ Interior PASS ×7; matriz 644/0; CI local OK.
 **v10.4 (2026-10-13)**: en el vídeo original la tapa gira hasta quedar de canto y desaparece, y al ralentizarlo se notaba. Se elimina el giro: el libro cerrado se funde despacio (1,2 s) en la escena que va apareciendo; el resto, con fundido ×1,6. Duración 10,7 s; textos a 5,6 s.
 
 **v10.5 (2026-10-13)**: el fundido libro→escena se ve peor; se vuelve a la apertura de v10.3. La tapa del vídeo original desaparece al quedar de canto; la solución limpia es generar un clip nuevo de la apertura.
+
+**v11 (2026-10-13)**: D08 · cuando empieza el vídeo de cierre (la caja se cierra), la melodía baja poco a poco hasta apagarse al mismo tiempo que la tapa; el botón ♪ queda en silencio y permite volver a activarla.

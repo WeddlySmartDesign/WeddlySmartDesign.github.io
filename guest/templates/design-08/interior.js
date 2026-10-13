@@ -79,6 +79,11 @@ function woodClick(){try{AC=AC||new (window.AudioContext||window.webkitAudioCont
  try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}}
 addEventListener('DOMContentLoaded',()=>{document.body.append(sb);const cover=document.getElementById('cover');
  const start=()=>{if(window.__GUEST_SUPPRESS_SOUND__)return;sb.classList.add('show');setSound(true);cover.removeEventListener('click',start)};cover.addEventListener('click',start);
- document.addEventListener('visibilitychange',()=>{if(document.hidden&&soundOn)music.pause();else if(!document.hidden&&soundOn)music.play().catch(()=>{})})});
+ document.addEventListener('visibilitychange',()=>{if(document.hidden&&soundOn)music.pause();else if(!document.hidden&&soundOn)music.play().catch(()=>{})});
+ // al cerrarse la caja en el vídeo final, la melodía se apaga a la vez que la tapa y queda en silencio
+ const xv=document.getElementById('closing-video');
+ if(xv)xv.addEventListener('play',()=>{if(!soundOn)return;const left=Math.max(1.5,((xv.duration||8)-(xv.currentTime||0))*.9),v0=music.volume,step=v0/(left*10);
+  soundOn=false;sb.setAttribute('aria-pressed','false');sb.setAttribute('aria-label','Activar música');clearInterval(fadeT);
+  fadeT=setInterval(()=>{music.volume=Math.max(0,music.volume-step);if(music.volume<=0){music.pause();clearInterval(fadeT)}},100)})});
 window.__GUEST_INTERIOR__={render};
 })();
