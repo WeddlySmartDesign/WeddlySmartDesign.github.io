@@ -10,8 +10,8 @@ html.lm [data-bg]{background:none!important;min-height:0!important;display:block
 .lm-p{font-size:20.5px;line-height:1.6;max-width:29ch;margin:0 auto;white-space:pre-line;overflow-wrap:anywhere}
 .lm-rv{opacity:0;transform:translateY(16px);transition:opacity 1.1s ease,transform 1.3s cubic-bezier(.2,.8,.2,1)}
 .lm-rv.in{opacity:1;transform:none}
-/* entre secciones: una ramita de limones pintada al óleo, quieta */
-.lm-bl{display:block;width:104px;height:auto;margin:0 auto 12px;max-width:none!important}
+/* entre secciones: un filete dorado fino con un punto, quieto */
+.lm-bl{display:block;width:120px;height:9px;margin:0 auto 18px;background:radial-gradient(circle,#c99a3c 0 2.5px,transparent 3px) center/9px 9px no-repeat,linear-gradient(90deg,transparent,rgba(168,116,31,.55) 40%,transparent 46%,transparent 54%,rgba(168,116,31,.55) 60%,transparent) center/100% 1px no-repeat}
 .lm-bl.lm-rv{transform:none;transition:opacity 2s ease}
 /* fotos fundidas con el óleo */
 .lm-fade{display:block;max-width:none!important;width:calc(100% + 60px);margin:20px -30px 0;height:300px;object-fit:cover;
@@ -53,13 +53,15 @@ html.lm a.link::after{content:none}
 .lm-wraps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 18px;max-width:320px;margin:14px auto 0}
 .lm-w{border:0;padding:0;background:none;cursor:pointer;color:inherit;display:flex;flex-direction:column;align-items:center;gap:10px}
 .lm-w.solo{grid-column:1/-1}
-.lm-branch{display:block;width:min(310px,100%);height:auto;margin:4px auto 6px;max-width:none!important}
-.lm-wraps{gap:6px 18px!important}
-.lm-w{min-height:64px;justify-content:center;gap:2px!important}
-.lm-w-no{font:400 30px/1 'Pinyon',cursive;color:#a8741f}
+.lm-wraps{gap:18px 18px!important}
+.lm-w{gap:8px!important}
+.lm-sprig{display:block;width:124px;height:100px;object-fit:contain;max-width:none!important;transform-origin:50% 60%;transform:rotate(var(--r,-4deg)) scaleX(var(--f,1));transition:transform 1.2s cubic-bezier(.3,1.3,.45,1),filter .8s}
+.lm-sprig{--r:-24deg}.lm-w:nth-child(2) .lm-sprig{--f:-1;--r:20deg}.lm-w:nth-child(3) .lm-sprig{--r:-14deg}.lm-w:nth-child(4) .lm-sprig{--f:-1;--r:26deg}
+.lm-w[aria-expanded=true] .lm-sprig{transform:rotate(calc(var(--r,-4deg) - 7deg)) scaleX(var(--f,1)) translateY(-3px);filter:drop-shadow(0 6px 8px rgba(86,61,75,.2))}
 .lm-w-lb{font:400 15.5px/1.2 'GaramondSC',Georgia,serif;letter-spacing:.16em;text-transform:lowercase;color:#563d4b;padding:6px 2px;border-bottom:1px solid transparent}
 .lm-w[aria-expanded=true] .lm-w-lb{border-bottom-color:#662f49}
 .lm-w:focus-visible{outline:2px solid #662f49;outline-offset:3px}
+@media(max-width:360px){.lm-sprig{width:110px;height:90px}}
 .lm-hint{font-style:italic;color:#775968;font-size:16.5px;margin:14px 0 0}
 .lm-tray{max-width:340px;margin:0 auto;overflow:hidden;height:0;transition:height .8s cubic-bezier(.2,.8,.2,1)}
 .lm-tray-in{margin-top:16px;padding:20px 20px 16px;text-align:center;background:radial-gradient(ellipse at 50% 0,rgba(251,226,124,.28),transparent 70%)}

@@ -105,3 +105,5 @@ A petición de la autora, versión alternativa de «Jardín de limoneros» para 
 Matriz con siete diseños (D04–D10): 644 comprobaciones, 0 fallos. Todo certification-pending, TEST, NO SALE.
 
 **v8.1 (2026-10-13)**: los limones aislados parecían manchas. design-09 usa ahora las dos ramas completas de la autora: la grande encabeza los detalles (títulos con numeral caligráfico que se abren al tocarlos) y la pequeña separa las secciones. Interior PASS.
+
+**v8.2 (2026-10-13)**: la rama grande era demasiado y se perdía el gesto de tocar algo. Cada detalle es ahora una ramita pintada pequeña (giradas como cortadas sueltas); al tocarla se mece y se abre su información. Entre secciones, solo un filete dorado con un punto. Interior PASS.
