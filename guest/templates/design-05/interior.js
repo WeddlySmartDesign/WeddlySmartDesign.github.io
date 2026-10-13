@@ -6,7 +6,7 @@ const el=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className
 const reducedMotion=()=>typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 const FAN='<svg class="ga-fan ga-rv" viewBox="0 0 120 44" aria-hidden="true"><path d="M60 42L10 42M60 42L110 42M60 42L22 16M60 42L98 16M60 42L42 6M60 42L78 6M60 42L60 2M30 42a30 30 0 0 1 60 0"/></svg>';
 const RULE='<svg class="ga-rule ga-rv" viewBox="0 0 150 12" aria-hidden="true"><path d="M2 6h58M90 6h58M75 1l5 5-5 5-5-5z"/></svg>';
-function head(inner,kicker,title,first){if(!first)inner.insertAdjacentHTML('beforeend',FAN);inner.append(el('p','ga-kicker ga-rv',kicker),el('h2','ga-title ga-rv',title));inner.insertAdjacentHTML('beforeend',RULE)}
+function head(inner,kicker,title,first){if(!first)inner.append(el('span','ga-gap'));const h=el('h2','ga-title ga-rv',title);h.dataset.text=title;inner.append(el('p','ga-kicker ga-rv',kicker),h)}
 function img(p,cls,alt,h){const i=el('img',cls);i.src=p.src;i.alt=p.alt||alt;i.loading='lazy';i.dataset.fit=p.fit;i.style.objectPosition=p.fx+'% '+p.fy+'%';if(h&&p.fit!=='full')i.style.height=h+'px';return i}
 function links(list){const r=el('div','ga-links');for(const [u,l] of list){const a=el('a','link',l);a.href=u;a.target='_blank';a.rel='noopener noreferrer';r.append(a)}return r}
 function scene(sec,show){sec.classList.toggle('invisible',!show);sec.replaceChildren();const inner=el('div','ga-in');sec.append(inner);return inner}
@@ -20,7 +20,7 @@ function render(vm){
  if(vm.story.show){head(inner,'Nuestra historia','Érase una vez…',mark(sec));if(vm.story.text)inner.append(el('p','ga-p ga-rv',vm.story.text));if(vm.story.photo)inner.append(img(vm.story.photo,'ga-fade ga-rv','Fotografía de la pareja'))}
  sec=document.getElementById('locations');inner=scene(sec,vm.venues.length>0);
  if(vm.venues.length){head(inner,'Nos vemos aquí','El gran día',mark(sec));if(vm.venuePhoto)inner.append(img(vm.venuePhoto,'ga-fade ga-rv','Fotografía del lugar',250));
-  for(const v of vm.venues){const a=el('div','ga-venue ga-rv');a.append(el('span','ga-v-k',v.label));a.append(el('div','ga-v-name',v.name));if(v.time)a.append(el('div','ga-v-time',v.time));if(v.address)a.append(el('div','ga-v-addr',v.address));if(v.links.length)a.append(links(v.links));inner.append(a)}
+  const places=el('div','ga-places ga-rv');vm.venues.forEach(v=>{const a=el('div','ga-venue');const info=el('div','ga-v-info');info.append(el('span','ga-v-k',v.label),el('div','ga-v-name',v.name));if(v.address)info.append(el('div','ga-v-addr',v.address));if(v.links.length)info.append(links(v.links));a.append(el('div','ga-v-time',v.time||''),info);places.append(a)});inner.append(places)
   if(vm.dress)inner.append(el('p','ga-dress ga-rv','Código de vestimenta: '+vm.dress))}
  // agenda: reloj déco; cada momento en su hora, la aguja avanza al bajar y cada marca se puede tocar
  const M=vm.moments;sec=document.getElementById('agenda');inner=scene(sec,M.length>0);A=null;
@@ -39,7 +39,7 @@ function render(vm){
  // detalles: tiques de guardarropa (1–4)
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openTk=null;
  if(D.length){head(inner,'Todo lo que necesitas saber','Los detalles',mark(sec));const tix=el('div','ga-tix ga-rv'),tray=el('div','ga-tray'),tin=el('div','ga-tray-in');tray.id='ga-tray';tray.append(tin);
-  D.forEach((x,i)=>{const b=el('button','ga-tk'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','ga-tray');b.append(el('span','ga-no','Nº 0'+(i+1)),el('span','ga-tl',x.title));
+  D.forEach((x,i)=>{const b=el('button','ga-tk'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','ga-tray');b.append(el('span','ga-no'),el('span','ga-tl',x.title));
    b.onclick=()=>{if(openTk===b){b.setAttribute('aria-expanded','false');openTk=null;tray.style.height='0px';return}openTk?.setAttribute('aria-expanded','false');openTk=b;b.setAttribute('aria-expanded','true');fill(tin,x);tray.style.height=(tin.offsetHeight+16)+'px'};tix.append(b)});
   inner.append(tix,el('p','ga-hint ga-rv',D.length>1?'Toca cada tique':'Toca el tique'),tray)}
  const G=vm.gallery;sec=document.getElementById('gallery');inner=scene(sec,G.length>0);

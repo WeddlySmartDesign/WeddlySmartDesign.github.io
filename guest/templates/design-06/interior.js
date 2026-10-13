@@ -4,7 +4,7 @@ document.documentElement.classList.add('iv');
 const SVG='http://www.w3.org/2000/svg';
 const el=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e};
 const reducedMotion=()=>typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-function head(inner,kicker,title,first){if(!first){const b=el('span','iv-bfly iv-rv');b.setAttribute('aria-hidden','true');inner.append(b)}inner.append(el('p','iv-kicker iv-rv',kicker),el('h2','iv-title iv-rv',title))}
+function head(inner,kicker,title,first){if(!first)inner.append(el('span','iv-gap'));const h=el('h2','iv-title iv-rv',title);h.dataset.text=title;inner.append(el('p','iv-kicker iv-rv',kicker),h)}
 function img(p,cls,alt,h){const i=el('img',cls);i.src=p.src;i.alt=p.alt||alt;i.loading='lazy';i.dataset.fit=p.fit;i.style.objectPosition=p.fx+'% '+p.fy+'%';if(h&&p.fit!=='full')i.style.height=h+'px';return i}
 function links(list){const r=el('div','iv-links');for(const [u,l] of list){const a=el('a','link',l);a.href=u;a.target='_blank';a.rel='noopener noreferrer';r.append(a)}return r}
 function scene(sec,show){sec.classList.toggle('invisible',!show);sec.replaceChildren();const inner=el('div','iv-in');sec.append(inner);return inner}
@@ -18,7 +18,7 @@ function render(vm){
  if(vm.story.show){head(inner,'Nuestra historia','Érase una vez…',mark(sec));if(vm.story.text)inner.append(el('p','iv-p iv-rv',vm.story.text));if(vm.story.photo)inner.append(img(vm.story.photo,'iv-fade iv-rv','Fotografía de la pareja'))}
  sec=document.getElementById('locations');inner=scene(sec,vm.venues.length>0);
  if(vm.venues.length){head(inner,'Nos vemos aquí','El gran día',mark(sec));if(vm.venuePhoto)inner.append(img(vm.venuePhoto,'iv-fade iv-rv','Fotografía del lugar',250));
-  for(const v of vm.venues){const a=el('div','iv-venue iv-rv');a.append(el('span','iv-v-k',v.label));a.append(el('div','iv-v-name',v.name));if(v.time)a.append(el('div','iv-v-time',v.time));if(v.address)a.append(el('div','iv-v-addr',v.address));if(v.links.length)a.append(links(v.links));inner.append(a)}
+  const places=el('div','iv-places iv-rv');vm.venues.forEach(v=>{const a=el('div','iv-venue');const info=el('div','iv-v-info');info.append(el('span','iv-v-k',v.label),el('div','iv-v-name',v.name));if(v.address)info.append(el('div','iv-v-addr',v.address));if(v.links.length)info.append(links(v.links));a.append(el('div','iv-v-time',v.time||''),info);places.append(a)});inner.append(places)
   if(vm.dress)inner.append(el('p','iv-dress iv-rv','Código de vestimenta: '+vm.dress))}
  // agenda: el tallo crece al bajar y despliega una hoja por momento; cada hoja se puede tocar
  const M=vm.moments;sec=document.getElementById('agenda');inner=scene(sec,M.length>0);A=null;
@@ -36,7 +36,7 @@ function render(vm){
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openEnv=null;
  if(D.length){head(inner,'Todo lo que necesitas saber','Los detalles',mark(sec));const envs=el('div','iv-envs iv-rv'),tray=el('div','iv-tray'),tin=el('div','iv-tray-in');tray.id='iv-tray';tray.append(tin);
   D.forEach((x,i)=>{const b=el('button','iv-env'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','iv-tray');
-   const pk=el('span','iv-pk');pk.append(el('span','iv-flap'),el('b',null,'Nº 0'+(i+1)),el('s'));b.append(pk,el('span','iv-env-lb',x.title));
+   const pk=el('span','iv-pk');pk.append(el('span','iv-flap'),el('s'));b.append(pk,el('span','iv-env-lb',x.title));
    b.onclick=()=>{if(openEnv===b){b.setAttribute('aria-expanded','false');openEnv=null;tray.style.height='0px';return}openEnv?.setAttribute('aria-expanded','false');openEnv=b;b.setAttribute('aria-expanded','true');fill(tin,x);tray.style.height=(tin.offsetHeight+16)+'px'};envs.append(b)});
   inner.append(envs,el('p','iv-hint iv-rv',D.length>1?'Abre cada sobre':'Abre el sobre'),tray)}
  const G=vm.gallery;sec=document.getElementById('gallery');inner=scene(sec,G.length>0);

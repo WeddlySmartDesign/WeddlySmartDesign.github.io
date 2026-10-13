@@ -80,7 +80,10 @@
    "BANDBOT": "skin-assets/band-bot.jpg",
    "PETAL": "skin-assets/motif.webp",
    "VELA": "skin-assets/vela.webp",
-   "VELAOFF": "skin-assets/vela-off.webp"
+   "VELAOFF": "skin-assets/vela-off.webp",
+   "WMASK": "skin-assets/wash-mask.png",
+   "AGUADA": "skin-assets/aguada.webp",
+   "HINTWASH": "skin-assets/hint-wash.webp"
   }
  }
 }

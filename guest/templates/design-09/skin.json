@@ -67,7 +67,9 @@
    "BANDBOT": "skin-assets/band-bot.jpg",
    "FLOR1": "skin-assets/flor1.webp",
    "FLOR2": "skin-assets/flor2.webp",
-   "FLOR3": "skin-assets/flor3.webp"
+   "FLOR3": "skin-assets/flor3.webp",
+   "WMASK": "skin-assets/wash-mask.png",
+   "AGUADA": "skin-assets/aguada.webp"
   }
  }
 }

@@ -88,3 +88,7 @@ html.cj .gallery-dot[aria-current=true]::before{background:#9a7134;transform:sca
 .cj-snd.show{display:grid}.cj-snd[aria-pressed=false]{opacity:.7;text-decoration:line-through}
 @media(max-width:360px){.cj-title{font-size:46px}.cj-lb{font-size:34px}.cj-act-name{font-size:23px}}
 @media(prefers-reduced-motion:reduce){.cj-rv,.cj-fade.cj-rv{opacity:1;transform:none;filter:none;transition:none}.cj-bar path{stroke-dashoffset:0}.cj-bar ellipse{opacity:.8}}
+/* === repaso v14 === fotos con borde de acuarela y velo */
+.cj-fade{width:calc(100% + 40px)!important;margin:22px -20px 0!important;-webkit-mask:url(%%WMASK%%) center/100% 100% no-repeat!important;mask:url(%%WMASK%%) center/100% 100% no-repeat!important}
+.cj-fade.cj-rv.in,#gallery-items .cj-fade{filter:sepia(.25) saturate(.8) brightness(1.02) contrast(.95)}
+html.cj #gallery-items{width:calc(100% + 40px);margin:8px -20px 0}

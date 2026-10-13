@@ -64,7 +64,9 @@
    "PAPER": "skin-assets/paper.jpg",
    "BANDTOP": "skin-assets/band-top.jpg",
    "BANDBOT": "skin-assets/band-bot.jpg",
-   "BFLY": "skin-assets/butterfly.webp"
+   "BFLY": "skin-assets/butterfly.webp",
+   "WMASK": "skin-assets/wash-mask.png",
+   "AGUADA": "skin-assets/aguada.webp"
   }
  }
 }

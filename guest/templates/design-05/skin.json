@@ -67,7 +67,9 @@
   "assets": {
    "PAPER": "skin-assets/paper.jpg",
    "BANDTOP": "skin-assets/band-top.jpg",
-   "BANDBOT": "skin-assets/band-bot.jpg"
+   "BANDBOT": "skin-assets/band-bot.jpg",
+   "WMASK": "skin-assets/wash-mask.png",
+   "AGUADA": "skin-assets/aguada.webp"
   }
  }
 }

@@ -67,7 +67,9 @@
    "BANDBOT": "skin-assets/band-bot.jpg",
    "SOL": "skin-assets/sol.webp",
    "NUBE1": "skin-assets/nube1.webp",
-   "NUBE2": "skin-assets/nube2.webp"
+   "NUBE2": "skin-assets/nube2.webp",
+   "WMASK": "skin-assets/wash-mask.png",
+   "AGUADA": "skin-assets/aguada.webp"
   }
  }
 }

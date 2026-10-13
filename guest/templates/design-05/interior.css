@@ -83,3 +83,40 @@ html.ga .gallery-dot::before{content:"";width:7px;height:7px;transform:rotate(45
 html.ga .gallery-dot[aria-current=true]::before{background:#a8822f}
 @media(max-width:360px){.ga-title{font-size:46px}.ga-lb{font-size:35px}.ga-v-name{font-size:25px}}
 @media(prefers-reduced-motion:reduce){.ga-rv,.ga-fade.ga-rv{opacity:1;transform:none;filter:none;transition:none}.ga-fan path{stroke-dashoffset:0}.ga-hand{transition:none}}
+/* === repaso v14 === tipografía de la portada, lugar tipo carta sobre aguada, fotos con borde de acuarela */
+html.ga [data-bg]{font:400 20px/1.5 'Garamond',Georgia,serif;color:#2d2618}
+.ga-kicker{font:400 15.5px/1.2 'GaramondSC',Georgia,serif!important;letter-spacing:.16em!important;text-transform:lowercase!important;color:#6b5a3e!important}
+.ga-title{font:400 44px/1.3 'Pinyon',cursive!important;letter-spacing:0!important;color:#8a6a24!important;background:none!important;-webkit-text-fill-color:currentColor;margin:0 0 14px!important;padding:0 .1em .1em!important;white-space:normal}
+.ga-title::after{content:none!important}
+.ga-gap{display:block;height:34px}
+.ga-lb{font:italic 400 30px/1.2 'Garamond',Georgia,serif!important;color:#2d2618!important;letter-spacing:0!important}
+.ga-tray-in h3{font:italic 400 28px/1.2 'Garamond',Georgia,serif!important;-webkit-text-fill-color:currentColor;background:none!important}
+.ga-tray-in h3{color:inherit}
+.ga-places{position:relative;max-width:360px;margin:26px auto 0;padding:34px 18px 30px}
+.ga-places::before{content:"";position:absolute;inset:0 -6px;background:url(%%AGUADA%%) center/100% 100% no-repeat;pointer-events:none}
+.ga-venue{position:relative;display:grid;grid-template-columns:76px 1px 1fr;gap:0 16px;align-items:start;text-align:left;padding:12px 0!important;background:none!important}
+.ga-venue::before{content:none!important}
+.ga-venue::after{content:"";grid-column:2;grid-row:1;width:1px;height:100%;background:linear-gradient(transparent,#8a6a2488 20%,#8a6a2488 80%,transparent)}
+.ga-v-time{grid-column:1;grid-row:1;text-align:right;font:400 26px/1.1 'Garamond',Georgia,serif!important;letter-spacing:.02em!important;color:#8a6a24!important;padding-top:20px}
+.ga-v-info{grid-column:3;grid-row:1}
+.ga-v-k{display:block;font:400 15px/1 'GaramondSC',Georgia,serif!important;letter-spacing:.16em!important;text-transform:lowercase!important;color:#6b5a3e!important}
+.ga-v-name{font:italic 400 25px/1.2 'Garamond',Georgia,serif!important;color:#2d2618!important;margin:6px 0 2px!important;overflow-wrap:anywhere}
+.ga-v-addr{color:#6b5a3e;font-size:17px;font-style:normal;margin:0;overflow-wrap:anywhere}
+.ga-places .ga-links{justify-content:flex-start;gap:0 18px}
+.ga-fade{width:calc(100% + 40px)!important;margin:22px -20px 0!important;-webkit-mask:url(%%WMASK%%) center/100% 100% no-repeat!important;mask:url(%%WMASK%%) center/100% 100% no-repeat!important}
+.ga-fade.ga-rv.in,#gallery-items .ga-fade{filter:sepia(.26) saturate(.8) brightness(1.03) contrast(.93)}
+html.ga #gallery-items{width:calc(100% + 40px);margin:8px -20px 0}
+@media(max-width:360px){.ga-title{font-size:40px!important}.ga-lb{font-size:26px!important}.ga-v-name{font-size:22px!important}.ga-venue{grid-template-columns:62px 1px 1fr;gap:0 12px}.ga-v-time{font-size:22px!important}}
+html.ga a.link{font:400 15px/1 'GaramondSC',Georgia,serif!important;letter-spacing:.16em!important;text-transform:lowercase!important;font-style:normal!important}
+
+.ga-no{display:block;width:7px;height:7px;transform:rotate(45deg);box-shadow:inset 0 0 0 1px #a8822f}
+.ga-tk[aria-expanded=true] .ga-no{background:#d2b06a;box-shadow:none}
+.ga-tl{font:400 15px/1.2 'GaramondSC',Georgia,serif!important;letter-spacing:.14em!important;text-transform:lowercase!important}
+.ga-hint{font:italic 400 16px 'Garamond',Georgia,serif}
+
+.ga-now{position:relative;padding:14px 0 10px}
+.ga-now::before{content:"";position:absolute;inset:-6px 6%;background:url(%%AGUADA%%) center/100% 100% no-repeat;opacity:.6;pointer-events:none;z-index:0}
+.ga-now>*{position:relative;z-index:1}
+
+.ga-tm{font:400 22px/1 'Garamond',Georgia,serif!important;letter-spacing:.06em!important}
+.ga-tt span{font:400 14px/1.4 'GaramondSC',Georgia,serif!important;letter-spacing:.14em!important;text-transform:lowercase!important}.ga-tt b{font:400 26px/1.1 'Garamond',Georgia,serif!important}

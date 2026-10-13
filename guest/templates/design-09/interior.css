@@ -86,3 +86,20 @@ html.lm .gallery-dot::before{content:"";width:9px;height:7px;border-radius:50%;b
 html.lm .gallery-dot[aria-current=true]::before{background:#e2b444}
 @media(max-width:360px){.lm-title{font-size:50px}.lm-lb{font-size:39px}.lm-v-name{font-size:34px}}
 @media(prefers-reduced-motion:reduce){.lm-rv,.lm-fade.lm-rv{opacity:1;transform:none;filter:none;transition:none}.lm-bl{opacity:1}.lm-sun}
+/* === repaso v14 === fotos con borde de acuarela y velo */
+.lm-fade{width:calc(100% + 40px)!important;margin:22px -20px 0!important;-webkit-mask:url(%%WMASK%%) center/100% 100% no-repeat!important;mask:url(%%WMASK%%) center/100% 100% no-repeat!important}
+.lm-fade.lm-rv.in,#gallery-items .lm-fade{filter:sepia(.18) saturate(.84) brightness(1.03) contrast(.94)}
+html.lm #gallery-items{width:calc(100% + 40px);margin:8px -20px 0}
+
+.lm-places{position:relative;max-width:360px;margin:26px auto 0;padding:34px 18px 30px}
+.lm-places::before{content:"";position:absolute;inset:0 -6px;background:url(%%AGUADA%%) center/100% 100% no-repeat;pointer-events:none}
+.lm-venue{position:relative;display:grid;grid-template-columns:76px 1px 1fr;gap:0 16px;align-items:start;text-align:left;padding:12px 0!important;background:none!important}
+.lm-venue::before{content:none!important}
+.lm-venue::after{content:"";grid-column:2;grid-row:1;width:1px;height:100%;background:linear-gradient(transparent,#662f4988 20%,#662f4988 80%,transparent)}
+.lm-v-time{grid-column:1;grid-row:1;text-align:right;font:400 26px/1.1 'Garamond',Georgia,serif!important;letter-spacing:.02em!important;color:#662f49!important;padding-top:20px;margin:0!important}
+.lm-v-info{grid-column:3;grid-row:1}
+.lm-v-k{display:block}
+.lm-v-name{font:italic 400 25px/1.2 'Garamond',Georgia,serif!important;color:#563d4b!important;margin:6px 0 2px!important;overflow-wrap:anywhere}
+.lm-v-addr{color:#775968;font-size:17px;font-style:normal;margin:0;overflow-wrap:anywhere}
+.lm-places .lm-links{justify-content:flex-start;gap:0 18px}
+@media(max-width:360px){.lm-v-name{font-size:22px!important}.lm-venue{grid-template-columns:62px 1px 1fr;gap:0 12px}.lm-v-time{font-size:22px!important}}

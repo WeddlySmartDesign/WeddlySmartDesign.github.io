@@ -22,7 +22,7 @@ function render(vm){
  if(vm.story.show){head(inner,'Nuestra historia','Érase una vez…',mark(sec));if(vm.story.text)inner.append(el('p','cu-p cu-rv',vm.story.text));if(vm.story.photo)inner.append(img(vm.story.photo,'cu-fade cu-rv','Fotografía de la pareja'))}
  sec=document.getElementById('locations');inner=scene(sec,vm.venues.length>0);
  if(vm.venues.length){head(inner,'Nos vemos aquí','El gran día',mark(sec));if(vm.venuePhoto)inner.append(img(vm.venuePhoto,'cu-fade cu-rv','Fotografía del lugar',250));
-  for(const v of vm.venues){const a=el('div','cu-venue cu-rv');a.append(el('span','cu-v-k',v.label));a.append(el('div','cu-v-name',v.name));if(v.time)a.append(el('div','cu-v-time',v.time));if(v.address)a.append(el('div','cu-v-addr',v.address));if(v.links.length)a.append(links(v.links));inner.append(a)}
+  const places=el('div','cu-places cu-rv');vm.venues.forEach(v=>{const a=el('div','cu-venue');const info=el('div','cu-v-info');info.append(el('span','cu-v-k',v.label),el('div','cu-v-name',v.name));if(v.address)info.append(el('div','cu-v-addr',v.address));if(v.links.length)info.append(links(v.links));a.append(el('div','cu-v-time',v.time||''),info);places.append(a)});inner.append(places)
   if(vm.dress)inner.append(el('p','cu-dress cu-rv','Código de vestimenta: '+vm.dress))}
  // agenda: paisaje de papel; cada momento es una banderita en la colina y el globo viaja hasta la del momento en curso
  const M=vm.moments;sec=document.getElementById('agenda');inner=scene(sec,M.length>0);A=null;

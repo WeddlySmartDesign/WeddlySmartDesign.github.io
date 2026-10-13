@@ -159,3 +159,10 @@ Interior PASS, matriz 644/0.
 **v13.2 (2026-10-13)**: D04 · fuera el trazo bajo los títulos. La aguada del lugar se repite en dosis mínimas solo detrás del momento en curso del programa y de la información abierta de los detalles. Vuelve «Toca un azulejo para ver su momento» y las horas del friso suben a 17 px. La autora da el diseño por casi listo.
 
 **v13.3 (2026-10-13)**: D04 · los nombres aparecían a los 3,3 s y tapaban las palomas; ahora a los 8,6 s, cuando terminan su vuelo. El cierre usa `cierre-sin-texto.mp4` de la entrega (sin «Os esperamos» en la vela, que se salía de ella).
+
+## Revisión v14 (2026-10-13) · repaso de los demás con los criterios de Azulejo
+La autora da Azulejo por terminado y pide repasar el resto con lo aprendido: serenidad, la letra de la portada en el interior, no repetir elementos, el lugar con algo más que texto pero elegante, fotos integradas y legibilidad.
+- **Gala, Invernadero, Reflejo**: títulos en Pinyon 44 px, texto Garamond, etiquetas y enlaces en versalitas; fuera abanicos, mariposas y pétalos entre secciones (solo aire) y los filetes laterales del papel; lugar en filas tipo carta (hora · filete · sede) sobre aguada con textura real de acuarela teñida del color del diseño; fotos con borde de acuarela y velo; detalles sin «Nº 0x» ni numerales; toque mínimo de aguada tras el momento en curso. Reflejo: «Toca para abrir» en tinta sobre mancha marfil y sin reflejo en los títulos.
+- **Caja de música**: solo fotos con borde de acuarela y velo cálido (su programa de concierto se mantiene).
+- **Limoneros y Cuento**: lugar tipo carta sobre aguada en su color y fotos con borde de acuarela; separadores aprobados (filete con punto, sol de papel) se mantienen.
+Interior PASS en los siete; matriz 644/0; CI local OK.

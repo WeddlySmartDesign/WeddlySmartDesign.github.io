@@ -3,7 +3,7 @@
 document.documentElement.classList.add('rf');
 const el=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e};
 const reducedMotion=()=>typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-function head(inner,kicker,title,first){if(!first){const b=el('span','rf-drop rf-rv');b.setAttribute('aria-hidden','true');b.append(el('i'));inner.append(b)}const h=el('h2','rf-title rf-rv',title);h.dataset.text=title;inner.append(el('p','rf-kicker rf-rv',kicker),h)}
+function head(inner,kicker,title,first){if(!first)inner.append(el('span','rf-gap'));const h=el('h2','rf-title rf-rv',title);h.dataset.text=title;inner.append(el('p','rf-kicker rf-rv',kicker),h)}
 function img(p,cls,alt,h){const i=el('img',cls);i.src=p.src;i.alt=p.alt||alt;i.loading='lazy';i.dataset.fit=p.fit;i.style.objectPosition=p.fx+'% '+p.fy+'%';if(h&&p.fit!=='full')i.style.height=h+'px';return i}
 function links(list){const r=el('div','rf-links');for(const [u,l] of list){const a=el('a','link',l);a.href=u;a.target='_blank';a.rel='noopener noreferrer';r.append(a)}return r}
 function scene(sec,show){sec.classList.toggle('invisible',!show);sec.replaceChildren();const inner=el('div','rf-in');sec.append(inner);return inner}
@@ -16,7 +16,7 @@ function render(vm){
  if(vm.story.show){head(inner,'Nuestra historia','Érase una vez…',mark(sec));if(vm.story.text)inner.append(el('p','rf-p rf-rv',vm.story.text));if(vm.story.photo)inner.append(img(vm.story.photo,'rf-fade rf-rv','Fotografía de la pareja'))}
  sec=document.getElementById('locations');inner=scene(sec,vm.venues.length>0);
  if(vm.venues.length){head(inner,'Nos vemos aquí','El gran día',mark(sec));if(vm.venuePhoto)inner.append(img(vm.venuePhoto,'rf-fade rf-rv','Fotografía del lugar',250));
-  for(const v of vm.venues){const a=el('div','rf-venue rf-rv');a.append(el('span','rf-v-k',v.label));a.append(el('div','rf-v-name',v.name));if(v.time)a.append(el('div','rf-v-time',v.time));if(v.address)a.append(el('div','rf-v-addr',v.address));if(v.links.length)a.append(links(v.links));inner.append(a)}
+  const places=el('div','rf-places rf-rv');vm.venues.forEach(v=>{const a=el('div','rf-venue');const info=el('div','rf-v-info');info.append(el('span','rf-v-k',v.label),el('div','rf-v-name',v.name));if(v.address)info.append(el('div','rf-v-addr',v.address));if(v.links.length)info.append(links(v.links));a.append(el('div','rf-v-time',v.time||''),info);places.append(a)});inner.append(places)
   if(vm.dress)inner.append(el('p','rf-dress rf-rv','Código de vestimenta: '+vm.dress))}
  // agenda: velas flotantes (1–5) que se encienden al bajar y se reflejan en el agua; cada vela se puede tocar
  const M=vm.moments;sec=document.getElementById('agenda');inner=scene(sec,M.length>0);A=null;
@@ -31,7 +31,7 @@ function render(vm){
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openEnv=null;
  if(D.length){head(inner,'Todo lo que necesitas saber','Los detalles',mark(sec));const envs=el('div','rf-mirrors rf-rv'),tray=el('div','rf-tray'),tin=el('div','rf-tray-in');tray.id='rf-tray';tray.append(tin);
   D.forEach((x,i)=>{const b=el('button','rf-mr'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','rf-tray');
-   const gl=el('span','rf-gl');gl.append(el('b',null,['I','II','III','IV'][i]||String(i+1)));b.append(gl,el('span','rf-mr-lb',x.title));
+   const gl=el('span','rf-gl');b.append(gl,el('span','rf-mr-lb',x.title));
    b.onclick=()=>{if(openEnv===b){b.setAttribute('aria-expanded','false');openEnv=null;tray.style.height='0px';return}openEnv?.setAttribute('aria-expanded','false');openEnv=b;b.setAttribute('aria-expanded','true');fill(tin,x);tray.style.height=(tin.offsetHeight+16)+'px'};envs.append(b)});
   inner.append(envs,el('p','rf-hint rf-rv',D.length>1?'Toca cada espejo':'Toca el espejo'),tray)}
  const G=vm.gallery;sec=document.getElementById('gallery');inner=scene(sec,G.length>0);

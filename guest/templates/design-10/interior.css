@@ -86,3 +86,21 @@ html.cu .gallery-dot[aria-current=true]::before{background:#b5684a;box-shadow:no
 
 /* portada: textos más arriba y compactos para no coincidir con las golondrinas del final del vídeo */
 #cover .cover-text{top:max(6.5svh,calc(env(safe-area-inset-top) + 30px))!important}#cover .cover-tag{margin-bottom:2px}#cover .cover-names{font-size:min(52px,7.2svh,13vw);line-height:1.12}#cover .cover-names span{display:inline}#cover .cover-names .amp{display:inline;font-size:.46em;margin:0 .22em}#cover .cover-date{margin-top:6px}#cover .cover-place{margin-top:2px}#cover .countdown{margin-top:4px}
+/* === repaso v14 === fotos con borde de acuarela y velo */
+.cu-fade{width:calc(100% + 40px)!important;margin:22px -20px 0!important;-webkit-mask:url(%%WMASK%%) center/100% 100% no-repeat!important;mask:url(%%WMASK%%) center/100% 100% no-repeat!important}
+.cu-fade.cu-rv.in,#gallery-items .cu-fade{filter:sepia(.1) saturate(.82) brightness(1.04) contrast(.93)}
+html.cu #gallery-items{width:calc(100% + 40px);margin:8px -20px 0}
+
+.cu-places{position:relative;max-width:360px;margin:26px auto 0;padding:34px 18px 30px}
+.cu-places::before{content:"";position:absolute;inset:0 -6px;background:url(%%AGUADA%%) center/100% 100% no-repeat;pointer-events:none}
+.cu-venue{position:relative;display:grid;grid-template-columns:76px 1px 1fr;gap:0 16px;align-items:start;text-align:left;padding:12px 0!important;background:none!important}
+.cu-venue::before{content:none!important}
+.cu-venue::after{content:"";grid-column:2;grid-row:1;width:1px;height:100%;background:linear-gradient(transparent,#b5684a88 20%,#b5684a88 80%,transparent)}
+.cu-v-time{grid-column:1;grid-row:1;text-align:right;font:400 26px/1.1 'Bonum',Georgia,serif!important;letter-spacing:.02em!important;color:#b5684a!important;padding-top:20px;margin:0!important}
+.cu-v-info{grid-column:3;grid-row:1}
+.cu-v-k{display:block}
+.cu-v-name{font:italic 400 25px/1.2 'Bonum',Georgia,serif!important;color:#2f3b66!important;margin:6px 0 2px!important;overflow-wrap:anywhere}
+.cu-v-addr{color:#5d6a8a;font-size:17px;font-style:normal;margin:0;overflow-wrap:anywhere}
+.cu-places .cu-links{justify-content:flex-start;gap:0 18px}
+@media(max-width:360px){.cu-v-name{font-size:22px!important}.cu-venue{grid-template-columns:62px 1px 1fr;gap:0 12px}.cu-v-time{font-size:22px!important}}
+.cu-v-name{font-size:21px!important}.cu-venue{grid-template-columns:70px 1px 1fr!important;gap:0 14px!important}
