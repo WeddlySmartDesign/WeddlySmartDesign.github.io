@@ -140,3 +140,16 @@ main>[data-bg].ga-night{background:linear-gradient(#f4ede1 0,#f4ede1 30px,#18223
 .ga-night .ga-places::before{background:linear-gradient(160deg,#fffcf4,#f6eedd)!important}
 main>[data-bg].ga-night .ga-in{padding-top:120px}
 html.ga #closing{margin-top:-1px}
+/* contraste: dorados más profundos sobre marfil; la noche llega antes del título */
+.ga-kicker,.ga-v-k{font-size:11.5px!important;color:#6e5016!important;font-weight:400}
+html.ga a.link{font-size:11.5px!important;color:#6e5016!important;border-bottom-color:rgba(110,80,22,.55)!important}
+.ga-title{color:#7a5a1a!important}
+.ga-v-time{color:#6e5016!important}.ga-v-addr,.ga-dress,.ga-hint,.ga-tap{color:#4f412a!important}
+.ga-p,.ga-v-name,.ga-lb{color:#2d2618!important}
+.ga-tl{color:#2d2618}.ga-tm{color:#6e5016!important}
+main>[data-bg].ga-night{background:linear-gradient(#f4ede1 0,#f4ede1 10px,#1a2443 170px,#0e1630 100%)!important}
+main>[data-bg].ga-night .ga-in{padding-top:190px!important}
+.ga-night .ga-title{color:#ebcd86!important}.ga-night .ga-kicker{color:#e2c27a!important}
+.ga-night .ga-p,.ga-night .ga-hint,.ga-night .ga-tap,.ga-night .ga-dress{color:#f3e8cf!important}
+.ga-night .ga-places .ga-v-k{color:#6e5016!important}
+main>[data-bg].ga-night{background:linear-gradient(#f4ede1 0,#e6e0d6 30px,#b9b6b4 70px,#6f7488 115px,#2f3856 160px,#18223f 200px,#0e1630 100%)!important}
