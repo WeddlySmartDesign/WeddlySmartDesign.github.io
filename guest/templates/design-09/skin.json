@@ -51,7 +51,7 @@
  },
  "mediaSource": "Entrega «Jardín de limoneros» (vídeos y fondos tomados en solo lectura de design-03; design-03 no se modifica)",
  "fx": {},
- "motif": "skin-assets/branch-b.webp",
+ "motif": "skin-assets/flor1.webp",
  "motifIdle": "",
  "layout": "limon",
  "fonts": [
@@ -65,8 +65,9 @@
    "TEX": "skin-assets/texture.jpg",
    "BANDTOP": "skin-assets/band-top.jpg",
    "BANDBOT": "skin-assets/band-bot.jpg",
-   "BRANCHA": "skin-assets/branch-a.webp",
-   "BRANCHB": "skin-assets/branch-b.webp"
+   "FLOR1": "skin-assets/flor1.webp",
+   "FLOR2": "skin-assets/flor2.webp",
+   "FLOR3": "skin-assets/flor3.webp"
   }
  }
 }

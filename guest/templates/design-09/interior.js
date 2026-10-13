@@ -8,6 +8,7 @@ function head(inner,kicker,title,first){if(!first){const b=el('span','lm-bl lm-r
 function img(p,cls,alt,h){const i=el('img',cls);i.src=p.src;i.alt=p.alt||alt;i.loading='lazy';i.dataset.fit=p.fit;i.style.objectPosition=p.fx+'% '+p.fy+'%';if(h&&p.fit!=='full')i.style.height=h+'px';return i}
 function links(list){const r=el('div','lm-links');for(const [u,l] of list){const a=el('a','link',l);a.href=u;a.target='_blank';a.rel='noopener noreferrer';r.append(a)}return r}
 function scene(sec,show){sec.classList.toggle('invisible',!show);sec.replaceChildren();const inner=el('div','lm-in');sec.append(inner);return inner}
+const FLORES=['%%FLOR1%%','%%FLOR2%%','%%FLOR3%%'];
 const ARC='M16 118 Q 170 -34 324 118';
 let A=null,openEnv=null,io=null;
 function render(vm){
@@ -32,11 +33,11 @@ function render(vm){
    const d=el('div');if(m.time)d.append(el('span','lm-tm',m.time));if(m.label)d.append(el('span','lm-lb',m.label));now.append(d);return {b,d,f,x:pt.x/340*100,y:pt.y/150*100}});
   inner.append(sky,now);if(M.length>1)inner.append(el('p','lm-tap','Toca una marca del camino del sol'));A={stem:sky,sun,leaves,n:M.length,pick:null};
   let x0=null;now.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});now.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<40)return;const c=A.leaves.findIndex(t=>t.d.classList.contains('on'));A.pick=Math.max(0,Math.min(A.n-1,c+(dx<0?1:-1)));A.pickY=scrollY;tick()},{passive:true})}
- // detalles: ramitas de limón pintadas (1–4); al tocar una se mece y se abre su información
+ // detalles: sobres cerrados con lacre marfil y una flor de buganvilla prensada (1–4); al tocarlo el lacre se gira y se abre su información
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openEnv=null;
  if(D.length){head(inner,'Todo lo que necesitas saber','Los detalles',mark(sec));const envs=el('div','lm-wraps lm-rv'),tray=el('div','lm-tray'),tin=el('div','lm-tray-in');tray.id='lm-tray';tray.append(tin);
   D.forEach((x,i)=>{const b=el('button','lm-w'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','lm-tray');
-   const sp=el('img','lm-sprig');sp.src=i%2?'%%BRANCHA%%':'%%BRANCHB%%';sp.alt='';sp.setAttribute('aria-hidden','true');b.append(sp,el('span','lm-w-lb',x.title));
+   const env=el('span','lm-env');env.setAttribute('aria-hidden','true');const seal=el('span','lm-seal');const fl=el('img');fl.src=FLORES[i%FLORES.length];fl.alt='';seal.append(fl);env.append(seal);b.append(env,el('span','lm-w-lb',x.title));
    b.onclick=()=>{if(openEnv===b){b.setAttribute('aria-expanded','false');openEnv=null;tray.style.height='0px';return}openEnv?.setAttribute('aria-expanded','false');openEnv=b;b.setAttribute('aria-expanded','true');fill(tin,x);tray.style.height=(tin.offsetHeight+16)+'px'};envs.append(b)});
   inner.append(envs,el('p','lm-hint lm-rv',D.length>1?'Toca cada uno para verlo':'Tócalo para verlo'),tray)}
  const G=vm.gallery;sec=document.getElementById('gallery');inner=scene(sec,G.length>0);

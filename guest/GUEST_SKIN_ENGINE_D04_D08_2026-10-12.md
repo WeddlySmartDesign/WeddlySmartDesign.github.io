@@ -107,3 +107,5 @@ Matriz con siete diseños (D04–D10): 644 comprobaciones, 0 fallos. Todo certif
 **v8.1 (2026-10-13)**: los limones aislados parecían manchas. design-09 usa ahora las dos ramas completas de la autora: la grande encabeza los detalles (títulos con numeral caligráfico que se abren al tocarlos) y la pequeña separa las secciones. Interior PASS.
 
 **v8.2 (2026-10-13)**: la rama grande era demasiado y se perdía el gesto de tocar algo. Cada detalle es ahora una ramita pintada pequeña (giradas como cortadas sueltas); al tocarla se mece y se abre su información. Entre secciones, solo un filete dorado con un punto. Interior PASS.
+
+**v8.3 (2026-10-13)**: tras comparar opciones, la autora elige para design-09 sobres cerrados con lacre marfil y una flor de buganvilla prensada (de sus ilustraciones al óleo, enlaza con la buganvilla de la cancela de la portada). Al tocarlo, el sobre se eleva, el lacre gira y se abre la información. Regla anotada por la autora: ningún adorno debe marcar el inicio de una sección, porque los fondos están pensados para fundirse sin cortes. Interior PASS.
