@@ -1,5 +1,9 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+## ENTRADA 105 (rama claude/guest-skins-d04-d08) — CAJA DE MÚSICA CON INTERIOR PROPIO (13/10/2026)
+
+design-08 deja de compartir composición con las demás pieles: partitura pulsable, cajones 1–4 sobre terciopelo, programa de concierto, fotos fundidas, compás entre secciones y música opcional tras la portada. El motor expone un modelo neutro y un gancho de interior para que cada diseño tenga su propio mundo sin tocar el cuestionario ni el RSVP. Matriz **460/460 PASS** + comprobación específica de Caja PASS. Detalle en [GUEST_SKIN_ENGINE_D04_D08_2026-10-12.md](GUEST_SKIN_ENGINE_D04_D08_2026-10-12.md). NO SALE.
+
 ## ENTRADA 104 — D04–D08: DETALLES EDITORIALES SIN TARJETAS NI ICONOS DE APP (12/10/2026)
 
 La autora: las tarjetas recargan y restan elegancia y los iconos parecen de app. Ahora sedes y detalles van **sin cajas ni iconos**, en composición editorial: numeración con la tipografía de cada piel (romanos caligráficos en Azulejo, 01–04 déco en Gala, romanos en cursiva en Invernadero, Reflejo y Caja), filetes finos con un adorno tipográfico propio entre bloques (rombo, ❦, ○, ♪) y enlaces de texto subrayados con trazo. La agenda que avanza se mantiene. Matriz **460/460 PASS**. NO SALE.

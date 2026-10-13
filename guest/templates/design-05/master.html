@@ -235,6 +235,7 @@ html[data-skin=caja] .moment.on .moment-node::before{color:#a8782f;text-shadow:0
 html[data-skin=caja] .moment-time{font-style:italic;letter-spacing:.06em;font-size:19px}
 @media(prefers-reduced-motion:reduce){html[data-skin] h2::after,html[data-skin] .moment-node,html[data-skin] .pr-icon::after{animation:none!important}}
 
+
 </style></head><body>
 <div id="stage-notice" aria-hidden="true">GUEST · GALA · REVISIÓN TEST · NO VENTA</div>
 <canvas id="fx" aria-hidden="true"></canvas>
@@ -257,6 +258,7 @@ html[data-skin=caja] .moment-time{font-style:italic;letter-spacing:.06em;font-si
 <div class="closing-text"><p class="closing-caption" id="closing-line"></p><p class="closing-sign" id="closing-names"></p><p class="close-date" id="closing-date"></p><a class="rsvp-button" id="rsvp-link" href="#" aria-label="Confirmar asistencia">Confirmar asistencia</a></div>
 </section>
 </main>
+
 <script>
 (()=>{'use strict';
 const TEMPLATE={id:'design-05',version:'1.0.0'};
@@ -294,23 +296,36 @@ function addBlock(root,title,lines,links=[],more=null,kind=''){
  const row=node('div','location-links');for(const [u,l] of links){const a=link(u,l);if(a)row.append(a)}if(row.childElementCount)b.append(row);
  if(hasMore){const d=node('details'),s=node('summary',null,more.label);d.append(s);addLines(d,more.lines);b.append(d)}
  root.append(b)}
-function applyPractical(config){
- const root=id('practical-items'),p=config.practical||{};root.replaceChildren();
+// Modelo neutro para pieles con interior propio: mismos datos y reglas, ninguna invención.
+function buildVM(config){const story=config.story||{},body=story.textMode==='none'?'':(txt(story.body)||(story.textMode==='preset'?(STORY_PRESETS[story.presetId]||''):''));
+ const ph=x=>photoUrl(x)?{src:photoUrl(x),fit:x.fit==='full'?'full':'crop',fx:clamp(x.focusX),fy:clamp(x.focusY),alt:x.alt||''}:null;
+ return {story:{show:!!story.enabled&&!!(body||photoUrl(story.photo)),text:body,photo:ph(story.photo)},
+  venues:(config.locations?.items||[]).map(i=>({type:i.type||'shared',label:i.type==='ceremony'?'Ceremonia':i.type==='celebration'?'Celebración':'Ceremonia y celebración',name:txt(i.name),time:txt(i.time),address:txt(i.address),links:[[i.mapsUrl,'Cómo llegar'],[i.websiteUrl,'Web']].filter(x=>safeUrl(x[0])).map(([u,l])=>[safeUrl(u),l])})).filter(v=>v.name||v.time||v.address),
+  venuePhoto:ph(config.locations?.heroPhoto),dress:config.locations?.dressCode?.enabled&&txt(config.locations?.dressCode?.text)?txt(config.locations.dressCode.text):'',
+  moments:config.agenda?.enabled?(config.agenda.moments||[]).filter(m=>txt(m.label)||txt(m.time)).map(m=>({time:txt(m.time),label:txt(m.label)})):[],
+  details:practicalBlocks(config),gallery:config.gallery?.enabled?(config.gallery.photos||[]).map(ph).filter(Boolean).slice(0,4):[]}}
+// Bloques prácticos canónicos (mismo mapeo para todas las pieles): {kind,title,lines,links:[[url,label]],more}
+function practicalBlocks(config){const out=[],p=config.practical||{};
+ const push=(kind,title,lines,links=[],more=null)=>{const L=lines.map(txt).filter(Boolean),K=links.filter(x=>safeUrl(x[0])).map(([u,l])=>[safeUrl(u),l]),M=more&&more.lines.map(txt).filter(Boolean).length?{label:more.label,lines:more.lines.map(txt).filter(Boolean)}:null;if(L.length||K.length||M)out.push({kind,title,lines:L,links:K,more:M})};
  const b=p.bus||{};
  if(b.enabled){const lines=[];const j=a=>(a||[]).map(txt).filter(Boolean).join(' · ');
   if(j(b.pickupPoints))lines.push('Paradas: '+j(b.pickupPoints));if(j(b.outboundTimes))lines.push('Ida: '+j(b.outboundTimes));if(j(b.returnTimes))lines.push('Vuelta: '+j(b.returnTimes));if(b.note)lines.push(b.note);
-  addBlock(root,'Transporte',lines,[[b.mapsUrl,'Cómo llegar']],null,'times')}
+  push('times','Transporte',lines,[[b.mapsUrl,'Cómo llegar']])}
  const a=p.accommodation||{};
  if(a.enabled&&a.mode!=='none'){
   const more=[a.address&&'Dirección: '+a.address,a.bookingName&&a.bookingName!==a.bookingCode&&'Reserva a nombre de '+a.bookingName,a.bookingCode&&'Código: '+a.bookingCode,a.deadline&&'Hasta: '+a.deadline,a.phone&&'Teléfono: '+a.phone].filter(Boolean);
   const links=[[a.websiteUrl,'Ver hotel'],[a.mapsUrl,'Cómo llegar']];if(a.mode==='external_booking')links.push([a.externalBookingUrl,'Reservar']);
-  addBlock(root,'Alojamiento',[a.name,a.note,a.discountText,a.priceText],links,{label:'Información adicional',lines:more},'accommodation')}
+  push('accommodation','Alojamiento',[a.name,a.note,a.discountText,a.priceText],links,{label:'Información adicional',lines:more})}
  const g=p.gift||{};
  if(g.enabled&&g.mode!=='none'){
   const more=[g.details,g.accountHolder&&'Titular: '+g.accountHolder,g.iban&&'IBAN: '+g.iban,g.bicSwift&&'BIC/SWIFT: '+g.bicSwift,g.bizumRecipient&&'Destinatario: '+g.bizumRecipient,g.bizumPhone&&'Bizum: '+g.bizumPhone];
-  addBlock(root,'Regalos',[g.displayText],[[g.externalUrl,g.linkLabel||'Ver lista de regalos']],{label:'Ver datos',lines:more},'gift')}
+  push('gift','Regalos',[g.displayText],[[g.externalUrl,g.linkLabel||'Ver lista de regalos']],{label:'Ver datos',lines:more})}
  const m=p.playlist||{};
- if(m.enabled&&m.mode!=='none'){addBlock(root,'Nuestra música',[m.prompt],[[m.url,m.mode==='guest_request'?'Pedir canción':'Ver playlist']],null,'playlist')}
+ if(m.enabled&&m.mode!=='none')push('playlist','Nuestra música',[m.prompt],[[m.url,m.mode==='guest_request'?'Pedir canción':'Ver playlist']]);
+ return out}
+function applyPractical(config){
+ const root=id('practical-items');root.replaceChildren();
+ for(const k of practicalBlocks(config))addBlock(root,k.title,k.lines,k.links,k.more,k.kind);
  hidden(id('practical'),!root.childElementCount)}
 /* ---- galería en carrusel ---- */
 function applyGallery(config){
@@ -349,6 +364,7 @@ function render(config){
  hidden(id('cover-place'),!config.cover?.showPlace||!txt(config.wedding?.coverPlace));text(id('cover-place'),config.wedding?.coverPlace||'');
  const count=id('countdown');hidden(count,!config.countdown?.enabled);
  if(config.countdown?.enabled){const days=Math.max(0,Math.ceil((new Date(config.wedding.date+'T12:00:00').getTime()-Date.now())/86400000));text(count,days>1?'Faltan '+days+' días':days===1?'¡Falta 1 día!':'¡Llegó nuestro día!')}
+ if(!window.__GUEST_INTERIOR__){
  // historia: texto y/o foto propia; la foto de portada nunca suplanta a la de la historia
  const story=config.story||{},body=story.textMode==='none'?'':(txt(story.body)||(story.textMode==='preset'?(STORY_PRESETS[story.presetId]||''):''));
  hidden(id('story'),!story.enabled||(!body&&!photoUrl(story.photo)));text(id('story-text'),body);hidden(id('story-text'),!body);setImage(id('story-photo'),story.photo);
@@ -362,6 +378,7 @@ function render(config){
  const moments=id('moments');moments.replaceChildren();for(const m of config.agenda?.moments||[]){if(!txt(m.label)&&!txt(m.time))continue;const r=node('div','moment');r.append(node('span','moment-node'),node('span','moment-time',m.time||''),node('span','moment-label',m.label||''));moments.append(r)}if(moments.childElementCount)moments.prepend(node('span','agenda-track'));
  hidden(id('agenda'),!config.agenda?.enabled||!moments.querySelector('.moment'));
  applyPractical(config);applyGallery(config);
+ }
  // cierre
  const line=txt(config.closing?.line);text(id('closing-line'),line);hidden(id('closing-line'),!line);
  text(id('closing-names'),n1&&n2?n1+' & '+n2:n1||n2);text(id('closing-date'),date);
@@ -369,6 +386,7 @@ function render(config){
  // fondos de la autora: la primera escena continúa la portada y la última enlaza con el cierre
  document.querySelectorAll('[data-bg]').forEach(s=>s.classList.remove('is-last','is-first'));const scenes=[...document.querySelectorAll('[data-bg]:not(.invisible)')],n=scenes.length;
  scenes.forEach((s,k)=>{s.classList.toggle('is-last',k===n-1);s.classList.toggle('is-first',k===0);let bg,idx;if(n===5){idx=k+1;bg=BG5[k]}else{idx=n===4?k+1:Math.max(1,Math.min(4,Math.round(1+k*3/Math.max(1,n-1))));bg=BG4[idx-1]}s.style.backgroundImage='url('+bg+')';s.dataset.backgroundIndex=String(idx)});
+ if(window.__GUEST_INTERIOR__){const vm=buildVM(config);window.__GUEST_INTERIOR__.render(vm,{node,txt,safeUrl,photoUrl,clamp,reduced,id});const vis=[...document.querySelectorAll('[data-bg]:not(.invisible)')];return {id:TEMPLATE.id,version:TEMPLATE.version,visibleScenes:vis.length,sceneKinds:vis.map(s=>s.id),rsvpReady:!!rt}}
  installReveals();installMotion();
  return {id:TEMPLATE.id,version:TEMPLATE.version,visibleScenes:n,sceneKinds:scenes.map(s=>s.id),rsvpReady:!!rt};
 }

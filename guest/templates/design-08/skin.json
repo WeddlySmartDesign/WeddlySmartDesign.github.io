@@ -51,13 +51,24 @@
  "mediaSource": "Entrega «Caja De Música» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas",
  "fx": {
   "kind": "rise",
-  "color": "226,186,110",
-  "count": 30
+  "color": "214,174,104",
+  "count": 26
  },
  "motif": "skin-assets/motif.webp",
  "motifIdle": "glow",
  "layout": "caja",
  "fonts": [
   "Bonum"
- ]
+ ],
+ "interior": {
+  "css": "interior.css",
+  "js": "interior.js",
+  "assets": {
+   "PAPER": "skin-assets/paper.jpg",
+   "WOOD": "skin-assets/wood.jpg",
+   "BANDTOP": "skin-assets/band-top.jpg",
+   "BANDBOT": "skin-assets/band-bot.jpg",
+   "MUSIC": "skin-assets/music.m4a"
+  }
+ }
 }

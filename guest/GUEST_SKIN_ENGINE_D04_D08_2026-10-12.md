@@ -71,3 +71,10 @@ Medios: entregas originales de cada diseño (`videos/portada.mp4`, `videos/cierr
 - **Backend:** la Edge Function viva (V19) solo acepta VEIL, Botánica y D03. Para crear pedidos TEST de D04–D08 hay que generar la candidata con `guest/tools/prepare_live_catalog_registry.cjs --require-template <id>` y desplegarla en TEST con autorización expresa.
 - Aprobación visual de la propietaria en Android, dos pedidos TEST reales por diseño, RSVP y gates de certificación. Hasta entonces: `certification-pending`, NO SALE.
 - Música (solo Caja de música tiene versión con música): no incluida. Se añadiría como opción de la piel si se decide.
+
+
+## Interiores propios por diseño (revisión v5)
+
+La autora pidió que cada diseño sea distinto también por dentro y que la elegancia no dependa de los campos rellenados. El motor ofrece ahora un **modelo neutro** (`buildVM`: historia, sedes, foto del lugar, vestimenta, momentos, bloques prácticos canónicos y galería) y un gancho `window.__GUEST_INTERIOR__.render(vm)`. Cada diseño puede aportar `interior.css` + `interior.js` (declarados en `skin.json → interior`), con las mismas reglas: nada inventado, enlaces solo con URL válida, ocultación sin huecos, galería en carrusel.
+
+**design-08 · Caja de música** (aprobado en simulación por la autora): lugares como programa de concierto, agenda como partitura que avanza al bajar y cuyas notas se pueden tocar, detalles como cajoncitos de madera que se abren sobre terciopelo (1–4), fotos fundidas con el papel sin marcos, compás musical entre secciones, polvo dorado, franjas de continuidad con los vídeos y melodía de la caja tras tocar la portada con botón para silenciarla. Comprobación: `guest/qa/skin_caja_interior_checks.py` (0–5 momentos × 0–4 detalles × 320/390/430, nota anterior seleccionable, cajón con contenido) PASS.

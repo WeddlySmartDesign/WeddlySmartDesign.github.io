@@ -15,7 +15,7 @@ if(!fs.existsSync(skinPath))throw new Error('Missing --skin');if(!fs.existsSync(
 const skin=JSON.parse(fs.readFileSync(skinPath,'utf8'));
 const engineDir=path.join(__dirname,'../templates/_skin-engine');
 const out=path.resolve(arg('--out')||path.join(path.dirname(skinPath),'master.html'));
-const mime={'.mp4':'video/mp4','.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png','.webp':'image/webp','.ttf':'font/ttf','.woff':'font/woff','.otf':'font/otf'};
+const mime={'.mp4':'video/mp4','.m4a':'audio/mp4','.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png','.webp':'image/webp','.ttf':'font/ttf','.woff':'font/woff','.otf':'font/otf'};
 const dataUri=p=>{const ext=path.extname(p).toLowerCase();if(!mime[ext])throw new Error('Unsupported media '+p);return 'data:'+mime[ext]+';base64,'+fs.readFileSync(p).toString('base64')};
 const media=rel=>{const p=path.resolve(mediaRoot,rel);if(!p.startsWith(mediaRoot+path.sep)||!fs.existsSync(p))throw new Error('Missing media '+rel);return p};
 function poster(videoRel){ // primer fotograma del vídeo original, para que la portada no aparezca vacía
@@ -45,8 +45,14 @@ const rep={
  FX:JSON.stringify({...(skin.fx||{}),sprites:((skin.fx||{}).sprites||[]).map(r=>dataUri(path.join(path.dirname(skinPath),r)))}),
  DEMO_PHOTOS:JSON.stringify(Object.fromEntries(['story','venue','g1','g2','g3','g4'].map(k=>[k,dataUri(path.join(engineDir,'demo-photos',k+'.jpg'))]))),BG4:bg(skin.media.backgrounds4)};
 if(skin.media.backgrounds5.length!==5||skin.media.backgrounds4.length!==4)throw new Error('Backgrounds must be 5 + 4');
+// Interior propio opcional de la piel (CSS+JS) con sus recursos incrustados; solo afecta a ese diseño.
+let interiorCss='',interiorJs='';
+if(skin.interior){const dir=path.dirname(skinPath),A={};for(const [k,r] of Object.entries(skin.interior.assets||{}))A[k]=dataUri(path.join(dir,r));
+ const sub=s=>s.replace(/%%([A-Z0-9_]+)%%/g,(m,k)=>{if(!(k in A))throw new Error('Unknown interior asset '+k);return A[k]});
+ interiorCss=sub(fs.readFileSync(path.join(dir,skin.interior.css),'utf8'));interiorJs='<script>'+sub(fs.readFileSync(path.join(dir,skin.interior.js),'utf8'))+'</script>'}
 html=html.replace(/\{\{([A-Z0-9_]+)\}\}/g,(m,k)=>{if(!(k in rep))throw new Error('Unknown placeholder '+k);return rep[k]});
 if(/\{\{[A-Z_]+\}\}/.test(html))throw new Error('Unresolved placeholder');
+html=html.replace('/*INTERIOR_CSS*/',()=>interiorCss).replace('<!--INTERIOR_JS-->',()=>interiorJs);
 fs.writeFileSync(out,html);
 const manifest={id:skin.id,displayName:skin.displayName,version:skin.version,rendererApi:'GUEST_APPLY_CONFIG',masterHtml:path.basename(out),typographyVariants:['classic']};
 fs.writeFileSync(path.join(path.dirname(out),'visual-plugin.json'),JSON.stringify(manifest,null,2)+'\n');
