@@ -71,8 +71,7 @@
    "WMASK": "skin-assets/wash-mask.png",
    "AGUADA": "skin-assets/aguada.webp",
    "COVERWASH": "skin-assets/cover-wash.webp",
-   "HINTWASH": "skin-assets/hint-wash.webp",
-   "STROKE": "skin-assets/stroke.webp"
+   "HINTWASH": "skin-assets/hint-wash.webp"
   }
  }
 }

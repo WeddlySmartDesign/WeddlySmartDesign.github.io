@@ -41,7 +41,7 @@ html.az a.link::after{content:none}
 .az-tile .f,.az-tile .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:2px;box-shadow:0 2px 6px rgba(20,40,90,.18)}
 .az-tile .b{background:url(%%TILE%%) center/cover;opacity:.5;transition:opacity 1s ease,box-shadow .8s}
 .az-tile.on .b{opacity:.85}.az-tile.cur .b{opacity:1}
-.az-tile .t{position:absolute;left:-6px;right:-6px;top:calc(100% + 8px);font:italic 400 14px/1 'Garamond',Georgia,serif;color:#4d6086;opacity:.55;transition:opacity .6s,color .6s}
+.az-tile .t{position:absolute;left:-6px;right:-6px;top:calc(100% + 8px);font:italic 400 17px/1 'Garamond',Georgia,serif;color:#4d6086;opacity:.6;transition:opacity .6s,color .6s}
 .az-tile.on .t{opacity:.85}.az-tile.cur .t{opacity:1;color:#23408a}
 .az-tile.cur .b{box-shadow:0 8px 16px rgba(20,40,90,.28)}
 .az-tile.cur{translate:0 -6px}
@@ -98,8 +98,12 @@ html.az #cover .cover-date{margin-top:8px}
 html.az .tap-hint{color:#1d3466;text-shadow:none}
 html.az .tap-hint>span:last-child{padding:24px 64px;font-size:21px;background:url(%%HINTWASH%%) center/100% 100% no-repeat,url(%%HINTWASH%%) center/86% 80% no-repeat}
 html.az .tap-hint .dot{background:#1d3466;box-shadow:0 0 0 4px rgba(251,248,242,.85)}
-/* pinceladas mínimas: un trazo de acuarela azul bajo cada título */
-html.az .az-title{background:url(%%STROKE%%) center 88%/min(230px,72%) 22px no-repeat}
 /* cierre: mismo lavado marfil, desde abajo, con el texto en tinta azul */
 html.az #closing .closing-scrim{bottom:0;top:auto;height:46%;background:url(%%COVERWASH%%) center top/100% 100% no-repeat;transform:scaleY(-1)}
 html.az #closing .closing-text{color:#1d3466;text-shadow:0 0 10px rgba(251,248,242,.9)}
+/* toques mínimos de la misma aguada del lugar: tras el momento en curso y tras la información abierta */
+.az-now{position:relative;padding:14px 0 10px}
+.az-now::before,.az-tray-in::before{content:"";position:absolute;inset:-6px 6%;background:url(%%AGUADA%%) center/100% 100% no-repeat;opacity:.7;pointer-events:none;z-index:0}
+.az-now>*,.az-tray-in>*{position:relative;z-index:1}
+.az-tray-in{position:relative;border-top:0!important;border-bottom:0!important}
+.az-tap{font-style:italic;color:#4d6086;font-size:16px;margin:12px 0 0}

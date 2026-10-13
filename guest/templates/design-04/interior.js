@@ -26,7 +26,7 @@ function render(vm){
  if(M.length){head(inner,'Para que no te pierdas nada','El programa',mark(sec));const path=el('div','az-path');path.setAttribute('role','group');path.setAttribute('aria-label','Momentos del día');const now=el('div','az-now');now.setAttribute('aria-live','polite');
   const tiles=M.map((m,i)=>{const b=el('button','az-tile');b.type='button';b.setAttribute('aria-label',(m.time?m.time+' ':'')+m.label);b.append(el('span','b'),el('span','t',m.time||''));b.onclick=()=>{A.pick=i;A.pickY=scrollY;tick()};path.append(b);
    const d=el('div');if(m.time)d.append(el('span','az-tm',m.time));if(m.label)d.append(el('span','az-lb',m.label));now.append(d);return {b,d}});
-  inner.append(path,now);A={path,tiles,n:M.length,pick:null,last:-1};
+  inner.append(path,now);if(M.length>1)inner.append(el('p','az-tap','Toca un azulejo para ver su momento'));A={path,tiles,n:M.length,pick:null,last:-1};
   let x0=null;now.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});now.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<40)return;const c=A.tiles.findIndex(t=>t.d.classList.contains('on'));A.pickY=scrollY;A.pick=Math.max(0,Math.min(A.n-1,c+(dx<0?1:-1)));tick()},{passive:true})}
  // detalles: contraventanas (1–4) que se abren
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openWin=null;
