@@ -5,12 +5,12 @@ const SVG='http://www.w3.org/2000/svg';
 const el=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e};
 const reducedMotion=()=>typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 const ROMAN=['i','ii','iii','iv','v','vi'];let chap=0;
-const HILLS='<svg class="cu-hills cu-rv" viewBox="0 0 118 30" aria-hidden="true"><path d="M0 30 Q 22 6 48 22 T 96 18 T 118 22 V30Z" fill="#a9c3cf"/><path d="M0 30 Q 34 14 64 26 T 118 24 V30Z" fill="#b9cbb2"/><path d="M8 30 Q 46 20 86 28 T 112 30Z" fill="#8fae9a"/></svg>';
-function head(inner,kicker,title,first){if(first)chap=0;chap++;if(!first)inner.insertAdjacentHTML('beforeend',HILLS);inner.append(el('span','cu-ch cu-rv','capítulo '+ROMAN[chap-1]),el('h2','cu-title cu-rv',title),el('p','cu-kicker cu-rv',kicker))}
+const SUN='<img class="cu-sun cu-rv" src="%%SOL%%" alt="" aria-hidden="true">';
+function head(inner,kicker,title,first){if(first)chap=0;chap++;if(!first)inner.insertAdjacentHTML('beforeend',SUN);inner.append(el('span','cu-ch cu-rv','capítulo '+ROMAN[chap-1]),el('h2','cu-title cu-rv',title),el('p','cu-kicker cu-rv',kicker))}
 function img(p,cls,alt,h){const i=el('img',cls);i.src=p.src;i.alt=p.alt||alt;i.loading='lazy';i.dataset.fit=p.fit;i.style.objectPosition=p.fx+'% '+p.fy+'%';if(h&&p.fit!=='full')i.style.height=h+'px';return i}
 function links(list){const r=el('div','cu-links');for(const [u,l] of list){const a=el('a','link',l);a.href=u;a.target='_blank';a.rel='noopener noreferrer';r.append(a)}return r}
 function scene(sec,show){sec.classList.toggle('invisible',!show);sec.replaceChildren();const inner=el('div','cu-in');sec.append(inner);return inner}
-const CLOUD='<path class="back" d="M18 52c-9 0-14-6-12-13 2-6 8-8 13-6 2-9 10-14 19-12 4-8 15-11 23-6 7-6 19-4 23 5 9-1 16 5 15 13 7 1 11 7 9 13-1 4-5 6-9 6z"/><path class="front" d="M22 58c-8 0-12-5-10-11 2-5 7-7 11-5 2-8 9-12 17-10 4-7 13-9 20-5 6-5 16-3 20 4 8-1 14 4 13 11 6 1 9 6 8 11-1 3-4 5-8 5z"/>';
+const NUBES=['%%NUBE1%%','%%NUBE2%%'];
 const RIDGE='M14 106 Q 80 84 170 102 T 326 97';
 const BALLOON='<svg viewBox="0 0 34 48"><path d="M17 1C7 1 1 8 1 17c0 9 9 16 13 21h6c4-5 13-12 13-21C33 8 27 1 17 1z" fill="#f3e9d6"/><path d="M17 1c-5 0-8 8-8 16 0 9 3 16 5 21h3V1z" fill="#d9a441"/><path d="M17 1c5 0 8 8 8 16 0 9-3 16-5 21h-3V1z" fill="#b5684a"/><path d="M14 38l1 5M20 38l-1 5" stroke="#6b5a4a" stroke-width=".8"/><rect x="13.5" y="42.5" width="7" height="5" rx="1" fill="#8a6a4a"/></svg>';
 let A=null,openEnv=null,io=null;
@@ -36,11 +36,11 @@ function render(vm){
    const d=el('div');if(m.time)d.append(el('span','cu-tm',m.time));if(m.label)d.append(el('span','cu-lb',m.label));now.append(d);return {b,d,f,x,y}});
   inner.append(land,now);if(M.length>1)inner.append(el('p','cu-tap','Toca una banderita para ver su momento'));A={stem:land,bal,leaves,n:M.length,pick:null};
   let x0=null;now.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});now.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<40)return;const c=A.leaves.findIndex(t=>t.d.classList.contains('on'));A.pick=Math.max(0,Math.min(A.n-1,c+(dx<0?1:-1)));A.pickY=scrollY;tick()},{passive:true})}
- // detalles: nubes de papel (1–4); al tocar una se eleva y se abre su página
+ // detalles: nubes de papel recortadas de la portada (1–4); al tocar una se eleva y se abre su página
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openEnv=null;
  if(D.length){head(inner,'Todo lo que necesitas saber','Los detalles',mark(sec));const envs=el('div','cu-clouds cu-rv'),tray=el('div','cu-tray'),tin=el('div','cu-tray-in');tray.id='cu-tray';tray.append(tin);
   D.forEach((x,i)=>{const b=el('button','cu-cl'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','cu-tray');
-   const cl=document.createElementNS(SVG,'svg');cl.setAttribute('viewBox','0 0 112 66');cl.setAttribute('aria-hidden','true');cl.innerHTML=CLOUD+`<text x="58" y="46" text-anchor="middle">${ROMAN[i]}</text>`;b.append(cl,el('span','cu-cl-lb',x.title));
+   const cl=el('img','cu-nube');cl.src=NUBES[i%2];cl.alt='';cl.setAttribute('aria-hidden','true');b.append(cl,el('span','cu-cl-lb',x.title));
    b.onclick=()=>{if(openEnv===b){b.setAttribute('aria-expanded','false');openEnv=null;tray.style.height='0px';return}openEnv?.setAttribute('aria-expanded','false');openEnv=b;b.setAttribute('aria-expanded','true');fill(tin,x);tray.style.height=(tin.offsetHeight+16)+'px'};envs.append(b)});
   inner.append(envs,el('p','cu-hint cu-rv',D.length>1?'Toca cada nube':'Toca la nube'),tray)}
  const G=vm.gallery;sec=document.getElementById('gallery');inner=scene(sec,G.length>0);

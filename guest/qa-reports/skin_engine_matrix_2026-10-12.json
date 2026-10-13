@@ -33,52 +33,52 @@
   "design-04": {
    "displayName": "AZULEJO",
    "version": "1.0.0",
-   "masterSha256": "d24017f25424a8ece27735b3f0380bf5609db96c6a76778100d546d14cd34594",
+   "masterSha256": "3729902c549918a9256be433b8f7a303602d20684565fcb375a81b8aa6af752e",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-05": {
    "displayName": "GALA",
    "version": "1.0.0",
-   "masterSha256": "2dd55d8c34ce7f840aa64f5e5ae3e2f0bd48c342e34866ef68babc5ac046501f",
+   "masterSha256": "1352d07206858a792c974e49612b61cd41b5e6f4598a0779c7214ed1bbcdaf12",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-06": {
    "displayName": "INVERNADERO",
    "version": "1.0.0",
-   "masterSha256": "4be653d5a4952e9d209455229a7586dca81da60d1436d82b728acbcd20dc8d74",
+   "masterSha256": "7aa5ce9d1b4989e96c6c7e2a0c076a00f23f6b98105ef5e1bad266a4583d15da",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-07": {
    "displayName": "REFLEJO",
    "version": "1.0.0",
-   "masterSha256": "f73fbb5115260c949eac8cc2c17c986c2011fdf76aa300b32b58b7a050a7a079",
+   "masterSha256": "69a7b455f8043d011eee896e1a4188e938974be327d291276366b112e595ecfb",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-08": {
    "displayName": "CAJA DE MÚSICA",
    "version": "1.0.0",
-   "masterSha256": "177172167f8129b35b4a95c7b97fda6cb259cd0f851ef9d48ab607cd69eadf00",
+   "masterSha256": "5fb3728a651b846c422182d649cbe341cbb7b04c629638bc24683056725a9cd2",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-09": {
    "displayName": "LIMONEROS · VERSIÓN CLAUDE",
    "version": "1.0.0",
-   "masterSha256": "a3c64207ed76602bf2164b3df3fb63a13793261dee80c165b3e7b953a567d902",
+   "masterSha256": "cf509e1c8d56b4f6bc7fc743e1a261197d5576527d6448c108b36e8a984d108b",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-10": {
    "displayName": "CUENTO DE PAPEL",
    "version": "1.0.0",
-   "masterSha256": "291b373b28cb685fe52e3d6f909707a4d0276961f266d2f02cac462ebce51efd",
+   "masterSha256": "d572768d4937bfacd3778768d02122798f2f3203caca66fe6dffd1b739c5ffe3",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   }
  },
- "revision": "v6: interiores propios en los cinco diseños (Azulejo: azulejos que giran y contraventanas; Gala: reloj déco y tiques de guardarropa; Invernadero: tallo con hojas y sobres de semillas; Reflejo: velas flotantes y espejos; Caja de música: partitura y cajones). Comprobación común guest/qa/skin_interior_checks.py PASS en los cinco; matriz 460/0 · v7: design-09 Limoneros (versión Claude, alternativa a design-03 para que la autora elija; design-03 intacto). Matriz 552/0 · v7.1: design-09 más sereno tras la revisión de la autora (detalles abiertos como carta impresa, programa completo a la vista con el momento del sol destacado, sin indicaciones de «toca») · v8: design-09 vuelve a la versión anterior con limones pintados (Recraft de la autora) en vez de rombos y sin golondrinas; design-10 Cuento de papel con interior propio. Matriz 644/0 · v8.1: design-09 usa las ramas completas pintadas (los limones sueltos parecían manchas) · v8.2: design-09 detalles como ramitas pintadas que se mecen al tocarlas; separador filete dorado · v8.3: design-09 detalles como sobres con lacre marfil y buganvilla prensada (elegido por la autora) · v9: motor con botón «volver a ver» en portada y cierre (los datos y el botón de confirmar no se ocultan), cierre arranca al 70 % visible, franjas de continuidad superpuestas a la primera y última sección (sin trozos de fondo vacío). Interior PASS ×7, matriz 644/0"
+ "revision": "v6: interiores propios en los cinco diseños (Azulejo: azulejos que giran y contraventanas; Gala: reloj déco y tiques de guardarropa; Invernadero: tallo con hojas y sobres de semillas; Reflejo: velas flotantes y espejos; Caja de música: partitura y cajones). Comprobación común guest/qa/skin_interior_checks.py PASS en los cinco; matriz 460/0 · v7: design-09 Limoneros (versión Claude, alternativa a design-03 para que la autora elija; design-03 intacto). Matriz 552/0 · v7.1: design-09 más sereno tras la revisión de la autora (detalles abiertos como carta impresa, programa completo a la vista con el momento del sol destacado, sin indicaciones de «toca») · v8: design-09 vuelve a la versión anterior con limones pintados (Recraft de la autora) en vez de rombos y sin golondrinas; design-10 Cuento de papel con interior propio. Matriz 644/0 · v8.1: design-09 usa las ramas completas pintadas (los limones sueltos parecían manchas) · v8.2: design-09 detalles como ramitas pintadas que se mecen al tocarlas; separador filete dorado · v8.3: design-09 detalles como sobres con lacre marfil y buganvilla prensada (elegido por la autora) · v9: motor con botón «volver a ver» en portada y cierre (los datos y el botón de confirmar no se ocultan), cierre arranca al 70 % visible, franjas de continuidad superpuestas a la primera y última sección (sin trozos de fondo vacío). Interior PASS ×7, matriz 644/0 · v10: medios de D04+ siempre servidos aparte (la portada responde al instante); al volver a ver, los textos se apartan hasta el final; franjas con bordes fundidos; Cuento con sol y nubes de papel recortados de su portada"
 }

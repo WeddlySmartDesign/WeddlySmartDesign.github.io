@@ -116,3 +116,11 @@ Matriz con siete diseños (D04–D10): 644 comprobaciones, 0 fallos. Todo certif
 - El cierre empieza cuando está visible al 70 % (antes 40 %), para que no se reproduzca mientras el invitado aún mira la galería.
 - **Franjas de continuidad**: ya no ocupan un bloque propio. La primera sección se superpone al 75 % inferior de la franja superior y la última sección al 80 % superior de la franja inferior, así no aparecen trozos de fondo vacío al deslizar desde la portada ni antes del cierre (`seatBands()` en el motor; márgenes en % del ancho, responsive).
 Afecta a D04–D10. Interior PASS en los siete; matriz 644/0; catálogo sincronizado.
+
+## Revisión v10 (2026-10-13)
+
+- **Carga**: los diseños del motor (D04+) pesaban 15–20 MB en un solo HTML y el móvil no respondía al toque de la portada hasta descargarlo entero. `build_catalog_static_preview.cjs` ahora externaliza sus medios siempre (marcador `window.__GUEST_SKIN__=`), igual que ya hacía con los >24 MiB; la fuente registrada sigue byte a byte y la restauración se verifica. Botánica y D03 no cambian. D10 pasa de 19,5 MB a 1,5 MB de HTML.
+- **Volver a ver**: durante la repetición los textos y el botón de confirmar se apartan para ver la escena completa (p. ej., los novios del cierre de Cuento) y vuelven al terminar el vídeo.
+- **Franjas**: sus bordes se funden (máscara), sin línea visible donde terminan.
+- **D10 Cuento de papel**: separador = sol de papel recortado de la portada; detalles = nubes de papel reales de la portada (sin numerales); más aire entre la historia y su foto.
+Interior PASS ×7; matriz 644/0; CI local OK.

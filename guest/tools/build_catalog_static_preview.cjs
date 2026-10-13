@@ -56,7 +56,10 @@ const viewRegistry=structuredClone(registry);
 // This works for D03, D04... without updating a design-specific upload workflow.
 function stageLargeVisualLosslessly(original,id,version){
  const limit=24*1024*1024; // below Cloudflare Pages' 25 MiB per-asset limit
- if(original.length<=limit)return{html:original,mediaCount:0,externalized:false};
+ // Skin-engine masters (D04+) always stream their media: a 15–20 MB single HTML makes the
+ // phone wait for the whole file before the cover reacts to a tap.
+ const skinEngine=original.includes('window.__GUEST_SKIN__=');
+ if(original.length<=limit&&!skinEngine)return{html:original,mediaCount:0,externalized:false};
  const html=original.toString('utf8');
  if(Buffer.byteLength(html,'utf8')!==original.length)
    throw Error('VISUAL_SOURCE_NOT_UTF8:'+id);

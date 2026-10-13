@@ -141,6 +141,8 @@ h3{font:400 clamp(28px,7vw,40px)/1.1 var(--serif);margin:0 0 6px}
 img.feather.rv{transform:scale(1.07);filter:blur(3px);transition:opacity 1.5s ease,transform 2.4s cubic-bezier(.2,.8,.2,1),filter 1.4s ease}
 img.feather.rv.in{transform:none;filter:none}
 @media(prefers-reduced-motion:reduce){.rv,.rv-head .section-kicker,.rv-head h2,img.feather.rv,.motif{opacity:1!important;transform:none!important;clip-path:none!important;filter:none!important;letter-spacing:.11em;transition:none!important;animation:none!important}.rv-head .rule-orn path{stroke-dashoffset:0}.rv-head .rule-orn circle{opacity:1}#fx{display:none}}
+/* mientras se vuelve a ver, los textos se apartan para ver la escena entera; vuelven al terminar */
+#cover.replaying .cover-text,#cover.replaying .cover-scrim,#cover.replaying .cover-bottom,#closing.replaying .closing-text,#closing.replaying .closing-scrim{opacity:0!important;pointer-events:none}
 /* volver a ver portada y cierre: discreto, aparece cuando ya se han visto */
 .replay{position:absolute;z-index:3;top:max(14px,calc(env(safe-area-inset-top) + 10px));right:12px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.55);background:rgba(20,20,28,.16);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);display:grid;place-items:center;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 1s ease}
 .replay svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}
@@ -148,6 +150,8 @@ img.feather.rv.in{transform:none;filter:none}
 .replay:focus-visible{outline:2px solid #fff;outline-offset:2px}
 /* franjas de continuidad: quedan detrás de la primera y la última sección, sin trozos de fondo vacío */
 main>img[class$="-band"]{position:relative;z-index:0}
+#cover+img[class$="-band"]{-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+main>img[class$="-band"]:not(#cover+img){-webkit-mask-image:linear-gradient(transparent,#000 45%);mask-image:linear-gradient(transparent,#000 45%)}
 main>[data-bg]{position:relative;z-index:1}
 /* ===== composición editorial sin tarjetas: numeración, filetes y adornos tipográficos ===== */
 .pr-icon{display:none}
@@ -628,8 +632,9 @@ if(!window.__GUEST_SUPPRESS_DEMO__){
 }
 
 /* ---- volver a ver: reproduce de nuevo sin ocultar los datos ni el botón de confirmar ---- */
-function replay(v){return e=>{e.stopPropagation();try{v.currentTime=0}catch{}const pr=v.play();if(pr&&pr.catch)pr.catch(()=>{})}}
-id('cover-replay').addEventListener('click',replay(cv));id('closing-replay').addEventListener('click',replay(xv));
+function replay(v,scene){let t=null;const done=()=>{scene.classList.remove('replaying');clearTimeout(t)};v.addEventListener('ended',done);
+ return e=>{e.stopPropagation();scene.classList.add('replaying');try{v.currentTime=0}catch{}const pr=v.play();if(pr&&pr.catch)pr.catch(done);clearTimeout(t);t=setTimeout(done,((v.duration||12)+1.5)*1000)}}
+id('cover-replay').addEventListener('click',replay(cv,cover));id('closing-replay').addEventListener('click',replay(xv,closing));
 /* ---- franjas: la primera sección y la última se superponen a sus franjas ---- */
 function seatBands(){document.querySelectorAll('main>img[class$="-band"]').forEach(b=>{const set=()=>{if(!b.naturalWidth)return;const r=b.naturalHeight/b.naturalWidth*100;if(b.previousElementSibling&&b.previousElementSibling.id==='cover'){b.style.marginBottom=(-r*.75)+'%'}else{b.style.marginTop=(-r*.8)+'%'}};if(b.complete)set();else b.addEventListener('load',set,{once:true})})}
 window.__GUEST_SKIN__={fixture,demo,openCover,startClosing};
