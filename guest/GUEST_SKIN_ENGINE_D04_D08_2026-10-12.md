@@ -103,3 +103,5 @@ A petición de la autora, versión alternativa de «Jardín de limoneros» para 
 **design-10 · Cuento de papel** (ZIP de la autora): cada sección es un capítulo del libro de la portada («capítulo i, ii…», numerado según las secciones visibles), historia con letra capital; agenda como paisaje de colinas de papel con banderitas por momento y un globo de papel (el del cierre) que viaja hasta la del momento en curso; detalles como nubes de papel que se elevan y abren su página; colinas de papel recortado entre capítulos; fondo que pasa del crema al azul de la noche como los fondos entregados. `skin_interior_checks.py design-10:.cu-flag:.cu-cl:.cu-now` PASS. Registrado TEST.
 
 Matriz con siete diseños (D04–D10): 644 comprobaciones, 0 fallos. Todo certification-pending, TEST, NO SALE.
+
+**v8.1 (2026-10-13)**: los limones aislados parecían manchas. design-09 usa ahora las dos ramas completas de la autora: la grande encabeza los detalles (títulos con numeral caligráfico que se abren al tocarlos) y la pequeña separa las secciones. Interior PASS.
