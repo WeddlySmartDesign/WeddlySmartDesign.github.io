@@ -136,3 +136,5 @@ Interior PASS ×7; matriz 644/0; CI local OK.
 **v10.5 (2026-10-13)**: el fundido libro→escena se ve peor; se vuelve a la apertura de v10.3. La tapa del vídeo original desaparece al quedar de canto; la solución limpia es generar un clip nuevo de la apertura.
 
 **v11 (2026-10-13)**: D08 · cuando empieza el vídeo de cierre (la caja se cierra), la melodía baja poco a poco hasta apagarse al mismo tiempo que la tapa; el botón ♪ queda en silencio y permite volver a activarla.
+
+**v12 (2026-10-13) · D04 Azulejo tras la revisión de la autora**: (1) los azulejos del programa giran en 1,9 s (antes 1,1) para que se vea el giro; (2) los detalles ya no son contraventanas planas: son el arco de flores en acuarela de la entrega (`piezas/arco.png`) con la vista al mar (`piezas/escena.jpg`) dentro; al tocar uno, los arcos se recogen y en ese mismo sitio se abre una ventana grande en arco con el cielo en acuarela y la información (botón «Cerrar la ventana»), así no queda abajo fuera de la vista; (3) lugares: cada sitio en su placa de azulejo pintada (doble filete cobalto y rombos laterales), con hora, dirección y enlaces debajo. Interior PASS.

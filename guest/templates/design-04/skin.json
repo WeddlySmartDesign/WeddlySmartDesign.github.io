@@ -65,7 +65,9 @@
    "BANDTOP": "skin-assets/band-top.jpg",
    "BANDBOT": "skin-assets/band-bot.jpg",
    "TILE": "skin-assets/tile.jpg",
-   "SEAL": "skin-assets/motif.webp"
+   "SEAL": "skin-assets/motif.webp",
+   "ARCO": "skin-assets/arco.webp",
+   "VISTA": "skin-assets/vista.jpg"
   }
  }
 }

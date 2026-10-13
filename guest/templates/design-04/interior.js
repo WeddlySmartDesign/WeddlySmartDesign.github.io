@@ -19,7 +19,7 @@ function render(vm){
  // lugares
  sec=document.getElementById('locations');inner=scene(sec,vm.venues.length>0);
  if(vm.venues.length){head(inner,'Nos vemos aquí','El gran día',mark(sec));if(vm.venuePhoto)inner.append(img(vm.venuePhoto,'az-fade az-rv','Fotografía del lugar',250));
-  for(const v of vm.venues){const a=el('div','az-venue az-rv');a.append(el('span','az-v-k',v.label));a.append(el('div','az-v-name',v.name));if(v.time)a.append(el('div','az-v-time',v.time));if(v.address)a.append(el('div','az-v-addr',v.address));if(v.links.length)a.append(links(v.links));inner.append(a)}
+  for(const v of vm.venues){const a=el('div','az-venue az-rv');const pl=el('div','az-plaque');pl.append(el('span','az-v-k',v.label),el('div','az-v-name',v.name));a.append(pl);if(v.time)a.append(el('div','az-v-time',v.time));if(v.address)a.append(el('div','az-v-addr',v.address));if(v.links.length)a.append(links(v.links));inner.append(a)}
   if(vm.dress)inner.append(el('p','az-dress az-rv','Código de vestimenta: '+vm.dress))}
  // agenda: camino de azulejos (1–5) que se dan la vuelta al bajar; cada azulejo se puede tocar
  const M=vm.moments;sec=document.getElementById('agenda');inner=scene(sec,M.length>0);A=null;
@@ -28,12 +28,17 @@ function render(vm){
    const d=el('div');if(m.time)d.append(el('span','az-tm',m.time));if(m.label)d.append(el('span','az-lb',m.label));now.append(d);return {b,d}});
   inner.append(path,now);if(M.length>1)inner.append(el('p','az-tap','Toca un azulejo para ver su momento'));A={path,tiles,n:M.length,pick:null,last:-1};
   let x0=null;now.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});now.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<40)return;const c=A.tiles.findIndex(t=>t.d.classList.contains('on'));A.pickY=scrollY;A.pick=Math.max(0,Math.min(A.n-1,c+(dx<0?1:-1)));tick()},{passive:true})}
- // detalles: contraventanas (1–4) que se abren
+ // detalles: arcos de flores en acuarela con vista al mar (1–4); al tocar uno, la ventana se abre en grande en ese mismo sitio
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openWin=null;
  if(D.length){head(inner,'Todo lo que necesitas saber','Los detalles',mark(sec));const wins=el('div','az-wins az-rv'),tray=el('div','az-tray'),tin=el('div','az-tray-in');tray.id='az-tray';tray.append(tin);
-  D.forEach((x,i)=>{const b=el('button','az-win'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','az-tray');const fr=el('span','az-frame');fr.append(el('span','az-sh l'),el('span','az-sh r'));b.append(fr,el('span','az-win-lb',x.title));
-   b.onclick=()=>{if(openWin===b){b.setAttribute('aria-expanded','false');openWin=null;tray.style.height='0px';return}openWin?.setAttribute('aria-expanded','false');openWin=b;b.setAttribute('aria-expanded','true');fill(tin,x);tray.style.height=(tin.offsetHeight+16)+'px'};wins.append(b)});
-  inner.append(wins,el('p','az-hint az-rv',D.length>1?'Abre cada ventana':'Abre la ventana'),tray)}
+  const hint=el('p','az-hint az-rv',D.length>1?'Asómate a cada ventana':'Asómate a la ventana');
+  const close=()=>{openWin?.setAttribute('aria-expanded','false');openWin=null;tray.style.height='0px';wins.classList.remove('away');hint.classList.remove('away');setTimeout(()=>wins.scrollIntoView({block:'center',behavior:reducedMotion()?'auto':'smooth'}),80)};
+  D.forEach((x,i)=>{const b=el('button','az-win'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','az-tray');
+   const fr=el('span','az-arch');const vi=el('img','az-vista');vi.src='%%VISTA%%';vi.alt='';const ar=el('img','az-arco');ar.src='%%ARCO%%';ar.alt='';fr.setAttribute('aria-hidden','true');fr.append(vi,ar);b.append(fr,el('span','az-win-lb',x.title));
+   b.onclick=()=>{if(openWin===b){close();return}openWin?.setAttribute('aria-expanded','false');openWin=b;b.setAttribute('aria-expanded','true');fill(tin,x);
+    const c=el('button','az-close','Cerrar la ventana');c.type='button';c.onclick=close;tin.append(c);
+    wins.classList.add('away');hint.classList.add('away');tray.style.height=(tin.offsetHeight+16)+'px';setTimeout(()=>{const r=tray.getBoundingClientRect();if(r.top<40||r.top>innerHeight*.45)tray.scrollIntoView({block:'start',behavior:reducedMotion()?'auto':'smooth'})},950)};wins.append(b)});
+  inner.append(wins,hint,tray)}
  // galería
  const G=vm.gallery;sec=document.getElementById('gallery');inner=scene(sec,G.length>0);
  if(G.length){head(inner,'Un poco de nosotros','Recuerdos',mark(sec));const track=el('div','az-rv');track.id='gallery-items';track.setAttribute('role','region');track.setAttribute('aria-label','Galería de fotografías');
