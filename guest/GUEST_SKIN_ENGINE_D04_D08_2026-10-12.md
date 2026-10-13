@@ -132,3 +132,5 @@ Interior PASS ×7; matriz 644/0; CI local OK.
 **v10.3 (2026-10-13)**: la interpolación de movimiento deformaba la iglesia al aparecer y la tapa del libro. Se rehace con fundido entre fotogramas (libro ×2,5, escena ×1,6; 12,2 s; textos a 6,6 s). El texto de portada baja un poco (6,5 svh) sin tocar las golondrinas en 412×732, 390×700 y 360×640.
 
 **v10.4 (2026-10-13)**: en el vídeo original la tapa gira hasta quedar de canto y desaparece, y al ralentizarlo se notaba. Se elimina el giro: el libro cerrado se funde despacio (1,2 s) en la escena que va apareciendo; el resto, con fundido ×1,6. Duración 10,7 s; textos a 5,6 s.
+
+**v10.5 (2026-10-13)**: el fundido libro→escena se ve peor; se vuelve a la apertura de v10.3. La tapa del vídeo original desaparece al quedar de canto; la solución limpia es generar un clip nuevo de la apertura.
