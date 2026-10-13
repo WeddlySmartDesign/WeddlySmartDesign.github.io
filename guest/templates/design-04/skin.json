@@ -67,7 +67,9 @@
    "TILE": "skin-assets/tile.jpg",
    "SEAL": "skin-assets/motif.webp",
    "WINC": "skin-assets/win-closed.webp",
-   "WINO": "skin-assets/win-open.webp"
+   "WINO": "skin-assets/win-open.webp",
+   "ARCO": "skin-assets/arco.webp",
+   "VELERO": "skin-assets/velero.webp"
   }
  }
 }

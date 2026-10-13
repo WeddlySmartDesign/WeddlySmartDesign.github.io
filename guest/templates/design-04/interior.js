@@ -19,7 +19,7 @@ function render(vm){
  // lugares
  sec=document.getElementById('locations');inner=scene(sec,vm.venues.length>0);
  if(vm.venues.length){head(inner,'Nos vemos aquí','El gran día',mark(sec));if(vm.venuePhoto)inner.append(img(vm.venuePhoto,'az-fade az-rv','Fotografía del lugar',250));
-  for(const v of vm.venues){const a=el('div','az-venue az-rv');a.append(el('span','az-v-k',v.label));a.append(el('div','az-v-name',v.name));if(v.time||v.address){const m=el('div','az-v-meta');if(v.time)m.append(el('b',null,v.time));if(v.time&&v.address)m.append(document.createTextNode(' · '));if(v.address)m.append(document.createTextNode(v.address));a.append(m)}if(v.links.length)a.append(links(v.links));inner.append(a)}
+  vm.venues.forEach((v,vi)=>{const a=el('div','az-venue az-rv');const orn=el('img','az-v-orn');orn.src=(v.type==='ceremony'||(!v.type&&vi===0))?'%%ARCO%%':'%%VELERO%%';orn.alt='';orn.setAttribute('aria-hidden','true');a.append(orn);a.append(el('span','az-v-k',v.label));a.append(el('div','az-v-name',v.name));if(v.time||v.address){const m=el('div','az-v-meta');if(v.time)m.append(el('b',null,v.time));if(v.time&&v.address)m.append(document.createTextNode(' · '));if(v.address)m.append(document.createTextNode(v.address));a.append(m)}if(v.links.length)a.append(links(v.links));inner.append(a)})
   if(vm.dress)inner.append(el('p','az-dress az-rv','Código de vestimenta: '+vm.dress))}
  // agenda: camino de azulejos (1–5) que se dan la vuelta al bajar; cada azulejo se puede tocar
  const M=vm.moments;sec=document.getElementById('agenda');inner=scene(sec,M.length>0);A=null;

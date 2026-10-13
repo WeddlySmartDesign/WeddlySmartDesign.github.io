@@ -22,6 +22,7 @@ html.az [data-bg]{background:none!important;min-height:0!important;display:block
 #gallery-items .az-fade{filter:sepia(.16) saturate(.82) brightness(1.04) contrast(.94)}
 /* lugares: ligero; nombre caligráfico con un rombo cobalto, hora y dirección en una línea */
 .az-venue{padding:10px 0 18px}.az-venue+.az-venue{padding-top:22px}
+.az-v-orn{display:block;height:92px;width:auto;max-width:none!important;margin:0 auto 6px;opacity:.95}
 .az-v-k{display:flex;align-items:center;justify-content:center;gap:10px;font:400 16px/1 'GaramondSC',Georgia,serif;letter-spacing:.16em;text-transform:lowercase;color:#4d6086}
 .az-v-name{font:400 42px/1.2 'Pinyon',cursive;color:#23408a;margin:2px 0 0;padding-bottom:.08em;overflow-wrap:anywhere}
 .az-v-meta{color:#4d6086;font-size:19px;font-style:italic;overflow-wrap:anywhere}.az-v-meta b{font:italic 400 19px/1 'Garamond',Georgia,serif;color:#1f355f}
