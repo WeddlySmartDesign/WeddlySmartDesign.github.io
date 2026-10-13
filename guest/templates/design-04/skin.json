@@ -2,7 +2,7 @@
  "id": "design-04",
  "version": "1.0.0",
  "displayName": "AZULEJO",
- "coverTextAt": 3.3,
+ "coverTextAt": 8.6,
  "closingTextAt": 8.6,
  "coverTextPosition": "top:max(8svh,calc(env(safe-area-inset-top) + 40px))",
  "coverScrim": "top:0;height:50%;background:linear-gradient(180deg,rgba(252,249,243,.62) 0%,rgba(252,249,243,.38) 55%,rgba(252,249,243,0) 100%)",

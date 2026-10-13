@@ -157,3 +157,5 @@ Interior PASS, matriz 644/0.
 **v13.1 (2026-10-13)**: D04 · «Toca para abrir» no se veía sobre los azulejos y los textos de portada/cierre se leían mal sobre la acuarela. Portada: el texto (compacto, nombres en una línea) descansa en un lavado marfil de acuarela con borde irregular, en tinta azul. Cierre: el mismo lavado desde abajo, texto en tinta azul. Aviso: tinta azul sobre una mancha marfil. Pinceladas mínimas: un trazo de acuarela azul bajo cada título de sección, además de la aguada del lugar.
 
 **v13.2 (2026-10-13)**: D04 · fuera el trazo bajo los títulos. La aguada del lugar se repite en dosis mínimas solo detrás del momento en curso del programa y de la información abierta de los detalles. Vuelve «Toca un azulejo para ver su momento» y las horas del friso suben a 17 px. La autora da el diseño por casi listo.
+
+**v13.3 (2026-10-13)**: D04 · los nombres aparecían a los 3,3 s y tapaban las palomas; ahora a los 8,6 s, cuando terminan su vuelo. El cierre usa `cierre-sin-texto.mp4` de la entrega (sin «Os esperamos» en la vela, que se salía de ella).
