@@ -49,20 +49,23 @@
   ]
  },
  "mediaSource": "Entrega «Azulejo» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas",
- "fx": {
-  "kind": "doves",
-  "every": 24000,
-  "sprites": [
-   "skin-assets/dove0.webp",
-   "skin-assets/dove1.webp",
-   "skin-assets/dove2.webp"
-  ]
- },
+ "fx": {},
  "motif": "skin-assets/motif.webp",
  "motifIdle": "float",
  "layout": "azulejo",
  "fonts": [
   "Chorus",
   "Lora"
- ]
+ ],
+ "interior": {
+  "css": "interior.css",
+  "js": "interior.js",
+  "assets": {
+   "PAPER": "skin-assets/paper.jpg",
+   "BANDTOP": "skin-assets/band-top.jpg",
+   "BANDBOT": "skin-assets/band-bot.jpg",
+   "TILE": "skin-assets/tile.jpg",
+   "SEAL": "skin-assets/motif.webp"
+  }
+ }
 }

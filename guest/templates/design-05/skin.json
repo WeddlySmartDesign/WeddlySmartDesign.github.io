@@ -3,7 +3,7 @@
  "version": "1.0.0",
  "displayName": "GALA",
  "coverTextAt": 3.6,
- "closingTextAt": 7.0,
+ "closingTextAt": 7,
  "coverTextPosition": "top:max(8svh,calc(env(safe-area-inset-top) + 40px))",
  "coverScrim": "top:0;height:50%;background:linear-gradient(180deg,rgba(252,249,243,.62) 0%,rgba(252,249,243,.38) 55%,rgba(252,249,243,0) 100%)",
  "theme": {
@@ -52,7 +52,7 @@
  "fx": {
   "kind": "dust",
   "color": "214,178,96",
-  "count": 36
+  "count": 14
  },
  "motif": "skin-assets/motif.webp",
  "motifIdle": "rotate",
@@ -60,5 +60,14 @@
  "fonts": [
   "Adventor",
   "Baskerville"
- ]
+ ],
+ "interior": {
+  "css": "interior.css",
+  "js": "interior.js",
+  "assets": {
+   "PAPER": "skin-assets/paper.jpg",
+   "BANDTOP": "skin-assets/band-top.jpg",
+   "BANDBOT": "skin-assets/band-bot.jpg"
+  }
+ }
 }

@@ -33,38 +33,38 @@
   "design-04": {
    "displayName": "AZULEJO",
    "version": "1.0.0",
-   "masterSha256": "ee6342705aac56cdc7ad42817c8e5f4d160e278e16378a1eb72e55c735c51e87",
+   "masterSha256": "d87675875b7b42db6564977ab32d3374b5f8b2a7901a5a5b25952e71035bec4a",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-05": {
    "displayName": "GALA",
    "version": "1.0.0",
-   "masterSha256": "30a8fb605352eb0bf78b51044d1b87bbf79c5b67291829222e6fdde763cff982",
+   "masterSha256": "1a9e7996199afc98d1f8320ab772813ce83d7be18f453c671cfcedab1e739f31",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-06": {
    "displayName": "INVERNADERO",
    "version": "1.0.0",
-   "masterSha256": "1757bf7723bfb35b25c63f57f019019f23da05be1b201a668dd671d33c836164",
+   "masterSha256": "a075815c85ebcf6b20f8bd043082936e525ffc5dccaaa437584e9467d0aaafe3",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-07": {
    "displayName": "REFLEJO",
    "version": "1.0.0",
-   "masterSha256": "49fbf0b3d01edefa3415580df55cd1b48530a7ffe0882db896885a95b0a68d89",
+   "masterSha256": "0ac6c3fc2575b2b2494e11c00eec55ae521223209214ecba6868605802a04d47",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   },
   "design-08": {
    "displayName": "CAJA DE MÚSICA",
    "version": "1.0.0",
-   "masterSha256": "cc8c89315a2154b7a5bb601bea1b0a036d9daff4c0a9946e78fef0cc84157d7f",
+   "masterSha256": "8cc601e3f3af59d0880d83a5ffbe20f870ea287462447005c27f7150bdd6acb5",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
   }
  },
- "revision": "v5: design-08 Caja de música con interior propio (partitura pulsable, cajones 1–4, fotos fundidas, compás entre secciones, música tras la portada); comprobación específica guest/qa/skin_caja_interior_checks.py PASS"
+ "revision": "v6: interiores propios en los cinco diseños (Azulejo: azulejos que giran y contraventanas; Gala: reloj déco y tiques de guardarropa; Invernadero: tallo con hojas y sobres de semillas; Reflejo: velas flotantes y espejos; Caja de música: partitura y cajones). Comprobación común guest/qa/skin_interior_checks.py PASS en los cinco; matriz 460/0"
 }

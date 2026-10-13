@@ -29,11 +29,11 @@ function render(vm){
   const staff=el('div','cj-staff');staff.setAttribute('role','group');staff.setAttribute('aria-label','Momentos del día');for(let k=0;k<5;k++){const l=el('i');l.style.top=(k*21)+'px';staff.append(l)}
   staff.append(el('span','cj-clef','𝄞'));const ph=el('span','cj-ph');staff.append(ph);
   const now=el('div','cj-now');now.setAttribute('aria-live','polite');const pitch=[52,31,42,21,63];
-  const notes=M.map((m,i)=>{const b=el('button','cj-note');b.type='button';b.setAttribute('aria-label',(m.time?m.time+' ':'')+m.label);b.style.left=(22+(i+.5)*(76/M.length))+'%';b.style.top=pitch[i%5]+'px';const h=el('span','cj-head');b.append(h);b.onclick=()=>{agendaState.pick=i;agendaTick()};staff.append(b);
+  const notes=M.map((m,i)=>{const b=el('button','cj-note');b.type='button';b.setAttribute('aria-label',(m.time?m.time+' ':'')+m.label);b.style.left=(22+(i+.5)*(76/M.length))+'%';b.style.top=pitch[i%5]+'px';const h=el('span','cj-head');b.append(h);b.onclick=()=>{agendaState.pick=i;agendaState.pickY=scrollY;agendaTick()};staff.append(b);
    const d=el('div');if(m.time)d.append(el('span','cj-tm',m.time));if(m.label)d.append(el('span','cj-lb',m.label));now.append(d);return {h,d}});
   inner.append(staff,now,el('p','cj-count'));if(M.length>1)inner.append(el('p','cj-tap','Toca una nota para ver su momento'));
   agendaState={staff,ph,notes,count:inner.querySelector('.cj-count'),n:M.length,pick:null,last:-1};
-  let x0=null;now.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});now.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<40)return;const c=agendaState.notes.findIndex(x=>x.d.classList.contains('on'));agendaState.pick=Math.max(0,Math.min(agendaState.n-1,c+(dx<0?1:-1)));agendaTick()},{passive:true})}
+  let x0=null;now.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});now.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<40)return;const c=agendaState.notes.findIndex(x=>x.d.classList.contains('on'));agendaState.pickY=scrollY;agendaState.pick=Math.max(0,Math.min(agendaState.n-1,c+(dx<0?1:-1)));agendaTick()},{passive:true})}
  // detalles: cajones (1–4), solo los que existen
  const D=vm.details;inner=scene(document.getElementById('practical'),D.length>0);openDrawer=null;
  if(D.length){head(inner,'todo lo que necesitas saber','Los detalles');const cab=el('div','cj-cab cj-rv'),tray=el('div','cj-tray'),tin=el('div','cj-tray-in');tray.append(tin);tray.id='cj-tray';
@@ -64,7 +64,7 @@ function fillTray(tin,x){tin.replaceChildren(el('h3',null,x.title));
  if(x.more){const d=el('details'),s=el('summary',null,x.more.label.toLowerCase());d.append(s);for(const l of x.more.lines)d.append(el('p',null,l));d.addEventListener('toggle',()=>{const tr=document.getElementById('cj-tray');tr.style.height=(tin.offsetHeight+12)+'px'});tin.append(d)}}
 function agendaTick(){const A=agendaState;if(!A)return;const vh=innerHeight;const y=A.staff.getBoundingClientRect().top;const q=A.n<2?1:Math.max(0,Math.min(1,(vh*.78-y)/(vh*.5)));const x=22+q*76;A.ph.style.left=x+'%';let cur=0;
  A.notes.forEach((o,i)=>{const nx=22+(i+.5)*(76/A.n);const on=x>=nx-1||A.n<2;o.h.classList.toggle('on',on);if(on)cur=i});
- if(A.last!==cur){A.last=cur;A.pick=null}if(A.pick!=null)cur=A.pick;
+ if(A.pick!=null&&Math.abs(scrollY-(A.pickY||0))>90)A.pick=null;A.last=cur;if(A.pick!=null)cur=A.pick;
  A.notes.forEach((o,i)=>{o.d.classList.toggle('on',i===cur);o.h.classList.toggle('cur',i===cur);if(i===cur)o.h.classList.add('on')});A.count.textContent=A.n>1?(cur+1)+' · '+A.n:''}
 let raf=0;addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;agendaTick()})},{passive:true});addEventListener('resize',()=>agendaTick());
 // sonido: melodía de la caja tras tocar la portada, botón para silenciar; clic de madera al abrir un cajón

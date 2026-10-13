@@ -53,7 +53,7 @@
  "closingScrimPosition": "top:0;height:52%;background:linear-gradient(180deg,rgba(10,12,28,.84) 0%,rgba(10,12,28,.5) 55%,rgba(10,12,28,0) 100%)",
  "fx": {
   "kind": "petals",
-  "count": 10,
+  "count": 5,
   "sprites": [
    "skin-assets/petal0.webp",
    "skin-assets/petal1.webp",
@@ -70,5 +70,17 @@
  "layout": "reflejo",
  "fonts": [
   "Lora"
- ]
+ ],
+ "interior": {
+  "css": "interior.css",
+  "js": "interior.js",
+  "assets": {
+   "PAPER": "skin-assets/paper.jpg",
+   "BANDTOP": "skin-assets/band-top.jpg",
+   "BANDBOT": "skin-assets/band-bot.jpg",
+   "PETAL": "skin-assets/motif.webp",
+   "VELA": "skin-assets/vela.webp",
+   "VELAOFF": "skin-assets/vela-off.webp"
+  }
+ }
 }

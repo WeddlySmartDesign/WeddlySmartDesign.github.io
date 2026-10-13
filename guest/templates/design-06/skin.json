@@ -2,7 +2,7 @@
  "id": "design-06",
  "version": "1.0.0",
  "displayName": "INVERNADERO",
- "coverTextAt": 3.0,
+ "coverTextAt": 3,
  "closingTextAt": 8.6,
  "coverTextPosition": "top:max(8svh,calc(env(safe-area-inset-top) + 40px))",
  "coverScrim": "top:0;height:50%;background:linear-gradient(180deg,rgba(252,249,243,.62) 0%,rgba(252,249,243,.38) 55%,rgba(252,249,243,0) 100%)",
@@ -49,18 +49,22 @@
   ]
  },
  "mediaSource": "Entrega «Invernadero» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas",
- "fx": {
-  "kind": "butterflies",
-  "every": 5200,
-  "sprites": [
-   "skin-assets/butterfly.webp"
-  ]
- },
+ "fx": {},
  "motif": "skin-assets/motif.webp",
  "motifIdle": "flap",
  "layout": "invernadero",
  "fonts": [
   "Pagella",
   "Poppins"
- ]
+ ],
+ "interior": {
+  "css": "interior.css",
+  "js": "interior.js",
+  "assets": {
+   "PAPER": "skin-assets/paper.jpg",
+   "BANDTOP": "skin-assets/band-top.jpg",
+   "BANDBOT": "skin-assets/band-bot.jpg",
+   "BFLY": "skin-assets/butterfly.webp"
+  }
+ }
 }

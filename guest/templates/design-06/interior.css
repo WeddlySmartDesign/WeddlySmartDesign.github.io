@@ -1,0 +1,84 @@
+/* ===== INVERNADERO · interior propio: tallo que crece, sobres de semillas, fotos fundidas ===== */
+html.iv body{background:url(%%PAPER%%) center top/100% auto repeat-y #f5f3ee}
+html.iv [data-bg]{background:none!important;min-height:0!important;display:block;padding:38px 30px 32px!important;color:#26392f;font:400 19px/1.55 'Pagella',Palatino,serif}
+.iv-band{display:block;width:100%;height:auto;max-width:none!important;margin:0}
+.iv-in{position:relative;max-width:420px;margin:0 auto;text-align:center}
+.iv-kicker{font:300 10.5px/1.2 'Poppins',sans-serif;letter-spacing:.38em;text-transform:uppercase;color:#56685d;margin:0 0 2px}
+.iv-title{font:italic 400 clamp(44px,12.5vw,58px)/1.2 'Pagella',Palatino,serif;letter-spacing:-.01em;color:#2f5540;margin:0 0 14px;padding-bottom:.06em}
+.iv-p{font-size:19.5px;line-height:1.62;max-width:29ch;margin:0 auto;white-space:pre-line;overflow-wrap:anywhere}
+.iv-rv{opacity:0;transform:translateY(16px);transition:opacity 1.1s ease,transform 1.3s cubic-bezier(.2,.8,.2,1)}
+.iv-rv.in{opacity:1;transform:none}
+/* mariposa entre secciones: se posa y abre las alas una vez */
+.iv-bfly{display:block;width:44px;height:30px;margin:0 auto 16px;background:url(%%BFLY%%) center/contain no-repeat;opacity:0;transform:scaleX(.18) translateY(-10px)}
+.iv-bfly.in{opacity:.9;transform:none;transition:opacity .9s ease,transform 1.8s cubic-bezier(.3,1.5,.4,1)}
+/* fotos fundidas */
+.iv-fade{display:block;max-width:none!important;width:calc(100% + 60px);margin:20px -30px 0;height:300px;object-fit:cover;
+ -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 76%,transparent 100%),linear-gradient(to right,transparent 0%,#000 14%,#000 86%,transparent 100%);-webkit-mask-composite:source-in;
+ mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 76%,transparent 100%),linear-gradient(to right,transparent 0%,#000 14%,#000 86%,transparent 100%);mask-composite:intersect}
+.iv-fade[data-fit=full]{object-fit:contain;height:auto;max-height:420px;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 10%,#000 88%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0%,#000 10%,#000 88%,transparent 100%)}
+.iv-fade.iv-rv{transform:scale(1.05);filter:blur(4px);transition:opacity 1.6s ease,transform 2.6s cubic-bezier(.2,.8,.2,1),filter 1.6s}
+.iv-fade.iv-rv.in{transform:none;filter:none}
+/* lugares */
+.iv-venue{padding:8px 0 22px}.iv-venue+.iv-venue{padding-top:24px}
+.iv-venue+.iv-venue::before{content:"";display:block;width:8px;height:14px;margin:0 auto 18px;background:linear-gradient(135deg,#9cc58e,#3d6a51);border-radius:0 90% 0 90%;transform:rotate(45deg);opacity:.75}
+.iv-v-k{font:300 10.5px/1 'Poppins',sans-serif;letter-spacing:.38em;text-transform:uppercase;color:#56685d}
+.iv-v-name{font:italic 400 31px/1.15 'Pagella',Palatino,serif;color:#2f5540;margin:9px 0 4px;overflow-wrap:anywhere}
+.iv-v-time{font:300 15px/1 'Poppins',sans-serif;letter-spacing:.22em}
+.iv-v-addr{color:#56685d;font-size:17.5px;margin-top:6px;overflow-wrap:anywhere}
+.iv-links{display:flex;flex-wrap:wrap;justify-content:center;gap:0 22px;margin-top:4px}
+html.iv a.link{display:inline-flex;align-items:center;min-height:44px;padding:12px 0 6px;border:0;border-bottom:1px solid rgba(61,106,81,.4);border-radius:0;background:none;font:400 10.5px/1 'Poppins',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#2f5540;text-decoration:none}
+html.iv a.link::after{content:none}
+.iv-dress{margin:22px auto 0;font-style:italic;color:#56685d}
+/* agenda: un tallo que crece; cada momento despliega una hoja */
+.iv-stem{position:relative;width:100%;max-width:340px;height:120px;margin:8px auto 0}
+.iv-stem svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.iv-stem path{fill:none;stroke:#4f7a5c;stroke-width:1.5;stroke-linecap:round}
+.iv-stem .bg{stroke:rgba(61,106,81,.16)}
+.iv-stem .fg{transition:stroke-dashoffset .7s ease-out}
+.iv-lf{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border:0;padding:0;background:none;cursor:pointer}
+.iv-lf i{position:absolute;left:50%;top:50%;width:15px;height:26px;margin:-26px 0 0 -7.5px;transform-origin:50% 100%;transform:rotate(var(--r)) scale(0);background:linear-gradient(160deg,#b9d7a6 0%,#6e9c6c 45%,#2f5540 100%);border-radius:50% 50% 50% 50%/62% 62% 38% 38%;transition:transform 1.1s cubic-bezier(.3,1.35,.45,1),filter .5s;box-shadow:inset -1px 0 0 rgba(255,255,255,.25)}
+.iv-lf i::after{content:"";position:absolute;left:50%;top:18%;bottom:6%;width:1px;background:rgba(255,255,255,.45)}
+.iv-lf::after{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:#4f7a5c;opacity:.35}
+.iv-lf.on i{transform:rotate(var(--r)) scale(1)}
+.iv-lf.cur i{transform:rotate(var(--r)) scale(1.22);filter:drop-shadow(0 3px 5px rgba(38,57,47,.3))}
+.iv-lf:focus-visible{outline:1px solid #3d6a51;outline-offset:-6px;border-radius:50%}
+.iv-now{display:grid;margin-top:10px}
+.iv-now div{grid-area:1/1;opacity:0;transform:translateY(8px);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+.iv-now div.on{opacity:1;transform:none}
+.iv-tm{display:block;font:300 15px/1 'Poppins',sans-serif;letter-spacing:.28em;color:#56685d}
+.iv-lb{display:block;font:italic 400 36px/1.2 'Pagella',Palatino,serif;color:#2f5540;margin-top:8px;overflow-wrap:anywhere}
+.iv-tap{font-style:italic;color:#56685d;font-size:15.5px;margin:10px 0 0}
+/* detalles: sobres de semillas */
+.iv-envs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 18px;max-width:320px;margin:16px auto 0}
+.iv-env{position:relative;border:0;padding:0;background:none;cursor:pointer;color:#26392f;display:flex;flex-direction:column;align-items:center;gap:10px}
+.iv-env.solo{grid-column:1/-1}
+.iv-pk{position:relative;width:98px;height:118px;background:linear-gradient(180deg,#efe6d2,#e4d7bc);box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 6px 14px rgba(38,57,47,.12);perspective:420px}
+.iv-pk::before{content:"";position:absolute;left:12px;right:12px;top:40px;bottom:16px;border:1px solid rgba(61,106,81,.35)}
+.iv-pk b{position:absolute;left:0;right:0;top:58px;font:300 9px/1 'Poppins',sans-serif;letter-spacing:.32em;color:#3d6a51}
+.iv-pk s{position:absolute;left:50%;top:76px;width:7px;height:13px;margin-left:-3.5px;background:linear-gradient(135deg,#9cc58e,#3d6a51);border-radius:0 90% 0 90%;transform:rotate(45deg)}
+.iv-flap{position:absolute;left:0;right:0;top:0;height:34px;transform-origin:50% 0;background:linear-gradient(180deg,#e9dec6,#ddcfb1);clip-path:polygon(0 0,100% 0,100% 30%,50% 100%,0 30%);transition:transform 1s cubic-bezier(.3,.9,.25,1);backface-visibility:hidden}
+.iv-env[aria-expanded=true] .iv-flap{transform:rotateX(-170deg)}
+.iv-env[aria-expanded=true] .iv-pk{transform:translateY(-3px);transition:transform .6s}
+.iv-env-lb{font:400 10.5px/1.2 'Poppins',sans-serif;letter-spacing:.24em;text-transform:uppercase;color:#2f5540;padding:6px 2px;border-bottom:1px solid transparent}
+.iv-env[aria-expanded=true] .iv-env-lb{border-bottom-color:#3d6a51}
+.iv-env:focus-visible .iv-pk{outline:2px solid #3d6a51;outline-offset:3px}
+.iv-hint{font-style:italic;color:#56685d;font-size:16px;margin:14px 0 0}
+.iv-tray{max-width:340px;margin:0 auto;overflow:hidden;height:0;transition:height .8s cubic-bezier(.2,.8,.2,1)}
+.iv-tray-in{margin-top:16px;padding:22px 20px 18px;text-align:center;background:rgba(255,255,255,.55);box-shadow:inset 0 0 0 1px rgba(61,106,81,.22)}
+.iv-tray-in h3{margin:0 0 8px;font:italic 400 32px/1.2 'Pagella',Palatino,serif;color:#2f5540}
+.iv-tray-in p{margin:0 0 6px;font-size:18.5px;overflow-wrap:anywhere;white-space:pre-line}
+.iv-tt{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 28px;margin:10px 0}
+.iv-tt span{display:flex;flex-direction:column;font:300 10px/1.5 'Poppins',sans-serif;letter-spacing:.3em;text-transform:uppercase;color:#56685d}
+.iv-tt b{font:italic 400 24px/1.1 'Pagella',Palatino,serif;color:#26392f;letter-spacing:0;text-transform:none}
+.iv-tray-in details{margin-top:4px}.iv-tray-in summary{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;list-style:none;font:400 10.5px/1 'Poppins',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#2f5540;border-bottom:1px solid rgba(61,106,81,.4)}
+.iv-tray-in summary::-webkit-details-marker{display:none}
+/* galería */
+html.iv #gallery-items{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;width:calc(100% + 60px);max-width:none;margin:8px -30px 0;overscroll-behavior-x:contain}
+html.iv #gallery-items::-webkit-scrollbar{display:none}
+html.iv #gallery-items img{flex:0 0 100%;width:100%!important;min-width:100%;max-width:none!important;margin:0!important;height:360px;scroll-snap-align:center;scroll-snap-stop:always}
+.iv-dots{display:flex;justify-content:center;gap:2px;margin-top:4px}
+html.iv .gallery-dot{width:42px;height:42px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer}
+html.iv .gallery-dot::before{content:"";width:6px;height:11px;transform:rotate(45deg);border-radius:0 90% 0 90%;background:rgba(61,106,81,.25)}
+html.iv .gallery-dot[aria-current=true]::before{background:#3d6a51}
+@media(max-width:360px){.iv-lb{font-size:31px}.iv-v-name{font-size:27px}.iv-pk{width:90px;height:110px}}
+@media(prefers-reduced-motion:reduce){.iv-rv,.iv-fade.iv-rv{opacity:1;transform:none;filter:none;transition:none}.iv-bfly{opacity:.9;transform:none}.iv-lf i,.iv-flap{transition:none}}
