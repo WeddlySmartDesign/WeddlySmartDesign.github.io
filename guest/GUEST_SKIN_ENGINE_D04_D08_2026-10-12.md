@@ -89,3 +89,7 @@ Misma estructura y mismas reglas que Caja de música; cada diseño con su propio
 - **design-07 · Reflejo**: títulos con su reflejo; agenda como velas flotantes que se encienden y se reflejan en el agua; detalles como espejos ovalados que recorre un destello; pétalo que se posa y deja una onda entre secciones; pétalos en caída reducidos.
 
 Comprobación común: `python3 guest/qa/skin_interior_checks.py design-04:.az-tile:.az-win:.az-now design-05:.ga-mk:.ga-tk:.ga-now design-06:.iv-lf:.iv-env:.iv-now design-07:.rf-cd:.rf-mr:.rf-now design-08:.cj-note:.cj-drawer:.cj-now` → PASS en los cinco. Matriz `skin_engine_matrix_playwright.py`: 460 comprobaciones, 0 fallos. Catálogo sincronizado con `--sync-catalog`. Estado: certification-pending, TEST, NO SALE.
+
+## Revisión v7 (2026-10-13) · design-09 Limoneros, versión Claude
+
+A petición de la autora, versión alternativa de «Jardín de limoneros» para compararla con design-03 (la de ChatGPT) y quedarse con una. **design-03 no se toca**: sus vídeos y fondos se han leído de `guest-independent` en solo lectura. Interior propio: el fondo pasa del melocotón del atardecer al lila de la noche al bajar (enlaza la portada con el cierre); agenda como el camino del sol, que avanza y se pone sobre el horizonte (marcas pulsables); detalles como papeles de seda de limón que se desenvuelven; golondrinas del cierre entre secciones; fotos fundidas. `skin_interior_checks.py design-09:.lm-mk:.lm-w:.lm-now` PASS; matriz con seis diseños 552/0. Registrado TEST con `register_visual_template.cjs --apply`. certification-pending, NO SALE.

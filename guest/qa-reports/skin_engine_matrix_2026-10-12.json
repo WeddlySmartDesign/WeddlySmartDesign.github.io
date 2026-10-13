@@ -19,7 +19,7 @@
   "galería 0/1/2/3/4 con navegación real por puntos",
   "ausencias: sin historia, solo texto, solo foto, sin agenda, 1 y 3 momentos, práctico 0 y 1, sin URLs, 1 sede, sin cuenta atrás, nombres largos, solo lugares"
  ],
- "checks": 460,
+ "checks": 552,
  "fails": 0,
  "criteria": [
   "sin desbordamiento horizontal",
@@ -64,7 +64,14 @@
    "masterSha256": "8cc601e3f3af59d0880d83a5ffbe20f870ea287462447005c27f7150bdd6acb5",
    "status": "certification-pending",
    "ownerVisualApproval": "PENDING"
+  },
+  "design-09": {
+   "displayName": "LIMONEROS · VERSIÓN CLAUDE",
+   "version": "1.0.0",
+   "masterSha256": "35b903843c145845cf3e894a4f5837ddb05d6cb198410b196b8903a0c9d1eeb9",
+   "status": "certification-pending",
+   "ownerVisualApproval": "PENDING"
   }
  },
- "revision": "v6: interiores propios en los cinco diseños (Azulejo: azulejos que giran y contraventanas; Gala: reloj déco y tiques de guardarropa; Invernadero: tallo con hojas y sobres de semillas; Reflejo: velas flotantes y espejos; Caja de música: partitura y cajones). Comprobación común guest/qa/skin_interior_checks.py PASS en los cinco; matriz 460/0"
+ "revision": "v6: interiores propios en los cinco diseños (Azulejo: azulejos que giran y contraventanas; Gala: reloj déco y tiques de guardarropa; Invernadero: tallo con hojas y sobres de semillas; Reflejo: velas flotantes y espejos; Caja de música: partitura y cajones). Comprobación común guest/qa/skin_interior_checks.py PASS en los cinco; matriz 460/0 · v7: design-09 Limoneros (versión Claude, alternativa a design-03 para que la autora elija; design-03 intacto). Matriz 552/0"
 }

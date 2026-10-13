@@ -1,0 +1,52 @@
+{
+ "id": "design-09",
+ "version": "1.0.0",
+ "displayName": "LIMONEROS · VERSIÓN CLAUDE",
+ "coverTextAt": 6.2,
+ "closingTextAt": 7.4,
+ "coverTextPosition": "top:max(7svh,calc(env(safe-area-inset-top) + 34px))",
+ "coverScrim": "top:0;height:48%;background:linear-gradient(180deg,rgba(255,240,226,.55) 0%,rgba(255,240,226,.3) 55%,rgba(255,240,226,0) 100%)",
+ "closingTextPosition": "bottom:max(5svh,calc(env(safe-area-inset-bottom) + 14px))",
+ "theme": {
+  "paper": "#f5e0ce",
+  "ink": "#563d4b",
+  "soft": "#775968",
+  "accent": "#a8741f",
+  "line": "rgba(119,89,104,.32)",
+  "btn": "rgba(255,255,255,.5)",
+  "cover-bg": "#e9a77a",
+  "cover-ink": "#662f49",
+  "cover-names": "#662f49",
+  "cover-halo": "0 0 18px rgba(255,240,224,.95),0 0 4px rgba(255,240,224,.9)",
+  "cover-btn": "rgba(255,246,236,.88)",
+  "cover-btn-ink": "#662f49",
+  "cover-btn-line": "rgba(102,47,73,.45)",
+  "hint-ink": "#662f49",
+  "hint-halo": "0 0 14px rgba(255,240,224,.95)",
+  "hint-pulse": "rgba(102,47,73,.35)",
+  "closing-scrim": "linear-gradient(to top,rgba(20,24,52,.88) 0%,rgba(20,24,52,.55) 50%,rgba(20,24,52,0) 100%)",
+  "closing-ink": "#fff7ed",
+  "closing-halo": "0 1px 10px rgba(0,0,0,.55)",
+  "closing-btn": "rgba(255,247,237,.95)",
+  "closing-btn-ink": "#242d52",
+  "closing-btn-line": "rgba(255,247,237,.95)"
+ },
+ "tapLabel": "Toca para abrir",
+ "media": {
+  "coverVideo": "videos/portada.mp4",
+  "closingVideo": "videos/cierre.mp4",
+  "backgrounds5": ["fondos-5-pantallas/fondo-1.jpg","fondos-5-pantallas/fondo-2.jpg","fondos-5-pantallas/fondo-3.jpg","fondos-5-pantallas/fondo-4.jpg","fondos-5-pantallas/fondo-5.jpg"],
+  "backgrounds4": ["fondos-4-pantallas/fondo-1.jpg","fondos-4-pantallas/fondo-2.jpg","fondos-4-pantallas/fondo-3.jpg","fondos-4-pantallas/fondo-4.jpg"]
+ },
+ "mediaSource": "Entrega «Jardín de limoneros» (vídeos y fondos tomados en solo lectura de design-03; design-03 no se modifica)",
+ "fx": {},
+ "motif": "skin-assets/swallows.webp",
+ "motifIdle": "float",
+ "layout": "limon",
+ "fonts": ["Garamond","GaramondSC"],
+ "interior": {
+  "css": "interior.css",
+  "js": "interior.js",
+  "assets": {"TEX":"skin-assets/texture.jpg","BANDTOP":"skin-assets/band-top.jpg","BANDBOT":"skin-assets/band-bot.jpg","SWALLOWS":"skin-assets/swallows.webp"}
+ }
+}
