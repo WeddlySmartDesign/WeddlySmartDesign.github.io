@@ -557,8 +557,8 @@
       "status": "certification-pending",
       "catalogAsset": "guest/catalog-assets/design-11/1.0.0/index.html",
       "adapter": "guest/guest-catalog-template-design-11-adapter-v1.js",
-      "visualMasterSha256": "393a5a0b6bfea1a05f3c58f386b26749fc38dfbf2385c29da473dd8c5b924e89",
-      "candidateSha256": "393a5a0b6bfea1a05f3c58f386b26749fc38dfbf2385c29da473dd8c5b924e89",
+      "visualMasterSha256": "31fe90aee4cbccce81aa3418d8deec0d2b5501a15ba6047c8846ad8713ade552",
+      "candidateSha256": "31fe90aee4cbccce81aa3418d8deec0d2b5501a15ba6047c8846ad8713ade552",
       "commerciallyCertified": false,
       "requiredGates": 11
     }

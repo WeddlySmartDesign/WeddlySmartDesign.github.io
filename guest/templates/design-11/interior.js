@@ -31,19 +31,19 @@ function render(vm){
   const svg=document.createElementNS(SVG,'svg');svg.setAttribute('viewBox','0 0 340 140');svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('aria-hidden','true');
   svg.innerHTML=`<defs><linearGradient id="bcg" x1="0" x2="1"><stop offset="0" stop-color="#d9b56a" stop-opacity=".2"/><stop offset=".5" stop-color="#c99a3c"/><stop offset="1" stop-color="#e6c57f"/></linearGradient></defs><path class="bc-tr-bg" d="${TRAIL}" vector-effect="non-scaling-stroke"/><path class="bc-tr" d="${TRAIL}" vector-effect="non-scaling-stroke"/>`;sky.append(svg);
   const tr=svg.querySelector('.bc-tr'),L=tr.getTotalLength();tr.style.strokeDasharray=L;tr.style.strokeDashoffset=L;
-  const now=el('div','bc-now');now.setAttribute('aria-live','polite');
+  const now=el('div','bc-now');
   const pts=M.map((m,i)=>{const f=M.length<2?.5:.06+.88*i/(M.length-1),pt=tr.getPointAtLength(L*f);const b=el('button','bc-mk');b.type='button';b.setAttribute('aria-label',(m.time?m.time+' ':'')+m.label);
    b.style.left=(pt.x/340*100)+'%';b.style.top=(pt.y/140*100)+'%';b.append(el('i'));b.onclick=()=>{A.pick=i;A.pickY=scrollY;tick()};sky.append(b);
-   const d=el('div');if(m.time)d.append(el('span','bc-tm',m.time));if(m.label)d.append(el('span','bc-lb',m.label));now.append(d);return {b,d,f}});
-  inner.append(sky,now);if(M.length>1)inner.append(el('p','bc-tap','Toca un destello para ver su momento'));A={sky,tr,L,pts,n:M.length,pick:null};
+   const d=el('div');d.append(el('span','bc-tm',m.time||''));if(m.label)d.append(el('span','bc-lb',m.label));d.onclick=()=>{A.pick=i;A.pickY=scrollY;tick()};now.append(d);return {b,d,f}});
+  inner.append(sky,now);A={sky,tr,L,pts,n:M.length,pick:null};
   let x0=null;now.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});now.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<40)return;const c=A.pts.findIndex(t=>t.d.classList.contains('on'));A.pick=Math.max(0,Math.min(A.n-1,c+(dx<0?1:-1)));A.pickY=scrollY;tick()},{passive:true})}
  // detalles: cantos de travertino con un pétalo encima (1–4); al tocar, el pétalo se levanta y se abre su información
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openStone=null;
  if(D.length){head(inner,'Todo lo que necesitas saber','Los detalles',mark(sec));const grid=el('div','bc-stones bc-rv'),tray=el('div','bc-tray'),tin=el('div','bc-tray-in');tray.id='bc-tray';tray.append(tin);
   D.forEach((x,i)=>{const b=el('button','bc-s'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','bc-tray');
    const st=el('span','bc-stone');st.setAttribute('aria-hidden','true');const pe=el('img','bc-pet');pe.src=PETALS[i%PETALS.length];pe.alt='';pe.style.setProperty('--r',(i%2?24:-30)+'deg');st.append(pe);b.append(st,el('span','bc-s-lb',x.title));
-   b.onclick=()=>{if(openStone===b){b.setAttribute('aria-expanded','false');openStone=null;tray.style.height='0px';return}openStone?.setAttribute('aria-expanded','false');openStone=b;b.setAttribute('aria-expanded','true');fill(tin,x);tray.style.height=(tin.offsetHeight+16)+'px'};grid.append(b)});
-  inner.append(grid,el('p','bc-hint bc-rv',D.length>1?'Toca cada piedra para verlo':'Toca la piedra para verlo'),tray)}
+   b.onclick=()=>{grid.classList.add('used');if(openStone===b){b.setAttribute('aria-expanded','false');openStone=null;tray.style.height='0px';return}openStone?.setAttribute('aria-expanded','false');openStone=b;b.setAttribute('aria-expanded','true');fill(tin,x);tray.style.height=(tin.offsetHeight+16)+'px'};grid.append(b)});
+  inner.append(grid,el('p','bc-hint bc-rv',D.length>1?'Toca cada piedra para abrir su información':'Toca la piedra para abrir su información'),tray)}
  const G=vm.gallery;sec=document.getElementById('gallery');inner=scene(sec,G.length>0);
  if(G.length){head(inner,'Un poco de nosotros','Recuerdos',mark(sec));const track=el('div','bc-rv');track.id='gallery-items';track.setAttribute('role','region');track.setAttribute('aria-label','Galería de fotografías');
   G.forEach((p,i)=>{const im=el('img','bc-gimg');im.src=p.src;im.alt=p.alt||'Fotografía de la pareja';im.dataset.fit=p.fit;im.style.objectPosition=p.fx+'% '+p.fy+'%';im.loading=i?'lazy':'eager';im.setAttribute('aria-label','Fotografía '+(i+1)+' de '+G.length);track.append(im)});inner.append(track);
