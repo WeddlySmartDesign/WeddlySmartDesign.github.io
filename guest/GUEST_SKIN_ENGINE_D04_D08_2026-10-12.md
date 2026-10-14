@@ -184,3 +184,11 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - Interior propio (prefijo `bc`): motas de purpurina entre secciones, fotos sin marco con borde empañado y destello, lugar grabado sobre travertino, programa sobre una estela dorada con destellos pulsables, detalles como cantos de travertino con un pétalo.
 - Música original (piano, celesta, arpa y cuerdas), se apaga con el cierre.
 - Medios fuente: `/home/claude/bola/ent` (copia local; no incluida en el repo salvo dentro del master).
+
+## v17 · D12 «Abanico» (nuevo, TEST · certification-pending · NO VENTA)
+- Sin vídeos generados: portada y cierre animados por código (`/home/claude/abanico/tools/frames.py`, 1080×1920, 30 fps). Hoja del abanico = retrato al óleo «retrato-cerca» de la autora (Recraft, reutilizado); varillas, borla, cinta, pétalos y seda verde salvia hechos por código. Sin nombres en los vídeos.
+- Portada (8,2 s): el abanico cerrado gira, se abre con un golpe, destello dorado y pétalos; textos del motor a 4,4 s, arriba.
+- Cierre (11 s): se pliega despacio, se tumba, la cinta se ata por partes y caen pétalos; «Os esperamos» propio a 5,6 s y resto a 6,6 s.
+- Interior propio (prefijo `ab`): seda marfil con reflejos; abanico diminuto que se abre entre secciones; lugar en hoja de seda con doble filo dorado; programa como abanico que se despliega al bajar (cada varilla = un momento, pulsable) + lista completa; detalles como abanicos entreabiertos que laten y se abren al tocarlos; fotos sin forma con bordes fundidos y destello dorado.
+- Música original (guitarra española en arpegios, flauta y cuerdas, 3/4 en re mayor), se apaga con el cierre.
+- Medios fuente: `/home/claude/abanico/ent` (copia local; dentro del master).

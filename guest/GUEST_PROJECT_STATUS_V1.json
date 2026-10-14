@@ -561,6 +561,16 @@
       "candidateSha256": "c3f35feb46a7ead97ce47b2d3538b199d270d1aa7b42e9faf6e3754616b2ec0d",
       "commerciallyCertified": false,
       "requiredGates": 11
+    },
+    "design-12": {
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-12/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-12-adapter-v1.js",
+      "visualMasterSha256": "6d8a3515ae02797c9246e3be9f745c77a2bedb516c3177e2000d2b049051538d",
+      "candidateSha256": "6d8a3515ae02797c9246e3be9f745c77a2bedb516c3177e2000d2b049051538d",
+      "commerciallyCertified": false,
+      "requiredGates": 11
     }
   },
   "runtime": {
