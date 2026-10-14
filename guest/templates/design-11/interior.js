@@ -35,7 +35,7 @@ function render(vm){
   const pts=M.map((m,i)=>{const f=M.length<2?.5:.06+.88*i/(M.length-1),pt=tr.getPointAtLength(L*f);const b=el('button','bc-mk');b.type='button';b.setAttribute('aria-label',(m.time?m.time+' ':'')+m.label);
    b.style.left=(pt.x/340*100)+'%';b.style.top=(pt.y/140*100)+'%';b.append(el('i'));b.onclick=()=>{A.pick=i;A.pickY=scrollY;tick()};sky.append(b);
    const d=el('div');d.append(el('span','bc-tm',m.time||''));if(m.label)d.append(el('span','bc-lb',m.label));d.onclick=()=>{A.pick=i;A.pickY=scrollY;tick()};now.append(d);return {b,d,f}});
-  inner.append(sky,now);A={sky,tr,L,pts,n:M.length,pick:null};
+  inner.append(sky,now);if(M.length>1)inner.append(el('p','bc-hint bc-rv','Toca un destello o un momento para resaltarlo'));A={sky,tr,L,pts,n:M.length,pick:null};
   let x0=null;now.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});now.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<40)return;const c=A.pts.findIndex(t=>t.d.classList.contains('on'));A.pick=Math.max(0,Math.min(A.n-1,c+(dx<0?1:-1)));A.pickY=scrollY;tick()},{passive:true})}
  // detalles: cantos de travertino con un pétalo encima (1–4); al tocar, el pétalo se levanta y se abre su información
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openStone=null;
@@ -74,6 +74,9 @@ addEventListener('DOMContentLoaded',()=>{document.body.append(sb);const cover=do
  const start=()=>{if(window.__GUEST_SUPPRESS_SOUND__)return;sb.classList.add('show');setSound(true);cover.removeEventListener('click',start)};cover.addEventListener('click',start);
  document.addEventListener('visibilitychange',()=>{if(document.hidden&&soundOn)music.pause();else if(!document.hidden&&soundOn)music.play().catch(()=>{})});
  const xv=document.getElementById('closing-video');
+ const cl=document.getElementById('closing');if(cl&&!cl.querySelector('.bc-wait')){const w=el('p','bc-wait','Os esperamos');w.setAttribute('aria-hidden','true');cl.append(w);
+  if(xv){xv.addEventListener('timeupdate',()=>{if(xv.currentTime>=1.2)w.classList.add('on')});xv.addEventListener('play',()=>{if(xv.currentTime<.5)w.classList.remove('on')})}
+  if(reducedMotion())w.classList.add('on');new MutationObserver(()=>{if(cl.classList.contains('revealed'))w.classList.add('on')}).observe(cl,{attributes:true,attributeFilter:['class']})}
  if(xv)xv.addEventListener('play',()=>{if(!soundOn)return;const left=Math.max(3,((xv.duration||12)-(xv.currentTime||0))*.95),step=music.volume/(left*10);
   soundOn=false;sb.setAttribute('aria-pressed','false');sb.setAttribute('aria-label','Activar música');clearInterval(fadeT);
   fadeT=setInterval(()=>{music.volume=Math.max(0,music.volume-step);if(music.volume<=0){music.pause();clearInterval(fadeT)}},100)})});

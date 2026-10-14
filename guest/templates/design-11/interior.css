@@ -72,7 +72,7 @@ html.bc a.link::after{content:none}
 .bc-s-lb{font:400 13px/1.35 'Poppins',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#43301f;padding:6px 2px;border-bottom:1px solid transparent}
 .bc-s[aria-expanded=true] .bc-s-lb{border-bottom-color:#3a2919}
 .bc-s:focus-visible{outline:2px solid #3a2919;outline-offset:3px}
-.bc-hint{font-style:italic;color:#5a4330;font-size:17.5px;margin:14px 0 0}
+.bc-hint{font-style:italic;color:#5a4330;font-size:15.5px;margin:14px 0 0}
 .bc-tray{max-width:340px;margin:0 auto;overflow:hidden;height:0;transition:height .8s cubic-bezier(.2,.8,.2,1)}
 .bc-tray-in{margin-top:16px;padding:20px 20px 16px;text-align:center;background:radial-gradient(ellipse at 50% 0,rgba(240,214,150,.3),transparent 70%)}
 .bc-tray-in h3{margin:0 0 6px;font:italic 400 32px/1.2 'Bonum',Georgia,serif;color:#3a2919}
@@ -116,3 +116,9 @@ html.bc .close-date{font-family:'Poppins',sans-serif;font-weight:300;letter-spac
 .bc-s-lb::after{content:" +";color:#b08a45;font-weight:500}
 .bc-s[aria-expanded=true] .bc-s-lb::after{content:" −"}
 @media(prefers-reduced-motion:reduce){.bc-stone::after{animation:none;opacity:.6}}
+
+/* cierre: «Os esperamos» aparece primero, en cuanto la estela empieza a subir; luego el resto debajo */
+.bc-wait{position:absolute;z-index:2;left:22px;right:22px;top:max(7svh,calc(env(safe-area-inset-top) + 34px));margin:0;text-align:center;font:italic 400 clamp(38px,10.5vw,54px)/1.1 'Bonum',Georgia,serif;color:#fff6e8;text-shadow:0 1px 14px rgba(0,0,0,.7),0 0 30px rgba(8,12,30,.6);opacity:0;transform:translateY(10px);transition:opacity 1.4s ease,transform 1.4s ease;pointer-events:none}
+.bc-wait.on{opacity:1;transform:none}
+#closing.replaying .bc-wait{opacity:0}
+html.bc .closing-text{top:calc(max(7svh,calc(env(safe-area-inset-top) + 34px)) + 64px)!important}
