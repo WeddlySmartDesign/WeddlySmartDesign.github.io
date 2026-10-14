@@ -1,4 +1,4 @@
-/* ===== ABANICO · interior propio: seda marfil con reflejos, filos dorados y abanicos que se despliegan ===== */
+/* ===== ABANICO · interior propio: seda marfil con reflejos y filos dorados; un solo abanico, el del programa ===== */
 /* La seda verde salvia de la portada se aclara a marfil y vuelve a la salvia antes del cierre. */
 html.ab{background:#efeee4}
 html.ab body{background:linear-gradient(180deg,#efeee4 0%,#f3f1e7 30%,#f1efe5 60%,#e9ebe0 84%,#e2e7db 100%) top/100% 100% no-repeat,url(%%SILK%%) center top/100% auto repeat-y transparent;background-blend-mode:multiply}
@@ -10,18 +10,6 @@ html.ab [data-bg]{background:none!important;min-height:0!important;display:block
 .ab-p{font-size:20px;line-height:1.65;max-width:30ch;margin:0 auto;white-space:pre-line;overflow-wrap:anywhere}
 .ab-rv{opacity:0;transform:translateY(16px);transition:opacity 1.1s ease,transform 1.3s cubic-bezier(.2,.8,.2,1)}
 .ab-rv.in{opacity:1;transform:none}
-/* abanicos en SVG: pliegues marfil con filo dorado que se despliegan desde el remache */
-.ab-fan{display:block;overflow:visible}
-.ab-pa{fill:#f7f2e4;stroke:#c9a75f;stroke-width:.6}
-.ab-pb{fill:#ebe3cf;stroke:#c9a75f;stroke-width:.6}
-.ab-rib{stroke:#d9c7a2;stroke-width:.9}
-.ab-pin{fill:#c39a4c;stroke:#f3dfa8;stroke-width:1}
-.ab-pl{transform-box:view-box;transform-origin:50px 56px;transform:rotate(0deg);transition:transform 1.2s cubic-bezier(.2,.9,.25,1.05);transition-delay:calc(var(--d) * 35ms)}
-/* separador entre secciones: un abanico diminuto que se abre al aparecer */
-.ab-sep{display:block;width:62px;height:38px;margin:0 auto 14px}
-.ab-sep.ab-rv{transform:none}
-.ab-sep svg{width:100%;height:100%;filter:drop-shadow(0 1px 1px rgba(60,70,50,.18))}
-.ab-sep.in .ab-pl{transform:rotate(var(--a));transition-delay:calc(.25s + var(--d) * 60ms)}
 /* fotos: sin marco ni forma, bordes fundidos con la seda y un destello dorado que las cruza */
 .ab-ph{position:relative;width:calc(100% + 40px);margin:22px -20px 0;-webkit-mask:url(%%MASK%%) center/100% 100% no-repeat;mask:url(%%MASK%%) center/100% 100% no-repeat}
 .ab-ph img{display:block;width:100%;height:320px;object-fit:cover;max-width:none!important;filter:saturate(.92) brightness(1.02)}
@@ -32,7 +20,7 @@ html.ab [data-bg]{background:none!important;min-height:0!important;display:block
 .ab-ph.in .ab-shine{animation:abshine 2.6s .9s cubic-bezier(.4,.1,.3,1) forwards}
 @keyframes abshine{to{background-position:160% 0}}
 /* lugar: hoja de abanico de seda marfil con doble filo dorado */
-.ab-places{position:relative;max-width:360px;margin:26px auto 0;padding:14px 22px 26px;background:linear-gradient(180deg,rgba(255,252,243,.92),rgba(250,246,234,.8));border-radius:50% 50% 14px 14px/64px 64px 14px 14px;box-shadow:0 0 0 1px #c9a75f,0 0 0 5px rgba(255,252,243,.6),0 0 0 6px rgba(201,167,95,.55),0 18px 30px -16px rgba(47,59,47,.35)}
+.ab-places{position:relative;max-width:360px;margin:26px auto 0;padding:30px 22px 26px;background:linear-gradient(180deg,rgba(255,252,243,.92),rgba(250,246,234,.8));border-radius:50% 50% 14px 14px/64px 64px 14px 14px;box-shadow:0 0 0 1px #c9a75f,0 0 0 5px rgba(255,252,243,.6),0 0 0 6px rgba(201,167,95,.55),0 18px 30px -16px rgba(47,59,47,.35)}
 .ab-venue{position:relative;display:grid;grid-template-columns:62px 1px 1fr;gap:0 14px;align-items:start;text-align:left;padding:10px 0}
 .ab-venue+.ab-venue{margin-top:6px;border-top:1px solid rgba(201,167,95,.35);padding-top:16px}
 .ab-venue::after{content:"";grid-column:2;grid-row:1;width:1px;height:100%;background:linear-gradient(transparent,rgba(168,132,63,.6) 20%,rgba(168,132,63,.6) 80%,transparent)}
@@ -46,18 +34,23 @@ html.ab [data-bg]{background:none!important;min-height:0!important;display:block
 html.ab a.link{display:inline-flex;align-items:center;min-height:44px;padding:10px 0 4px;border:0;border-bottom:1px solid rgba(168,132,63,.7);border-radius:0;background:none;font:400 14px/1 'GaramondSC',Georgia,serif;letter-spacing:.16em;text-transform:uppercase;color:#2b3a2c;text-decoration:none;white-space:nowrap}
 html.ab a.link::after{content:none}
 .ab-dress{margin:22px auto 0;font-style:italic;color:#4b5a47}
-.ab-pfan{display:block;width:58px;height:35px;margin:0 auto 4px}
-.ab-pfan .ab-pl{transform:rotate(var(--a))}
-/* agenda: el abanico se abre al bajar; cada varilla es un momento */
-.ab-sky{position:relative;width:100%;max-width:340px;aspect-ratio:340/190;margin:6px auto 0}
+/* agenda: un abanico pintado (hoja de óleo con pliegues, varillas de marfil) que se abre al bajar */
+.ab-sky{position:relative;width:100%;max-width:340px;aspect-ratio:340/200;margin:10px auto 0}
 .ab-sky svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.ab-leaf{fill:rgba(255,251,240,.75);stroke:#c9a75f;stroke-width:1.2;filter:drop-shadow(0 6px 8px rgba(47,59,47,.14))}
-.ab-r{stroke:#d8c6a0;stroke-width:3;stroke-linecap:round;transition:stroke .5s}
-.ab-r.cur{stroke:url(#abg);stroke-width:4}
+.ab-body{filter:drop-shadow(0 8px 9px rgba(40,52,40,.22)) drop-shadow(0 1px 1px rgba(40,52,40,.25))}
+.ab-st{stroke:url(#abiv);stroke:#efe6d2;stroke-width:4.2;stroke-linecap:round}
+.ab-sticks{filter:drop-shadow(1px 0 0 rgba(150,130,95,.55))}
+.ab-tint{fill:rgba(250,246,235,.12)}
+.ab-pa{fill:rgba(255,255,255,.16)}
+.ab-pb{fill:rgba(70,72,50,.11);stroke:rgba(120,105,70,.18);stroke-width:.5}
+.ab-edge{fill:none;stroke:#c3a160;stroke-width:1.3}
+.ab-gd{stroke:#cbb88f;stroke-width:8;stroke-linecap:round}
+.ab-gd2{stroke:#f6efde;stroke-width:5.4;stroke-linecap:round}
+.ab-pin{fill:#c39a4c;stroke:#f3dfa8;stroke-width:1}.ab-pin2{fill:#f6e3b0}
 .ab-mk{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border:0;padding:0;background:none;cursor:pointer}
-.ab-mk i{position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;border-radius:50%;background:#eee6d2;box-shadow:0 0 0 1px rgba(86,101,79,.55);transition:all .6s cubic-bezier(.3,1.4,.5,1);opacity:0}
-.ab-mk.on i{opacity:1;background:radial-gradient(circle,#fff8e2 0 25%,#d1ac5e 65%);box-shadow:0 0 8px 2px rgba(209,172,94,.5)}
-.ab-mk.cur i{width:15px;height:15px;margin:-7.5px;background:radial-gradient(circle,#fff 0 18%,#ebcd84 50%,#c39a4c 80%);box-shadow:0 0 14px 5px rgba(225,190,110,.55)}
+.ab-mk i{position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px;border-radius:50%;background:#e9dfc7;box-shadow:0 0 0 1px rgba(150,120,60,.5);opacity:0;transition:all .6s cubic-bezier(.3,1.4,.5,1)}
+.ab-mk.on i{opacity:1;background:radial-gradient(circle,#fff8e2 0 25%,#d1ac5e 65%);box-shadow:0 0 6px 1px rgba(209,172,94,.45)}
+.ab-mk.cur i{width:13px;height:13px;margin:-6.5px;background:radial-gradient(circle,#fff 0 18%,#ebcd84 50%,#c39a4c 80%);box-shadow:0 0 12px 4px rgba(225,190,110,.5)}
 .ab-mk:focus-visible{outline:1px solid #2b3a2c;outline-offset:-8px;border-radius:50%}
 .ab-now{display:block;max-width:330px;margin:16px auto 0}
 .ab-now div{display:grid;grid-template-columns:74px 1fr;gap:0 14px;align-items:baseline;text-align:left;padding:10px 4px;border-top:1px solid rgba(168,132,63,.3);cursor:pointer;opacity:.72;transition:opacity .6s ease,background .6s ease}
@@ -66,23 +59,18 @@ html.ab a.link::after{content:none}
 .ab-tm{position:relative;font:400 18px/1.2 'GaramondSC',Georgia,serif;letter-spacing:.08em;color:#4b5a47;text-align:right}
 .ab-now div.on .ab-tm::before{content:"";position:absolute;left:-2px;top:50%;width:7px;height:7px;margin-top:-4px;border-radius:50%;background:radial-gradient(circle,#fff8e2 0 25%,#c39a4c 65%);box-shadow:0 0 8px 2px rgba(209,172,94,.6)}
 .ab-lb{font:italic 400 23px/1.25 'Garamond',Georgia,serif;color:#24312a;overflow-wrap:anywhere}
-/* detalles: abanicos entreabiertos que laten; al tocar se abren del todo */
-.ab-fans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 18px;max-width:320px;margin:14px auto 0}
-.ab-f{border:0;padding:0;background:none;cursor:pointer;color:inherit;display:flex;flex-direction:column;align-items:center;gap:6px}
-.ab-f.solo{grid-column:1/-1}
-.ab-fi{position:relative;display:block;width:96px;height:60px}
-.ab-fi svg{width:100%;height:100%;filter:drop-shadow(0 3px 3px rgba(47,59,47,.2))}
-.ab-fans.in .ab-pl{transform:rotate(calc(.45 * var(--a)))}
-.ab-f[aria-expanded=true] .ab-pl{transform:rotate(var(--a))}
-.ab-f-lb{font:400 14px/1.35 'GaramondSC',Georgia,serif;letter-spacing:.2em;text-transform:uppercase;color:#2f3b2f;padding:6px 2px;border-bottom:1px solid transparent}
-.ab-f[aria-expanded=true] .ab-f-lb{border-bottom-color:#2b3a2c}
-.ab-f-lb::after{content:" +";color:#a8843f}
-.ab-f[aria-expanded=true] .ab-f-lb::after{content:" −"}
-.ab-f:focus-visible{outline:2px solid #2b3a2c;outline-offset:3px}
-.ab-fi::after{content:"";position:absolute;left:50%;bottom:-4px;width:70px;height:70px;margin-left:-35px;border-radius:50%;box-shadow:0 0 0 1.5px rgba(195,154,76,.7);opacity:0;animation:abping 2.6s ease-out infinite;pointer-events:none;clip-path:inset(0 0 45% 0)}
-.ab-f:nth-child(2) .ab-fi::after{animation-delay:.65s}.ab-f:nth-child(3) .ab-fi::after{animation-delay:1.3s}.ab-f:nth-child(4) .ab-fi::after{animation-delay:1.95s}
-.ab-fans.used .ab-fi::after{animation:none;opacity:0}
-@keyframes abping{0%{opacity:.9;transform:scale(.9)}70%{opacity:0;transform:scale(1.2)}100%{opacity:0}}
+/* detalles: muestras de seda marfil con filo dorado; un reflejo las recorre hasta el primer toque */
+.ab-sws{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 14px;max-width:330px;margin:16px auto 0}
+.ab-sw{position:relative;overflow:hidden;min-height:66px;border:0;border-radius:6px;padding:12px 10px;cursor:pointer;color:#2f3b2f;background:linear-gradient(160deg,#fbf8ef 0%,#f1ecdd 45%,#faf6eb 62%,#ece5d2 100%);box-shadow:inset 0 0 0 1px rgba(195,161,96,.8),inset 0 0 0 4px rgba(251,248,239,.9),inset 0 0 0 5px rgba(195,161,96,.45),0 8px 14px -8px rgba(40,52,40,.35);transition:transform .7s cubic-bezier(.2,.9,.25,1),box-shadow .7s}
+.ab-sw.solo{grid-column:1/-1}
+.ab-sw::before{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.75) 46%,rgba(255,240,205,.35) 52%,transparent 66%) -150% 0/220% 100% no-repeat;animation:absilk 3.4s ease-in-out infinite;animation-delay:calc(var(--i) * .5s);pointer-events:none}
+.ab-sws.used .ab-sw::before{animation:none;opacity:0}
+@keyframes absilk{0%{background-position:-150% 0}55%,100%{background-position:150% 0}}
+.ab-sw-lb{position:relative;font:400 14px/1.35 'GaramondSC',Georgia,serif;letter-spacing:.12em;text-transform:uppercase}
+.ab-sw-lb::after{content:" +";color:#a8843f}
+.ab-sw[aria-expanded=true]{transform:translateY(-3px);box-shadow:inset 0 0 0 1px #b8924c,inset 0 0 0 4px rgba(251,248,239,.9),inset 0 0 0 5px #c9a75f,0 14px 22px -10px rgba(40,52,40,.4),0 0 20px rgba(225,190,110,.35)}
+.ab-sw[aria-expanded=true] .ab-sw-lb::after{content:" −"}
+.ab-sw:focus-visible{outline:2px solid #2b3a2c;outline-offset:3px}
 .ab-hint{font-style:italic;color:#4b5a47;font-size:16.5px;margin:14px 0 0}
 .ab-tray{max-width:340px;margin:0 auto;overflow:hidden;height:0;transition:height .8s cubic-bezier(.2,.8,.2,1)}
 .ab-tray-in{margin-top:16px;padding:20px 20px 16px;text-align:center;background:radial-gradient(ellipse at 50% 0,rgba(225,196,128,.26),transparent 70%)}
@@ -122,4 +110,4 @@ html.ab .close-date{font-family:'GaramondSC',Georgia,serif;letter-spacing:.22em;
 #closing.replaying .ab-wait{opacity:0}
 html.ab .closing-text{top:calc(max(7svh,calc(env(safe-area-inset-top) + 34px)) + 74px)!important}
 @media(max-width:360px){.ab-title{font-size:47px}.ab-lb{font-size:21px}.ab-v-name{font-size:21px}.ab-venue{grid-template-columns:54px 1px 1fr;gap:0 11px}.ab-v-time{font-size:26px}html.ab a.link{letter-spacing:.12em}}
-@media(prefers-reduced-motion:reduce){.ab-rv,.ab-ph.ab-rv{opacity:1;transform:none;filter:none;transition:none}.ab-pl{transition:none}.ab-sep .ab-pl,.ab-fans .ab-pl{transform:rotate(var(--a))}.ab-shine{display:none}.ab-fi::after{animation:none;opacity:.6}}
+@media(prefers-reduced-motion:reduce){.ab-rv,.ab-ph.ab-rv{opacity:1;transform:none;filter:none;transition:none}.ab-shine{display:none}.ab-sw::before{animation:none}}
