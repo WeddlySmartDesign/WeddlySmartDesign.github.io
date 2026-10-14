@@ -177,3 +177,10 @@ Vistas juntas, solo Caja de música tenía un interior inconfundible (una sola m
 Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 
 **v15.3 (2026-10-13)**: D05 · en la portada el vals avanzaba, se paraba 1 s, retrocedía y daba tirones (fotogramas duplicados). Se usa solo el tramo hacia delante (hasta 5 s), los últimos 30 fotogramas se ralentizan ×2,6 con fundido para frenar suave y la pareja queda abrazada hasta el final. El original se conserva como `portada-original.mp4`.
+
+## v16 · D11 «Bola de cristal» (nuevo, TEST · certification-pending · NO VENTA)
+- Portada: vídeo generado por la autora (bola de cristal real) + pétalos añadidos dentro de la bola siguiendo la cámara + final alargado. Sin nombres en el vídeo: todos los textos los pone el motor.
+- Cierre: noche en el jardín del banquete; la estela dorada sale de la bola hasta el cielo. Textos arriba sobre las estrellas.
+- Interior propio (prefijo `bc`): motas de purpurina entre secciones, fotos sin marco con borde empañado y destello, lugar grabado sobre travertino, programa sobre una estela dorada con destellos pulsables, detalles como cantos de travertino con un pétalo.
+- Música original (piano, celesta, arpa y cuerdas), se apaga con el cierre.
+- Medios fuente: `/home/claude/bola/ent` (copia local; no incluida en el repo salvo dentro del master).
