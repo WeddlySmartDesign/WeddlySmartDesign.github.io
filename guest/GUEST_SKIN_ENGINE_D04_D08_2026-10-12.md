@@ -197,3 +197,4 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - **v17.3**: retrato en la tela con menos zoom (se ve la pareja entera de cara a manos), colores más vivos y bordes del cuadro difuminados en claro en lugar de reflejados.
 - **2026-10-15**: la autora aprueba el diseño visual de D12 «Abanico». Sigue TEST · certification-pending · NO VENTA.
 - **v17.4**: música cambiada a guitarra española sola (composición propia: la menor con cadencia andaluza que se abre a la mayor; `/home/claude/gala/musica/abanico_guitarra.py`).
+- **v17.5**: vuelve la música original (guitarra en arpegios, flauta y cuerdas). Las pruebas de guitarra sola (GM, modelado físico, muestras FluidR3) no convencieron. Pendiente: música definitiva.
