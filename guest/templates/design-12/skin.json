@@ -65,7 +65,8 @@
    "BANDBOT": "skin-assets/band-bot.jpg",
    "MASK": "skin-assets/leaf-mask.png",
    "MUSIC": "skin-assets/music.m4a",
-   "LEAF": "skin-assets/leaf.jpg"
+   "FANB": "skin-assets/fan-body.webp",
+   "FANP": "skin-assets/fan-pin.webp"
   }
  }
 }

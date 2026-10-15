@@ -23,15 +23,16 @@ function render(vm){
  // agenda: un abanico que se abre al bajar; cada varilla es un momento y se puede tocar
  const M=vm.moments;sec=document.getElementById('agenda');inner=scene(sec,M.length>0);A=null;
  if(M.length){head(inner,'Para que no te pierdas nada','El programa',mark(sec));const sky=el('div','ab-sky ab-rv');sky.setAttribute('role','group');sky.setAttribute('aria-label','Momentos del día');
-  const svg=document.createElementNS(SVG,'svg');svg.setAttribute('viewBox','0 0 340 200');svg.setAttribute('aria-hidden','true');
-  svg.innerHTML='<defs><clipPath id="ab-clip"><path class="ab-cp"/></clipPath><linearGradient id="abg" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#b08a45"/><stop offset="1" stop-color="#ecd395"/></linearGradient><linearGradient id="abiv" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d9ccb0"/><stop offset=".5" stop-color="#fbf6ea"/><stop offset="1" stop-color="#d4c6a8"/></linearGradient></defs>'+
-   '<g class="ab-body"><g class="ab-sticks"></g><g class="ab-lf" clip-path="url(#ab-clip)"><image href="%%LEAF%%" x="0" y="10" width="340" height="180" preserveAspectRatio="xMidYMid slice"/><rect x="0" y="0" width="340" height="200" class="ab-tint"/><g class="ab-pleats"></g></g><path class="ab-edge"/><g class="ab-guards"></g></g><circle cx="170" cy="188" r="5.5" class="ab-pin"/><circle cx="170" cy="188" r="2.2" class="ab-pin2"/>';sky.append(svg);
-  const q=s=>svg.querySelector(s),mk=(tag,cls,parent)=>{const e=document.createElementNS(SVG,tag);e.setAttribute('class',cls);parent.append(e);return e};
-  const sticks=Array.from({length:NP+1},()=>mk('line','ab-st',q('.ab-sticks'))),pleats=Array.from({length:NP},(_,k)=>mk('path',k%2?'ab-pa':'ab-pb',q('.ab-pleats'))),guards=[0,1].map(()=>{const g=document.createElementNS(SVG,'g');q('.ab-guards').append(g);return [mk('line','ab-gd',g),mk('line','ab-gd2',g)]});
+  const svg=document.createElementNS(SVG,'svg');svg.setAttribute('viewBox',`0 0 ${FW} ${FH}`);svg.setAttribute('aria-hidden','true');
+  let defs='',body='';const ord=WG.map((c,j)=>[c,j]).sort((x,y)=>Math.abs(x[0])-Math.abs(y[0]));
+  WG.forEach((c,j)=>{defs+=`<clipPath id="ab-w${j}"><path d="${sector(j?c-WW/2-.5:-178,j<NW-1?c+WW/2+.5:178)}"/></clipPath>`});
+  ord.forEach(([c,j])=>{body+=`<g class="ab-wg" data-j="${j}"><image href="%%FANB%%" width="${FW}" height="${FH}" clip-path="url(#ab-w${j})"/></g>`});
+  svg.innerHTML=`<defs>${defs}</defs><g class="ab-body">${body}</g><image href="%%FANP%%" width="${FW}" height="${FH}"/>`;sky.append(svg);
+  const wgs=[...svg.querySelectorAll('.ab-wg')].map(g=>[g,WG[+g.dataset.j]]);
   const now=el('div','ab-now');
   const pts=M.map((m,i)=>{const b=el('button','ab-mk');b.type='button';b.setAttribute('aria-label',(m.time?m.time+' ':'')+m.label);b.append(el('i'));b.onclick=()=>{A.pick=i;A.pickY=scrollY;tick()};sky.append(b);
-   const d=el('div');d.append(el('span','ab-tm',m.time||''));if(m.label)d.append(el('span','ab-lb',m.label));d.onclick=()=>{A.pick=i;A.pickY=scrollY;tick()};now.append(d);return {b,d,f:M.length<2?.5:.08+.84*i/(M.length-1)}});
-  inner.append(sky,now);if(M.length>1)inner.append(el('p','ab-hint ab-rv','Toca un momento para resaltarlo'));A={sky,svg,cp:q('.ab-cp'),edge:q('.ab-edge'),sticks,pleats,guards,pts,n:M.length,pick:null};
+   const d=el('div');d.append(el('span','ab-tm',m.time||''));if(m.label)d.append(el('span','ab-lb',m.label));d.onclick=()=>{A.pick=i;A.pickY=scrollY;tick()};now.append(d);return {b,d,f:M.length<2?.5:i/(M.length-1)}});
+  inner.append(sky,now);if(M.length>1)inner.append(el('p','ab-hint ab-rv','Toca un momento para resaltarlo'));A={sky,svg,wgs,pts,n:M.length,pick:null};
   let x0=null;now.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});now.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)<40)return;const c=A.pts.findIndex(t=>t.d.classList.contains('on'));A.pick=Math.max(0,Math.min(A.n-1,c+(dx<0?1:-1)));A.pickY=scrollY;tick()},{passive:true})}
  // detalles: muestras de seda marfil con filo dorado; un reflejo las recorre hasta el primer toque
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openFan=null;
@@ -53,18 +54,16 @@ function fill(tin,x){tin.replaceChildren(el('h3',null,x.title));const times=x.li
  for(const l of rest.slice(0,1))tin.append(el('p',null,l));if(times.length){const tt=el('div','ab-tt');for(const l of times){const m=l.match(/^(Ida|Vuelta):\s*(.*)$/);const s=el('span',null,m[1]);s.append(el('b',null,m[2]));tt.append(s)}tin.append(tt)}
  for(const l of rest.slice(1))tin.append(el('p',null,l));if(x.links.length)tin.append(links(x.links));
  if(x.more){const d=el('details');d.append(el('summary',null,x.more.label));for(const l of x.more.lines)d.append(el('p',null,l));d.addEventListener('toggle',()=>{document.getElementById('ab-tray').style.height=(tin.offsetHeight+16)+'px'});tin.append(d)}}
-// el abanico del programa: hoja pintada con pliegues y varillas de marfil; se abre según se baja (de cerrado a 150°)
-const CX=170,CY=188,RL=172,RI=84,NP=16;
+// el abanico del programa: el abanico real (tela pintada a pinceladas) cortado en gajos que giran sobre el remache; se abre según se baja
+const FW=680,FH=583,CX=346.14,CY=379.96,RL=374.11,T0=-69.03,T1=66.39,NW=24,WW=(T1-T0+3)/NW;
+const WG=Array.from({length:NW},(_,j)=>T0-1.5+WW*(j+.5));
 const P=(deg,r)=>{const a=(deg-90)*Math.PI/180;return [CX+Math.cos(a)*r,CY+Math.sin(a)*r]};
 const f2=v=>v.toFixed(1);
-function wedge(a,b,r1,r2){const [x1,y1]=P(a,r2),[x2,y2]=P(b,r2),[x3,y3]=P(b,r1),[x4,y4]=P(a,r1);return `M${f2(x4)} ${f2(y4)} L${f2(x1)} ${f2(y1)} A${r2} ${r2} 0 0 1 ${f2(x2)} ${f2(y2)} L${f2(x3)} ${f2(y3)} A${r1} ${r1} 0 0 0 ${f2(x4)} ${f2(y4)} Z`}
+function sector(a,b){const [x1,y1]=P(a,RL*1.3),[x2,y2]=P(b,RL*1.3);return `M${f2(CX)} ${f2(CY)} L${f2(x1)} ${f2(y1)} A${f2(RL*1.3)} ${f2(RL*1.3)} 0 ${b-a>180?1:0} 1 ${f2(x2)} ${f2(y2)} Z`}
 function tick(){if(!A)return;const vh=innerHeight,y=A.sky.getBoundingClientRect().top;const q=reducedMotion()?1:Math.max(0,Math.min(1,(vh*.9-y)/(vh*.5)));
- const span=4+146*(q*q*(3-2*q)),a0=-span/2,w=span/NP;let cur=0;
- A.cp.setAttribute('d',wedge(a0,a0+span,RI,RL));A.edge.setAttribute('d',wedge(a0,a0+span,RI,RL));
- A.pleats.forEach((p,k)=>p.setAttribute('d',wedge(a0+w*k,a0+w*(k+1),RI,RL)));
- A.sticks.forEach((l,k)=>{const [x,y2]=P(a0+w*k,RI+16);l.setAttribute('x1',CX);l.setAttribute('y1',CY);l.setAttribute('x2',f2(x));l.setAttribute('y2',f2(y2))});
- A.guards.forEach((g,k)=>{const [x,y2]=P(k?a0+span:a0,RL+5);g.forEach(l=>{l.setAttribute('x1',CX);l.setAttribute('y1',CY);l.setAttribute('x2',f2(x));l.setAttribute('y2',f2(y2))})});
- A.pts.forEach((t,i)=>{const deg=a0+span*t.f,[mx,my]=P(deg,RL+15);t.deg=deg;t.b.style.left=(mx/340*100)+'%';t.b.style.top=(my/200*100)+'%';const on=q>.2+.75*(A.n<2?0:i/(A.n-1))||q>=1;t.b.classList.toggle('on',on);if(on)cur=i});
+ const k=.03+.97*(q*q*(3-2*q));let cur=0;
+ A.wgs.forEach(([g,c])=>g.setAttribute('transform',`rotate(${f2((k-1)*c)} ${CX} ${CY})`));
+ A.pts.forEach((t,i)=>{const deg=k*(T0+8+(T1-T0-16)*t.f),[mx,my]=P(deg,RL+20);t.b.style.left=(mx/FW*100)+'%';t.b.style.top=(my/FH*100)+'%';const on=q>.2+.75*(A.n<2?0:i/(A.n-1))||q>=1;t.b.classList.toggle('on',on);if(on)cur=i});
  if(A.pick!=null&&Math.abs(scrollY-(A.pickY||0))>90)A.pick=null;if(A.pick!=null)cur=A.pick;
  A.pts.forEach((t,i)=>{t.d.classList.toggle('on',i===cur);t.b.classList.toggle('cur',i===cur);if(i===cur)t.b.classList.add('on')})}
 let raf=0;addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;tick()})},{passive:true});addEventListener('resize',()=>tick());

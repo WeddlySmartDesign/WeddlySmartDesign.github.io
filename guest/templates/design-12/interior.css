@@ -34,19 +34,10 @@ html.ab [data-bg]{background:none!important;min-height:0!important;display:block
 html.ab a.link{display:inline-flex;align-items:center;min-height:44px;padding:10px 0 4px;border:0;border-bottom:1px solid rgba(168,132,63,.7);border-radius:0;background:none;font:400 14px/1 'GaramondSC',Georgia,serif;letter-spacing:.16em;text-transform:uppercase;color:#2b3a2c;text-decoration:none;white-space:nowrap}
 html.ab a.link::after{content:none}
 .ab-dress{margin:22px auto 0;font-style:italic;color:#4b5a47}
-/* agenda: un abanico pintado (hoja de óleo con pliegues, varillas de marfil) que se abre al bajar */
-.ab-sky{position:relative;width:100%;max-width:340px;aspect-ratio:340/200;margin:10px auto 0}
+/* agenda: el abanico real (tela pintada a pinceladas, varillas de marfil, borla) que se abre al bajar */
+.ab-sky{position:relative;width:100%;max-width:330px;aspect-ratio:680/583;margin:14px auto 0}
 .ab-sky svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.ab-body{filter:drop-shadow(0 8px 9px rgba(40,52,40,.22)) drop-shadow(0 1px 1px rgba(40,52,40,.25))}
-.ab-st{stroke:url(#abiv);stroke:#efe6d2;stroke-width:4.2;stroke-linecap:round}
-.ab-sticks{filter:drop-shadow(1px 0 0 rgba(150,130,95,.55))}
-.ab-tint{fill:rgba(250,246,235,.12)}
-.ab-pa{fill:rgba(255,255,255,.16)}
-.ab-pb{fill:rgba(70,72,50,.11);stroke:rgba(120,105,70,.18);stroke-width:.5}
-.ab-edge{fill:none;stroke:#c3a160;stroke-width:1.3}
-.ab-gd{stroke:#cbb88f;stroke-width:8;stroke-linecap:round}
-.ab-gd2{stroke:#f6efde;stroke-width:5.4;stroke-linecap:round}
-.ab-pin{fill:#c39a4c;stroke:#f3dfa8;stroke-width:1}.ab-pin2{fill:#f6e3b0}
+.ab-body{filter:drop-shadow(0 10px 10px rgba(40,52,40,.22)) drop-shadow(0 1px 2px rgba(40,52,40,.25))}
 .ab-mk{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border:0;padding:0;background:none;cursor:pointer}
 .ab-mk i{position:absolute;left:50%;top:50%;width:7px;height:7px;margin:-3.5px;border-radius:50%;background:#e9dfc7;box-shadow:0 0 0 1px rgba(150,120,60,.5);opacity:0;transition:all .6s cubic-bezier(.3,1.4,.5,1)}
 .ab-mk.on i{opacity:1;background:radial-gradient(circle,#fff8e2 0 25%,#d1ac5e 65%);box-shadow:0 0 6px 1px rgba(209,172,94,.45)}
