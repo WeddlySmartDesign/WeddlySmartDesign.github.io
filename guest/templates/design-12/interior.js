@@ -55,7 +55,7 @@ function fill(tin,x){tin.replaceChildren(el('h3',null,x.title));const times=x.li
  for(const l of rest.slice(1))tin.append(el('p',null,l));if(x.links.length)tin.append(links(x.links));
  if(x.more){const d=el('details');d.append(el('summary',null,x.more.label));for(const l of x.more.lines)d.append(el('p',null,l));d.addEventListener('toggle',()=>{document.getElementById('ab-tray').style.height=(tin.offsetHeight+16)+'px'});tin.append(d)}}
 // el abanico del programa: el abanico real (tela pintada a pinceladas) cortado en gajos que giran sobre el remache; se abre según se baja
-const FW=680,FH=583,CX=346.14,CY=379.96,RL=374.11,T0=-69.03,T1=66.39,NW=24,WW=(T1-T0+3)/NW;
+const FW=680,FH=584,CX=347.53,CY=381.55,RL=374.97,T0=-68.93,T1=66.11,NW=24,WW=(T1-T0+3)/NW;
 const WG=Array.from({length:NW},(_,j)=>T0-1.5+WW*(j+.5));
 const P=(deg,r)=>{const a=(deg-90)*Math.PI/180;return [CX+Math.cos(a)*r,CY+Math.sin(a)*r]};
 const f2=v=>v.toFixed(1);
@@ -78,7 +78,7 @@ addEventListener('DOMContentLoaded',()=>{document.body.append(sb);const cover=do
  const start=()=>{if(window.__GUEST_SUPPRESS_SOUND__)return;sb.classList.add('show');setSound(true);cover.removeEventListener('click',start)};cover.addEventListener('click',start);
  document.addEventListener('visibilitychange',()=>{if(document.hidden&&soundOn)music.pause();else if(!document.hidden&&soundOn)music.play().catch(()=>{})});
  const xv=document.getElementById('closing-video');
- // «Os esperamos» llega cuando la cinta termina de atar el abanico
+ // «Os esperamos» llega cuando el abanico se ha cerrado y queda su silueta de luz
  const cl=document.getElementById('closing');if(cl&&!cl.querySelector('.ab-wait')){const w=el('p','ab-wait','Os esperamos');w.setAttribute('aria-hidden','true');cl.append(w);
   if(xv){xv.addEventListener('timeupdate',()=>{if(xv.currentTime>=5.6)w.classList.add('on')});xv.addEventListener('play',()=>{if(xv.currentTime<.5)w.classList.remove('on')})}
   if(reducedMotion())w.classList.add('on');new MutationObserver(()=>{if(cl.classList.contains('revealed'))w.classList.add('on')}).observe(cl,{attributes:true,attributeFilter:['class']})}
