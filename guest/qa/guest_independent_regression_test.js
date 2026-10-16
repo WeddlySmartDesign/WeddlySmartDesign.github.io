@@ -62,7 +62,7 @@ ok(manifest.display==='standalone','PWA is not standalone');
 
 const endpointFiles=[
 'index.html','guests-v116-production.html','guests-production-sync.js','guests-access-layer.js','guests-production-ui.js','guests-production-ops.js',
-'guests-rsvp-route-v1.js','guests-home-rsvp-status-v1.js','guests-smart-actions-v1.js','guests-extra-event-lists-v1.js','guests-custom-lists-v1.js','guests-service-visibility-v1.js','guests-rsvp-operations-feedback-v1.js','guests-rsvp-share-primary-v1.js','guests-rsvp-share-composer-v2.js','guests-rsvp-plusone-ops-v1.js','guests-rsvp-manual-parity-v1.js','guests-v114-integrated.html',
+'guests-rsvp-route-v1.js','guests-home-rsvp-status-v1.js','guests-smart-actions-v1.js','guests-extra-event-lists-v1.js','guests-custom-lists-v1.js','guests-service-visibility-v1.js','guests-rsvp-operations-feedback-v1.js','guests-rsvp-operations-flow-v1.js','guests-rsvp-share-primary-v1.js','guests-rsvp-share-composer-v2.js','guests-rsvp-plusone-ops-v1.js','guests-rsvp-manual-parity-v1.js','guests-v114-integrated.html',
 'guests-rsvp-operations-v2.html','guests-rsvp-operations-live.html','guests-rsvp-operations-v3.html','guests-rsvp-design-manage.html',
 'guests-rsvp-form-flow.html','guests-rsvp-form-flex.html','guests-rsvp-public-clean.html','guests-rsvp-essential-live.html','guests-rsvp-signature-live.html','guests-personalizacion-essential.html','guests-personalizacion-signature-integrated.html',
 'guests-rsvp-services-hotfix-v1.js','guests-rsvp-services-hotfix-v1.js','guests-rsvp-v115-wedding-flex-live.html','guests-rsvp-v116-single-live.html','guests-rsvp-children-public-v1.js','guests-rsvp-plusone-public-v1.js','guests-rsvp-postsubmit-calendar-v1.js','guests-rsvp-calendar-action-v2.js','guests-rsvp-custom-answers-v1.js','guests-rsvp-children-answers-v1.js','guests-rsvp-v112-wedding-flex.html','guests-rsvp-v114-single-flex.html','guests-rsvp-v105-mobile.html','guests-rsvp-v115-wedding-flex-live.html','guests-rsvp-v116-single-live.html','guests-rsvp-operations-feedback-v1.js','guests-rsvp-share-primary-v1.js','guests-rsvp-share-composer-v2.js','guests-rsvp-plusone-ops-v1.js','guests-rsvp-manual-parity-v1.js',
@@ -96,6 +96,10 @@ for(const p of sourceFiles){
     continue;
   }
   if(!allowedModified.has(p)){const privacyOnly=s=>s.replace(/<meta\s+name=["']robots["']\s+content=["']noindex,nofollow(?:,noarchive)?["']\s*\/?>/gi,'').replace(/>\s+</g,'><');ok(src===dst||privacyOnly(src)===privacyOnly(dst),'unexpected functional modification vs latest ONE source: '+p)}
+  // The old invitation -> RSVP -> send editor wizard is excluded from the delivered app.
+  else if(p==='guests-rsvp-operations-flow-v1.js'){
+    ok(dst.includes('wsdOpsFlow')&&!dst.includes('goDesign')&&!dst.includes('goRsvp'),'legacy editor wizard unexpectedly active');
+  }
   // Two post-delivery couple routes are intentionally RETIRED, not ported. Their old editor functions must be absent.
   else if(['guests-rsvp-design-manage.html','guests-rsvp-form-flow.html'].includes(p)){
     ok(dst.includes('href="index.html"')&&!/<(?:input|textarea|select)\b/i.test(dst),'retired editor route unexpectedly active: '+p);
