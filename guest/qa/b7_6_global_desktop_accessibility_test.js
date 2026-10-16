@@ -62,11 +62,6 @@ async function core(page){
  for(let i=0;i<100;i++){const f=page.frames().find(x=>/guests-v114-integrated\.html/.test(x.url()));if(f){try{await f.waitForSelector('#nav',{timeout:400});return f}catch{}}await page.waitForTimeout(100)}
  throw Error('core missing');
 }
-async function editorFrame(page){
- for(let i=0;i<150;i++){const f=page.frames().find(x=>x.url().includes('weddly-personalizacion-essential.html'));if(f){try{await f.waitForSelector('#tplGrid',{timeout:400});return f}catch{}}await page.waitForTimeout(100)}
- throw Error('editor frame missing');
-}
-
 async function testMain(browser){
  const context=await browser.newContext({viewport:{width:1366,height:900}});
  const page=await makePage(context);
@@ -130,15 +125,16 @@ async function testPublic(browser){
  ok(contrast(rgb(colors.fg),rgb(colors.bg))>=4.5,'public RSVP muted contrast below AA '+JSON.stringify(colors));
  await context.close();
 }
-async function testEditor(browser){
+async function testRetiredEditor(browser){
  const context=await browser.newContext({viewport:{width:1366,height:900}});
  const page=await makePage(context,'essential');
- await page.goto(base+'/guest/guests-rsvp-design-manage.html',{waitUntil:'domcontentloaded'});
- const f=await editorFrame(page);
- await f.waitForFunction(()=>document.documentElement.dataset.guestB73Editor==='1',null,{timeout:10000});
- await f.waitForSelector('.weddly-save-bottom [data-save-essential]',{timeout:10000});
- await noOverflow(f,'editor desktop');
- await focusVisible(page,f.locator('.weddly-save-bottom [data-save-essential]'),'editor save');
+ for(const path of ['guests-rsvp-design-manage.html','guests-rsvp-form-flow.html']){
+   await page.goto(base+'/guest/'+path,{waitUntil:'domcontentloaded'});
+   await page.waitForSelector('main a[href="index.html"]',{timeout:5000});
+   await noOverflow(page,path+' desktop');
+   await focusVisible(page,page.locator('main a[href="index.html"]'),path+' return link');
+   ok(await page.locator('input,select,textarea,[contenteditable="true"]').count()===0,'editing inputs exposed in retired route '+path);
+ }
  await context.close();
 }
 (async()=>{
@@ -147,7 +143,7 @@ async function testEditor(browser){
  await testEvents(browser);
  await testOperations(browser);
  await testPublic(browser);
- await testEditor(browser);
+ await testRetiredEditor(browser);
  await browser.close();
  console.log('B7.6 global desktop/accessibility: PASS');
 })().catch(e=>{console.error('B7.6 FAIL:',e.stack||e);process.exit(1)});
