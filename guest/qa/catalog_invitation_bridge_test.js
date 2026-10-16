@@ -21,11 +21,13 @@ function ok(v,msg){if(!v)throw new Error(msg)}
   ok(bridge.includes("action:'active_for_member'"),'bridge must resolve active invitation from backend');
   ok(bridge.includes('shareBaseUrl'),'bridge must use stored final invitation URL');
   ok(!bridge.includes('veil-light'),'management bridge must be template-agnostic');
-  ok(bridge.includes('legacyUrl'),'legacy fallback must remain available');
+  ok(bridge.includes("throw new Error('catalog_invitation_unavailable')"),'missing delivered invitation must fail closed');
 
   const composer=read('guests-rsvp-share-composer-v3.js');
   ok(!composer.includes("location.origin+'/guests-rsvp-v105.html'"),'composer must never fallback to ONE root RSVP');
-  ok(composer.includes("location.origin+'/guest/guests-rsvp-v105.html'"),'composer fallback must be isolated GUEST entrypoint');
+  ok(!composer.includes("location.origin+'/guest/guests-rsvp-v105.html'"),'customer send cannot fall back to an old invitation');
+  ok(composer.includes("throw new Error('catalog_bridge_unavailable')"),'customer composer must fail closed if bridge does not load');
+  ok(!live.includes("'guests-rsvp-share-primary-v1.js?v=3'"),'old link-only sender must not intercept purchased invitation');
   ok(composer.includes('__GuestCatalogBridge.buildRecipientUrl'),'existing composer must use catalog bridge');
   ok(!composer.includes("templateId:'veil-light'"),'share composer cannot know a template');
   ok(composer.includes('invitationUnitId'),'invitation units must be preserved');
@@ -80,6 +82,19 @@ function ok(v,msg){if(!v)throw new Error(msg)}
   ok(uu.searchParams.get('u')==='unit_9','invitation unit missing');
   ok(!uu.searchParams.has('g'),'unit URL must not also expose single guest id');
 
+
+  // Commercial couple access starts only with an approved final invitation.
+  // On backend downtime or an absent delivery, never generate the old RSVP design URL.
+  context.__GuestCatalogBridge.clearCache();
+  context.fetch=async()=>({ok:true,json:async()=>({ok:true,active:false})});
+  let blocked=false;
+  try{await context.__GuestCatalogBridge.buildRecipientUrl({recipientId:'g_1',rsvpToken:'r1',lang:'es'});}catch(e){blocked=String(e.message).includes('catalog_invitation_unavailable')}
+  ok(blocked,'without final invitation backend must block sending, not fall back');
+  context.__GuestCatalogBridge.clearCache();
+  context.fetch=async()=>{throw Error('network_unreachable')};
+  blocked=false;
+  try{await context.__GuestCatalogBridge.buildRecipientUrl({recipientId:'g_1',rsvpToken:'r1',lang:'es'});}catch(e){blocked=String(e.message).includes('catalog_invitation_unavailable')}
+  ok(blocked,'network outage must not create a legacy invitation URL');
 
   const deliveryRuntime=read('guest-catalog-delivery-runtime-v1.js');
   ok(!deliveryRuntime.includes('veil-light'),'delivery runtime must be template-agnostic');
