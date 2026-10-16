@@ -99,6 +99,10 @@ async function runViewport(browser,width,height){
   // An actual click must open the already approved, read-only invitation.
   // Stub the external final: no live backend, no payment, no personal data.
   await page.route('https://final-preview.example/**',route=>route.fulfill({status:200,contentType:'text/html',body:'<!doctype html><title>Approved invitation preview</title><h1>Final approved invitation</h1>'}));
+  // The people-manager sheet from the preceding assertion is still open.
+  // Close it as a real user would before using the bottom navigation.
+  await f.locator('#sheet').click({position:{x:5,y:5}});
+  await f.waitForFunction(()=>!document.getElementById('sheet')?.classList.contains('on'),null,{timeout:5000});
   await f.locator('#nav button[data-go="hoy"]').click();
   await f.waitForSelector('#wsdViewFinalInvitation',{state:'visible',timeout:5000});
   await f.locator('#wsdViewFinalInvitation').click();
