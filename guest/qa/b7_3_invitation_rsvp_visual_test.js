@@ -41,14 +41,6 @@ async function noOverflow(page,label){
  const x=await page.evaluate(()=>({sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth,bw:document.body?.scrollWidth||0}));
  ok(x.sw<=x.cw+2&&x.bw<=x.cw+2,label+' overflow '+JSON.stringify(x));
 }
-async function editorFrame(page,filename){
- for(let i=0;i<150;i++){
-  const f=page.frames().find(x=>x.url().includes(filename));
-  if(f){try{await f.waitForSelector('#tplGrid',{timeout:400});return f}catch{}}
-  await page.waitForTimeout(100);
- }
- throw Error('editor frame missing '+filename);
-}
 async function testOperations(context){
  const {page,legacy,errors}=await makePage(context,'signature');
  await page.goto(base+'/guest/guests-rsvp-operations-v2.html',{waitUntil:'domcontentloaded'});
@@ -59,32 +51,21 @@ async function testOperations(context){
  const h1=await page.locator('h1').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));ok(h1>=34,'operations title hierarchy too weak: '+h1);
  const metrics=await page.locator('#metrics .metric').evaluateAll(xs=>xs.map(x=>({w:x.getBoundingClientRect().width,r:parseFloat(getComputedStyle(x).borderRadius)})));
  ok(metrics.length===3&&metrics.every(x=>x.w>70&&x.r>=17),'operations metrics hierarchy broken: '+JSON.stringify(metrics));
- const flow=page.locator('#wsdOpsFlow button');await flow.first().waitFor({state:'visible',timeout:8000});
- const flowH=await flow.evaluateAll(xs=>xs.map(x=>x.getBoundingClientRect().height));ok(flowH.every(h=>h>=42),'operations stepper tap target too small');
+ ok(await page.locator('#wsdOpsFlow,#editInvitation,#wsdEditRsvp').count()===0,'legacy invitation/RSVP editor navigation exposed in operations');
  const recipient=page.locator('[data-recipient="g1"]');await recipient.waitFor({state:'visible',timeout:8000});
  const chk=await recipient.evaluate(el=>el.getBoundingClientRect().width);ok(chk>=23,'recipient checkbox too small');
  ok(legacy.length===0,'ONE endpoint from operations: '+legacy.join(','));
  ok(errors.length===0,'operations browser errors: '+errors.join(' | '));
  await page.close();
 }
-async function testEditor(context,edition){
- const {page,legacy,errors}=await makePage(context,edition);
- await page.goto(base+'/guest/guests-rsvp-design-manage.html',{waitUntil:'domcontentloaded'});
- const filename=edition==='signature'?'weddly-personalizacion-signature.html':'weddly-personalizacion-essential.html';
- const f=await editorFrame(page,filename);
- await f.waitForSelector('#weddlyIntegrationBar',{timeout:15000});
- await f.waitForFunction(()=>document.documentElement.dataset.guestB73Editor==='1',null,{timeout:10000});
- await f.waitForSelector('#wsdInvitationFlow',{state:'visible',timeout:10000});
- await f.waitForFunction(()=>{const xs=[...document.querySelectorAll('#wsdInvitationFlow button')];return xs.length===3&&xs.every(x=>x.getBoundingClientRect().height>=43)},null,{timeout:5000});
- await noOverflow(f,edition+' editor');
- const stepper=await f.locator('#wsdInvitationFlow button').evaluateAll(xs=>xs.map(x=>x.getBoundingClientRect().height));ok(stepper.length===3&&stepper.every(h=>h>=43),edition+' editor stepper too small: '+stepper.join(','));
- const cards=await f.locator('#tplGrid > *').count();ok(cards>=(edition==='signature'?4:6),edition+' template collection changed');
- const save=await f.locator('.weddly-save-bottom [data-save-essential]').evaluate(el=>({h:el.getBoundingClientRect().height,r:parseFloat(getComputedStyle(el).borderRadius)}));
- ok(save.h>=51&&save.r>=13,edition+' bottom CTA hierarchy weak: '+JSON.stringify(save));
- const bar=await f.locator('#weddlyIntegrationBar').evaluate(el=>({top:getComputedStyle(el).position,h:el.getBoundingClientRect().height}));
- ok(bar.top==='sticky','editor action bar is not sticky');
- ok(legacy.length===0,'ONE endpoint from '+edition+' editor: '+legacy.join(','));
- ok(errors.length===0,edition+' editor browser errors: '+errors.join(' | '));
+async function testRetiredEditorRoute(context,path){
+ const {page,legacy,errors}=await makePage(context,'signature');
+ await page.goto(base+'/guest/'+path,{waitUntil:'domcontentloaded'});
+ await page.waitForSelector('main a[href="index.html"]',{timeout:5000});
+ ok(await page.locator('#tplGrid,#childrenQ,#addQuestion,#save,#wsdInvitationFlow').count()===0,'retired customer editor still exposed: '+path);
+ await noOverflow(page,path);
+ ok(legacy.length===0,'ONE endpoint from retired route: '+legacy.join(','));
+ ok(errors.length===0,'retired route errors: '+errors.join(' | '));
  await page.close();
 }
 async function testPublic(context,kind){
@@ -111,12 +92,12 @@ async function testPublic(context,kind){
  for(const [w,h] of [[320,700],[390,844]]){
   const context=await browser.newContext({viewport:{width:w,height:h},isMobile:true,hasTouch:true});
   await testOperations(context);
-  await testEditor(context,'essential');
-  await testEditor(context,'signature');
+  await testRetiredEditorRoute(context,'guests-rsvp-design-manage.html');
+  await testRetiredEditorRoute(context,'guests-rsvp-form-flow.html');
   await testPublic(context,'single');
   await testPublic(context,'unit');
   await context.close();
  }
  await browser.close();
- console.log('B7.3 invitation + RSVP visual QA: PASS');
+ console.log('B7.3 send/response mobile UX + retired editor routes: PASS');
 })().catch(e=>{console.error('B7.3 FAIL:',e.stack||e);process.exit(1)});
