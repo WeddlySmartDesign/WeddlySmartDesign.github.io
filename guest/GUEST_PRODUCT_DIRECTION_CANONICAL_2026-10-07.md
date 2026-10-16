@@ -176,3 +176,18 @@ The remaining gate before Design 02 is ONE unavoidable real-device owner certifi
 Mobile Center V4.3 prepares the normal order automatically and resets the work timer to 0:00, so owner intervention is limited to the real usability/touch-time work that cannot be simulated.
 
 After that PASS, Catalog Pipeline V1 can be frozen and Design 02 starts under the same contract.
+
+
+## 9. Rectificación de alcance para pareja — 16/10/2026 · PREVALECE SOBRE FASES ANTIGUAS
+
+**La pareja compra la invitación como producto; NO compra un editor.** El diseño seleccionado, el contenido y las preguntas RSVP se configuran mediante cuestionario y el flujo de producción/revisión de WeddlySmartDesign. Tras revisión y aprobación, la pareja recibe la invitación terminada en el plazo máximo comercial establecido (48–72 h). **GUEST se entrega/activa con esa entrega final, nunca antes**.
+
+**Excluir expresamente del GUEST de la pareja:** diseñador/editor de invitaciones; colección de plantillas Essential/Signature; cambio de tipografías, fotos, contenidos o diseño de la invitación; editor/configurador de preguntas y formulario RSVP; asistente heredado «Invitación → RSVP → Enviar»; enlaces/CTA «Editar invitación» o «Editar RSVP». No se autoriza la modificación del diseño ni del formulario por parte de la pareja.
+
+**Conservar:** invitación definitiva y enlace de envío ligado a la licencia, selección de invitados/unidades/grupos/subgrupos, mensaje personalizado **solo del envío** (no del diseño), WhatsApp/copia/compartir, registro de envíos, recepción y consulta de respuestas RSVP, corrección manual de la respuesta de una persona, +1/niños/menús/alergias según formulario fijado durante producción, mesas, avisos, listados, eventos extra, temas de GUEST, y los dos dispositivos con datos sincronizados. Las opciones de RSVP siguen existiendo en el motor de respuesta, pero su **configuración queda fuera de la aplicación de la pareja**.
+
+**Regla de seguridad funcional:** si GUEST no puede recuperar del backend la invitación definitiva aprobada, debe **bloquear el envío y permitir reintentar**, sin generar ni compartir automáticamente una invitación genérica/antigua ni un segundo RSVP. La fuente del enlace es siempre `active_for_member` y el `delivery_url` correspondiente, no el editor heredado.
+
+**Implementación 16/10:** las capas de navegación y rutas cliente se han corregido en `guest/guests-production-ops.js`, `guest/guests-rsvp-operations-v3.html`, `guest/guests-rsvp-operations-flow-v1.js`, `guest/guests-rsvp-design-manage.html`, `guest/guests-rsvp-form-flow.html`. El envío por `guest/guests-catalog-invitation-bridge-v1.js` y `guest/guests-rsvp-share-composer-v3.js` no recurre a invitaciones antiguas. Las plantillas técnicas heredadas pueden seguir almacenadas en el repositorio por paridad/regresión, pero **no forman parte de la interfaz ni de las rutas de edición de la pareja**. No confundir esto con una autorización de venta ni certificación comercial real.
+
+**Documentación de intervención y verificaciones:** `guest/GUEST_MODULE_OPERATIONAL_AUDIT_2026-10-16.md`.
