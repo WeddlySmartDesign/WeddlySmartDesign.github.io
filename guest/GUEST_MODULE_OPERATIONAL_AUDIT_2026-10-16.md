@@ -61,3 +61,31 @@ Un comprador ficticio autorizado selecciona un diseño permitido; pago TEST veri
 ## Rectificación expresa de alcance — 16/10/2026
 
 La propietaria corrigió una sugerencia de la auditoría: **la pareja no puede usar GUEST antes de recibir la invitación terminada**; GUEST se habilita con la entrega final, posterior a revisión y aprobación, dentro del compromiso de entrega de 48–72 h. Se retira como trabajo pendiente el estado «invitación en preparación» y cualquier acceso de pareja anterior a la entrega. El backend puede provisionar internamente la licencia durante la compra, pero su existencia técnica NO debe equivaler a dar acceso a la pareja: el correo inicial entrega exclusivamente el cuestionario y la comunicación de acceso se produce exclusivamente con la entrega final. Esta rectificación prevalece sobre cualquier recomendación anterior contradictoria de esta auditoría.
+
+
+## Intervención técnica sobre el módulo — 16/10/2026
+
+### Contrato definitivo de acceso
+
+1. La pareja compra **un diseño individual** de invitación, no un editor.
+2. Recibe cuestionario y WeddlySmartDesign personaliza, revisa y presenta el resultado para aprobación.
+3. La entrega final de invitación aprobada se produce en el plazo comercial comprometido de **48–72 h**. **El acceso a GUEST se comunica solamente en esa entrega final.** No existe un cliente que abra GUEST con la invitación pendiente.
+4. En GUEST la pareja **no diseña ni edita la invitación** y **no configura ni edita el formulario/preguntas RSVP**. Sí crea/importa grupos, subgrupos, invitados, unidades, envía la invitación final, registra y consulta confirmaciones y cambios manuales, asigna mesas, avisos, listados, eventos extra, tema visual de la aplicación y segundo dispositivo sincronizado.
+
+### Hallazgos reales y correcciones realizadas (rama exclusiva `guest-independent`)
+
+- `guest/guests-production-ops.js`: quitados dos botones heredados «Editar invitación» del panel Hoy y paso de Envíos y respuestas; un único botón lleva al trabajo de envíos/respuestas. No se modificaron motor de invitados, mesas, listados ni gestión manual del RSVP.
+- `guest/guests-rsvp-operations-v3.html`: eliminado acceso «Editar invitación» desde cabecera de Envíos y respuestas; el envío y el registro manual conservan sus funciones.
+- `guest/guests-rsvp-operations-flow-v1.js`: retirado asistente cliente «Invitación → RSVP → Enviar», inaplicable a una invitación comprada y ya entregada; no se reimplementa el editor.
+- `guest/guests-rsvp-design-manage.html` y `guest/guests-rsvp-form-flow.html`: rutas antiguas de edición ahora muestran información y retorno a GUEST, incluso mediante enlace directo. El resto de artefactos fuente/QA heredados siguen versionados sin integrarse en el flujo comercial actual; **su presencia en Git no significa que se vendan ni formen parte de la experiencia de pareja**.
+- `guest/guests-catalog-invitation-bridge-v1.js`: si el backend no devuelve invitación final activa, `buildRecipientUrl` falla y **no recurre al diseño RSVP heredado**.
+- `guest/guests-rsvp-share-composer-v3.js`: eliminado fallback manual al HTML de antigua invitación; el enlace se exige al bridge del diseño final, se mantienen destinatarios/unidades, mensaje personalizable, WhatsApp/compartir y marcado de enviado; ante error no entrega enlace y solicita reintento.
+- `guest/guests-rsvp-operations-live.html`: quitada carga del sender anterior `guests-rsvp-share-primary-v1.js`, que podía competir con el compositor y generar URL de invitación antigua. El archivo legado no se borra de la historia del repositorio.
+- Tests: `guest/qa/b6_3_invitation_rsvp_test.js`, `guest/qa/b7_3_invitation_rsvp_visual_test.js`, `guest/qa/b7_2_hoy_invitados_test.js`, `guest/qa/b7_6_global_desktop_accessibility_test.js`, `guest/qa/catalog_invitation_bridge_test.js`, `guest/qa/guest_independent_regression_test.js` adaptados para comprobar **ausencia** de editores cliente, preservar RSVP público, UX móvil, envío y fail-closed. Los contratos históricos de portabilidad de ONE solo se exceptúan para esas dos rutas deliberadamente retiradas, no para el motor RSVP.
+- Dirección canónica corregida en `guest/GUEST_PRODUCT_DIRECTION_CANONICAL_2026-10-07.md`, sección 9, como regla que prevalece sobre documentación antigua.
+
+### Alcance, limitaciones y siguiente puerta de salida
+
+Estos cambios son de **código en GitHub**, no constituyen por sí mismos un despliegue Cloudflare/Pages, una compra real, una entrega real al cliente ni una certificación de producción. No se activó Stripe, no se usó email de cliente, no se creó un pedido de pago y no se tocó ONE, ONE Partner ni STUDIO. Las fuentes de editor antiguas siguen existiendo como artefactos de paridad/versión y no deben ser enlazadas ni utilizadas por la interfaz comercial. Una retirada de todos los archivos históricos o un cierre del permiso backend de configuración RSVP requiere revisar dependencias del motor, sin convertir esa migración en requisito de rediseño visual. **Ningún producto se declara a la venta con estos cambios.**
+
+QA posterior a los cambios: consultar los workflows GUEST Independent QA, Catalog Bridge QA y Catalog and Continuity QA del último HEAD; registrar resultado de la ejecución concreta y no asumir PASS a partir de pruebas anteriores.
