@@ -32,4 +32,16 @@ ok(!access.includes('Activar GUEST'),'legacy unexplained activation button remai
 ok(flow.includes("createOrder(c,'test',txt(b.email,200),null,null,txt(b.templateId||'veil-light',80))"),'test-order creation must use null, never empty string, for UUID license_id');
 ok(!flow.includes("createOrder(c,'test',txt(b.email,200),'',null"),'empty-string UUID license regression detected');
 
+
+const checkout=fs.readFileSync(path.join(root,'guest/backend/guest-stripe-checkout/index.ts'),'utf8');
+const start=checkout.indexOf('async function startCatalogEmail(');
+const end=checkout.indexOf('async function provision(',start);
+ok(start>=0&&end>start,'catalog purchase email function not found');
+const catalogEmail=checkout.slice(start,end);
+ok(!catalogEmail.includes('labelFor(edition)')&&!catalogEmail.includes('GUEST Signature')&&!catalogEmail.includes('GUEST Essential'),'catalog purchase email cannot advertise legacy editions');
+ok(catalogEmail.includes('el diseño de invitación que habéis elegido'),'catalog purchase must acknowledge selected individual design');
+ok(catalogEmail.includes('Con la entrega de la versión definitiva recibiréis también el acceso'),'catalog email must explain delayed management access');
+ok(!catalogEmail.includes('guest/access.html')&&!catalogEmail.includes('activationCode'),'access link/code cannot be sent with purchase email');
+ok(flow.includes("if(order.status!=='approved')return json({ok:false,error:'approval_required'},409)"),'final delivery must require approval');
+
 console.log('CATALOG CUSTOMER JOURNEY / COMMUNICATION CONTRACT PASS');
