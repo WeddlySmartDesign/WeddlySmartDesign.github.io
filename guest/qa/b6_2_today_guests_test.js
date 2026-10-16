@@ -75,7 +75,7 @@ async function run(){
  await noOverflow(core,'Invitados');
  let txt=await core.locator('#invitados').innerText();
  ok(txt.includes('Prepara tu lista'),'guest preparation step missing');
- ok(/Invitaciones y respuestas|Gestiona el RSVP|Envía y recoge RSVP/.test(txt),'guest RSVP step missing');
+ ok(/Envía y gestiona las respuestas|Invitaciones y respuestas|Gestiona el RSVP|Envía y recoge RSVP/.test(txt),'guest send-and-responses step missing');
  ok(txt.includes('Ajusta las mesas'),'guest seating step missing');
  await core.locator('#createBtn').click();
  await core.locator('[data-g="Amigos Pilar"]').click();
