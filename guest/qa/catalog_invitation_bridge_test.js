@@ -38,6 +38,10 @@ function ok(v,msg){if(!v)throw new Error(msg)}
   ok(ctx.includes('cfg.rsvp.route=rsvpUrl(ctx)'),'catalog template must route CTA into existing RSVP');
   ok(!ctx.includes('veil-light'),'recipient context must be template-agnostic');
 
+  const main=read('index.html'),ops=read('guests-production-ops.js');
+  for(const shell of [main,read('guests-v116-production.html')])ok(shell.includes('guests-catalog-invitation-bridge-v1.js'),'GUEST app must load final invitation resolver');
+  ok(ops.includes('wsdViewFinalInvitation')&&ops.includes('final?.shareBaseUrl'),'GUEST Home must open approved read-only invitation');
+  ok(!ops.includes('goTop(DESIGN)'),'GUEST Home must not expose invitation editor');
   const core=read('guests-v116-production.html');
   ok(core.includes('guests-seating-v2.js'),'existing seating engine missing');
   ok(core.includes('guests-people-manager-v1.js'),'existing people engine missing');
