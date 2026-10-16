@@ -96,6 +96,10 @@ for(const p of sourceFiles){
     continue;
   }
   if(!allowedModified.has(p)){const privacyOnly=s=>s.replace(/<meta\s+name=["']robots["']\s+content=["']noindex,nofollow(?:,noarchive)?["']\s*\/?>/gi,'').replace(/>\s+</g,'><');ok(src===dst||privacyOnly(src)===privacyOnly(dst),'unexpected functional modification vs latest ONE source: '+p)}
+  // Two post-delivery couple routes are intentionally RETIRED, not ported. Their old editor functions must be absent.
+  else if(['guests-rsvp-design-manage.html','guests-rsvp-form-flow.html'].includes(p)){
+    ok(dst.includes('href="index.html"')&&!/<(?:input|textarea|select)\b/i.test(dst),'retired editor route unexpectedly active: '+p);
+  }
   else for(const fn of namedFns(src))ok(namedFns(dst).includes(fn),'source function lost in '+p+': '+fn);
 }
 
