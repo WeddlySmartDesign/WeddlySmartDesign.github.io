@@ -601,3 +601,13 @@ El siguiente agente debe poder entrar **sin chat**. Antes de terminar:
 > Continuamos **GUEST by WeddlySmartDesign**. Antes de proponer o tocar código, abre `guest/START_HERE.md` de `WeddlySmartDesign/WeddlySmartDesign.github.io` en rama `guest-independent`; comprueba el estado real contra registros, CI y backend y sigue el runbook del diseño/compromiso pendiente. No reinicies investigación, no preguntes de nuevo por decisiones selladas ni toques ONE, ONE Partner, STUDIO, VEIL LIGHT o Botánica V14 congeladas. Dirige el trabajo, realiza QA antes de entregar, distingue simulaciones de E2E reales y documenta todo al finalizar.
 
 **Siguiente paso técnico prioritario a fecha de este checkpoint:** confirmar CI nativo de V13 y diagnosticar B6.6, certificar compatibilidad histórica sin escritura y ejecutar pruebas reales exclusivamente en entorno de despliegue **autorizado**; después cerrar la integración **autorizada** de la plataforma común V2 y certificar Botánica en su camino real de pedidos/RSVP/Android; **NO comenzar diseño 03 repitiendo la arquitectura**.
+
+---
+
+## Actualización de continuidad — 16/10/2026 · GUEST MÓDULO (NO DISEÑOS)
+
+**LEER PRIMERO**: `guest/GUEST_MODULE_OPERATIONAL_AUDIT_2026-10-16.md` (auditoría, corrección de acceso, cambios realizados y pendientes) y sección 9 de `guest/GUEST_PRODUCT_DIRECTION_CANONICAL_2026-10-07.md`.
+
+Decisión comercial definitiva: **se compra una invitación individual**, WeddlySmartDesign recibe cuestionario, personaliza y revisa, pareja aprueba; **invitación final y acceso a GUEST se entregan juntos dentro de 48–72 h**. La pareja NUNCA accede antes de la invitación terminada. No existe «preparando invitación» dentro de su GUEST. Dentro de GUEST **NO hay editor de invitación ni editor de preguntas/formulario RSVP**; solo envío del diseño final vinculado, lista/grupos/subgrupos/unidades, seguimiento y registro manual de respuestas, +1, mesas, avisos, listados, extraeventos, temas y sincronización de dos móviles.
+
+16/10 correcciones en rama exclusiva `guest-independent`: botones y navegación de edición retirados; dos rutas obsoletas de edición cerradas a uso de pareja; asistente legado retirado; envío bloquea fallback a invitación antigua si falla la entrega del backend; tests de exclusión e invitación aprobada actualizados. Revisar **última ejecución de GitHub Actions** antes de declarar QA en verde. **No se ha desplegado o activado ninguna venta como parte de esta corrección.** Mantener ONE, ONE Partner y STUDIO intocables.
