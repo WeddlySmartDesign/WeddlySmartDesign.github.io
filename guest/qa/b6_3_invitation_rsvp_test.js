@@ -56,71 +56,19 @@ async function makePage(context,opts={}){
   return {page,calls,setFailConfig:v=>failConfig=v,getConfig:()=>config,setConfig:v=>{config=structuredClone(v)},setEdition:v=>edition=v};
 }
 
-async function innerEditor(page,filename){
-  for(let i=0;i<160;i++){
-    const f=page.frames().find(x=>x.url().includes(filename));
-    if(f){try{await f.waitForSelector('#tplGrid',{timeout:500});return f}catch{}}
-    await page.waitForTimeout(100);
+// Invitation design and RSVP form configuration are produced by WeddlySmartDesign,
+// outside the post-delivery couple application. Legacy editing routes remain closed.
+async function testRetiredEditors(context){
+  const {page,calls}=await makePage(context);
+  for(const path of ['/guest/guests-rsvp-design-manage.html','/guest/guests-rsvp-form-flow.html']){
+    await page.goto(base+path,{waitUntil:'domcontentloaded'});
+    await page.waitForSelector('main a[href="index.html"]',{timeout:5000});
+    ok(await page.locator('main a').count()===1,'customer editor guard missing on '+path);
+    ok(await page.locator('#tplGrid,#childrenQ,#addQuestion,#save').count()===0,'legacy editor controls exposed on '+path);
+    ok(await page.locator('a[href="index.html"]').isVisible(),'return to GUEST missing on '+path);
+    await noOverflow(page,path);
   }
-  throw new Error('editor iframe did not load: '+filename);
-}
-
-async function testFormFlow(context){
-  const x=await makePage(context,{config:{title:'Pilar & Jorge',date:'2027-09-12',time:'18:00',venue:'Finca Los Olivos, Murcia',transportOffered:true,accommodationOffered:false,questions:{meal:true,allergy:true,transport:true,children:false,plusone:true},customQuestions:[]}});
-  const {page,calls}=x;
-  await page.goto(base+'/guest/guests-rsvp-form-flow.html',{waitUntil:'domcontentloaded'});
-  await page.waitForSelector('#childrenQ',{timeout:15000});
-  ok(!(await page.locator('#childrenQ').isChecked()),'children must be opt-in by default');
-  ok(!(await page.locator('#accommodationQ').isChecked()),'accommodation should reflect disabled config');
-  await page.locator('#childrenQ').check();
-  await page.locator('#accommodationQ').check();
-  await page.locator('#addQuestion').click();
-  const card=page.locator('#customQuestions .custom').last();
-  await card.locator('[data-k="label"]').fill('¿Qué canción no puede faltar?');
-  await card.locator('[data-k="type"]').selectOption('text');
-  await page.locator('#save').click();
-  await page.waitForFunction(()=>document.getElementById('feedback')?.classList.contains('ok'),null,{timeout:10000}).catch(()=>{});
-  for(let i=0;i<40&&!calls.config.length;i++)await page.waitForTimeout(100);
-  ok(calls.config.length===1,'RSVP config save was not sent');
-  const cfg=calls.config[0].config;
-  ok(cfg.questions.children===true,'children opt-in was not persisted in config payload');
-  ok(cfg.accommodationOffered===true,'accommodation toggle was not persisted');
-  ok(Array.isArray(cfg.customQuestions)&&cfg.customQuestions.some(q=>q.label==='¿Qué canción no puede faltar?'),'custom question missing from config');
-  for(let i=0;i<60&&!calls.sameOrigin.some(p=>p.endsWith('/guest/guests-rsvp-operations-live.html'));i++)await page.waitForTimeout(100);
-  ok(calls.sameOrigin.some(p=>p.endsWith('/guest/guests-rsvp-services-hotfix-v1.js')),'RSVP services layer escaped GUEST directory');
-  ok(calls.sameOrigin.some(p=>p.endsWith('/guest/guests-rsvp-form-flow-v1.js')),'RSVP flow layer escaped GUEST directory');
-  ok(calls.sameOrigin.some(p=>p.endsWith('/guest/guests-rsvp-operations-live.html')),'save did not continue to invitation sending');
-  for(let i=0;i<60&&!calls.sameOrigin.some(p=>p.endsWith('/guest/guests-rsvp-custom-answers-v1.js'));i++)await page.waitForTimeout(100);
-  ok(calls.sameOrigin.some(p=>p.endsWith('/guest/guests-rsvp-custom-answers-v1.js')),'operations runtime escaped GUEST directory');
-  ok(calls.legacy.length===0,'ONE backend called from RSVP form/operations: '+calls.legacy.join(','));
-  await page.close();
-}
-
-async function testDesign(context,edition){
-  const pers=edition==='signature'
-    ?{tier:'signature',template:'sig01',fontPair:'moderno',p1:'Pilar',p2:'Jorge',date:'2027-09-12',time:'18:00',city:'Murcia',venues:[{label:'Ceremonia',name:'Finca Los Olivos',address:'Murcia'}],agenda:[],transporte:[],galeria:[],blocks:{}}
-    :{tier:'essential',template:'e01',fontPair:'editorial',p1:'Pilar',p2:'Jorge',date:'2027-09-12',time:'18:00',venue:'Finca Los Olivos',city:'Murcia',agenda:[],locations:[]};
-  const x=await makePage(context,{edition,personalization:pers,failConfig:true});
-  const {page,calls}=x;
-  await page.goto(base+'/guest/guests-rsvp-design-manage.html',{waitUntil:'domcontentloaded'});
-  const file=edition==='signature'?'weddly-personalizacion-signature.html':'weddly-personalizacion-essential.html';
-  const inner=await innerEditor(page,file);
-  await inner.waitForSelector('#weddlyIntegrationBar',{timeout:15000});
-  const cards=await inner.locator('#tplGrid > *').count();
-  ok(cards>=(edition==='signature'?4:6),edition+' template collection incomplete: '+cards);
-  await inner.waitForSelector('#wsdInvitationFlow',{state:'visible',timeout:5000});
-  ok(await inner.locator('#wsdInvitationFlow').isVisible(),edition+' invitation stepper missing');
-  const mealBefore=await inner.locator('[data-save-essential]').first().isVisible();
-  ok(mealBefore,edition+' save action missing');
-  try{await page.waitForFunction(()=>document.getElementById('boot')?.classList.contains('hide'),null,{timeout:5000})}catch{const outer=await page.evaluate(()=>({boot:document.getElementById('boot')?.innerText||'',cls:document.getElementById('boot')?.className||''}));const innerState=await inner.evaluate(()=>({hasSave:typeof window.__weddlySaveEssential==='function'}));throw new Error(edition+' integration boot did not clear '+JSON.stringify({outer,innerState,errors:calls.errors}))}
-  await inner.locator('[data-save-essential]').first().click();
-  try{await inner.waitForFunction(()=>document.getElementById('weddlyIntegrationFeedback')?.classList.contains('ok'),null,{timeout:15000})}catch(e){const dbg=await inner.evaluate(()=>({feedback:document.getElementById('weddlyIntegrationFeedback')?.textContent||'',cls:document.getElementById('weddlyIntegrationFeedback')?.className||'',hasSave:typeof window.__weddlySaveEssential==='function'}));throw new Error(edition+' save feedback timeout '+JSON.stringify({dbg,calls:{personalization:calls.personalization.length,config:calls.config.length,legacy:calls.legacy}}))}
-  ok(calls.personalization.length===1,edition+' personalization was not saved');
-  ok(calls.personalization[0].personalization?.tier===edition,edition+' saved wrong tier');
-  ok(calls.config.length===1,edition+' did not attempt RSVP config refresh');
-  const feedback=await inner.locator('#weddlyIntegrationFeedback').innerText();
-  ok(/guardado/i.test(feedback),edition+' save resilience did not report success after RSVP refresh failure');
-  ok(calls.legacy.length===0,'ONE backend called from '+edition+' editor: '+calls.legacy.join(','));
+  ok(calls.config.length===0&&calls.personalization.length===0,'editor mutation invoked in customer view');
   await page.close();
 }
 
@@ -203,11 +151,9 @@ async function testUnitPublic(context){
   const browser=await chromium.launch({headless:true});
   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
   try{
-    await testFormFlow(context);
-    await testDesign(context,'essential');
-    await testDesign(context,'signature');
+    await testRetiredEditors(context);
     await testSinglePublic(context);
     await testUnitPublic(context);
-    console.log('B6.3 invitation + RSVP + Essential/Signature: PASS');
+    console.log('B6.3 managed invitations + public RSVP + editor exclusion: PASS');
   }finally{await browser.close()}
 })().catch(e=>{console.error('B6.3 FAIL:',e.stack||e);process.exit(1)});
