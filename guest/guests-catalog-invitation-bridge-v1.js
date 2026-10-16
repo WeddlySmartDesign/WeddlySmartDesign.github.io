@@ -38,7 +38,7 @@ async function fetchActive(force=false){
 }
 async function buildRecipientUrl(ctx){
   const active=await fetchActive(false);
-  if(!active)return legacyUrl(ctx);
+  if(!active)throw new Error('catalog_invitation_unavailable');
   const base=new URL(active.shareBaseUrl,location.href);
   base.searchParams.set('rt',ctx.rsvpToken||'');
   base.searchParams.set('lang',ctx.lang||'es');
