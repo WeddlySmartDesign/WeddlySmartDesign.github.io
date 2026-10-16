@@ -114,3 +114,30 @@ Comprobación funcional adicional: en el motor de invitados no existía el acces
 **Estado operativo que puede declararse:** interfaz del módulo GUEST con funcionalidades de gestión preservadas, sin edición de invitación ni de formulario RSVP accesible en las rutas cliente del flujo, botón read-only de invitación final, protección de envío contra fallback, y pruebas automatizadas PASS. 
 
 **Lo que NO se puede declarar aún:** despliegue Cloudflare del último commit, integración efectiva de los ocho diseños individuales, precios/nombres comerciales definitivos, producción y entrega de un pedido pagado auténtico, paridad visual externa en móviles reales ni certificación comercial de extremo a extremo. No se ha efectuado ningún cobro ni activación. Los ficheros legados de editor se conservan en el repositorio para referencia/paridad; las rutas expuestas al cliente se han clausurado, sin eliminación física exhaustiva de todos los artefactos de origen.
+
+
+## Continuación autónoma SIN archivos de diseños — 16/10/2026
+
+### 1. Defecto real identificado y corregido en el módulo
+
+- **Problema:** en `guest/guests-production-ops.js`, el botón «Ver nuestra invitación» recuperaba correctamente `shareBaseUrl`, pero llamaba a `topGo(...)`, **función no definida** en ese archivo. Los contratos estáticos anteriores certificaban la presencia del botón, pero no lo pulsaban. El cliente vería el aviso de error incluso con una invitación aprobada.
+- **Corrección:** añadida función `topGo(url)` en el módulo GUEST para navegar a la URL final devuelta por `active_for_member`, manteniendo la validación HTTPS/fallo cerrado. No se modifica ningún diseño, RSVP público ni otro producto. Commit `af48bb8666d80cae3270f49ec9e036e76445abd6`.
+- **Prueba de extremo a extremo en navegador simulado:** extendida `guest/qa/b7_2_hoy_invitados_test.js`: configura respuesta simulada `active_for_member`, sirve una invitación final de prueba en dominio ficticio, pulsa realmente «Ver nuestra invitación» en móvil y verifica que el navegador llegue a la URL aprobada. No toca backend real ni envía invitaciones ni pagos. Durante QA se detectó que el propio test dejaba abierto el panel de personas, que interceptaba el clic en navegación; se corrigió cerrando el panel primero, como haría la usuaria. Commits de prueba `8005681087e6b37c18013b00b3ddcebdebed7281` y `a2e0981ccb7cec051c47f1b84b9d73c02c68c9db`. **QA de matriz actual por verificar en Actions; no declarar PASS sin ejecución concluyente en el HEAD.**
+
+### 2. Correo poscompra de un diseño individual corregido
+
+- `guest/backend/guest-stripe-checkout/index.ts`: la función `startCatalogEmail` incluía «GUEST Essential» o «GUEST Signature» para un diseño comprado individualmente. Se ha sustituido **solo en el camino de catálogo individual** por «Hemos recibido vuestro pago y reservado el diseño de invitación que habéis elegido». El mensaje indica rellenar cuestionario, revisión/aprobación y que **el acceso a gestión de invitados se recibe con la entrega definitiva**, no con el cobro.
+- No se altera tarifa, sesión Stripe, pasarela, idempotencia, metadatos de compra ni correo heredado no perteneciente al catálogo. No hay cambios activos en Supabase: es fuente de código de GitHub pendiente de proceso autorizado de despliegue.
+- `guest/qa/catalog_customer_journey_test.js`: contrato para detectar cualquier reintroducción de etiquetas de colecciones en `startCatalogEmail` y impedir enlaces/códigos de activación en el correo de compra; exige aprobación antes de entrega. Commits `6e545fb8f867dce483afb443d89b72164d445291` y `64f60e3484cc58b2b4a43c151f7d4e1e61dc7640`.
+
+### 3. Independencia de materiales visuales y trabajo que SÍ sigue siendo posible
+
+Antes de recibir los masters/assets de los **ocho diseños individuales**, se pueden seguir cerrando en código y QA: visualización y envío exclusivo de la invitación aprobada; comportamiento ante cortes de red; mensajes poscompra/revisión/entrega; autorización del acceso al entregar; prueba de envío por unidad/grupo; persistencia y entrada de RSVP; los dos dispositivos y la sincronización; pruebas de rutas obsoletas y controles que no deben ver las parejas; inventario de checkout por diseño y compatibilidad del cuestionario común. El repositorio tiene ya contratos/arquitectura de adaptación por plantilla; **no regenerar ni rediseñar el motor GUEST para cada nuevo diseño**.
+
+Para **integrar/renderizar y certificar visualmente cada diseño específico** sí hacen falta los archivos definitivos que proporcione la propietaria (HTML/CSS/JS, vídeo/imagen/fuentes/licencias u otros recursos efectivamente utilizados), identificador/nombre del diseño y la correspondencia de sus secciones con el cuestionario común. Sin esos archivos no se puede afirmar que los ocho estén conectados; actualmente el registro técnico conocido enumera VEIL LIGHT, BOTÁNICA y D03 LIMONEROS, no los ocho. **No pedirle que vuelva a crear un sistema ni que haga integración manual.**
+
+### 4. Límites y próxima comprobación
+
+No se ha publicado ni activado ninguna venta, comprado nada, enviado correo real ni desplegado el backend; ONE, ONE Partner, STUDIO y diseños congelados intactos. Mantener pendientes las pruebas comerciales reales (compra → cuestionario → revisión → aprobación → entrega con GUEST → envío → RSVP → segundo móvil), el origen de producción y el registro real de los ocho diseños.
+
+CI a comprobar en último HEAD: `GUEST Independent QA` (31 jobs), `GUEST Catalog Bridge QA`, `GUEST Catalog and Continuity QA (offline)`. Una ejecución previa `GUEST Catalog Bridge QA` en commit `64f60e3484cc58b2b4a43c151f7d4e1e61dc7640` concluyó SUCCESS; no equivale al PASS de las tres matrices en el último commit.
