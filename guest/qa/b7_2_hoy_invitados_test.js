@@ -28,6 +28,7 @@ async function mock(page){
     else if(slug==='guest-license-access')out={ok:true,role:'primary',partnerJoined:false,product:'guests',edition:'signature'};
     else if(slug==='guest-access-check')out={ok:true,product:'guests',edition:'signature'};
     else if(slug==='guest-rsvp')out=u.searchParams.get('manage')==='1'?{ok:true,...remote}:{ok:true,form:{config:{}}};
+    else if(slug==='guest-invitation-flow'&&body.action==='active_for_member')out={ok:true,active:true,invitation:{shareBaseUrl:'https://final-preview.example/final.html?order=approved'}};
     else if(slug==='guest-event-state')out={ok:true,state:{events:{}},version:1};
     else if(slug==='guest-event-invite')out={ok:true,recipients:[],invitation:{}};
     await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(out)});
@@ -95,6 +96,15 @@ async function runViewport(browser,width,height){
   ok(search.h>=48&&search.left>=0&&search.right<=width+1,'people search is not mobile-safe: '+JSON.stringify(search));
   await noOverflow(f);
 
+  // An actual click must open the already approved, read-only invitation.
+  // Stub the external final: no live backend, no payment, no personal data.
+  await page.route('https://final-preview.example/**',route=>route.fulfill({status:200,contentType:'text/html',body:'<!doctype html><title>Approved invitation preview</title><h1>Final approved invitation</h1>'}));
+  await f.locator('#nav button[data-go="hoy"]').click();
+  await f.waitForSelector('#wsdViewFinalInvitation',{state:'visible',timeout:5000});
+  await f.locator('#wsdViewFinalInvitation').click();
+  await page.waitForURL('https://final-preview.example/final.html?order=approved',{timeout:12000});
+  ok(await page.locator('h1').innerText()==='Final approved invitation','final viewer did not actually navigate');
+  
   await ctx.close();
 }
 (async()=>{
