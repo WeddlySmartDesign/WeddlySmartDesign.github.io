@@ -89,3 +89,17 @@ La propietaria corrigió una sugerencia de la auditoría: **la pareja no puede u
 Estos cambios son de **código en GitHub**, no constituyen por sí mismos un despliegue Cloudflare/Pages, una compra real, una entrega real al cliente ni una certificación de producción. No se activó Stripe, no se usó email de cliente, no se creó un pedido de pago y no se tocó ONE, ONE Partner ni STUDIO. Las fuentes de editor antiguas siguen existiendo como artefactos de paridad/versión y no deben ser enlazadas ni utilizadas por la interfaz comercial. Una retirada de todos los archivos históricos o un cierre del permiso backend de configuración RSVP requiere revisar dependencias del motor, sin convertir esa migración en requisito de rediseño visual. **Ningún producto se declara a la venta con estos cambios.**
 
 QA posterior a los cambios: consultar los workflows GUEST Independent QA, Catalog Bridge QA y Catalog and Continuity QA del último HEAD; registrar resultado de la ejecución concreta y no asumir PASS a partir de pruebas anteriores.
+
+
+### Mejora postentrega — visualización de invitación sin edición (16/10, continuación)
+
+Comprobación funcional adicional: en el motor de invitados no existía el acceso principal **«Ver nuestra invitación»**, pese a que la invitación final debe acompañar siempre a GUEST. Se ha incorporado en la tarjeta de Hoy **exclusivamente en modo lectura** junto a «Abrir envíos y respuestas»:
+
+- `guest/index.html` y `guest/guests-v116-production.html`: cargan el resolver existente `guests-catalog-invitation-bridge-v1.js` antes de las operaciones.
+- `guest/guests-production-ops.js`: el botón **Ver nuestra invitación** llama a `fetchActive(true)`, que resuelve **solo** el `shareBaseUrl` de la invitación entregada desde `active_for_member`; nunca abre un editor ni acepta diseño/URL configurado manualmente. Si no se recupera, comunica incidencia y no abre ninguna invitación heredada.
+- `guest/qa/b7_2_hoy_invitados_test.js` y `guest/qa/catalog_invitation_bridge_test.js`: prueban presencia y tamaños de los 2 controles válidos, eliminación de CTA de edición, enlace resuelto desde backend y fail-closed del envío.
+- `guest/index.html`, `guest/guests-v116-production.html` aumentan la versión de `guests-production-ops.js` para evitar caché de botones anteriores. `guest/guest-sw.js` rota caché local `guest-shell-v3` → `guest-shell-v4`.
+
+**Corrección QA de regresiones de aserciones antiguas:** `guest/qa/guest_independent_regression_test.js` exceptúa el asistente deliberadamente retirado de paridad de código con ONE (sin relajar la paridad del resto), y las páginas de retorno de antiguos editores incorporan foco de teclado visible de 3 px. Se comprobó que los trabajos CI anteriores al cambio final identificaron y permitieron aislar estos desajustes, y **no se debe declarar matriz final PASS hasta comprobar el job del último commit**.
+
+**Comprobación del requisito acceso SOLO en entrega:** el correo inicial `startCatalogEmail` del backend de compra remite únicamente al cuestionario (no incluye enlace de activación); el enlace a GUEST figura en el correo de entrega `deliver` de `guest-invitation-flow`. La licencia puede provisionarse internamente durante la compra pero ello no comunica acceso previo. Esta garantía debe reproducirse en el E2E comercial real pendiente; no confundir inspección de fuente con certificado de correo en producción.
