@@ -68,7 +68,9 @@ async function runViewport(browser,width,height){
   const rsvp=await f.locator('#wsdRsvpHome').evaluate(el=>{const r=el.getBoundingClientRect(),s=getComputedStyle(el);return{w:r.width,pad:parseFloat(s.paddingLeft)}});
   ok(rsvp.w<=width-20&&rsvp.pad>=16,'RSVP focus card hierarchy broken: '+JSON.stringify(rsvp));
   const rsvpBtns=await f.locator('#wsdRsvpHome .actions .btn').evaluateAll(xs=>xs.map(x=>x.getBoundingClientRect().height));
-  ok(rsvpBtns.length===1&&rsvpBtns.every(h=>h>=47),'only approved send/response action should remain mobile-safe');
+  ok(rsvpBtns.length===2&&rsvpBtns.every(h=>h>=47),'send/response and read-only invitation actions must be mobile-safe');
+  ok(await f.locator('#wsdViewFinalInvitation').innerText()==='Ver nuestra invitación','read-only final invitation action missing');
+  ok(await f.locator('#wsdEditInvitation,#wsdEditInvitationInline').count()===0,'invitation editing unexpectedly available');
 
   const recent=await f.locator('#wsdRecentChanges').evaluate(el=>({head:!!el.querySelector('.guest-recent-head'),rows:el.querySelectorAll('.row').length}));
   ok(recent.head&&recent.rows>=1,'recent changes hierarchy missing: '+JSON.stringify(recent));
