@@ -41,3 +41,12 @@ Se compran **diseños individuales**, no colecciones Essential/Signature ni un e
 4. No publicar cobros ni declarar GO hasta dos recorridos completos sin intervención técnica y comprobación externa real.
 
 **Aislamiento verificado:** comparación desde `05aa01f6` al código de 17/10 muestra solo `guest/**`, `guest-checkout.html` y workflows exclusivos de GUEST; ONE, ONE Partner y STUDIO no se modificaron.
+
+
+## Cierre adicional: correo comercial de catálogo desplegado de verdad — 17/10/2026
+
+Al verificar producción, la función `guest-stripe-checkout` ACTIVE v24 seguía enviando `startCatalogEmail` con la etiqueta heredada de Essential/Signature, aunque el archivo GitHub ya estaba corregido. Se contrastó contra la fuente de GitHub y se demostró que **la única diferencia de código era la redacción en ese correo del catálogo**, sin cambios a sesión Stripe, importe, validación del diseño, autorización de venta, devolución, ni checkout de legados. Se conservó copia literal de v24 en `guest/backend/guest-stripe-checkout/ROLLBACK_LIVE_V24_2026-10-17.ts`. Se desplegó **`guest-stripe-checkout` ACTIVE v25** y se releyó en Supabase: fuente **idéntica** a `guest/backend/guest-stripe-checkout/index.ts` y texto aprobado; el correo inicial comunica solo pago/cuestionario/revisión y que el acceso de gestión llega con la invitación final.
+
+**Estado backend real confirmado:** `guest-rsvp` v6 ACTIVE (bloqueo configuración de RSVP para licencia con pedido del catálogo), `guest-personalization` v3 ACTIVE (bloqueo de edición visual para licencia de catálogo), `guest-stripe-checkout` v25 ACTIVE (correo individual sin colecciones). Se preservan los orígenes V5/V2/V24 para reversión. No se activó venta de los ocho diseños ni se envió correo de compra real en esta intervención.
+
+**Seguridad de datos:** consulta de solo lectura a Supabase confirma RLS habilitado en las nueve tablas `guest_*` expuestas en `public`. RLS habilitado no sustituye la revisión de políticas; no se han hecho cambios de esquema ni políticas.
