@@ -108,3 +108,7 @@ html.mp .closing-sign{font:italic 400 clamp(30px,8.6vw,40px)/1.15 'Lora',Georgia
 html.mp .close-date{font:400 15px/1.3 'GaramondSC',Georgia,serif!important;letter-spacing:.2em;color:#8f4129!important}
 @media(max-width:360px){.mp-b{grid-template-columns:28px 1fr;padding-right:12px}.mp-b::before{left:28px}.mp-b-lb{font-size:11.5px;letter-spacing:.03em;padding-left:8px}.mp-title{font-size:33px}.mp-card{grid-template-columns:1fr 76px}.mp-card::before{right:98px}.mp-stamp{width:74px;height:86px}.mp-stamp b{font-size:18px}.mp-lb{font-size:18px}html.mp [data-bg]{padding:30px 12px 22px!important}}
 @media(prefers-reduced-motion:reduce){.mp-rv{opacity:1;transform:none;transition:none}.mp-m{opacity:1;transform:none;transition:none}.mp-rose{transition:none}.mp-now::after{transition:none}}
+/* legibilidad de los datos sobre el mar: lavado de acuarela crema detrás, tinta más oscura */
+html.mp .cover-text{isolation:isolate;text-shadow:none!important}
+html.mp .cover-text::before{content:"";position:absolute;z-index:-1;left:-12%;right:-12%;top:-30%;bottom:-30%;background:radial-gradient(ellipse at 50% 50%,rgba(251,246,234,.94) 0,rgba(251,246,234,.86) 38%,rgba(251,246,234,.5) 58%,rgba(251,246,234,0) 74%);pointer-events:none}
+html.mp .cover-tag,html.mp .cover-names,html.mp .cover-date,html.mp .countdown,html.mp .cover-place{color:#1f2a2c!important}
