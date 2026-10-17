@@ -249,3 +249,10 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - Interior propio (prefijo `mp`, Lora + GaramondSC): páginas de guía con doble filete y la rosa de los vientos que gira; lugar en postales con sello perforado (hora) y matasellos; programa como recorrido de alfileres con el camino que se dibuja al bajar; detalles como billetes con matriz que se pican al tocarlos (el billete abierto lleva el sello de lacre); fotos en copia de papel.
 - Sin música (decisión de la autora).
 - Interior PASS, matriz 1196/0, tests de másters PASS, CI OK.
+- **v20.1**: tras la revisión de la autora («a la altura del resto»):
+  - portada de 11,5 s con viaje de cámara siguiendo la pluma por el camino y alejamiento final;
+  - mar con ondulación y brillos, luz giratoria del faro y gaviotas en tinta;
+  - camino más grueso con halo y contorno, y alfileres más grandes;
+  - brújula y luz dorada al final; datos a 9,4 s;
+  - cierre con dorsos impresos (cuadrícula y filete) y carta mayor y centrada;
+  - más pseudo-letras del ampliado borradas.

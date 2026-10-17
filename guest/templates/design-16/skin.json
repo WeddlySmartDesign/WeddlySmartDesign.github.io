@@ -2,7 +2,7 @@
  "id": "design-16",
  "version": "1.0.0",
  "displayName": "EL MAPA",
- "coverTextAt": 7.0,
+ "coverTextAt": 9.4,
  "closingTextAt": 5.2,
  "coverTextPosition": "top:71svh",
  "coverScrim": "top:0;height:0;background:none",
@@ -50,7 +50,7 @@
    "fondos-4-pantallas/fondo-4.jpg"
   ]
  },
- "mediaSource": "Entrega «El mapa» (Claude): mapa ilustrado en acuarela, brújula y sello de lacre de Recraft (piezas de la autora), limpiados y animados por código (plegado en 3D, camino, alfileres, aguja); sin música",
+ "mediaSource": "Entrega «El mapa» (Claude): mapa ilustrado en acuarela, brújula y sello de lacre de Recraft (piezas de la autora), limpiados y animados por código (plegado en 3D, viaje de cámara por el camino, mar con brillos, faro, gaviotas, alfileres, aguja y luz dorada); sin música",
  "fx": {},
  "motif": "",
  "motifIdle": "",
