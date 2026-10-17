@@ -83,7 +83,7 @@ h3{font:400 clamp(28px,7vw,40px)/1.1 var(--serif);margin:0 0 6px}
 #cover,#closing{padding:0;min-height:100svh;min-height:100dvh;display:block;overflow:hidden;background:var(--cover-bg)}
 .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none;z-index:0}
 .cover-text,.closing-text{position:absolute;z-index:2;left:22px;right:22px;text-align:center;color:var(--cover-ink);text-shadow:var(--cover-halo);opacity:0;transform:translateY(10px);transition:opacity 1.2s ease,transform 1.2s ease}
-.cover-text{top:71svh}
+.cover-text{top:min(70svh,calc(100svh - 290px))}
 #cover.opened .cover-text,#closing.revealed .closing-text{opacity:1;transform:none}
 .cover-scrim,.closing-scrim{position:absolute;left:0;right:0;z-index:1;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
 .cover-scrim{top:0;height:0;background:none}
@@ -361,6 +361,8 @@ html.mp .close-date{font:400 15px/1.3 'GaramondSC',Georgia,serif!important;lette
 html.mp .cover-text{isolation:isolate;text-shadow:none!important}
 html.mp .cover-text::before{content:"";position:absolute;z-index:-1;left:-12%;right:-12%;top:-30%;bottom:-30%;background:radial-gradient(ellipse at 50% 50%,rgba(251,246,234,.94) 0,rgba(251,246,234,.86) 38%,rgba(251,246,234,.5) 58%,rgba(251,246,234,0) 74%);pointer-events:none}
 html.mp .cover-tag,html.mp .cover-names,html.mp .cover-date,html.mp .countdown,html.mp .cover-place{color:#1f2a2c!important}
+html.mp .cover-names span{display:inline!important}
+html.mp .cover-names .amp{display:inline!important;font-size:.82em!important;padding:0 .24em!important}
 
 </style></head><body>
 <div id="stage-notice" aria-hidden="true">GUEST · EL MAPA · REVISIÓN TEST · NO VENTA</div>

@@ -112,3 +112,5 @@ html.mp .close-date{font:400 15px/1.3 'GaramondSC',Georgia,serif!important;lette
 html.mp .cover-text{isolation:isolate;text-shadow:none!important}
 html.mp .cover-text::before{content:"";position:absolute;z-index:-1;left:-12%;right:-12%;top:-30%;bottom:-30%;background:radial-gradient(ellipse at 50% 50%,rgba(251,246,234,.94) 0,rgba(251,246,234,.86) 38%,rgba(251,246,234,.5) 58%,rgba(251,246,234,0) 74%);pointer-events:none}
 html.mp .cover-tag,html.mp .cover-names,html.mp .cover-date,html.mp .countdown,html.mp .cover-place{color:#1f2a2c!important}
+html.mp .cover-names span{display:inline!important}
+html.mp .cover-names .amp{display:inline!important;font-size:.82em!important;padding:0 .24em!important}

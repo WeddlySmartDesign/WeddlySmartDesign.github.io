@@ -4,7 +4,7 @@
  "displayName": "EL MAPA",
  "coverTextAt": 9.4,
  "closingTextAt": 5.2,
- "coverTextPosition": "top:71svh",
+ "coverTextPosition": "top:min(70svh,calc(100svh - 290px))",
  "coverScrim": "top:0;height:0;background:none",
  "closingTextPosition": "top:12svh",
  "closingScrimPosition": "top:0;height:0;background:none",
