@@ -44,7 +44,7 @@ const rep={
  BG5:bg(skin.media.backgrounds5),
  MOTIF:skin.motif?dataUri(path.join(path.dirname(skinPath),skin.motif)):'',MOTIF_IDLE:skin.motifIdle||'',
  FX:JSON.stringify({...(skin.fx||{}),sprites:((skin.fx||{}).sprites||[]).map(r=>dataUri(path.join(path.dirname(skinPath),r)))}),
- DEMO_PHOTOS:JSON.stringify(Object.fromEntries(['story','venue','g1','g2','g3','g4'].map(k=>[k,dataUri(path.join(engineDir,'demo-photos',k+'.jpg'))]))),BG4:bg(skin.media.backgrounds4)};
+ DEMO_PHOTOS:JSON.stringify(Object.fromEntries(['story','venue','g1','g2','g3','g4'].map(k=>[k,dataUri((skin.demoPhotos&&skin.demoPhotos[k])?path.join(path.dirname(skinPath),skin.demoPhotos[k]):path.join(engineDir,'demo-photos',k+'.jpg'))]))),BG4:bg(skin.media.backgrounds4)};
 if(skin.media.backgrounds5.length!==5||skin.media.backgrounds4.length!==4)throw new Error('Backgrounds must be 5 + 4');
 // Interior propio opcional de la piel (CSS+JS) con sus recursos incrustados; solo afecta a ese diseño.
 let interiorCss='',interiorJs='';

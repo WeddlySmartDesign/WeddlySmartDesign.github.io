@@ -66,5 +66,12 @@
    "PAPER": "skin-assets/paper.jpg",
    "MUSIC": "skin-assets/music.m4a"
   }
+ },
+ "demoPhotos": {
+  "story": "skin-assets/demo/story.jpg",
+  "g1": "skin-assets/demo/g1.jpg",
+  "g2": "skin-assets/demo/g2.jpg",
+  "g3": "skin-assets/demo/g3.jpg",
+  "g4": "skin-assets/demo/g4.jpg"
  }
 }
