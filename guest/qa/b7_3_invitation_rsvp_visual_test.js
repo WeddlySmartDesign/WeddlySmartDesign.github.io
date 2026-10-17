@@ -89,8 +89,9 @@ async function testFirstCatalogActivation(context){
  const {page,errors,getEnsured}=await makePage(context,'signature',true);
  await page.goto(base+'/guest/guests-rsvp-operations-v2.html',{waitUntil:'domcontentloaded'});
  await page.waitForSelector('#metrics .metric',{timeout:12000});
+ for(let attempt=0;attempt<80&&!getEnsured();attempt++)await page.waitForTimeout(50);
+ ok(getEnsured(),'first delivered access must call guest-rsvp-ensure');
  await page.waitForFunction(()=>Boolean(localStorage.getItem('weddly_rsvp_public_token_v1')),null,{timeout:10000});
- ok(getEnsured(),'no form on first delivered access must call guest-rsvp-ensure');
  const share=page.locator('.guest .wsdrf-share').first();await share.waitFor({state:'visible',timeout:8000});
  await share.click();await page.waitForSelector('#wsdShareComposer.on',{timeout:8000});
  ok(await page.locator('#wsdShareMessage').isVisible(),'first activation must lead to a usable invitation sender');
