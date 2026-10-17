@@ -17,6 +17,8 @@ on:
       - 'guest/qa/catalog_delivery_builder_test.js'
       - 'guest/backend/guest-invitation-flow/index.ts'
       - 'guest/backend/guest-rsvp/index.ts'
+      - 'guest/backend/guest-personalization/index.ts'
+      - 'guest/tests/guest_personalization_config_lock_contract.test.cjs'
       - 'guest/tests/guest_rsvp_config_lock_contract.test.cjs'
       - 'guest/access.html'
       - '.github/workflows/guest-catalog-bridge-qa.yml'
@@ -32,6 +34,8 @@ jobs:
       - run: node guest/qa/catalog_invitation_bridge_test.js
       - name: Catalog RSVP configuration permission guard (offline)
         run: node guest/tests/guest_rsvp_config_lock_contract.test.cjs
+      - name: Catalog invitation authoring permission guard (offline)
+        run: node guest/tests/guest_personalization_config_lock_contract.test.cjs
       - name: Catalog customer journey contract
         run: node guest/qa/catalog_customer_journey_test.js
       - name: Catalog delivery builder
