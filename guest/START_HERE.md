@@ -611,3 +611,16 @@ El siguiente agente debe poder entrar **sin chat**. Antes de terminar:
 Decisión comercial definitiva: **se compra una invitación individual**, WeddlySmartDesign recibe cuestionario, personaliza y revisa, pareja aprueba; **invitación final y acceso a GUEST se entregan juntos dentro de 48–72 h**. La pareja NUNCA accede antes de la invitación terminada. No existe «preparando invitación» dentro de su GUEST. Dentro de GUEST **NO hay editor de invitación ni editor de preguntas/formulario RSVP**; solo envío del diseño final vinculado, lista/grupos/subgrupos/unidades, seguimiento y registro manual de respuestas, +1, mesas, avisos, listados, extraeventos, temas y sincronización de dos móviles.
 
 16/10 correcciones en rama exclusiva `guest-independent`: botones y navegación de edición retirados; dos rutas obsoletas de edición cerradas a uso de pareja; asistente legado retirado; envío bloquea fallback a invitación antigua si falla la entrega del backend; tests de exclusión e invitación aprobada actualizados. Revisar **última ejecución de GitHub Actions** antes de declarar QA en verde. **No se ha desplegado o activado ninguna venta como parte de esta corrección.** Mantener ONE, ONE Partner y STUDIO intocables.
+
+
+---
+
+## Continuidad prioritaria — 17/10/2026 · GUEST MÓDULO CERRADO HASTA DISEÑOS
+
+**LEER ANTES DE CUALQUIER PROPUESTA:** `guest/GUEST_MODULE_CLOSEOUT_2026-10-17.md`, además de `guest/GUEST_MODULE_OPERATIONAL_AUDIT_2026-10-16.md` y la dirección canónica sección 9. No reconstruir, no reabrir colecciones Essential/Signature, no incorporar editor de invitación ni preguntas RSVP a la pareja. La invitación aprobada y GUEST se entregan juntos, no hay acceso durante producción.
+
+**17/10 código:** se eliminan en la pantalla REAL de «Envíos y respuestas» los botones que enviaban una antigua plantilla genérica; se usa exclusivamente el compositor con el enlace al diseño aprobado. Envíos manuales marcados solo después de confirmación remota. Bridge exige revalidación de pedido y HTTPS, rechaza caducidad/red. Cuatro rutas de edición directa adicionales redirigen a gestión. Checkout por diseño oculta etiquetas de colecciones. PWA cache v5.
+
+**17/10 BACKEND REAL (aislado):** Supabase `guest-rsvp` ACTIVE **v6** y `guest-personalization` ACTIVE **v3**. Se cierra por licencia de pedido del catálogo la configuración de formulario RSVP y la edición de personalización, sin impedir respuestas, manuales, contactos ni estados. Códigos activos versionados en `guest/backend/guest-rsvp/index.ts` y `guest/backend/guest-personalization/index.ts`; respaldo exacto de versiones anteriores en carpetas correspondientes. Tras desplegar se comprobó identidad exacta de fuentes. Ninguna mutación de datos de clientes ni despliegue de ventas.
+
+**Puerta abierta:** revisar y registrar HEAD + GitHub Actions; pendiente de integración masters de ocho diseños, mapeo automático cuestionario-RSVP de cada encargo, certificación E2E real (compra, aprobación, entrega, envío, respuestas, segundo móvil) y publicación autorizada. No confundir PASS de tests con publicación ni con certificación de venta. Mantener ONE, Partner y STUDIO estrictamente intocables.
