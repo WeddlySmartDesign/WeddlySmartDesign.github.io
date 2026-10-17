@@ -141,8 +141,10 @@ async function testUnitPublic(context){
   await a.locator('.customValue').fill('September');
   await b.locator('[data-answer="no"]').click();
   await page.locator('#send').click();
-  for(let i=0;i<60&&calls.submit.length<2;i++)await page.waitForTimeout(100);
-  ok(calls.submit.length===2,'unit RSVP did not submit one response per person');
+  // Responses are deliberately posted sequentially. Under a loaded CI browser,
+  // allow the actual UI to reach success rather than imposing a 6-second transport guess.
+  await page.waitForSelector('.success',{timeout:20000});
+  ok(calls.submit.length===2,'unit RSVP did not submit one response per person; got '+calls.submit.length+'; errors: '+calls.errors.join(' | '));
   const ga=calls.submit.find(v=>v.guest_key==='g1'),gb=calls.submit.find(v=>v.guest_key==='g2');
   ok(ga?.attend===true&&ga.meal==='Vegano'&&ga.custom_answers?.song==='September','attending unit member payload incorrect');
   ok(gb?.attend===false,'declined unit member payload incorrect');
