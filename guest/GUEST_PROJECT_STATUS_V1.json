@@ -21,7 +21,7 @@
       "guest-stripe-checkout": 25
     },
     "browserAndBackendContractQa": {
-      "independentQaRun": 39015811142,
+      "independentQaRun": 39016250938,
       "independentQaJobs": 31,
       "independentQaStatus": "success",
       "catalogueBridgeRun": 39015815702,
