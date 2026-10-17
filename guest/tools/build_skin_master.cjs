@@ -31,7 +31,8 @@ const FONTS={Pinyon:[['Pinyon.ttf','truetype',400,'normal']],Garamond:[['Garamon
  Chorus:[['Chorus.otf','opentype',400,'normal']],Lora:[['Lora.ttf','truetype','400 700','normal'],['Lora-Italic.ttf','truetype','400 700','italic']],
  Adventor:[['Adventor.otf','opentype',400,'normal']],Baskerville:[['Baskerville.otf','opentype',400,'normal']],
  Pagella:[['Pagella.otf','opentype',400,'normal'],['Pagella-Italic.otf','opentype',400,'italic']],Poppins:[['Poppins-Light.ttf','truetype',300,'normal'],['Poppins.ttf','truetype',400,'normal']],
- Bonum:[['Bonum.otf','opentype',400,'normal'],['Bonum-Italic.otf','opentype',400,'italic']]};
+ Bonum:[['Bonum.otf','opentype',400,'normal'],['Bonum-Italic.otf','opentype',400,'italic']],
+ Bangers:[['Bangers-Regular.ttf','truetype',400,'normal']],Kalam:[['Kalam-Regular.ttf','truetype',400,'normal'],['Kalam-Bold.ttf','truetype',700,'normal']]};
 function fontFaces(list){return [...new Set(list)].map(f=>{if(!FONTS[f])throw new Error('Unknown font '+f);return FONTS[f].map(([file,fmt,w,st])=>`@font-face{font-family:'${f}';src:url('${dataUri(path.join(engineDir,'fonts',file))}') format('${fmt}');font-weight:${w};font-style:${st};font-display:swap}`).join('\n')}).join('\n')}
 const rep={
  ID:skin.id,VERSION:skin.version,NAME:skin.displayName,NAME_UPPER:skin.displayName.toUpperCase(),TAP_LABEL:skin.tapLabel||'Toca para abrir',

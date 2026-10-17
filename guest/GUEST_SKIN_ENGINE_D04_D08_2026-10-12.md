@@ -198,3 +198,11 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - **2026-10-15**: la autora aprueba el diseño visual de D12 «Abanico». Sigue TEST · certification-pending · NO VENTA.
 - **v17.4**: música cambiada a guitarra española sola (composición propia: la menor con cadencia andaluza que se abre a la mayor; `/home/claude/gala/musica/abanico_guitarra.py`).
 - **v17.5**: vuelve la música original (guitarra en arpegios, flauta y cuerdas). Las pruebas de guitarra sola (GM, modelado físico, muestras FluidR3) no convencieron. Pendiente: música definitiva.
+
+## v18 · D13 «Viñetas» (nuevo, TEST · certification-pending · NO VENTA)
+- Ilustraciones de Recraft de la autora (pareja en el mar, calle, copas; fotomatón con Recraft 4.1), retocadas por código: colores a juego, farolillos apagados/encendidos, sin puntitos de nieve, sombras grises quitadas de las caras. Fuentes en `/home/claude/comic` (src, src2, prep, vid).
+- Portada (9 s): boceto a lápiz → tinta → color viñeta a viñeta; farolillos que se encienden; «¡CHIN CHIN!»; luna que respira. Los datos de la pareja los pone el motor dentro de un bocadillo CSS sobre la última viñeta (a 7,3 s).
+- Cierre (11 s): tira de fotomatón con tres fotos que se revelan con «¡FLASH!» y «¡SMACK!» → último flash → noche con fuegos artificiales de cómic y «¡BOOM!». «¡Os esperamos!» propio en bocadillo (5,9 s) y datos en una cartela (6,6 s).
+- Interior propio (prefijo `vn`): viñetas con cartela amarilla y título rotulado, horas en estrellas de cómic, programa en tira de viñetas que aparecen al bajar, detalles como bocadillos con aviso «!», galería enmarcada.
+- Motor: se añaden las fuentes OFL Bangers y Kalam (con sus licencias) al registro de fuentes del constructor.
+- Música original «swing suave» (contrabajo, piano, clarinete, vibráfono y glockenspiel).
