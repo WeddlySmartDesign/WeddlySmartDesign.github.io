@@ -9,7 +9,21 @@ const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'
 function guests(){try{const s=JSON.parse(localStorage.getItem(GKEY)||'{}')||{};return Object.entries(s.guests||{}).map(([id,g])=>({id,...g}))}catch{return[]}}
 function localR(){try{return JSON.parse(localStorage.getItem(RKEY)||'{}')||{}}catch{return{}}}
 function putLocalR(x){try{localStorage.setItem(RKEY,JSON.stringify(x))}catch{}}
-async function token(){if(publicToken)return publicToken;try{const cached=localStorage.getItem(PTKEY)||'';if(cached)return publicToken=cached}catch{}const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),7000);try{const r=await fetch(API+'?manage=1',{headers:{'x-weddly-token':localStorage.getItem(TOKEN)||''},cache:'no-store',signal:ctl.signal}),x=await r.json().catch(()=>({}));if(r.ok&&x?.ok){publicToken=x.forms?.[0]?.public_token||'';if(publicToken)try{localStorage.setItem(PTKEY,publicToken)}catch{}}}catch{}finally{clearTimeout(timer)}return publicToken}
+async function token(){
+ // A token cached for another wedding/device must never be used to send an RSVP.
+ const member=localStorage.getItem(TOKEN)||'';
+ if(member.length<40){publicToken='';return''}
+ const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),7000);
+ try{
+  const r=await fetch(API+'?manage=1',{headers:{'x-weddly-token':member},cache:'no-store',signal:ctl.signal});
+  const x=await r.json().catch(()=>({}));
+  const formToken=r.ok&&x?.ok?String(x.forms?.[0]?.public_token||''):'';
+  if(!formToken){publicToken='';try{localStorage.removeItem(PTKEY)}catch{};return''}
+  publicToken=formToken;
+  try{localStorage.setItem(PTKEY,formToken)}catch{}
+  return publicToken;
+ }catch{publicToken='';return''}finally{clearTimeout(timer)}
+}
 function rowId(el){return el.closest('.guest')?.querySelector('[data-recipient]')?.dataset.recipient||''}
 function inviteInfo(id){const all=guests(),g=all.find(x=>x.id===id);if(!g)return null;const members=g.invitationUnitId?all.filter(x=>x.invitationUnitId===g.invitationUnitId&&x.invitationRecipientId===id):[g];return{g,members}}
 function invitationKey(id){const x=inviteInfo(id);if(!x)return id;return x.g.invitationUnitId&&x.members.length>1?'unit:'+x.g.invitationUnitId:id}
