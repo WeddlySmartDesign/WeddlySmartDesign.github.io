@@ -261,3 +261,4 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - **v20.4**: D16 vuelve el haz del faro de v20.1 (gustaba a la autora); sigue apagándose antes de los datos.
 - **v20.5**: D16 billetes de detalles en una columna (sin texto que se salga); cierre con la carta más baja y menor, y textos compactos para no pisarla.
 - **v20.6**: D16 el billete abierto aparece debajo del que se toca y la vista se acerca sola si hace falta.
+- **2026-10-17**: la autora aprueba el diseño visual de D16 «El mapa». Sigue TEST · certification-pending · NO VENTA.
