@@ -262,3 +262,6 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - **v20.5**: D16 billetes de detalles en una columna (sin texto que se salga); cierre con la carta más baja y menor, y textos compactos para no pisarla.
 - **v20.6**: D16 el billete abierto aparece debajo del que se toca y la vista se acerca sola si hace falta.
 - **2026-10-17**: la autora aprueba el diseño visual de D16 «El mapa». Sigue TEST · certification-pending · NO VENTA.
+- **v21**: D06, revisión de la autora:
+  - datos de portada legibles, con vaho blanco detrás y tinta más profunda;
+  - cierre re-renderizado (`/home/claude/inv/render.html`): la nube de mariposas sale del encuadre antes de desvanecerse, sin quedarse en los laterales. Vídeos anteriores guardados en `/tmp/claude-0/inv_cierre_*_v1.mp4`.

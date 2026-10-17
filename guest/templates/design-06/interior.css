@@ -133,3 +133,7 @@ html.iv a.link{font:400 15px/1 'GaramondSC',Georgia,serif!important;letter-spaci
 .iv-v-info{display:block}
 .iv-v-k{font:400 14px/1 'GaramondSC',Georgia,serif!important}
 .iv-v-name{font:italic 400 24px/1.2 'Garamond',Georgia,serif!important}
+/* portada: los datos sobre el cristal se leen con un vaho blanco suave detrás y tinta más profunda */
+html.iv .cover-text{isolation:isolate}
+html.iv .cover-text::before{content:"";position:absolute;z-index:-1;left:-14%;right:-14%;top:-14%;bottom:-16%;background:radial-gradient(ellipse at 50% 48%,rgba(250,250,246,.9) 0,rgba(250,250,246,.8) 40%,rgba(250,250,246,.45) 62%,rgba(250,250,246,0) 78%);filter:blur(4px);pointer-events:none}
+html.iv .cover-tag,html.iv .cover-names,html.iv .cover-date,html.iv .countdown,html.iv .cover-place{color:#183324!important}
