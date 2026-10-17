@@ -9,8 +9,8 @@ const baseState={meta:{couple:['Pilar','Jorge'],weddingDate:'2027-09-12'},guests
 },tables:{}};
 const cfg={title:'Pilar & Jorge',date:'2027-09-12',time:'18:00',venue:'Finca Los Olivos, Murcia',transportOffered:true,accommodationOffered:true,questions:{meal:true,allergy:true,transport:true,children:false,plusone:true},customQuestions:[{id:'song',label:'¿Qué canción no puede faltar?',type:'text',options:[],required:false}]};
 
-async function makePage(context,edition='essential'){
- const page=await context.newPage(),legacy=[],errors=[];
+async function makePage(context,edition='essential',emptyFirst=false){
+ const page=await context.newPage(),legacy=[],errors=[];let provisioned=false;
  let personalization={tier:edition,template:edition==='signature'?'sig01':'e01',fontPair:edition==='signature'?'moderno':'editorial',p1:'Pilar',p2:'Jorge',date:'2027-09-12',time:'18:00',venue:'Finca Los Olivos',city:'Murcia'};
  await page.addInitScript(({member,baseState})=>{localStorage.setItem('weddly_shared_wedding_token',member);localStorage.setItem('weddly_pro_v7',JSON.stringify({settings:{partner1:'Pilar',partner2:'Jorge',weddingDate:'2027-09-12',lang:'es'}}));localStorage.setItem('weddly_guests_qa_v67',JSON.stringify(baseState));},{member,baseState});
  page.on('pageerror',e=>errors.push(e.message));
@@ -19,13 +19,13 @@ async function makePage(context,edition='essential'){
   const req=route.request(),u=new URL(req.url()),slug=u.pathname.split('/').pop();let body={};try{body=req.postDataJSON()||{}}catch{}
   let out={ok:true},status=200;
   if(slug==='guest-access-check')out=body.action==='entitlement'?{ok:true,product:'guests',edition,owner:false}:{ok:true,product:'guests',edition};
-  else if(slug==='guest-rsvp-ensure')out={ok:true,publicToken};
+  else if(slug==='guest-rsvp-ensure'){provisioned=true;out={ok:true,publicToken,created:true,config:cfg};}
   else if(slug==='guest-invitation-flow'&&body.action==='active_for_member')out={ok:true,active:true,invitation:{shareBaseUrl:'https://final.example.test/final.html?order=ready',templateId:'premium-any'}};
   else if(slug==='guest-personalization'){
    if(req.method()==='POST')personalization=body.personalization||personalization;
    out={ok:true,personalization};
   }else if(slug==='guest-rsvp'){
-   if(req.method()==='GET'&&u.searchParams.get('manage')==='1')out={ok:true,forms:[{id:'f1',public_token:publicToken,config:cfg}],submissions:[{guest_key:'g1',name:'Ana López',attend:true,meal:'Vegetariano',received_at:new Date().toISOString()}],contacts:[{guest_key:'g1',phone:'600111222'}],delivery:[]};
+   if(req.method()==='GET'&&u.searchParams.get('manage')==='1')out=emptyFirst&&!provisioned?{ok:true,forms:[],submissions:[],contacts:[],delivery:[]}:{ok:true,forms:[{id:'f1',public_token:publicToken,config:cfg}],submissions:[{guest_key:'g1',name:'Ana López',attend:true,meal:'Vegetariano',received_at:new Date().toISOString()}],contacts:[{guest_key:'g1',phone:'600111222'}],delivery:[]};
    else if(req.method()==='GET'&&u.searchParams.get('unit'))out={ok:true,form:{id:'f1',config:cfg},unit:{id:'u1',label:'Familia López',members:[{id:'g1',name:'Ana López',events:[]},{id:'g2',name:'Mario López',events:[]}]}};
    else if(req.method()==='GET'&&u.searchParams.get('token'))out={ok:true,form:{id:'f1',config:cfg},...(u.searchParams.get('guest')?{guest:{id:'g1',name:'Ana López'}}:{})};
    else if(req.method()==='POST')out={ok:true,submission:{id:'s1'},config:body.config||cfg};
@@ -36,7 +36,7 @@ async function makePage(context,edition='essential'){
   else if(slug==='guest-event-invite')out={ok:true};
   await route.fulfill({status,contentType:'application/json',body:JSON.stringify(out)});
  });
- return{page,legacy,errors};
+ return{page,legacy,errors,getEnsured:()=>provisioned};
 }
 async function noOverflow(page,label){
  const x=await page.evaluate(()=>({sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth,bw:document.body?.scrollWidth||0}));
@@ -85,6 +85,18 @@ async function testOperations(context){
  ok(errors.length===0,'operations browser errors: '+errors.join(' | '));
  await page.close();
 }
+async function testFirstCatalogActivation(context){
+ const {page,errors,getEnsured}=await makePage(context,'signature',true);
+ await page.goto(base+'/guest/guests-rsvp-operations-v2.html',{waitUntil:'domcontentloaded'});
+ await page.waitForSelector('#metrics .metric',{timeout:12000});
+ await page.waitForFunction(()=>Boolean(localStorage.getItem('weddly_rsvp_public_token_v1')),null,{timeout:10000});
+ ok(getEnsured(),'no form on first delivered access must call guest-rsvp-ensure');
+ const share=page.locator('.guest .wsdrf-share').first();await share.waitFor({state:'visible',timeout:8000});
+ await share.click();await page.waitForSelector('#wsdShareComposer.on',{timeout:8000});
+ ok(await page.locator('#wsdShareMessage').isVisible(),'first activation must lead to a usable invitation sender');
+ ok(errors.length===0,'first activation errors: '+errors.join(' | '));
+ await page.close();
+}
 async function testRetiredEditorRoute(context,path){
  const {page,legacy,errors}=await makePage(context,'signature');
  await page.goto(base+'/guest/'+path,{waitUntil:'domcontentloaded'});
@@ -119,6 +131,7 @@ async function testPublic(context,kind){
  for(const [w,h] of [[320,700],[390,844]]){
   const context=await browser.newContext({viewport:{width:w,height:h},isMobile:true,hasTouch:true});
   await testOperations(context);
+  await testFirstCatalogActivation(context);
   await testRetiredEditorRoute(context,'guests-rsvp-design-manage.html');
   await testRetiredEditorRoute(context,'guests-rsvp-form-flow.html');
   await testPublic(context,'single');
