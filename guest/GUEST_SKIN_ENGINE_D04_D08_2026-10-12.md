@@ -241,3 +241,11 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - **2026-10-17**: la autora da por buena D15 «Viñetas · Ellos» («perfecto»). Sigue TEST · certification-pending · NO VENTA.
 - **v19.6**: D14/D15 con fotos de ejemplo propias de la autora (dos novias / dos novios) en historia y galería; el lugar sigue con la foto común. El constructor admite `demoPhotos` opcional en skin.json; sin él usa las comunes (D13 reconstruido idéntico byte a byte).
 - **v19.7**: D14/D15 una foto de ejemplo más de la autora en cada galería (Ellas: de la mano riendo, en lugar del primer plano; Ellos: leyendo un libro, en lugar de repetir la de la historia).
+
+## v20 · D16 «El mapa» (nuevo, TEST · certification-pending · NO VENTA)
+- Diseño sin pareja dibujada para que cualquier pareja se sienta representada. Tres piezas de Recraft de la autora: mapa en acuarela (ampliado; se borran por código unas pseudo-letras del ampliado), brújula en acuarela y sello de lacre realista con rama de olivo. Fuentes en `/home/claude/mapa` (src, prep.py, vid).
+- Portada (9 s): mapa plegado sobre lino con la brújula en la tapa, que se despliega en perspectiva 3D (6 cuarterones: columna y luego filas), marcas de los pliegues en el papel, camino terracota discontinuo del faro a la finca, alfileres con rebote en la iglesia y la finca, y brújula que gira y cuya aguja oscila hasta apuntar a la finca. Datos del motor sobre el mar (7 s).
+- Cierre (9 s): el mapa con el camino se vuelve a plegar como una carta y cae el sello de lacre sobre el borde. «Os esperamos» propio en cursiva (4,7 s) y datos del motor (5,2 s) sobre el lino.
+- Interior propio (prefijo `mp`, Lora + GaramondSC): páginas de guía con doble filete y la rosa de los vientos que gira; lugar en postales con sello perforado (hora) y matasellos; programa como recorrido de alfileres con el camino que se dibuja al bajar; detalles como billetes con matriz que se pican al tocarlos (el billete abierto lleva el sello de lacre); fotos en copia de papel.
+- Sin música (decisión de la autora).
+- Interior PASS, matriz 1196/0, tests de másters PASS, CI OK.
