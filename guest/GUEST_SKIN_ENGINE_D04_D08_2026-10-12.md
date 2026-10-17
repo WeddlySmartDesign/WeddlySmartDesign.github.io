@@ -207,3 +207,4 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - Motor: se añaden las fuentes OFL Bangers y Kalam (con sus licencias) al registro de fuentes del constructor.
 - Música original «swing suave» (contrabajo, piano, clarinete, vibráfono y glockenspiel).
 - **v18.1**: en el cierre los fuegos estallan más abajo (mitad inferior) para que la cartela con los datos no tape los «¡BOOM!».
+- **2026-10-17**: la autora aprueba el diseño visual de D13 «Viñetas». Sigue TEST · certification-pending · NO VENTA.
