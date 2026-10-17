@@ -26,6 +26,8 @@ jobs:
         run: node guest/tests/guest_personalization_config_lock_contract.test.cjs
       - name: Catalogue questionnaire RSVP first-activation mapping (offline)
         run: node guest/tests/catalog_questionnaire_rsvp_first_access.test.cjs
+      - name: Catalogue final-delivery-only activation (offline)
+        run: node guest/tests/catalog_license_delivery_gate_contract.test.cjs
 
   catalog-invitation-bridge:
     runs-on: ubuntu-latest
