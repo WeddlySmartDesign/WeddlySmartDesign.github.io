@@ -581,6 +581,26 @@
       "candidateSha256": "d9664f91ba7fef44152f5bc75433ada1eb4c7f6f40299309758d562f3aa22c6e",
       "commerciallyCertified": false,
       "requiredGates": 11
+    },
+    "design-14": {
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-14/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-14-adapter-v1.js",
+      "visualMasterSha256": "5ee2040d6053e6d8472030ee291f42d2ed7fa6ff5ee584fc507a51cbcbb3c283",
+      "candidateSha256": "5ee2040d6053e6d8472030ee291f42d2ed7fa6ff5ee584fc507a51cbcbb3c283",
+      "commerciallyCertified": false,
+      "requiredGates": 11
+    },
+    "design-15": {
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-15/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-15-adapter-v1.js",
+      "visualMasterSha256": "f11b62f98ff70b1f1f7cc89177b700255819df1d8b4f0fd734cfdcf26456039a",
+      "candidateSha256": "f11b62f98ff70b1f1f7cc89177b700255819df1d8b4f0fd734cfdcf26456039a",
+      "commerciallyCertified": false,
+      "requiredGates": 11
     }
   },
   "runtime": {

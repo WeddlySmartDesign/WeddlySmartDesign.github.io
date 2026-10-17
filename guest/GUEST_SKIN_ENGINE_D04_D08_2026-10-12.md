@@ -208,3 +208,28 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - Música original «swing suave» (contrabajo, piano, clarinete, vibráfono y glockenspiel).
 - **v18.1**: en el cierre los fuegos estallan más abajo (mitad inferior) para que la cartela con los datos no tape los «¡BOOM!».
 - **2026-10-17**: la autora aprueba el diseño visual de D13 «Viñetas». Sigue TEST · certification-pending · NO VENTA.
+
+## v19 · D14 «Viñetas · Ellas» y D15 «Viñetas · Ellos» (nuevos, TEST · certification-pending · NO VENTA)
+- Versiones inclusivas de «Viñetas» pedidas por la autora: dos novias (D14) y dos novios (D15). Mismo guion de portada y cierre e interior `vn`, pero cada versión con su propia identidad. No son clones.
+- Ilustraciones nuevas de Recraft de la autora: la pareja en el mar (vectorial) y las tres fotos del fotomatón (Recraft 4.1). La calle y las copas se reutilizan de D13 y se recolorean, así que no gastan créditos.
+- Retoque por código (`/home/claude/comic/inc/skin.py`, `cfg.py`, `prep2.py`):
+  - piel plana con tono propio para cada persona (clara / morena cálida / morena profunda), sin las sombras grises de Recraft 4.1;
+  - fondos de las fotos en azul pizarra, arena y terracota;
+  - traje verde botella;
+  - flores fuera de la espalda;
+  - tallo de la copa devuelto a su color.
+- Sin clichés de género (indicación de la autora):
+  - las dos novias llevan vestido y velo, y los dos novios traje;
+  - nada de rosa o azul por género.
+- Ellas (D14):
+  - atardecer y «¡SALUD!»;
+  - copas: mano clara con manga de encaje y mano morena con manga de raso marfil;
+  - fuegos en mostaza, terracota y oliva sobre noche verde mar;
+  - interior en terracota #B9572F, mostaza #ECBD55 y oliva #4D5A32.
+- Ellos (D15):
+  - calle en noche de verbena (cielo berenjena, luna saliendo del mar, farolillos);
+  - «¡CHIN CHIN!» y copas con manga verde botella;
+  - fuegos en dorado, granate y salvia sobre noche berenjena;
+  - interior en granate #8E2F3C, dorado #E8C77A y verde botella #2F4B3C.
+- Vídeos: `/home/claude/comic/vid/portada.py` y `cierre.py` con `V=ellas|ellos` (sin variable = D13 intacto). Medios en `/home/claude/comic/ent_ellas` y `ent_ellos`.
+- Resultados: Interior PASS ×2, matriz 1104/0, tests de másters PASS y CI OK.

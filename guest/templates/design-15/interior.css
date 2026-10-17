@@ -1,0 +1,115 @@
+/* ===== VIÑETAS · interior propio: cada sección es una viñeta de cómic en línea clara sobre papel crema ===== */
+/* VIÑETAS · ELLOS · tinta #231F2F · papel #F6EEDC · granate #8E2F3C · dorado #E8C77A · verde botella #2F4B3C · salvia #CBDCCD */
+html.vn{background:#f3ead6}
+html.vn body{background:url(%%PAPER%%) center top/100% auto repeat-y #f3ead6}
+html.vn [data-bg]{background:none!important;min-height:0!important;display:block;padding:34px 18px 26px!important;color:#231f2f;font:400 19px/1.55 'Kalam','Comic Sans MS',cursive}
+/* la viñeta */
+.vn-panel{position:relative;max-width:440px;margin:0 auto;padding:46px 22px 26px;background:#fffbf1;border:4px solid #231f2f;border-radius:4px;box-shadow:7px 7px 0 #231f2f;transform:rotate(var(--tilt,0deg));text-align:center}
+.vn-panel::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle,rgba(35,31,47,.07) 1.3px,transparent 1.6px) 0 0/11px 11px;-webkit-mask:linear-gradient(160deg,#000,transparent 38%);mask:linear-gradient(160deg,#000,transparent 38%)}
+.vn-panel.vn-rv{opacity:0;transform:rotate(var(--tilt,0deg)) translateY(26px) scale(.96);transition:opacity .6s ease,transform .9s cubic-bezier(.3,1.5,.5,1)}
+.vn-panel.vn-rv.in{opacity:1;transform:rotate(var(--tilt,0deg))}
+/* cartela de narrador */
+.vn-cap{position:absolute;left:-10px;top:-18px;margin:0;padding:6px 14px 5px;background:#e8c77a;border:3px solid #231f2f;box-shadow:3px 3px 0 #231f2f;font:700 13.5px/1.2 'Kalam',cursive;letter-spacing:.06em;text-transform:uppercase;color:#231f2f;transform:rotate(-2.5deg);max-width:86%;text-align:left}
+.vn-title{margin:6px 0 14px;font:400 48px/1 'Bangers',Impact,sans-serif;letter-spacing:.03em;color:#8e2f3c;-webkit-text-stroke:2px #231f2f;paint-order:stroke fill;text-shadow:3px 3px 0 #231f2f}
+.vn-p{margin:0 auto;max-width:31ch;font-size:19.5px;line-height:1.6;white-space:pre-line;overflow-wrap:anywhere}
+.vn-rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .8s cubic-bezier(.3,1.4,.5,1)}
+.vn-rv.in{opacity:1;transform:none}
+/* fotos: viñeta dentro de la viñeta */
+.vn-ph{position:relative;margin:20px -6px 4px;border:4px solid #231f2f;box-shadow:5px 5px 0 #231f2f;background:#231f2f;overflow:hidden}
+.vn-ph img{display:block;width:100%;height:300px;object-fit:cover;max-width:none!important}
+.vn-ph[data-fit=full] img{object-fit:contain;height:auto;max-height:430px;background:#fffbf1}
+/* lugar */
+.vn-venue{position:relative;display:grid;grid-template-columns:96px 1fr;gap:0 14px;align-items:center;text-align:left;margin-top:18px;padding:14px 12px 12px 6px;border:3px solid #231f2f;background:#f6eedc;box-shadow:4px 4px 0 #231f2f}
+.vn-venue:nth-of-type(even){background:#e6efe6}
+.vn-v-info{min-width:0}
+.vn-v-k{display:inline-block;font:700 13px/1.3 'Kalam',cursive;letter-spacing:.08em;text-transform:uppercase;color:#2f4b3c}
+.vn-v-name{font:700 24px/1.15 'Kalam',cursive;color:#231f2f;margin:2px 0;overflow-wrap:anywhere}
+.vn-v-addr{font-size:17.5px;line-height:1.35;color:#3d3746;overflow-wrap:anywhere}
+.vn-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 12px;margin-top:8px}
+.vn-venue .vn-links{justify-content:flex-start}
+html.vn a.link{display:inline-flex;align-items:center;min-height:44px;padding:8px 14px 6px;border:3px solid #231f2f;border-radius:999px;background:#fffbf1;box-shadow:3px 3px 0 #231f2f;font:700 14px/1 'Kalam',cursive;letter-spacing:.06em;text-transform:uppercase;color:#231f2f;text-decoration:none;white-space:nowrap;transition:transform .15s,box-shadow .15s}
+html.vn a.link:active{transform:translate(3px,3px);box-shadow:0 0 0 #231f2f}
+html.vn a.link::after{content:none}
+.vn-say{position:relative;margin:24px auto 4px;max-width:330px;padding:12px 16px;background:#fff;border:3px solid #231f2f;border-radius:22px;font-size:17.5px;line-height:1.4}
+.vn-say::after{content:"";position:absolute;left:40px;bottom:-15px;width:22px;height:16px;background:#fff;border:3px solid #231f2f;border-top:0;border-left:0;transform:skewX(35deg)}
+.vn-say b{display:block;font:700 13px/1.4 'Kalam',cursive;letter-spacing:.08em;text-transform:uppercase;color:#8e2f3c}
+/* estrella de cómic con la hora */
+.vn-burst{position:relative;display:grid;place-items:center;width:92px;height:92px;flex:none;filter:drop-shadow(3px 3px 0 #231f2f)}
+.vn-burst::before{content:"";position:absolute;inset:0;background:#231f2f;clip-path:polygon(50% 0,59% 18%,77% 7%,76% 27%,96% 25%,86% 42%,100% 55%,82% 63%,90% 82%,70% 79%,63% 98%,50% 85%,37% 98%,30% 79%,10% 82%,18% 63%,0 55%,14% 42%,4% 25%,24% 27%,23% 7%,41% 18%)}
+.vn-burst::after{content:"";position:absolute;inset:4px;background:#e8c77a;clip-path:polygon(50% 0,59% 18%,77% 7%,76% 27%,96% 25%,86% 42%,100% 55%,82% 63%,90% 82%,70% 79%,63% 98%,50% 85%,37% 98%,30% 79%,10% 82%,18% 63%,0 55%,14% 42%,4% 25%,24% 27%,23% 7%,41% 18%)}
+.vn-burst.alt::after{background:#c5d6bf}
+.vn-burst span{position:relative;z-index:1;font:400 23px/1 'Bangers',Impact,sans-serif;letter-spacing:.04em;color:#231f2f}
+/* programa: tira de viñetas pequeñas */
+.vn-now{position:relative;display:block;max-width:360px;margin:6px auto 0;text-align:left}
+.vn-now::before{content:"";position:absolute;left:46px;top:30px;bottom:30px;border-left:3px dashed rgba(35,31,47,.35)}
+.vn-m{position:relative;display:grid;grid-template-columns:92px 1fr;gap:0 12px;align-items:center;margin:8px 0;opacity:.35;transform:translateX(-16px) scale(.94);transition:opacity .5s ease,transform .6s cubic-bezier(.3,1.6,.5,1)}
+.vn-m.in{opacity:.82;transform:none}
+.vn-m.on{opacity:1}
+.vn-mk{border:0;padding:0;background:none;cursor:pointer;width:92px;height:92px;transition:transform .5s cubic-bezier(.3,1.8,.5,1)}
+.vn-m.on .vn-mk{transform:scale(1.12) rotate(-6deg)}
+.vn-m.on .vn-burst::after{background:#8e2f3c}.vn-m.on .vn-burst span{color:#fffbf1}
+.vn-mk:focus-visible{outline:3px solid #231f2f;outline-offset:2px;border-radius:50%}
+.vn-lb{display:block;padding:10px 14px;border:3px solid #231f2f;background:#fffbf1;box-shadow:3px 3px 0 #231f2f;font:700 21px/1.2 'Kalam',cursive;color:#231f2f;cursor:pointer;overflow-wrap:anywhere;transition:background .4s,box-shadow .4s}
+.vn-m.on .vn-lb{background:#e8c77a;box-shadow:5px 5px 0 #231f2f}
+.vn-hint{margin:16px 0 0;font-size:16px;color:#4a4357}
+/* detalles: bocadillos */
+.vn-bubbles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 16px;max-width:340px;margin:10px auto 0}
+.vn-b{position:relative;min-height:68px;border:3px solid #231f2f;border-radius:50%/46%;background:#fff;padding:12px 10px;cursor:pointer;color:#231f2f;box-shadow:3px 3px 0 #231f2f;transition:transform .4s cubic-bezier(.3,1.6,.5,1),background .3s}
+.vn-b::after{content:"";position:absolute;left:24%;bottom:-13px;width:18px;height:15px;background:#fff;border:3px solid #231f2f;border-top:0;border-left:0;transform:skewX(38deg);transition:background .3s}
+.vn-b.r::after{left:auto;right:24%;transform:skewX(-38deg) scaleX(-1)}
+.vn-b.solo{grid-column:1/-1;max-width:220px;justify-self:center;width:100%}
+.vn-b-lb{font:700 15px/1.2 'Kalam',cursive;letter-spacing:.06em;text-transform:uppercase}
+.vn-b-dot{position:absolute;right:-6px;top:-10px;display:grid;place-items:center;width:28px;height:28px;border:3px solid #231f2f;border-radius:50%;background:#8e2f3c;color:#fffbf1;font:400 18px/1 'Bangers',Impact,sans-serif;animation:vnping 1.8s ease-in-out infinite}
+.vn-b:nth-child(2) .vn-b-dot{animation-delay:.45s}.vn-b:nth-child(3) .vn-b-dot{animation-delay:.9s}.vn-b:nth-child(4) .vn-b-dot{animation-delay:1.35s}
+.vn-bubbles.used .vn-b-dot{animation:none;opacity:0;transform:scale(.4);transition:all .4s}
+@keyframes vnping{0%,100%{transform:scale(1)}50%{transform:scale(1.25) rotate(8deg)}}
+.vn-b[aria-expanded=true]{background:#e8c77a;transform:scale(1.05) rotate(-2deg)}
+.vn-b[aria-expanded=true]::after{background:#e8c77a}
+.vn-b:focus-visible{outline:3px solid #231f2f;outline-offset:4px}
+.vn-tray{max-width:360px;margin:0 auto;overflow:hidden;height:0;transition:height .6s cubic-bezier(.3,1.2,.5,1)}
+.vn-tray-in{margin:22px 4px 4px;padding:18px 18px 14px;background:#fff;border:3px solid #231f2f;border-radius:26px;box-shadow:5px 5px 0 #231f2f;text-align:center}
+.vn-tray-in h3{margin:0 0 6px;font:400 32px/1.1 'Bangers',Impact,sans-serif;letter-spacing:.03em;color:#2f4b3c}
+.vn-tray-in p{margin:0 0 6px;font-size:18px;overflow-wrap:anywhere;white-space:pre-line}
+.vn-tt{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 28px;margin:10px 0}
+.vn-tt span{display:flex;flex-direction:column;font:700 13px/1.5 'Kalam',cursive;letter-spacing:.08em;text-transform:uppercase;color:#4a4357}
+.vn-tt b{font:400 30px/1.05 'Bangers',Impact,sans-serif;color:#8e2f3c;letter-spacing:.04em;text-transform:none}
+.vn-tray-in details{margin-top:4px}.vn-tray-in summary{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;list-style:none;font:700 14px/1 'Kalam',cursive;letter-spacing:.06em;text-transform:uppercase;color:#231f2f;border-bottom:3px solid #e8c77a}
+.vn-tray-in summary::-webkit-details-marker{display:none}
+/* galería */
+html.vn #gallery-items{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;width:100%;max-width:none;margin:8px 0 0;border:4px solid #231f2f;box-shadow:5px 5px 0 #231f2f;background:#231f2f;overscroll-behavior-x:contain}
+html.vn #gallery-items::-webkit-scrollbar{display:none}
+html.vn #gallery-items img{flex:0 0 100%;width:100%!important;min-width:100%;max-width:none!important;margin:0!important;height:360px;object-fit:cover;scroll-snap-align:center;scroll-snap-stop:always}
+html.vn #gallery-items img[data-fit=full]{object-fit:contain;background:#fffbf1}
+.vn-dots{display:flex;justify-content:center;gap:2px;margin-top:8px}
+html.vn .gallery-dot{width:46px;height:46px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer}
+html.vn .gallery-dot::before{content:"";width:11px;height:11px;border-radius:50%;background:#fffbf1;border:2.5px solid #231f2f;transition:all .3s}
+html.vn .gallery-dot[aria-current=true]::before{width:16px;height:16px;background:#8e2f3c}
+/* portada: los datos van dentro de un bocadillo sobre la última viñeta */
+html.vn .cover-text{left:50%!important;right:auto!important;width:min(88vw,410px);transform:translateX(-50%) scale(.6);padding:26px 26px 22px!important;background:#fffcf4;border:5px solid #231f2f;border-radius:50%/44%;box-shadow:5px 5px 0 #231f2f;opacity:0;transition:opacity .25s ease,transform .7s cubic-bezier(.3,1.7,.5,1)!important}
+html.vn #cover.opened .cover-text,html.vn #cover.revealed .cover-text,html.vn #cover.done .cover-text{transform:translateX(-50%) scale(1)}
+html.vn .cover-text::after{content:"";position:absolute;right:22%;top:-34px;width:30px;height:34px;background:#fffcf4;border:5px solid #231f2f;border-bottom:0;border-right:0;transform:skewX(-30deg);z-index:-1}
+html.vn .cover-tag{margin:0;font:400 30px/1 'Bangers',Impact,sans-serif!important;letter-spacing:.05em!important;text-transform:uppercase;color:#8e2f3c!important;-webkit-text-stroke:1.5px #231f2f;paint-order:stroke fill}
+html.vn .cover-names{margin:6px 0 2px;font:700 clamp(30px,9vw,42px)/1.08 'Kalam',cursive!important;color:#231f2f!important;text-shadow:none!important}
+html.vn .cover-names span{display:inline!important}
+html.vn #cover.long-names .cover-names{font-size:clamp(26px,7.4vw,34px)!important}
+html.vn .cover-names .amp{font:400 .7em/1 'Bangers',Impact,sans-serif!important;color:#8e2f3c!important;margin:0!important;padding:0 .32em}
+html.vn .cover-date,html.vn .countdown,html.vn .cover-place{font-family:'Kalam',cursive!important;letter-spacing:.04em!important;color:#3d3746!important;text-shadow:none!important}
+html.vn .cover-date{font-size:17px!important;font-weight:700;margin:4px 0 0}html.vn .countdown,html.vn .cover-place{font-size:15.5px!important;margin:1px 0}
+html.vn .tap-hint{top:auto!important;bottom:max(8svh,calc(env(safe-area-inset-bottom) + 30px));font:400 30px/1.1 'Bangers',Impact,sans-serif;letter-spacing:.05em;color:#231f2f}
+html.vn .entry-button,html.vn .rsvp-button{font:700 15px/1.2 'Kalam',cursive!important;letter-spacing:.08em;text-transform:uppercase;border:3px solid #231f2f!important;border-radius:999px;background:#e8c77a!important;color:#231f2f!important;box-shadow:4px 4px 0 #231f2f;backdrop-filter:none;-webkit-backdrop-filter:none}
+html.vn .cover-bottom{bottom:max(2.4svh,calc(env(safe-area-inset-bottom) + 10px))}
+/* cierre: «¡Os esperamos!» en un bocadillo y los datos en una cartela bajo él */
+.vn-wait{position:absolute;z-index:2;left:50%;top:max(5svh,calc(env(safe-area-inset-top) + 24px));margin:0;padding:18px 30px 14px;background:#fffcf4;border:5px solid #231f2f;border-radius:50%/46%;box-shadow:5px 5px 0 #231f2f;font:400 clamp(36px,10vw,50px)/1 'Bangers',Impact,sans-serif;letter-spacing:.04em;color:#8e2f3c;-webkit-text-stroke:1.5px #231f2f;paint-order:stroke fill;white-space:nowrap;opacity:0;transform:translateX(-50%) scale(.4);transition:opacity .2s ease,transform .7s cubic-bezier(.3,1.8,.5,1);pointer-events:none}
+.vn-wait.on{opacity:1;transform:translateX(-50%) scale(1)}
+#closing.replaying .vn-wait{opacity:0}
+html.vn #closing .closing-text{transform:translateX(-50%) translateY(10px)}
+html.vn #closing.revealed .closing-text{transform:translateX(-50%)}
+html.vn .closing-text{top:calc(max(5svh,calc(env(safe-area-inset-top) + 24px)) + 108px)!important;left:50%!important;right:auto!important;width:min(86vw,380px);padding:16px 18px 18px!important;background:#fffbf1;border:4px solid #231f2f;box-shadow:6px 6px 0 #231f2f}
+html.vn .closing-caption{font:400 18px/1.35 'Kalam',cursive!important;color:#3d3746!important;text-shadow:none!important}
+html.vn .closing-sign{font:700 clamp(30px,8.6vw,40px)/1.1 'Kalam',cursive!important;color:#231f2f!important;text-shadow:none!important}
+html.vn .close-date{font:700 16px/1.3 'Kalam',cursive!important;letter-spacing:.06em;color:#8e2f3c!important;text-shadow:none!important}
+/* música */
+.vn-snd{position:fixed;right:14px;top:max(14px,env(safe-area-inset-top));z-index:70;width:44px;height:44px;border-radius:50%;border:3px solid #231f2f;background:#e8c77a;color:#231f2f;font:700 19px/1 Georgia,serif;cursor:pointer;display:none;place-items:center;box-shadow:3px 3px 0 #231f2f}
+.vn-snd.show{display:grid}.vn-snd[aria-pressed=false]{background:#fffbf1;text-decoration:line-through}
+@media(max-width:360px){.vn-title{font-size:42px}.vn-venue{grid-template-columns:80px 1fr}.vn-burst{width:80px;height:80px}.vn-burst span{font-size:20px}.vn-m{grid-template-columns:80px 1fr}.vn-mk{width:80px;height:80px}.vn-now::before{left:40px}.vn-lb{font-size:19px}html.vn [data-bg]{padding:34px 14px 26px!important}}
+@media(prefers-reduced-motion:reduce){.vn-rv,.vn-panel.vn-rv{opacity:1;transform:rotate(var(--tilt,0deg));transition:none}.vn-m{opacity:1;transform:none;transition:none}.vn-b-dot{animation:none}html.vn .cover-text{transition:none!important}}
