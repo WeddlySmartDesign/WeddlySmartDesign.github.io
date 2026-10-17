@@ -104,6 +104,14 @@ for(const p of sourceFiles){
   else if(['guests-rsvp-design-manage.html','guests-rsvp-form-flow.html'].includes(p)){
     ok(dst.includes('href="index.html"')&&!/<(?:input|textarea|select)\b/i.test(dst),'retired editor route unexpectedly active: '+p);
   }
+  // Single final-invitation sender intentionally replaces THREE generic RSVP URL functions.
+  else if(p==='guests-rsvp-operations-v3.html'){
+    const retired=new Set(['publicLink','copyInvite','sendWA']);
+    const names=namedFns(dst);
+    for(const fn of namedFns(src))if(!retired.has(fn))ok(names.includes(fn),'source function lost in '+p+': '+fn);
+    for(const fn of retired)ok(!names.includes(fn),'legacy generic RSVP sender still active: '+fn);
+    ok(dst.includes('wsdrf-share')&&!dst.includes('data-wa=')&&!dst.includes('data-copy='),'one delivered-design sharing control required');
+  }
   else for(const fn of namedFns(src))ok(namedFns(dst).includes(fn),'source function lost in '+p+': '+fn);
 }
 
