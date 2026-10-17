@@ -1,0 +1,12 @@
+'use strict';
+const fs=require('fs'),assert=require('assert/strict');
+const source=fs.readFileSync('guest/backend/guest-license-access/index.ts','utf8');
+const start=source.indexOf('async function activate('),end=source.indexOf('Deno.serve(',start);
+assert(start>=0&&end>start,'activation function unavailable');
+const code=source.slice(start,end);
+for(const v of ["from('licenses')","eq('purchase_hash',hash)","from('guest_invitation_orders')","eq('license_id',l.id)","latestOrder.status!=='delivered'","error:'invitation_not_delivered'","memberToken=secret()"])assert(code.includes(v),'missing catalog delivery/access gate '+v);
+assert(code.indexOf("latestOrder.status!=='delivered'")<code.indexOf('memberToken=secret()'),'member token must not be issued before approved final invitation delivery');
+assert(source.includes("if(action==='status')"),'existing member status must stay');
+assert(source.includes("if(action==='invite')"),'second-device invite must stay');
+assert(source.includes("if(action==='join')"),'second-device join must stay');
+console.log('PASS: catalog GUEST code cannot activate until final delivery; legacy and second-device operations preserved');
