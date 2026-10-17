@@ -5,7 +5,7 @@ ok(man.scope==='./','PWA scope must stay inside /guest');
 ok(idx.includes('guest.webmanifest')&&idx.includes('guest-sw.js'),'canonical app shell is not wired to GUEST PWA');
 for(const f of ['./index.html','./access.html','./guests-v116-production.html','./guest-settings.html','./guest.webmanifest','./guests-access-layer.js','./guests-production-sync.js'])ok(sw.includes("'"+f+"'"),'offline core missing '+f);
 ok(sw.includes("u.origin!==location.origin"),'service worker must not intercept external origins');
-ok(sw.includes("guest-shell-v4"),'B9 cache version not bumped');
+ok(sw.includes("guest-shell-v5"),'B9 cache version not bumped');
 ok(sw.includes("const appPaths=new Set(['/guest/','/guest/index.html','/guest/guests-v116-production.html','/guest/guest-settings.html'])"),'offline fallback is not restricted to canonical app routes');
 ok(sw.includes("else{e.respondWith(fetch(e.request))}"),'non-app GUEST navigation must not silently fall back to app shell');
 const forbidden=/ONE Partner|STUDIO|\/one\.html|partner\.html/i;
