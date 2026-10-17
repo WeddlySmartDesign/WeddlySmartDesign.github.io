@@ -32,8 +32,13 @@ function render(vm){
  if(D.length){const grid=el('div','mp-tickets'),tray=el('div','mp-tray'),tin=el('div','mp-tray-in');tray.id='mp-tray';tray.append(tin);
   D.forEach((x,i)=>{const b=el('button','mp-b'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','mp-tray');
    b.append(el('span','mp-b-no','Nº '+String(i+1).padStart(2,'0')),el('span','mp-b-lb',x.title));
-   b.onclick=()=>{grid.classList.add('used');if(openB===b){b.setAttribute('aria-expanded','false');openB=null;tray.style.height='0px';return}openB?.setAttribute('aria-expanded','false');openB=b;b.setAttribute('aria-expanded','true');b.classList.add('punched');fill(tin,x);tray.style.height=(tin.offsetHeight+26)+'px'};grid.append(b)});
-  p.append(grid,el('p','mp-hint',D.length>1?'Toca cada billete para leerlo':'Toca el billete para leerlo'),tray)}
+   b.onclick=()=>{grid.classList.add('used');if(openB===b){b.setAttribute('aria-expanded','false');openB=null;tray.style.height='0px';return}
+    // el billete se abre justo debajo del que se ha tocado (no al final de la lista) y se acerca a la vista si hace falta
+    openB?.setAttribute('aria-expanded','false');const moved=tray.previousSibling!==b;openB=b;b.setAttribute('aria-expanded','true');b.classList.add('punched');
+    if(moved){tray.style.transition='none';tray.style.height='0px';grid.insertBefore(tray,b.nextSibling);void tray.offsetHeight;tray.style.transition=''}
+    fill(tin,x);tray.style.height=(tin.offsetHeight+26)+'px';
+    setTimeout(()=>{const r=tray.getBoundingClientRect(),over=r.bottom-innerHeight+20;if(over>0)scrollBy({top:Math.min(over,r.top-90),behavior:reducedMotion()?'auto':'smooth'})},reducedMotion()?0:620)};grid.append(b)});
+  grid.append(tray);p.append(grid,el('p','mp-hint',D.length>1?'Toca cada billete para leerlo':'Toca el billete para leerlo'))}
  const G=vm.gallery;p=page(document.getElementById('gallery'),G.length>0,'Recuerdos de viaje','Nosotros');
  if(G.length){const track=el('div');track.id='gallery-items';track.setAttribute('role','region');track.setAttribute('aria-label','Galería de fotografías');
   G.forEach((g,i)=>{const im=el('img','mp-gimg');im.src=g.src;im.alt=g.alt||'Fotografía de la pareja';im.dataset.fit=g.fit;im.style.objectPosition=g.fx+'% '+g.fy+'%';im.loading=i?'lazy':'eager';im.setAttribute('aria-label','Fotografía '+(i+1)+' de '+G.length);track.append(im)});p.append(track);
