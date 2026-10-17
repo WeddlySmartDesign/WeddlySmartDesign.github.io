@@ -137,3 +137,58 @@ html.iv a.link{font:400 15px/1 'GaramondSC',Georgia,serif!important;letter-spaci
 html.iv .cover-text{isolation:isolate}
 html.iv .cover-text::before{content:"";position:absolute;z-index:-1;left:-14%;right:-14%;top:-14%;bottom:-16%;background:radial-gradient(ellipse at 50% 48%,rgba(250,250,246,.9) 0,rgba(250,250,246,.8) 40%,rgba(250,250,246,.45) 62%,rgba(250,250,246,0) 78%);filter:blur(4px);pointer-events:none}
 html.iv .cover-tag,html.iv .cover-names,html.iv .cover-date,html.iv .countdown,html.iv .cover-place{color:#183324!important}
+/* === v22 · sobres de semillas, ficha de herbario, etiquetas de vivero y fotos tras el cristal === */
+/* sobres de semillas en papel kraft con etiqueta de herbario */
+.iv-envs{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:22px 16px!important;max-width:330px!important}
+.iv-pk{width:132px!important;height:168px!important;background:url(%%KRAFT%%) center/160px auto,#c9aa80!important;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 10px 18px -8px rgba(60,40,20,.45),0 2px 4px rgba(60,40,20,.15)!important;border-radius:2px}
+.iv-pk::before{content:""!important;position:absolute;left:0;right:0;bottom:0;top:auto;height:10px;border:0!important;background:repeating-linear-gradient(90deg,rgba(80,55,30,.18) 0 2px,transparent 2px 6px)}
+.iv-pk::after{content:"";position:absolute;inset:0;box-shadow:inset 6px 0 8px -6px rgba(80,55,30,.35),inset -6px 0 8px -6px rgba(80,55,30,.35);pointer-events:none}
+.iv-flap{height:46px!important;background:url(%%KRAFT%%) center top/160px auto,#c3a378!important;filter:brightness(.94);clip-path:polygon(0 0,100% 0,100% 34%,50% 100%,0 34%)!important;z-index:2;box-shadow:none}
+.iv-flap::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(80,55,30,.18))}
+.iv-lab{position:absolute;left:12px;right:12px;top:58px;bottom:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px 6px;background:#fbf7ec;box-shadow:0 1px 2px rgba(60,40,20,.25)}
+.iv-lab::before{content:"";position:absolute;inset:4px;border:1px solid rgba(61,106,81,.5);pointer-events:none}
+.iv-lab::after{content:"";position:absolute;inset:7px;border:1px solid rgba(61,106,81,.25);pointer-events:none}
+.iv-sprig{display:block;width:30px;height:22px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 44'%3E%3Cpath d='M4 40 C 20 30 36 22 56 6' fill='none' stroke='%233d6a51' stroke-width='1.6'/%3E%3Cg fill='%236e9c6c'%3E%3Cellipse cx='16' cy='28' rx='7' ry='3' transform='rotate(-60 16 28)'/%3E%3Cellipse cx='22' cy='34' rx='7' ry='3' transform='rotate(10 22 34)'/%3E%3Cellipse cx='28' cy='19' rx='7' ry='3' transform='rotate(-70 28 19)'/%3E%3Cellipse cx='35' cy='25' rx='7' ry='3' transform='rotate(0 35 25)'/%3E%3Cellipse cx='41' cy='11' rx='7' ry='3' transform='rotate(-75 41 11)'/%3E%3Cellipse cx='48' cy='16' rx='7' ry='3' transform='rotate(-5 48 16)'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat}
+.iv-env-lb{display:block;max-width:100%;padding:0!important;border:0!important;font:italic 400 17px/1.15 'Garamond',Georgia,serif!important;letter-spacing:0!important;text-transform:none!important;color:#26392f!important;overflow-wrap:break-word;hyphens:auto}
+.iv-env[aria-expanded=true] .iv-pk{transform:translateY(-4px) rotate(-1.5deg)!important}
+.iv-env[aria-expanded=true] .iv-lab::before{border-color:#3d6a51}
+.iv-pk s{display:none}
+/* la ficha que sale del sobre: hoja de herbario con planta prensada y cinta */
+.iv-tray{max-width:350px!important}
+.iv-tray-in{position:relative;margin:22px 4px 10px!important;padding:30px 22px 22px 22px!important;background:#fcfaf3!important;box-shadow:0 12px 24px -14px rgba(38,57,47,.45),0 1px 3px rgba(38,57,47,.12)!important;transform:rotate(-.5deg)}
+.iv-tray-in::before{content:"";position:absolute;inset:9px;border:1px solid rgba(61,106,81,.35);pointer-events:none}
+.iv-tray-in::after{content:"";position:absolute;left:50%;top:-11px;width:92px;height:24px;margin-left:-46px;background:rgba(214,226,206,.82);transform:rotate(-2.5deg);box-shadow:0 1px 2px rgba(0,0,0,.08);clip-path:polygon(3% 0,97% 4%,100% 50%,97% 100%,2% 96%,0 48%)}
+.iv-tray-in>*{position:relative;z-index:1}
+.iv-tray-in h3::after{content:"";display:block;width:64px;height:26px;margin:6px auto 2px;opacity:.85;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 44'%3E%3Cpath d='M6 22 C 40 22 80 22 114 22' fill='none' stroke='%233d6a51' stroke-width='1.3'/%3E%3Cg fill='%236e9c6c'%3E%3Cellipse cx='28' cy='15' rx='9' ry='3.4' transform='rotate(-35 28 15)'/%3E%3Cellipse cx='28' cy='29' rx='9' ry='3.4' transform='rotate(35 28 29)'/%3E%3Cellipse cx='50' cy='14' rx='10' ry='3.6' transform='rotate(-35 50 14)'/%3E%3Cellipse cx='50' cy='30' rx='10' ry='3.6' transform='rotate(35 50 30)'/%3E%3Cellipse cx='72' cy='14' rx='10' ry='3.6' transform='rotate(-35 72 14)'/%3E%3Cellipse cx='72' cy='30' rx='10' ry='3.6' transform='rotate(35 72 30)'/%3E%3Cellipse cx='93' cy='16' rx='8' ry='3' transform='rotate(-35 93 16)'/%3E%3Cellipse cx='93' cy='28' rx='8' ry='3' transform='rotate(35 93 28)'/%3E%3Cellipse cx='110' cy='22' rx='7' ry='3'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat}
+/* lugar: etiquetas de vivero de cartón con ojal y cordel, la hora destacada */
+.iv-places{gap:22px!important;padding:6px 0 6px 10px!important}
+.iv-venue{position:relative;display:block!important;padding:18px 20px 16px 58px!important;background:url(%%KRAFT%%) center/180px auto,#d9c19b!important;filter:saturate(.75) brightness(1.08);clip-path:polygon(26px 0,100% 0,100% 100%,26px 100%,0 calc(100% - 26px),0 26px);box-shadow:none!important;transform:rotate(-.8deg)}
+.iv-venue:nth-child(2){transform:rotate(.9deg)}
+.iv-venue::before{content:""!important;position:absolute;left:18px;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:50%;background:#f5f3ee!important;box-shadow:inset 0 1px 2px rgba(60,40,20,.5),0 0 0 4px rgba(250,247,238,.85);transform:none!important;opacity:1!important}
+.iv-venue::after{content:""!important;position:absolute;inset:auto auto auto auto!important;left:-30px;top:calc(50% - 1px);width:46px!important;height:2px!important;background:#8a6a48!important;box-shadow:none!important;transform:rotate(-14deg);transform-origin:100% 50%}
+.iv-eye{display:none}
+.iv-v-time{display:block!important;font:400 34px/1 'Garamond',Georgia,serif!important;color:#22402f!important;letter-spacing:.02em!important;margin:2px 0 6px!important}
+.iv-v-k{color:#4e3d2a!important}
+.iv-v-name{color:#1f2f26!important}
+.iv-v-addr{color:#3e3a2e!important}
+.iv-places .iv-links a.link{color:#22402f;border-bottom-color:rgba(34,64,47,.5)}
+/* fotos: tras un cristal de invernadero con marco de hierro blanco y un poco de vaho en una esquina */
+.iv-glass{position:relative;display:block;margin:24px auto 0;padding:7px;background:linear-gradient(135deg,#ffffff,#eceee9 40%,#ffffff 60%,#e3e6e0);box-shadow:0 0 0 1px rgba(61,106,81,.25),0 12px 22px -14px rgba(38,57,47,.5);border-radius:2px}
+.iv-glass::before{content:"";position:absolute;inset:3px;border:1px solid rgba(61,106,81,.18);pointer-events:none;z-index:2}
+.iv-glass::after{content:"";position:absolute;inset:7px;z-index:2;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.18) 42%,rgba(255,255,255,0) 52%)}
+.iv-glass .iv-ph,.iv-glass img{display:block;width:100%!important;max-width:none!important;height:290px;object-fit:cover;-webkit-mask:none!important;mask:none!important;filter:sepia(.08) saturate(.85) brightness(1.03);margin:0!important}
+.iv-glass .iv-ph[data-fit=full]{height:auto;max-height:430px;object-fit:contain;background:#fff}
+.iv-fog{position:absolute;inset:7px;z-index:1;pointer-events:none;background:radial-gradient(ellipse 60% 45% at 0% 100%,rgba(245,248,244,.75),rgba(245,248,244,0) 70%),radial-gradient(ellipse 35% 25% at 100% 0%,rgba(245,248,244,.45),rgba(245,248,244,0) 70%)}
+/* al aparecer, el cristal está empañado y se aclara */
+.iv-glass.iv-rv{opacity:1;transform:none}
+.iv-glass.iv-rv .iv-ph,.iv-glass.iv-rv #gallery-items img{filter:blur(12px) brightness(1.2) saturate(.35) contrast(.75);transition:filter 2.6s cubic-bezier(.3,.2,.2,1) .2s}
+.iv-glass.iv-rv.in .iv-ph,.iv-glass.iv-rv.in #gallery-items img{filter:sepia(.08) saturate(.85) brightness(1.03)}
+html.iv .iv-gal #gallery-items{width:100%!important;margin:0!important}
+html.iv .iv-gal #gallery-items img{height:340px;object-fit:cover}
+html.iv .iv-gal #gallery-items img[data-fit=full]{object-fit:contain;background:#fff}
+@media(max-width:360px){.iv-pk{width:122px!important;height:156px!important}.iv-env-lb{font-size:15.5px!important}.iv-v-time{font-size:30px!important}}
+@media(prefers-reduced-motion:reduce){.iv-glass.iv-rv .iv-ph,.iv-glass.iv-rv #gallery-items img{filter:none;transition:none}}
+.iv-venue::after{content:none!important}
+.iv-venue{filter:none!important;background:url(%%KRAFT%%) center/180px auto,#d8c29e!important}
+.iv-pk{background:url(%%KRAFT%%) center/180px auto,#d0b48c!important}
+.iv-venue::before,.iv-venue+.iv-venue::before{border-radius:50%!important;background:#f5f3ee!important;width:16px!important;height:16px!important;margin:-8px 0 0!important;display:block!important;left:18px!important;top:50%!important;transform:none!important}

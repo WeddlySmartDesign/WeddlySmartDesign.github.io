@@ -265,3 +265,9 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - **v21**: D06, revisión de la autora:
   - datos de portada legibles, con vaho blanco detrás y tinta más profunda;
   - cierre re-renderizado (`/home/claude/inv/render.html`): la nube de mariposas sale del encuadre antes de desvanecerse, sin quedarse en los laterales. Vídeos anteriores guardados en `/tmp/claude-0/inv_cierre_*_v1.mp4`.
+- **v22**: D06 interior más premium:
+  - sobres de semillas en kraft con etiqueta de herbario;
+  - ficha de herbario con cinta y rama prensada;
+  - etiquetas de vivero para el lugar;
+  - fotos y galería tras un cristal con marco blanco y vaho que se aclara;
+  - nuevo recurso `skin-assets/kraft.jpg` (textura de papel por código).
