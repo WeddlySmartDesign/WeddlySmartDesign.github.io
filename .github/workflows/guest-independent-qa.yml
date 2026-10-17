@@ -24,6 +24,8 @@ jobs:
         run: node guest/tests/guest_rsvp_config_lock_contract.test.cjs
       - name: Catalog invitation authoring permission guard (offline)
         run: node guest/tests/guest_personalization_config_lock_contract.test.cjs
+      - name: Catalogue questionnaire RSVP first-activation mapping (offline)
+        run: node guest/tests/catalog_questionnaire_rsvp_first_access.test.cjs
 
   catalog-invitation-bridge:
     runs-on: ubuntu-latest
