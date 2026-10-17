@@ -30,6 +30,9 @@ function ok(v,msg){if(!v)throw new Error(msg)}
   ok(live.includes('guests-rsvp-share-composer-v3.js'),'final invitation composer must be installed');
 
   const composer=read('guests-rsvp-share-composer-v3.js');
+  ok(!composer.includes('if(publicToken)return publicToken'),'share must not reuse stale public RSVP token');
+  ok(!composer.includes('if(cached)return publicToken=cached'),'share must not trust global localStorage RSVP token from another wedding');
+  ok(composer.includes('cache:\'no-store\'')&&composer.includes("x.forms?.[0]?.public_token"),'share must validate RSVP form against authenticated member');
   ok(!composer.includes("location.origin+'/guests-rsvp-v105.html'"),'composer must never fallback to ONE root RSVP');
   ok(!composer.includes("location.origin+'/guest/guests-rsvp-v105.html'"),'customer send cannot fall back to an old invitation');
   ok(composer.includes("throw new Error('catalog_bridge_unavailable')"),'customer composer must fail closed if bridge does not load');
