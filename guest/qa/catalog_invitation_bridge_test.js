@@ -23,6 +23,12 @@ function ok(v,msg){if(!v)throw new Error(msg)}
   ok(!bridge.includes('veil-light'),'management bridge must be template-agnostic');
   ok(bridge.includes("throw new Error('catalog_invitation_unavailable')"),'missing delivered invitation must fail closed');
 
+  const operations=read('guests-rsvp-operations-v3.html');
+  ok(operations.includes('class="btn mini wsdrf-share"'),'actual recipient controls must use approved-invitation composer');
+  for(const forbidden of ['data-wa=', 'data-copy=', 'function publicLink(', 'async function sendWA(', 'async function copyInvite('])
+    ok(!operations.includes(forbidden),'generic RSVP sending path still exposed: '+forbidden);
+  ok(live.includes('guests-rsvp-share-composer-v3.js'),'final invitation composer must be installed');
+
   const composer=read('guests-rsvp-share-composer-v3.js');
   ok(!composer.includes("location.origin+'/guests-rsvp-v105.html'"),'composer must never fallback to ONE root RSVP');
   ok(!composer.includes("location.origin+'/guest/guests-rsvp-v105.html'"),'customer send cannot fall back to an old invitation');
