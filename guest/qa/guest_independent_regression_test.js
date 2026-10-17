@@ -79,7 +79,7 @@ ok(sourceFiles.length===179,'unexpected ONE Guests source inventory: '+sourceFil
 const allowedModified=new Set([
   'event-invite.html','event-invite-v2.html','guests-access-layer.js','guests-events-invite-addon-v2.js','guests-events-share-composer-v1.js','guests-events-v3.html','guests-events-v3.js',
   'guests-home-rsvp-status-v1.js','guests-production-ops.js','guests-production-sync.js','guests-production-ui.js','guests-rsvp-design-manage.html','guests-rsvp-essential-live.html',
-  'guests-rsvp-form-flex.html','guests-rsvp-form-flow.html','guests-rsvp-operations-live.html','guests-rsvp-operations-v3.html','guests-rsvp-public-clean.html','guests-rsvp-signature-live.html',
+  'guests-rsvp-form-flex.html','guests-rsvp-form.html','guests-rsvp-form-flow.html','guests-rsvp-operations-live.html','guests-rsvp-operations-v3.html','guests-rsvp-public-clean.html','guests-rsvp-signature-live.html',
   'guests-smart-actions-v1.js','guests-v114-integrated.html','guests-v116-production.html','guests-personalizacion-essential.html','guests-personalizacion-signature-integrated.html',
   'guests-rsvp-children-public-v1.js','guests-rsvp-plusone-public-v1.js','guests-rsvp-postsubmit-calendar-v1.js','guests-rsvp-calendar-action-v2.js','guests-rsvp-custom-answers-v1.js','guests-rsvp-children-answers-v1.js','guests-rsvp-v112-wedding-flex.html','guests-rsvp-v114-single-flex.html','guests-rsvp-v105-mobile.html','guests-rsvp-v115-wedding-flex-live.html','guests-rsvp-v116-single-live.html','guests-rsvp-services-hotfix-v1.js','guests-rsvp-operations-feedback-v1.js','guests-rsvp-operations-flow-v1.js','guests-rsvp-share-primary-v1.js','guests-rsvp-share-composer-v2.js','guests-rsvp-plusone-ops-v1.js','guests-rsvp-manual-parity-v1.js','guests-invitation-editor-feedback-inner-v1.js','guests-v081-visual-seating.html','guests-custom-lists-v1.js','guests-service-visibility-v1.js','guests-copy-control-v1.js','guests-extra-event-lists-v1.js','guests-events-group-select-v1.js','guests-events-ui-compact-photo-v1.js'
 ]);
@@ -113,6 +113,12 @@ for(const p of sourceFiles){
     ok(dst.includes('wsdrf-share')&&!dst.includes('data-wa=')&&!dst.includes('data-copy='),'one delivered-design sharing control required');
   }
   else for(const fn of namedFns(src))ok(namedFns(dst).includes(fn),'source function lost in '+p+': '+fn);
+}
+
+// Final product MUST NOT expose any of the old RSVP/invitation authorship pages.
+for(const retired of ['guests-rsvp-form.html','guests-rsvp-form-flex.html','guests-personalizacion-essential.html','guests-personalizacion-signature-integrated.html']){
+  const page=read(retired),head=page.slice(0,page.indexOf('</head>'));
+  ok(head.includes('<script id="guest-legacy-editor-retired">window.location.replace("index.html");</script>'),'direct customer editing route is open: '+retired);
 }
 
 // B5: ONE-shell improvements that directly affected Guests must be preserved or explicitly mapped.
