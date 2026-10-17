@@ -66,6 +66,22 @@ async function checkoutAt(browser,edition){
   await ctx.close();
 }
 
+async function catalogCheckout(browser){
+  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+  const page=await ctx.newPage(),seen=[];await mockConfigAndCreate(page,seen);
+  await page.goto(base+'/guest-checkout.html?catalog_template=veil-light&edition=signature',{waitUntil:'domcontentloaded'});
+  ok(!(await page.locator('.editions').isVisible()),'individual design checkout shows obsolete product collections');
+  ok((await page.locator('.hero h1').innerText()).includes('Vuestra invitación'),'individual design purchase heading missing');
+  ok((await page.locator('#guestCatalogCheckoutNotice').innerText()).includes('VEIL LIGHT'),'selected design must be named');
+  ok(!seen.some(x=>x.action==='create'),'catalog checkout created session before consent');
+  await page.locator('#consent').check();
+  await page.waitForFunction(()=>document.querySelector('#mount')?.dataset.qaMounted==='1');
+  const purchases=seen.filter(x=>x.action==='create');
+  ok(purchases.length===1&&purchases[0].catalogTemplateId==='veil-light','catalog checkout lost exact individual design');
+  ok(purchases[0].startPersonalizationConsent===true,'catalog checkout missing personalization consent');
+  await ctx.close();
+}
+
 async function returnCase(browser,submitted){
   const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
   const page=await ctx.newPage();
@@ -111,6 +127,7 @@ async function missingSession(browser){
   const browser=await chromium.launch({headless:true});
   await checkoutAt(browser,'essential');
   await checkoutAt(browser,'signature');
+  await catalogCheckout(browser);
   await returnCase(browser,false);
   await returnCase(browser,true);
   await missingSession(browser);
