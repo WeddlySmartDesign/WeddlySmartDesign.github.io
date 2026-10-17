@@ -237,3 +237,4 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - **v19.2**: D14 antebrazo del brindis más fino y curvado (el recto parecía un tronco), con una pulsera dorada fina en la muñeca.
 - **v19.3**: D14 muñeca del brindis suavizada: la mano baja al brazo en una sola curva.
 - **v19.4**: D14 vuelve el brazo de v19.2; el suavizado de v19.3 quedaba peor en la muñeca.
+- **v19.5**: D15 brindis con manga de lino arena y puño de camisa en el novio de la izquierda (antes salía el antebrazo al aire); en el mar se quitan las dos flores de la espalda/hombro y se rehace el borde del hombro.
