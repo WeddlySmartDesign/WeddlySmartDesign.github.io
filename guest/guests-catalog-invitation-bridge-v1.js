@@ -37,9 +37,13 @@ async function fetchActive(force=false){
   return activePromise;
 }
 async function buildRecipientUrl(ctx){
-  const active=await fetchActive(false);
+  // Each send revalidates the delivered order instead of trusting a prior local cache.
+  const active=await fetchActive(true);
   if(!active)throw new Error('catalog_invitation_unavailable');
-  const base=new URL(active.shareBaseUrl,location.href);
+  if(!ctx?.rsvpToken||!ctx?.recipientId&&!ctx?.unitId)throw new Error('missing_recipient_context');
+  let base;
+  try{base=new URL(active.shareBaseUrl);}catch{throw new Error('invalid_delivered_invitation_url')}
+  if(base.protocol!=='https:'||base.username||base.password||!base.hostname)throw new Error('invalid_delivered_invitation_url');
   base.searchParams.set('rt',ctx.rsvpToken||'');
   base.searchParams.set('lang',ctx.lang||'es');
   if(ctx.unitId&&Number(ctx.unitSize)>1)base.searchParams.set('u',ctx.unitId);
