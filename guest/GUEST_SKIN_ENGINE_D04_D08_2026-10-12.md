@@ -233,3 +233,4 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
   - interior en granate #8E2F3C, dorado #E8C77A y verde botella #2F4B3C.
 - Vídeos: `/home/claude/comic/vid/portada.py` y `cierre.py` con `V=ellas|ellos` (sin variable = D13 intacto). Medios en `/home/claude/comic/ent_ellas` y `ent_ellos`.
 - Resultados: Interior PASS ×2, matriz 1104/0, tests de másters PASS y CI OK.
+- **v19.1**: D14 brindis con el brazo de la novia morena al aire (vestido de tirantes): se quita la manga con puño y gemelo, que parecía de traje de hombre.
