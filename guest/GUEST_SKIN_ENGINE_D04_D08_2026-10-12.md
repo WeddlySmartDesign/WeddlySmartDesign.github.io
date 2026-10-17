@@ -236,3 +236,4 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - **v19.1**: D14 brindis con el brazo de la novia morena al aire (vestido de tirantes): se quita la manga con puño y gemelo, que parecía de traje de hombre.
 - **v19.2**: D14 antebrazo del brindis más fino y curvado (el recto parecía un tronco), con una pulsera dorada fina en la muñeca.
 - **v19.3**: D14 muñeca del brindis suavizada: la mano baja al brazo en una sola curva.
+- **v19.4**: D14 vuelve el brazo de v19.2; el suavizado de v19.3 quedaba peor en la muñeca.
