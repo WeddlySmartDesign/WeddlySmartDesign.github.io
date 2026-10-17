@@ -56,15 +56,15 @@ html.mp a.link::after{content:none}
 .mp-m.on .mp-lb{font-style:italic;color:#8f4129;border-bottom-color:#b5573a}
 .mp-hint{margin:16px 0 0;font-size:15px;font-style:italic;color:#6a6458}
 /* detalles: billetes con matriz y perforado */
-.mp-tickets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px;max-width:350px;margin:6px auto 0}
-.mp-b{position:relative;display:grid;grid-template-columns:34px 1fr;align-items:center;min-height:70px;padding:10px 10px 10px 0;border:0;color:#2e3a3c;cursor:pointer;text-align:left;
+.mp-tickets{display:grid;grid-template-columns:1fr;gap:12px;max-width:300px;margin:6px auto 0}
+.mp-b{position:relative;display:grid;grid-template-columns:40px 1fr;align-items:center;min-height:62px;padding:10px 30px 10px 0;border:0;color:#2e3a3c;cursor:pointer;text-align:left;
  background:radial-gradient(circle at 0 50%,transparent 9px,#fffdf7 9.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 50%,transparent 9px,#fffdf7 9.5px) right/51% 100% no-repeat;filter:drop-shadow(0 5px 7px rgba(60,44,26,.22));transition:transform .4s cubic-bezier(.3,1.5,.5,1)}
-.mp-b::before{content:"";position:absolute;left:34px;top:9px;bottom:9px;border-left:1.5px dashed rgba(110,88,62,.45)}
+.mp-b::before{content:"";position:absolute;left:40px;top:9px;bottom:9px;border-left:1.5px dashed rgba(110,88,62,.45)}
 .mp-b::after{content:"";position:absolute;right:12px;top:9px;width:11px;height:11px;border-radius:50%;background:#efe6d5;box-shadow:inset 0 1px 2px rgba(0,0,0,.25);transform:scale(0);transition:transform .35s cubic-bezier(.3,1.8,.5,1)}
 .mp-b.punched::after{transform:scale(1)}
-.mp-b.solo{grid-column:1/-1;max-width:240px;justify-self:center;width:100%}
+.mp-b.solo{width:100%}
 .mp-b-no{writing-mode:vertical-rl;transform:rotate(180deg);justify-self:center;font:400 11px/1 'GaramondSC',Georgia,serif;letter-spacing:.14em;color:#b5573a}
-.mp-b-lb{padding-left:10px;padding-right:6px;font:400 13px/1.25 'GaramondSC',Georgia,serif;letter-spacing:.05em;text-transform:uppercase;overflow-wrap:normal;word-break:normal;hyphens:manual;min-width:0}
+.mp-b-lb{padding-left:16px;padding-right:4px;font:400 15px/1.25 'GaramondSC',Georgia,serif;letter-spacing:.12em;text-transform:uppercase;overflow-wrap:normal;word-break:normal;hyphens:manual;min-width:0}
 .mp-b[aria-expanded=true]{transform:translateY(-3px) rotate(-1.5deg)}
 .mp-b[aria-expanded=true] .mp-b-lb{color:#8f4129}
 .mp-b:focus-visible{outline:2px solid #b5573a;outline-offset:3px}
@@ -99,14 +99,14 @@ html.mp .cover-date{font-size:18px!important;margin:4px 0 0}html.mp .countdown,h
 html.mp .tap-hint{font:italic 400 24px/1.2 'Lora',Georgia,serif;color:#2e3a3c;text-shadow:0 0 14px rgba(251,246,234,.95)}
 html.mp .entry-button,html.mp .rsvp-button{font:400 14px/1.2 'GaramondSC',Georgia,serif!important;letter-spacing:.18em;text-transform:uppercase;border:1px solid #8f4129!important;border-radius:999px;background:#b5573a!important;color:#fffdf7!important;box-shadow:0 6px 14px -8px rgba(60,30,10,.6);backdrop-filter:none;-webkit-backdrop-filter:none}
 /* cierre: «Os esperamos» y los datos sobre el lino, encima de la carta sellada */
-.mp-wait{position:absolute;z-index:2;left:0;right:0;top:max(6svh,calc(env(safe-area-inset-top) + 26px));margin:0;text-align:center;font:italic 400 clamp(42px,12vw,58px)/1 'Lora',Georgia,serif;color:#2e3a3c;text-shadow:0 0 18px rgba(251,246,234,.8);opacity:0;transform:translateY(10px);transition:opacity 1.1s ease,transform 1.2s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.mp-wait{position:absolute;z-index:2;left:0;right:0;top:max(5svh,calc(env(safe-area-inset-top) + 20px));margin:0;text-align:center;font:italic 400 clamp(36px,10.5vw,48px)/1 'Lora',Georgia,serif;color:#2e3a3c;text-shadow:0 0 18px rgba(251,246,234,.8);opacity:0;transform:translateY(10px);transition:opacity 1.1s ease,transform 1.2s cubic-bezier(.2,.7,.2,1);pointer-events:none}
 .mp-wait.on{opacity:1;transform:none}
 #closing.replaying .mp-wait{opacity:0}
-html.mp .closing-text{top:calc(max(6svh,calc(env(safe-area-inset-top) + 26px)) + 76px)!important;text-shadow:0 0 16px rgba(251,246,234,.85)!important}
-html.mp .closing-caption{font:italic 400 18px/1.4 'Lora',Georgia,serif!important;color:#3c4646!important}
-html.mp .closing-sign{font:italic 400 clamp(30px,8.6vw,40px)/1.15 'Lora',Georgia,serif!important;color:#2e3a3c!important}
+html.mp .closing-text{top:calc(max(5svh,calc(env(safe-area-inset-top) + 20px)) + 58px)!important;text-shadow:0 0 16px rgba(251,246,234,.85)!important}
+html.mp .closing-caption{font:italic 400 16px/1.35 'Lora',Georgia,serif!important;color:#3c4646!important}
+html.mp .closing-sign{font:italic 400 clamp(28px,8vw,36px)/1.15 'Lora',Georgia,serif!important;color:#2e3a3c!important}
 html.mp .close-date{font:400 15px/1.3 'GaramondSC',Georgia,serif!important;letter-spacing:.2em;color:#8f4129!important}
-@media(max-width:360px){.mp-b{grid-template-columns:28px 1fr;padding-right:12px}.mp-b::before{left:28px}.mp-b-lb{font-size:11.5px;letter-spacing:.03em;padding-left:8px}.mp-title{font-size:33px}.mp-card{grid-template-columns:1fr 76px}.mp-card::before{right:98px}.mp-stamp{width:74px;height:86px}.mp-stamp b{font-size:18px}.mp-lb{font-size:18px}html.mp [data-bg]{padding:30px 12px 22px!important}}
+@media(max-width:360px){.mp-title{font-size:33px}.mp-card{grid-template-columns:1fr 76px}.mp-card::before{right:98px}.mp-stamp{width:74px;height:86px}.mp-stamp b{font-size:18px}.mp-lb{font-size:18px}html.mp [data-bg]{padding:30px 12px 22px!important}}
 @media(prefers-reduced-motion:reduce){.mp-rv{opacity:1;transform:none;transition:none}.mp-m{opacity:1;transform:none;transition:none}.mp-rose{transition:none}.mp-now::after{transition:none}}
 /* legibilidad de los datos sobre el mar: lavado de acuarela crema detrás, tinta más oscura */
 html.mp .cover-text{isolation:isolate;text-shadow:none!important}
@@ -114,3 +114,4 @@ html.mp .cover-text::before{content:"";position:absolute;z-index:-1;left:-12%;ri
 html.mp .cover-tag,html.mp .cover-names,html.mp .cover-date,html.mp .countdown,html.mp .cover-place{color:#1f2a2c!important}
 html.mp .cover-names span{display:inline!important}
 html.mp .cover-names .amp{display:inline!important;font-size:.82em!important;padding:0 .24em!important}
+html.mp #closing .closing-text .rsvp-button,html.mp #closing .rsvp-button{margin-top:10px}

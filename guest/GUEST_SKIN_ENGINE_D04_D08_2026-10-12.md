@@ -259,3 +259,4 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - **v20.2**: D16 datos de portada con lavado crema detrás y tinta más oscura; haz del faro más fino y tenue, que se apaga antes de los datos.
 - **v20.3**: D16 nombres de portada en una línea con «&» terracota; posición de los datos ajustada para pantallas bajas (sin chocar con «Descubrir»).
 - **v20.4**: D16 vuelve el haz del faro de v20.1 (gustaba a la autora); sigue apagándose antes de los datos.
+- **v20.5**: D16 billetes de detalles en una columna (sin texto que se salga); cierre con la carta más baja y menor, y textos compactos para no pisarla.
