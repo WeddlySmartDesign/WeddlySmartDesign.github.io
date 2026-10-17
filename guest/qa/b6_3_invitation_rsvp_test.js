@@ -68,6 +68,11 @@ async function testRetiredEditors(context){
     ok(await page.locator('a[href="index.html"]').isVisible(),'return to GUEST missing on '+path);
     await noOverflow(page,path);
   }
+  for(const path of ['/guest/guests-rsvp-form.html','/guest/guests-rsvp-form-flex.html','/guest/guests-personalizacion-essential.html','/guest/guests-personalizacion-signature-integrated.html']){
+    await page.goto(base+path,{waitUntil:'domcontentloaded'}).catch(()=>{});
+    await page.waitForURL(base+'/guest/index.html',{timeout:8000});
+    ok(!page.url().includes('personalizacion')&&!page.url().includes('rsvp-form'),'retired direct editor failed to redirect: '+path);
+  }
   ok(calls.config.length===0&&calls.personalization.length===0,'editor mutation invoked in customer view');
   await page.close();
 }
