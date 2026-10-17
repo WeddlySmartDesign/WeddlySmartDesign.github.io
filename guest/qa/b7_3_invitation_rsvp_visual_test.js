@@ -20,6 +20,7 @@ async function makePage(context,edition='essential'){
   let out={ok:true},status=200;
   if(slug==='guest-access-check')out=body.action==='entitlement'?{ok:true,product:'guests',edition,owner:false}:{ok:true,product:'guests',edition};
   else if(slug==='guest-rsvp-ensure')out={ok:true,publicToken};
+  else if(slug==='guest-invitation-flow'&&body.action==='active_for_member')out={ok:true,active:true,invitation:{shareBaseUrl:'https://final.example.test/final.html?order=ready',templateId:'premium-any'}};
   else if(slug==='guest-personalization'){
    if(req.method()==='POST')personalization=body.personalization||personalization;
    out={ok:true,personalization};
@@ -54,6 +55,19 @@ async function testOperations(context){
  ok(await page.locator('#wsdOpsFlow,#editInvitation,#wsdEditRsvp').count()===0,'legacy invitation/RSVP editor navigation exposed in operations');
  const recipient=page.locator('[data-recipient="g1"]');await recipient.waitFor({state:'visible',timeout:8000});
  const chk=await recipient.evaluate(el=>el.getBoundingClientRect().width);ok(chk>=23,'recipient checkbox too small');
+ // Verify ACTUAL customer button reaches the shared approved-design composer.
+ const share=page.locator('.guest .wsdrf-share').first();
+ await share.waitFor({state:'visible',timeout:8000});
+ ok(await page.locator('[data-copy],[data-wa]').count()===0,'legacy generic RSVP share actions are visible');
+ await share.click();
+ await page.waitForSelector('#wsdShareComposer.on',{timeout:8000});
+ const copy=page.locator('#wsdShareCopy');
+ ok(await copy.isVisible(),'share composer lacks copy function');
+ ok(await page.locator('#wsdShareMark').isVisible(),'share composer lacks manual sent confirmation');
+ ok(await page.locator('#wsdShareMessage').isVisible(),'share composer lacks editable MESSAGE only');
+ ok(await page.locator('#wsdShareComposer #tplGrid,#wsdShareComposer #childrenQ').count()===0,'invitation/RSVP editor leaked into sharing');
+ await page.locator('#wsdShareCancel').click();
+
  ok(legacy.length===0,'ONE endpoint from operations: '+legacy.join(','));
  ok(errors.length===0,'operations browser errors: '+errors.join(' | '));
  await page.close();
