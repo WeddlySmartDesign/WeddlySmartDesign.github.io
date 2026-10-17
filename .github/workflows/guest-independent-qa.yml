@@ -20,6 +20,8 @@ jobs:
           node-version: '22'
       - name: GUEST independence and parity gate
         run: node guest/qa/guest_independent_regression_test.js
+      - name: Catalog RSVP config lock (staged source; offline)
+        run: node guest/tests/guest_rsvp_config_lock_contract.test.cjs
 
   catalog-invitation-bridge:
     runs-on: ubuntu-latest
