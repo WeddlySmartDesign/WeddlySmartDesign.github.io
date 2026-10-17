@@ -106,6 +106,25 @@ function ok(v,msg){if(!v)throw new Error(msg)}
   try{await context.__GuestCatalogBridge.buildRecipientUrl({recipientId:'g_1',rsvpToken:'r1',lang:'es'});}catch(e){blocked=String(e.message).includes('catalog_invitation_unavailable')}
   ok(blocked,'network outage must not create a legacy invitation URL');
 
+  // A rogue/mistyped final URL, an absent RSVP token or loss of delivery access must never be shareable.
+  for(const invalid of ['http://cdn.example/final.html','javascript:alert(1)','https://user:pass@cdn.example/final.html','/guest/guests-rsvp-v105.html']){
+    context.__GuestCatalogBridge.clearCache();
+    context.fetch=async()=>({ok:true,json:async()=>({ok:true,active:true,invitation:{shareBaseUrl:invalid}})});
+    let err='';try{await context.__GuestCatalogBridge.buildRecipientUrl({recipientId:'g_1',rsvpToken:'token',lang:'es'})}catch(e){err=e.message}
+    ok(err==='invalid_delivered_invitation_url','insecure or relative final URL accepted: '+invalid);
+  }
+  context.__GuestCatalogBridge.clearCache();
+  context.fetch=async()=>({ok:true,json:async()=>({ok:true,active:true,invitation:{shareBaseUrl:'https://cdn.example/final.html'}})});
+  let missing='';try{await context.__GuestCatalogBridge.buildRecipientUrl({recipientId:'g_1',rsvpToken:'',lang:'es'})}catch(e){missing=e.message}
+  ok(missing==='missing_recipient_context','missing RSVP token must block sending');
+  // The second share MUST consult backend even if the first had a valid cached delivery.
+  context.__GuestCatalogBridge.clearCache();
+  let checks=0;
+  context.fetch=async()=>({ok:true,json:async()=>{checks++;return checks===1?{ok:true,active:true,invitation:{shareBaseUrl:'https://cdn.example/final.html'}}:{ok:true,active:false}}});
+  await context.__GuestCatalogBridge.buildRecipientUrl({recipientId:'g_1',rsvpToken:'token',lang:'es'});
+  let rejected=false;try{await context.__GuestCatalogBridge.buildRecipientUrl({recipientId:'g_1',rsvpToken:'token',lang:'es'})}catch(e){rejected=e.message==='catalog_invitation_unavailable'}
+  ok(checks===2&&rejected,'stale delivered invitation cache bypassed subsequent backend revocation');
+
   const deliveryRuntime=read('guest-catalog-delivery-runtime-v1.js');
   ok(!deliveryRuntime.includes('veil-light'),'delivery runtime must be template-agnostic');
   ok(deliveryRuntime.includes("action:'public_load'"),'delivery runtime must load delivered order');
