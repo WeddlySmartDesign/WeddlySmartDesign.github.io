@@ -20,6 +20,8 @@ on:
       - 'guest/backend/guest-personalization/index.ts'
       - 'guest/tests/guest_personalization_config_lock_contract.test.cjs'
       - 'guest/tests/guest_rsvp_config_lock_contract.test.cjs'
+      - 'guest/tests/catalog_questionnaire_rsvp_first_access.test.cjs'
+      - 'guest/backend/guest-rsvp-ensure/index.ts'
       - 'guest/access.html'
       - '.github/workflows/guest-catalog-bridge-qa.yml'
   workflow_dispatch:
@@ -36,6 +38,8 @@ jobs:
         run: node guest/tests/guest_rsvp_config_lock_contract.test.cjs
       - name: Catalog invitation authoring permission guard (offline)
         run: node guest/tests/guest_personalization_config_lock_contract.test.cjs
+      - name: Catalogue questionnaire RSVP first-activation mapping (offline)
+        run: node guest/tests/catalog_questionnaire_rsvp_first_access.test.cjs
       - name: Catalog customer journey contract
         run: node guest/qa/catalog_customer_journey_test.js
       - name: Catalog delivery builder
