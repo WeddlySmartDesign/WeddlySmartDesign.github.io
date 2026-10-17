@@ -206,3 +206,4 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - Interior propio (prefijo `vn`): viñetas con cartela amarilla y título rotulado, horas en estrellas de cómic, programa en tira de viñetas que aparecen al bajar, detalles como bocadillos con aviso «!», galería enmarcada.
 - Motor: se añaden las fuentes OFL Bangers y Kalam (con sus licencias) al registro de fuentes del constructor.
 - Música original «swing suave» (contrabajo, piano, clarinete, vibráfono y glockenspiel).
+- **v18.1**: en el cierre los fuegos estallan más abajo (mitad inferior) para que la cartela con los datos no tape los «¡BOOM!».
