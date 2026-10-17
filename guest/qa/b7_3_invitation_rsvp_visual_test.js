@@ -25,7 +25,7 @@ async function makePage(context,edition='essential'){
    if(req.method()==='POST')personalization=body.personalization||personalization;
    out={ok:true,personalization};
   }else if(slug==='guest-rsvp'){
-   if(req.method()==='GET'&&u.searchParams.get('manage')==='1')out={ok:true,forms:[{id:'f1',public_token:publicToken,config:cfg}],submissions:[{guest_key:'g1',name:'Ana López',attend:true,meal:'Vegetariano',received_at:new Date().toISOString()}],contacts:[{guest_key:'g1',phone:'600111222'}],delivery:[{guest_key:'unit:u1',status:'sent'}]};
+   if(req.method()==='GET'&&u.searchParams.get('manage')==='1')out={ok:true,forms:[{id:'f1',public_token:publicToken,config:cfg}],submissions:[{guest_key:'g1',name:'Ana López',attend:true,meal:'Vegetariano',received_at:new Date().toISOString()}],contacts:[{guest_key:'g1',phone:'600111222'}],delivery:[]};
    else if(req.method()==='GET'&&u.searchParams.get('unit'))out={ok:true,form:{id:'f1',config:cfg},unit:{id:'u1',label:'Familia López',members:[{id:'g1',name:'Ana López',events:[]},{id:'g2',name:'Mario López',events:[]}]}};
    else if(req.method()==='GET'&&u.searchParams.get('token'))out={ok:true,form:{id:'f1',config:cfg},...(u.searchParams.get('guest')?{guest:{id:'g1',name:'Ana López'}}:{})};
    else if(req.method()==='POST')out={ok:true,submission:{id:'s1'},config:body.config||cfg};
@@ -66,6 +66,19 @@ async function testOperations(context){
  ok(await page.locator('#wsdShareMark').isVisible(),'share composer lacks manual sent confirmation');
  ok(await page.locator('#wsdShareMessage').isVisible(),'share composer lacks editable MESSAGE only');
  ok(await page.locator('#wsdShareComposer #tplGrid,#wsdShareComposer #childrenQ').count()===0,'invitation/RSVP editor leaked into sharing');
+ // Failure must not falsely mark an invitation as sent or claim two-device sync.
+ const reject='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp**';
+ await page.route(reject,async route=>{let data={};try{data=route.request().postDataJSON()||{}}catch{}if(data.action==='delivery')await route.fulfill({status:503,contentType:'application/json',body:'{"ok":false,"error":"temporary_outage"}'});else await route.fallback()});
+ let warning='';page.on('dialog',async d=>{warning=d.message();await d.dismiss()});
+ await page.locator('#wsdShareMark').click();
+ await page.waitForFunction(()=>document.getElementById('wsdShareMark')?.disabled===false,null,{timeout:6000});
+ ok(/no se ha marcado como enviada/i.test(warning),'offline delivery state should warn and remain pending');
+ ok(!((await page.locator('.sendBox .chip').first().innerText()).includes('Enviada')),'failed remote delivery was falsely marked sent');
+ await page.unroute(reject);
+ await page.locator('#wsdShareMark').click();
+ await page.waitForFunction(()=>document.querySelector('.sendBox .chip')?.textContent?.includes('Enviada'),null,{timeout:6000});
+ ok((await page.locator('.sendBox .chip').first().innerText())==='Enviada','successful remote delivery not marked locally');
+
  await page.locator('#wsdShareCancel').click();
 
  ok(legacy.length===0,'ONE endpoint from operations: '+legacy.join(','));
