@@ -286,3 +286,4 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
   - tarjeta del lugar con filo dorado.
 - **v24.1**: D09 sin limones junto a la hora del lugar (petición de la autora).
 - **v24.2**: D09 sin ramita de limonero en la carta de los detalles (se veía falsa).
+- **2026-10-18**: la autora aprueba el diseño visual de D09 «Limoneros · versión Claude». Sigue TEST · certification-pending · NO VENTA.
