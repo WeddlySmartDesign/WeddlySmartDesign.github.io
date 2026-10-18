@@ -285,3 +285,4 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
   - sobres grandes con solapa, carta con borde rasgado y ramita de limonero;
   - tarjeta del lugar con filo dorado.
 - **v24.1**: D09 sin limones junto a la hora del lugar (petición de la autora).
+- **v24.2**: D09 sin ramita de limonero en la carta de los detalles (se veía falsa).
