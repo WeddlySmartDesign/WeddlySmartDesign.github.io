@@ -280,3 +280,7 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
 - **v23.1**: D07 espejos con pieza real de Recraft (oval moderno de latón champán, `skin-assets/espejo.webp`).
 - **2026-10-18**: la autora aprueba el diseño visual de D07 «Reflejo» (los cuatro espejos no le entusiasman pero han mejorado). Sigue TEST · certification-pending · NO VENTA.
 - **v17.6**: D12 «Abanico» sin música, por decisión de la autora. Se quitan el audio, el botón de sonido y `skin-assets/music.m4a`.
+- **v24**: D09:
+  - vestido opaco en portada y cierre (seguimiento de la pareja y retrato al óleo de la autora superpuesto, `/home/claude/limon/fix`);
+  - sobres grandes con solapa, carta con borde rasgado y ramita de limonero;
+  - tarjeta del lugar con filo dorado.

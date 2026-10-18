@@ -109,3 +109,39 @@ html.lm #gallery-items{width:calc(100% + 40px);margin:8px -20px 0}
 .lm-fade{-webkit-mask:url(%%OILMASK%%) center/100% 100% no-repeat!important;mask:url(%%OILMASK%%) center/100% 100% no-repeat!important}
 /* lugar: sobre una pincelada ancha de óleo con los colores del atardecer de la portada */
 .lm-places::before{background:url(%%BRUSH%%) center/100% 100% no-repeat!important;inset:-4px -14px!important}
+/* === v24 · sobres grandes de papel de algodón, carta con borde rasgado y ramita de limonero, tarjeta del lugar con filo dorado al óleo === */
+.lm-wraps{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:24px 16px!important;max-width:340px!important;margin-top:18px!important}
+.lm-w{gap:10px!important}
+.lm-env{width:142px!important;height:100px!important;border-radius:2px!important;overflow:visible!important;
+ background:linear-gradient(160deg,#fdf8ef 0%,#f6ecdc 60%,#efe1cc 100%)!important;
+ box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 12px 20px -10px rgba(86,61,75,.45),0 2px 3px rgba(86,61,75,.15)!important}
+.lm-env::before{content:""!important;position:absolute;inset:0;background:linear-gradient(to top right,transparent 49.4%,rgba(168,130,110,.22) 50%,transparent 50.6%) left bottom/50% 62% no-repeat,linear-gradient(to top left,transparent 49.4%,rgba(168,130,110,.22) 50%,transparent 50.6%) right bottom/50% 62% no-repeat;pointer-events:none}
+.lm-env::after{content:none!important}
+.lm-flap{position:absolute;left:0;right:0;top:0;height:58px;z-index:1;transform-origin:50% 0;background:linear-gradient(180deg,#faf2e5,#efe2cd);clip-path:polygon(0 0,100% 0,50% 100%);filter:drop-shadow(0 2px 2px rgba(86,61,75,.18));transition:transform .9s cubic-bezier(.3,.9,.25,1)}
+.lm-w[aria-expanded=true] .lm-flap{transform:rotateX(-165deg)}
+.lm-seal{z-index:2!important;top:36px!important;width:48px!important;height:48px!important;margin-left:-24px!important}
+.lm-seal img{left:5px!important;top:5px!important;width:38px!important;height:38px!important}
+.lm-w[aria-expanded=true] .lm-seal{transform:translateY(-6px) scale(.9) rotate(-18deg)!important;opacity:.85!important}
+.lm-w-lb{font-size:16px!important}
+/* la carta: papel de algodón con borde rasgado y una ramita de limonero pintada */
+.lm-tray{max-width:350px!important}
+.lm-tray-in{position:relative;margin:22px 6px 10px!important;padding:30px 24px 22px!important;background:#fdf9f1!important;
+ -webkit-mask:radial-gradient(circle at 3px 3px,#000 2.4px,transparent 2.6px) -3px -3px/7px 7px,linear-gradient(#000,#000) 3px 3px/calc(100% - 6px) calc(100% - 6px) no-repeat;mask:radial-gradient(circle at 3px 3px,#000 2.4px,transparent 2.6px) -3px -3px/7px 7px,linear-gradient(#000,#000) 3px 3px/calc(100% - 6px) calc(100% - 6px) no-repeat;
+ filter:drop-shadow(0 10px 14px rgba(86,61,75,.22))}
+.lm-tray-in::before{content:"";position:absolute;right:-6px;top:-4px;width:96px;height:74px;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 92'%3E%3Cpath d='M118 4 C 90 18 66 30 30 62' fill='none' stroke='%236b5530' stroke-width='2.2' stroke-linecap='round'/%3E%3Cg%3E%3Cellipse cx='92' cy='14' rx='14' ry='5.5' transform='rotate(-30 92 14)' fill='%235f7a3a'/%3E%3Cellipse cx='80' cy='32' rx='15' ry='6' transform='rotate(40 80 32)' fill='%23708c45'/%3E%3Cellipse cx='60' cy='34' rx='14' ry='5.5' transform='rotate(-40 60 34)' fill='%235f7a3a'/%3E%3Cellipse cx='50' cy='54' rx='13' ry='5' transform='rotate(30 50 54)' fill='%23708c45'/%3E%3C/g%3E%3Cellipse cx='32' cy='70' rx='14' ry='11' transform='rotate(-25 32 70)' fill='%23efc443'/%3E%3Cellipse cx='28' cy='66' rx='5' ry='3.5' transform='rotate(-25 28 66)' fill='%23f8e08a'/%3E%3Cellipse cx='42' cy='62' rx='2' ry='3' fill='%23c79a2a'/%3E%3C/svg%3E") center/contain no-repeat;transform:rotate(6deg)}
+.lm-tray-in::after{content:"";position:absolute;inset:12px;border:1px solid rgba(102,47,73,.18);pointer-events:none}
+/* lugar: tarjeta de papel grueso con filo dorado al óleo y un limón junto a la hora */
+.lm-places::before{display:none!important}
+.lm-places{padding:4px 0!important;display:flex;flex-direction:column;gap:18px}
+.lm-venue{position:relative;padding:20px 18px 18px!important;background:#fdf8ef!important;border-radius:3px;box-shadow:0 12px 22px -14px rgba(86,61,75,.5),0 1px 3px rgba(86,61,75,.12),inset 0 0 0 6px #fdf8ef,inset 0 0 0 9px rgba(214,170,74,.75),inset 0 0 0 10px rgba(168,116,31,.35)}
+.lm-venue::after{background:linear-gradient(transparent,#662f4966 20%,#662f4966 80%,transparent)!important}
+.lm-v-time{position:relative;padding-top:30px!important}
+.lm-v-time::before{content:"";position:absolute;right:2px;top:0;width:26px;height:22px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 34'%3E%3Cpath d='M30 4 C 26 8 24 10 22 12' stroke='%236b5530' stroke-width='1.6' fill='none'/%3E%3Cellipse cx='33' cy='8' rx='7' ry='3' transform='rotate(-30 33 8)' fill='%235f7a3a'/%3E%3Cellipse cx='18' cy='21' rx='13' ry='10' transform='rotate(-20 18 21)' fill='%23efc443'/%3E%3Cellipse cx='14' cy='17' rx='4.5' ry='3' transform='rotate(-20 14 17)' fill='%23f8e08a'/%3E%3C/svg%3E") center/contain no-repeat}
+@media(max-width:360px){.lm-env{width:128px!important;height:92px!important}.lm-flap{height:52px}.lm-seal{top:32px!important}}
+@media(prefers-reduced-motion:reduce){.lm-flap{transition:none}}
+.lm-wraps{margin-top:44px!important;row-gap:52px!important}
+.lm-env{perspective:500px}
+.lm-w[aria-expanded=true] .lm-flap{transform:rotateX(-160deg);filter:brightness(.97) drop-shadow(0 -1px 2px rgba(86,61,75,.12))}
+.lm-venue{box-shadow:0 12px 22px -14px rgba(86,61,75,.45),0 1px 3px rgba(86,61,75,.1),inset 0 0 0 7px #fdf8ef,inset 0 0 0 8px rgba(196,150,62,.6),inset 0 0 0 10px #fdf8ef,inset 0 0 0 10.5px rgba(196,150,62,.35)!important}
+.lm-tray-in{padding-top:40px!important}
+.lm-tray-in::before{width:74px!important;height:56px!important;right:4px!important;top:2px!important}
