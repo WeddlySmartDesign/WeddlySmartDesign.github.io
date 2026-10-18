@@ -284,3 +284,4 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
   - vestido opaco en portada y cierre (seguimiento de la pareja y retrato al óleo de la autora superpuesto, `/home/claude/limon/fix`);
   - sobres grandes con solapa, carta con borde rasgado y ramita de limonero;
   - tarjeta del lugar con filo dorado.
+- **v24.1**: D09 sin limones junto a la hora del lugar (petición de la autora).
