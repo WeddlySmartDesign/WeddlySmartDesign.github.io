@@ -50,7 +50,7 @@
    "fondos-4-pantallas/fondo-4.jpg"
   ]
  },
- "mediaSource": "Entrega «Abanico» (Claude): abanico y terciopelo de Recraft de la autora; retrato al óleo de la autora (reutilizado) como tela; animación, brillo y silueta de luz por código; música original",
+ "mediaSource": "Entrega «Abanico» (Claude): abanico y terciopelo de Recraft de la autora; retrato al óleo de la autora (reutilizado) como tela; animación, brillo y silueta de luz por código; sin música",
  "fx": {},
  "motif": "",
  "motifIdle": "",
@@ -64,7 +64,6 @@
    "BANDTOP": "skin-assets/band-top.jpg",
    "BANDBOT": "skin-assets/band-bot.jpg",
    "MASK": "skin-assets/leaf-mask.png",
-   "MUSIC": "skin-assets/music.m4a",
    "FANB": "skin-assets/fan-body.webp",
    "FANP": "skin-assets/fan-pin.webp"
   }

@@ -67,23 +67,13 @@ function tick(){if(!A)return;const vh=innerHeight,y=A.sky.getBoundingClientRect(
  if(A.pick!=null&&Math.abs(scrollY-(A.pickY||0))>90)A.pick=null;if(A.pick!=null)cur=A.pick;
  A.pts.forEach((t,i)=>{t.d.classList.toggle('on',i===cur);t.b.classList.toggle('cur',i===cur);if(i===cur)t.b.classList.add('on')})}
 let raf=0;addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;tick()})},{passive:true});addEventListener('resize',()=>tick());
-// sonido: música tras abrir la portada, botón para silenciar; se apaga despacio con el cierre
-const music=new Audio('%%MUSIC%%');music.loop=true;music.volume=0;let fadeT=null,soundOn=false;
-const sb=el('button','ab-snd','♪');sb.type='button';sb.setAttribute('aria-pressed','false');sb.setAttribute('aria-label','Activar música');
-function setSound(on){soundOn=on;sb.setAttribute('aria-pressed',String(on));sb.setAttribute('aria-label',on?'Silenciar música':'Activar música');clearInterval(fadeT);
- if(on){const p=music.play();if(p&&p.catch)p.catch(()=>{});fadeT=setInterval(()=>{music.volume=Math.min(.6,music.volume+.03);if(music.volume>=.6)clearInterval(fadeT)},90)}
- else fadeT=setInterval(()=>{music.volume=Math.max(0,music.volume-.06);if(music.volume<=0){music.pause();clearInterval(fadeT)}},60)}
-sb.onclick=()=>setSound(!soundOn);
-addEventListener('DOMContentLoaded',()=>{document.body.append(sb);const cover=document.getElementById('cover');
- const start=()=>{if(window.__GUEST_SUPPRESS_SOUND__)return;sb.classList.add('show');setSound(true);cover.removeEventListener('click',start)};cover.addEventListener('click',start);
- document.addEventListener('visibilitychange',()=>{if(document.hidden&&soundOn)music.pause();else if(!document.hidden&&soundOn)music.play().catch(()=>{})});
+// sin música (decisión de la autora)
+addEventListener('DOMContentLoaded',()=>{
  const xv=document.getElementById('closing-video');
  // «Os esperamos» llega cuando el abanico se ha cerrado y queda su silueta de luz
  const cl=document.getElementById('closing');if(cl&&!cl.querySelector('.ab-wait')){const w=el('p','ab-wait','Os esperamos');w.setAttribute('aria-hidden','true');cl.append(w);
   if(xv){xv.addEventListener('timeupdate',()=>{if(xv.currentTime>=5.6)w.classList.add('on')});xv.addEventListener('play',()=>{if(xv.currentTime<.5)w.classList.remove('on')})}
   if(reducedMotion())w.classList.add('on');new MutationObserver(()=>{if(cl.classList.contains('revealed'))w.classList.add('on')}).observe(cl,{attributes:true,attributeFilter:['class']})}
- if(xv)xv.addEventListener('play',()=>{if(!soundOn)return;const left=Math.max(3,((xv.duration||12)-(xv.currentTime||0))*.95),step=music.volume/(left*10);
-  soundOn=false;sb.setAttribute('aria-pressed','false');sb.setAttribute('aria-label','Activar música');clearInterval(fadeT);
-  fadeT=setInterval(()=>{music.volume=Math.max(0,music.volume-step);if(music.volume<=0){music.pause();clearInterval(fadeT)}},100)})});
+});
 window.__GUEST_INTERIOR__={render};
 })();
