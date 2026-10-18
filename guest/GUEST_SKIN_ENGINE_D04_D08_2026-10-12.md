@@ -272,3 +272,8 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
   - fotos y galería tras un cristal con marco blanco y vaho que se aclara;
   - nuevo recurso `skin-assets/kraft.jpg` (textura de papel por código).
 - **2026-10-18**: la autora aprueba el diseño visual de D06 «Invernadero». Sigue TEST · certification-pending · NO VENTA.
+- **v23**: D07 interior más premium:
+  - espejos con marco dorado y cristal que se empaña;
+  - ficha de espejo biselado;
+  - reflejos en agua con onda real;
+  - velita flotante en el lugar.

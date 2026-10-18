@@ -141,3 +141,47 @@ html.rf .tap-hint .dot{background:#3b2f33;box-shadow:0 0 0 4px rgba(251,248,242,
 .rf-v-name{font:italic 400 30px/1.15 'Lora',Georgia,serif!important;position:relative;padding-bottom:8px;margin:6px 0 0!important;background:linear-gradient(90deg,transparent,rgba(138,90,99,.45),transparent) bottom/80% 1px no-repeat}
 .rf-v-mirror{font:italic 400 30px/1.15 'Lora',Georgia,serif;color:#3b2f33;transform:scaleY(-1);opacity:.14;filter:blur(.7px);margin-top:-4px;height:22px;overflow:hidden;-webkit-mask-image:linear-gradient(to top,transparent,#000);mask-image:linear-gradient(to top,transparent,#000);animation:rf-ripple 6s ease-in-out infinite}
 .rf-v-addr{margin-top:6px!important}.rf-places .rf-links{justify-content:center!important}
+/* === v23 · espejos con marco dorado, ficha de espejo biselado, reflejos en agua y velas flotantes en el lugar === */
+/* espejos: marco ovalado de bronce dorado con perlado y copete; cristal rosado que refleja una ventana; al tocar se empaña y lo recorre un destello */
+.rf-mirrors{gap:26px 18px!important;max-width:330px!important;margin-top:18px!important}
+.rf-fr{position:relative;display:block;width:104px;height:134px;padding:9px;border-radius:50%;
+ background:radial-gradient(ellipse at 30% 20%,#fff3d6 0%,#e2c48a 22%,#b8904e 52%,#8c6a35 74%,#d9bb7d 100%);
+ box-shadow:inset 0 2px 3px rgba(255,248,225,.9),inset 0 -3px 5px rgba(90,60,25,.45),0 10px 18px -8px rgba(59,47,51,.45),0 2px 3px rgba(59,47,51,.2)}
+.rf-fr::before{content:"";position:absolute;inset:3px;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(255,244,214,.95) 0 3deg,rgba(140,106,53,.55) 3deg 7.2deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3.5px),#000 calc(100% - .5px),transparent 100%);mask:radial-gradient(farthest-side,transparent calc(100% - 4px),#000 calc(100% - 3.5px),#000 calc(100% - .5px),transparent 100%)}
+.rf-fr::after{content:"";position:absolute;left:50%;top:-13px;width:34px;height:20px;margin-left:-17px;background:radial-gradient(ellipse at 50% 85%,#f3dca8 0 30%,transparent 32%),radial-gradient(circle at 22% 70%,#d4b170 0 22%,transparent 24%),radial-gradient(circle at 78% 70%,#d4b170 0 22%,transparent 24%),radial-gradient(ellipse at 50% 40%,#e7cc92 0 34%,#a98140 36% 44%,transparent 46%);filter:drop-shadow(0 1px 1px rgba(90,60,25,.5))}
+.rf-gl{width:100%!important;height:100%!important;box-shadow:inset 0 0 0 1.5px rgba(120,88,40,.75),inset 0 6px 14px rgba(80,55,40,.28)!important;
+ background:radial-gradient(ellipse 34% 42% at 50% 62%,rgba(255,236,214,.95),rgba(255,236,214,0) 70%),linear-gradient(180deg,rgba(255,255,255,0) 0 40%,rgba(196,160,150,.22) 41%,rgba(255,255,255,0) 60%),radial-gradient(ellipse at 30% 25%,#ffffff 0%,#f1e6e6 34%,#d7c4c6 72%,#bfa9ac 100%)!important}
+.rf-gl::after{content:"";position:absolute;left:34%;right:34%;top:30%;bottom:22%;border-radius:50% 50% 0 0/38% 38% 0 0;border:1.5px solid rgba(160,120,110,.28);border-bottom:0;background:linear-gradient(90deg,transparent 48%,rgba(160,120,110,.22) 49% 51%,transparent 52%),linear-gradient(180deg,transparent 52%,rgba(160,120,110,.18) 53% 55%,transparent 56%)}
+.rf-fog{position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 50% 55%,rgba(250,245,243,.92),rgba(250,245,243,.7) 60%,rgba(250,245,243,.4));opacity:0;transition:opacity .9s ease;z-index:1}
+.rf-mr[aria-expanded=true] .rf-fog{opacity:1}
+.rf-gl::before{z-index:2}
+.rf-mr[aria-expanded=true] .rf-fr{transform:translateY(-3px);transition:transform .5s}
+.rf-mr .rf-fr{transition:transform .5s}
+.rf-mr:focus-visible .rf-fr{outline:2px solid #8a5a63;outline-offset:6px}
+.rf-mr-lb{margin-top:4px}
+/* ficha: espejo rectangular de borde biselado plateado */
+.rf-tray{max-width:350px!important}
+.rf-tray-in{position:relative;margin:22px 4px 10px!important;padding:26px 22px 20px!important;border:7px solid transparent!important;border-radius:3px!important;
+ background:radial-gradient(ellipse at 30% 0%,rgba(255,255,255,.9),rgba(255,255,255,0) 55%) padding-box,linear-gradient(180deg,#fbf6f5,#f1e5e6) padding-box,linear-gradient(135deg,#ffffff,#b9b0b2 22%,#f7f3f3 40%,#9a9093 62%,#ffffff 80%,#c3babc) border-box!important;
+ box-shadow:0 14px 26px -16px rgba(59,47,51,.5),inset 0 0 0 1px rgba(255,255,255,.9),inset 0 0 18px rgba(170,140,145,.18)!important}
+.rf-tray-in::before{content:"";position:absolute;inset:6px;border:1px solid rgba(138,90,99,.25);pointer-events:none}
+.rf-tray-in::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.55) 45%,transparent 55%);pointer-events:none}
+.rf-tray-in h3,.rf-tray-in p,.rf-tray-in .rf-tt b{color:#5e3a43!important}
+/* fotos: orilla limpia y reflejo en agua que ondula de verdad */
+.rf-fade{-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 14%,#000 100%),linear-gradient(to right,transparent 0%,#000 7%,#000 93%,transparent 100%)!important;mask-image:linear-gradient(to bottom,transparent 0%,#000 14%,#000 100%),linear-gradient(to right,transparent 0%,#000 7%,#000 93%,transparent 100%)!important}
+.rf-water{position:relative;width:calc(100% + 40px);margin:0 -20px;height:96px;overflow:hidden;
+ -webkit-mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.6) 55%,transparent 100%),linear-gradient(to right,transparent 0%,#000 7%,#000 93%,transparent 100%);-webkit-mask-composite:source-in;mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.6) 55%,transparent 100%),linear-gradient(to right,transparent 0%,#000 7%,#000 93%,transparent 100%);mask-composite:intersect}
+.rf-water::before{content:"";position:absolute;left:6%;right:6%;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent);z-index:2}
+.rf-water .rf-refl{display:block;width:100%!important;margin:0!important;height:150px!important;object-fit:cover;object-position:50% 100%;transform:scaleY(-1)!important;transform-origin:50% 0;opacity:.62!important;animation:none!important;-webkit-mask:none!important;mask:none!important;filter:url(#rf-wave) saturate(.75) brightness(.97) hue-rotate(-6deg)!important}
+.rf-water::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(150,120,130,.12),rgba(170,150,160,.25)),repeating-linear-gradient(180deg,transparent 0 9px,rgba(255,255,255,.18) 9px 10px,transparent 10px 17px);z-index:1}
+.rf-sheen{position:absolute;left:-40%;top:8px;width:40%;height:3px;border-radius:2px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent);z-index:2;animation:rf-sheen 7s ease-in-out infinite}
+@keyframes rf-sheen{0%{transform:translateX(0)}60%,100%{transform:translateX(360%)}}
+/* lugar: velita flotante junto a la hora; el nombre se refleja en el agua con onda */
+.rf-v-time{display:flex!important;align-items:center;justify-content:center;gap:8px}
+.rf-float{display:inline-block;width:30px;height:33px;background:url(%%VELA%%) center/contain no-repeat;animation:rf-bob 3.8s ease-in-out infinite;filter:drop-shadow(0 4px 4px rgba(120,80,60,.25))}
+@keyframes rf-bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-3px) rotate(2deg)}}
+.rf-v-mirror{animation:none!important;filter:url(#rf-wave) blur(.3px)!important;opacity:.2!important;height:26px!important}
+@media(max-width:360px){.rf-fr{width:94px;height:122px}}
+@media(prefers-reduced-motion:reduce){.rf-float,.rf-sheen{animation:none}}
+.rf-fr .rf-gl{display:block!important;position:relative;border-radius:50%;overflow:hidden}
+.rf-water .rf-refl{transform-origin:50% 50%!important}
