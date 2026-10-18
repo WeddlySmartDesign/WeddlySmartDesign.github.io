@@ -41,8 +41,8 @@ function render(vm){
  const D=vm.details;sec=document.getElementById('practical');inner=scene(sec,D.length>0);openEnv=null;
  if(D.length){head(inner,'Todo lo que necesitas saber','Los detalles',mark(sec));const envs=el('div','cu-clouds cu-rv'),tray=el('div','cu-tray'),tin=el('div','cu-tray-in');tray.id='cu-tray';tray.append(tin);
   D.forEach((x,i)=>{const b=el('button','cu-cl'+(D.length%2&&i===D.length-1?' solo':''));b.type='button';b.setAttribute('aria-expanded','false');b.setAttribute('aria-controls','cu-tray');
-   const cl=el('img','cu-nube');cl.src=NUBES[i%2];cl.alt='';cl.setAttribute('aria-hidden','true');b.append(cl,el('span','cu-cl-lb',x.title));
-   b.onclick=()=>{if(openEnv===b){b.setAttribute('aria-expanded','false');openEnv=null;tray.style.height='0px';return}openEnv?.setAttribute('aria-expanded','false');openEnv=b;b.setAttribute('aria-expanded','true');fill(tin,x);tray.style.height=(tin.offsetHeight+16)+'px'};envs.append(b)});
+   const cl=el('span','cu-nb');cl.setAttribute('aria-hidden','true');cl.append(el('i','l3'),el('i','l2'),el('i','l1'));b.append(cl,el('span','cu-cl-lb',x.title));
+   b.onclick=()=>{if(openEnv===b){b.setAttribute('aria-expanded','false');openEnv=null;tray.style.height='0px';return}openEnv?.setAttribute('aria-expanded','false');openEnv=b;b.setAttribute('aria-expanded','true');fill(tin,x);tray.style.height=(tin.offsetHeight+16)+'px';setTimeout(()=>{const r=tray.getBoundingClientRect(),over=r.bottom-innerHeight+20;if(over>0)scrollBy({top:Math.min(over,r.top-80),behavior:reducedMotion()?'auto':'smooth'})},reducedMotion()?0:820)};envs.append(b)});
   inner.append(envs,el('p','cu-hint cu-rv',D.length>1?'Toca cada nube':'Toca la nube'),tray)}
  const G=vm.gallery;sec=document.getElementById('gallery');inner=scene(sec,G.length>0);
  if(G.length){head(inner,'Un poco de nosotros','Recuerdos',mark(sec));const track=el('div','cu-rv');track.id='gallery-items';track.setAttribute('role','region');track.setAttribute('aria-label','Galería de fotografías');

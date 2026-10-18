@@ -119,3 +119,35 @@ html.cu #gallery-items .cu-fade{-webkit-mask:url(%%TORN%%) center/100% 100% no-r
  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 96' preserveAspectRatio='none'%3E%3Cpath d='M0 46 Q 70 14 150 38 T 300 30 T 400 40 V96 H0Z' fill='%23c4d6dd'/%3E%3Cpath d='M0 62 Q 90 34 200 56 T 400 52 V96H0Z' fill='%23c9d6c0'/%3E%3Cpath d='M0 80 Q 110 60 220 76 T 400 72 V96H0Z' fill='%23a3bba9'/%3E%3C/svg%3E") center bottom/100% 100% no-repeat;filter:drop-shadow(0 -2px 2px rgba(47,59,102,.16));-webkit-mask-image:linear-gradient(to right,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(to right,transparent,#000 10%,#000 90%,transparent)}
 .cu-v-k::before{content:"";display:inline-block;width:10px;height:8px;margin-right:7px;background:#b5684a;clip-path:polygon(0 0,100% 50%,0 100%);vertical-align:0;box-shadow:none}
 .cu-venue::after{background:linear-gradient(transparent,rgba(107,90,74,.6) 20%,rgba(107,90,74,.6) 80%,transparent)!important;width:1.5px!important}
+/* === v25 · nubes de papel recortado en capas, hoja de cuaderno troquelada con cinta === */
+.cu-clouds{gap:30px 14px!important;max-width:330px!important;margin-top:16px!important}
+.cu-nb{position:relative;display:block;width:132px;height:80px;transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+.cu-nb i{position:absolute;inset:0;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 70'%3E%3Cpath d='M18 62 C4 62 2 44 14 40 C12 26 28 20 36 27 C40 12 62 8 70 22 C80 12 100 18 98 34 C112 34 116 52 104 58 C102 63 96 64 92 64 Z'/%3E%3C/svg%3E") center/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 70'%3E%3Cpath d='M18 62 C4 62 2 44 14 40 C12 26 28 20 36 27 C40 12 62 8 70 22 C80 12 100 18 98 34 C112 34 116 52 104 58 C102 63 96 64 92 64 Z'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+.cu-nb .l1{background:url(%%TEX%%) center/220px auto,#fbf8f1;background-blend-mode:multiply}
+.cu-nb .l2{background:#dfe6ef;transform:translate(7px,6px) scale(.97)}
+.cu-nb .l3{background:#c4d1e2;transform:translate(13px,11px) scale(.93);opacity:.9}
+.cu-nb{filter:drop-shadow(0 6px 6px rgba(47,59,102,.18)) drop-shadow(0 1px 1px rgba(47,59,102,.22))}
+.cu-cl:nth-child(even) .cu-nb{transform:scaleX(-1)}
+.cu-cl[aria-expanded=true] .cu-nb{transform:translateY(-8px)}
+.cu-cl:nth-child(even)[aria-expanded=true] .cu-nb{transform:scaleX(-1) translateY(-8px)}
+.cu-cl[aria-expanded=true] .cu-nb .l2{transform:translate(10px,10px) scale(.97)}
+.cu-cl[aria-expanded=true] .cu-nb .l3{transform:translate(18px,17px) scale(.93)}
+.cu-nb .l2,.cu-nb .l3{transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+.cu-cl:focus-visible .cu-nb{outline:2px solid #2f3b66;outline-offset:6px}
+/* hoja de cuaderno de papel, con borde troquelado, agujeros y cinta */
+.cu-tray{max-width:350px!important}
+.cu-tray-in{margin:24px 8px 12px!important;padding:28px 22px 22px 40px!important;background:url(%%TEX%%) center/260px auto,#fcfaf4!important;background-blend-mode:multiply!important;
+ box-shadow:5px 6px 0 -1px #dfe6ef,9px 11px 0 -2px #c4d1e2,0 10px 18px -8px rgba(47,59,102,.35)!important;
+ -webkit-mask:radial-gradient(circle at 50% 0,transparent 3px,#000 3.4px) 0 0/10px 6px repeat-x,linear-gradient(#000,#000) 0 5px/100% calc(100% - 5px) no-repeat;mask:radial-gradient(circle at 50% 0,transparent 3px,#000 3.4px) 0 0/10px 6px repeat-x,linear-gradient(#000,#000) 0 5px/100% calc(100% - 5px) no-repeat}
+.cu-tray-in::before{content:"";position:absolute;left:14px;top:22px;bottom:22px;width:10px;background:radial-gradient(circle,#e9e3d4 3.6px,rgba(47,59,102,.18) 4.2px,transparent 4.6px) center top/10px 34px repeat-y;pointer-events:none}
+.cu-tray-in::after{content:"";position:absolute;left:32px;top:0;bottom:0;border-left:1px solid rgba(181,104,74,.35);pointer-events:none}
+.cu-tray-wrap{position:relative}
+@media(max-width:360px){.cu-nb{width:118px;height:72px}}
+.cu-tray{filter:drop-shadow(4px 5px 0 #dfe6ef) drop-shadow(4px 4px 0 #c4d1e2) drop-shadow(0 8px 10px rgba(47,59,102,.22));padding:0 14px 14px 0}
+.cu-tray-in{box-shadow:none!important}
+/* títulos de capítulo más ligeros, a juego con la cursiva de los subtítulos */
+.cu-title{font:italic 400 clamp(36px,11vw,52px)/1.12 'Garamond',Georgia,serif!important;letter-spacing:0!important}
+.cu-tray-in h3{font:italic 400 32px/1.2 'Garamond',Georgia,serif!important}
+.cu-v-name{font-family:'Garamond',Georgia,serif!important;font-style:italic!important;font-size:26px!important}
+.cu-lb{font:italic 400 32px/1.2 'Garamond',Georgia,serif!important}
+.cu-v-time{font-family:'Garamond',Georgia,serif!important}
