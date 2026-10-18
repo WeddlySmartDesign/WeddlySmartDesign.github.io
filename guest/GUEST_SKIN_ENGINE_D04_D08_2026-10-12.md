@@ -277,3 +277,4 @@ Azulejo y Caja sin cambios. Interior PASS; matriz 644/0; CI OK.
   - ficha de espejo biselado;
   - reflejos en agua con onda real;
   - velita flotante en el lugar.
+- **v23.1**: D07 espejos con pieza real de Recraft (oval moderno de latón champán, `skin-assets/espejo.webp`).

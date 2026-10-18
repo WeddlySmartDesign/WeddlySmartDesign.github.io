@@ -185,3 +185,11 @@ html.rf .tap-hint .dot{background:#3b2f33;box-shadow:0 0 0 4px rgba(251,248,242,
 @media(prefers-reduced-motion:reduce){.rf-float,.rf-sheen{animation:none}}
 .rf-fr .rf-gl{display:block!important;position:relative;border-radius:50%;overflow:hidden}
 .rf-water .rf-refl{transform-origin:50% 50%!important}
+/* v23.1 · espejo real (pieza de Recraft de la autora): marco fino de latón champán; encima solo el destello y el vaho al abrir */
+.rf-fr{width:106px!important;height:150px!important;padding:0!important;border-radius:50%;background:url(%%ESPEJO%%) center/contain no-repeat!important;box-shadow:none!important;filter:drop-shadow(0 8px 10px rgba(59,47,51,.22)) drop-shadow(0 1px 2px rgba(59,47,51,.18))}
+.rf-fr::before,.rf-fr::after{content:none!important}
+.rf-fr .rf-gl{position:absolute!important;left:10%;top:7.5%;width:80%!important;height:85%!important;background:none!important;box-shadow:none!important}
+.rf-fr .rf-gl::after{content:none!important}
+.rf-fr .rf-gl::before{background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.7) 50%,transparent 58%)!important}
+.rf-fog{background:radial-gradient(ellipse at 50% 55%,rgba(252,247,246,.88),rgba(252,247,246,.62) 62%,rgba(252,247,246,.3))!important}
+@media(max-width:360px){.rf-fr{width:96px!important;height:136px!important}}

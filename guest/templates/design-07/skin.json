@@ -83,7 +83,8 @@
    "VELAOFF": "skin-assets/vela-off.webp",
    "WMASK": "skin-assets/wash-mask.png",
    "AGUADA": "skin-assets/aguada.webp",
-   "HINTWASH": "skin-assets/hint-wash.webp"
+   "HINTWASH": "skin-assets/hint-wash.webp",
+   "ESPEJO": "skin-assets/espejo.webp"
   }
  }
 }
