@@ -28,3 +28,22 @@ La propietaria observó en Chrome de escritorio un rectángulo/cuadro visible en
 - **No está publicado todavía por Cloudflare**: rama `guest-botanica-practical-desktop-fix-preview-2026-10-20` creada con control GitHub, pero sus commits `8bf9f71` y `68d500f` no recibieron check Cloudflare Pages, incluso tras disparador de raíz; PR temporal #146 DRAFT cerrada **SIN MERGE**.
 - Para mostrar solo esta corrección sin alterar la PREVIEW de 16 entradas ya publicada, desde PC autorizado: descargar artefacto, extraer en carpeta nueva, abrir CMD en raíz con `index.html`, ejecutar una sola orden `npx --yes wrangler@4 pages deploy . --project-name guest-weddlysmartdesign --branch guest-botanica-lo-esencial-fix-2026-10-20`. Esta rama es distinta de `guest-independent`; deberá verificarse etiqueta **PREVIEW** y URL inmutable en consola, luego ver `Lo esencial` en desktop y móvil. Antes de ese check no marcar visual definitiva como PASS.
 - `main` constatada intacta en `1e7c81515b71f16105b68a928bb908cba702bebf`. Ningún pago, licencia o Supabase tocado; prod y vieja PREVIEW `eebba5b2` conservados.
+
+
+## Cierre visual confirmado por la propietaria (20/10/2026, desde PC)
+
+**RESULTADO: APROBADO — incidencia «cuadro rectangular en Lo esencial» resuelta visualmente.**
+
+La propietaria hizo el deploy mediante `wrangler 4.151.3` del artefacto aislado `BOTANICA_LO_ESENCIAL_CORREGIDA_PREVIEW_NO_VENTA_2026-10-20` en el proyecto Cloudflare Pages existente **`guest-weddlysmartdesign`**, rama PREVIEW **`guest-botanica-lo-esencial-fix-2026-10-20`**. La consola mostró literalmente `Success! Uploaded 2 files (1 already uploaded)` y `Deployment complete!`, con URL **inmutable**:
+**https://55620fad.guest-weddlysmartdesign.pages.dev**
+
+Ruta completa para revisión:
+**https://55620fad.guest-weddlysmartdesign.pages.dev/guest/catalog-assets/botanica/14.7/**
+
+El usuario abrió y revisó en su ordenador el diseño corregido y confirmó expresamente: **«ya se ve bien»**. Se acepta la corrección estética de esa incidencia; **no solicitar volver a corregir el mismo defecto salvo regresión nueva demostrada**.
+
+Pruebas existentes: [Chrome cuatro tamaños — PASS](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39475897384), [staging con SHA original — PASS](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39476440097), [ZIP exclusivo BOTÁNICA — PASS](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39478510394). El máster original `botanica/14.7` permanece INMUTABLE. El parche CSS está versionado en `guest/catalog-patches/botanica/14.7/patch.css`, aplicado por el constructor de PREVIEW `guest/tools/build_catalog_static_preview.cjs`.
+
+**Alcance exacto de la aprobación:** visual de «Lo esencial» **PC**, no certificación visual individual de dos teléfonos físicos ni validación completa de funciones comerciales. El parche actual se publica **solo en PREVIEW**. Al hacer el futuro lanzamiento comercial, habrá que utilizar el pipeline que incorpora este parche (o trasladarlo mediante una capa versionada equivalente) y comprobar el diseño final servido; **NO reemplazar el master congelado por una versión manual ni asumir que cualquier pipeline comercial lo aplica automáticamente**. `commercialRelease:false` y **NO_GO** de venta permanecen hasta las pruebas E2E y el consentimiento comercial.
+
+`main`, producción, ONE, STUDIO, Supabase, Stripe LIVE y datos de clientes NO se modificaron con la corrección.
