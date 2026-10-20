@@ -14,7 +14,7 @@ Fecha: 20/10/2026. Exclusivamente GUEST. Venta NO_GO.
 | --- | --- | --- |
 | Destino | Panel identifica guest-weddlysmartdesign y entorno Preview | PENDING |
 | Publicación | Cloudflare confirma éxito y URL real; producción conservada | PENDING |
-| Integridad HTTPS | Manifiesto remoto idéntico + 121 recursos SHA256/bytes y noindex | PENDING |
+| Integridad HTTPS | Manifiesto remoto idéntico + **120 recursos HTTP** SHA256/bytes/noindex. El archivo **_headers** (n.º 121) es configuración Cloudflare NO servida por HTTP: comprobar su pin de origen y la aplicación observable de noindex | PENDING |
 | Renderizadores | 16 rutas y applyApi; revisión visual de las invitaciones sin cambios al máster | PENDING |
 | Acceso anónimo | Visor final sin token válido deniega datos; no muestra pedido de otra pareja | PENDING |
 | Stripe TEST | Contexto/clave TEST aislados y sesiones de pago con livemode=false, sin claves compartidas cambiadas | PENDING |
@@ -40,3 +40,9 @@ Dos pedidos acreditan ese recorrido concreto y los diseños utilizados: no certi
 Usar el manifiesto canónico recuperado de `guest/qa-reports/preview16_recovered_manifest_2026-10-20.json`.
 El origen debe ser la URL PREVIEW realmente devuelta por Cloudflare. El script rechaza producción y parámetros. No adivinar la URL.
 Solo acredita integridad y noindex; las pruebas visuales, autenticación, compra, correo, entrega, GUEST y RSVP requieren evidencias separadas.
+
+## Aclaraciones técnicas de FASE 7 — no inventar E2E
+- **URLs canónicas HTML:** Cloudflare Pages redirige `*.html` a su ruta sin extensión y `*/index.html` a `*/`. El verificador permite estrictamente **un** salto equivalente dentro del mismo PREVIEW HTTPS; cualquier otra redirección se rechaza. Fuente: https://developers.cloudflare.com/pages/configuration/serving-pages/
+- **_headers no es un recurso HTTP:** se valida su tamaño/SHA fijados y se comprueba `X-Robots-Tag: noindex` sobre todos los recursos servidos. No declarar “121 hashes remotos” porque son **120 remotos + 1 fichero de configuración protegido en manifiesto**. Fuente: https://developers.cloudflare.com/pages/configuration/headers/
+- **Correos de pedidos internos TEST:** en Edge Function `guest-invitation-flow`, los estados de revisión/entrega de modo `test` no envían correo real. Su `PASS` de API nunca sustituye la recepción efectiva. La prueba completa con correo real solo es legítima en una operación de **Stripe TEST independiente**, con destinatario propio autorizado, sin modificar la clave Live compartida ni afectar ONE.
+- **Handoff:** [fase 7](GUEST_AUDIT_CONTINUITY_PHASE7_PREVIEW_VERIFIER_2026-10-20.md), regresión de integridad CI `39427483317` SUCCESS 30/30; quedan PENDING toda la matriz remota y autorizaciones.
