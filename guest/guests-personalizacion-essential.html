@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="es">
-<head>
+<head><script id="guest-legacy-editor-retired">window.location.replace("index.html");</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow,noarchive">
@@ -14,7 +14,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
 </head>
 <body>
 <div id="boot">Cargando personalización…</div>
-<iframe id="editor" src="weddly-personalizacion-essential.html?v=essential-premium-pass-c-20261001" title="Personalización Essential"></iframe>
+<iframe id="editor" src="weddly-personalizacion-essential.html?v=essential-6-rev2-20260909" title="Personalización Essential"></iframe>
 <script>
 (()=> {
   const RSVP_API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp';
@@ -74,10 +74,10 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
       .weddly-photo-meta{min-width:0}
       .weddly-photo-status{font:600 12px 'Jost',system-ui,sans-serif;color:var(--ink);margin:0 0 8px}
       .weddly-photo-actions{display:flex;gap:8px;flex-wrap:wrap}
-      .weddly-photo-actions button,.weddly-photo-actions .weddly-photo-pick{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);padding:8px 10px;font:600 11px 'Jost',system-ui,sans-serif;cursor:pointer;margin:0;letter-spacing:0}
+      .weddly-photo-actions button{border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);padding:8px 10px;font:600 11px 'Jost',system-ui,sans-serif;cursor:pointer}
       .weddly-photo-empty{margin-top:10px}
-      .weddly-photo-empty .weddly-photo-pick{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);padding:9px 12px;font:600 11px 'Jost',system-ui,sans-serif;cursor:pointer;margin:0;letter-spacing:0}
-      input[type=file]{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;clip-path:inset(50%)!important;overflow:hidden!important;white-space:nowrap!important}
+      .weddly-photo-empty button{border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);padding:9px 12px;font:600 11px 'Jost',system-ui,sans-serif;cursor:pointer}
+      input[type=file]{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
     `;
     d.head.appendChild(st);
     const bar=d.createElement('div'); bar.id='weddlyIntegrationBar'; bar.className='weddly-intbar';
@@ -147,9 +147,10 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
             const src=state[def.key]||'';
             ui.className=src?'weddly-photo-card':'weddly-photo-empty';
             ui.innerHTML=src
-              ? '<img class="weddly-photo-thumb" alt="Vista previa"><div class="weddly-photo-meta"><div class="weddly-photo-status">'+def.label+'</div><div class="weddly-photo-actions"><label class="weddly-photo-pick" for="'+def.input.id+'">Cambiar foto</label><button type="button" data-remove>Eliminar foto</button></div></div>'
-              : '<label class="weddly-photo-pick" for="'+def.input.id+'">Elegir foto</label>';
+              ? '<img class="weddly-photo-thumb" alt="Vista previa"><div class="weddly-photo-meta"><div class="weddly-photo-status">'+def.label+'</div><div class="weddly-photo-actions"><button type="button" data-change>Cambiar foto</button><button type="button" data-remove>Eliminar foto</button></div></div>'
+              : '<button type="button" data-change>Elegir foto</button>';
             if(src){const im=ui.querySelector('img');if(im)im.src=src}
+            const change=ui.querySelector('[data-change]'); if(change) change.onclick=()=>def.input.click();
             const remove=ui.querySelector('[data-remove]'); if(remove) remove.onclick=()=>{state[def.key]='';try{def.input.value=''}catch{}renderPreview();redraw()};
           };
           def.input.addEventListener('change',()=>setTimeout(redraw,60));
@@ -192,7 +193,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
         };
         const r=await fetch(B.persApi,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':B.memberToken},body:JSON.stringify({token:B.token,personalization:p})});
         const x=await r.json().catch(()=>({})); if(!r.ok||!x.ok) throw new Error(x.error||'save_failed');
-        const nextCfg={...cfg,title:p.p1+' & '+p.p2,date:p.date,time:p.time,venue:[p.venue,p.city].filter(Boolean).join(', '),intro:cfg.intro||'Nos encantará celebrar este día contigo.',transportOffered:cfg.transportOffered!==false,questions:{meal:cfg.questions?.meal!==false,allergy:cfg.questions?.allergy!==false,transport:cfg.questions?.transport!==false,plusone:cfg.questions?.plusone!==false}};
+        const nextCfg={...cfg,title:p.p1+' & '+p.p2,date:p.date,time:p.time,venue:[p.venue,p.city].filter(Boolean).join(', '),intro:cfg.intro||'Nos encantará celebrar este día contigo.',transportOffered:cfg.transportOffered!==false,questions:{...(cfg.questions||{}),meal:cfg.questions?.meal!==false,allergy:cfg.questions?.allergy!==false,transport:cfg.questions?.transport!==false,plusone:cfg.questions?.plusone!==false}};
         let rsvpSynced=false;
         try{
           const cr=await fetch(B.rsvpApi,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':B.memberToken},body:JSON.stringify({action:'config',token:B.token,config:nextCfg})});
@@ -216,7 +217,7 @@ html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f6f4f0}
     if(installed) return;
     try{
       const d=frame.contentDocument,w=frame.contentWindow;
-      if(!d?.body||!d.getElementById('tplGrid')) return;
+      if(!d?.body||d.readyState!=='complete'||!d.getElementById('tplGrid')) return;
       installed=true;
       await resolve();
       inject(d,w);
