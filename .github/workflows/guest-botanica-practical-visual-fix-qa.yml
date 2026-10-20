@@ -1,0 +1,61 @@
+name: GUEST BOTANICA desktop Lo esencial repair (PREVIEW ONLY)
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - 'guest/catalog-patches/botanica/14.7/**'
+      - 'guest/tools/build_catalog_static_preview.cjs'
+      - 'guest/qa/botanica_practical_seam_desktop_browser_2026_10_20.cjs'
+      - '.github/workflows/guest-botanica-practical-visual-fix-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: guest-botanica-practical-visual-fix-qa
+  cancel-in-progress: true
+
+jobs:
+  verify-original-untouched-and-stage-only-desktop-effect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      STRIPE_SECRET_KEY: ''
+      SUPABASE_ACCESS_TOKEN: ''
+      CLOUDFLARE_API_TOKEN: ''
+      RESEND_API_KEY: ''
+      NODE_OPTIONS: --max-old-space-size=4096
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Ensure no customer/payment/deploy credential can be used
+        shell: bash
+        run: |
+          test -z "$STRIPE_SECRET_KEY" && test -z "$SUPABASE_ACCESS_TOKEN"
+          test -z "$CLOUDFLARE_API_TOKEN" && test -z "$RESEND_API_KEY"
+          node --check guest/tools/build_catalog_static_preview.cjs
+          node --check guest/qa/botanica_practical_seam_desktop_browser_2026_10_20.cjs
+      - name: Generate complete immutable 16-design preview in ephemeral temp folder
+        shell: bash
+        run: |
+          mkdir -p /tmp/guest-botanica-corrected-stage
+          node guest/tools/build_catalog_static_preview.cjs --output /tmp/guest-botanica-corrected-stage --template botanica
+      - name: Install chromium driver on runner, not repository
+        run: npm install --no-save --ignore-scripts playwright-core@1.55.0
+      - name: Compare exact frozen master and test visual patch across PC/mobile widths
+        env:
+          GUEST_STAGE_ROOT: /tmp/guest-botanica-corrected-stage
+        run: node guest/qa/botanica_practical_seam_desktop_browser_2026_10_20.cjs
+      - name: Archive 4 screenshots for owner visual comparison (no secrets)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: botanica-lo-esencial-staging-PC-and-mobile
+          path: /tmp/guest-botanica-practical-*.png
+          retention-days: 14
+      - name: Delete all preproduction resources from CI runner
+        if: always()
+        run: rm -rf /tmp/guest-botanica-corrected-stage /tmp/guest-botanica-practical-*.png
