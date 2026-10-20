@@ -5,25 +5,22 @@ const repoRoot=path.resolve(__dirname,'..','..');
 const base=process.env.GUEST_QA_BASE||'http://127.0.0.1:4173';
 
 function staticAudit(){
-  const landing=fs.readFileSync(path.join(repoRoot,'guest.html'),'utf8');
-  const checkout=fs.readFileSync(path.join(repoRoot,'guest-checkout.html'),'utf8');
-  const required=[
-    ['guest.html','guest-checkout.html?edition=essential'],
-    ['guest.html','guest-checkout.html?edition=signature'],
-    ['guest-checkout.html','guest.html#comprar'],
-    ['guest-checkout.html','guest-legal.html#contratacion'],
-    ['guest-checkout.html','guest-legal.html#privacidad']
-  ];
-  for(const [file,needle] of required){
-    const src=file==='guest.html'?landing:checkout;
-    ok(src.includes(needle),file+' missing route '+needle);
-  }
-  for(const p of ['guest.html','guest-checkout.html','guest-checkout-return.html','guest-order.html','guest-legal.html']){
-    ok(fs.existsSync(path.join(repoRoot,p)),'missing commercial file '+p);
-  }
-  const joined=landing+'\n'+checkout;
-  ok(!/ONE Partner|STUDIO|one\.html|partner\.html/i.test(joined),'foreign product dependency in commercial entry flow');
-  ok(joined.includes('/functions/v1/guest-stripe-checkout'),'GUEST checkout endpoint missing');
+ const landing=fs.readFileSync(path.join(repoRoot,'guest.html'),'utf8');
+ const checkout=fs.readFileSync(path.join(repoRoot,'guest-checkout.html'),'utf8');
+ const catalog=JSON.parse(fs.readFileSync(path.join(repoRoot,'guest/GUEST_PROJECT_STATUS_V1.json'),'utf8')).designInventory2026_10_20;
+ ok(catalog?.candidateIds?.length===15,'expected 15 individual design candidates');
+ for(const id of catalog.candidateIds)ok(landing.includes('data-template-id="'+id+'"'),'individual design missing from storefront: '+id);
+ for(const obsolete of ['Colección Essential','Colección Signature','guest-checkout.html?edition=essential','guest-checkout.html?edition=signature','Elegís Essential o Signature']){
+   ok(!landing.includes(obsolete),'obsolete collection checkout advertised: '+obsolete);
+ }
+ ok(!/data-price=|data-gallery=/.test(landing),'unverified prices or fake previews must not be sold');
+ ok(landing.includes('48–72 h'),'advertised delivery must match actual reviewed-delivery window');
+ for(const p of ['guest.html','guest-checkout.html','guest-checkout-return.html','guest-order.html','guest-legal.html'])
+   ok(fs.existsSync(path.join(repoRoot,p)),'missing commercial file '+p);
+ ok(checkout.includes('guest-legal.html#contratacion')&&checkout.includes('guest-legal.html#privacidad'),'legal routes missing');
+ ok(checkout.includes("if(!catalogSelectionRequested)")&&checkout.includes("||!catalogTemplateId)return;"),'legacy no-design checkout not guarded');
+ ok(!/ONE Partner|STUDIO|one\.html|partner\.html/i.test(landing+'\n'+checkout),'foreign products in GUEST sale');
+ ok(checkout.includes('/functions/v1/guest-stripe-checkout'),'payment endpoint missing');
 }
 
 async function mockConfig(page){
@@ -43,30 +40,27 @@ async function noOverflow(page,label){
   const x=await page.evaluate(()=>({sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth,bw:document.body?.scrollWidth||0}));
   ok(x.sw<=x.cw+2&&x.bw<=x.cw+2,label+' overflow '+JSON.stringify(x));
 }
-async function verifyEdition(browser,edition,w,h){
-  const ctx=await browser.newContext({viewport:{width:w,height:h},isMobile:w<600,hasTouch:w<600});
-  const page=await ctx.newPage();
-  await mockConfig(page);
-  await page.goto(base+'/guest.html',{waitUntil:'domcontentloaded'});
-  await noOverflow(page,'landing '+w);
-  const link=page.locator('a.buychoice[href="guest-checkout.html?edition='+edition+'"]');
-  ok(await link.count()===1,'landing missing '+edition+' buy link');
-  await link.click();
-  await page.waitForURL(new RegExp('guest-checkout\\.html\\?edition='+edition+'$'));
-  await page.waitForSelector('.edition.selected');
-  ok(await page.locator('.edition.selected').getAttribute('data-edition')===edition,'checkout did not preserve '+edition);
-  ok(!(await page.locator('#consent').isChecked()),'consent must be opt-in');
-  ok(await page.locator('#state').innerText()==='Marca la casilla anterior para abrir el pago seguro.','payment opened before consent');
-  const back=await page.locator('a.back').getAttribute('href');
-  ok(back==='guest.html#comprar','checkout back route wrong');
-  const legal=await page.locator('.consent a').evaluateAll(xs=>xs.map(x=>x.getAttribute('href')));
-  ok(legal.includes('guest-legal.html#contratacion')&&legal.includes('guest-legal.html#privacidad'),'legal routes incomplete');
-  await noOverflow(page,'checkout '+edition+' '+w);
-  const body=await page.locator('body').innerText();
-  ok(body.includes('GUEST')&&body.includes('WeddlySmartDesign'),'checkout brand missing');
-  ok(!/ONE Partner|STUDIO/.test(body),'foreign product visible in checkout');
-  await ctx.close();
+async function verifyLegacyBlocked(browser,edition,w,h){
+ const ctx=await browser.newContext({viewport:{width:w,height:h},isMobile:w<600,hasTouch:w<600});
+ const page=await ctx.newPage(),payments=[];
+ await mockConfig(page);
+ await page.route('https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-stripe-checkout',async route=>{
+  try{if(route.request().postDataJSON()?.action==='create')payments.push(true)}catch{}
+  await route.fulfill({status:200,contentType:'application/json',body:'{"ok":true}'});
+ });
+ await page.goto(base+'/guest.html',{waitUntil:'domcontentloaded'});
+ await noOverflow(page,'15-design landing '+w);
+ ok(await page.locator('.design-card.individual').count()===15,'individual catalog count mismatch');
+ ok(await page.locator('a.buychoice').count()===0,'legacy collection checkout still publicly linked');
+ await page.goto(base+'/guest-checkout.html?edition='+edition,{waitUntil:'domcontentloaded'});
+ ok(await page.locator('#consent').isDisabled(),'legacy '+edition+' checkout consent not blocked');
+ ok((await page.locator('#state').innerText()).includes('sin elegir una invitación individual'),'legacy '+edition+' should not accept money');
+ ok(payments.length===0,'Stripe session was improperly created for legacy checkout');
+ ok(await page.locator('a.back').getAttribute('href')==='guest.html#comprar','back to catalogue missing');
+ await noOverflow(page,'legacy blocked checkout '+w);
+ await ctx.close();
 }
+
 async function verifyCatalogSelection(browser){
  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
  const page=await ctx.newPage(),submitted=[];
@@ -98,8 +92,8 @@ async function verifyCatalogSelection(browser){
   staticAudit();
   const browser=await chromium.launch({headless:true});
   for(const [w,h] of [[390,844],[1366,900]]){
-    await verifyEdition(browser,'essential',w,h);
-    await verifyEdition(browser,'signature',w,h);
+    await verifyLegacyBlocked(browser,'essential',w,h);
+    await verifyLegacyBlocked(browser,'signature',w,h);
   }
   await verifyCatalogSelection(browser);
   await browser.close();
