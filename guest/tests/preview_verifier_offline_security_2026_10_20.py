@@ -22,6 +22,32 @@ class PreviewGuardTests(unittest.TestCase):
     def test_real_sealed_manifest(self):
         self.assertEqual(len(v.validate_manifest(self.manifest)), 121)
 
+    def test_sealed_manifest_variants_and_reject_mutations(self):
+        self.assertTrue(v.verify_stage_manifest_variant(
+            self.manifest, copy.deepcopy(self.manifest),
+            "ba0e5928a601b42df93c62e0315ceb3b6b23bd4b9bf49b44527e89da7349b05c"
+        ))
+        self.assertTrue(v.verify_stage_manifest_variant(
+            self.manifest, copy.deepcopy(self.manifest),
+            "4b8c39645af44a63577f5dfa0cafc4583c2036b8a12db8af14b5871684fccaad"
+        ))
+        with self.assertRaises(v.VerificationError):
+            v.verify_stage_manifest_variant(self.manifest, copy.deepcopy(self.manifest), "0" * 64)
+        tampered = copy.deepcopy(self.manifest)
+        tampered["files"][0]["sha256"] = "0" * 64
+        with self.assertRaises(v.VerificationError):
+            v.verify_stage_manifest_variant(
+                self.manifest, tampered,
+                "ba0e5928a601b42df93c62e0315ceb3b6b23bd4b9bf49b44527e89da7349b05c"
+            )
+        tampered = copy.deepcopy(self.manifest)
+        tampered["designs"][0]["version"] = "unexpected"
+        with self.assertRaises(v.VerificationError):
+            v.verify_stage_manifest_variant(
+                self.manifest, tampered,
+                "4b8c39645af44a63577f5dfa0cafc4583c2036b8a12db8af14b5871684fccaad"
+            )
+
     def test_headers_is_configuration_not_public_http_asset(self):
         files = v.validate_manifest(self.manifest)
         public_files = v.public_http_assets(files)
