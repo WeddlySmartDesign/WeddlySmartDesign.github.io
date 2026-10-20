@@ -1,0 +1,72 @@
+name: GUEST BOTÁNICA Lo esencial — isolated single-design PREVIEW package
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - '.github/workflows/guest-botanica-single-design-preview-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-standalone-botanica-visual-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      STRIPE_SECRET_KEY: ''
+      RESEND_API_KEY: ''
+      SUPABASE_ACCESS_TOKEN: ''
+      CLOUDFLARE_API_TOKEN: ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prove there are no production/cloud write credentials
+        run: |
+          test -z "$STRIPE_SECRET_KEY" -a -z "$RESEND_API_KEY"
+          test -z "$SUPABASE_ACCESS_TOKEN" -a -z "$CLOUDFLARE_API_TOKEN"
+      - name: Generate 15-design staging safely from pinned masters (do not deploy)
+        run: node guest/tools/build_catalog_static_preview.cjs --output /tmp/guest-stage-for-botanica-alone --template botanica
+      - name: Make a small standalone BOTÁNICA-only preview for owner visual inspection
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib,shutil,hashlib,json
+          src=pathlib.Path('/tmp/guest-stage-for-botanica-alone')
+          dest=pathlib.Path('/tmp/guest-botanica-only-preview')
+          target='guest/catalog-assets/botanica/14.7/index.html'
+          file=src/target
+          assert file.exists()
+          obj=json.loads((src/'GUEST_STAGE_MANIFEST.json').read_text())
+          d=next(x for x in obj['designs'] if x['templateId']=='botanica')
+          assert obj['commercialApproved'] is False
+          assert d['masterSha256']=='fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a'
+          assert hashlib.sha256(file.read_bytes()).hexdigest()==d['deployedHtmlSha256']
+          assert b'guest-botanica-practical-seam-preview' in file.read_bytes()
+          out=dest/target
+          out.parent.mkdir(parents=True,exist_ok=True)
+          shutil.copyfile(file,out)
+          page='<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><title>BOTÁNICA · Lo esencial · revisión visual</title><style>body{background:#f7f1e8;color:#44352d;margin:0;min-height:100vh;display:grid;place-items:center;font-family:Georgia,serif}main{text-align:center;padding:34px}a{display:inline-block;background:#4c3b2d;color:white;border-radius:8px;text-decoration:none;padding:14px 22px}</style></head><body><main><h1>BOTÁNICA · «Lo esencial»</h1><p>Solo revisión visual. Sin venta, sin pedidos, sin gestión.</p><a href="/guest/catalog-assets/botanica/14.7/index.html">Abrir invitación corregida</a></main></body></html>'
+          (dest/'index.html').write_text(page)
+          (dest/'_headers').write_text('/*\n  X-Robots-Tag: noindex, nofollow, noarchive\n  Referrer-Policy: no-referrer\n  X-Content-Type-Options: nosniff\n')
+          m={'kind':'botanica-v14.7-css-seam-only-visual-preview','commercialApproved':False,'guestPaymentConnection':False,
+             'sourceMasterSha256':d['masterSha256'],'patchedHtmlSha256':d['deployedHtmlSha256'],
+             'files':{str(x.relative_to(dest)):{'size':x.stat().st_size,'sha256':hashlib.sha256(x.read_bytes()).hexdigest()} for x in dest.rglob('*') if x.is_file()}}
+          (dest/'BOTANICA_VISUAL_PREVIEW_MANIFEST.json').write_text(json.dumps(m,indent=2,ensure_ascii=False)+'\n')
+          assert len(list(dest.rglob('*')))<=12
+          assert out.stat().st_size<25*1024*1024,'Cannot upload a >25 MiB Pages asset'
+          print('PASS BOTÁNICA-only visual PREVIEW ready, immutable master verified, visual CSS patch present; NO SALE')
+          PY
+      - name: Save compact BOTÁNICA-only staging artifact (not production)
+        uses: actions/upload-artifact@v4
+        with:
+          name: BOTANICA_LO_ESENCIAL_CORREGIDA_PREVIEW_NO_VENTA_2026-10-20
+          path: /tmp/guest-botanica-only-preview/
+          if-no-files-found: error
+          retention-days: 14
+      - name: Remove CI stage contents
+        if: always()
+        run: rm -rf /tmp/guest-stage-for-botanica-alone /tmp/guest-botanica-only-preview
