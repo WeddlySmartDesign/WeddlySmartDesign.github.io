@@ -1,0 +1,13 @@
+/* GUEST / BOTÁNICA V14.7 — staging-only desktop video seam repair.
+   The premultiplied floral film was composed on paper, but the geometric edge
+   of its rectangular layer is still apparent on wide screens. Feather ONLY
+   the local decorative film; never mask text, links or the other chapters.
+   Mobile <= 699px intentionally preserves the previously approved layout. */
+@media (min-width:700px) {
+  .late-world > .film-breath {
+    -webkit-mask-image:radial-gradient(ellipse closest-side at 50% 50%, #000 0%, #000 58%, rgba(0,0,0,.90) 71%, transparent 100%);
+    mask-image:radial-gradient(ellipse closest-side at 50% 50%, #000 0%, #000 58%, rgba(0,0,0,.90) 71%, transparent 100%);
+    -webkit-mask-repeat:no-repeat;
+    mask-repeat:no-repeat;
+  }
+}
