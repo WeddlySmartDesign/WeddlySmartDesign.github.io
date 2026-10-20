@@ -1,0 +1,22 @@
+# GUEST · Fase 17 · reparación visual acotada BOTÁNICA «Lo esencial» (20/10/2026)
+
+Continuidad tras [Fase 16](GUEST_AUDIT_CONTINUITY_PHASE16_FIRST_REAL_STRIPE_TEST_2026-10-20.md).
+
+## Incidencia comunicada
+La propietaria observó en Chrome de escritorio un rectángulo/cuadro visible en la sección **«Lo esencial»** de BOTÁNICA V14.7 durante la revisión de la PREVIEW `eebba5b2.guest-weddlysmartdesign.pages.dev`. Existía grabación `20261020-1638-31.6856796.mp4`. El recorrido restante le pareció correcto. La causa **más probable en análisis de código** es la silueta de la capa de vídeo rectangular `.late-world > .film-breath`, de ancho `min(110vw,650px)`, altura proporcional `540/946`, visible con opacidad ~0.70 sobre papel. No se ha realizado inspección fotograma-a-fotograma del vídeo aportado, por lo que no confundir hipótesis CSS con diagnóstico visual humano de producción.
+
+## Corrección realizada SIN tocar originales ni producción
+- Original congelado BOTÁNICA V14.7: los **22 archivos** `guest/catalog-assets/botanica/14.7/source-chunks` se concatenan en 11.635.635 bytes, y mantienen SHA256 original `fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a`. V14 original visual aceptada también permanece intacta.
+- Nuevo manifiesto `guest/catalog-patches/botanica/14.7/patch-manifest.json`, anclado a **esa SHA exacta**, con `commercialRelease:false` y `patchMode:css-only`. CSS `guest/catalog-patches/botanica/14.7/patch.css` aplica **solo** a `.late-world > .film-breath`, y únicamente a pantallas de **700 px o más**: máscara CSS radial con degradado transparente hacia el borde, conservando el vídeo, su movimiento y la zona central. NO altera estilos de foto, textos, enlaces, Agenda, Galería, Cierre, ni layout de móvil menor de 700px.
+- Se amplió exclusivamente `guest/tools/build_catalog_static_preview.cjs` para admitir parche de estilo inyectado en `</head>` bajo allowlist de modo `css-only`, con controles de manifest, SHA, ancla única, sin JS y sin posibilidad de cambiar los masters. El modo anterior `patch.js` usado por otros diseños sigue funcionando igual.
+- `guest/qa/botanica_practical_seam_desktop_browser_2026_10_20.cjs` verifica que **al eliminar el único fragmento CSS inyectado, el HTML de staging vuelve a coincidir byte a byte con V14.7**; verifica el SHA del original y 4 anchuras Chromium: 1440, 768, 390, 320 px; comprueba máscara solo en escritorio, vídeo conservado, título/texto, botones, sin desbordamiento horizontal ni errores JS y toma capturas de «Lo esencial» como artefactos.
+- **[GitHub Actions 39475897384](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39475897384) COMPLETED/SUCCESS** — 4 tamaños Chrome con CSS realmente calculado.
+- Se corrigió el viejo check `guest-static-stage-package.yml` que suponía erróneamente que un *master parcheado para PREVIEW* tendría el mismo SHA que el original. Ahora verifica master original reconstruido SHA, inyección CSS exacta y hash del archivo publicado indicado en manifiesto.
+- **[GitHub Actions 39476440097](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39476440097) COMPLETED/SUCCESS** — paquete completo 15 fichas + 109 recursos, sin publicar ni activar venta. FALLOS históricos transitorios en runs 39475629829 y 39476152328 eran comprobaciones SHA obsoletas/de salto de línea en el TEST, no fallo visual; ambos corregidos antes del run final. No ocultarlos.
+
+## PREVIEW GitHub separada
+- Rama nueva **`guest-botanica-practical-desktop-fix-preview-2026-10-20`**, derivada del SHA fuente `e3fbb4c71bd94abf2fa7cbe99e4b349788946b49`; commit de disparo del despliegue `8bf9f71a0e50867970f26e5facda2d11d9e0343f` con únicamente fichero de lectura en rama PREVIEW.
+- **PENDIENTE de confirmar en Cloudflare URL inmutable del despliegue y funcionamiento remoto**. No afirmar que se haya publicado con éxito por crear rama. El anterior `eebba5b2` NO se modifica y sigue siendo referencia antes de la reparación.
+
+## Estado
+**Corrección CSS creada + CI local/browser PASS, pero NO certificar visual final sin validar el resultado publicado contra el defecto observado por la propietaria.** Mantener NO_GO comercial; no tocar `main`, ONE/STUDIO, Stripe, Supabase ni licencias. Después de PREVIEW remota comprobar en el PC que el rectángulo ha desaparecido y en Android que no hay regresión; si persistiese, analizar otra capa en vez de ocultar elementos indiscriminadamente.
