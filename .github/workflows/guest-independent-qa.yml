@@ -607,3 +607,13 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Run 13 Claude skin candidates in Chromium without publishing or checkout
         run: node guest/qa/claude_candidate_13_skins_browser_smoke.cjs
+  full-candidate-static-stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify complete 15-candidate staging package, Git pins and Pages asset limits without deployment
+        run: node guest/tests/catalog_full_15_candidate_stage.test.cjs
