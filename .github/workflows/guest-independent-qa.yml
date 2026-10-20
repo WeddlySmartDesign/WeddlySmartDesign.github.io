@@ -36,6 +36,8 @@ jobs:
         run: node guest/tests/catalog_license_delivery_gate_contract.test.cjs
       - name: All 15 candidate design IDs gated TEST-ONLY in backend
         run: node guest/tests/test_only_15_design_backend_gate.test.cjs
+      - name: Individual-design Stripe amount and tax contract
+        run: node guest/tests/individual_design_checkout_pricing_contract.test.cjs
 
   catalog-invitation-bridge:
     runs-on: ubuntu-latest
