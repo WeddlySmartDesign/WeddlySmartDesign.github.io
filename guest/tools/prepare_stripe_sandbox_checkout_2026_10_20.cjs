@@ -30,7 +30,7 @@ once(marker,marker+'\n'+guard);
 once("async function stripeRequest(path:string,init:RequestInit={}){","async function stripeRequest(path:string,init:RequestInit={}){assertStrictGuestSandbox();");
 once("const x=await r.json().catch(()=>({}));if(!r.ok){console.warn('stripe_error'","const x=await r.json().catch(()=>({}));if(r.ok&&x.livemode!==false)throw new Error('stripe_sandbox_livemode_violation');if(!r.ok){console.warn('stripe_error'");
 once("Deno.serve(async req=>{","Deno.serve(async req=>{assertStrictGuestSandbox();");
-if(!s.includes("Deno.env.get('RESEND_API_KEY')")||!s.includes("STRIPE_SECRET_KEY"))throw Error('EXPECTED_SOURCE_MISSING');
+if(!s.includes("env('RESEND_API_KEY')")||!s.includes("STRIPE_SECRET_KEY"))throw Error('EXPECTED_SOURCE_MISSING');
 fs.mkdirSync(path.dirname(output),{recursive:true});
 fs.writeFileSync(output,s,{flag:'wx',mode:0o600});
 assert(!fs.readFileSync(input,'utf8').includes('stripe_sandbox_livemode_violation'),'live source never modified');
