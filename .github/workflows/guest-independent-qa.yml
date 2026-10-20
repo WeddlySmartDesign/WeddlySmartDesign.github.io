@@ -28,6 +28,10 @@ jobs:
         run: node guest/qa/catalog_commercial_go_no_go_2026_10_20.cjs
       - name: Individual design release regression, archived D03 excluded (no sales)
         run: node guest/tests/catalog_individual_design_release_gate.test.cjs
+      - name: GUEST Cloudflare preview verifier rejects unsafe redirects and releases (offline)
+        run: |
+          python3 -m py_compile guest/qa/verify_guest_preview_manifest_2026_10_20.py
+          python3 guest/tests/preview_verifier_offline_security_2026_10_20.py
       - name: Verify original Claude candidate blobs (TEST only)
         run: node guest/tests/claude_designs_import_integrity_2026_10_20.test.cjs
       - name: Verify seven extra Claude D10–D16 designs without sales approval
