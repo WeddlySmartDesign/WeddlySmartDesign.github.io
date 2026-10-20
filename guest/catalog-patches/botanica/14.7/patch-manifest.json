@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "guest-visual-stage-patch-v1",
+  "templateId": "botanica",
+  "templateVersion": "14.7",
+  "sourceMasterSha256": "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a",
+  "patchMode": "css-only",
+  "commercialRelease": false,
+  "reason": "Revisión visual en PC 20/10: borde rectangular del vídeo de fondo en «Lo esencial»; difuminar únicamente capa cinematográfica local para escritorio, sin alterar el máster V14.7."
+}
