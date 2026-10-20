@@ -23,3 +23,8 @@ Fecha 20/10/2026. Continuación de [fase 12](GUEST_AUDIT_CONTINUITY_PHASE12_INTE
 
 ## Evidencia de seguridad
 No se ha restaurado proyecto temporal, no se ha escrito en Supabase, Stripe, Resend, Cloudflare o `main`; solo lecturas y este registro en `guest-independent`. Ambas PREVIEW anteriores e infraestructura de ONE permanecen sin cambios.
+
+
+## Confirmación de la titular — acceso al entorno Stripe de pruebas
+La titular compartió captura del Dashboard con banda azul «**Entorno de prueba**» y mensaje «Estás haciendo pruebas en un entorno de prueba. Los cambios que realices aquí no afectarán a clientes ni a pagos reales». Se confirma **acceso UI a Stripe TEST/sandbox**, NO conexión programática por el conector (este solo muestra cuenta LIVE). **No se han visto, solicitado, copiado ni instalado claves TEST, ni efectuado pago alguno.** Stripe documenta que algunas opciones de sandbox/test mode pueden compartir ajustes con LIVE; no modificar ajustes indiscriminadamente. Documentación Stripe: https://docs.stripe.com/testing-use-cases.
+**Siguiente frontera:** antes de guardar credenciales de prueba, aclarar reactivación/coste/estado del proyecto Supabase temporal inactivo «GUEST-Botanica-Certificacion-Temporal»; no tocar el proyecto principal `dnjsxequwgtyyauuofxj`, no reutilizar `STRIPE_SECRET_KEY` LIVE, no desplegar aún ninguna función ni abrir checkout.
