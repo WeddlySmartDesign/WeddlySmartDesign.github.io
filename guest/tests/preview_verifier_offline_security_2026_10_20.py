@@ -22,6 +22,21 @@ class PreviewGuardTests(unittest.TestCase):
     def test_real_sealed_manifest(self):
         self.assertEqual(len(v.validate_manifest(self.manifest)), 121)
 
+    def test_headers_is_configuration_not_public_http_asset(self):
+        files = v.validate_manifest(self.manifest)
+        public_files = v.public_http_assets(files)
+        self.assertEqual(len(files), 121)
+        self.assertEqual(len(public_files), 120)
+        self.assertNotIn("_headers", {x["name"] for x in public_files})
+        self.assertIn("index.html", {x["name"] for x in public_files})
+
+    def test_headers_file_requires_exact_source_pin(self):
+        data = copy.deepcopy(self.manifest)
+        config = next(x for x in data["files"] if x["name"] == "_headers")
+        config["sha256"] = "0" * 64
+        with self.assertRaises(v.VerificationError):
+            v.validate_manifest(data)
+
     def test_safe_same_preview_html_redirects(self):
         for old, new in (
             ("/guest/catalog-final.html", "/guest/catalog-final"),
