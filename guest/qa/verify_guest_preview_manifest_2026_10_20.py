@@ -89,7 +89,15 @@ def validate_manifest(m):
         if not isinstance(sha, str) or not re.fullmatch(r"[0-9a-f]{64}", sha):
             raise VerificationError("Invalid SHA256")
         names.add(name)
+    configuration = next((f for f in files if f["name"] == "_headers"), None)
+    if (configuration is None or configuration["size"] != 176
+            or configuration["sha256"] != "448bfd64d0358ce68ec27f4d7fdc2b4678b72a9de6d0b723d5ecc7affb0c23b3"):
+        raise VerificationError("Immutable stage _headers source pin mismatch")
     return files
+
+def public_http_assets(files):
+    # Cloudflare Pages parses _headers; it does not serve it over HTTPS.
+    return [f for f in files if f["name"] != "_headers"]
 
 def fetch_file(origin, f):
     url = origin + "/" + urllib.parse.quote(f["name"], safe="/-._~")
@@ -139,8 +147,9 @@ def main():
     if remote_manifest["status"] != "PASS":
         raise VerificationError("Remote stage manifest: " + remote_manifest.get("error", "mismatch"))
     rows, registry_raw = [], None
+    http_files = public_http_assets(files)
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
-        for row, body in pool.map(lambda f: fetch_file(origin, f), files):
+        for row, body in pool.map(lambda f: fetch_file(origin, f), http_files):
             rows.append(row)
             if body is not None:
                 registry_raw = body
@@ -166,12 +175,15 @@ def main():
         "status": "PASS" if ok else "FAIL", "previewOrigin": origin,
         "manifestSha256": hashlib.sha256(raw_manifest).hexdigest(), "stageManifest": remote_manifest,
         "resources": rows, "resourceCount": len(rows),
+        "declaredManifestFileCount": len(files),
+        "configurationNotHttpServed": ["_headers"],
+        "headerPolicyEvidence": "X-Robots-Tag noindex checked on every downloaded static resource",
         "rendererRoutes": renderer_result,
         "commercialApproved": False, "sale": "NO_GO",
         "limits": "Integrity and noindex only. Does not certify visual rendering, anonymous order access, Stripe, emails, delivery, RSVP or physical phones."
     }
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
-    print(json.dumps({"status": report["status"], "resourcesPassed": sum(r["status"] == "PASS" for r in rows), "total": len(rows), "rendererRoutes": renderer_result, "sale": "NO_GO"}))
+    print(json.dumps({"status": report["status"], "resourcesPassedHTTP": sum(r["status"] == "PASS" for r in rows), "publicResourcesTotal": len(rows), "manifestFiles": len(files), "configurationFiles": 1, "rendererRoutes": renderer_result, "sale": "NO_GO"}))
     return 0 if ok else 1
 
 if __name__ == "__main__":
