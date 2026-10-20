@@ -118,8 +118,7 @@ def main():
         templates = registry.get("templates", {})
         if set(templates) != ALL_IDS:
             raise Rejected("Renderer registry diverges from design roster")
-        for d in embedded["guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json"],:
-            pass  # Its checksum was verified above; now prove 16 explicit route bindings.
+        # Registry SHA256 was verified above; now prove 16 explicit route bindings.
         for id, render in templates.items():
             expected_src = "/guest/catalog-assets/{}/{}/index.html".format(id, render.get("version"))
             if (render.get("id") != id or render.get("mode") != "iframe"
