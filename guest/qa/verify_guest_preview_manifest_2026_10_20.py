@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+"""Read-only verification of the sealed 16-renderer GUEST Cloudflare preview.
+
+Uses no account credentials, cookies, payment APIs, order tokens, or writes.
+Only a preview subdomain of the named GUEST Pages project is permitted.
+"""
+import argparse
+import concurrent.futures
+import hashlib
+import json
+import pathlib
+import re
+import sys
+import urllib.error
+import urllib.parse
+import urllib.request
+
+PREVIEW_HOST = re.compile(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.guest-weddlysmartdesign\.pages\.dev\Z")
+EXPECTED_COUNT = 121
+MAX_FILE_BYTES = 25 * 1024 * 1024
+
+class VerificationError(Exception):
+    pass
+
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        raise VerificationError("Unexpected redirect: HTTP " + str(code))
+
+def validate_origin(value):
+    u = urllib.parse.urlsplit(value)
+    if (u.scheme != "https" or not u.hostname or not PREVIEW_HOST.fullmatch(u.hostname)
+            or u.username or u.password or u.port not in (None, 443)
+            or u.path not in ("", "/") or u.query or u.fragment):
+        raise VerificationError("An HTTPS preview origin of guest-weddlysmartdesign is required; production is forbidden.")
+    return u.scheme + "://" + u.netloc.lower()
+
+def validate_manifest(m):
+    if (m.get("status") != "PREPRODUCTION_DO_NOT_SELL"
+            or m.get("commercialApproved") is not False
+            or m.get("productionPromotionForbidden") is not True):
+        raise VerificationError("Stage commercial guard mismatch")
+    files = m.get("files")
+    designs = m.get("designs")
+    if not isinstance(files, list) or len(files) != EXPECTED_COUNT:
+        raise VerificationError("Expected exactly 121 resources")
+    if not isinstance(designs, list) or len(designs) != 16 or len({d.get("templateId") for d in designs}) != 16:
+        raise VerificationError("Expected exactly 16 distinct technical renderer records")
+    names = set()
+    for f in files:
+        name, size, sha = f.get("name"), f.get("size"), f.get("sha256")
+        if not isinstance(name, str) or not name or name in names:
+            raise VerificationError("Missing or duplicate resource path")
+        p = pathlib.PurePosixPath(name)
+        if (p.is_absolute() or ".." in p.parts or str(p) != name or "\\" in name
+                or any(ord(c) < 32 for c in name) or "?" in name or "#" in name or "%" in name):
+            raise VerificationError("Unsafe resource path")
+        if type(size) is not int or size < 0 or size > MAX_FILE_BYTES:
+            raise VerificationError("Resource exceeds expected hosting limit")
+        if not isinstance(sha, str) or not re.fullmatch(r"[0-9a-f]{64}", sha):
+            raise VerificationError("Invalid SHA256")
+        names.add(name)
+    return files
+
+def fetch_file(origin, f):
+    url = origin + "/" + urllib.parse.quote(f["name"], safe="/-._~")
+    req = urllib.request.Request(url, headers={"User-Agent": "GUEST-Preview-Integrity/1.0", "Accept-Encoding": "identity"})
+    try:
+        with urllib.request.build_opener(NoRedirect()).open(req, timeout=45) as response:
+            if response.status != 200:
+                raise VerificationError("HTTP " + str(response.status))
+            directives = {v.strip().lower() for v in response.headers.get("X-Robots-Tag", "").split(",")}
+            if "noindex" not in directives:
+                raise VerificationError("Missing noindex response header")
+            digest, count, collected = hashlib.sha256(), 0, []
+            collect = f["name"] == "guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json"
+            while True:
+                b = response.read(1024 * 1024)
+                if not b:
+                    break
+                count += len(b)
+                if count > f["size"]:
+                    raise VerificationError("Unexpected resource size")
+                digest.update(b)
+                if collect:
+                    collected.append(b)
+            if count != f["size"] or digest.hexdigest() != f["sha256"]:
+                raise VerificationError("SHA256 or length mismatch")
+            row = {"name": f["name"], "status": "PASS", "bytes": count, "sha256": digest.hexdigest()}
+            return row, b"".join(collected) if collect else None
+    except (OSError, urllib.error.HTTPError, VerificationError) as exc:
+        # No response bodies, tokens or redirected URLs are printed.
+        error = str(exc) if isinstance(exc, VerificationError) else type(exc).__name__
+        return {"name": f["name"], "status": "FAIL", "error": error}, None
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--origin", required=True)
+    parser.add_argument("--manifest", required=True, type=pathlib.Path)
+    parser.add_argument("--output", required=True, type=pathlib.Path)
+    args = parser.parse_args()
+    origin = validate_origin(args.origin)
+    raw_manifest = args.manifest.read_bytes()
+    manifest = json.loads(raw_manifest)
+    files = validate_manifest(manifest)
+    remote_manifest, _ = fetch_file(origin, {
+        "name": "GUEST_STAGE_MANIFEST.json", "size": len(raw_manifest),
+        "sha256": hashlib.sha256(raw_manifest).hexdigest()
+    })
+    if remote_manifest["status"] != "PASS":
+        raise VerificationError("Remote stage manifest: " + remote_manifest.get("error", "mismatch"))
+    rows, registry_raw = [], None
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+        for row, body in pool.map(lambda f: fetch_file(origin, f), files):
+            rows.append(row)
+            if body is not None:
+                registry_raw = body
+    renderer_result = "FAIL"
+    if registry_raw is not None:
+        registry = json.loads(registry_raw)
+        templates = registry.get("templates", {})
+        names = {f["name"] for f in files}
+        if (len(templates) == 16 and all(v.get("mode") == "iframe"
+                and isinstance(v.get("src"), str) and v["src"].startswith("/")
+                and v["src"][1:] in names
+                and v.get("applyApi") in ("GUEST_APPLY_CONFIG", "BOTANICA_APPLY_CONFIG")
+                for v in templates.values())):
+            renderer_result = "PASS"
+    ok = all(r["status"] == "PASS" for r in rows) and renderer_result == "PASS"
+    report = {
+        "status": "PASS" if ok else "FAIL", "previewOrigin": origin,
+        "manifestSha256": hashlib.sha256(raw_manifest).hexdigest(), "stageManifest": remote_manifest,
+        "resources": rows, "resourceCount": len(rows),
+        "rendererRoutes": renderer_result,
+        "commercialApproved": False, "sale": "NO_GO",
+        "limits": "Integrity and noindex only. Does not certify visual rendering, anonymous order access, Stripe, emails, delivery, RSVP or physical phones."
+    }
+    args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+    print(json.dumps({"status": report["status"], "resourcesPassed": sum(r["status"] == "PASS" for r in rows), "total": len(rows), "rendererRoutes": renderer_result, "sale": "NO_GO"}))
+    return 0 if ok else 1
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except (VerificationError, ValueError, KeyError, OSError) as exc:
+        print("Preview verification refused: " + str(exc), file=sys.stderr)
+        raise SystemExit(2)

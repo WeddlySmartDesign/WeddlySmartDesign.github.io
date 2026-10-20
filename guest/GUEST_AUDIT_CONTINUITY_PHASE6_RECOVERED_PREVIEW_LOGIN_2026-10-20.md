@@ -68,3 +68,13 @@ El artifact fuente de 15 entradas figura con caducidad `2026-10-23T09:58:05Z`; v
 | Venta | NO_GO |
 
 ONE, ONE Partner, STUDIO, diseños originales, backend, datos de clientes, configuración comercial y producción no fueron modificados.
+
+## Preparación autónoma posterior al bloqueo de acceso — 20/10/2026
+La propietaria informó de que tanto el acceso seguro como el control directo daban error y no podía entrar. Esto no permite identificar la causa técnica; no atribuirlo a contraseña, Cloudflare, móvil ni bloqueo antibot sin evidencia. No se han repetido intentos de inicio de sesión.
+
+- ZIP local revalidado: SHA256 `0fd69d40d5ee85862a71ba7eb34bba188563d79f9b2d0a0022524dbb6009a1bb` correcto; comprobación CRC de las 122 entradas PASS; visor final, revisión y cuestionario presentes; `_headers` con `noindex, nofollow, noarchive`.
+- Consulta REAL actual de cuentas Stripe: solo `WeddlySmartDesign`, `livemode=true`. No hay contexto TEST expuesto en la conexión actual. No se hizo ninguna llamada de cobro ni cambio de modo.
+- Lectura del código de `guest/backend/guest-stripe-checkout/index.ts` en `7060d890`: Stripe usa `STRIPE_SECRET_KEY` y configuración `STRIPE_PUBLISHABLE_KEY` con respaldo de clave pública Live. No existe selector de modo TEST por petición. **La conexión solo Live no prueba qué clave privada tiene el backend**; ese valor no se inspeccionó. Antes del E2E debe acreditarse un entorno Stripe TEST aislado, sin sustituir claves compartidas con ONE ni activar venta.
+- Preparado comprobador de solo lectura: [verify_guest_preview_manifest_2026_10_20.py](qa/verify_guest_preview_manifest_2026_10_20.py). Solo admite un subdominio PREVIEW de `guest-weddlysmartdesign.pages.dev`; rechaza producción, otros dominios, HTTP y parámetros/tokens. Verifica manifiesto remoto, 121 SHA256/longitudes, encabezado noindex y 16 rutas iframe. Sin escrituras, cookies ni pagos. Sintaxis y guardas offline PASS; **NO ejecutado contra PREVIEW porque no existe URL desplegada por esta fase**.
+- Preparada [matriz de pruebas reales](GUEST_PREVIEW_E2E_MATRIX_2026-10-20.md). Sus estados pendientes no se convierten en PASS por disponer del script.
+- El cierre posible sin acceso en este punto es preparación de verificación y documentación. Siguen pendientes la publicación autorizada, la acreditación de Stripe TEST, las pruebas E2E reales y las autorizaciones comerciales. Guardado persistente del ZIP continúa sin confirmar como se documentó arriba.
