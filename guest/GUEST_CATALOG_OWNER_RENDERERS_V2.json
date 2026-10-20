@@ -25,6 +25,54 @@
       "src": null,
       "applyApi": "GUEST_APPLY_CONFIG",
       "status": "certification-pending"
+    },
+    "design-04": {
+      "id": "design-04",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending"
+    },
+    "design-05": {
+      "id": "design-05",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending"
+    },
+    "design-06": {
+      "id": "design-06",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending"
+    },
+    "design-07": {
+      "id": "design-07",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending"
+    },
+    "design-08": {
+      "id": "design-08",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending"
+    },
+    "design-09": {
+      "id": "design-09",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending"
     }
   }
 }
