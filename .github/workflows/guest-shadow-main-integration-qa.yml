@@ -47,3 +47,20 @@ jobs:
         run: |
           node guest/tests/individual_design_checkout_pricing_contract.test.cjs
           node guest/tests/catalog_individual_design_release_gate.test.cjs
+      - name: Build disposable 36-file GUEST shadow on a separate copy of main
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/guest-shadow-main"
+          git archive origin/main | tar -x -C "$RUNNER_TEMP/guest-shadow-main"
+          GUEST_SHADOW_ROOT="$RUNNER_TEMP/guest-shadow-main" node guest/qa/create_shadow_main_browser_fixture_2026_10_20.cjs
+      - name: Install isolated browser QA runtime
+        run: npm install --no-save playwright-core@1.55.0
+      - name: Run desktop and mobile browser smoke without remote APIs, writes or Stripe
+        shell: bash
+        run: |
+          GUEST_SHADOW_ROOT="$RUNNER_TEMP/guest-shadow-main" node guest/qa/shadow_main_browser_smoke_2026_10_20.cjs
+      - name: Delete disposable shadow and any state
+        if: always()
+        shell: bash
+        run: rm -rf "$RUNNER_TEMP/guest-shadow-main"
