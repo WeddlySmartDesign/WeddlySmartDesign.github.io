@@ -14,8 +14,10 @@ const renderers=json('guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json');
 const evidence=json('guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json');
 const status=json('guest/GUEST_PROJECT_STATUS_V1.json');
 const marketing=file('guest.html'),final=file('guest/catalog-final.html');
-const liveFlow=file('guest/backend/guest-invitation-flow/DEPLOYED_LIVE_V20_READONLY_2026-10-20.ts');
+const liveFlow=file('guest/backend/guest-invitation-flow/DEPLOYED_LIVE_V21_READONLY_2026-10-20.ts');
 const stagedFlow=file('guest/backend/guest-invitation-flow/index.ts');
+const checkoutActiveSnapshot=file('guest/backend/guest-stripe-checkout/DEPLOYED_LIVE_V26_READONLY_2026-10-20.ts');
+const checkoutStaged=file('guest/backend/guest-stripe-checkout/index.ts');
 const names=(registry.templates||[]).map(t=>t.id);
 const missing=[];
 const fail=(id,message)=>missing.push({id,message});
@@ -46,7 +48,8 @@ for(const t of registry.templates||[]){
 }
 if(/Elegís Essential o Signature|GUEST Essential|GUEST Signature/.test(marketing))fail('storefront','La página comercial sigue vendiendo colecciones antiguas; deben mostrarse diseños individuales.');
 if(/<meta name="robots" content="noindex,nofollow">/.test(marketing))fail('public-index','La página comercial aún está marcada noindex.');
-if(liveFlow!==stagedFlow)fail('deployed-source','El código de invitación v20 activo y el index.ts histórico difieren: reconciliar antes de desplegar una nueva versión.');
+if(liveFlow!==stagedFlow)fail('deployed-source','Snapshot ACTIVE V21 y fuente invitación en GitHub difieren: NO desplegar sin reconciliar.');
+if(checkoutActiveSnapshot!==checkoutStaged)fail('checkout-deployed-source','Snapshot ACTIVE checkout V26 y fuente en GitHub difieren: NO modificar cobros sin reconciliar.');
 if(status.moduleContinuity2026_10_17?.commerciallyReady!==true)fail('commercial-e2e','No hay certificación de compra y entrega comercial auténticas.');
 if(status.moduleContinuity2026_10_17?.allDesignFilesIntegrated!==true)fail('renderers-e2e','Integración de todos los diseños pendiente.');
 // External release checks are never assumed successful from repository files alone.
