@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   real-stripe-sandbox-unpaid:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/guest-independent' # ONE-SHOT owner-authorized TEST session, disable immediately after result
+    if: false # PERMANENTLY BLOCKED after successful 2026-10-20 Stripe TEST session; require new explicit owner decision for any rerun
     runs-on: ubuntu-latest
     environment: guest-stripe-sandbox # isolated environment secret; NEVER repository-wide key
     timeout-minutes: 5
