@@ -46,3 +46,21 @@ Solo acredita integridad y noindex; las pruebas visuales, autenticación, compra
 - **_headers no es un recurso HTTP:** se valida su tamaño/SHA fijados y se comprueba `X-Robots-Tag: noindex` sobre todos los recursos servidos. No declarar “121 hashes remotos” porque son **120 remotos + 1 fichero de configuración protegido en manifiesto**. Fuente: https://developers.cloudflare.com/pages/configuration/headers/
 - **Correos de pedidos internos TEST:** en Edge Function `guest-invitation-flow`, los estados de revisión/entrega de modo `test` no envían correo real. Su `PASS` de API nunca sustituye la recepción efectiva. La prueba completa con correo real solo es legítima en una operación de **Stripe TEST independiente**, con destinatario propio autorizado, sin modificar la clave Live compartida ni afectar ONE.
 - **Handoff:** [fase 7](GUEST_AUDIT_CONTINUITY_PHASE7_PREVIEW_VERIFIER_2026-10-20.md), regresión de integridad CI `39427483317` SUCCESS 30/30; quedan PENDING toda la matriz remota y autorizaciones.
+
+
+## Estado actualizado por evidencia real 20/10/2026 (fase 10 y vídeo PC)
+
+La tabla original representa el plan ANTERIOR a la publicación. No usar su «PENDING» antiguo como estado actual. Evidencia más reciente: [fase 10](GUEST_AUDIT_CONTINUITY_PHASE10_CLOUDFLARE_PREVIEW_2026-10-20.md).
+
+| Verificación | Estado y evidencia actual |
+| --- | --- |
+| Despliegue PREVIEW aislado | **PASS:** URL inmutable `https://eebba5b2.guest-weddlysmartdesign.pages.dev`; Wrangler confirmó éxito en proyecto correcto, sin reemplazar producción |
+| Integridad HTTPS / 16 rutas | **PASS:** [GitHub run 39457669846](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39457669846): manifiesto firmado, 120/120 recursos HTTP, noindex y 16 renderizadores |
+| Alias de rama `guest-preproduction-16-2026-10-20` | **FAIL:** Cloudflare «Nothing is here yet» observado en Chrome; utilizar URL individual validada |
+| BOTÁNICA V14.7, portada PC | **PASS visual preliminar:** captura de portada con datos ficticios, fondo y tipos visibles |
+| BOTÁNICA V14.7, recorrido PC | **INCIDENCIA ABIERTA:** la titular observó un cuadro no deseado en «Lo esencial» y aportó vídeo `20261020-1638-31.6856796.mp4`; no aprobado visual final |
+| Integración de gestión / venta individual | **PENDIENTE:** [PR #144](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/pull/144) y [PR #145](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/pull/145) están en borrador; no fusionar sin prueba/autorización |
+| Compra Stripe TEST, correo real, entrega, acceso GUEST, RSVP, dos móviles | **PENDIENTE:** sin evidencia E2E externa |
+| Comercialización | **NO_GO:** cobros no autorizados, D03 histórico no vendible; resolver defecto BOTÁNICA antes de venta |
+
+**Orden aprobado por la titular:** continuar conectando los componentes y corrigiendo los bloqueos de integración, después eliminar el cuadro visual de «Lo esencial» antes de GO. No marcar test visual completo como PASS porque la navegación preliminar pareciese correcta.
