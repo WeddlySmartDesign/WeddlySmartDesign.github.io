@@ -1,0 +1,43 @@
+# GUEST — Fase 9 · auditoría real de sorpresas antes de la intervención de la propietaria
+
+Fecha 20/10/2026. Única rama técnica original: `guest-independent`. **VENTA NO_GO.** No se ha desplegado Cloudflare, autorizado Stripe Live ni fusionado código en `main`.
+
+## Alcance comprobado, no asumido
+- Biblioteca: `/GUEST by WeddlySmartDesign/GUEST_PREPRODUCTION_16_VERIFICADO_2026-10-20.zip`, archivo `libfile_d8a6d57dbb648191a58db59b1c2b74fc` listado hoy, **223596068 bytes**.
+- **ZIP leído de verdad en contenedor** y verificado por SHA256 `e09ad244e617c4d423a6591425ad407bdd04f9a0f0a4d0b9bf26d6a3595f6216`; contiene exactamente 122 entradas, **121/121 SHA256 de recursos PASS**, comprobación CRC `None` (sin errores), manifiesto `ba0e5928a601b42df93c62e0315ceb3b6b23bd4b9bf49b44527e89da7349b05c`. No confundir la variante ZIP normalizada de fase 6.
+- Descomprimidos los 16 HTML de los renderizadores directamente desde ese ZIP. **36/36 bloques de JavaScript inline pasaron `node --check`**, 0 errores sintácticos. Se inspeccionaron los `src/href/poster` de HTML, sin rutas locales faltantes declaradas (no equivale a ejecutabilidad completa, CSS/JS dinámicos ni Android).
+- **Chromium local no pudo navegar**: bloqueo del entorno `net::ERR_BLOCKED_BY_ADMINISTRATOR` contra `127.0.0.1`, reproducido después de extraer el ZIP. **NO afirmar prueba visual real superada**.
+- Las **seis funciones productivas de GUEST** leídas ahora por el conector Supabase y comparadas **carácter por carácter** contra `guest/backend/{slug}/index.ts`: `guest-invitation-flow` V21, `guest-stripe-checkout` V26, `guest-rsvp` V6, `guest-personalization` V3, `guest-rsvp-ensure` V3, `guest-license-access` V5, todas ACTIVE y **6/6 fuentes idénticas**. No desplegar versiones redundantes.
+- CI anterior sobre `guest-independent`: [run 39431457813](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39431457813) **30/30 SUCCESS**; [continuity run 39431457840](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39431457840) SUCCESS. No sustituye pruebas E2E.
+
+## Hallazgo BLOQUEANTE 1 (nuevo): host GUEST de gestión obsoleto en rama main
+El backend entrega el acceso a gestión en `https://weddlysmartdesign.github.io/guest/access.html#code=...`; la invitación final publicada en Cloudflare remite a rutas RSVP del GUEST en `https://weddlysmartdesign.github.io/guest/...`. Sin embargo:
+- En la rama pública `main` faltan `guest/guests-catalog-invitation-bridge-v1.js` y `guest/guests-rsvp-share-composer-v3.js`; `guest/guests-rsvp-operations-live.html`, el shell y otras vistas tienen versiones anteriores.
+- **Cloudflare PREVIEW de las invitaciones no repara por sí solo** el envío de la invitación final desde GUEST cuando se abre la gestión en GitHub Pages.
+- Se preparó [PR #144 — borrador GUEST-only](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/pull/144) desde el `main` `1e7c81515b71f16105b68a928bb908cba702bebf`. Comparación GitHub efectiva: **32 archivos / 32 bajo `guest/`; 30 actualizados y 2 añadidos; 0 fuera de GUEST**. Commit `62cd8c85a12ac1d20fb798209f4b30e49a7d08ee`. Las ocho rutas/pantallas principales inspeccionadas tienen **0 referencias locales sin fichero correspondiente** en la rama de borrador. **PR DRAFT NO FUSIONAR** hasta prueba real de compatibilidad de gestión/RSVP y autorización explícita. La aplicación de GUEST en main no se tocó.
+- Este código no se puede fusionar automáticamente al validar Cloudflare: PR puede quedar obsoleta si main cambia; comparar y actualizar base de nuevo justo antes del merge.
+
+## Hallazgo BLOQUEANTE 2 (nuevo): escaparate GUEST público muestra colecciones retiradas
+- `main/guest.html` aún muestra **GUEST Essential / Signature** y enlaza a antiguos `guest-checkout.html?edition=...`, aunque la instrucción comercial actual es **15 diseños individuales candidatos**. `noindex` **NO equivale a impedir visitas o cobros**; el checkout activo exige plantilla individual y puede rechazar una compra sin ID de diseño.
+- `guest-independent/guest.html` ya incluye 15 fichas individuales sin colecciones, `Próxima apertura`, y `noindex`.
+- Se preparó [PR #145 — borrador escaparate individual](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/pull/145), **un único archivo `guest.html`**, commit `b92dd19369101cfc6eac5a154cc8d1f8cc1545a6`, sin cambios ONE/STUDIO/otro archivo.
+- **NO FUSIONAR**: 15 fichas son candidatos, no diseños certificados. Antes de vender hay que validar arte final/identidad, precio, derechos, textos legales y producir una versión aprobada en la que el CTA de compra sea real. Nunca activar cobros al fusionar un escaparate de “próxima apertura”.
+
+## Bloqueo 3 que ya estaba pendiente pero debe quedar explícito
+- Stripe accesible al conector **solo con `livemode=true` y lectura**. No hay prueba de clave TEST efectiva del backend; `guest-stripe-checkout` usa única `STRIPE_SECRET_KEY` del entorno. El sistema no ofrece switch de TEST por petición. **No usar ese backend para compras sintéticas** sin separar una configuración Stripe TEST segura, sin alterar secretos compartidos de ONE.
+- `guest-invitation-flow` para `order.mode='test'` salta los envíos Resend: pruebas internas de pedido/entrega **no certifican emails enviados y recibidos**.
+- La configuración `GUEST_CATALOG_PUBLIC_ORIGIN` tiene un único origen para catálogo pagado, cuestionario, revisión y entrega; la URL aleatoria de PREVIEW no debe convertirse en el destino de ventas reales ni sobrescribir una variable de entorno compartida. Definir primero TEST aislado.
+- `guest/qa/catalog_commercial_go_no_go_2026_10_20.cjs` mantiene siempre un bloqueo `external-verification`: es deliberado y, tras acreditar pruebas, exigirá **procedimiento explícito** de certificación y autorización que consuma evidencias reales, no editar el script apresuradamente para saltar NO_GO.
+- PREVIEW sin iniciar sesión Cloudflare, sin URL ni cotejo HTTPS: 120 recursos públicos + configuración `_headers` validada por respuesta noindex. Las pruebas Chromium CI no certifican móviles físicos ni licencias.
+- D09 Limoneros candidato recuperado de Claude pero **identidad visual respecto al diseño aprobado por la propietaria aún no validada**; D03 incorrecto nunca vendible.
+- Precios GUEST por diseño, licencias/fuentes/música/vídeos, condiciones legales y autorización de apertura siguen indelegables. No suponer aprobación global a 15 diseños por su presencia en catálogo.
+
+## Orden óptimo, sin trabajo técnico improductivo para la propietaria
+1. **Intervención futura mínima 1**: autenticación segura de Cloudflare en un entorno que funcione (Work en Android queda pospuesto). Nada de contraseñas por chat. Único proyecto `guest-weddlysmartdesign`. El paquete completo subible está preservado en Biblioteca; el agente no debe pedirlo.
+2. El agente: PREVIEW cerrada sin ventas + validador SHA HTTPS + renderizados y correcciones. **No asumir que todos los 15 diseños quedarán certificados por publicar el paquete.**
+3. El agente: resolver aislamiento Stripe TEST sin tocar ONE; dos compras genuinas con datos sintéticos autorizados, cuestionarios, correos, revisiones, aprobación, entrega, tokens, RSVP sí/no y sincronización (Android físico requiere evidencia separada).
+4. El agente: después del test, validar los cambios GUEST-only del [PR #144](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/pull/144) en condiciones seguras, cotejar `main` actualizado y pedir autorización para fusionar GUEST sin afectar ONE. Validar el recorrido real gestión → enviar invitación → invitado RSVP.
+5. El agente: catálogo comercial final, precios y derechos con la titular, habilitar solo diseños certificados; revisión [PR #145](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/pull/145) y publicar tras autorización. No fusionar directamente ninguna PR en la sesión sin confirmar pasos E2E.
+6. Rellenar pruebas verificadas en [matriz E2E](GUEST_PREVIEW_E2E_MATRIX_2026-10-20.md), integrar recibos y comprobaciones de seguridad, pasar puerta comercial explícita, rollback preparado, y solo entonces **GO por diseño**.
+
+**Respuesta técnica a «¿queda algo de tu parte?»: SÍ, tras dar acceso.** Preparar PRs ha eliminado la búsqueda de archivos y los cambios improvisados, pero todavía son necesarias la validación externa y la certificación de la integración. No es profesional prometer riesgo cero ni cerrar como “solo login” antes de hacer esas verificaciones.
