@@ -78,6 +78,7 @@ const meta={schemaVersion:'guest-veil-common-iframe-stage-v1',
  status:'PREPRODUCTION_DO_NOT_SELL',originalMasterSha256:pilot.source_sha256,
  originalPilotHtmlSha256:pilot.output_html_sha256,derivedSha256:sha(Buffer.from(html)),
  mediaCount:media.length,commercialApproved:false};
+newReport.files.push(entry(sub+'/bridge-manifest.json',Buffer.from(JSON.stringify(meta,null,2)+'\n')));
 // Inputs and integrity must pass before any stage write; failures never touch the visual SOURCE.
 // If a disk write fails, discard the derived stage and regenerate it from the two verified inputs.
 fs.mkdirSync(path.join(target,'media'),{recursive:true});
