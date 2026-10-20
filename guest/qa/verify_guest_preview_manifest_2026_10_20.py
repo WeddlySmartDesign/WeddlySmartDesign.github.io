@@ -68,6 +68,13 @@ def validate_manifest(m):
         raise VerificationError("Expected exactly 121 resources")
     if not isinstance(designs, list) or len(designs) != 16 or len({d.get("templateId") for d in designs}) != 16:
         raise VerificationError("Expected exactly 16 distinct technical renderer records")
+    expected_ids = {"veil-light", "botanica"} | {f"design-{n:02d}" for n in range(3, 17)}
+    if {d["templateId"] for d in designs} != expected_ids:
+        raise VerificationError("Stage design inventory mismatch")
+    if any(d.get("commercialApproved") is True for d in designs):
+        raise VerificationError("Preview cannot contain a commercially approved design record")
+    if any(d["templateId"] == "design-03" and d.get("status") == "commercially-frozen" for d in designs):
+        raise VerificationError("Archived incorrect Limoneros cannot be admitted")
     names = set()
     for f in files:
         name, size, sha = f.get("name"), f.get("size"), f.get("sha256")
@@ -148,7 +155,8 @@ def main():
                 and all(v.get("mode") == "iframe"
                 and v.get("version") == designs[design_id].get("version")
                 and v.get("status") in ("commercially-frozen", "certification-pending")
-                and isinstance(v.get("src"), str) and v["src"].startswith("/")
+                and v.get("id") == design_id
+                and v.get("src") == "/guest/catalog-assets/" + design_id + "/" + str(v.get("version")) + "/index.html"
                 and v["src"][1:] in names
                 and v.get("applyApi") == ("BOTANICA_APPLY_CONFIG" if design_id == "botanica" else "GUEST_APPLY_CONFIG")
                 for design_id, v in templates.items())):
