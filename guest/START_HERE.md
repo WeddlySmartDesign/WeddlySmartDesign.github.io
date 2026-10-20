@@ -1,5 +1,9 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+> **INCIDENCIA ABIERTA — BOTÁNICA PC (20/10):** La titular ha recorrido BOTÁNICA V14.7 en la URL PREVIEW **https://eebba5b2.guest-weddlysmartdesign.pages.dev**; funcionamiento general aceptable, pero aparece un **cuadro no deseado en «Lo esencial»** (vídeo recibido en chat `20261020-1638-31.6856796.mp4`). **Secuencia acordada: primero cerrar integración GUEST en pruebas, después corregir cuadro, ANTES de vender.** Queda registrada en [fase 10](GUEST_AUDIT_CONTINUITY_PHASE10_CLOUDFLARE_PREVIEW_2026-10-20.md) y [matriz PREVIEW](GUEST_PREVIEW_E2E_MATRIX_2026-10-20.md). Alias de rama PREVIEW muestra “Nothing is here yet”; usar solo URL inmutable `eebba5b2`. **PR #144 y #145 siguen DRAFT, aún sin fusión a main y con check Cloudflare Pages de build fallido; no autorizar venta ni marcar visual completo PASS.**
+
+
+
 > **CONTINUIDAD MÁS RECIENTE — FASE 10, 20/10/2026:** [GUEST_AUDIT_CONTINUITY_PHASE10_CLOUDFLARE_PREVIEW_2026-10-20.md](GUEST_AUDIT_CONTINUITY_PHASE10_CLOUDFLARE_PREVIEW_2026-10-20.md). La propietaria realizó correctamente el despliegue Cloudflare Pages de **PREVIEW 16** desde ZIP sellado en Biblioteca mediante Wrangler (`--branch guest-preproduction-16-2026-10-20`). URL inmutable **https://eebba5b2.guest-weddlysmartdesign.pages.dev**; alias de rama **https://guest-preproduction-16-2026-10-20.guest-weddlysmartdesign.pages.dev**. Integridad remota **PASS en [GitHub Actions 39457669846](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39457669846)**: manifiesto original pin, 120/120 recursos descargables SHA256/tamaño exactos y noindex, 16 renderizadores, _headers fijado (no se sirve por HTTP). Cloudflare production automáticas desactivadas por la propietaria. **PENDIENTES: comprobación visual real, PR #144/#145 GUEST-only y publicación autorizada, Stripe TEST aislado, dos recorridos con emails y RSVP, móviles, licencias/precios/GO. Ningún cobro habilitado. NO_GO.**
 
 
