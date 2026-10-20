@@ -102,3 +102,12 @@ No cambiar estados históricos de la tabla de planificación original; el avance
 - **REAL TEST API PASS:** [Run 39473359246](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39473359246). Sandbox GUEST independiente del sandbox histórico ONE. Una sesión `cs_test` real creada y consultada por API con `livemode=false`, `status=open`, `payment_status=unpaid`; metadatos/importe sintético VEIL 5.3.3 comprobados. **No se pagó ni se envió correo ni se creó licencia**.
 - **RE-BLOQUEADO:** [Run 39473530446](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39473530446) **SKIPPED**, workflow por defecto `if:false` otra vez, environment GUEST secret `sk_test` cifrado sin exponer.
 - **PENDIENTES SIN CAMBIO:** dos compras Stripe TEST completadas en backend remoto aislado, correos de recepción real, revisión/entrega, licencia/gestión/RSVP dos móviles físicos, PR #144/#145, fallo BOTÁNICA y decisión de venta. **NO_GO**.
+
+
+## Incidencia BOTÁNICA «Lo esencial» — ACEPTACIÓN VISUAL (20/10/2026)
+
+- **PC VISUAL PASS, defect CLOSED:** la propietaria desplegó en Cloudflare PREVIEW exclusiva `guest-botanica-lo-esencial-fix-2026-10-20`, URL `https://55620fad.guest-weddlysmartdesign.pages.dev/guest/catalog-assets/botanica/14.7/` y confirmó **«ya se ve bien»**. El rectángulo visible queda **resuelto en PREVIEW**. No reiterar como bug abierto en próximos informes; sí exigir que el futuro pipeline comercial traslade el parche CSS versionado.
+- **Verificación técnica PASS:** [4 tamaños Chrome](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39475897384), [staging SHA](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39476440097), [paquete aislado](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39478510394). Máster V14.7 congelado intacto.
+- **NO cubre:** validación funcional de invitados y RSVP, compra/entrega y correos TEST reales o certificación de dos móviles físicos. Los otros criterios comerciales permanecen **NO_GO**.
+
+**Si en secciones históricas de esta matriz aparece «fallo BOTÁNICA abierto», este cierre posterior tiene prioridad y lo reemplaza para la incidencia visual de escritorio concreta.**
