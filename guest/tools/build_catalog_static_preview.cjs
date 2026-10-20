@@ -13,6 +13,38 @@ if(fs.existsSync(output)&&fs.readdirSync(output).length)throw Error('Output must
 const status=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_PROJECT_STATUS_V1.json'),'utf8'));
 const registry=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json'),'utf8'));
 const id=flag('--template')||'botanica'; // legacy Cloudflare command selects landing only, NEVER filters build
+// Recovered Claude masters are pinned to exact original Git blob SHA1 and size.
+// Never trust a newly calculated digest unless the source also matches this pin.
+// Certified templates still REQUIRE their canonical SHA256.
+const contentSha256=b=>crypto.createHash('sha256').update(b).digest('hex');
+const gitBlobSha1=b=>crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');
+let claudeManifestFiles=null;
+function integrityPin(name,t,entry){
+ const expected=String(entry.candidateSha256||entry.visualMasterSha256||'');
+ if(/^[0-9a-f]{64}$/.test(expected))return{kind:'sha256',digest:expected};
+ const git=String(entry.visualMasterGitBlobSha1||''),bytes=entry.originalMasterBytes;
+ if(entry.status!=='certification-pending'||entry.backendTestOnly!==true||
+    entry.commerciallyCertified!==false||!/^[0-9a-f]{40}$/.test(git)||
+    !Number.isSafeInteger(bytes)||bytes<=0)
+    throw Error('MISSING_IMMUTABLE_SHA:'+name);
+ if(!claudeManifestFiles){
+  const paths=['GUEST_CLAUDE_SOURCE_IMPORT_MANIFEST_2026-10-20.json',
+    'GUEST_CLAUDE_D10_D16_IMPORT_MANIFEST_2026-10-20.json'];
+  claudeManifestFiles=paths.flatMap(filename=>{
+   const file=path.join(root,'guest',filename);
+   if(!fs.existsSync(file))throw Error('SOURCE_MANIFEST_MISSING:'+name);
+   return JSON.parse(fs.readFileSync(file,'utf8')).files||[];
+  });
+ }
+ const original=claudeManifestFiles.find(x=>x.path==='guest/catalog-assets/'+name+'/'+t.version+'/index.html');
+ if(original?.gitBlobSha1!==git||original?.bytes!==bytes)
+   throw Error('SOURCE_MANIFEST_DRIFT:'+name);
+ return{kind:'git-blob-sha1',digest:git,bytes};
+}
+function verifiedSource(buf,pin){
+ return pin.kind==='sha256'?contentSha256(buf)===pin.digest:
+   buf.length===pin.bytes&&gitBlobSha1(buf)===pin.digest;
+}
 const candidates=Object.entries(registry.templates||{}).filter(([,t])=>
    t?.mode==='iframe'&&['certification-pending','commercially-frozen'].includes(t.status));
 if(!candidates.length||!candidates.some(([name])=>name===id))
@@ -24,8 +56,7 @@ for(const [name,t] of candidates){
     !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,30}$/.test(t.version||'')||
     !entry||entry.version!==t.version||entry.status!==t.status)
     throw Error('CATALOG_TEMPLATE_UNCERTIFIED_OR_DRIFT:'+name);
- const expected=String(entry.candidateSha256||entry.visualMasterSha256||'');
- if(!/^[0-9a-f]{64}$/.test(expected))throw Error('MISSING_IMMUTABLE_SHA:'+name);
+ integrityPin(name,t,entry);
 }
 if(master&&candidates.length>1)throw Error('MASTER_OVERRIDE_CANNOT_BYPASS_MULTI_DESIGN_SOURCE_CHECK');
 const read=(file)=>fs.readFileSync(path.join(root,file));
@@ -117,7 +148,7 @@ function applyOptionalVisualPatch(stagedHtml,name,version,sourceSha){
 const designs=[];
 for(const [name,t] of candidates){
  const entry=status.designs[name];
- const expected=String(entry.candidateSha256||entry.visualMasterSha256||'');
+ const pin=integrityPin(name,t,entry);
  const assetRoot=path.join(root,'guest/catalog-assets',name,t.version);
  const registeredAsset=path.join(assetRoot,'index.html');
  const chunksFile=path.join(assetRoot,'source-chunks','manifest.json');
@@ -127,7 +158,7 @@ for(const [name,t] of candidates){
  else if(fs.existsSync(chunksFile)){
   const meta=JSON.parse(fs.readFileSync(chunksFile,'utf8'));
   if(meta.schemaVersion!=='guest-immutable-visual-chunks-v1'||meta.id!==name||
-     meta.version!==t.version||meta.sha256!==expected||
+     meta.version!==t.version||pin.kind!=='sha256'||meta.sha256!==pin.digest||
      !Array.isArray(meta.parts)||meta.parts.length<2||meta.parts.length>100||
      new Set(meta.parts).size!==meta.parts.length)
     throw Error('INVALID_FROZEN_VISUAL_CHUNK_MANIFEST:'+name);
@@ -145,14 +176,15 @@ for(const [name,t] of candidates){
  // This is intentionally strict: once a new design is registered the whole
  // Cloudflare build must fail unless its untouched HTML is present.
  if(!visual)throw Error('MISSING_REGISTERED_VISUAL_MASTER:'+name);
- if(sha(visual)!==expected||!visual.includes(Buffer.from('window.'+t.applyApi)))
+ if(!verifiedSource(visual,pin)||!visual.includes(Buffer.from('window.'+t.applyApi)))
     throw Error('FROZEN_VISUAL_SHA256_OR_RENDERER_MISMATCH:'+name);
+ const originalSha256=sha(visual);
  const dest='guest/catalog-assets/'+name+'/'+t.version+'/index.html';
  const stage=stageLargeVisualLosslessly(visual,name,t.version);
- stage.html=applyOptionalVisualPatch(stage.html,name,t.version,expected);
+ stage.html=applyOptionalVisualPatch(stage.html,name,t.version,originalSha256);
  files.push(write(dest,stage.html));
  viewRegistry.templates[name].src='/'+dest;
- designs.push({templateId:name,version:t.version,status:t.status,masterSha256:expected,deployedHtmlSha256:sha(stage.html),mediaAssets:stage.mediaCount,losslessMediaExternalization:stage.externalized,visualIncluded:true});
+ designs.push({templateId:name,version:t.version,status:t.status,sourcePinKind:pin.kind,masterSha256:originalSha256,deployedHtmlSha256:sha(stage.html),mediaAssets:stage.mediaCount,losslessMediaExternalization:stage.externalized,visualIncluded:true});
 }
 // Only staging copies get temporary src pointers. Canonical registry remains
 // certification-gated; published HTML never by itself authorizes a purchase.
