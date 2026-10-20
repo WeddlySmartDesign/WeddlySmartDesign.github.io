@@ -30,6 +30,8 @@ for(const key of ['mode','name','address','websiteUrl','externalBookingUrl','boo
 for(const key of ['displayText','details','iban','bicSwift','bizumPhone','bizumRecipient','externalUrl']) assert.ok(js.includes(key)&&schema.$defs.gift.properties[key],key);
 for(const key of ['prompt','url','mode']) assert.ok(schema.$defs.playlist.properties[key],key);
 const builder=fs.readFileSync(path.join(root,'guest/tools/build_catalog_static_preview.cjs'),'utf8');
-assert.ok(builder.includes('applyOptionalVisualPatch(stage.html,name,t.version,expected)'));
+assert.ok(builder.includes('applyOptionalVisualPatch(stage.html,name,t.version,originalSha256)'));
+assert.ok(builder.includes('const originalSha256=sha(visual)'));
+assert.ok(builder.includes('verifiedSource(visual,pin)'),'No patch can skip immutable SHA256/Git source pin check');
 assert.ok(builder.includes('meta.sourceMasterSha256!==sourceSha'));
 console.log('PASS D03 author media untouched, premium CTA, closing animation, schema mapping, TEST-only SHA-pinned stage patch');
