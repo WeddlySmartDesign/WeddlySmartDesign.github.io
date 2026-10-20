@@ -1,0 +1,70 @@
+{
+ "id": "design-16",
+ "version": "1.0.0",
+ "displayName": "EL MAPA",
+ "coverTextAt": 9.4,
+ "closingTextAt": 5.2,
+ "coverTextPosition": "top:min(70svh,calc(100svh - 290px))",
+ "coverScrim": "top:0;height:0;background:none",
+ "closingTextPosition": "top:12svh",
+ "closingScrimPosition": "top:0;height:0;background:none",
+ "theme": {
+  "paper": "#f3ecdd",
+  "ink": "#2e3a3c",
+  "soft": "#4c5654",
+  "accent": "#b5573a",
+  "line": "rgba(110,88,62,.4)",
+  "btn": "#b5573a",
+  "cover-bg": "#d8c6aa",
+  "cover-ink": "#2e3a3c",
+  "cover-names": "#2e3a3c",
+  "cover-halo": "none",
+  "cover-btn": "#b5573a",
+  "cover-btn-ink": "#fffdf7",
+  "cover-btn-line": "#8f4129",
+  "hint-ink": "#2e3a3c",
+  "hint-halo": "none",
+  "hint-pulse": "rgba(181,87,58,.5)",
+  "closing-scrim": "none",
+  "closing-ink": "#2e3a3c",
+  "closing-halo": "none",
+  "closing-btn": "#b5573a",
+  "closing-btn-ink": "#fffdf7",
+  "closing-btn-line": "#8f4129"
+ },
+ "tapLabel": "Toca para abrir el mapa",
+ "media": {
+  "coverVideo": "videos/portada.mp4",
+  "closingVideo": "videos/cierre.mp4",
+  "backgrounds5": [
+   "fondos-5-pantallas/fondo-1.jpg",
+   "fondos-5-pantallas/fondo-2.jpg",
+   "fondos-5-pantallas/fondo-3.jpg",
+   "fondos-5-pantallas/fondo-4.jpg",
+   "fondos-5-pantallas/fondo-5.jpg"
+  ],
+  "backgrounds4": [
+   "fondos-4-pantallas/fondo-1.jpg",
+   "fondos-4-pantallas/fondo-2.jpg",
+   "fondos-4-pantallas/fondo-3.jpg",
+   "fondos-4-pantallas/fondo-4.jpg"
+  ]
+ },
+ "mediaSource": "Entrega «El mapa» (Claude): mapa ilustrado en acuarela, brújula y sello de lacre de Recraft (piezas de la autora), limpiados y animados por código (plegado en 3D, viaje de cámara por el camino, mar con brillos, faro, gaviotas, alfileres, aguja y luz dorada); sin música",
+ "fx": {},
+ "motif": "",
+ "motifIdle": "",
+ "layout": "mapa",
+ "fonts": [
+  "Lora"
+ ],
+ "interior": {
+  "css": "interior.css",
+  "js": "interior.js",
+  "assets": {
+   "PAPER": "skin-assets/paper.jpg",
+   "ROSE": "skin-assets/rose.png",
+   "SEAL": "skin-assets/seal.png"
+  }
+ }
+}

@@ -1,0 +1,77 @@
+{
+ "id": "design-14",
+ "version": "1.0.0",
+ "displayName": "VIÑETAS · ELLAS",
+ "coverTextAt": 7.3,
+ "closingTextAt": 6.6,
+ "coverTextPosition": "top:65svh",
+ "coverScrim": "top:0;height:0;background:none",
+ "closingTextPosition": "top:20svh",
+ "closingScrimPosition": "top:0;height:0;background:none",
+ "theme": {
+  "paper": "#f3ead6",
+  "ink": "#231f2f",
+  "soft": "#3d3746",
+  "accent": "#b9572f",
+  "line": "rgba(35,31,47,.4)",
+  "btn": "#ecbd55",
+  "cover-bg": "#f3ead6",
+  "cover-ink": "#231f2f",
+  "cover-names": "#231f2f",
+  "cover-halo": "none",
+  "cover-btn": "#ecbd55",
+  "cover-btn-ink": "#231f2f",
+  "cover-btn-line": "#231f2f",
+  "hint-ink": "#231f2f",
+  "hint-halo": "none",
+  "hint-pulse": "rgba(185,87,47,.55)",
+  "closing-scrim": "none",
+  "closing-ink": "#231f2f",
+  "closing-halo": "none",
+  "closing-btn": "#ecbd55",
+  "closing-btn-ink": "#231f2f",
+  "closing-btn-line": "#231f2f"
+ },
+ "tapLabel": "¡Toca para abrir!",
+ "media": {
+  "coverVideo": "videos/portada.mp4",
+  "closingVideo": "videos/cierre.mp4",
+  "backgrounds5": [
+   "fondos-5-pantallas/fondo-1.jpg",
+   "fondos-5-pantallas/fondo-2.jpg",
+   "fondos-5-pantallas/fondo-3.jpg",
+   "fondos-5-pantallas/fondo-4.jpg",
+   "fondos-5-pantallas/fondo-5.jpg"
+  ],
+  "backgrounds4": [
+   "fondos-4-pantallas/fondo-1.jpg",
+   "fondos-4-pantallas/fondo-2.jpg",
+   "fondos-4-pantallas/fondo-3.jpg",
+   "fondos-4-pantallas/fondo-4.jpg"
+  ]
+ },
+ "mediaSource": "Entrega «Viñetas · Ellas» (Claude): versión de «Viñetas» con dos novias. Ilustraciones de Recraft de la autora (pareja en el mar y fotomatón con Recraft 4.1; calle y copas reutilizadas de «Viñetas» y recoloreadas), tonos de piel y fondos retocados por código; fuegos, bocadillos y onomatopeyas por código; música original",
+ "fx": {},
+ "motif": "",
+ "motifIdle": "",
+ "layout": "vinetas",
+ "fonts": [
+  "Bangers",
+  "Kalam"
+ ],
+ "interior": {
+  "css": "interior.css",
+  "js": "interior.js",
+  "assets": {
+   "PAPER": "skin-assets/paper.jpg",
+   "MUSIC": "skin-assets/music.m4a"
+  }
+ },
+ "demoPhotos": {
+  "story": "skin-assets/demo/story.jpg",
+  "g1": "skin-assets/demo/g1.jpg",
+  "g2": "skin-assets/demo/g2.jpg",
+  "g3": "skin-assets/demo/g3.jpg",
+  "g4": "skin-assets/demo/g4.jpg"
+ }
+}

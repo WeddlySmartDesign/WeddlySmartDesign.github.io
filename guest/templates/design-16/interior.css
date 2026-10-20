@@ -1,0 +1,117 @@
+/* ===== EL MAPA · interior propio: una guía de viaje hacia la boda, sobre papel crema ===== */
+/* tinta #2E3A3C · papel #F3ECDD · terracota #B5573A · salvia #7E8F6E · ocre #C9A45C · mar #A9C2C0 */
+html.mp{background:#efe6d5}
+html.mp body{background:url(%%PAPER%%) center top/640px auto repeat #f3ecdd}
+html.mp [data-bg]{background:none!important;min-height:0!important;display:block;padding:30px 16px 22px!important;color:#2e3a3c;font:400 18.5px/1.6 'Lora',Georgia,serif}
+/* página de la guía: doble filete sepia, como la tapa del mapa */
+.mp-page{position:relative;max-width:440px;margin:0 auto;padding:34px 22px 26px;background:#fbf6ea;border:1px solid rgba(110,88,62,.55);box-shadow:0 1px 0 #fff inset,0 10px 26px -14px rgba(70,52,30,.45);text-align:center}
+.mp-page::before{content:"";position:absolute;inset:7px;border:1px solid rgba(110,88,62,.35);pointer-events:none}
+.mp-rv{opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+.mp-rv.in{opacity:1;transform:none}
+.mp-cap{display:inline-flex;align-items:center;gap:8px;margin:0;font:400 14px/1.2 'GaramondSC',Georgia,serif;letter-spacing:.18em;text-transform:uppercase;color:#8a6a48}
+.mp-rose{display:inline-block;width:26px;height:26px;background:url(%%ROSE%%) center/contain no-repeat;transition:transform 1.4s cubic-bezier(.2,.8,.2,1)}
+.mp-page.in .mp-rose{transform:rotate(360deg)}
+.mp-title{margin:6px 0 16px;font:italic 400 38px/1.15 'Lora',Georgia,serif;color:#2e3a3c;letter-spacing:.005em}
+.mp-p{margin:0 auto;max-width:32ch;font-size:18.5px;line-height:1.65;white-space:pre-line;overflow-wrap:anywhere}
+/* fotos: copia en papel con margen blanco */
+.mp-ph{margin:22px 0 4px;padding:9px 9px 9px;background:#fff;box-shadow:0 8px 20px -10px rgba(60,44,26,.5);transform:rotate(-.6deg)}
+.mp-ph img{display:block;width:100%;height:290px;object-fit:cover;max-width:none!important}
+.mp-ph[data-fit=full] img{object-fit:contain;height:auto;max-height:430px;background:#fff}
+/* lugar: postales con sello y matasellos */
+.mp-card{position:relative;display:grid;grid-template-columns:1fr 88px;gap:0 12px;align-items:start;text-align:left;margin-top:18px;padding:16px 14px 16px 18px;background:#fffdf7;border:1px solid rgba(110,88,62,.4);box-shadow:0 8px 18px -12px rgba(60,44,26,.55)}
+.mp-card::before{content:"";position:absolute;right:112px;top:16px;bottom:16px;border-left:1px solid rgba(110,88,62,.25)}
+.mp-card .mp-stamp{grid-column:2;grid-row:1}
+.mp-c-info{grid-column:1;grid-row:1;min-width:0;padding-right:12px}
+.mp-c-k{display:block;font:400 13px/1.3 'GaramondSC',Georgia,serif;letter-spacing:.16em;text-transform:uppercase;color:#b5573a}
+.mp-c-name{font:italic 400 25px/1.2 'Lora',Georgia,serif;color:#2e3a3c;margin:3px 0 2px;overflow-wrap:anywhere}
+.mp-c-addr{font-size:16.5px;line-height:1.4;color:#4c5654;overflow-wrap:anywhere}
+.mp-stamp{position:relative;display:grid;place-items:center;width:84px;height:96px;background:radial-gradient(circle,transparent 4.2px,#fffdf7 4.6px) -6px -6px/12px 12px;padding:7px;transform:rotate(2.5deg)}
+.mp-stamp::before{content:"";position:absolute;inset:7px;background:#b5573a;box-shadow:inset 0 0 0 3px #fffdf7,inset 0 0 0 4px rgba(255,253,247,.6)}
+.mp-stamp.alt::before{background:#7e8f6e}
+.mp-stamp::after{content:"";position:absolute;left:-26px;top:44px;width:60px;height:60px;border-radius:50%;border:1.5px solid rgba(46,58,60,.45);background:repeating-linear-gradient(0deg,transparent 0 9px,rgba(46,58,60,.35) 9px 10.5px) center/36px 60px no-repeat;-webkit-mask:radial-gradient(circle,#000 62%,transparent 63%);mask:radial-gradient(circle,#000 62%,transparent 63%);opacity:.8}
+.mp-stamp b{position:relative;z-index:1;font:italic 600 21px/1 'Lora',Georgia,serif;color:#fffdf7;letter-spacing:.01em}
+.mp-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 10px;margin-top:10px}
+.mp-card .mp-links{justify-content:flex-start}
+html.mp a.link{display:inline-flex;align-items:center;min-height:44px;padding:8px 16px 7px;border:1px solid #b5573a;border-radius:999px;background:transparent;font:400 13.5px/1 'GaramondSC',Georgia,serif;letter-spacing:.14em;text-transform:uppercase;color:#8f4129;text-decoration:none;white-space:nowrap;transition:background .2s,color .2s}
+html.mp a.link:active{background:#b5573a;color:#fffdf7}
+html.mp a.link::after{content:none}
+.mp-note{margin:22px auto 2px;max-width:330px;font-size:17px;line-height:1.45;font-style:italic}
+.mp-note b{display:block;font:400 13px/1.4 'GaramondSC',Georgia,serif;font-style:normal;letter-spacing:.16em;text-transform:uppercase;color:#b5573a}
+/* programa: alfileres sobre un camino que se dibuja al bajar */
+.mp-now{position:relative;display:block;max-width:350px;margin:4px auto 0;text-align:left;--drawn:0px}
+.mp-now::before,.mp-now::after{content:"";position:absolute;left:31px;top:26px;width:0;border-left:3px dashed rgba(46,58,60,.18)}
+.mp-now::before{bottom:26px}
+.mp-now::after{height:max(0px,calc(var(--drawn) - 26px));border-left-color:#b5573a;transition:height .7s cubic-bezier(.2,.7,.2,1)}
+.mp-m{position:relative;z-index:1;display:grid;grid-template-columns:64px 1fr;gap:0 10px;align-items:center;margin:10px 0;opacity:.3;transform:translateY(12px);transition:opacity .6s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.mp-m.in{opacity:.85;transform:none}
+.mp-m.on{opacity:1}
+.mp-mk{position:relative;display:grid;justify-items:center;align-content:center;gap:3px;width:64px;min-height:72px;border:0;padding:0;background:none;cursor:pointer}
+.mp-pin{position:relative;width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg) scale(.8);background:#fbf6ea;border:2px solid #b5573a;transition:transform .6s cubic-bezier(.3,1.7,.5,1),background .4s}
+.mp-pin::after{content:"";position:absolute;inset:7px;border-radius:50%;background:#b5573a;transition:background .4s}
+.mp-m.on .mp-pin{transform:rotate(-45deg) scale(1.12) translate(3px,-3px);background:#b5573a}
+.mp-m.on .mp-pin::after{background:#fbf6ea}
+.mp-t{font:italic 600 15px/1 'Lora',Georgia,serif;color:#2e3a3c;background:#fbf6ea;padding:2px 3px}
+.mp-mk:focus-visible{outline:2px solid #b5573a;outline-offset:2px;border-radius:8px}
+.mp-lb{display:block;padding:11px 14px;border-bottom:1px solid rgba(110,88,62,.3);font:400 20px/1.25 'Lora',Georgia,serif;color:#2e3a3c;cursor:pointer;overflow-wrap:anywhere;transition:color .4s,border-color .4s}
+.mp-m.on .mp-lb{font-style:italic;color:#8f4129;border-bottom-color:#b5573a}
+.mp-hint{margin:16px 0 0;font-size:15px;font-style:italic;color:#6a6458}
+/* detalles: billetes con matriz y perforado */
+.mp-tickets{display:grid;grid-template-columns:1fr;gap:12px;max-width:300px;margin:6px auto 0}
+.mp-b{position:relative;display:grid;grid-template-columns:40px 1fr;align-items:center;min-height:62px;padding:10px 30px 10px 0;border:0;color:#2e3a3c;cursor:pointer;text-align:left;
+ background:radial-gradient(circle at 0 50%,transparent 9px,#fffdf7 9.5px) left/51% 100% no-repeat,radial-gradient(circle at 100% 50%,transparent 9px,#fffdf7 9.5px) right/51% 100% no-repeat;filter:drop-shadow(0 5px 7px rgba(60,44,26,.22));transition:transform .4s cubic-bezier(.3,1.5,.5,1)}
+.mp-b::before{content:"";position:absolute;left:40px;top:9px;bottom:9px;border-left:1.5px dashed rgba(110,88,62,.45)}
+.mp-b::after{content:"";position:absolute;right:12px;top:9px;width:11px;height:11px;border-radius:50%;background:#efe6d5;box-shadow:inset 0 1px 2px rgba(0,0,0,.25);transform:scale(0);transition:transform .35s cubic-bezier(.3,1.8,.5,1)}
+.mp-b.punched::after{transform:scale(1)}
+.mp-b.solo{width:100%}
+.mp-b-no{writing-mode:vertical-rl;transform:rotate(180deg);justify-self:center;font:400 11px/1 'GaramondSC',Georgia,serif;letter-spacing:.14em;color:#b5573a}
+.mp-b-lb{padding-left:16px;padding-right:4px;font:400 15px/1.25 'GaramondSC',Georgia,serif;letter-spacing:.12em;text-transform:uppercase;overflow-wrap:normal;word-break:normal;hyphens:manual;min-width:0}
+.mp-b[aria-expanded=true]{transform:translateY(-3px) rotate(-1.5deg)}
+.mp-b[aria-expanded=true] .mp-b-lb{color:#8f4129}
+.mp-b:focus-visible{outline:2px solid #b5573a;outline-offset:3px}
+.mp-tray{width:100%;margin:-6px 0 0;overflow:hidden;height:0;transition:height .6s cubic-bezier(.2,.8,.2,1)}
+.mp-tray-in{position:relative;margin:14px 6px 8px;padding:20px 20px 16px;background:#fffdf7;border:1px solid rgba(110,88,62,.4);box-shadow:0 10px 20px -12px rgba(60,44,26,.5);text-align:center}
+.mp-tray-in::before{content:"";position:absolute;inset:6px;border:1px dashed rgba(110,88,62,.35);pointer-events:none}
+.mp-tray-in::after{content:"";position:absolute;right:-10px;top:-14px;width:54px;height:52px;background:url(%%SEAL%%) center/contain no-repeat;transform:rotate(12deg);filter:drop-shadow(1px 2px 2px rgba(0,0,0,.25))}
+.mp-tray-in h3{margin:0 0 8px;font:italic 400 27px/1.15 'Lora',Georgia,serif;color:#2e3a3c}
+.mp-tray-in p{position:relative;margin:0 0 6px;font-size:17px;overflow-wrap:anywhere;white-space:pre-line}
+.mp-tt{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 30px;margin:10px 0}
+.mp-tt span{display:flex;flex-direction:column;font:400 12.5px/1.6 'GaramondSC',Georgia,serif;letter-spacing:.16em;text-transform:uppercase;color:#6a6458}
+.mp-tt b{font:italic 600 27px/1.05 'Lora',Georgia,serif;color:#b5573a;letter-spacing:.01em;text-transform:none}
+.mp-tray-in details{position:relative;margin-top:4px}.mp-tray-in summary{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;list-style:none;font:400 13.5px/1 'GaramondSC',Georgia,serif;letter-spacing:.14em;text-transform:uppercase;color:#8f4129;border-bottom:1px solid #b5573a}
+.mp-tray-in summary::-webkit-details-marker{display:none}
+/* galería: copias en papel que se pasan */
+html.mp #gallery-items{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;width:100%;max-width:none;margin:6px 0 0;padding:9px;background:#fff;box-shadow:0 8px 20px -10px rgba(60,44,26,.5);overscroll-behavior-x:contain;box-sizing:border-box}
+html.mp #gallery-items::-webkit-scrollbar{display:none}
+html.mp #gallery-items img{flex:0 0 100%;width:100%!important;min-width:100%;max-width:none!important;margin:0!important;height:340px;object-fit:cover;scroll-snap-align:center;scroll-snap-stop:always}
+html.mp #gallery-items img[data-fit=full]{object-fit:contain;background:#fff}
+.mp-dots{display:flex;justify-content:center;gap:2px;margin-top:8px}
+html.mp .gallery-dot{width:46px;height:46px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer}
+html.mp .gallery-dot::before{content:"";width:9px;height:9px;border-radius:50%;border:1.5px solid #8a6a48;transition:all .3s}
+html.mp .gallery-dot[aria-current=true]::before{width:12px;height:12px;background:#b5573a;border-color:#b5573a}
+/* portada: los datos sobre el mar, en tinta */
+html.mp .cover-text{text-shadow:0 0 18px rgba(232,240,238,.9),0 0 4px rgba(232,240,238,.9)!important}
+html.mp .cover-tag{margin:0;font:400 15px/1 'GaramondSC',Georgia,serif!important;letter-spacing:.3em!important;text-transform:uppercase;color:#2e3a3c!important}
+html.mp .cover-names{margin:6px 0 4px;font:italic 400 clamp(36px,11vw,52px)/1.08 'Lora',Georgia,serif!important;color:#2e3a3c!important}
+html.mp #cover.long-names .cover-names{font-size:clamp(28px,8.4vw,40px)!important}
+html.mp .cover-names .amp{font-style:italic;color:#b5573a!important;padding:0 .18em}
+html.mp .cover-date,html.mp .countdown,html.mp .cover-place{font-family:'GaramondSC',Georgia,serif!important;letter-spacing:.18em!important;color:#2e3a3c!important}
+html.mp .cover-date{font-size:18px!important;margin:4px 0 0}html.mp .countdown,html.mp .cover-place{font-size:15px!important;margin:2px 0}
+html.mp .tap-hint{font:italic 400 24px/1.2 'Lora',Georgia,serif;color:#2e3a3c;text-shadow:0 0 14px rgba(251,246,234,.95)}
+html.mp .entry-button,html.mp .rsvp-button{font:400 14px/1.2 'GaramondSC',Georgia,serif!important;letter-spacing:.18em;text-transform:uppercase;border:1px solid #8f4129!important;border-radius:999px;background:#b5573a!important;color:#fffdf7!important;box-shadow:0 6px 14px -8px rgba(60,30,10,.6);backdrop-filter:none;-webkit-backdrop-filter:none}
+/* cierre: «Os esperamos» y los datos sobre el lino, encima de la carta sellada */
+.mp-wait{position:absolute;z-index:2;left:0;right:0;top:max(5svh,calc(env(safe-area-inset-top) + 20px));margin:0;text-align:center;font:italic 400 clamp(36px,10.5vw,48px)/1 'Lora',Georgia,serif;color:#2e3a3c;text-shadow:0 0 18px rgba(251,246,234,.8);opacity:0;transform:translateY(10px);transition:opacity 1.1s ease,transform 1.2s cubic-bezier(.2,.7,.2,1);pointer-events:none}
+.mp-wait.on{opacity:1;transform:none}
+#closing.replaying .mp-wait{opacity:0}
+html.mp .closing-text{top:calc(max(5svh,calc(env(safe-area-inset-top) + 20px)) + 58px)!important;text-shadow:0 0 16px rgba(251,246,234,.85)!important}
+html.mp .closing-caption{font:italic 400 16px/1.35 'Lora',Georgia,serif!important;color:#3c4646!important}
+html.mp .closing-sign{font:italic 400 clamp(28px,8vw,36px)/1.15 'Lora',Georgia,serif!important;color:#2e3a3c!important}
+html.mp .close-date{font:400 15px/1.3 'GaramondSC',Georgia,serif!important;letter-spacing:.2em;color:#8f4129!important}
+@media(max-width:360px){.mp-title{font-size:33px}.mp-card{grid-template-columns:1fr 76px}.mp-card::before{right:98px}.mp-stamp{width:74px;height:86px}.mp-stamp b{font-size:18px}.mp-lb{font-size:18px}html.mp [data-bg]{padding:30px 12px 22px!important}}
+@media(prefers-reduced-motion:reduce){.mp-rv{opacity:1;transform:none;transition:none}.mp-m{opacity:1;transform:none;transition:none}.mp-rose{transition:none}.mp-now::after{transition:none}}
+/* legibilidad de los datos sobre el mar: lavado de acuarela crema detrás, tinta más oscura */
+html.mp .cover-text{isolation:isolate;text-shadow:none!important}
+html.mp .cover-text::before{content:"";position:absolute;z-index:-1;left:-12%;right:-12%;top:-30%;bottom:-30%;background:radial-gradient(ellipse at 50% 50%,rgba(251,246,234,.94) 0,rgba(251,246,234,.86) 38%,rgba(251,246,234,.5) 58%,rgba(251,246,234,0) 74%);pointer-events:none}
+html.mp .cover-tag,html.mp .cover-names,html.mp .cover-date,html.mp .countdown,html.mp .cover-place{color:#1f2a2c!important}
+html.mp .cover-names span{display:inline!important}
+html.mp .cover-names .amp{display:inline!important;font-size:.82em!important;padding:0 .24em!important}
+html.mp #closing .closing-text .rsvp-button,html.mp #closing .rsvp-button{margin-top:10px}

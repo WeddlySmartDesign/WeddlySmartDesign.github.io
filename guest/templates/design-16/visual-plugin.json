@@ -1,0 +1,10 @@
+{
+  "id": "design-16",
+  "displayName": "EL MAPA",
+  "version": "1.0.0",
+  "rendererApi": "GUEST_APPLY_CONFIG",
+  "masterHtml": "master.html",
+  "typographyVariants": [
+    "classic"
+  ]
+}
