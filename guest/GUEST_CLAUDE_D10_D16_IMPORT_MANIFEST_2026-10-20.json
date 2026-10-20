@@ -1,0 +1,466 @@
+{
+  "schemaVersion": "guest-claude-designs-d10-d16-import-v1",
+  "recordedAt": "2026-10-20",
+  "sourceRepository": "WeddlySmartDesign/WeddlySmartDesign.github.io",
+  "sourceBranch": "claude/guest-skins-d04-d08",
+  "sourceCommit": "5b1e418b11c4af0a0b7753963b7079f897016f8d",
+  "importCommit": "a7ac960d590dc66bea9fcb497a4f3ff0e7e7e530",
+  "sourceFiles": 84,
+  "bytes": 118195733,
+  "commercialApproval": false,
+  "allTemplatesTestOnly": true,
+  "designs": [
+    {
+      "id": "design-10",
+      "displayName": "CUENTO DE PAPEL"
+    },
+    {
+      "id": "design-11",
+      "displayName": "BOLA DE CRISTAL",
+      "userTerm": "bola de nieve"
+    },
+    {
+      "id": "design-12",
+      "displayName": "ABANICO"
+    },
+    {
+      "id": "design-13",
+      "displayName": "VIÑETAS"
+    },
+    {
+      "id": "design-14",
+      "displayName": "VIÑETAS · ELLAS"
+    },
+    {
+      "id": "design-15",
+      "displayName": "VIÑETAS · ELLOS"
+    },
+    {
+      "id": "design-16",
+      "displayName": "EL MAPA"
+    }
+  ],
+  "notCopiedBecauseDuplicates": "guest/templates/design-10..16/master.html duplicate byte-identical original catalog-assets/design-XX/1.0.0/index.html preserved in source branch",
+  "files": [
+    {
+      "path": "guest/catalog-assets/design-10/1.0.0/index.html",
+      "gitBlobSha1": "c9e1d6fa3ef31faa90cfa2e387a884106742f518",
+      "bytes": 20346599
+    },
+    {
+      "path": "guest/catalog-assets/design-11/1.0.0/index.html",
+      "gitBlobSha1": "c0a34078f0f985a35dbee1cec92e87b324906455",
+      "bytes": 21042009
+    },
+    {
+      "path": "guest/catalog-assets/design-12/1.0.0/index.html",
+      "gitBlobSha1": "2509733e4bc0d5c3a54fba36db1d7b11a220b0d7",
+      "bytes": 13506667
+    },
+    {
+      "path": "guest/catalog-assets/design-13/1.0.0/index.html",
+      "gitBlobSha1": "64df7209f495e19b1c2c134f51cae954a23c22a2",
+      "bytes": 12861173
+    },
+    {
+      "path": "guest/catalog-assets/design-14/1.0.0/index.html",
+      "gitBlobSha1": "ae1bf2b5a79dd30090ea69fae535f0cb403bc19c",
+      "bytes": 13071169
+    },
+    {
+      "path": "guest/catalog-assets/design-15/1.0.0/index.html",
+      "gitBlobSha1": "f7680ec795cb4f3f7ec29ea372e87b6a8e55367f",
+      "bytes": 12930550
+    },
+    {
+      "path": "guest/catalog-assets/design-16/1.0.0/index.html",
+      "gitBlobSha1": "5454eb2dfe20a9a8a6156c0aae43da7d93e2e9b0",
+      "bytes": 16980612
+    },
+    {
+      "path": "guest/guest-catalog-template-design-10-adapter-v1.js",
+      "gitBlobSha1": "e0b7ae7f94abf946ac368d10eac3d42a90cf05e3",
+      "bytes": 345
+    },
+    {
+      "path": "guest/guest-catalog-template-design-11-adapter-v1.js",
+      "gitBlobSha1": "24abfa0ee8ca47cc73398c6abdad19cb3e457869",
+      "bytes": 345
+    },
+    {
+      "path": "guest/guest-catalog-template-design-12-adapter-v1.js",
+      "gitBlobSha1": "adea36d19d6f5a349fe90f66147d357642e76ab8",
+      "bytes": 345
+    },
+    {
+      "path": "guest/guest-catalog-template-design-13-adapter-v1.js",
+      "gitBlobSha1": "2f74731447a5d400c284bdea214c56dabe6b5020",
+      "bytes": 345
+    },
+    {
+      "path": "guest/guest-catalog-template-design-14-adapter-v1.js",
+      "gitBlobSha1": "75822c353cc0a966abfff6b13a76796bcc4f2257",
+      "bytes": 345
+    },
+    {
+      "path": "guest/guest-catalog-template-design-15-adapter-v1.js",
+      "gitBlobSha1": "be10e2bcea4182ad864ed96300823c89b5c2fdfd",
+      "bytes": 345
+    },
+    {
+      "path": "guest/guest-catalog-template-design-16-adapter-v1.js",
+      "gitBlobSha1": "8a7a15a22cdfd4e798956f573592de4b7c588d71",
+      "bytes": 345
+    },
+    {
+      "path": "guest/templates/design-10/interior.css",
+      "gitBlobSha1": "a847b1254eb8979907a370c5f1559fa8ce22609c",
+      "bytes": 17805
+    },
+    {
+      "path": "guest/templates/design-10/interior.js",
+      "gitBlobSha1": "aa3e93e24421d362ad476edd6e2a70642cbd60fc",
+      "bytes": 10270
+    },
+    {
+      "path": "guest/templates/design-10/skin-assets/band-bot.jpg",
+      "gitBlobSha1": "b93f2306455cc9835347d81d3779c8f4408995b0",
+      "bytes": 40475
+    },
+    {
+      "path": "guest/templates/design-10/skin-assets/band-top.jpg",
+      "gitBlobSha1": "9e5562a56e9a80beee75a31eb0bae766f01d955a",
+      "bytes": 52544
+    },
+    {
+      "path": "guest/templates/design-10/skin-assets/nube1.webp",
+      "gitBlobSha1": "9a24b5260069582fd775b67637b58322343568f1",
+      "bytes": 7526
+    },
+    {
+      "path": "guest/templates/design-10/skin-assets/nube2.webp",
+      "gitBlobSha1": "f922d7a6aaacb45862abda8fe54590c873c35035",
+      "bytes": 8724
+    },
+    {
+      "path": "guest/templates/design-10/skin-assets/sol.webp",
+      "gitBlobSha1": "26c23d326cc67efbd391a4ae47faf8cdac99e453",
+      "bytes": 4978
+    },
+    {
+      "path": "guest/templates/design-10/skin-assets/texture.jpg",
+      "gitBlobSha1": "ac7a0d3b063206365b2a27508aba49b1f165cb56",
+      "bytes": 73282
+    },
+    {
+      "path": "guest/templates/design-10/skin-assets/torn-mask.png",
+      "gitBlobSha1": "815d0c393a78334c1de0bf16ff5e81b8ff2d5ed5",
+      "bytes": 12029
+    },
+    {
+      "path": "guest/templates/design-10/skin.json",
+      "gitBlobSha1": "53ece708a9be1cb2e3963e0e815a96d9bdf43f60",
+      "bytes": 2312
+    },
+    {
+      "path": "guest/templates/design-10/visual-plugin.json",
+      "gitBlobSha1": "4ed38ade5a96e5348a111b8668f1bd195f2c693c",
+      "bytes": 197
+    },
+    {
+      "path": "guest/templates/design-11/interior.css",
+      "gitBlobSha1": "17ef666da43337fa2a3e3e66b8817d8afa6ad21d",
+      "bytes": 14994
+    },
+    {
+      "path": "guest/templates/design-11/interior.js",
+      "gitBlobSha1": "9079aa3a2523bd7f926306355a6115ed146374d5",
+      "bytes": 12186
+    },
+    {
+      "path": "guest/templates/design-11/skin-assets/band-bot.jpg",
+      "gitBlobSha1": "a2807b4ff599f3ea0c244807ddd5cf6bbaf4d72a",
+      "bytes": 27564
+    },
+    {
+      "path": "guest/templates/design-11/skin-assets/band-top.jpg",
+      "gitBlobSha1": "34b0dda0f3bee050a46cd9ceb68e4a321354b7a4",
+      "bytes": 21720
+    },
+    {
+      "path": "guest/templates/design-11/skin-assets/mist-mask.png",
+      "gitBlobSha1": "4a654639c83dea369ac7799f9f705b76dbeed66a",
+      "bytes": 40190
+    },
+    {
+      "path": "guest/templates/design-11/skin-assets/music.m4a",
+      "gitBlobSha1": "93e0b1f2e56a2c4971672028cf2f97925509c94c",
+      "bytes": 1113748
+    },
+    {
+      "path": "guest/templates/design-11/skin-assets/petal1.webp",
+      "gitBlobSha1": "13f146adef19668e68da05e8fba724ddf68fd158",
+      "bytes": 3784
+    },
+    {
+      "path": "guest/templates/design-11/skin-assets/petal2.webp",
+      "gitBlobSha1": "30f0d2f8998b24af8e28e118d1d0b271d4c0e536",
+      "bytes": 3282
+    },
+    {
+      "path": "guest/templates/design-11/skin-assets/petal3.webp",
+      "gitBlobSha1": "d06a28a9c7d48703a59bc99b6a68e5ca8160511e",
+      "bytes": 3798
+    },
+    {
+      "path": "guest/templates/design-11/skin-assets/petal4.webp",
+      "gitBlobSha1": "475818db99f01bc1079436a05fb47ed7e9158183",
+      "bytes": 3078
+    },
+    {
+      "path": "guest/templates/design-11/skin-assets/stone.jpg",
+      "gitBlobSha1": "0f7fb6276181e8a08a48681b3ffb6b598908100e",
+      "bytes": 7157
+    },
+    {
+      "path": "guest/templates/design-11/skin-assets/texture.jpg",
+      "gitBlobSha1": "758f4b0df2d3009ab34e27745770946d7371a7d0",
+      "bytes": 118364
+    },
+    {
+      "path": "guest/templates/design-11/skin.json",
+      "gitBlobSha1": "d38f3faa2458ac4cb08722b7fbf947351a87009f",
+      "bytes": 2637
+    },
+    {
+      "path": "guest/templates/design-11/visual-plugin.json",
+      "gitBlobSha1": "b1c022bbaf90d3b4adcba3d47cadfc0d1480e6cb",
+      "bytes": 197
+    },
+    {
+      "path": "guest/templates/design-12/interior.css",
+      "gitBlobSha1": "18f28befd4de9e63807a9420c2f6db9ff1f9c2af",
+      "bytes": 12867
+    },
+    {
+      "path": "guest/templates/design-12/interior.js",
+      "gitBlobSha1": "24f4b548f2d1c7b9ee7573259f64b4e90154d9df",
+      "bytes": 10614
+    },
+    {
+      "path": "guest/templates/design-12/skin-assets/band-bot.jpg",
+      "gitBlobSha1": "99d7162207eb4134f79cfa94a06577aec368a458",
+      "bytes": 26734
+    },
+    {
+      "path": "guest/templates/design-12/skin-assets/band-top.jpg",
+      "gitBlobSha1": "698fb7acbdd24e7692b223f0091215530cee8e5b",
+      "bytes": 26615
+    },
+    {
+      "path": "guest/templates/design-12/skin-assets/fan-body.webp",
+      "gitBlobSha1": "c7c97fdcf2355f00338e4d31e0a813bd2f6b13b0",
+      "bytes": 58736
+    },
+    {
+      "path": "guest/templates/design-12/skin-assets/fan-pin.webp",
+      "gitBlobSha1": "61157cb8087209af82a0744c0fd08a3800f9c952",
+      "bytes": 9538
+    },
+    {
+      "path": "guest/templates/design-12/skin-assets/leaf-mask.png",
+      "gitBlobSha1": "6b2b14bc5857c6cadde2b09e715f557a41666c3a",
+      "bytes": 5264
+    },
+    {
+      "path": "guest/templates/design-12/skin-assets/silk.jpg",
+      "gitBlobSha1": "07005be0584a6158e6e0b1c511fc06e06f07431c",
+      "bytes": 17800
+    },
+    {
+      "path": "guest/templates/design-12/skin.json",
+      "gitBlobSha1": "a6f0e17c643e36f10aadd5c0cee41350735eb615",
+      "bytes": 2499
+    },
+    {
+      "path": "guest/templates/design-12/visual-plugin.json",
+      "gitBlobSha1": "cad4645254f5cb03472752bfb42b81c96f6327aa",
+      "bytes": 189
+    },
+    {
+      "path": "guest/templates/design-13/interior.css",
+      "gitBlobSha1": "269bfb2057d19e8f0e37728cd44ea610b4542a1b",
+      "bytes": 14905
+    },
+    {
+      "path": "guest/templates/design-13/interior.js",
+      "gitBlobSha1": "cc78d053d89b93765f4c71a4adcb5f83a45c8372",
+      "bytes": 9725
+    },
+    {
+      "path": "guest/templates/design-13/skin-assets/music.m4a",
+      "gitBlobSha1": "0e3c8509389260d29e3a8cb6b079702b96dd9b9e",
+      "bytes": 1116487
+    },
+    {
+      "path": "guest/templates/design-13/skin-assets/paper.jpg",
+      "gitBlobSha1": "17889142a9835e1fa63fd736c9243898135683ec",
+      "bytes": 53605
+    },
+    {
+      "path": "guest/templates/design-13/skin.json",
+      "gitBlobSha1": "d58af9021161ab5fcad00b9fcaed9446a6b76c27",
+      "bytes": 1902
+    },
+    {
+      "path": "guest/templates/design-13/visual-plugin.json",
+      "gitBlobSha1": "97394cf704040b6cd6ef3cc4f517d5cfec9d8041",
+      "bytes": 190
+    },
+    {
+      "path": "guest/templates/design-14/interior.css",
+      "gitBlobSha1": "617c2e8ba9ede9d56090992b7cc805387b6dd74d",
+      "bytes": 14924
+    },
+    {
+      "path": "guest/templates/design-14/interior.js",
+      "gitBlobSha1": "abeec809d655362f33abd6e76a687983ff22bafc",
+      "bytes": 9761
+    },
+    {
+      "path": "guest/templates/design-14/skin-assets/demo/g1.jpg",
+      "gitBlobSha1": "1a2f8b8ac1801714175d0530f4a96d255e27163b",
+      "bytes": 197439
+    },
+    {
+      "path": "guest/templates/design-14/skin-assets/demo/g2.jpg",
+      "gitBlobSha1": "b54e126e5daed0079e6b0c22995838300ba9fe51",
+      "bytes": 205486
+    },
+    {
+      "path": "guest/templates/design-14/skin-assets/demo/g3.jpg",
+      "gitBlobSha1": "f7146fff0d18a94fd6d31609482c8c545ee14b91",
+      "bytes": 176953
+    },
+    {
+      "path": "guest/templates/design-14/skin-assets/demo/g4.jpg",
+      "gitBlobSha1": "4af92bc348d7aba89ae33ee7ecdb6a60b0d650d1",
+      "bytes": 174675
+    },
+    {
+      "path": "guest/templates/design-14/skin-assets/demo/story.jpg",
+      "gitBlobSha1": "4af92bc348d7aba89ae33ee7ecdb6a60b0d650d1",
+      "bytes": 174675
+    },
+    {
+      "path": "guest/templates/design-14/skin-assets/music.m4a",
+      "gitBlobSha1": "0e3c8509389260d29e3a8cb6b079702b96dd9b9e",
+      "bytes": 1116487
+    },
+    {
+      "path": "guest/templates/design-14/skin-assets/paper.jpg",
+      "gitBlobSha1": "17889142a9835e1fa63fd736c9243898135683ec",
+      "bytes": 53605
+    },
+    {
+      "path": "guest/templates/design-14/skin.json",
+      "gitBlobSha1": "47c5c6a48f50cc456c603343545994ab809c576c",
+      "bytes": 2234
+    },
+    {
+      "path": "guest/templates/design-14/visual-plugin.json",
+      "gitBlobSha1": "3ab5a7983516dae16a9e38bcfe8c962553452a90",
+      "bytes": 199
+    },
+    {
+      "path": "guest/templates/design-15/interior.css",
+      "gitBlobSha1": "c10a76cc2533c0a495ec5e65ca737877c10a965c",
+      "bytes": 14929
+    },
+    {
+      "path": "guest/templates/design-15/interior.js",
+      "gitBlobSha1": "d80c0aba94119116eb1478398e01caea1e80ee88",
+      "bytes": 9761
+    },
+    {
+      "path": "guest/templates/design-15/skin-assets/demo/g1.jpg",
+      "gitBlobSha1": "9028df2d84389eb5988a00d214d97c61fef032ea",
+      "bytes": 192543
+    },
+    {
+      "path": "guest/templates/design-15/skin-assets/demo/g2.jpg",
+      "gitBlobSha1": "62ea60f5ad36ef2afe0751897c98309425b6f485",
+      "bytes": 208606
+    },
+    {
+      "path": "guest/templates/design-15/skin-assets/demo/g3.jpg",
+      "gitBlobSha1": "035533fcde63e84ed42a4f2baafc753ed0d812e6",
+      "bytes": 194705
+    },
+    {
+      "path": "guest/templates/design-15/skin-assets/demo/g4.jpg",
+      "gitBlobSha1": "be7da05d4c2b7aa31f9b0e7053261817eb17594a",
+      "bytes": 185213
+    },
+    {
+      "path": "guest/templates/design-15/skin-assets/demo/story.jpg",
+      "gitBlobSha1": "3aedc1216a26ddfcce6fbf7523ff5b7a6409ed13",
+      "bytes": 186273
+    },
+    {
+      "path": "guest/templates/design-15/skin-assets/music.m4a",
+      "gitBlobSha1": "0e3c8509389260d29e3a8cb6b079702b96dd9b9e",
+      "bytes": 1116487
+    },
+    {
+      "path": "guest/templates/design-15/skin-assets/paper.jpg",
+      "gitBlobSha1": "17889142a9835e1fa63fd736c9243898135683ec",
+      "bytes": 53605
+    },
+    {
+      "path": "guest/templates/design-15/skin.json",
+      "gitBlobSha1": "f0877f85906aa3936856fe4668ba4542e4f6ae2f",
+      "bytes": 2251
+    },
+    {
+      "path": "guest/templates/design-15/visual-plugin.json",
+      "gitBlobSha1": "499af6de9f2bb9bbb1687c7c328badcf1022eda0",
+      "bytes": 199
+    },
+    {
+      "path": "guest/templates/design-16/interior.css",
+      "gitBlobSha1": "41de939d65c5e4ea686bd78fb65907e2644c5da0",
+      "bytes": 14448
+    },
+    {
+      "path": "guest/templates/design-16/interior.js",
+      "gitBlobSha1": "348cb0a16a32084a7df060273865242dae1efa43",
+      "bytes": 8977
+    },
+    {
+      "path": "guest/templates/design-16/skin-assets/paper.jpg",
+      "gitBlobSha1": "3ce713732d26e5b64016b0d84c0cbf0cb69b6b38",
+      "bytes": 51510
+    },
+    {
+      "path": "guest/templates/design-16/skin-assets/rose.png",
+      "gitBlobSha1": "8991e0ec5e5866264a852ebb97294c5a12840f46",
+      "bytes": 81051
+    },
+    {
+      "path": "guest/templates/design-16/skin-assets/seal.png",
+      "gitBlobSha1": "48e142d670467b2233233d34fb07cd8e862a0b5a",
+      "bytes": 34834
+    },
+    {
+      "path": "guest/templates/design-16/skin.json",
+      "gitBlobSha1": "553cdbf8ff10524e1ca89c512f9f42fba8e121be",
+      "bytes": 2009
+    },
+    {
+      "path": "guest/templates/design-16/visual-plugin.json",
+      "gitBlobSha1": "8e974953685d6459aa27c10cef1073d844a59349",
+      "bytes": 189
+    }
+  ]
+}
