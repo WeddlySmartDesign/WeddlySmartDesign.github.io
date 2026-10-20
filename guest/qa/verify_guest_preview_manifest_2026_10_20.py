@@ -130,6 +130,59 @@ def fetch_file(origin, f):
         error = str(exc) if isinstance(exc, VerificationError) else type(exc).__name__
         return {"name": f["name"], "status": "FAIL", "error": error}, None
 
+STAGE_MANIFEST_SHA_PINS = {
+    # Phase 5 ZIP currently hosted in Library and uploaded to Cloudflare PREVIEW.
+    "ba0e5928a601b42df93c62e0315ceb3b6b23bd4b9bf49b44527e89da7349b05c",
+    # Phase 6 byte-normalized recovery (same 121 resources, different manifest bytes).
+    "4b8c39645af44a63577f5dfa0cafc4583c2036b8a12db8af14b5871684fccaad",
+}
+
+def verify_stage_manifest_variant(local, remote, remote_sha):
+    """Two SHA-pinned ZIP variants; require exact file digests and design identities."""
+    if remote_sha not in STAGE_MANIFEST_SHA_PINS:
+        raise VerificationError("Remote stage manifest is not an approved sealed variant")
+    reference_files = validate_manifest(local)
+    remote_files = validate_manifest(remote)
+    ordered = lambda rows: sorted(rows, key=lambda item: item["name"])
+    if ordered(reference_files) != ordered(remote_files):
+        raise VerificationError("Remote manifest file hashes, names or sizes differ")
+    identities = lambda stage: sorted(
+        (d.get("templateId"), d.get("version"), d.get("status"))
+        for d in stage["designs"]
+    )
+    if identities(local) != identities(remote):
+        raise VerificationError("Remote stage manifest template/version/status differs")
+    return True
+
+def fetch_remote_stage_manifest(origin, reference):
+    """Read a small manifest only from the exact Preview host; no cross-site redirects."""
+    req = urllib.request.Request(
+        origin + "/GUEST_STAGE_MANIFEST.json",
+        headers={"User-Agent": "GUEST-Preview-Integrity/1.0", "Accept-Encoding": "identity"}
+    )
+    try:
+        with urllib.request.build_opener(SafeCanonicalRedirect(origin)).open(req, timeout=45) as response:
+            if response.status != 200:
+                raise VerificationError("Remote stage manifest HTTP status not 200")
+            header = {v.strip().lower() for v in response.headers.get("X-Robots-Tag", "").split(",")}
+            if "noindex" not in header:
+                raise VerificationError("Remote stage manifest has no noindex protection")
+            data = response.read(1024 * 1024 + 1)
+    except (OSError, urllib.error.HTTPError) as exc:
+        raise VerificationError("Remote stage manifest cannot be downloaded: " + type(exc).__name__) from exc
+    if len(data) > 1024 * 1024:
+        raise VerificationError("Remote stage manifest unexpectedly large")
+    digest = hashlib.sha256(data).hexdigest()
+    try:
+        parsed = json.loads(data)
+        verify_stage_manifest_variant(reference, parsed, digest)
+    except (json.JSONDecodeError, TypeError, KeyError) as exc:
+        raise VerificationError("Remote stage manifest structure is invalid") from exc
+    return {"name": "GUEST_STAGE_MANIFEST.json", "status": "PASS",
+            "bytes": len(data), "sha256": digest, "variant": (
+                "phase5-owner-library" if digest.startswith("ba0e5928") else "phase6-normalized"
+            )}
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--origin", required=True)
@@ -140,12 +193,7 @@ def main():
     raw_manifest = args.manifest.read_bytes()
     manifest = json.loads(raw_manifest)
     files = validate_manifest(manifest)
-    remote_manifest, _ = fetch_file(origin, {
-        "name": "GUEST_STAGE_MANIFEST.json", "size": len(raw_manifest),
-        "sha256": hashlib.sha256(raw_manifest).hexdigest()
-    })
-    if remote_manifest["status"] != "PASS":
-        raise VerificationError("Remote stage manifest: " + remote_manifest.get("error", "mismatch"))
+    remote_manifest = fetch_remote_stage_manifest(origin, manifest)
     rows, registry_raw = [], None
     http_files = public_http_assets(files)
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
