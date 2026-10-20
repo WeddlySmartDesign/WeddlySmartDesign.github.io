@@ -29,7 +29,7 @@ async function mockConfig(page){
     if(body.action==='config'){
       await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
         ok:true,publishableKey:'pk_test_guest',
-        prices:{essential:{current:3990},signature:{current:4990}}
+        prices:{essential:{current:3990},signature:{current:4990}},catalog:{'veil-light':{name:'VEIL LIGHT',version:'5.3.3',priceCents:4990,status:'available'}}
       })});
       return;
     }
@@ -69,7 +69,7 @@ async function verifyCatalogSelection(browser){
  }})});
  await page.route('https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-stripe-checkout',async route=>{
   const body=route.request().postDataJSON();if(body.action==='create')submitted.push(body);
-  const result=body.action==='config'?{ok:true,publishableKey:'pk_test_offline',prices:{essential:{current:3990},signature:{current:4990}}}:
+  const result=body.action==='config'?{ok:true,publishableKey:'pk_test_offline',prices:{essential:{current:3990},signature:{current:4990}},catalog:{'veil-light':{name:'VEIL LIGHT',version:'5.3.3',priceCents:4990,status:'available'}}}:
     {ok:true,clientSecret:'cs_test_no_real_payment',sessionId:'offline'};
   await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(result)});
  });
