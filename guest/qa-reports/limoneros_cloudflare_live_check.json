@@ -1,12 +1,135 @@
 {
   "schemaVersion": "guest-d03-cloudflare-stage-evidence-v2",
-  "checkedAtUtc": "2026-10-20T07:12:29.731196+00:00",
+  "checkedAtUtc": "2026-10-20T07:14:12.933903+00:00",
   "url": "https://guest-weddlysmartdesign.pages.dev/guest/catalog-assets/design-03/1.0.0/index.html",
   "testOnly": true,
   "commercialApproved": false,
   "backendTestDeployed": false,
   "androidPhysicalVerified": false,
-  "online": false,
-  "stageBuildPassed": false,
-  "error": "RuntimeError: CLOUDFLARE_STAGE_BUILD_FAILED: /home/runner/work/WeddlySmartDesign.github.io/WeddlySmartDesign.github.io/guest/tools/build_catalog_static_preview.cjs:26\n    throw Error('CATALOG_TEMPLATE_UNCERTIFIED_OR_DRIFT:'+name);\n    ^\n\nError: CATALOG_TEMPLATE_UNCERTIFIED_OR_DRIFT:design-04\n    at Object.<anonymous> (/home/runner/work/WeddlySmartDesign.github.io/WeddlySmartDesign.github.io/guest/tools/build_catalog_static_preview.cjs:26:11)\n    at Module._compile (node:internal/modules/cjs/loader:1781:14)\n    at Object..js (node:internal/modules/cjs/loader:1913:10)\n    at Module.load (node:internal/modules/cjs/loader:1505:32)\n    at Function._load (node:internal/modules/cjs/loader:1309:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n    at node:internal/main/run_main_module:36:49\n\nNode.js v22.23.3\n"
+  "visualPatchLocalEmbedded": true,
+  "visualPatchCssSha256": "6d7ffccc5547d3e0be152821eacb558b9d99f2dd35656660fe1f2c2b1bceea32",
+  "visualPatchJsSha256": "4a4beec3aeb5403efce99ea411c8b0e872a584d184cd53c352171c47313ea773",
+  "visualPatchLiveExact": true,
+  "stageBuildPassed": true,
+  "sourceSha256": "a6fa4d81f73e6b5c913f8fd3cd3d285327249ee631a8707d0635d447d0c96482",
+  "publishedHtmlSha256": "3728eba4147ad91d8cf345fc99dc12584a97bf1516248e756fa3a07d04d0e34b",
+  "publishedHtmlBytes": 1090094,
+  "mediaFiles": 15,
+  "largestMediaBytes": 8587255,
+  "exactReconstructionVerified": true,
+  "stageNoSale": true,
+  "httpsStatus": 200,
+  "liveHtmlExact": true,
+  "noIndex": true,
+  "liveHtmlBytes": 1090094,
+  "mediaDiagnostics": [
+    {
+      "name": "0afbf00149e732a48bf4c76d.jpg",
+      "http": 200,
+      "bytes": 333461,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    },
+    {
+      "name": "4badf39ccac905a9b40ba35d.mp4",
+      "http": 200,
+      "bytes": 8587255,
+      "shaMatches": true,
+      "mime": "video/mp4"
+    },
+    {
+      "name": "e47aff063a8eb830c5c0d5c4.jpg",
+      "http": 200,
+      "bytes": 236245,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    },
+    {
+      "name": "ef30c9ae628a90d19e2f45d7.mp4",
+      "http": 200,
+      "bytes": 5471729,
+      "shaMatches": true,
+      "mime": "video/mp4"
+    },
+    {
+      "name": "a9af1e075f63a294092e2af6.jpg",
+      "http": 200,
+      "bytes": 569267,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    },
+    {
+      "name": "a5587dffb86e47b6ed23867e.jpg",
+      "http": 200,
+      "bytes": 583310,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    },
+    {
+      "name": "8d13922419e923846f632dcd.jpg",
+      "http": 200,
+      "bytes": 572809,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    },
+    {
+      "name": "7ac10ba2c65e5dfc55ce4fd6.jpg",
+      "http": 200,
+      "bytes": 561757,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    },
+    {
+      "name": "ce98ce0edcf45ce0fbe5c72c.jpg",
+      "http": 200,
+      "bytes": 519496,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    },
+    {
+      "name": "91246515ea0675cf8b405669.jpg",
+      "http": 200,
+      "bytes": 569258,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    },
+    {
+      "name": "45a9e4305d1a0058531cf83b.jpg",
+      "http": 200,
+      "bytes": 583238,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    },
+    {
+      "name": "94a6f2c47b753bc47051a539.jpg",
+      "http": 200,
+      "bytes": 570114,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    },
+    {
+      "name": "6d3cc49713e435f7e1108078.jpg",
+      "http": 200,
+      "bytes": 524086,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    },
+    {
+      "name": "fbadbf780783c001ede89274.jpg",
+      "http": 200,
+      "bytes": 524540,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    },
+    {
+      "name": "ccffdf4b308884911bd92d66.jpg",
+      "http": 200,
+      "bytes": 529338,
+      "shaMatches": true,
+      "mime": "image/jpeg"
+    }
+  ],
+  "mediaErrors": [],
+  "liveMediaExact": true,
+  "online": true
 }
