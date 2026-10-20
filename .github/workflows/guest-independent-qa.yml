@@ -26,6 +26,8 @@ jobs:
         run: node guest/tests/claude_designs_import_integrity_2026_10_20.test.cjs
       - name: Verify seven extra Claude D10–D16 designs without sales approval
         run: node guest/tests/claude_d10_d16_integrity_2026_10_20.test.cjs
+      - name: 15 candidate catalog registry cannot sell or confuse two Limoneros
+        run: node guest/tests/catalog_15_candidate_consistency.test.cjs
       - name: Stage all 13 Claude skin media under 25 MiB (private CI, NEVER deploy)
         run: node guest/tests/claude_asset_stage_2026_10_20.test.cjs
       - name: Catalog RSVP config lock (staged source; offline)
