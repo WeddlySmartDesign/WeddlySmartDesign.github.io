@@ -6,7 +6,9 @@
     "minimumLaunchTemplates": 5,
     "targetLaunchTemplates": 6,
     "commonConfigSchema": "guest/GUEST_INVITATION_CONFIG_SCHEMA_V1.json",
-    "ownerTouchTargetMinutes": 5
+    "ownerTouchTargetMinutes": 5,
+    "inventoryCandidateCount": 15,
+    "historicExcludedFromSale": "design-03"
   },
   "templates": [
     {
@@ -48,6 +50,227 @@
     {
       "id": "design-03",
       "displayName": "LIMONEROS",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-04",
+      "displayName": "AZULEJO",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-05",
+      "displayName": "GALA",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-06",
+      "displayName": "INVERNADERO",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-07",
+      "displayName": "REFLEJO",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-08",
+      "displayName": "CAJA DE MÚSICA",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-09",
+      "displayName": "LIMONEROS · VERSIÓN CLAUDE",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-10",
+      "displayName": "CUENTO DE PAPEL",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-11",
+      "displayName": "BOLA DE CRISTAL",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-12",
+      "displayName": "ABANICO",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-13",
+      "displayName": "VIÑETAS",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-14",
+      "displayName": "VIÑETAS · ELLAS",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-15",
+      "displayName": "VIÑETAS · ELLOS",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "scalabilityCertified": false,
+      "operationalPilotPass": false,
+      "visualRobustnessPass": false,
+      "ownerEditing": "bounded-safe-controls-only",
+      "publicDeliveryContract": "stable-final-url + shared recipient-context parameters",
+      "configSchema": "guest-invitation-config-v1",
+      "typographyVariants": [
+        "classic"
+      ],
+      "defaultTypographyVariant": "classic",
+      "versionPinnedPerOrder": true
+    },
+    {
+      "id": "design-16",
+      "displayName": "EL MAPA",
       "version": "1.0.0",
       "status": "certification-pending",
       "scalabilityCertified": false,
