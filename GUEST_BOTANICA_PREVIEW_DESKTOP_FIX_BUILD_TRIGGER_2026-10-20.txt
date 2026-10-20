@@ -1,0 +1,2 @@
+GUEST / BOTÁNICA DESKTOP LO ESENCIAL — PREVIEW ONLY (2026-10-20).
+This root marker exists only on the dedicated preview branch to trigger Cloudflare Pages build watch (*). It is NOT copied by the catalog static builder, not a sale gate, not a production asset, and must never be merged to main.
