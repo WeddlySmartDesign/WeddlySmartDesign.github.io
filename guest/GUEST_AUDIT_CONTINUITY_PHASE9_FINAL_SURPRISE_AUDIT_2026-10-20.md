@@ -20,7 +20,7 @@ El backend entrega el acceso a gestión en `https://weddlysmartdesign.github.io/
 ## Hallazgo BLOQUEANTE 2 (nuevo): escaparate GUEST público muestra colecciones retiradas
 - `main/guest.html` aún muestra **GUEST Essential / Signature** y enlaza a antiguos `guest-checkout.html?edition=...`, aunque la instrucción comercial actual es **15 diseños individuales candidatos**. `noindex` **NO equivale a impedir visitas o cobros**; el checkout activo exige plantilla individual y puede rechazar una compra sin ID de diseño.
 - `guest-independent/guest.html` ya incluye 15 fichas individuales sin colecciones, `Próxima apertura`, y `noindex`.
-- Se preparó [PR #145 — borrador escaparate individual](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/pull/145), **un único archivo `guest.html`**, commit `b92dd19369101cfc6eac5a154cc8d1f8cc1545a6`, sin cambios ONE/STUDIO/otro archivo.
+- Se amplió [PR #145 — borrador escaparate y compra individual](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/pull/145), **exactamente cuatro archivos GUEST de raíz**: `guest.html`, `guest-checkout.html`, `guest-checkout-return.html` y `guest-order.html` (commit de cierre `aa95138f8000689ce39c3e57e9cbf62628cd7067`), para no dejar el checkout, el retorno y el pedido ligados a las colecciones antiguas. **PR DRAFT**, sin cambios ONE/STUDIO y sin publicaciones ni cobros.
 - **NO FUSIONAR**: 15 fichas son candidatos, no diseños certificados. Antes de vender hay que validar arte final/identidad, precio, derechos, textos legales y producir una versión aprobada en la que el CTA de compra sea real. Nunca activar cobros al fusionar un escaparate de “próxima apertura”.
 
 ## Bloqueo 3 que ya estaba pendiente pero debe quedar explícito
