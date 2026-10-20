@@ -1,0 +1,656 @@
+{
+  "schemaVersion": "guest-claude-candidates-import-v1",
+  "date": "2026-10-20",
+  "sourceBranch": "claude/guest-skins-d04-d08",
+  "sourceCommit": "5b1e418b11c4af0a0b7753963b7079f897016f8d",
+  "importCommit": "6b53a91aa15100bc58555739d4402a804b92a1bc",
+  "noSale": true,
+  "selectedCandidateIds": [
+    "design-04",
+    "design-05",
+    "design-06",
+    "design-07",
+    "design-08",
+    "design-09"
+  ],
+  "limonerosCurrentWrongHistoricId": "design-03",
+  "limonerosClaudeAlternativeId": "design-09",
+  "historicD03BlobSha1": "020c46846403a77574b71a92cd22c3d00408b235",
+  "files": [
+    {
+      "path": "guest/catalog-assets/design-04/1.0.0/index.html",
+      "gitBlobSha1": "adfc97e9e2a745f815f201e9197c17e45fb500e1",
+      "bytes": 27448936
+    },
+    {
+      "path": "guest/catalog-assets/design-05/1.0.0/index.html",
+      "gitBlobSha1": "74a7e8ce989a4a8c95aab0d6263a85e2ae7b54ba",
+      "bytes": 19827547
+    },
+    {
+      "path": "guest/catalog-assets/design-06/1.0.0/index.html",
+      "gitBlobSha1": "4a184fb11ef18e97d9173e93528645e2b12631b9",
+      "bytes": 14135186
+    },
+    {
+      "path": "guest/catalog-assets/design-07/1.0.0/index.html",
+      "gitBlobSha1": "4bc7bdadc38e45a32fd75f1b018eebd25c2026ca",
+      "bytes": 30954481
+    },
+    {
+      "path": "guest/catalog-assets/design-08/1.0.0/index.html",
+      "gitBlobSha1": "406442c12400ba17b9698913a969ca24b87498f6",
+      "bytes": 24068615
+    },
+    {
+      "path": "guest/catalog-assets/design-09/1.0.0/index.html",
+      "gitBlobSha1": "3d689aaf7995c8dcaac8e82d319016506496172f",
+      "bytes": 24178059
+    },
+    {
+      "path": "guest/guest-catalog-template-design-04-adapter-v1.js",
+      "gitBlobSha1": "f82bc50be2a253d79665552186094e448af9d38b",
+      "bytes": 345
+    },
+    {
+      "path": "guest/guest-catalog-template-design-05-adapter-v1.js",
+      "gitBlobSha1": "c42e21e41e5c932d711b31beee98426b8b984379",
+      "bytes": 345
+    },
+    {
+      "path": "guest/guest-catalog-template-design-06-adapter-v1.js",
+      "gitBlobSha1": "4ef80a7c11aa94b8c1e024c823ead6b2859477e7",
+      "bytes": 345
+    },
+    {
+      "path": "guest/guest-catalog-template-design-07-adapter-v1.js",
+      "gitBlobSha1": "6af7d2ebda4eadcc675b19d52a05438c50b8b521",
+      "bytes": 345
+    },
+    {
+      "path": "guest/guest-catalog-template-design-08-adapter-v1.js",
+      "gitBlobSha1": "c5ca8ff0b3a4d9653eb4fe45b0ee264df2234ef9",
+      "bytes": 345
+    },
+    {
+      "path": "guest/guest-catalog-template-design-09-adapter-v1.js",
+      "gitBlobSha1": "3c7dae1357bfc033a05b530739d6d3b979ed2958",
+      "bytes": 345
+    },
+    {
+      "path": "guest/templates/_skin-engine/demo-photos/g1.jpg",
+      "gitBlobSha1": "35366af979c5930c6c9676a704a50adbe84ee83f",
+      "bytes": 213270
+    },
+    {
+      "path": "guest/templates/_skin-engine/demo-photos/g2.jpg",
+      "gitBlobSha1": "3f4df58f2657bfa7dd8a6eaaef0075f2ea903936",
+      "bytes": 176578
+    },
+    {
+      "path": "guest/templates/_skin-engine/demo-photos/g3.jpg",
+      "gitBlobSha1": "127cdc978b8340fd7ed2139372b7843c868a7b5d",
+      "bytes": 236131
+    },
+    {
+      "path": "guest/templates/_skin-engine/demo-photos/g4.jpg",
+      "gitBlobSha1": "5bffc7a8273843ad5fa2b135884b195a27909f71",
+      "bytes": 174620
+    },
+    {
+      "path": "guest/templates/_skin-engine/demo-photos/story.jpg",
+      "gitBlobSha1": "5bffc7a8273843ad5fa2b135884b195a27909f71",
+      "bytes": 174620
+    },
+    {
+      "path": "guest/templates/_skin-engine/demo-photos/venue.jpg",
+      "gitBlobSha1": "cf252be3db2263b7fe8e8823436fee289a915943",
+      "bytes": 272731
+    },
+    {
+      "path": "guest/templates/_skin-engine/engine.html",
+      "gitBlobSha1": "42d8334c41fe2878df8b326e753c5b3f3d12bc22",
+      "bytes": 50874
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Adventor.otf",
+      "gitBlobSha1": "7040d008641d1a1e5611360e9a61b5ff912d61da",
+      "bytes": 170364
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Bangers-Regular.ttf",
+      "gitBlobSha1": "9b0f8c1f1b45e7bb4971b7d6a8604f9aacacdd32",
+      "bytes": 93148
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Baskerville.otf",
+      "gitBlobSha1": "e52dd0b7da3ad0b4369fe78a1e7d09c5542b357b",
+      "bytes": 73168
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Bonum-Italic.otf",
+      "gitBlobSha1": "ca816e24adcd79a02de3b3aa8b502cf9912b3862",
+      "bytes": 147120
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Bonum.otf",
+      "gitBlobSha1": "b7f2af358b4f06b801be2787b74c65d775e7aa57",
+      "bytes": 142660
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Chorus.otf",
+      "gitBlobSha1": "e1c8f8dc2bb596643232998e05c34e23393f0e85",
+      "bytes": 100924
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Garamond.woff",
+      "gitBlobSha1": "57ae9c0c4cfa7e5de13f7a7451e4a0edff4d26d9",
+      "bytes": 249060
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/GaramondSC.otf",
+      "gitBlobSha1": "0f1edd56e3690ce7d881bc0132b3df48a3ae9273",
+      "bytes": 353196
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Kalam-Bold.ttf",
+      "gitBlobSha1": "321272d977887fefb4911789a2691d3131d1bcf0",
+      "bytes": 460896
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Kalam-Regular.ttf",
+      "gitBlobSha1": "0c956a29348e69bff24a1ae8952fd0b42569311c",
+      "bytes": 427360
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Lora-Italic.ttf",
+      "gitBlobSha1": "e973ccf7e5c69a831090c729a0dc2c592f42f4cc",
+      "bytes": 221232
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Lora.ttf",
+      "gitBlobSha1": "ee1914c3746140523de2940d267ec2215bd85d5b",
+      "bytes": 212196
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/OFL-Bangers.txt",
+      "gitBlobSha1": "bf717d4be410cf7616b9bd345b40ab4817a26e6f",
+      "bytes": 4479
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/OFL-Kalam.txt",
+      "gitBlobSha1": "6dd809659a8ccace7ccee108d024d33cd4f936da",
+      "bytes": 4373
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Pagella-Italic.otf",
+      "gitBlobSha1": "2f354a1982b7d3c943bc13f663032146709e5dca",
+      "bytes": 221936
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Pagella.otf",
+      "gitBlobSha1": "b4bb7c05699e8dce042afac46f724f1daa2eda2f",
+      "bytes": 218100
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Pinyon.ttf",
+      "gitBlobSha1": "fb2458f7cdd09cffdcf6b8008617fc9d203ff04c",
+      "bytes": 151412
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Poppins-Light.ttf",
+      "gitBlobSha1": "931ae8fdc6a32eaa6666f31343f5cd37e74954a4",
+      "bytes": 161936
+    },
+    {
+      "path": "guest/templates/_skin-engine/fonts/Poppins.ttf",
+      "gitBlobSha1": "0bda228ade88b0bb5aac7da2c881d0c3f64d0817",
+      "bytes": 160316
+    },
+    {
+      "path": "guest/templates/_skin-engine/skins.css",
+      "gitBlobSha1": "449774beaac45f8035f572a3534793ff762f1420",
+      "bytes": 10016
+    },
+    {
+      "path": "guest/templates/design-04/interior.css",
+      "gitBlobSha1": "421aa810b3e02c87a7b384efa611c2e24a694019",
+      "bytes": 11251
+    },
+    {
+      "path": "guest/templates/design-04/interior.js",
+      "gitBlobSha1": "938adbf97f41d188f8eab2a295efb9bc235c1eb6",
+      "bytes": 8493
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/aguada.webp",
+      "gitBlobSha1": "2fe1dc5b620edc77f0d0aa4ea80c115672f4ddfa",
+      "bytes": 30158
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/band-bot.jpg",
+      "gitBlobSha1": "e0ebf30229aa1f75e69d6c8618be824043cdb718",
+      "bytes": 30821
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/band-top.jpg",
+      "gitBlobSha1": "b2cd5d47225e8388b2fbde64bea141e48f7aef26",
+      "bytes": 8518
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/cover-wash.webp",
+      "gitBlobSha1": "671395e9b2167c5ea37bf32eecff3b69f2bab691",
+      "bytes": 14642
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/dove0.webp",
+      "gitBlobSha1": "6b8e893a6d0975f362d0e1cd9997a6c30c0a7a9a",
+      "bytes": 8944
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/dove1.webp",
+      "gitBlobSha1": "b42619ddca256fc9017e83ae249e155885cce748",
+      "bytes": 9516
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/dove2.webp",
+      "gitBlobSha1": "1c934e5e9ea0919bb75fc46c6dc0d6cc9da49aeb",
+      "bytes": 7980
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/hint-wash.webp",
+      "gitBlobSha1": "a276934c7d0ec65a820ce636bbe0600a84ae0728",
+      "bytes": 4264
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/motif.webp",
+      "gitBlobSha1": "12b959cf27120509f24ce17f760ddb4ce05552d8",
+      "bytes": 35326
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/paper.jpg",
+      "gitBlobSha1": "d9f2644d7c3d3310a3dc66177574565e9aebbdba",
+      "bytes": 15694
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/tile.jpg",
+      "gitBlobSha1": "6ae62be210eedc52afebb130280aa11e5b55e44a",
+      "bytes": 36325
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/wash-mask.png",
+      "gitBlobSha1": "14c8d7ccb367de7bcb41bd127a235407b25bdd33",
+      "bytes": 23760
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/win-closed.webp",
+      "gitBlobSha1": "83b1ae1ad3dae02650c85a455c32d7e7074ab519",
+      "bytes": 38828
+    },
+    {
+      "path": "guest/templates/design-04/skin-assets/win-open.webp",
+      "gitBlobSha1": "d4c54eacdc4851952018ba3614bc2bb9475177d7",
+      "bytes": 47654
+    },
+    {
+      "path": "guest/templates/design-04/skin.json",
+      "gitBlobSha1": "ea3984ed00a84fe7366f8ef50e8670016262e072",
+      "bytes": 2502
+    },
+    {
+      "path": "guest/templates/design-04/visual-plugin.json",
+      "gitBlobSha1": "6496411b4d860099916846b9fa7b91880ae8b135",
+      "bytes": 189
+    },
+    {
+      "path": "guest/templates/design-05/interior.css",
+      "gitBlobSha1": "05923586963dbb2409131bbeaac4291501ed04d9",
+      "bytes": 18399
+    },
+    {
+      "path": "guest/templates/design-05/interior.js",
+      "gitBlobSha1": "57e1aeac885344e7b9c796fc9b99240040b67e22",
+      "bytes": 12195
+    },
+    {
+      "path": "guest/templates/design-05/skin-assets/aguada.webp",
+      "gitBlobSha1": "57600c5f53e4ad8870c7ee5c8a600534d97c8c8a",
+      "bytes": 33798
+    },
+    {
+      "path": "guest/templates/design-05/skin-assets/band-bot.jpg",
+      "gitBlobSha1": "34fd31155b75364950bbd86b432a61f150491e66",
+      "bytes": 12118
+    },
+    {
+      "path": "guest/templates/design-05/skin-assets/band-top.jpg",
+      "gitBlobSha1": "16e77096ad491847815df86d3e903e2a2d31d3ec",
+      "bytes": 8247
+    },
+    {
+      "path": "guest/templates/design-05/skin-assets/motif.webp",
+      "gitBlobSha1": "51aad0f2e2dd394923985a8b59a48e60c8af8b74",
+      "bytes": 25334
+    },
+    {
+      "path": "guest/templates/design-05/skin-assets/music.m4a",
+      "gitBlobSha1": "c88e5e69dcb212f97f11f6420506e3f86b708e1b",
+      "bytes": 1111841
+    },
+    {
+      "path": "guest/templates/design-05/skin-assets/paper.jpg",
+      "gitBlobSha1": "688d02c3dece6fa8de1fc4df09464dae3f63350a",
+      "bytes": 12997
+    },
+    {
+      "path": "guest/templates/design-05/skin-assets/wash-mask.png",
+      "gitBlobSha1": "14c8d7ccb367de7bcb41bd127a235407b25bdd33",
+      "bytes": 23760
+    },
+    {
+      "path": "guest/templates/design-05/skin.json",
+      "gitBlobSha1": "a93ae6a65a28389aa1c29c5f120d58bc8b746d59",
+      "bytes": 2336
+    },
+    {
+      "path": "guest/templates/design-05/visual-plugin.json",
+      "gitBlobSha1": "b8f1705327a4e20c571df4bebc64642fe1802fa1",
+      "bytes": 186
+    },
+    {
+      "path": "guest/templates/design-06/interior.css",
+      "gitBlobSha1": "2982b6ec44f94150f2d8ef7228460586ebef2d5b",
+      "bytes": 24228
+    },
+    {
+      "path": "guest/templates/design-06/interior.js",
+      "gitBlobSha1": "f26b55a8c36de0f6c75dd74ffe91e0c0b969cf26",
+      "bytes": 9665
+    },
+    {
+      "path": "guest/templates/design-06/skin-assets/aguada.webp",
+      "gitBlobSha1": "5f6c5c2453ee54d23cbd1ced73038a89e9c27b9b",
+      "bytes": 33256
+    },
+    {
+      "path": "guest/templates/design-06/skin-assets/band-bot.jpg",
+      "gitBlobSha1": "453e7476b5e2400a8b76fc9096a49f7d69e86a32",
+      "bytes": 22358
+    },
+    {
+      "path": "guest/templates/design-06/skin-assets/band-top.jpg",
+      "gitBlobSha1": "e0335e1cdda929803a500b7599903bbe32952e61",
+      "bytes": 8028
+    },
+    {
+      "path": "guest/templates/design-06/skin-assets/butterfly.webp",
+      "gitBlobSha1": "6d195e38855936b98162c3854780aa6117c001cb",
+      "bytes": 15452
+    },
+    {
+      "path": "guest/templates/design-06/skin-assets/kraft.jpg",
+      "gitBlobSha1": "c8423f18b4b46c145d4284b9f3aef81a2c16b994",
+      "bytes": 17085
+    },
+    {
+      "path": "guest/templates/design-06/skin-assets/motif.webp",
+      "gitBlobSha1": "9a843442577b7112e92a8e994f9cd5b2df27ba02",
+      "bytes": 39660
+    },
+    {
+      "path": "guest/templates/design-06/skin-assets/paper.jpg",
+      "gitBlobSha1": "89f0fa39e1e9344ef1fadba1763a6bdb960f567c",
+      "bytes": 13874
+    },
+    {
+      "path": "guest/templates/design-06/skin-assets/wash-mask.png",
+      "gitBlobSha1": "14c8d7ccb367de7bcb41bd127a235407b25bdd33",
+      "bytes": 23760
+    },
+    {
+      "path": "guest/templates/design-06/skin.json",
+      "gitBlobSha1": "0684f025b0eae3738f5fd333a12d19e0714bbe6e",
+      "bytes": 2335
+    },
+    {
+      "path": "guest/templates/design-06/visual-plugin.json",
+      "gitBlobSha1": "5be8cb0bd73b957b40de5fe0e31c3b4884c3aea4",
+      "bytes": 193
+    },
+    {
+      "path": "guest/templates/design-07/interior.css",
+      "gitBlobSha1": "114379a5217195ff253bfe75c3872985d99d8198",
+      "bytes": 24336
+    },
+    {
+      "path": "guest/templates/design-07/interior.js",
+      "gitBlobSha1": "32d4fb53cd57b9549c9b7516ab52b2de270af96d",
+      "bytes": 10016
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/aguada.webp",
+      "gitBlobSha1": "2e6614a91a8c016d9f638fc1c7968d2e079d4f39",
+      "bytes": 32962
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/band-bot.jpg",
+      "gitBlobSha1": "fb5f48db21486b8d68757680663dbdcbc5f8b827",
+      "bytes": 12048
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/band-top.jpg",
+      "gitBlobSha1": "9650a1b2f5adb59ff6a2d1f5202d519cccd1c09d",
+      "bytes": 9295
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/espejo.webp",
+      "gitBlobSha1": "c716489565b63d2b1b26ad4f3f409a5d302a9461",
+      "bytes": 12396
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/hint-wash.webp",
+      "gitBlobSha1": "a276934c7d0ec65a820ce636bbe0600a84ae0728",
+      "bytes": 4264
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/motif.webp",
+      "gitBlobSha1": "c74ee25ebf47ffabff4b2b9d5937b3529a9dd5b1",
+      "bytes": 10900
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/paper.jpg",
+      "gitBlobSha1": "a331f03de62bc7c3580f33b9c99d4231b3bece85",
+      "bytes": 13964
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/petal0.webp",
+      "gitBlobSha1": "e2d7bbf65c6a04c92c3fc10277ddc7db67377c9a",
+      "bytes": 2876
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/petal1.webp",
+      "gitBlobSha1": "a24896f60add0370491a22449d2f592688078420",
+      "bytes": 2880
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/petal2.webp",
+      "gitBlobSha1": "decc68222f42765094f2bf553b4bf3bd817d4d4d",
+      "bytes": 2812
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/petal3.webp",
+      "gitBlobSha1": "deaf2dd5db4747f02103087a43522b4273d00901",
+      "bytes": 2798
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/petal4.webp",
+      "gitBlobSha1": "76dc077f1eb42589c30fa0481fa6da91e7d1bcbd",
+      "bytes": 2898
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/petal5.webp",
+      "gitBlobSha1": "e05005f31978022ccaf152a2e1ea991beffd7a64",
+      "bytes": 3738
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/petal6.webp",
+      "gitBlobSha1": "fabf25e0495e80d56280dc294a6e0acf55bda2dd",
+      "bytes": 2574
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/petal7.webp",
+      "gitBlobSha1": "48ee40af0071ca77ee64ea90ada028a34093737a",
+      "bytes": 3438
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/vela-off.webp",
+      "gitBlobSha1": "9745238f38efbfd87672e3dfca0d30a324ff2a73",
+      "bytes": 3654
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/vela.webp",
+      "gitBlobSha1": "6ff9ab592ddbdce672a579f80b113f129d6b795d",
+      "bytes": 4646
+    },
+    {
+      "path": "guest/templates/design-07/skin-assets/wash-mask.png",
+      "gitBlobSha1": "14c8d7ccb367de7bcb41bd127a235407b25bdd33",
+      "bytes": 23760
+    },
+    {
+      "path": "guest/templates/design-07/skin.json",
+      "gitBlobSha1": "b2b7fb74ecde74d8b7844804990baf80cf7eed2e",
+      "bytes": 2934
+    },
+    {
+      "path": "guest/templates/design-07/visual-plugin.json",
+      "gitBlobSha1": "791c953cfee9d450b9baaa2a8842b7b18a8f97f8",
+      "bytes": 189
+    },
+    {
+      "path": "guest/templates/design-08/interior.css",
+      "gitBlobSha1": "a48d8115603bb944e41d9c7f7376f69741d009ca",
+      "bytes": 10988
+    },
+    {
+      "path": "guest/templates/design-08/interior.js",
+      "gitBlobSha1": "19c21f5274a280253ef2d783ae623880ecf109bd",
+      "bytes": 12360
+    },
+    {
+      "path": "guest/templates/design-08/skin-assets/aguada.webp",
+      "gitBlobSha1": "e19e93fe192169e982a5869516360c96788b97d9",
+      "bytes": 33604
+    },
+    {
+      "path": "guest/templates/design-08/skin-assets/band-bot.jpg",
+      "gitBlobSha1": "ce8533511b0b188eb2da44724e3998369269536b",
+      "bytes": 7155
+    },
+    {
+      "path": "guest/templates/design-08/skin-assets/band-top.jpg",
+      "gitBlobSha1": "d30930ca7d21b917f37a176a4a7f3296ea7af933",
+      "bytes": 7696
+    },
+    {
+      "path": "guest/templates/design-08/skin-assets/motif.webp",
+      "gitBlobSha1": "7a62532d460e8f5502a3b9e6738cdb00f4968bb5",
+      "bytes": 38236
+    },
+    {
+      "path": "guest/templates/design-08/skin-assets/music.m4a",
+      "gitBlobSha1": "1f6010b3073641de28c3095c3e2e6651fabf026e",
+      "bytes": 937456
+    },
+    {
+      "path": "guest/templates/design-08/skin-assets/paper.jpg",
+      "gitBlobSha1": "b63c7a673419819f4077cd1b003d0c229254294a",
+      "bytes": 15975
+    },
+    {
+      "path": "guest/templates/design-08/skin-assets/wash-mask.png",
+      "gitBlobSha1": "14c8d7ccb367de7bcb41bd127a235407b25bdd33",
+      "bytes": 23760
+    },
+    {
+      "path": "guest/templates/design-08/skin-assets/wood.jpg",
+      "gitBlobSha1": "9372e0c12b0e293e00d13e1936cd66e455726aff",
+      "bytes": 7582
+    },
+    {
+      "path": "guest/templates/design-08/skin.json",
+      "gitBlobSha1": "bcf69508aad8f464384144987d7f56d03b2107b3",
+      "bytes": 2353
+    },
+    {
+      "path": "guest/templates/design-08/visual-plugin.json",
+      "gitBlobSha1": "1294d97ff6d1accc71c294b8dd1826d65ccfea6e",
+      "bytes": 197
+    },
+    {
+      "path": "guest/templates/design-09/interior.css",
+      "gitBlobSha1": "999bbc460342fad0b8981c62f2bde28a0492d002",
+      "bytes": 17915
+    },
+    {
+      "path": "guest/templates/design-09/interior.js",
+      "gitBlobSha1": "b0e34d619345b6a631e108f83612e66edd5fea02",
+      "bytes": 9457
+    },
+    {
+      "path": "guest/templates/design-09/skin-assets/band-bot.jpg",
+      "gitBlobSha1": "9329cc3da3712067029b2a81d6614923e4f04639",
+      "bytes": 46908
+    },
+    {
+      "path": "guest/templates/design-09/skin-assets/band-top.jpg",
+      "gitBlobSha1": "b761e41d32fe76215fd43d8ecbed329357ce3bf5",
+      "bytes": 48165
+    },
+    {
+      "path": "guest/templates/design-09/skin-assets/brush.webp",
+      "gitBlobSha1": "a8da50fdc1ef91262ea3ae4bda9058e27e809d6d",
+      "bytes": 35422
+    },
+    {
+      "path": "guest/templates/design-09/skin-assets/flor1.webp",
+      "gitBlobSha1": "99bcdaf49061b61416887e8668704aedfc6a5aa2",
+      "bytes": 7094
+    },
+    {
+      "path": "guest/templates/design-09/skin-assets/flor2.webp",
+      "gitBlobSha1": "d5d0bca7420abb64c46eef70d4b4aa39ac3fba7b",
+      "bytes": 6092
+    },
+    {
+      "path": "guest/templates/design-09/skin-assets/flor3.webp",
+      "gitBlobSha1": "8c135a94a9dc5e0894a141287471c4eb8a51b4b8",
+      "bytes": 5758
+    },
+    {
+      "path": "guest/templates/design-09/skin-assets/oil-mask.png",
+      "gitBlobSha1": "37fb652b57d3d4cdb1adda0da6cd6ac8e896d1fc",
+      "bytes": 21037
+    },
+    {
+      "path": "guest/templates/design-09/skin-assets/texture.jpg",
+      "gitBlobSha1": "706a5a078072d0b03f82e3621b6fd1c4a54dd05a",
+      "bytes": 73724
+    },
+    {
+      "path": "guest/templates/design-09/skin.json",
+      "gitBlobSha1": "6a2d7ac8c306f1d4f17a0ece2d1b526663a8b90b",
+      "bytes": 2472
+    },
+    {
+      "path": "guest/templates/design-09/visual-plugin.json",
+      "gitBlobSha1": "2c0b0e23683a380c4fc14f80109d428dfba5c1c2",
+      "bytes": 210
+    },
+    {
+      "path": "guest/tools/build_skin_master.cjs",
+      "gitBlobSha1": "5fee4c50ea33bb189a11bc7171d9ef038a285ed0",
+      "bytes": 7849
+    }
+  ]
+}
