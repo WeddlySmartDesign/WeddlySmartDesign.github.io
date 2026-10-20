@@ -134,6 +134,23 @@ function applyOptionalVisualPatch(stagedHtml,name,version,sourceSha){
  if(meta.schemaVersion!=='guest-visual-stage-patch-v1'||meta.templateId!==name||
     meta.templateVersion!==version||meta.sourceMasterSha256!==sourceSha||
     meta.commercialRelease!==false)throw Error('UNAPPROVED_VISUAL_PATCH_SOURCE:'+name);
+ // CSS-only previews are intentional for editorial defects. They must not
+ // require script changes or mutate the byte-immutable author's source.
+ // Insert only once before </head>, after all original styles.
+ if(meta.patchMode==='css-only'){
+  const cssPath=path.join(dir,'patch.css');
+  if(!fs.existsSync(cssPath)||fs.existsSync(path.join(dir,'patch.js')))
+   throw Error('INVALID_CSS_ONLY_PATCH_FILES:'+name);
+  const css=fs.readFileSync(cssPath,'utf8');
+  if(!css||css.includes('</style>')||css.includes('<script')||
+      css.length>8192||!css.includes('.late-world > .film-breath'))
+   throw Error('UNSAFE_CSS_ONLY_PATCH:'+name);
+  let html=stagedHtml.toString('utf8');
+  if(html.split('</head>').length!==2)
+   throw Error('VISUAL_PATCH_HEAD_ANCHOR:'+name);
+  html=html.replace('</head>','<style id="guest-botanica-practical-seam-preview">\n'+css+'\n</style>\n</head>');
+  return Buffer.from(html,'utf8');
+ }
  const cssPath=path.join(dir,'patch.css'),jsPath=path.join(dir,'patch.js');
  if(!fs.existsSync(cssPath)||!fs.existsSync(jsPath))throw Error('INCOMPLETE_VISUAL_PATCH:'+name);
  const css=fs.readFileSync(cssPath,'utf8'),js=fs.readFileSync(jsPath,'utf8');
