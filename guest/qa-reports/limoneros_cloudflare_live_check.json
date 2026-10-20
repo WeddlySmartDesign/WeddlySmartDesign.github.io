@@ -1,6 +1,6 @@
 {
   "schemaVersion": "guest-d03-cloudflare-stage-evidence-v2",
-  "checkedAtUtc": "2026-10-20T09:19:59.596782+00:00",
+  "checkedAtUtc": "2026-10-20T09:26:43.410522+00:00",
   "url": "https://guest-weddlysmartdesign.pages.dev/guest/catalog-assets/design-03/1.0.0/index.html",
   "testOnly": true,
   "commercialApproved": false,
@@ -8,5 +8,5 @@
   "androidPhysicalVerified": false,
   "online": false,
   "stageBuildPassed": false,
-  "error": "RuntimeError: CLOUDFLARE_STAGE_BUILD_FAILED: /home/runner/work/WeddlySmartDesign.github.io/WeddlySmartDesign.github.io/guest/tools/build_catalog_static_preview.cjs:26\n    throw Error('CATALOG_TEMPLATE_UNCERTIFIED_OR_DRIFT:'+name);\n    ^\n\nError: CATALOG_TEMPLATE_UNCERTIFIED_OR_DRIFT:design-04\n    at Object.<anonymous> (/home/runner/work/WeddlySmartDesign.github.io/WeddlySmartDesign.github.io/guest/tools/build_catalog_static_preview.cjs:26:11)\n    at Module._compile (node:internal/modules/cjs/loader:1781:14)\n    at Object..js (node:internal/modules/cjs/loader:1913:10)\n    at Module.load (node:internal/modules/cjs/loader:1505:32)\n    at Function._load (node:internal/modules/cjs/loader:1309:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n    at node:internal/main/run_main_module:36:49\n\nNode.js v22.23.3\n"
+  "error": "RuntimeError: CLOUDFLARE_STAGE_BUILD_FAILED: /home/runner/work/WeddlySmartDesign.github.io/WeddlySmartDesign.github.io/guest/tools/build_catalog_static_preview.cjs:28\n if(!/^[0-9a-f]{64}$/.test(expected))throw Error('MISSING_IMMUTABLE_SHA:'+name);\n                                     ^\n\nError: MISSING_IMMUTABLE_SHA:design-04\n    at Object.<anonymous> (/home/runner/work/WeddlySmartDesign.github.io/WeddlySmartDesign.github.io/guest/tools/build_catalog_static_preview.cjs:28:44)\n    at Module._compile (node:internal/modules/cjs/loader:1781:14)\n    at Object..js (node:internal/modules/cjs/loader:1913:10)\n    at Module.load (node:internal/modules/cjs/loader:1505:32)\n    at Function._load (node:internal/modules/cjs/loader:1309:12)\n    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\n    at node:internal/main/run_main_module:36:49\n\nNode.js v22.23.3\n"
 }
