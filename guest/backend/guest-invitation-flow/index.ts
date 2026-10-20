@@ -46,7 +46,20 @@ const CATALOG_TEMPLATES:any={
       "classic"
     ],
     "defaultTypographyVariant": "classic"
-  }
+  },
+  "design-04": {"id":"design-04","version":"1.0.0","renderer":"design-04-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"},
+  "design-05": {"id":"design-05","version":"1.0.0","renderer":"design-05-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"},
+  "design-06": {"id":"design-06","version":"1.0.0","renderer":"design-06-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"},
+  "design-07": {"id":"design-07","version":"1.0.0","renderer":"design-07-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"},
+  "design-08": {"id":"design-08","version":"1.0.0","renderer":"design-08-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"},
+  "design-09": {"id":"design-09","version":"1.0.0","renderer":"design-09-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"},
+  "design-10": {"id":"design-10","version":"1.0.0","renderer":"design-10-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"},
+  "design-11": {"id":"design-11","version":"1.0.0","renderer":"design-11-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"},
+  "design-12": {"id":"design-12","version":"1.0.0","renderer":"design-12-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"},
+  "design-13": {"id":"design-13","version":"1.0.0","renderer":"design-13-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"},
+  "design-14": {"id":"design-14","version":"1.0.0","renderer":"design-14-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"},
+  "design-15": {"id":"design-15","version":"1.0.0","renderer":"design-15-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"},
+  "design-16": {"id":"design-16","version":"1.0.0","renderer":"design-16-v1-0-0","active":true,"testOnly":true,"typographyVariants":["classic"],"defaultTypographyVariant":"classic"}
 };
 // Call assertCatalogOrderMode(spec,mode) inside ALL order-creation routes (test/checkout).
 function assertCatalogOrderMode(spec:any,mode:'test'|'production'){
