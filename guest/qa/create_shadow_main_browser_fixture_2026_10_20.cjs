@@ -21,7 +21,7 @@ for(const group of groups){
   if(!group.allowed(name))throw Error('Unexpected path '+name);
   const dest=path.join(root,name);
   fs.mkdirSync(path.dirname(dest),{recursive:true});
-  fs.writeFileSync(dest,cp.execFileSync('git',['show',group.ref+':'+name]));
+  fs.writeFileSync(dest,cp.execFileSync('git',['show',group.ref+':'+name],{maxBuffer:64*1024*1024}));
   count++;
  }
 }
