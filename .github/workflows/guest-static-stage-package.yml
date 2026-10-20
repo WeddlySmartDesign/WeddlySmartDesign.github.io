@@ -61,7 +61,8 @@ jobs:
           assert.equal(manifest.botanica.masterSha256,original,'Wrong original design pin');
           const modified=fs.readFileSync(stage+'guest/catalog-assets/botanica/14.7/index.html','utf8');
           const patch=fs.readFileSync('guest/catalog-patches/botanica/14.7/patch.css','utf8');
-          const injection='<style id="guest-botanica-practical-seam-preview">\\n'+patch+'\\n</style>\\n';
+          const nl=String.fromCharCode(10);
+          const injection='<style id="guest-botanica-practical-seam-preview">'+nl+patch+nl+'</style>'+nl;
           assert.equal(modified.replace(injection,''),sourceBytes.toString('utf8'),'Stage changed beyond exact CSS-only patch');
           assert.equal(sha(Buffer.from(modified)),manifest.botanica.deployedHtmlSha256,'Stage SHA mismatch');
           assert.equal(manifest.commercialApproved,false);
