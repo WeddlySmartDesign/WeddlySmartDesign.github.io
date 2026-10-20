@@ -10,6 +10,11 @@ try{
  fs.copyFileSync(path.join(root,'guest/tools/build_catalog_static_preview.cjs'),path.join(guest,'tools/build_catalog_static_preview.cjs'));
  const registry=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json')));
  const status=JSON.parse(fs.readFileSync(path.join(root,'guest/GUEST_PROJECT_STATUS_V1.json')));
+ // Synthetic 3-design fixture: do not inherit recovered real candidates D04–D16
+ // whose 200MB+ source masters are intentionally not copied into this temp tree.
+ // Production builder must continue to fail closed for ANY registered missing design.
+ registry.templates=Object.fromEntries(Object.entries(registry.templates).filter(([id])=>['botanica','design-03'].includes(id)));
+ status.designs=Object.fromEntries(Object.entries(status.designs).filter(([id])=>['botanica','design-03'].includes(id)));
  const html=Buffer.from('<!doctype html><html><body><script>window.GUEST_APPLY_CONFIG=function(){return true}</script></body></html>');
  registry.templates['design-03']={id:'design-03',version:'1.0.0',mode:'iframe',src:null,applyApi:'GUEST_APPLY_CONFIG',status:'certification-pending'};
  status.designs['design-03']={version:'1.0.0',status:'certification-pending',candidateSha256:sha(html)};
