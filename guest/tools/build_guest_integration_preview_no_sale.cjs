@@ -9,7 +9,11 @@ const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypt
 const root=path.resolve(__dirname,'../..'),args=process.argv.slice(2);
 const arg=key=>{const i=args.indexOf(key);return i<0?null:args[i+1]};
 const target=arg('--output');
-if(!target||!path.isAbsolute(target)||target===root||target.startsWith(root+path.sep))throw Error('Provide absolute, separate --output directory');
+// Cloudflare's configured build output is `$PWD/dist` inside the checkout.
+// Permit ONLY that directory inside the source tree; still reject all other
+// source paths and require an empty destination before writing a single file.
+const stageDirectory=path.join(root,'dist');
+if(!target||!path.isAbsolute(target)||target===root||(target.startsWith(root+path.sep)&&target!==stageDirectory))throw Error('Only checkout/dist or an external empty --output directory is allowed');
 if(fs.existsSync(target)&&fs.readdirSync(target).length)throw Error('Target must be empty');
 if(arg('--template') && arg('--template')!=='botanica')throw Error('Unexpected configured Cloudflare template flag');
 const sha256=b=>crypto.createHash('sha256').update(b).digest('hex');
@@ -24,6 +28,9 @@ function add(file,data){
 const allow=/\.(html?|js|css|json|svg|webmanifest|png|jpg|jpeg|webp|ico|woff2?|mp4|webm|mp3|m4a)$/i;
 for(const entry of fs.readdirSync(path.join(root,'guest'),{withFileTypes:true})){
  if(!entry.isFile()||!allow.test(entry.name))continue;
+ // Internal project state, QA evidence and source-lock documents must never
+ // be copied to a publicly accessible Pages preview, even with noindex.
+ if(entry.name.endsWith('.json') && !['GUEST_CATALOG_OWNER_RENDERERS_V2.json','GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'].includes(entry.name))continue;
  const src='guest/'+entry.name;
  add(src,fs.readFileSync(path.join(root,src)));
 }
