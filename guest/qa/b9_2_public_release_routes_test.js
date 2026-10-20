@@ -4,7 +4,9 @@ for(const f of publicFiles)ok(fs.existsSync(path.join(root,f)),'missing public r
 const joined=publicFiles.map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('\n');
 for(const bad of ['ONE Partner','STUDIO','/one.html','/partner.html'])ok(!joined.includes(bad),'foreign release route/brand '+bad);
 const landing=fs.readFileSync(path.join(root,'guest.html'),'utf8'),checkout=fs.readFileSync(path.join(root,'guest-checkout.html'),'utf8'),backend=fs.readFileSync(path.join(root,'guest','backend','guest-stripe-checkout','index.ts'),'utf8'),access=fs.readFileSync(path.join(root,'guest','access.html'),'utf8');
-ok(landing.includes('guest-checkout.html?edition=essential')&&landing.includes('guest-checkout.html?edition=signature'),'landing purchase routes missing');
+ok(landing.includes('data-template-id="veil-light"')&&landing.includes('data-template-id="design-16"'),'15 individual design cards missing');
+ok(!landing.includes('guest-checkout.html?edition=essential')&&!landing.includes('guest-checkout.html?edition=signature'),'old collections must not be advertised');
+ok(checkout.includes("if(!catalogSelectionRequested)"),'checkout must block collection-only purchase');
 ok(backend.includes('guest-checkout-return.html?session_id={CHECKOUT_SESSION_ID}'),'Stripe checkout return route missing from session creation');
 ok(access.includes("location.replace('index.html')"),'activation does not route into canonical app');
 ok(!joined.includes('guest-orders-admin.html'),'public customer surfaces expose internal order manager');
