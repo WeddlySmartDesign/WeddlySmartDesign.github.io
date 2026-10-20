@@ -1,0 +1,171 @@
+/* ===== GALA · interior propio: reloj déco, tiques de guardarropa, fotos fundidas ===== */
+html.ga body{background:url(%%PAPER%%) center top/100% auto repeat-y #f4ede1}
+html.ga [data-bg]{background:none!important;min-height:0!important;display:block;padding:38px 30px 32px!important;color:#2d2618;font:400 19px/1.5 'Baskerville',Georgia,serif}
+.ga-band{display:block;width:100%;height:auto;max-width:none!important;margin:0}
+.ga-in{position:relative;max-width:420px;margin:0 auto;text-align:center}
+.ga-kicker{font:400 10.5px/1.2 'Adventor',sans-serif;letter-spacing:.42em;text-transform:uppercase;color:#7d5f22;margin:0 0 4px}
+.ga-title{font:400 54px/1.32 'Pinyon',cursive;margin:0 0 4px;padding:0 .12em .12em;background:linear-gradient(100deg,#6e5016 0%,#a8822f 30%,#d2b06a 48%,#9a7428 66%,#6e5016 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ga-p{font-size:19.5px;line-height:1.6;max-width:29ch;margin:0 auto;white-space:pre-line;overflow-wrap:anywhere}
+.ga-rv{opacity:0;transform:translateY(16px);transition:opacity 1.1s ease,transform 1.3s cubic-bezier(.2,.8,.2,1)}
+.ga-rv.in{opacity:1;transform:none}
+/* abanico déco entre secciones: se dibuja al llegar */
+.ga-fan{display:block;width:120px;height:44px;margin:0 auto 16px;color:#a8822f}
+.ga-fan path{fill:none;stroke:currentColor;stroke-width:.9;stroke-dasharray:80;stroke-dashoffset:80;transition:stroke-dashoffset 1.6s ease}
+.ga-fan.in path{stroke-dashoffset:0}
+.ga-rule{display:block;width:150px;height:12px;margin:2px auto 22px;color:#a8822f}
+.ga-rule path{fill:none;stroke:currentColor;stroke-width:.9}
+/* fotos fundidas */
+.ga-fade{display:block;max-width:none!important;width:calc(100% + 60px);margin:20px -30px 0;height:300px;object-fit:cover;
+ -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 76%,transparent 100%),linear-gradient(to right,transparent 0%,#000 14%,#000 86%,transparent 100%);-webkit-mask-composite:source-in;
+ mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 76%,transparent 100%),linear-gradient(to right,transparent 0%,#000 14%,#000 86%,transparent 100%);mask-composite:intersect}
+.ga-fade[data-fit=full]{object-fit:contain;height:auto;max-height:420px;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 10%,#000 88%,transparent 100%);mask-image:linear-gradient(to bottom,transparent 0%,#000 10%,#000 88%,transparent 100%)}
+.ga-fade.ga-rv{transform:scale(1.05);filter:blur(4px);transition:opacity 1.6s ease,transform 2.6s cubic-bezier(.2,.8,.2,1),filter 1.6s}
+.ga-fade.ga-rv.in{transform:none;filter:none}
+/* lugares */
+.ga-venue{padding:8px 0 22px}.ga-venue+.ga-venue{padding-top:26px;background:linear-gradient(90deg,transparent,rgba(168,130,47,.55),transparent) top/70% 1px no-repeat}
+.ga-v-k{font:400 10.5px/1 'Adventor',sans-serif;letter-spacing:.42em;text-transform:uppercase;color:#7d5f22}
+.ga-v-name{font:400 29px/1.15 'Baskerville',Georgia,serif;margin:10px 0 4px;overflow-wrap:anywhere}
+.ga-v-time{font:400 15px/1 'Adventor',sans-serif;letter-spacing:.24em;color:#7d5f22}
+.ga-v-addr{font-style:italic;color:#6b5a3e;font-size:17.5px;margin-top:6px;overflow-wrap:anywhere}
+.ga-links{display:flex;flex-wrap:wrap;justify-content:center;gap:0 22px;margin-top:4px}
+html.ga a.link{display:inline-flex;align-items:center;min-height:44px;padding:12px 0 6px;border:0;border-bottom:1px solid rgba(168,130,47,.55);border-radius:0;background:none;font:400 10.5px/1 'Adventor',sans-serif;letter-spacing:.3em;text-transform:uppercase;color:#7d5f22;text-decoration:none}
+html.ga a.link::after{content:none}
+.ga-dress{margin:22px auto 0;font-style:italic;color:#6b5a3e}
+/* agenda: reloj déco cuya aguja avanza */
+.ga-clock{position:relative;width:min(250px,72vw);aspect-ratio:1;margin:18px auto 0}
+.ga-clock svg{position:absolute;inset:0;width:100%;height:100%}
+.ga-dial circle{fill:none;stroke:#a8822f}
+.ga-dial line{stroke:#a8822f}
+.ga-dial text{font:400 9px 'Adventor',sans-serif;fill:#7d5f22;letter-spacing:.1em}
+.ga-hand{transition:transform 1.4s cubic-bezier(.3,.9,.25,1);transform-origin:50% 50%}
+.ga-hand line{stroke:#2d2618;stroke-width:1.4;stroke-linecap:round}
+.ga-hand circle{fill:#2d2618}
+.ga-mk{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border:0;background:none;padding:0;cursor:pointer}
+.ga-mk::before{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;margin:-5.5px 0 0 -5.5px;transform:rotate(45deg) scale(.8);background:#f4ede1;box-shadow:inset 0 0 0 1px #a8822f;transition:transform .5s cubic-bezier(.3,1.6,.5,1),background .4s,box-shadow .4s}
+.ga-mk.on::before{background:#c9a35a}
+.ga-mk.cur::before{transform:rotate(45deg) scale(1.35);background:#a8822f;box-shadow:0 0 12px rgba(210,176,106,.85)}
+.ga-mk:focus-visible{outline:1px solid #a8822f;outline-offset:-8px;border-radius:50%}
+.ga-now{display:grid;margin-top:18px}
+.ga-now div{grid-area:1/1;opacity:0;transform:translateY(8px);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+.ga-now div.on{opacity:1;transform:none}
+.ga-tm{display:block;font:400 15px/1 'Adventor',sans-serif;letter-spacing:.3em;color:#7d5f22}
+.ga-lb{display:block;font:400 42px/1.2 'Pinyon',cursive;color:#2d2618;margin-top:6px;overflow-wrap:anywhere}
+.ga-tap{font-style:italic;color:#6b5a3e;font-size:15.5px;margin:8px 0 0}
+/* detalles: tiques dorados de guardarropa */
+.ga-tix{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:330px;margin:14px auto 0}
+.ga-tk{position:relative;height:84px;border:0;padding:0;cursor:pointer;color:#2d2618;background:#fbf6ea;
+ -webkit-mask:radial-gradient(circle 8px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 8px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat;
+ mask:radial-gradient(circle 8px at 0 50%,transparent 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 8px at 100% 50%,transparent 98%,#000) right/51% 100% no-repeat;
+ box-shadow:inset 0 0 0 1px rgba(168,130,47,.7),inset 0 0 0 4px #fbf6ea,inset 0 0 0 5px rgba(168,130,47,.35);transition:transform .7s cubic-bezier(.2,.8,.2,1),background .5s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.ga-tk.solo{grid-column:1/-1}
+.ga-no{font:400 10px/1 'Adventor',sans-serif;letter-spacing:.4em;color:#a8822f}
+.ga-tl{font:400 11px/1.2 'Adventor',sans-serif;letter-spacing:.26em;text-transform:uppercase}
+.ga-tk[aria-expanded=true]{background:#121114;color:#e9d6a8;transform:translateY(-4px);box-shadow:inset 0 0 0 1px rgba(210,176,106,.8),inset 0 0 0 4px #121114,inset 0 0 0 5px rgba(210,176,106,.4)}
+.ga-tk:focus-visible{outline:2px solid #a8822f;outline-offset:3px}
+.ga-hint{font-style:italic;color:#6b5a3e;font-size:16px;margin:14px 0 0}
+.ga-tray{max-width:340px;margin:0 auto;overflow:hidden;height:0;transition:height .8s cubic-bezier(.2,.8,.2,1)}
+.ga-tray-in{margin-top:16px;padding:24px 22px 20px;text-align:center;background:#121114;color:#efe3c8;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px)}
+.ga-tray-in h3{margin:0 0 8px;font:400 38px/1.2 'Pinyon',cursive;background:linear-gradient(100deg,#b8923f,#f1dca0 50%,#b8923f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ga-tray-in p{margin:0 0 6px;font-size:18.5px;overflow-wrap:anywhere;white-space:pre-line}
+.ga-tt{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 30px;margin:10px 0}
+.ga-tt span{display:flex;flex-direction:column;font:400 10px/1.5 'Adventor',sans-serif;letter-spacing:.32em;text-transform:uppercase;color:#d2b06a}
+.ga-tt b{font:400 22px/1.1 'Adventor',sans-serif;color:#fff6e2;letter-spacing:.06em}
+html.ga .ga-tray-in a.link{color:#e9d6a8;border-bottom-color:rgba(210,176,106,.6)}
+.ga-tray-in details{margin-top:4px}.ga-tray-in summary{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;list-style:none;font:400 10.5px/1 'Adventor',sans-serif;letter-spacing:.3em;text-transform:uppercase;color:#e9d6a8;border-bottom:1px solid rgba(210,176,106,.6)}
+.ga-tray-in summary::-webkit-details-marker{display:none}
+/* galería */
+html.ga #gallery-items{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;width:calc(100% + 60px);max-width:none;margin:8px -30px 0;overscroll-behavior-x:contain}
+html.ga #gallery-items::-webkit-scrollbar{display:none}
+html.ga #gallery-items img{flex:0 0 100%;width:100%!important;min-width:100%;max-width:none!important;margin:0!important;height:360px;scroll-snap-align:center;scroll-snap-stop:always}
+.ga-dots{display:flex;justify-content:center;gap:2px;margin-top:4px}
+html.ga .gallery-dot{width:42px;height:42px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer}
+html.ga .gallery-dot::before{content:"";width:7px;height:7px;transform:rotate(45deg);box-shadow:inset 0 0 0 1px #a8822f}
+html.ga .gallery-dot[aria-current=true]::before{background:#a8822f}
+@media(max-width:360px){.ga-title{font-size:46px}.ga-lb{font-size:35px}.ga-v-name{font-size:25px}}
+@media(prefers-reduced-motion:reduce){.ga-rv,.ga-fade.ga-rv{opacity:1;transform:none;filter:none;transition:none}.ga-fan path{stroke-dashoffset:0}.ga-hand{transition:none}}
+/* === repaso v14 === tipografía de la portada, lugar tipo carta sobre aguada, fotos con borde de acuarela */
+html.ga [data-bg]{font:400 20px/1.5 'Garamond',Georgia,serif;color:#2d2618}
+.ga-kicker{font:400 15.5px/1.2 'GaramondSC',Georgia,serif!important;letter-spacing:.16em!important;text-transform:lowercase!important;color:#6b5a3e!important}
+.ga-title{font:400 44px/1.3 'Pinyon',cursive!important;letter-spacing:0!important;color:#8a6a24!important;background:none!important;-webkit-text-fill-color:currentColor;margin:0 0 14px!important;padding:0 .1em .1em!important;white-space:normal}
+.ga-title::after{content:none!important}
+.ga-gap{display:block;height:34px}
+.ga-lb{font:italic 400 30px/1.2 'Garamond',Georgia,serif!important;color:#2d2618!important;letter-spacing:0!important}
+.ga-tray-in h3{font:italic 400 28px/1.2 'Garamond',Georgia,serif!important;-webkit-text-fill-color:currentColor;background:none!important}
+.ga-tray-in h3{color:inherit}
+.ga-places{position:relative;max-width:360px;margin:26px auto 0;padding:34px 18px 30px}
+.ga-places::before{content:"";position:absolute;inset:0 -6px;background:url(%%AGUADA%%) center/100% 100% no-repeat;pointer-events:none}
+.ga-venue{position:relative;display:grid;grid-template-columns:76px 1px 1fr;gap:0 16px;align-items:start;text-align:left;padding:12px 0!important;background:none!important}
+.ga-venue::before{content:none!important}
+.ga-venue::after{content:"";grid-column:2;grid-row:1;width:1px;height:100%;background:linear-gradient(transparent,#8a6a2488 20%,#8a6a2488 80%,transparent)}
+.ga-v-time{grid-column:1;grid-row:1;text-align:right;font:400 26px/1.1 'Garamond',Georgia,serif!important;letter-spacing:.02em!important;color:#8a6a24!important;padding-top:20px}
+.ga-v-info{grid-column:3;grid-row:1}
+.ga-v-k{display:block;font:400 15px/1 'GaramondSC',Georgia,serif!important;letter-spacing:.16em!important;text-transform:lowercase!important;color:#6b5a3e!important}
+.ga-v-name{font:italic 400 25px/1.2 'Garamond',Georgia,serif!important;color:#2d2618!important;margin:6px 0 2px!important;overflow-wrap:anywhere}
+.ga-v-addr{color:#6b5a3e;font-size:17px;font-style:normal;margin:0;overflow-wrap:anywhere}
+.ga-places .ga-links{justify-content:flex-start;gap:0 18px}
+.ga-fade{width:calc(100% + 40px)!important;margin:22px -20px 0!important;-webkit-mask:url(%%WMASK%%) center/100% 100% no-repeat!important;mask:url(%%WMASK%%) center/100% 100% no-repeat!important}
+.ga-fade.ga-rv.in,#gallery-items .ga-fade{filter:sepia(.26) saturate(.8) brightness(1.03) contrast(.93)}
+html.ga #gallery-items{width:calc(100% + 40px);margin:8px -20px 0}
+@media(max-width:360px){.ga-title{font-size:40px!important}.ga-lb{font-size:26px!important}.ga-v-name{font-size:22px!important}.ga-venue{grid-template-columns:62px 1px 1fr;gap:0 12px}.ga-v-time{font-size:22px!important}}
+html.ga a.link{font:400 15px/1 'GaramondSC',Georgia,serif!important;letter-spacing:.16em!important;text-transform:lowercase!important;font-style:normal!important}
+
+.ga-no{display:block;width:7px;height:7px;transform:rotate(45deg);box-shadow:inset 0 0 0 1px #a8822f}
+.ga-tk[aria-expanded=true] .ga-no{background:#d2b06a;box-shadow:none}
+.ga-tl{font:400 15px/1.2 'GaramondSC',Georgia,serif!important;letter-spacing:.14em!important;text-transform:lowercase!important}
+.ga-hint{font:italic 400 16px 'Garamond',Georgia,serif}
+
+.ga-now{position:relative;padding:14px 0 10px}
+.ga-now::before{content:"";position:absolute;inset:-6px 6%;background:url(%%AGUADA%%) center/100% 100% no-repeat;opacity:.6;pointer-events:none;z-index:0}
+.ga-now>*{position:relative;z-index:1}
+
+.ga-tm{font:400 22px/1 'Garamond',Georgia,serif!important;letter-spacing:.06em!important}
+.ga-tt span{font:400 14px/1.4 'GaramondSC',Georgia,serif!important;letter-spacing:.14em!important;text-transform:lowercase!important}.ga-tt b{font:400 26px/1.1 'Garamond',Georgia,serif!important}
+/* === identidad v15 === */
+
+/* fotos: fundido suave, sin forma ni marco (vale para cualquier foto) */
+.ga-fade{-webkit-mask:none!important;mask:none!important;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 14%,#000 80%,transparent 100%),linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%)!important;-webkit-mask-composite:source-in!important;mask-image:linear-gradient(to bottom,transparent 0%,#000 14%,#000 80%,transparent 100%),linear-gradient(to right,transparent 0%,#000 12%,#000 88%,transparent 100%)!important;mask-composite:intersect!important}
+/* etiquetas en mayúsculas déco doradas, como las puertas de la portada */
+.ga-kicker,.ga-v-k{font:400 10.5px/1.3 'Adventor',sans-serif!important;letter-spacing:.42em!important;text-transform:uppercase!important;color:#9a7428!important}
+html.ga a.link{font:400 10.5px/1 'Adventor',sans-serif!important;letter-spacing:.3em!important;text-transform:uppercase!important}
+/* lugar: tarjeta de entrada a la velada, marfil con canto dorado y esquinas déco */
+.ga-places::before{background:none!important;inset:0!important;border:0;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px);background:linear-gradient(160deg,#fffcf4,#f6eedd)!important;box-shadow:0 10px 28px rgba(60,44,12,.10)}
+.ga-places::after{content:"";position:absolute;inset:7px;pointer-events:none;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px);box-shadow:inset 0 0 0 1px rgba(168,130,47,.65),inset 0 0 0 4px #fbf5e8,inset 0 0 0 5px rgba(168,130,47,.35)}
+.ga-places{padding:36px 22px 32px!important;margin-top:30px!important}
+.ga-places>*{position:relative;z-index:1}
+.ga-v-time{font:400 22px/1.1 'Adventor',sans-serif!important;letter-spacing:.06em!important}
+/* la noche llega: la última sección pasa del marfil al azul noche del cierre, con letras doradas */
+main>[data-bg].ga-night{background:linear-gradient(#f4ede1 0,#f4ede1 30px,#18223f 380px,#0e1630 100%)!important;color:#efe3c8}
+.ga-night .ga-title{color:#e2c27a!important}.ga-night .ga-kicker{color:#cfae66!important}.ga-night .ga-p,.ga-night .ga-hint,.ga-night .ga-tap{color:#efe3c8}
+.ga-night .ga-dots .gallery-dot::before,html.ga .ga-night .gallery-dot::before{box-shadow:inset 0 0 0 1px #e2c27a}html.ga .ga-night .gallery-dot[aria-current=true]::before{background:#e2c27a}
+.ga-night .ga-places::before{background:linear-gradient(160deg,#fffcf4,#f6eedd)!important}
+main>[data-bg].ga-night .ga-in{padding-top:120px}
+html.ga #closing{margin-top:-1px}
+/* contraste: dorados más profundos sobre marfil; la noche llega antes del título */
+.ga-kicker,.ga-v-k{font-size:11.5px!important;color:#6e5016!important;font-weight:400}
+html.ga a.link{font-size:11.5px!important;color:#6e5016!important;border-bottom-color:rgba(110,80,22,.55)!important}
+.ga-title{color:#7a5a1a!important}
+.ga-v-time{color:#6e5016!important}.ga-v-addr,.ga-dress,.ga-hint,.ga-tap{color:#4f412a!important}
+.ga-p,.ga-v-name,.ga-lb{color:#2d2618!important}
+.ga-tl{color:#2d2618}.ga-tm{color:#6e5016!important}
+main>[data-bg].ga-night{background:linear-gradient(#f4ede1 0,#f4ede1 10px,#1a2443 170px,#0e1630 100%)!important}
+main>[data-bg].ga-night .ga-in{padding-top:190px!important}
+.ga-night .ga-title{color:#ebcd86!important}.ga-night .ga-kicker{color:#e2c27a!important}
+.ga-night .ga-p,.ga-night .ga-hint,.ga-night .ga-tap,.ga-night .ga-dress{color:#f3e8cf!important}
+.ga-night .ga-places .ga-v-k{color:#6e5016!important}
+main>[data-bg].ga-night{background:linear-gradient(#f4ede1 0,#e6e0d6 30px,#b9b6b4 70px,#6f7488 115px,#2f3856 160px,#18223f 200px,#0e1630 100%)!important}
+/* lugar compacto: cabe en una pantalla */
+.ga-places{padding:24px 18px 20px!important;margin-top:22px!important}
+.ga-venue{grid-template-columns:58px 1px 1fr!important;gap:0 12px!important;padding:8px 0!important}
+.ga-v-time{font-size:18px!important;padding-top:16px!important}
+.ga-v-k{font-size:10px!important;letter-spacing:.3em!important}
+.ga-v-name{font-size:22px!important;margin:4px 0 0!important}
+.ga-v-addr{font-size:16px!important;line-height:1.35}
+.ga-places .ga-links{gap:0 14px!important;flex-wrap:nowrap!important;margin-top:0!important}
+.ga-places a.link{font-size:10px!important;letter-spacing:.18em!important;min-height:44px!important;padding:12px 0 4px!important;white-space:nowrap}
+.ga-places .ga-links{flex-wrap:wrap!important;gap:0 12px!important}
+.ga-kicker{letter-spacing:.3em!important}
+@media(max-width:360px){.ga-places{padding:22px 12px 18px!important}.ga-venue{grid-template-columns:50px 1px 1fr!important;gap:0 10px!important}.ga-v-time{font-size:16px!important}.ga-places a.link{letter-spacing:.12em!important}}
+
+/* música */
+.ga-snd{position:fixed;right:14px;top:max(14px,env(safe-area-inset-top));z-index:70;width:42px;height:42px;border-radius:50%;border:1px solid rgba(201,169,97,.75);background:rgba(18,18,20,.72);color:#ecd9a0;font:400 18px/1 Georgia,serif;cursor:pointer;display:none;place-items:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);box-shadow:0 0 12px rgba(236,217,160,.25)}
+.ga-snd.show{display:grid}.ga-snd[aria-pressed=false]{opacity:.7;text-decoration:line-through}

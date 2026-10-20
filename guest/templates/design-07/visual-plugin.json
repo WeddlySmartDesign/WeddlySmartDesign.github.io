@@ -1,0 +1,10 @@
+{
+  "id": "design-07",
+  "displayName": "REFLEJO",
+  "version": "1.0.0",
+  "rendererApi": "GUEST_APPLY_CONFIG",
+  "masterHtml": "master.html",
+  "typographyVariants": [
+    "classic"
+  ]
+}

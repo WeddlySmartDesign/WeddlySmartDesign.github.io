@@ -1,0 +1,10 @@
+{
+  "id": "design-08",
+  "displayName": "CAJA DE MÚSICA",
+  "version": "1.0.0",
+  "rendererApi": "GUEST_APPLY_CONFIG",
+  "masterHtml": "master.html",
+  "typographyVariants": [
+    "classic"
+  ]
+}

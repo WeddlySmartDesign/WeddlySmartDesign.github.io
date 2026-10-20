@@ -1,0 +1,109 @@
+/* ===== AZULEJO · interior propio: camino de azulejos, contraventanas, fotos fundidas ===== */
+html.az body{background:url(%%PAPER%%) center top/100% auto repeat-y #f7f1e6}
+html.az [data-bg]{background:none!important;min-height:0!important;display:block;padding:38px 30px 32px!important;color:#1f355f;font:400 20px/1.5 'Garamond',Georgia,serif}
+.az-band{display:block;width:100%;height:auto;max-width:none!important;margin:0}
+.az-in{position:relative;max-width:420px;margin:0 auto;text-align:center}
+.az-kicker{font:400 16px/1.2 'GaramondSC',Georgia,serif;letter-spacing:.16em;text-transform:lowercase;color:#4d6086;margin:0 0 6px}
+.az-title{font:400 44px/1.3 'Pinyon',cursive;color:#23408a;margin:0 0 14px;padding:0 .1em .1em}
+.az-p{font-size:19px;line-height:1.6;max-width:29ch;margin:0 auto;white-space:pre-line;overflow-wrap:anywhere}
+.az-rv{opacity:0;transform:translateY(16px);transition:opacity 1.1s ease,transform 1.3s cubic-bezier(.2,.8,.2,1)}
+.az-rv.in{opacity:1;transform:none}
+/* sello entre secciones: el azulejo de las palomas gira y se asienta */
+.az-seal{display:block;width:46px;height:46px;margin:0 auto 18px;perspective:400px}
+.az-seal img{display:block;width:100%;height:100%;border-radius:2px;box-shadow:0 2px 8px rgba(20,40,90,.18);transform:rotateY(90deg);transition:transform 1.4s cubic-bezier(.2,.9,.2,1)}
+.az-seal.in img{transform:none}
+/* fotos fundidas con el papel */
+.az-fade{display:block;max-width:none!important;width:calc(100% + 40px);margin:22px -20px 0;height:300px;object-fit:cover;-webkit-mask:url(%%WMASK%%) center/100% 100% no-repeat;mask:url(%%WMASK%%) center/100% 100% no-repeat}
+ -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 76%,transparent 100%),linear-gradient(to right,transparent 0%,#000 14%,#000 86%,transparent 100%);-webkit-mask-composite:source-in;
+ mask-image:linear-gradient(to bottom,transparent 0%,#000 16%,#000 76%,transparent 100%),linear-gradient(to right,transparent 0%,#000 14%,#000 86%,transparent 100%);mask-composite:intersect}
+.az-fade[data-fit=full]{object-fit:contain;height:auto;max-height:420px}
+.az-fade.az-rv{transform:scale(1.05);filter:blur(4px);transition:opacity 1.6s ease,transform 2.6s cubic-bezier(.2,.8,.2,1),filter 1.6s}
+.az-fade.az-rv.in{transform:none;filter:sepia(.22) saturate(.78) brightness(1.05) contrast(.92)}
+#gallery-items .az-fade{filter:sepia(.22) saturate(.78) brightness(1.05) contrast(.92)}
+/* lugares: ligero; nombre caligráfico con un rombo cobalto, hora y dirección en una línea */
+.az-places{position:relative;max-width:360px;margin:26px auto 0;padding:34px 18px 30px}
+.az-places::before{content:"";position:absolute;inset:0 -6px;background:url(%%AGUADA%%) center/100% 100% no-repeat;pointer-events:none}
+.az-venue{position:relative;display:grid;grid-template-columns:76px 1px 1fr;gap:0 16px;align-items:start;text-align:left;padding:12px 0}
+.az-venue::after{content:"";grid-column:2;grid-row:1;width:1px;height:100%;background:linear-gradient(transparent,rgba(35,64,138,.45) 20%,rgba(35,64,138,.45) 80%,transparent)}
+.az-v-time{grid-column:1;grid-row:1;text-align:right;font:400 26px/1.1 'Garamond',Georgia,serif;letter-spacing:.02em;color:#23408a;padding-top:20px}
+.az-v-info{grid-column:3;grid-row:1}
+.az-v-k{display:block;font:400 15px/1 'GaramondSC',Georgia,serif;letter-spacing:.16em;text-transform:lowercase;color:#4d6086}
+.az-v-name{font:italic 400 25px/1.2 'Garamond',Georgia,serif;color:#1f355f;margin:6px 0 2px;overflow-wrap:anywhere}
+.az-v-addr{color:#4d6086;font-size:17px;overflow-wrap:anywhere}
+.az-places .az-links{justify-content:flex-start;gap:0 18px}
+.az-links{display:flex;flex-wrap:wrap;justify-content:center;gap:0 22px;margin-top:4px}
+html.az a.link{display:inline-flex;align-items:center;min-height:44px;padding:12px 0 6px;border:0;border-bottom:1px solid rgba(35,64,138,.4);border-radius:0;background:none;font:400 16px/1 'GaramondSC',Georgia,serif;letter-spacing:.16em;text-transform:lowercase;color:#23408a;text-decoration:none}
+html.az a.link::after{content:none}
+.az-dress{margin:22px auto 0;font-style:italic;color:#4d6086}
+/* agenda: camino de azulejos que se dan la vuelta */
+.az-path{display:flex;justify-content:center;gap:10px;margin:24px 0 46px;perspective:700px}
+.az-tile{position:relative;width:min(58px,calc((100vw - 92px)/5));aspect-ratio:1;border:0;padding:0;background:none;cursor:pointer;transform-style:preserve-3d;transition:translate .6s ease}
+.az-tile .f,.az-tile .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:2px;box-shadow:0 2px 6px rgba(20,40,90,.18)}
+.az-tile .b{background:url(%%TILE%%) center/cover;opacity:.5;transition:opacity 1s ease,box-shadow .8s}
+.az-tile.on .b{opacity:.85}.az-tile.cur .b{opacity:1}
+.az-tile .t{position:absolute;left:-6px;right:-6px;top:calc(100% + 8px);font:italic 400 17px/1 'Garamond',Georgia,serif;color:#4d6086;opacity:.6;transition:opacity .6s,color .6s}
+.az-tile.on .t{opacity:.85}.az-tile.cur .t{opacity:1;color:#23408a}
+.az-tile.cur .b{box-shadow:0 8px 16px rgba(20,40,90,.28)}
+.az-tile.cur{translate:0 -6px}
+.az-tile .t::after{content:"";display:block;width:0;height:1px;margin:5px auto 0;background:#23408a;transition:width .6s}.az-tile.cur .t::after{width:22px}
+.az-tile:focus-visible{outline:2px solid #23408a;outline-offset:3px}
+.az-now{display:grid;margin-top:20px}
+.az-now div{grid-area:1/1;opacity:0;transform:translateY(8px);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+.az-now div.on{opacity:1;transform:none}
+.az-tm{display:block;font:italic 400 22px/1 'Garamond',Georgia,serif;color:#4d6086}
+.az-lb{display:block;font:italic 400 30px/1.2 'Garamond',Georgia,serif;color:#1f355f;margin-top:6px;overflow-wrap:anywhere}
+.az-tap{font-style:italic;color:#4d6086;font-size:15.5px;margin:10px 0 0}
+/* detalles: contraventanas azules */
+.az-wins{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px;max-width:330px;margin:14px auto 0}
+.az-win{border:0;background:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;color:inherit}
+.az-win.solo{grid-column:1/-1}
+.az-frame{position:relative;display:block;width:108px;aspect-ratio:388/374}
+.az-frame img{position:absolute;inset:0;width:100%;height:100%;max-width:none!important;transition:opacity .9s ease,transform 1.1s cubic-bezier(.3,.9,.25,1)}
+.az-frame .o{opacity:0;transform:scale(.97)}
+.az-win[aria-expanded=true] .az-frame .c{opacity:0;transform:scale(1.02)}
+.az-win[aria-expanded=true] .az-frame .o{opacity:1;transform:none}
+.az-win-lb{font:400 16px/1.2 'GaramondSC',Georgia,serif;letter-spacing:.16em;text-transform:lowercase;color:#23408a;padding:6px 2px;border-bottom:1px solid transparent}
+.az-win[aria-expanded=true] .az-win-lb{border-bottom-color:#23408a}
+.az-win:focus-visible .az-frame{outline:2px solid #23408a;outline-offset:3px}
+.az-hint{font-style:italic;color:#4d6086;font-size:16px;margin:14px 0 0}
+.az-tray{scroll-margin-bottom:30px;max-width:340px;margin:0 auto;overflow:hidden;height:0;transition:height .8s cubic-bezier(.2,.8,.2,1)}
+.az-tray-in{margin-top:16px;padding:22px 20px 18px;text-align:center;border-top:1px solid rgba(35,64,138,.3);border-bottom:1px solid rgba(35,64,138,.3)}
+.az-tray-in h3{margin:0 0 8px;font:italic 400 28px/1.2 'Garamond',Georgia,serif;color:#1f355f}
+.az-tray-in p{margin:0 0 6px;font-size:18.5px;overflow-wrap:anywhere;white-space:pre-line}
+.az-tt{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 28px;margin:10px 0}
+.az-tt span{display:flex;flex-direction:column;font:400 16px/1.4 'GaramondSC',Georgia,serif;letter-spacing:.16em;text-transform:lowercase;color:#4d6086}
+.az-tt b{font:italic 500 24px/1.1 'Garamond',Georgia,serif;color:#1f355f;letter-spacing:0;text-transform:none}
+.az-tray-in details{margin-top:4px}.az-tray-in summary{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;list-style:none;font:400 16px/1 'GaramondSC',Georgia,serif;letter-spacing:.16em;text-transform:lowercase;color:#23408a;border-bottom:1px solid rgba(35,64,138,.4)}
+.az-tray-in summary::-webkit-details-marker{display:none}
+/* galería */
+html.az #gallery-items{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;width:calc(100% + 60px);max-width:none;margin:8px -30px 0;overscroll-behavior-x:contain}
+html.az #gallery-items::-webkit-scrollbar{display:none}
+html.az #gallery-items img{flex:0 0 100%;width:100%!important;min-width:100%;max-width:none!important;margin:0!important;height:360px;scroll-snap-align:center;scroll-snap-stop:always}
+.az-dots{display:flex;justify-content:center;gap:2px;margin-top:4px}
+html.az .gallery-dot{width:42px;height:42px;border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer}
+html.az .gallery-dot::before{content:"";width:7px;height:7px;transform:rotate(45deg);background:rgba(35,64,138,.3)}
+html.az .gallery-dot[aria-current=true]::before{background:#23408a}
+@media(max-width:360px){.az-title{font-size:40px}.az-lb{font-size:26px}.az-v-name{font-size:22px}.az-venue{grid-template-columns:62px 1px 1fr;gap:0 12px}.az-v-time{font-size:22px}.az-frame{width:98px}}
+@media(prefers-reduced-motion:reduce){.az-rv,.az-fade.az-rv{opacity:1;transform:none;filter:none;transition:none}.az-seal img{transform:none;transition:none}.az-tile,.az-frame img{transition:none}}
+
+.az-gap{display:block;height:34px}
+/* portada: el texto descansa sobre un lavado marfil de acuarela, legible sobre el arco y el cielo */
+html.az #cover .cover-scrim{top:0;height:56%;background:url(%%COVERWASH%%) center top/100% 100% no-repeat}
+html.az #cover .cover-text{top:max(4.5svh,calc(env(safe-area-inset-top) + 24px))}
+html.az #cover .cover-names{font-size:min(54px,7.4svh,13.5vw);line-height:1.1}
+html.az #cover .cover-names span{display:inline}html.az #cover .cover-names .amp{display:inline;font-size:.5em;margin:0 .2em}
+html.az #cover .cover-text{text-shadow:0 0 10px rgba(251,248,242,.9)}
+html.az #cover .cover-date{margin-top:8px}
+/* «toca para abrir»: en tinta azul sobre una mancha marfil, visible sobre los azulejos */
+html.az .tap-hint{color:#1d3466;text-shadow:none}
+html.az .tap-hint>span:last-child{padding:24px 64px;font-size:21px;background:url(%%HINTWASH%%) center/100% 100% no-repeat,url(%%HINTWASH%%) center/86% 80% no-repeat}
+html.az .tap-hint .dot{background:#1d3466;box-shadow:0 0 0 4px rgba(251,248,242,.85)}
+/* cierre: mismo lavado marfil, desde abajo, con el texto en tinta azul */
+html.az #closing .closing-scrim{bottom:0;top:auto;height:46%;background:url(%%COVERWASH%%) center top/100% 100% no-repeat;transform:scaleY(-1)}
+html.az #closing .closing-text{color:#1d3466;text-shadow:0 0 10px rgba(251,248,242,.9)}
+/* toques mínimos de la misma aguada del lugar: tras el momento en curso y tras la información abierta */
+.az-now{position:relative;padding:14px 0 10px}
+.az-now::before,.az-tray-in::before{content:"";position:absolute;inset:-6px 6%;background:url(%%AGUADA%%) center/100% 100% no-repeat;opacity:.7;pointer-events:none;z-index:0}
+.az-now>*,.az-tray-in>*{position:relative;z-index:1}
+.az-tray-in{position:relative;border-top:0!important;border-bottom:0!important}
+.az-tap{font-style:italic;color:#4d6086;font-size:16px;margin:12px 0 0}

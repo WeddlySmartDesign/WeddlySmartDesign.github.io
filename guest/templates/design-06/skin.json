@@ -1,0 +1,73 @@
+{
+ "id": "design-06",
+ "version": "1.0.0",
+ "displayName": "INVERNADERO",
+ "coverTextAt": 3,
+ "closingTextAt": 8.6,
+ "coverTextPosition": "top:max(8svh,calc(env(safe-area-inset-top) + 40px))",
+ "coverScrim": "top:0;height:50%;background:linear-gradient(180deg,rgba(252,249,243,.62) 0%,rgba(252,249,243,.38) 55%,rgba(252,249,243,0) 100%)",
+ "theme": {
+  "paper": "#f5f3ee",
+  "ink": "#26392f",
+  "soft": "#56685d",
+  "accent": "#3d6a51",
+  "line": "rgba(61,106,81,.30)",
+  "btn": "rgba(255,255,255,.55)",
+  "cover-bg": "#dfe6e1",
+  "cover-ink": "#22402f",
+  "cover-names": "#22402f",
+  "cover-halo": "0 0 18px rgba(255,255,255,.95),0 0 4px rgba(255,255,255,.9)",
+  "cover-btn": "rgba(255,255,255,.84)",
+  "cover-btn-ink": "#22402f",
+  "cover-btn-line": "rgba(34,64,47,.45)",
+  "hint-ink": "#22402f",
+  "hint-halo": "0 0 14px rgba(255,255,255,.95)",
+  "hint-pulse": "rgba(34,64,47,.35)",
+  "closing-scrim": "linear-gradient(to top,rgba(10,22,18,.86) 0%,rgba(10,22,18,.55) 50%,rgba(10,22,18,0) 100%)",
+  "closing-ink": "#fff6e6",
+  "closing-halo": "0 1px 10px rgba(0,0,0,.55)",
+  "closing-btn": "rgba(255,248,231,.95)",
+  "closing-btn-ink": "#2b2230",
+  "closing-btn-line": "rgba(255,248,231,.95)"
+ },
+ "tapLabel": "Toca para abrir",
+ "media": {
+  "coverVideo": "videos/portada.mp4",
+  "closingVideo": "videos/cierre.mp4",
+  "backgrounds5": [
+   "fondos-5-pantallas/fondo-1.jpg",
+   "fondos-5-pantallas/fondo-2.jpg",
+   "fondos-5-pantallas/fondo-3.jpg",
+   "fondos-5-pantallas/fondo-4.jpg",
+   "fondos-5-pantallas/fondo-5.jpg"
+  ],
+  "backgrounds4": [
+   "fondos-4-pantallas/fondo-1.jpg",
+   "fondos-4-pantallas/fondo-2.jpg",
+   "fondos-4-pantallas/fondo-3.jpg",
+   "fondos-4-pantallas/fondo-4.jpg"
+  ]
+ },
+ "mediaSource": "Entrega «Invernadero» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas",
+ "fx": {},
+ "motif": "skin-assets/motif.webp",
+ "motifIdle": "flap",
+ "layout": "invernadero",
+ "fonts": [
+  "Pagella",
+  "Poppins"
+ ],
+ "interior": {
+  "css": "interior.css",
+  "js": "interior.js",
+  "assets": {
+   "PAPER": "skin-assets/paper.jpg",
+   "BANDTOP": "skin-assets/band-top.jpg",
+   "BANDBOT": "skin-assets/band-bot.jpg",
+   "BFLY": "skin-assets/butterfly.webp",
+   "WMASK": "skin-assets/wash-mask.png",
+   "AGUADA": "skin-assets/aguada.webp",
+   "KRAFT": "skin-assets/kraft.jpg"
+  }
+ }
+}

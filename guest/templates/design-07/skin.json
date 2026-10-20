@@ -1,0 +1,90 @@
+{
+ "id": "design-07",
+ "version": "1.0.0",
+ "displayName": "REFLEJO",
+ "coverTextAt": 5.6,
+ "closingTextAt": 7.6,
+ "coverTextPosition": "top:max(8svh,calc(env(safe-area-inset-top) + 40px))",
+ "coverScrim": "top:0;height:55%;background:linear-gradient(180deg,rgba(26,22,20,.72) 0%,rgba(26,22,20,.45) 55%,rgba(26,22,20,0) 100%)",
+ "theme": {
+  "paper": "#f3eee9",
+  "ink": "#3b2f33",
+  "soft": "#6d5c61",
+  "accent": "#8a5a63",
+  "line": "rgba(138,90,99,.30)",
+  "btn": "rgba(255,255,255,.55)",
+  "cover-bg": "#9aa0a4",
+  "cover-ink": "#fff7ec",
+  "cover-names": "#fff7ec",
+  "cover-halo": "0 1px 12px rgba(0,0,0,.6),0 0 3px rgba(0,0,0,.4)",
+  "cover-btn": "rgba(255,248,236,.9)",
+  "cover-btn-ink": "#3b2f33",
+  "cover-btn-line": "rgba(255,248,236,.9)",
+  "hint-ink": "#fff8ee",
+  "hint-halo": "0 1px 10px rgba(20,20,26,.8)",
+  "hint-pulse": "rgba(255,248,238,.6)",
+  "closing-scrim": "linear-gradient(to top,rgba(10,12,28,.86) 0%,rgba(10,12,28,.55) 50%,rgba(10,12,28,0) 100%)",
+  "closing-ink": "#fff6e6",
+  "closing-halo": "0 1px 10px rgba(0,0,0,.55)",
+  "closing-btn": "rgba(255,248,231,.95)",
+  "closing-btn-ink": "#2b2230",
+  "closing-btn-line": "rgba(255,248,231,.95)"
+ },
+ "tapLabel": "Toca para abrir",
+ "media": {
+  "coverVideo": "videos/portada.mp4",
+  "closingVideo": "videos/cierre.mp4",
+  "backgrounds5": [
+   "fondos-5-pantallas/fondo-1.jpg",
+   "fondos-5-pantallas/fondo-2.jpg",
+   "fondos-5-pantallas/fondo-3.jpg",
+   "fondos-5-pantallas/fondo-4.jpg",
+   "fondos-5-pantallas/fondo-5.jpg"
+  ],
+  "backgrounds4": [
+   "fondos-4-pantallas/fondo-1.jpg",
+   "fondos-4-pantallas/fondo-2.jpg",
+   "fondos-4-pantallas/fondo-3.jpg",
+   "fondos-4-pantallas/fondo-4.jpg"
+  ]
+ },
+ "mediaSource": "Entrega «Reflejo» (Claude): videos/portada.mp4, videos/cierre.mp4, fondos-4-pantallas, fondos-5-pantallas",
+ "closingTextPosition": "top:max(7svh,calc(env(safe-area-inset-top) + 34px))",
+ "closingScrimPosition": "top:0;height:52%;background:linear-gradient(180deg,rgba(10,12,28,.84) 0%,rgba(10,12,28,.5) 55%,rgba(10,12,28,0) 100%)",
+ "fx": {
+  "kind": "petals",
+  "count": 5,
+  "sprites": [
+   "skin-assets/petal0.webp",
+   "skin-assets/petal1.webp",
+   "skin-assets/petal2.webp",
+   "skin-assets/petal3.webp",
+   "skin-assets/petal4.webp",
+   "skin-assets/petal5.webp",
+   "skin-assets/petal6.webp",
+   "skin-assets/petal7.webp"
+  ]
+ },
+ "motif": "skin-assets/motif.webp",
+ "motifIdle": "float",
+ "layout": "reflejo",
+ "fonts": [
+  "Lora"
+ ],
+ "interior": {
+  "css": "interior.css",
+  "js": "interior.js",
+  "assets": {
+   "PAPER": "skin-assets/paper.jpg",
+   "BANDTOP": "skin-assets/band-top.jpg",
+   "BANDBOT": "skin-assets/band-bot.jpg",
+   "PETAL": "skin-assets/motif.webp",
+   "VELA": "skin-assets/vela.webp",
+   "VELAOFF": "skin-assets/vela-off.webp",
+   "WMASK": "skin-assets/wash-mask.png",
+   "AGUADA": "skin-assets/aguada.webp",
+   "HINTWASH": "skin-assets/hint-wash.webp",
+   "ESPEJO": "skin-assets/espejo.webp"
+  }
+ }
+}
