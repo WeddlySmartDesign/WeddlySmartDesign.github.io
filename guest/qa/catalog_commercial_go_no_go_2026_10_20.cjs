@@ -19,17 +19,22 @@ const stagedFlow=file('guest/backend/guest-invitation-flow/index.ts');
 const names=(registry.templates||[]).map(t=>t.id);
 const missing=[];
 const fail=(id,message)=>missing.push({id,message});
-const listed=Number(status.moduleContinuity2026_10_17?.catalogueDesignCountClaimedByOwner||8);
-const intended=['veil-light','botanica','design-04','design-05','design-06','design-07','design-08','design-09'];
-const recovery=json('guest/GUEST_CLAUDE_SOURCE_IMPORT_MANIFEST_2026-10-20.json');
-const importedIds=recovery.selectedCandidateIds||[];
-for(const id of intended.slice(2)){
- if(!importedIds.includes(id)||!fs.existsSync(path.join(root,'guest/catalog-assets',id,'1.0.0/index.html')))
-  fail('design-assets:'+id,'No existe master importado desde rama Claude para '+id);
+const inventory=status.designInventory2026_10_20;
+const intended=inventory?.candidateIds||[];
+if(intended.length!==15)fail('design-inventory','No existe catálogo auditado de 15 diseños sin contar D03 antiguo');
+const first=json('guest/GUEST_CLAUDE_SOURCE_IMPORT_MANIFEST_2026-10-20.json');
+const second=json('guest/GUEST_CLAUDE_D10_D16_IMPORT_MANIFEST_2026-10-20.json');
+const imported=new Set([...(first.selectedCandidateIds||[]),...(second.designs||[]).map(x=>x.id)]);
+for(const id of intended){
+ if(id==='veil-light'||id==='botanica')continue;
+ if(!imported.has(id)||!fs.existsSync(path.join(root,'guest/catalog-assets',id,'1.0.0/index.html')))
+  fail('design-assets:'+id,'Master de diseño pendiente: '+id);
 }
-if(names.length<listed)fail('catalog-registry','Hay '+names.length+' registros de venta frente a '+listed+' diseños previstos; los masters Claude se recuperaron sin activar ventas ni registrarlos comercialmente.');
+for(const id of intended){
+ if(!registry.templates.some(x=>x.id===id))fail('catalog-admission:'+id,'Master localizado pero pendiente de admisión/certificación comercial: '+id);
+}
 if(registry.templates.some(t=>t.id==='design-03'&&t.status==='commercially-frozen'))
- fail('wrong-limoneros','El Limoneros histórico design-03 no puede estar comercialmente aprobado: usar la alternativa Claude design-09 solo tras certificación.');
+ fail('wrong-limoneros','Limoneros histórico design-03 NUNCA debe habilitarse; revisar variante Claude design-09');
 for(const t of registry.templates||[]){
  const spec=renderers.templates?.[t.id],proof=evidence.templates?.[t.id];
  if(t.status!=='commercially-frozen'||t.scalabilityCertified!==true)fail('certification:'+t.id,'Diseño pendiente de congelación comercial y pruebas de escalabilidad.');
@@ -46,6 +51,6 @@ if(status.moduleContinuity2026_10_17?.commerciallyReady!==true)fail('commercial-
 if(status.moduleContinuity2026_10_17?.allDesignFilesIntegrated!==true)fail('renderers-e2e','Integración de todos los diseños pendiente.');
 // External release checks are never assumed successful from repository files alone.
 fail('external-verification','Falta verificación externa real de hosting Cloudflare, Stripe Live, correos Resend y dos dispositivos; no confundir GitHub QA con ello.');
-const output={date:'2026-10-20',status:missing.length?'NO_GO':'GO',registeredDesigns:names,recoveredCandidateDesigns:intended,sourceBranch:recovery.sourceBranch,ownerDesignsClaimed:listed,blockingChecks:missing,context:'Code audit, not external publication or payment evidence'};
+const output={date:'2026-10-20',status:missing.length?'NO_GO':'GO',registeredDesigns:names,recoveredCandidateDesigns:intended,sourceBranch:first.sourceBranch,ownerDesignsClaimed:intended.length,blockingChecks:missing,context:'Code audit, not external publication or payment evidence'};
 process.stdout.write(JSON.stringify(output,null,2)+'\n');
 if(process.argv.includes('--launch-gate')&&missing.length)process.exitCode=1;
