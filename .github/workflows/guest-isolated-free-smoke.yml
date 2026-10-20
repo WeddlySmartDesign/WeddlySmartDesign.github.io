@@ -31,6 +31,10 @@ jobs:
       SUPABASE_DB_PASSWORD: ""
       SUPABASE_PROJECT_ID: ""
       SUPABASE_URL: ""
+      STRIPE_SECRET_KEY: ""
+      STRIPE_PUBLISHABLE_KEY: ""
+      RESEND_API_KEY: ""
+      CLOUDFLARE_API_TOKEN: ""
       WEDDLY_SITE_ORIGIN: "https://guest-ci-local.invalid"
     steps:
       - uses: actions/checkout@v4
@@ -42,6 +46,8 @@ jobs:
           test -z "${SUPABASE_DB_PASSWORD}"
           test -z "${SUPABASE_PROJECT_ID}"
           test -z "${SUPABASE_URL}"
+          test -z "${STRIPE_SECRET_KEY}" && test -z "${STRIPE_PUBLISHABLE_KEY}"
+          test -z "${RESEND_API_KEY}" && test -z "${CLOUDFLARE_API_TOKEN}"
           test ! -e supabase/config.toml
           docker info --format 'Docker server reachable: {{.ServerVersion}}'
           echo 'NO PRODUCTION CREDENTIALS; ONLY DISPOSABLE LOCAL RUNNER'
