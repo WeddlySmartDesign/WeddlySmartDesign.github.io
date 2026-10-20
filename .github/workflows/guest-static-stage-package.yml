@@ -48,7 +48,25 @@ jobs:
           test -s /tmp/guest-static-stage/guest-review-v1.html
           test -s /tmp/guest-static-stage/guest/catalog-questionnaire.html
           test -s /tmp/guest-static-stage/guest/catalog-assets/botanica/14.7/index.html
-          echo "fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a  /tmp/guest-static-stage/guest/catalog-assets/botanica/14.7/index.html" | sha256sum -c -
+          node - <<'NODE'
+          const fs=require('fs'),crypto=require('crypto'),assert=require('assert/strict');
+          const root='guest/catalog-assets/botanica/14.7/source-chunks/';
+          const stage='/tmp/guest-static-stage/';
+          const manifest=JSON.parse(fs.readFileSync(stage+'GUEST_STAGE_MANIFEST.json'));
+          const source=JSON.parse(fs.readFileSync(root+'manifest.json'));
+          const sourceBytes=Buffer.concat(source.parts.map(p=>fs.readFileSync(root+p)));
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const original='fffd3e0fcd5eb2f0d2f4582957b5fdd7358294cbc509ecb3ca15f0089098ec7a';
+          assert.equal(sha(sourceBytes),original,'Frozen Botánica master changed');
+          assert.equal(manifest.botanica.masterSha256,original,'Wrong original design pin');
+          const modified=fs.readFileSync(stage+'guest/catalog-assets/botanica/14.7/index.html','utf8');
+          const patch=fs.readFileSync('guest/catalog-patches/botanica/14.7/patch.css','utf8');
+          const injection='<style id="guest-botanica-practical-seam-preview">\\n'+patch+'\\n</style>\\n';
+          assert.equal(modified.replace(injection,''),sourceBytes.toString('utf8'),'Stage changed beyond exact CSS-only patch');
+          assert.equal(sha(Buffer.from(modified)),manifest.botanica.deployedHtmlSha256,'Stage SHA mismatch');
+          assert.equal(manifest.commercialApproved,false);
+          console.log('PASS: frozen Botánica original SHA unchanged, and exact CSS-only stage patch verified; NO SALE');
+          NODE
           node -e "const f=require('/tmp/guest-static-stage/GUEST_STAGE_MANIFEST.json');if(f.status!=='PREPRODUCTION_DO_NOT_SELL'||!f.botanica.visualIncluded||f.commercialApproved)process.exit(1)"
           echo 'PASS precommercial static packaging. Frozen visual reconstructed from immutable chunks; SHA verified. NO SALE.'
       - name: Save platform-neutral stage (NOT LIVE)
