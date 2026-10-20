@@ -40,7 +40,7 @@ function descriptionFor(e:string){return e==='signature'?'Invitación digital Si
 // Never configure pending Botánica; no GUEST catalog sale is enabled by default.
 function catalogSaleOption(raw:any,edition:string){
  const id=String(raw||'').trim().toLowerCase();
- if(!id)return null;
+ if(!id)throw new Error('catalog_template_required'); // No new bare Essential/Signature sales: finished invitation design is mandatory.
  if(!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(id))throw new Error('catalog_template_not_for_sale');
  let published:any={};
  try{published=JSON.parse(env('GUEST_CATALOG_SALE_OPTIONS')||'{}')}catch{throw new Error('catalog_not_configured')}
@@ -253,5 +253,5 @@ Deno.serve(async req=>{
   }
   if(action==='submit_order'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await submitOrder(session,b.details||{}))}
   return json({ok:false,error:'invalid_action'},400)
- }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','catalog_template_not_for_sale','catalog_uses_common_questionnaire','catalog_host_invalid'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable','catalog_host_not_configured'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
+ }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','catalog_template_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','catalog_template_not_for_sale','catalog_uses_common_questionnaire','catalog_host_invalid'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable','catalog_host_not_configured'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
 });
