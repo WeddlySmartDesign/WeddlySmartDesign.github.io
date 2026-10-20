@@ -15,6 +15,7 @@ function staticAudit(){
   ok(ret.includes("guest-order.html?session_id="),'return → order route missing');
   const backend=fs.readFileSync(path.join(repoRoot,'guest','backend','guest-stripe-checkout','index.ts'),'utf8');
   ok(backend.includes("handleWebhook"),'signed webhook handler missing');
+  ok(backend.includes("if(!id)throw new Error('catalog_template_required')"),'backend must block collection-only checkout');
   ok(backend.includes("env('GUEST_STRIPE_WEBHOOK_SECRET')"),'dedicated GUEST webhook secret missing');
   ok(!backend.includes("GUEST_STRIPE_WEBHOOK_SECRET')||env('STRIPE_WEBHOOK_SECRET"),'GUEST must not fall back to ONE/shared webhook secret');
   ok(backend.includes("checkout.session.completed")&&backend.includes("checkout.session.async_payment_succeeded"),'paid webhook events incomplete');
@@ -50,20 +51,13 @@ async function mockConfigAndCreate(page,seen){
 }
 
 async function checkoutAt(browser,edition){
-  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
-  const page=await ctx.newPage(),seen=[];await mockConfigAndCreate(page,seen);
-  await page.goto(base+'/guest-checkout.html?edition='+edition,{waitUntil:'domcontentloaded'});
-  await page.waitForSelector('.edition.selected');
-  ok(await page.locator('.edition.selected').getAttribute('data-edition')===edition,'wrong selected edition '+edition);
-  ok(!(await page.locator('#consent').isChecked()),'consent prechecked '+edition);
-  ok(!seen.some(x=>x.action==='create'),'payment session created before consent '+edition);
-  await page.locator('#consent').check();
-  await page.waitForFunction(()=>document.querySelector('#mount')?.dataset.qaMounted==='1');
-  const creates=seen.filter(x=>x.action==='create');
-  ok(creates.length===1,'expected one create request '+edition+' got '+creates.length);
-  ok(creates[0].edition===edition,'create lost edition '+edition);
-  ok(creates[0].startPersonalizationConsent===true,'create lost consent '+edition);
-  await ctx.close();
+ const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+ const page=await ctx.newPage(),seen=[];await mockConfigAndCreate(page,seen);
+ await page.goto(base+'/guest-checkout.html?edition='+edition,{waitUntil:'domcontentloaded'});
+ ok(await page.locator('#consent').isDisabled(),'legacy no-design checkout not blocked: '+edition);
+ ok((await page.locator('#state').innerText()).includes('sin elegir una invitación individual'),'no-design explanation missing');
+ ok(!seen.some(x=>x.action==='create'),'payment created for unsupported collection '+edition);
+ await ctx.close();
 }
 
 async function catalogCheckout(browser){
