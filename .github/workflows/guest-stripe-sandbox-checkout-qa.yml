@@ -45,6 +45,14 @@ jobs:
       - name: Exercise Stripe LIVE denial, individual templates, metadata, idempotence and amount
         run: |
           node guest/qa/stripe_sandbox_checkout_isolated_contract_2026_10_20.cjs /tmp/guest-stripe-sandbox-runtime-ci.ts
+      - name: Fail closed when a real Stripe TEST key was not deliberately supplied
+        shell: bash
+        run: |
+          if node guest/qa/stripe_real_sandbox_unpaid_session_2026_10_20.cjs; then
+            echo 'ERROR: real API test unexpectedly ran without a sandbox secret'
+            exit 1
+          fi
+          echo 'PASS: real Stripe test session is impossible without a separately stored encrypted sk_test key'
       - name: Remove sandbox runtime
         if: always()
         run: rm -f /tmp/guest-stripe-sandbox-runtime-ci.ts
