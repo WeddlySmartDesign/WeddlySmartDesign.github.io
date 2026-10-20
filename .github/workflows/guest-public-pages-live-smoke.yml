@@ -1,3 +1,4 @@
+# Read-only rerun 2026-10-20 following the recovered 15-design catalog audit.
 name: GUEST Public Cloudflare Pages Live Smoke (NO SALE)
 on:
   push:
