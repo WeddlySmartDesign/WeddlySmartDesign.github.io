@@ -13,8 +13,45 @@ const site=()=>String(Deno.env.get('WEDDLY_SITE_ORIGIN')||'https://weddlysmartde
 const now=()=>new Date().toISOString();
 const txt=(v:any,max=500)=>String(v??'').trim().slice(0,max);
 const CATALOG_TEMPLATES:any={
-  'veil-light':{id:'veil-light',version:'5.3.3',renderer:'veil-light-v5-3-3',active:true,typographyVariants:['classic','romantic','contemporary'],defaultTypographyVariant:'classic'}
+  "veil-light": {
+    "id": "veil-light",
+    "version": "5.3.3",
+    "renderer": "veil-light-v5-3-3",
+    "active": true,
+    "typographyVariants": [
+      "classic",
+      "romantic",
+      "contemporary"
+    ],
+    "defaultTypographyVariant": "classic"
+  },
+  "botanica": {
+    "id": "botanica",
+    "version": "14.7",
+    "renderer": "botanica-v14-7",
+    "active": true,
+    "testOnly": true,
+    "typographyVariants": [
+      "classic"
+    ],
+    "defaultTypographyVariant": "classic"
+  },
+  "design-03": {
+    "id": "design-03",
+    "version": "1.0.0",
+    "renderer": "design-03-v1-0-0",
+    "active": true,
+    "testOnly": true,
+    "typographyVariants": [
+      "classic"
+    ],
+    "defaultTypographyVariant": "classic"
+  }
 };
+// Call assertCatalogOrderMode(spec,mode) inside ALL order-creation routes (test/checkout).
+function assertCatalogOrderMode(spec:any,mode:'test'|'production'){
+ if(spec?.testOnly===true&&mode!=='test')throw new Error('template_test_only');
+}
 function templateSpec(v:any){
   const id=txt(v,80).toLowerCase(),x=CATALOG_TEMPLATES[id];
   if(!x||x.active!==true)throw new Error('template_unavailable');
@@ -114,6 +151,7 @@ function validateQuestionnaire(q:any,files:any[]){
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date))e.push('Revisa la fecha de la boda.');
   if(q?.couple?.coverPlaceEnabled===true&&!txt(q?.couple?.coverPlace,36))e.push('Falta el lugar de portada.');
   if(q?.couple?.coverTimeEnabled===true&&!txt(q?.couple?.coverTime,10))e.push('Falta la hora de portada.');
+  if(q?.story?.enabled&&q?.story?.textMode==='none'&&!files.some((f:any)=>f.slot==='story'))e.push('Añade una foto para la historia solo fotográfica.');
   if(q?.story?.enabled&&q?.story?.textMode==='custom'&&!txt(q?.story?.customText,450))e.push('Escribe el texto de vuestra historia o elige uno de los textos propuestos.');
   if(q?.story?.enabled&&q?.story?.textMode==='custom'&&txt(q?.story?.customText,451).length>450)e.push('El texto de historia supera 450 caracteres.');
   const loc=q?.locations||{},mode=loc.mode==='split'?'split':'shared';
@@ -157,6 +195,178 @@ const STORY:any={
   'story-05':'Nos elegimos hace tiempo y seguimos eligiéndonos cada día. Ahora queremos celebrarlo como más nos gusta: con nuestra familia y amigos cerca.'
 };
 function fileRef(slot:string){return 'upload:'+slot}
+function normalizeBackendInvitationConfig(input:any) {
+  if (!input || typeof input !== 'object' || Array.isArray(input))
+    throw new Error('invalid_backend_config');
+  const config = JSON.parse(JSON.stringify(input));
+  if (!config.cover || typeof config.cover !== 'object' || Array.isArray(config.cover))
+    throw new Error('invalid_cover');
+  if (!Object.prototype.hasOwnProperty.call(config.cover, 'photo'))
+    config.cover.photo = null;
+  const optionalUrl = (object:any, key:string) => {
+    if (object && Object.prototype.hasOwnProperty.call(object, key) && object[key] === '')
+      object[key] = null;
+  };
+  for (const item of config.locations?.items || []) {
+    optionalUrl(item, 'mapsUrl');
+    optionalUrl(item, 'websiteUrl');
+  }
+  optionalUrl(config.practical?.bus, 'mapsUrl');
+  for (const key of ['websiteUrl', 'mapsUrl', 'externalBookingUrl'])
+    optionalUrl(config.practical?.accommodation, key);
+  optionalUrl(config.practical?.gift, 'externalUrl');
+  optionalUrl(config.practical?.playlist, 'url');
+  return config;
+}
+
+const schema:any={"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"https://weddlysmartdesign.example/schemas/guest-invitation-config-v1.json","title":"GUEST Invitation Config V1","type":"object","additionalProperties":false,"required":["schemaVersion","template","couple","wedding","cover","countdown","story","locations","agenda","practical","rsvp","gallery","closing"],"properties":{"schemaVersion":{"const":"guest-invitation-config-v1"},"template":{"type":"object","additionalProperties":false,"required":["id","version","typographyVariant"],"properties":{"id":{"type":"string","minLength":1},"version":{"type":"string","minLength":1},"typographyVariant":{"type":"string","minLength":1}}},"locale":{"type":"string","default":"es"},"couple":{"type":"object","additionalProperties":false,"required":["name1","name2"],"properties":{"name1":{"type":"string","minLength":1,"maxLength":30},"name2":{"type":"string","minLength":1,"maxLength":30}}},"wedding":{"type":"object","additionalProperties":false,"required":["date","coverPlace"],"properties":{"date":{"type":"string","format":"date"},"time":{"type":["string","null"],"maxLength":10},"timezone":{"type":"string","default":"Europe/Madrid"},"coverPlace":{"type":"string","minLength":0,"maxLength":36}}},"cover":{"type":"object","additionalProperties":false,"properties":{"photo":{"$ref":"#/$defs/photoOrNull"},"showPlace":{"type":"boolean","default":true},"showTime":{"type":"boolean","default":false}},"required":["showPlace","showTime","photo"]},"countdown":{"type":"object","additionalProperties":false,"required":["enabled"],"properties":{"enabled":{"type":"boolean"}}},"story":{"type":"object","additionalProperties":false,"required":["enabled","textMode","body","photo"],"properties":{"enabled":{"type":"boolean"},"body":{"type":"string","maxLength":450},"photo":{"$ref":"#/$defs/photoOrNull"},"textMode":{"enum":["preset","custom","none"]},"presetId":{"anyOf":[{"enum":["story-01","story-02","story-03","story-04","story-05"]},{"type":"null"}]}}},"locations":{"type":"object","additionalProperties":false,"required":["mode","items","dressCode"],"properties":{"mode":{"enum":["shared","split"]},"heroPhoto":{"$ref":"#/$defs/photoOrNull"},"items":{"type":"array","minItems":1,"maxItems":2,"items":{"$ref":"#/$defs/location"}},"dressCode":{"type":"object","additionalProperties":false,"required":["enabled"],"properties":{"enabled":{"type":"boolean"},"text":{"type":["string","null"],"maxLength":60}}}}},"agenda":{"type":"object","additionalProperties":false,"required":["enabled","moments"],"properties":{"enabled":{"type":"boolean"},"moments":{"type":"array","minItems":0,"maxItems":5,"items":{"type":"object","additionalProperties":false,"required":["time","label"],"properties":{"time":{"type":"string","minLength":1,"maxLength":10},"label":{"type":"string","minLength":1,"maxLength":28}}}}}},"practical":{"type":"object","additionalProperties":false,"required":["bus","accommodation","gift","playlist"],"properties":{"bus":{"$ref":"#/$defs/bus"},"accommodation":{"$ref":"#/$defs/accommodation"},"gift":{"$ref":"#/$defs/gift"},"playlist":{"$ref":"#/$defs/playlist"}}},"rsvp":{"type":"object","additionalProperties":false,"required":["ctaLabel"],"properties":{"ctaLabel":{"type":"string","minLength":1,"maxLength":40,"default":"Confirmar asistencia"},"route":{"type":["string","null"]},"plusOneEnabled":{"type":"boolean"},"childrenEnabled":{"type":"boolean"},"customQuestions":{"type":"array","maxItems":20,"items":{"type":"string","maxLength":160}},"menu":{"type":"object","additionalProperties":false,"required":["enabled","options"],"properties":{"enabled":{"type":"boolean"},"options":{"type":"array","maxItems":8,"items":{"type":"string","maxLength":80}}}},"dietary":{"type":"object","additionalProperties":false,"required":["enabled"],"properties":{"enabled":{"type":"boolean"},"prompt":{"type":["string","null"],"maxLength":160}}}}},"gallery":{"type":"object","additionalProperties":false,"required":["enabled","photos"],"properties":{"enabled":{"type":"boolean"},"photos":{"type":"array","minItems":0,"maxItems":4,"items":{"$ref":"#/$defs/photo"}}}},"closing":{"type":"object","additionalProperties":false,"properties":{"line":{"type":["string","null"],"maxLength":80}}}},"$defs":{"photo":{"type":"object","additionalProperties":false,"required":["src","fit","focusX","focusY"],"properties":{"src":{"type":"string","minLength":1},"width":{"type":["integer","null"],"minimum":1},"height":{"type":["integer","null"],"minimum":1},"orientation":{"enum":["portrait","landscape","square","panorama","unknown"]},"fit":{"enum":["crop","full"]},"focusX":{"type":"number","minimum":0,"maximum":100},"focusY":{"type":"number","minimum":0,"maximum":100},"alt":{"type":["string","null"],"maxLength":160},"autoFrame":{"type":"boolean"}}},"photoOrNull":{"anyOf":[{"$ref":"#/$defs/photo"},{"type":"null"}]},"location":{"type":"object","additionalProperties":false,"required":["type","time","name","address"],"properties":{"type":{"enum":["shared","ceremony","celebration"]},"time":{"type":"string","minLength":1,"maxLength":10},"name":{"type":"string","minLength":1,"maxLength":55},"address":{"type":"string","minLength":0,"maxLength":100},"mapsUrl":{"type":["string","null"],"format":"uri"},"websiteUrl":{"type":["string","null"],"format":"uri"}}},"bus":{"type":"object","additionalProperties":false,"required":["enabled","pickupPoints","outboundTimes","returnTimes"],"properties":{"enabled":{"type":"boolean"},"pickupPoints":{"type":"array","maxItems":3,"items":{"type":"string","maxLength":120}},"outboundTimes":{"type":"array","maxItems":3,"items":{"type":"string","maxLength":20}},"returnTimes":{"type":"array","maxItems":4,"items":{"type":"string","maxLength":20}},"note":{"type":["string","null"],"maxLength":120},"mapsUrl":{"type":["string","null"],"format":"uri"},"collectUsageInRSVP":{"type":"boolean"},"collectRouteChoiceInRSVP":{"type":"boolean"},"collectReturnChoiceInRSVP":{"type":"boolean"}}},"accommodation":{"type":"object","additionalProperties":false,"required":["enabled","mode"],"properties":{"enabled":{"type":"boolean"},"mode":{"enum":["on_site","room_block","couple_managed","recommended","external_booking","none"]},"name":{"type":["string","null"],"maxLength":140},"address":{"type":["string","null"],"maxLength":180},"websiteUrl":{"type":["string","null"],"format":"uri"},"mapsUrl":{"type":["string","null"],"format":"uri"},"phone":{"type":["string","null"],"maxLength":60},"bookingCode":{"type":["string","null"],"maxLength":100},"bookingName":{"type":["string","null"],"maxLength":120},"discountText":{"type":["string","null"],"maxLength":160},"deadline":{"type":["string","null"],"maxLength":40},"priceText":{"type":["string","null"],"maxLength":60},"externalBookingUrl":{"type":["string","null"],"format":"uri"},"note":{"type":["string","null"],"maxLength":180},"collectAccommodationInRSVP":{"type":"boolean"},"collectNightsInRSVP":{"type":"boolean","default":false},"collectOccupancyInRSVP":{"type":"boolean","default":false}}},"gift":{"type":"object","additionalProperties":false,"required":["enabled","mode"],"properties":{"enabled":{"type":"boolean"},"mode":{"enum":["bank","bizum","external_link","short_text","none"]},"displayText":{"type":["string","null"],"maxLength":160},"details":{"type":["string","null"],"maxLength":300},"externalUrl":{"type":["string","null"],"format":"uri"},"accountHolder":{"type":["string","null"],"maxLength":100},"iban":{"type":["string","null"],"maxLength":42},"bicSwift":{"type":["string","null"],"maxLength":20},"bizumPhone":{"type":["string","null"],"maxLength":30},"bizumRecipient":{"type":["string","null"],"maxLength":80},"linkLabel":{"type":["string","null"],"maxLength":80}}},"playlist":{"type":"object","additionalProperties":false,"required":["enabled","mode"],"properties":{"enabled":{"type":"boolean"},"mode":{"enum":["external_link","guest_request","none"]},"prompt":{"type":["string","null"],"maxLength":160},"url":{"type":["string","null"],"format":"uri"}}}}};
+const equal=(a:any,b:any)=>JSON.stringify(a)===JSON.stringify(b);
+function validate(data:any,contract:any=schema){
+ const errors:string[]=[];
+ const got=(x:any)=>x===null?'null':Array.isArray(x)?'array':typeof x;
+ function walk(value:any,node:any,p:string){
+  if(!node||typeof node!=='object')return;
+  if(node.$ref){
+   if(!node.$ref.startsWith('#/$defs/')){errors.push(p+':unsupported_ref');return}
+   const key=node.$ref.slice('#/$defs/'.length),target=contract.$defs?.[key];
+   if(!target){errors.push(p+':unknown_ref_'+key);return}
+   walk(value,target,p);return;
+  }
+  if(node.anyOf){
+   const failures:any[]=[];let valid=false;
+   for(const branch of node.anyOf){
+    const start=errors.length;walk(value,branch,p);
+    const issues=errors.splice(start);
+    if(!issues.length){valid=true;break}
+    failures.push(issues);
+   }
+   if(!valid)errors.push(...(failures.sort((a,b)=>a.length-b.length)[0]||[p+':anyOf']));
+   return;
+  }
+  if(Object.hasOwn(node,'const')&&!equal(value,node.const))errors.push(p+':const');
+  if(Array.isArray(node.enum)&&!node.enum.some(x=>equal(x,value)))errors.push(p+':enum');
+  if(node.type){
+   const allowed=Array.isArray(node.type)?node.type:[node.type],actual=got(value);
+   const ok=allowed.some(t=>t===actual||(t==='integer'&&actual==='number'&&Number.isInteger(value)));
+   if(!ok){errors.push(p+':type_'+actual);return}
+  }
+  if(typeof value==='string'){
+   if(node.minLength!==undefined&&value.length<node.minLength)errors.push(p+':minLength');
+   if(node.maxLength!==undefined&&value.length>node.maxLength)errors.push(p+':maxLength');
+   if(node.format==='date'){
+    const parsed=/^\d{4}-\d{2}-\d{2}$/.test(value)?new Date(value+'T00:00:00Z'):null;
+    if(!parsed||Number.isNaN(parsed.getTime())||parsed.toISOString().slice(0,10)!==value)errors.push(p+':date');
+   }
+   if(node.format==='uri'&&!/^https?:\/\/\S+$/i.test(value))errors.push(p+':uri');
+  }
+  if(typeof value==='number'){
+   if(node.minimum!==undefined&&value<node.minimum)errors.push(p+':minimum');
+   if(node.maximum!==undefined&&value>node.maximum)errors.push(p+':maximum');
+  }
+  if(Array.isArray(value)){
+   if(node.minItems!==undefined&&value.length<node.minItems)errors.push(p+':minItems');
+   if(node.maxItems!==undefined&&value.length>node.maxItems)errors.push(p+':maxItems');
+   value.forEach((v,i)=>walk(v,node.items||{},p+'['+i+']'));
+  }
+  if(value!==null&&typeof value==='object'&&!Array.isArray(value)){
+   for(const key of node.required||[])if(!Object.hasOwn(value,key))errors.push(p+'.'+key+':required');
+   for(const [key,v] of Object.entries(value)){
+    if(node.properties?.[key])walk(v,node.properties[key],p+'.'+key);
+    else if(node.additionalProperties===false)errors.push(p+'.'+key+':unexpected');
+   }
+  }
+ }
+ walk(data,contract,'$');
+ // Semantic invariants from the shared questionnaire; no per-template branches.
+ if (data && typeof data === 'object' && !Array.isArray(data)) {
+  if (data.cover?.showPlace === true && !String(data.wedding?.coverPlace || '').trim())
+   errors.push('$.wedding.coverPlace:required_when_shown');
+  if (data.story?.enabled === true && data.story.textMode === 'none' && !data.story.photo)
+   errors.push('$.story.photo:required_for_photo_only');
+  if (data.story?.enabled === true && data.story.textMode === 'custom' && !String(data.story.body || '').trim())
+   errors.push('$.story.body:required_for_custom');
+  if (data.locations?.mode === 'shared' && Array.isArray(data.locations.items) && data.locations.items.length !== 1)
+   errors.push('$.locations.items:shared_requires_one');
+  if (data.locations?.mode === 'split' && Array.isArray(data.locations.items) && data.locations.items.length !== 2)
+   errors.push('$.locations.items:split_requires_two');
+  if (data.agenda?.enabled === true && Array.isArray(data.agenda.moments) && data.agenda.moments.length === 0)
+   errors.push('$.agenda.moments:required_when_enabled');
+  if (data.gallery?.enabled === true && Array.isArray(data.gallery.photos) && data.gallery.photos.length === 0)
+   errors.push('$.gallery.photos:required_when_enabled');
+  if (data.practical?.bus?.enabled === true &&
+      (!data.practical.bus.pickupPoints?.length || !data.practical.bus.outboundTimes?.length))
+   errors.push('$.practical.bus:pickup_and_outbound_required');
+  if (data.practical?.playlist?.enabled === true && !data.practical.playlist.url)
+   errors.push('$.practical.playlist.url:required_when_enabled');
+ }
+ return errors;
+}
+
+function assertPinnedInvitationConfig(config:any, order:any, validateConfig:(v:any)=>string[], files:any[], phase:string='stored') {
+  if (!config || typeof config !== 'object' || Array.isArray(config))
+    throw new Error('invalid_invitation_config');
+  if (!order || !order.template_id || !order.template_version)
+    throw new Error('missing_order_template_pin');
+  if (config.template?.id !== order.template_id ||
+      String(config.template?.version) !== String(order.template_version))
+    throw new Error('invitation_template_pin_mismatch');
+  if (typeof validateConfig !== 'function' || validateConfig(config).length !== 0)
+    throw new Error('invalid_invitation_config');
+  // The stored invitation is recipient-neutral. Existing GUEST sharing adds
+  // rt + g/u + lang only at render time; never persist a redirect here.
+  if (config.rsvp?.route != null && config.rsvp.route !== '#')
+    throw new Error('invalid_invitation_rsvp_route');
+  const media:any[]=[];
+  if (config.cover?.photo) media.push(config.cover.photo);
+  if (config.story?.photo) media.push(config.story.photo);
+  if (config.locations?.heroPhoto) media.push(config.locations.heroPhoto);
+  for (const picture of config.gallery?.photos || []) media.push(picture);
+  const slots=new Set((Array.isArray(files)?files:[]).filter(f=>f&&
+    (f.path || f.publicUrl || f.url)).map(f=>String(f.slot)));
+  for (const picture of media) {
+    const src=picture?.src;
+    if (typeof src !== 'string' || !src) throw new Error('invalid_invitation_media');
+    if (src.startsWith('upload:')) {
+      if (phase === 'hydrated') throw new Error('missing_signed_asset');
+      if (!slots.has(src.slice(7))) throw new Error('missing_invitation_upload');
+    } else if (!/^https:\/\/[^\s]+$/i.test(src))
+      throw new Error('invalid_invitation_media');
+  }
+  return config;
+}
+/**
+ * Read-only compatibility for historical delivered TEST orders written by v12.
+ * Never used for creation, mutation, approval, delivery, or production orders.
+ * The old rows may have template.version different from template_version;
+ * preserving their bytes is safer than silently rewriting order history.
+ */
+function assertLegacyDeliveredTestRead(config:any,order:any,files:any[]) {
+  if (order?.mode !== 'test' || order?.status !== 'delivered' ||
+      !config || typeof config !== 'object' || Array.isArray(config) ||
+      config.schemaVersion !== undefined || config.template?.id !== order.template_id)
+    throw new Error('untrusted_legacy_invitation');
+  if (config.rsvp?.route != null && config.rsvp.route !== '#')
+    throw new Error('invalid_invitation_rsvp_route');
+  const media:any[]=[];
+  if(config.cover?.photo)media.push(config.cover.photo);
+  if(config.story?.photo)media.push(config.story.photo);
+  if(config.locations?.heroPhoto)media.push(config.locations.heroPhoto);
+  for(const picture of config.gallery?.photos||[])media.push(picture);
+  for(const picture of media){
+    if(typeof picture?.src !== 'string' || !/^https:\/\/[^\s]+$/i.test(picture.src))
+      throw new Error('missing_signed_asset');
+  }
+  return config;
+}
+
+function checkInvitationConfig(config:any,order:any,files:any[]=order.files||[],phase:string='stored'){
+ return assertPinnedInvitationConfig(config,order,validate,files,phase);
+}
+function checkInvitationRead(config:any,order:any,files:any[]){
+ if(order?.mode==='test'&&order?.status==='delivered'&&config?.schemaVersion===undefined)
+  return assertLegacyDeliveredTestRead(config,order,files);
+ return checkInvitationConfig(config,order,files,'hydrated');
+}
 function buildConfig(q:any,files:any[],rsvpRoute='#',templateId='veil-light',templateVersion=''){
   const spec=templateSpec(templateId),pinnedVersion=txt(templateVersion,40)||spec.version;
   const couple=q?.couple||{},story=q?.story||{},loc=q?.locations||{},agenda=q?.agenda||{},p=q?.practical||{},r=q?.rsvp||{},gallery=q?.gallery||{},closing=q?.closing||{};
@@ -176,7 +386,8 @@ function buildConfig(q:any,files:any[],rsvpRoute='#',templateId='veil-light',tem
     if(gift.mode==='short_text')giftDetails=txt(gift.message,240);
   }
   const galleryFiles=files.filter((x:any)=>String(x.slot||'').startsWith('gallery-')).sort((a:any,b:any)=>String(a.slot).localeCompare(String(b.slot))).slice(0,4);
-  return {
+  return normalizeBackendInvitationConfig({
+    schemaVersion:'guest-invitation-config-v1',
     template:{id:spec.id,version:pinnedVersion,typographyVariant:(Array.isArray(spec.typographyVariants)&&spec.typographyVariants.includes(couple.typographyVariant))?couple.typographyVariant:spec.defaultTypographyVariant},
     locale:'es',
     couple:{name1:txt(couple.name1,30),name2:txt(couple.name2,30)},
@@ -185,7 +396,7 @@ function buildConfig(q:any,files:any[],rsvpRoute='#',templateId='veil-light',tem
     countdown:{enabled:q?.countdown?.enabled!==false},
     story:{
       enabled:story.enabled===true,
-      textMode:story.textMode==='custom'?'custom':'preset',
+      textMode:story.textMode==='none'?'none':(story.textMode==='custom'?'custom':'preset'),
       presetId:STORY[story.presetId]?story.presetId:'story-03',
       body:story.textMode==='custom'?txt(story.customText,450):'',
       photo:story.enabled&&has('story')?{src:fileRef('story'),fit:'crop',focusX:50,focusY:50,autoFrame:true,alt:'Foto de la pareja'}:null
@@ -222,7 +433,7 @@ function buildConfig(q:any,files:any[],rsvpRoute='#',templateId='veil-light',tem
       },
       playlist:{
         enabled:play.enabled===true,
-        mode:'external_link',
+        mode:(spec.id==='design-03'&&play.mode==='guest_request')?'guest_request':'external_link',
         prompt:txt(play.prompt||'Mandadnos esa canción que no puede faltar.',160),
         url:txt(play.url,800)
       }
@@ -230,7 +441,7 @@ function buildConfig(q:any,files:any[],rsvpRoute='#',templateId='veil-light',tem
     rsvp:{route:rsvpRoute||'#',ctaLabel:'Confirmar asistencia'},
     gallery:{enabled:gallery.enabled===true,photos:galleryFiles.map((x:any)=>({src:fileRef(x.slot),fit:'crop',focusX:50,focusY:50,autoFrame:true,alt:'Foto de la pareja'}))},
     closing:{line:closing.mode==='custom'?txt(closing.customLine,80):'Gracias por formar parte de nuestra historia.'}
-  };
+  });
 }
 async function signedFiles(c:any,order:any,ttl=3600){
   const out=[];for(const f of (Array.isArray(order.files)?order.files:[])){
@@ -241,11 +452,11 @@ async function signedFiles(c:any,order:any,ttl=3600){
 function hydrateConfig(config:any,files:any[]){
   const map=new Map(files.map((x:any)=>[String(x.slot),x.url||x.publicUrl||'']));
   const v=structuredClone(config||{});
-  const walk=(x:any)=>{if(Array.isArray(x)){x.forEach(walk);return}if(!x||typeof x!=='object')return;for(const k of Object.keys(x)){if(typeof x[k]==='string'&&x[k].startsWith('upload:'))x[k]=map.get(x[k].slice(7))||'';else walk(x[k])}};
+  const walk=(x:any)=>{if(Array.isArray(x)){x.forEach(walk);return}if(!x||typeof x!=='object')return;for(const k of Object.keys(x)){if(typeof x[k]==='string'&&x[k].startsWith('upload:')){const resolved=map.get(x[k].slice(7));if(!resolved)throw new Error('missing_signed_asset');x[k]=resolved;}else walk(x[k])}};
   walk(v);return v;
 }
 async function createOrder(c:any,mode:'test'|'production',buyerEmail:string,licenseId:string|null,checkoutSessionId:string|null,templateId='veil-light'){
-  const spec=templateSpec(templateId),id=crypto.randomUUID(),qToken=await capability(id,'q'),rToken=await capability(id,'r'),pToken=await capability(id,'p');
+  const spec=templateSpec(templateId);assertCatalogOrderMode(spec,mode);const id=crypto.randomUUID(),qToken=await capability(id,'q'),rToken=await capability(id,'r'),pToken=await capability(id,'p');
   const row={id,mode,license_id:licenseId,checkout_session_id:checkoutSessionId,buyer_email:txt(buyerEmail,200).toLowerCase(),template_id:spec.id,template_version:spec.version,status:'draft',questionnaire_token_hash:await sha256(qToken),review_token_hash:await sha256(rToken),public_token_hash:await sha256(pToken),questionnaire:{},resolved_config:{},files:[],created_at:now(),updated_at:now()};
   const {error}=await c.from('guest_invitation_orders').insert(row);if(error)throw error;
   return{id,qToken,rToken,pToken};
@@ -322,12 +533,12 @@ Deno.serve(async req=>{
       const order=await findByToken(c,String(b.token||''),'questionnaire_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
       if(!['draft','changes_requested'].includes(order.status))return json({ok:false,error:'questionnaire_locked'},409);
       const questionnaire=sanitizeQuestionnaire(b.questionnaire||{}),errors=validateQuestionnaire(questionnaire,order.files||[]);if(errors.length)return json({ok:false,error:'validation_failed',errors},400);
-      const config=buildConfig(questionnaire,order.files||[],'#',order.template_id,order.template_version),ts=now(),email=emailOf(questionnaire,order.buyer_email);
+      const config=checkInvitationConfig(buildConfig(questionnaire,order.files||[],'#',order.template_id,order.template_version),order),ts=now(),email=emailOf(questionnaire,order.buyer_email);
       const {error}=await c.from('guest_invitation_orders').update({questionnaire,resolved_config:config,buyer_email:email,status:'submitted',submitted_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
       const fresh={...order,questionnaire,resolved_config:config,buyer_email:email,status:'submitted',submitted_at:ts};
-      await internalSubmittedEmail(fresh);
-      if(email){
-        const steps='<div style="font-size:11px;letter-spacing:.15em;font-weight:700;color:#aa8472;margin-bottom:8px">QUÉ PASA A PARTIR DE AHORA</div>'
+       if(order.mode!=='test')await internalSubmittedEmail(fresh);
+       if(email&&order.mode!=='test'){
+         const steps='<div style="font-size:11px;letter-spacing:.15em;font-weight:700;color:#aa8472;margin-bottom:8px">QUÉ PASA A PARTIR DE AHORA</div>'
           +'<table role="presentation" width="100%" cellspacing="0" cellpadding="0">'
           +emailStep('01','Datos recibidos','Ya tenemos la información que nos habéis enviado.')
           +emailStep('02','Preparamos','Montamos vuestra invitación con el diseño que habéis elegido.')
@@ -347,7 +558,7 @@ Deno.serve(async req=>{
     if(action==='review_load'){
       const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
       if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);
-      const files=await signedFiles(c,order,7200),config=hydrateConfig(order.resolved_config||{},files);
+      const files=await signedFiles(c,order,7200),config=checkInvitationRead(hydrateConfig(order.resolved_config||{},files),order,files);
       return json({ok:true,order:{id:order.id,status:order.status,label:orderLabel(order),config,revisionCount:order.revision_count||0}});
     }
     if(action==='review_respond'){
@@ -356,21 +567,22 @@ Deno.serve(async req=>{
       if(!['review_ready','review_sent','changes_requested'].includes(order.status))return json({ok:false,error:'review_locked'},409);
       const ts=now();
       if(decision==='approve'){
+        checkInvitationConfig(order.resolved_config||{},order);
         const {error}=await c.from('guest_invitation_orders').update({status:'approved',approved_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
-        await resend({to:['weddlysmartdesign@gmail.com'],subject:'Invitación GUEST aprobada · '+orderLabel(order),html:'<p>La pareja ha aprobado la invitación. Pedido <b>'+esc(order.id)+'</b>.</p>'},'guest-review-approved/'+order.id);
+         if(order.mode!=='test')await resend({to:['weddlysmartdesign@gmail.com'],subject:'Invitación GUEST aprobada · '+orderLabel(order),html:'<p>La pareja ha aprobado la invitación. Pedido <b>'+esc(order.id)+'</b>.</p>'},'guest-review-approved/'+order.id);
         return json({ok:true,status:'approved'});
       }
       const note=txt(b.note,1500);if(!note)return json({ok:false,error:'changes_note_required'},400);
       const history=[...(Array.isArray(order.revision_requests)?order.revision_requests:[]),{at:ts,note}];
       const {error}=await c.from('guest_invitation_orders').update({status:'changes_requested',revision_count:Number(order.revision_count||0)+1,revision_requests:history,updated_at:ts}).eq('id',order.id);if(error)throw error;
-      await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados · '+orderLabel(order),html:'<p><b>'+esc(orderLabel(order))+'</b></p><p>'+esc(note).replaceAll('\n','<br>')+'</p>'},'guest-review-changes/'+order.id+'/'+String(order.revision_count||0));
+       if(order.mode!=='test')await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados · '+orderLabel(order),html:'<p><b>'+esc(orderLabel(order))+'</b></p><p>'+esc(note).replaceAll('\n','<br>')+'</p>'},'guest-review-changes/'+order.id+'/'+String(order.revision_count||0));
       return json({ok:true,status:'changes_requested'});
     }
     if(action==='public_load'){
       const order=await findByToken(c,String(b.token||''),'public_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
       if(order.status!=='delivered')return json({ok:false,error:'not_delivered'},409);
-      const files=await signedFiles(c,order,86400),config=hydrateConfig(order.resolved_config||{},files);
-      return json({ok:true,order:{id:order.id,label:orderLabel(order),config}});
+      const files=await signedFiles(c,order,86400),config=checkInvitationRead(hydrateConfig(order.resolved_config||{},files),order,files);
+      return json({ok:true,order:{id:order.id,mode:order.mode==='test'?'test':'production',label:orderLabel(order),config}});
     }
 
     if(action==='active_for_member'){
@@ -394,8 +606,84 @@ Deno.serve(async req=>{
     }
     const ctx=await managerContext(c,req);if(!ctx)return json({ok:false,error:'manager_required'},403);
     if(action==='status')return json({ok:true});
+    if(action==='create_paid'){
+      const licenseId=txt(b.licenseId,80);
+      if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(licenseId))return json({ok:false,error:'invalid_license_id'},400);
+      const spec=templateSpec(txt(b.templateId,80));
+      if(spec.testOnly===true)return json({ok:false,error:'template_test_only'},409);
+      assertCatalogOrderMode(spec,'production');
+      const {data:license,error:le}=await c.from('licenses')
+        .select('id,source,source_order_id,status,metadata').eq('id',licenseId).maybeSingle();
+      if(le)throw le;
+      const checkoutId=String(license?.source_order_id||''),meta=license?.metadata||{};
+      if(!license||license.source!=='stripe'||license.status!=='active'||
+         meta.product!=='guest'||!/^cs_(?:test|live)_[A-Za-z0-9]+$/.test(checkoutId)||
+         meta.guest_catalog_template_id!==spec.id||
+         String(meta.guest_catalog_template_version||'')!==String(spec.version))
+        return json({ok:false,error:'paid_catalog_template_not_purchased'},409);
+      const {data:existing,error:xe}=await c.from('guest_invitation_orders')
+        .select('id,mode,license_id,checkout_session_id,template_id,template_version')
+        .eq('license_id',licenseId).maybeSingle();
+      if(xe)throw xe;
+      if(existing){
+        if(existing.mode!=='production'||existing.checkout_session_id!==checkoutId||
+           existing.template_id!==spec.id||String(existing.template_version)!==String(spec.version))
+          return json({ok:false,error:'paid_catalog_order_conflict'},409);
+        return json({ok:true,id:existing.id,alreadyCreated:true,
+          qToken:await capability(existing.id,'q'),rToken:await capability(existing.id,'r'),
+          pToken:await capability(existing.id,'p')});
+      }
+      const {data:delivery,error:de}=await c.from('license_delivery_codes')
+        .select('buyer_email').eq('license_id',licenseId).maybeSingle();
+      if(de)throw de;
+      const email=txt(delivery?.buyer_email,200).toLowerCase();
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+        return json({ok:false,error:'paid_buyer_email_missing'},409);
+      const created=await createOrder(c,'production',email,licenseId,checkoutId,spec.id);
+      return json({ok:true,...created,alreadyCreated:false},201);
+    }
     if(action==='create_test'){
       const o=await createOrder(c,'test',txt(b.email,200),null,null,txt(b.templateId||'veil-light',80));return json({ok:true,...o},201);
+    }
+    if(action==='link_test_license'){
+      // Owner HMAC managerContext is checked before this branch.
+      const orderId=txt(b.orderId,80),licenseId=txt(b.licenseId,80);
+      const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if(!uuid.test(orderId)||!uuid.test(licenseId))return json({ok:false,error:'invalid_test_link_identifiers'},400);
+      const order=await getOrder(c,orderId);
+      if(!order||order.mode!=='test'||order.status!=='delivered'||
+         !String(order.buyer_email||'').toLowerCase().endsWith('@example.invalid')||
+         templateSpec(order.template_id).testOnly!==true)
+        return json({ok:false,error:'test_only_order_required'},409);
+      if(order.license_id){
+        if(String(order.license_id)===licenseId)return json({ok:true,alreadyLinked:true});
+        return json({ok:false,error:'order_already_linked'},409);
+      }
+      const {data:lic,error:le}=await c.from('licenses')
+        .select('id,source,status,wedding_id,metadata').eq('id',licenseId).maybeSingle();
+      if(le)throw le;
+      if(!lic||lic.source!=='tester'||lic.status!=='active'||
+         String(lic.metadata?.product||'')!=='guests'||
+         !String(lic.metadata?.tester_label||'').startsWith('GUEST QA ')||
+         !uuid.test(String(lic.wedding_id||''))||
+         (lic.metadata?.expires_at&&Date.now()>=Date.parse(String(lic.metadata.expires_at))))
+        return json({ok:false,error:'active_guest_qa_license_required'},409);
+      const {count,error:me}=await c.from('wedding_members')
+        .select('license_id',{count:'exact',head:true})
+        .eq('license_id',licenseId).eq('wedding_id',lic.wedding_id).eq('status','active');
+      if(me)throw me;
+      if(!count)return json({ok:false,error:'guest_qa_wedding_member_required'},409);
+      const {data:existing,error:ee}=await c.from('guest_invitation_orders')
+        .select('id').eq('license_id',licenseId).neq('id',orderId).limit(1);
+      if(ee)throw ee;
+      if(existing?.length)return json({ok:false,error:'guest_qa_license_already_has_order'},409);
+      const {data:linked,error:ue}=await c.from('guest_invitation_orders')
+        .update({license_id:licenseId,updated_at:now()}).eq('id',orderId)
+        .eq('mode','test').eq('status','delivered').is('license_id',null)
+        .select('id').maybeSingle();
+      if(ue)throw ue;
+      if(!linked)return json({ok:false,error:'test_link_race_or_changed'},409);
+      return json({ok:true,status:'linked_test_guest_management',alreadyLinked:false});
     }
     if(action==='list'){
       const {data:rows,error}=await c.from('guest_invitation_orders').select('id,mode,buyer_email,template_id,status,questionnaire,created_at,updated_at,submitted_at,designing_at,review_sent_at,approved_at,delivered_at,revision_count').order('updated_at',{ascending:false}).limit(200);if(error)throw error;
@@ -409,7 +697,7 @@ Deno.serve(async req=>{
     if(action==='start_design'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
       if(!['submitted','changes_requested','designing'].includes(order.status))return json({ok:false,error:'invalid_status'},409);
-      const config=buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version),ts=now();
+      const config=checkInvitationConfig(buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version),order),ts=now();
       const {error}=await c.from('guest_invitation_orders').update({status:'designing',designing_at:order.designing_at||ts,resolved_config:config,updated_at:ts}).eq('id',order.id);if(error)throw error;
       const files=await signedFiles(c,{...order,resolved_config:config},7200);
       return json({ok:true,status:'designing',config:hydrateConfig(config,files),reviewToken:await capability(order.id,'r')});
@@ -419,6 +707,7 @@ Deno.serve(async req=>{
       if(!['designing','changes_requested','submitted'].includes(order.status))return json({ok:false,error:'invalid_status'},409);
       const config=b.config&&typeof b.config==='object'?b.config:null;if(!config)return json({ok:false,error:'invalid_config'},400);
       const rawCfg=JSON.stringify(config);if(rawCfg.length>120000)return json({ok:false,error:'config_too_large'},400);
+      checkInvitationConfig(config,order);
       const {error}=await c.from('guest_invitation_orders').update({resolved_config:config,status:'designing',updated_at:now()}).eq('id',order.id);if(error)throw error;return json({ok:true});
     }
     if(action==='mark_review_ready'){
@@ -426,7 +715,7 @@ Deno.serve(async req=>{
       if(!['designing','changes_requested','submitted'].includes(order.status))return json({ok:false,error:'invalid_status'},409);
       const missing=validateQuestionnaire(order.questionnaire||{},order.files||[]).filter((x:string)=>x!=='Confirma que habéis revisado los datos.');
       if(missing.length)return json({ok:false,error:'incomplete_order',errors:missing},400);
-      const ts=now(),config=Object.keys(order.resolved_config||{}).length?order.resolved_config:buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version);
+      const ts=now(),config=checkInvitationConfig(Object.keys(order.resolved_config||{}).length?order.resolved_config:buildConfig(order.questionnaire||{},order.files||[],'#',order.template_id,order.template_version),order);
       const {error}=await c.from('guest_invitation_orders').update({status:'review_ready',resolved_config:config,updated_at:ts}).eq('id',order.id);if(error)throw error;
       return json({ok:true,status:'review_ready',reviewToken:await capability(order.id,'r')});
     }
@@ -434,7 +723,27 @@ Deno.serve(async req=>{
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
       if(!['review_ready','review_sent'].includes(order.status))return json({ok:false,error:'invalid_status'},409);
       const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);
-      const token=await capability(order.id,'r'),supplied=txt(b.reviewUrl,1200),localTest=order.mode==='test'&&!supplied,reviewUrl=supplied||(!localTest?site()+'/guest-review-v1.html?t='+encodeURIComponent(token):''),ts=now();
+      checkInvitationConfig(order.resolved_config||{},order);
+      const token=await capability(order.id,'r'),supplied=txt(b.reviewUrl,1200),localTest=order.mode==='test'&&!supplied,ts=now();
+      // Paid catalog: review uses the SAME externally configured static host
+      // as the eventual final URL. Legacy/test reviews keep historic behavior.
+      const paidCatalogReview=order.mode==='production'&&Boolean(order.checkout_session_id);
+      let reviewBase=site();
+      if(paidCatalogReview){
+        const raw=String(Deno.env.get('GUEST_CATALOG_PUBLIC_ORIGIN')||'').trim();
+        if(!raw)return json({ok:false,error:'catalog_host_not_configured'},503);
+        try{
+          const host=new URL(raw);
+          if(host.protocol!=='https:'||host.username||host.password||
+             host.pathname!=='/'||host.search||host.hash)
+            throw Error('invalid');
+          reviewBase=host.origin;
+        }catch{return json({ok:false,error:'catalog_host_misconfigured'},503)}
+      }
+      const expectedReviewUrl=reviewBase+'/guest-review-v1.html?t='+encodeURIComponent(token);
+      if(paidCatalogReview&&supplied&&supplied!==expectedReviewUrl)
+        return json({ok:false,error:'invalid_review_url'},400);
+      const reviewUrl=supplied||(!localTest?expectedReviewUrl:'');
       const reviewSteps='<div style="font-size:11px;letter-spacing:.15em;font-weight:700;color:#aa8472;margin-bottom:8px">REVISAD ESTOS DETALLES</div>'
         +'<table role="presentation" width="100%" cellspacing="0" cellpadding="0">'
         +emailStep('01','Datos principales','Nombres, fecha y horarios.')
@@ -452,7 +761,7 @@ Deno.serve(async req=>{
               +emailButton(reviewUrl,'Revisar nuestra invitación')
               +'<p style="font-size:13px;line-height:1.55;color:#83756b">No hace falta responder a este correo para pedir cambios: la pantalla de revisión os guía en todo el proceso.</p>'
           );
-      const ok=await resend({to:[email],subject:localTest?'Revisión de prueba preparada':'Vuestra invitación está lista para revisar',html:content},'guest-review-send/'+order.id+'/'+String(order.revision_count||0));
+      const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Revisión de prueba preparada':'Vuestra invitación está lista para revisar',html:content},'guest-review-send/'+order.id+'/'+String(order.revision_count||0));
       if(!ok)return json({ok:false,error:'email_failed'},502);
       const {error}=await c.from('guest_invitation_orders').update({status:'review_sent',review_sent_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
       return json({ok:true,status:'review_sent',reviewUrl,reviewToken:token,localTest});
@@ -461,8 +770,34 @@ Deno.serve(async req=>{
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
       if(order.status!=='approved')return json({ok:false,error:'approval_required'},409);
       const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);
-      const files=await copyPublicFiles(c,order),publicFiles=files.map((x:any)=>({...x,url:x.publicUrl||''})),config=hydrateConfig(order.resolved_config||{},publicFiles),ts=now(),token=await capability(order.id,'p'),supplied=txt(b.invitationUrl,1200),localTest=order.mode==='test'&&!supplied,inviteUrl=supplied;
-      if(order.mode==='production'&&!inviteUrl)return json({ok:false,error:'missing_invitation_url'},400);
+      checkInvitationConfig(order.resolved_config||{},order);
+      const files=order.mode==='test'?(Array.isArray(order.files)?order.files:[]):await copyPublicFiles(c,order),publicFiles=order.mode==='test'?await signedFiles(c,order,7200):files.map((x:any)=>({...x,url:x.publicUrl||''})),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},publicFiles),order,publicFiles,'hydrated'),ts=now(),token=await capability(order.id,'p'),supplied=txt(b.invitationUrl,1200),localTest=order.mode==='test'&&!supplied,inviteUrl=supplied;
+      if(!inviteUrl)return json({ok:false,error:'missing_invitation_url'},400);
+      let finalUrl:any;try{finalUrl=new URL(inviteUrl)}catch{return json({ok:false,error:'invalid_invitation_url'},400)}
+      let configuredSite:any;try{configuredSite=new URL(site())}catch{return json({ok:false,error:'invalid_site_origin'},500)}
+      // SECONDARY STATIC CATALOG HOST: one operator-configured HTTPS origin, fail closed.
+      // Keep existing site() for activation codes and historic VEIL orders.
+      const publicOriginRaw=String(Deno.env.get('GUEST_CATALOG_PUBLIC_ORIGIN')||'').trim();
+      let secondaryOrigin='';
+      if(publicOriginRaw){
+        try{
+          const configured=new URL(publicOriginRaw);
+          if(configured.protocol!=='https:'||configured.username||configured.password||
+             configured.pathname!=='/'||configured.search||configured.hash)
+            throw Error('invalid_catalog_public_origin');
+          secondaryOrigin=configured.origin;
+        }catch{return json({ok:false,error:'catalog_host_misconfigured'},503)}
+      }
+      const onPrimary=finalUrl.origin===configuredSite.origin;
+      const onSecondary=secondaryOrigin!==''&&finalUrl.origin===secondaryOrigin&&
+        finalUrl.pathname==='/guest/catalog-final.html'&&
+        finalUrl.searchParams.get('p')===token&&
+        Array.from(finalUrl.searchParams.keys()).length===1&&
+        finalUrl.hash==='';
+      const paidCatalogDelivery=order.mode==='production'&&Boolean(order.checkout_session_id);
+      if(finalUrl.protocol!=='https:'||finalUrl.username||finalUrl.password||
+         !(paidCatalogDelivery?onSecondary:(onPrimary||onSecondary)))
+        return json({ok:false,error:'invalid_invitation_url'},400);
       let accessUrl='';
       if(order.license_id){
         const {data:d}=await c.from('license_delivery_codes').select('activation_code').eq('license_id',order.license_id).maybeSingle();
@@ -493,9 +828,9 @@ Deno.serve(async req=>{
         localTest?'La entrega final de prueba está completada.':'Vuestra invitación está aprobada y terminada. Ya podéis enviarla a vuestros invitados.',
         deliveryBody
       );
-      const ok=await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Vuestra invitación está lista para compartir',html:deliveryHtml},'guest-deliver-v3/'+order.id);
+      const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Vuestra invitación está lista para compartir',html:deliveryHtml},'guest-deliver-v3/'+order.id);
       if(!ok)return json({ok:false,error:'email_failed'},502);
-      const {error}=await c.from('guest_invitation_orders').update({files,resolved_config:config,delivery_url:inviteUrl||null,status:'delivered',delivered_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
+      const {error}=await c.from('guest_invitation_orders').update({files,resolved_config:order.mode==='test'?order.resolved_config:config,delivery_url:inviteUrl||null,status:'delivered',delivered_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
       return json({ok:true,status:'delivered',inviteUrl,accessUrl,publicToken:token,localTest});
     }
     if(action==='owner_note'){
@@ -508,5 +843,5 @@ Deno.serve(async req=>{
       const {error}=await c.from('guest_invitation_orders').update({status:'designing',updated_at:now()}).eq('id',order.id);if(error)throw error;return json({ok:true,status:'designing'});
     }
     return json({ok:false,error:'invalid_action'},400);
-  }catch(e){const m=String((e as Error)?.message||'');console.error(e);if(['questionnaire_too_large','invalid_file_type','file_too_large','invalid_upload','changes_note_required','missing_email','invalid_config','config_too_large','template_unavailable','missing_invitation_url','missing_management_license','missing_management_access'].includes(m))return json({ok:false,error:m},400);return json({ok:false,error:'server_error'},500)}
+  }catch(e){const m=String((e as Error)?.message||'');console.error(e);if(['missing_signed_asset','missing_invitation_upload','missing_order_template_pin'].includes(m))return json({ok:false,error:m},409);if(['invalid_invitation_config','invitation_template_pin_mismatch','invalid_invitation_media','invalid_invitation_rsvp_route','untrusted_legacy_invitation'].includes(m))return json({ok:false,error:m},400);if(['questionnaire_too_large','invalid_file_type','file_too_large','invalid_upload','changes_note_required','missing_email','invalid_config','config_too_large','template_unavailable','missing_invitation_url','missing_management_license','missing_management_access'].includes(m))return json({ok:false,error:m},400);return json({ok:false,error:'server_error'},500)}
 });
