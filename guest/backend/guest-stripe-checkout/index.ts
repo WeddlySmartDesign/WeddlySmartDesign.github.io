@@ -174,7 +174,7 @@ async function provision(session:any){
  if((templateId||templateVersion)&&(!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(templateId)||
     !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,30}$/.test(templateVersion)))
   throw new Error('invalid_checkout_session');
- const metadata={product:'guest',edition,access_kind:'paid',payment_provider:'stripe',stripe_session_id:sessionId,stripe_payment_intent:typeof session.payment_intent==='string'?session.payment_intent:null,amount_total:Number(session.amount_total||amountFor(edition)),currency:'eur',pricing:'launch',guest_personalization_status:'awaiting_details',purchased_at:created,
+ const metadata={product:'guest',edition,access_kind:'paid',payment_provider:'stripe',stripe_session_id:sessionId,stripe_payment_intent:typeof session.payment_intent==='string'?session.payment_intent:null,amount_total:Number(session.amount_total||amountFor(edition)),currency:'eur',pricing:templateId?'individual-design':'launch',guest_personalization_status:'awaiting_details',purchased_at:created,
    ...(templateId?{guest_catalog_template_id:templateId,guest_catalog_template_version:templateVersion}:{})};
  const {data,error}=await db.rpc('provision_weddly_license',{p_source:'stripe',p_source_order_id:sessionId,p_buyer_email:buyer,p_product_ref:'guest_'+edition,p_metadata:metadata,p_activation_code:code,p_purchase_hash:hash});if(error)throw error;
  const row=data?.[0];if(!row?.license_id)throw new Error('license_provision_failed');
