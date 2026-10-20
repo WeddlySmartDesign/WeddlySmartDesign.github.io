@@ -1,0 +1,64 @@
+name: GUEST isolated management-preview build QA (NO SALE)
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - 'guest/tools/build_guest_integration_preview_no_sale.cjs'
+      - '.github/workflows/guest-integration-preview-build-qa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prove-no-sale-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      CLOUDFLARE_API_TOKEN: ''
+      STRIPE_SECRET_KEY: ''
+      RESEND_API_KEY: ''
+      SUPABASE_ACCESS_TOKEN: ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build GUEST-only static integration preview with complete network/payment blockade
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$CLOUDFLARE_API_TOKEN" -a -z "$STRIPE_SECRET_KEY" -a -z "$RESEND_API_KEY" -a -z "$SUPABASE_ACCESS_TOKEN"
+          node --check guest/tools/build_guest_integration_preview_no_sale.cjs
+          node guest/tools/build_guest_integration_preview_no_sale.cjs --output "$RUNNER_TEMP/guest-safe-integration" --template botanica
+      - name: Test frontend contents and Cloudflare CSP rejects all external requests
+        env:
+          STAGE: ${{ runner.temp }}/guest-safe-integration
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib,hashlib
+          p=pathlib.Path(os.environ["STAGE"])
+          m=json.loads((p/'GUEST_INTEGRATION_STAGE_MANIFEST.json').read_text())
+          assert m['status']=='PREVIEW_NO_REMOTE_DATA_NO_SALE'
+          assert m['commercialApproved'] is False
+          assert m['physicalDesignsExcluded'] is True
+          assert m['externalAPIsBlockedViaCSP'] is True
+          files=m['files']
+          assert len(files)>120
+          for f in files:
+            name=f['file']; target=p/name
+            assert name.startswith('guest/') or name in ('index.html','_headers','guest.html','guest-checkout.html','guest-checkout-return.html','guest-order.html'),name
+            assert target.is_file(),name
+            b=target.read_bytes()
+            assert len(b)==f['bytes'] and hashlib.sha256(b).hexdigest()==f['sha256'],name
+          headers=(p/'_headers').read_text()
+          for rule in ("X-Robots-Tag: noindex", "connect-src 'none'", "form-action 'none'", "worker-src 'none'"):
+            assert rule in headers,rule
+          html=(p/'guest.html').read_text()
+          assert 'Próxima apertura' in html and 'GUEST Signature' not in html
+          assert not (p/'guest/catalog-assets').exists()
+          print('PASS: isolated frontend snapshot with exact digests and no outbound API/payment access; NO SALE')
+          PY
+      - name: Erase test preview package
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/guest-safe-integration"
