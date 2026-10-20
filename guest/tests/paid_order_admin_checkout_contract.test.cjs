@@ -24,7 +24,7 @@ assert.match(checkout,/function catalogStaticHost\(/,'catalog URL cannot use the
 assert.match(checkout,/catalogStaticHost\(\); \/\/ cannot begin a charge/,'catalog purchase must fail before Stripe if host is missing');
 assert.match(checkout,/GUEST_CATALOG_SALE_OPTIONS/,'operator-owned allowlist is required');
 assert.match(checkout,/option\.status!=='commercially-frozen'/,'pending Botánica cannot be sold');
-assert.match(checkout,/option\.amountCents!==amountFor\(edition\)/,'client may not choose price');
+assert.match(checkout,/Number\.isInteger\(option\.amountCents\)/,'individual design price must come from validated server allowlist');
 assert.match(checkout,/p\.set\('metadata\[guest_catalog_template_id\]',option\.id\)/,'Stripe Checkout pins catalog id');
 assert.match(checkout,/p\.set\('metadata\[guest_catalog_template_version\]',option\.version\)/,'Stripe Checkout pins version');
 assert.match(checkout,/payment_intent_data\[metadata\]\[guest_catalog_template_id\]/,'payment intent also pins catalog choice');
@@ -45,18 +45,18 @@ function options(value,host='https://guest-preview-qa.pages.dev'){
   const amountFor=edition=>edition==='signature'?4990:3990;
   return new Function('env','amountFor',functionText+'; return catalogSaleOption;')(env,amountFor);
 }
-const catalog=options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990},
- botanica:{version:'14.7',status:'certification-pending',edition:'signature',amountCents:4990}});
-assert.deepEqual(catalog('veil-light','signature'),{id:'veil-light',version:'5.3.3'});
-assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990}},'')('veil-light','signature'),/catalog_host_not_configured/,'cannot initiate payment before static host is configured');
-assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990}},'http://unsafe.invalid')('veil-light','signature'),/catalog_host_invalid/,'HTTP non-production host must be refused');
-assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990}},'https://example.com/fake/')('veil-light','signature'),/catalog_host_invalid/,'host must have no hidden path');
+const catalog=options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990,displayName:'VEIL LIGHT'},
+ botanica:{version:'14.7',status:'certification-pending',edition:'signature',amountCents:4990,displayName:'BOTÁNICA'}});
+assert.deepEqual(catalog('veil-light','signature'),{id:'veil-light',version:'5.3.3',amountCents:4990,displayName:'VEIL LIGHT'});
+assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990,displayName:'VEIL LIGHT'}},'')('veil-light','signature'),/catalog_host_not_configured/,'cannot initiate payment before static host is configured');
+assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990,displayName:'VEIL LIGHT'}},'http://unsafe.invalid')('veil-light','signature'),/catalog_host_invalid/,'HTTP non-production host must be refused');
+assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990,displayName:'VEIL LIGHT'}},'https://example.com/fake/')('veil-light','signature'),/catalog_host_invalid/,'host must have no hidden path');
 assert.throws(()=>options({},'')('','essential'),/catalog_template_required/,'legacy collection checkout must not create new orders');
 assert.throws(()=>catalog('', 'essential'),/catalog_template_required/,'new collection-only checkout must be rejected');
 assert.throws(()=>catalog('botanica','signature'),/catalog_template_not_for_sale/);
-assert.throws(()=>catalog('veil-light','essential'),/catalog_template_not_for_sale/);
+assert.deepEqual(catalog('veil-light','essential'),{id:'veil-light',version:'5.3.3',amountCents:4990,displayName:'VEIL LIGHT'},'internal edition does not create a public design collection');
 assert.throws(()=>catalog('../veil-light','signature'),/catalog_template_not_for_sale/);
-assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:1}})('veil-light','signature'),/catalog_template_not_for_sale/);
+assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:1,displayName:'VEIL LIGHT'}})('veil-light','signature'),/catalog_template_not_for_sale/);
 assert.throws(()=>options({})('veil-light','signature'),/catalog_template_not_for_sale/);
 assert.match(flow,/async function createOrder\(/,'new guest_invitation_orders pipeline remains independent until deliberate Cloud release');
 
