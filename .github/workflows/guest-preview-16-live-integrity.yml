@@ -1,0 +1,40 @@
+name: GUEST PREVIEW 16 live HTTPS verification (NO SALE)
+
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - .github/workflows/guest-preview-16-live-integrity.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: guest-preview-16-live-integrity
+  cancel-in-progress: true
+
+jobs:
+  verify-preview-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sanity check exact PREVIEW alias (read-only, never production)
+        run: |
+          python3 -m py_compile guest/qa/verify_guest_preview_manifest_2026_10_20.py
+          python3 guest/tests/preview_verifier_offline_security_2026_10_20.py
+      - name: Check 120 public HTTP resources + 1 protected _headers config and 16 design routes
+        run: |
+          python3 guest/qa/verify_guest_preview_manifest_2026_10_20.py \
+            --origin https://eebba5b2.guest-weddlysmartdesign.pages.dev \
+            --manifest guest/qa-reports/preview16_recovered_manifest_2026-10-20.json \
+            --output /tmp/guest-preview-16-live-integrity.json
+      - name: Save non-secret preview integrity evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: guest-preview-16-live-integrity-evidence
+          path: /tmp/guest-preview-16-live-integrity.json
+          if-no-files-found: ignore
+          retention-days: 14
