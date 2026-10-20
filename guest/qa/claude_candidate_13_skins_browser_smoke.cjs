@@ -46,7 +46,7 @@ async function main(){
       template:document.querySelector('html')?.dataset.skin,cover:c?.getAttribute('src'),closing:d?.getAttribute('src'),
       sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth,
       ns:document.getElementById('name-1')?.textContent,dt:document.getElementById('cover-date')?.textContent,
-      scenes:sceneNames,agenda:document.querySelectorAll('#agenda .moment').length,notice:document.getElementById('stage-notice')?.textContent||'',
+      scenes:sceneNames,agenda:document.querySelectorAll('#agenda [role="group"][aria-label="Momentos del día"] button[aria-label]').length,notice:document.getElementById('stage-notice')?.textContent||'',
       covers:document.querySelector('#cover-video')?.readyState||0,
       gallery:document.querySelectorAll('#gallery-items img').length};
     });
