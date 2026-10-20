@@ -20,7 +20,9 @@ jobs:
           node-version: '22'
       - name: GUEST independence and parity gate
         run: node guest/qa/guest_independent_regression_test.js
-      - name: Catalog 8-design commercial preflight (report only; sales remain off)\n        run: node guest/qa/catalog_commercial_go_no_go_2026_10_20.cjs\n      - name: Catalog RSVP config lock (staged source; offline)
+      - name: Catalog 8-design commercial preflight (report only; sales remain off)
+        run: node guest/qa/catalog_commercial_go_no_go_2026_10_20.cjs
+      - name: Catalog RSVP config lock (staged source; offline)
         run: node guest/tests/guest_rsvp_config_lock_contract.test.cjs
       - name: Catalog invitation authoring permission guard (offline)
         run: node guest/tests/guest_personalization_config_lock_contract.test.cjs
