@@ -20,3 +20,11 @@ La propietaria observó en Chrome de escritorio un rectángulo/cuadro visible en
 
 ## Estado
 **Corrección CSS creada + CI local/browser PASS, pero NO certificar visual final sin validar el resultado publicado contra el defecto observado por la propietaria.** Mantener NO_GO comercial; no tocar `main`, ONE/STUDIO, Stripe, Supabase ni licencias. Después de PREVIEW remota comprobar en el PC que el rectángulo ha desaparecido y en Android que no hay regresión; si persistiese, analizar otra capa en vez de ocultar elementos indiscriminadamente.
+
+
+## Cierre técnico adicional: paquete BOTÁNICA aislado descargable (20/10)
+- [GitHub Actions **39478510394**](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39478510394) **COMPLETED/SUCCESS** empaquetó una revisión visual **exclusivamente BOTÁNICA V14.7 corregida** para desplegar en una PREVIEW separada, sin copiar el catálogo completo ni habilitar cobros.
+- Artefacto descargable desde la sección **Artifacts** del run: `BOTANICA_LO_ESENCIAL_CORREGIDA_PREVIEW_NO_VENTA_2026-10-20` (artifact ID 12289778552, ZIP comprimido 8.708.639 bytes). Contiene exactamente el HTML de BOTÁNICA con máscara y medios embebidos, landing visual neutra, `_headers` `noindex` y manifiesto SHA256 de los archivos. Cualquier ZIP sin ese nombre/manifiesto debe rechazarse.
+- **No está publicado todavía por Cloudflare**: rama `guest-botanica-practical-desktop-fix-preview-2026-10-20` creada con control GitHub, pero sus commits `8bf9f71` y `68d500f` no recibieron check Cloudflare Pages, incluso tras disparador de raíz; PR temporal #146 DRAFT cerrada **SIN MERGE**.
+- Para mostrar solo esta corrección sin alterar la PREVIEW de 16 entradas ya publicada, desde PC autorizado: descargar artefacto, extraer en carpeta nueva, abrir CMD en raíz con `index.html`, ejecutar una sola orden `npx --yes wrangler@4 pages deploy . --project-name guest-weddlysmartdesign --branch guest-botanica-lo-esencial-fix-2026-10-20`. Esta rama es distinta de `guest-independent`; deberá verificarse etiqueta **PREVIEW** y URL inmutable en consola, luego ver `Lo esencial` en desktop y móvil. Antes de ese check no marcar visual definitiva como PASS.
+- `main` constatada intacta en `1e7c81515b71f16105b68a928bb908cba702bebf`. Ningún pago, licencia o Supabase tocado; prod y vieja PREVIEW `eebba5b2` conservados.
