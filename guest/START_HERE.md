@@ -1,5 +1,8 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+> **CONTINUIDAD MÁS RECIENTE — FASE 5, 20/10/2026:** [GUEST_AUDIT_CONTINUITY_PHASE5_STAGE_PACKAGE_2026-10-20.md](GUEST_AUDIT_CONTINUITY_PHASE5_STAGE_PACKAGE_2026-10-20.md). Paquete físico preproducción GUEST 16 entradas técnicas y **121/121 archivos con SHA256 PASS** creado; VEIL LIGHT conservó el SHA de la copia derivada, 5/5 scripts sintácticos PASS; corregido manifiesto del puente para cubrir también su propio JSON. ZIP verificado SHA256 `e09ad244e617c4d423a6591425ad407bdd04f9a0f0a4d0b9bf26d6a3595f6216` disponible como archivo descargable de la conversación, **NO alojado en Cloudflare**. Chromium local devuelve ERR_BLOCKED_BY_ADMINISTRATOR, NO prueba visual; tampoco hay pedidos E2E reales, correos, dos móviles, licencias ni precios aprobados. **VENTA NO_GO**. No solicitar otra vez diseños ni repetir la CI Claude; D03 Limoneros incorrecto archivado, D09 sigue candidato. ONE/Partner/STUDIO intactos.
+
+
 > **CONTINUIDAD MÁS RECIENTE — 20/10/2026 FASE 4 VEIL / PAQUETE TEST UNIFICADO:** leer [GUEST_AUDIT_CONTINUITY_PHASE4_VEIL_2026-10-20.md](GUEST_AUDIT_CONTINUITY_PHASE4_VEIL_2026-10-20.md). Se recuperó el ZIP VEIL de Biblioteca, se creó adaptador iframe derivado sin alterar máster y se integró físicamente con artifact CI de 15 iframe: **16 entradas técnicas, 120/120 hashes PASS**, siempre `PREPRODUCTION_DO_NOT_SELL`; D03 histórico incorrecto sigue bloqueado, D09 candidato independiente. Nuevo tool y test fail-closed añadidos a CI. **No está publicado el paquete unificado en Cloudflare; no hubo E2E real de compra/correos/RSVP/dos móviles ni permisos de audio acreditados. VENTA NO_GO.** No repetir QA Claude ya certificada ni pedir otra vez los diseños. La fuente anterior fase 3 sigue válida.
 
 
