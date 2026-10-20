@@ -146,8 +146,9 @@ ok(lock.captured_from_commit==='6e054a21480624c7f04c6879c7ad72ed55c7307d','sourc
 for(const p of ['guest.html','guest-checkout.html','guest-checkout-return.html','guest-order.html','guest-legal.html'])ok(existsRepo(p),'missing commercial file '+p);
 const market=readRepo('guest.html'),checkout=readRepo('guest-checkout.html'),ret=readRepo('guest-checkout-return.html'),order=readRepo('guest-order.html'),legal=readRepo('guest-legal.html');
 ok(market.includes('Vuestra invitación.')&&market.includes('Nosotros nos ocupamos.'),'invitation-first positioning missing');
-ok(market.includes('24–48 h')&&market.includes('personalización incluida'),'managed personalization promise missing');
-ok((market.match(/guests-rsvp-essential-0/g)||[]).length>=1&&market.includes('guests-signature-0'),'real design viewer missing');
+ok(market.includes('48–72 h')&&market.includes('personalización')&&market.includes('aprobáis'),'reviewed individual invitation delivery promise missing');
+ok((market.match(/data-template-id=/g)||[]).length===15&&market.includes('design-09')&&market.includes('design-16'),'15 individually inventoried designs missing');
+ok(!/Colección Essential|Colección Signature|guest-checkout\.html\?edition=/.test(market),'obsolete collections advertised');
 for(const body of [checkout,ret,order])ok(body.includes('/guest-stripe-checkout'),'commercial flow is not using isolated GUEST checkout');
 ok(checkout.includes('startPersonalizationConsent:true'),'personalization-start consent missing from checkout');
 ok(order.includes('Essential 06')&&order.includes('Signature 04'),'order form does not expose all design families');
