@@ -4,6 +4,7 @@ on:
     branches: [guest-independent]
     paths:
       - 'guest/tools/build_claude_candidates_staging.cjs'
+      - 'guest/qa/claude_candidates_mobile_browser_test.js'
       - 'guest/GUEST_CLAUDE_*IMPORT_MANIFEST_2026-10-20.json'
       - 'guest/catalog-assets/design-*/**'
       - 'guest/templates/design-*/skin.json'
@@ -54,6 +55,22 @@ jobs:
           }
           console.log('PASS 13 precommercial previews,',m.files.length,'verified files /',all,'bytes; NO SALE OR DEPLOY');
           NODE
+      - name: Install Chromium for visual smoke
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve isolated precommercial static candidates
+        run: |
+          cd /tmp/guest-claude-designs-stage
+          python3 -m http.server 4183 --bind 127.0.0.1 > /tmp/guest-claude-serve.log 2>&1 &
+          for i in {1..25}; do
+            curl -fsS http://127.0.0.1:4183/guest/qa/claude-designs-review.html > /dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-claude-serve.log
+          exit 1
+      - name: Validate all 13 real design masters on mobile Chromium
+        run: node guest/qa/claude_candidates_mobile_browser_test.js
       - name: Upload internal review ZIP artifact only
         uses: actions/upload-artifact@v4
         with:
