@@ -1,6 +1,6 @@
 {
   "schemaVersion": "guest-catalog-owner-renderers-v2",
-  "notes": "One generic owner viewer; new templates add only a registry entry. No hardcoded per-design center changes.",
+  "notes": "One generic owner viewer; new templates add only a registry entry. No hardcoded per-design center changes. Recovered D04–D16 are TEST-only until public asset release and all independent gates; archived D03 never sell.",
   "templates": {
     "veil-light": {
       "id": "veil-light",
@@ -25,6 +25,123 @@
       "src": null,
       "applyApi": "GUEST_APPLY_CONFIG",
       "status": "certification-pending"
+    },
+    "design-04": {
+      "id": "design-04",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
+    },
+    "design-05": {
+      "id": "design-05",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
+    },
+    "design-06": {
+      "id": "design-06",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
+    },
+    "design-07": {
+      "id": "design-07",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
+    },
+    "design-08": {
+      "id": "design-08",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
+    },
+    "design-09": {
+      "id": "design-09",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
+    },
+    "design-10": {
+      "id": "design-10",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
+    },
+    "design-11": {
+      "id": "design-11",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
+    },
+    "design-12": {
+      "id": "design-12",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
+    },
+    "design-13": {
+      "id": "design-13",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
+    },
+    "design-14": {
+      "id": "design-14",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
+    },
+    "design-15": {
+      "id": "design-15",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
+    },
+    "design-16": {
+      "id": "design-16",
+      "version": "1.0.0",
+      "mode": "iframe",
+      "src": null,
+      "applyApi": "GUEST_APPLY_CONFIG",
+      "status": "certification-pending",
+      "note": "Original Claude asset pinned in Git, staging-only. No verified live/public URL, no sale."
     }
   }
 }
