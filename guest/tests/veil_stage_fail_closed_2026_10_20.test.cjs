@@ -32,6 +32,8 @@ try{
   assert.match(programSource,/PREPRODUCTION_DO_NOT_SELL/);
   assert.match(programSource,/GUEST_APPLY_CONFIG/);
   assert.match(programSource,/VEIL_APPLY_CONFIG/);
+  // Derived VEIL metadata must be covered by the same immutable file-integrity report.
+  assert.match(programSource,/newReport\.files\.push\(entry\(sub\+'\/bridge-manifest\.json'/);
   assert.doesNotMatch(programSource,/https:\/\/api\.stripe\.com/);
   console.log('PASS: VEIL stage merge is fail-closed, no original changes, no sales, no partial write on invalid master');
 }finally{fs.rmSync(tmp,{recursive:true,force:true})}
