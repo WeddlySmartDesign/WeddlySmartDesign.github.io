@@ -20,6 +20,10 @@ jobs:
           node-version: '22'
       - name: GUEST independence and parity gate
         run: node guest/qa/guest_independent_regression_test.js
+      - name: Guard VEIL LIGHT common-stage adapter against missing or tampered masters (TEST only)
+        run: |
+          node --check guest/tools/merge_veil_stage.cjs
+          node guest/tests/veil_stage_fail_closed_2026_10_20.test.cjs
       - name: Catalog 8-design commercial preflight (report only; sales remain off)
         run: node guest/qa/catalog_commercial_go_no_go_2026_10_20.cjs
       - name: Verify original Claude candidate blobs (TEST only)
