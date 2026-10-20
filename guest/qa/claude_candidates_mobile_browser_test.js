@@ -25,7 +25,37 @@ const origin=process.env.GUEST_CLAUDE_PREVIEW_ORIGIN||'http://127.0.0.1:4183';
     assert.equal(s.mode,'full','Full questionnaire test fixture was not applied '+d.id);
     assert.equal(errs.length,0,'JS errors '+d.id+' '+errs.join(' | '));
     assert.equal(notFound.length,0,'Asset HTTP failures '+d.id+' '+notFound.join(' | '));
-    passed++;console.log('PASS',d.id,d.name,'390px mobile | hero | full fixture | scenes | no errors/overflow');
+    // Real delivery injects an order-specific config; it must override every demo name.
+    const unique='QA_'+d.id.replaceAll('-','_');
+    const config={
+      schemaVersion:'guest-invitation-config-v1',locale:'es',
+      template:{id:d.id,version:d.version,typographyVariant:'classic'},
+      couple:{name1:unique,name2:'PAREJA_PRUEBA'},
+      wedding:{date:'2027-09-18',time:'19:30',coverPlace:'Lugar de prueba'},
+      cover:{showPlace:true,showTime:false},countdown:{enabled:false},
+      story:{enabled:false,textMode:'none',body:'',photo:null},
+      locations:{mode:'shared',items:[{type:'ceremony',name:'Sede de pruebas',time:'18:30',address:'Murcia',mapsUrl:null}],dressCode:{enabled:false}},
+      agenda:{enabled:true,moments:[{time:'18:30',label:'Ceremonia'},{time:'20:00',label:'Cena'}]},
+      practical:{bus:{enabled:false},accommodation:{enabled:false},gift:{enabled:false},playlist:{enabled:false}},
+      gallery:{enabled:false,photos:[]},
+      rsvp:{ctaLabel:'Confirmar prueba',route:'https://example.test/rsvp?rt=QA-ONLY'},
+      closing:{line:'Nos vemos en la prueba'}
+    };
+    const payload=await page.evaluate(cfg=>{
+       const response=window.GUEST_APPLY_CONFIG(cfg);
+       return{response,n1:document.querySelector('#name-1')?.textContent,n2:document.querySelector('#name-2')?.textContent,
+       rsvp:document.querySelector('#rsvp-link')?.getAttribute('href'),rsvpLabel:document.querySelector('#rsvp-link')?.textContent,
+       scenes:[...document.querySelectorAll('[data-bg]:not(.invisible)')].length,
+       hiddenStory:document.querySelector('#story')?.classList.contains('invisible')};
+    },config);
+    assert.equal(payload.n1,unique,'Customer names did not overwrite test/demo '+d.id);
+    assert.equal(payload.n2,'PAREJA_PRUEBA','Partner name not personalized '+d.id);
+    assert.equal(payload.rsvpLabel,'Confirmar prueba','RSVP CTA not set from order '+d.id);
+    assert.equal(payload.rsvp,'https://example.test/rsvp?rt=QA-ONLY','RSVP destination from order lost '+d.id);
+    assert.equal(payload.response?.id,d.id,'Wrong template adapter on personalisation '+d.id);
+    assert(payload.scenes>=1,'No scene after custom questionnaire with optional blocks off '+d.id);
+    assert.equal(errs.length,0,'JS errors after personalization '+d.id+' '+errs.join(' | '));
+    passed++;console.log('PASS',d.id,d.name,'390px mobile | hero | full + minimal personalized order | RSVP CTA | no errors/overflow');
    }catch(e){failed.push({id:d.id,error:e.message});console.error('FAIL',d.id,e.message)}
    finally{await ctx.close()}
   }
