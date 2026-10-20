@@ -29,3 +29,14 @@
 5. Decisión de titular sobre precios, derechos de música/fonts/videos, privacidad, licencias, diseños específicos y GO. Mantener bloqueo `NO_GO` hasta cierre y verificación.
 
 **Nota:** la validación del enlace desde el navegador web automatizado de este chat devolvió “no accesible” (limitación de esa herramienta). La evidencia de HTTP proviene de una ejecución independiente GitHub Actions con salida **SUCCESS**, no de afirmar haber navegado visualmente la invitación.
+
+
+## Incidencia visual nueva detectada por la titular en PREVIEW (20/10, después del primer recorrido PC)
+- **Diseño:** BOTÁNICA, versión `14.7` en `https://eebba5b2.guest-weddlysmartdesign.pages.dev/guest/catalog-assets/botanica/14.7/`.
+- **Zona:** «Lo esencial» / bloque de información práctica.
+- **Síntoma observado por la titular:** se aprecia un **cuadro / rectángulo** no deseado durante el recorrido en **PC/escritorio**. Dice que el recorrido general funciona bien y sospecha que no se detectó en móvil por resultar menos visible. Existe grabación de pantalla enviada en la conversación del 20/10/2026, archivo `20261020-1638-31.6856796.mp4`. **No se ha caracterizado aún la causa ni confirmado el mismo fallo en móvil; no inventar causa ni marcar como solucionado.**
+- **Decisión de orden solicitada por la titular:** primero terminar de **vincular/integrar** GUEST (gestión, catálogo individual, pruebas aisladas), luego corregir el cuadro de BOTÁNICA. **El diseño NO recibe aprobación visual final ni se puede vender hasta corregir y comprobar en PC y móvil.** El orden no autoriza publicar LIVE, tocar masters congelados, fusionar PR sin pruebas ni activar pagos.
+- **Criterio de cierre del defecto:** analizar el elemento que forma el cuadro, parche acotado, prueba de regresión PC/Android sobre «Lo esencial», contraste de diseño íntegro y confirmación de propietaria. No modificar originales innecesariamente.
+
+## Alias PREVIEW
+La propietaria abrió el alias largo de rama `guest-preproduction-16-2026-10-20.guest-weddlysmartdesign.pages.dev` en Chrome y obtuvo la página Cloudflare **“Nothing is here yet”**. La URL individual **`eebba5b2.guest-weddlysmartdesign.pages.dev` sí funcionó**, mostró portada y abrió BOTÁNICA V14.7, además del PASS íntegro GitHub Actions. El alias no debe usarse como enlace de aceptación hasta diagnosticarlo; mantener URL individual como referencia comprobada. No confundir con fallo de archivos o revertir preview correctamente publicado.
