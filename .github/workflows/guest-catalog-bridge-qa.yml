@@ -16,6 +16,7 @@ on:
       - 'guest/tools/build_catalog_delivery.js'
       - 'guest/qa/catalog_delivery_builder_test.js'
       - 'guest/backend/guest-invitation-flow/index.ts'
+      - 'guest/tests/test_only_15_design_backend_gate.test.cjs'
       - 'guest/backend/guest-rsvp/index.ts'
       - 'guest/backend/guest-personalization/index.ts'
       - 'guest/tests/guest_personalization_config_lock_contract.test.cjs'
@@ -44,6 +45,8 @@ jobs:
         run: node guest/tests/catalog_questionnaire_rsvp_first_access.test.cjs
       - name: Catalogue final-delivery-only activation (offline)
         run: node guest/tests/catalog_license_delivery_gate_contract.test.cjs
+      - name: All 15 candidate design IDs gated TEST-ONLY in backend
+        run: node guest/tests/test_only_15_design_backend_gate.test.cjs
       - name: Catalog customer journey contract
         run: node guest/qa/catalog_customer_journey_test.js
       - name: Catalog delivery builder
