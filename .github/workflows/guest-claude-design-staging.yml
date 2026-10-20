@@ -1,0 +1,63 @@
+name: GUEST Claude Designs Static Preproduction (NO LIVE)
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - 'guest/tools/build_claude_candidates_staging.cjs'
+      - 'guest/GUEST_CLAUDE_*IMPORT_MANIFEST_2026-10-20.json'
+      - 'guest/catalog-assets/design-*/**'
+      - 'guest/templates/design-*/skin.json'
+      - '.github/workflows/guest-claude-design-staging.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: guest-claude-designs-precommercial-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  safe-static-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CLOUDFLARE_API_TOKEN: ''
+      STRIPE_SECRET_KEY: ''
+      SUPABASE_ACCESS_TOKEN: ''
+      VERCEL_TOKEN: ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify immutable originals and create safe test-only static stage
+        run: |
+          mkdir -p /tmp/guest-claude-designs-stage
+          node --max-old-space-size=4096 guest/tools/build_claude_candidates_staging.cjs --output /tmp/guest-claude-designs-stage
+      - name: Verify every packaged asset, source count, host per-file limit and no sales
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),path=require('path'),crypto=require('crypto');
+          const base='/tmp/guest-claude-designs-stage';
+          const m=JSON.parse(fs.readFileSync(path.join(base,'GUEST_DESIGN_STAGE_MANIFEST.json'),'utf8'));
+          if(m.status!=='PREPRODUCTION_DO_NOT_SELL'||m.approvedForSale!==false||m.designs?.length!==13)throw Error('Unapproved or missing designs');
+          const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          let all=0;
+          for(const entry of m.files){
+            const b=fs.readFileSync(path.join(base,entry.path));
+            if(b.length!==entry.bytes||sha(b)!==entry.sha256)throw Error('Stage hash mismatch '+entry.path);
+            if(b.length>24*1024*1024)throw Error('Cloudflare cap '+entry.path);
+            all+=b.length;
+          }
+          if(all!==m.totalBytes)throw Error('Stage manifest size mismatch');
+          for(const d of m.designs){
+            const html=fs.readFileSync(path.join(base,'guest/catalog-assets',d.id,'1.0.0/index.html'));
+            if(sha(html)!==d.stagedSha256||d.status!=='TEST_ONLY_NOT_SALE_APPROVED')throw Error('Unsafe candidate '+d.id);
+          }
+          console.log('PASS 13 precommercial previews,',m.files.length,'verified files /',all,'bytes; NO SALE OR DEPLOY');
+          NODE
+      - name: Upload internal review ZIP artifact only
+        uses: actions/upload-artifact@v4
+        with:
+          name: GUEST-13-Claude-Designs-TEST-ONLY-${{ github.run_id }}
+          path: /tmp/guest-claude-designs-stage/
+          retention-days: 7
+          compression-level: 1
