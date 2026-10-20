@@ -254,7 +254,7 @@ Deno.serve(async req=>{
    for(const [id,item] of Object.entries(published||{})){const op:any=item;
      if(/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(id)&&op?.status==='commercially-frozen'&&
        Number.isInteger(op.amountCents)&&op.amountCents>=1000&&op.amountCents<=200000&&
-       typeof op.displayName==='string'&&/^[^<>\\r\\n]{2,85}$/.test(op.displayName.trim()))
+       typeof op.displayName==='string'&&/^[^<>\r\n]{2,85}$/.test(op.displayName.trim()))
        catalog[id]={name:op.displayName.trim(),version:op.version,priceCents:op.amountCents,status:'available'};
    }
    return json({ok:true,publishableKey:pk,launch:true,catalog})
