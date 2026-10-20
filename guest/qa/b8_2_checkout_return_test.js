@@ -38,7 +38,7 @@ async function mockConfigAndCreate(page,seen){
     seen.push(body);
     if(body.action==='config'){
       return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({
-        ok:true,publishableKey:'pk_test_guest',prices:{essential:{current:3990},signature:{current:4990}}
+        ok:true,publishableKey:'pk_test_guest',prices:{essential:{current:3990},signature:{current:4990}},catalog:{'veil-light':{name:'VEIL LIGHT',version:'5.3.3',priceCents:4990,status:'available'}}
       })});
     }
     if(body.action==='create'){
