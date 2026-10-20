@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   real-stripe-sandbox-unpaid:
-    if: false # NO Stripe requests until owner provides TEST key via encrypted GitHub Secrets and we enable deliberate one-shot gate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/guest-independent' # ONE-SHOT owner-authorized TEST session, disable immediately after result
     runs-on: ubuntu-latest
     environment: guest-stripe-sandbox # isolated environment secret; NEVER repository-wide key
     timeout-minutes: 5
