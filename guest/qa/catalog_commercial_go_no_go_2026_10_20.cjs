@@ -20,7 +20,16 @@ const names=(registry.templates||[]).map(t=>t.id);
 const missing=[];
 const fail=(id,message)=>missing.push({id,message});
 const listed=Number(status.moduleContinuity2026_10_17?.catalogueDesignCountClaimedByOwner||8);
-if(names.length<listed)fail('design-assets','Se han aportado '+names.length+' diseños registrados; la propietaria ha indicado '+listed+'. Faltan los masters y registros de los demás.');
+const intended=['veil-light','botanica','design-04','design-05','design-06','design-07','design-08','design-09'];
+const recovery=json('guest/GUEST_CLAUDE_SOURCE_IMPORT_MANIFEST_2026-10-20.json');
+const importedIds=recovery.selectedCandidateIds||[];
+for(const id of intended.slice(2)){
+ if(!importedIds.includes(id)||!fs.existsSync(path.join(root,'guest/catalog-assets',id,'1.0.0/index.html')))
+  fail('design-assets:'+id,'No existe master importado desde rama Claude para '+id);
+}
+if(names.length<listed)fail('catalog-registry','Hay '+names.length+' registros de venta frente a '+listed+' diseños previstos; los masters Claude se recuperaron sin activar ventas ni registrarlos comercialmente.');
+if(registry.templates.some(t=>t.id==='design-03'&&t.status==='commercially-frozen'))
+ fail('wrong-limoneros','El Limoneros histórico design-03 no puede estar comercialmente aprobado: usar la alternativa Claude design-09 solo tras certificación.');
 for(const t of registry.templates||[]){
  const spec=renderers.templates?.[t.id],proof=evidence.templates?.[t.id];
  if(t.status!=='commercially-frozen'||t.scalabilityCertified!==true)fail('certification:'+t.id,'Diseño pendiente de congelación comercial y pruebas de escalabilidad.');
@@ -37,6 +46,6 @@ if(status.moduleContinuity2026_10_17?.commerciallyReady!==true)fail('commercial-
 if(status.moduleContinuity2026_10_17?.allDesignFilesIntegrated!==true)fail('renderers-e2e','Integración de todos los diseños pendiente.');
 // External release checks are never assumed successful from repository files alone.
 fail('external-verification','Falta verificación externa real de hosting Cloudflare, Stripe Live, correos Resend y dos dispositivos; no confundir GitHub QA con ello.');
-const output={date:'2026-10-20',status:missing.length?'NO_GO':'GO',registeredDesigns:names,ownerDesignsClaimed:listed,blockingChecks:missing,context:'Code audit, not external publication or payment evidence'};
+const output={date:'2026-10-20',status:missing.length?'NO_GO':'GO',registeredDesigns:names,recoveredCandidateDesigns:intended,sourceBranch:recovery.sourceBranch,ownerDesignsClaimed:listed,blockingChecks:missing,context:'Code audit, not external publication or payment evidence'};
 process.stdout.write(JSON.stringify(output,null,2)+'\n');
 if(process.argv.includes('--launch-gate')&&missing.length)process.exitCode=1;
