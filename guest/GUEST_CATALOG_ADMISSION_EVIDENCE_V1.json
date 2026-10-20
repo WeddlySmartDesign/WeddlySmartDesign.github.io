@@ -7,7 +7,17 @@
       "design-03",
       "design-04",
       "design-05",
-      "design-06"
+      "design-06",
+      "design-07",
+      "design-08",
+      "design-09",
+      "design-10",
+      "design-11",
+      "design-12",
+      "design-13",
+      "design-14",
+      "design-15",
+      "design-16"
     ],
     "newTemplateRequirements": [
       "common-questionnaire",
@@ -21,7 +31,9 @@
       "owner-touch",
       "media-integrity",
       "approved-visual"
-    ]
+    ],
+    "historicIncorrectTemplateId": "design-03",
+    "publicSaleAuthorized": false
   },
   "templates": {
     "veil-light": {
@@ -149,6 +161,799 @@
           "pass": false,
           "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
           "why": "Not independently certified for design-03"
+        }
+      }
+    },
+    "design-04": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-04; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-04; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-04; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-04; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-04; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-04; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-04; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-04; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-04; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-04; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-04; TEST-only until genuine evidence."
+        }
+      }
+    },
+    "design-05": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-05; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-05; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-05; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-05; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-05; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-05; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-05; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-05; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-05; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-05; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-05; TEST-only until genuine evidence."
+        }
+      }
+    },
+    "design-06": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-06; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-06; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-06; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-06; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-06; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-06; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-06; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-06; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-06; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-06; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-06; TEST-only until genuine evidence."
+        }
+      }
+    },
+    "design-07": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-07; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-07; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-07; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-07; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-07; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-07; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-07; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-07; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-07; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-07; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-07; TEST-only until genuine evidence."
+        }
+      }
+    },
+    "design-08": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-08; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-08; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-08; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-08; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-08; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-08; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-08; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-08; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-08; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-08; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-08; TEST-only until genuine evidence."
+        }
+      }
+    },
+    "design-09": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-09; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-09; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-09; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-09; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-09; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-09; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-09; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-09; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-09; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-09; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-09; TEST-only until genuine evidence."
+        }
+      }
+    },
+    "design-10": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-10; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-10; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-10; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-10; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-10; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-10; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-10; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-10; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-10; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-10; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-10; TEST-only until genuine evidence."
+        }
+      }
+    },
+    "design-11": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-11; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-11; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-11; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-11; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-11; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-11; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-11; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-11; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-11; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-11; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-11; TEST-only until genuine evidence."
+        }
+      }
+    },
+    "design-12": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-12; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-12; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-12; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-12; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-12; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-12; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-12; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-12; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-12; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-12; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-12; TEST-only until genuine evidence."
+        }
+      }
+    },
+    "design-13": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-13; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-13; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-13; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-13; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-13; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-13; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-13; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-13; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-13; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-13; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-13; TEST-only until genuine evidence."
+        }
+      }
+    },
+    "design-14": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-14; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-14; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-14; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-14; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-14; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-14; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-14; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-14; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-14; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-14; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-14; TEST-only until genuine evidence."
+        }
+      }
+    },
+    "design-15": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-15; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-15; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-15; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-15; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-15; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-15; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-15; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-15; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-15; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-15; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-15; TEST-only until genuine evidence."
+        }
+      }
+    },
+    "design-16": {
+      "version": "1.0.0",
+      "basis": "new-template-gated",
+      "gates": {
+        "common-questionnaire": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live common-questionnaire for design-16; TEST-only until genuine evidence."
+        },
+        "backend-test-only": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live backend-test-only for design-16; TEST-only until genuine evidence."
+        },
+        "renderer": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live renderer for design-16; TEST-only until genuine evidence."
+        },
+        "config-matrix": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live config-matrix for design-16; TEST-only until genuine evidence."
+        },
+        "two-real-test-orders": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live two-real-test-orders for design-16; TEST-only until genuine evidence."
+        },
+        "review-final-parity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live review-final-parity for design-16; TEST-only until genuine evidence."
+        },
+        "recipient-rsvp": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live recipient-rsvp for design-16; TEST-only until genuine evidence."
+        },
+        "owner-android": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-android for design-16; TEST-only until genuine evidence."
+        },
+        "owner-touch": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live owner-touch for design-16; TEST-only until genuine evidence."
+        },
+        "media-integrity": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live media-integrity for design-16; TEST-only until genuine evidence."
+        },
+        "approved-visual": {
+          "pass": false,
+          "source": "guest/GUEST_CATALOG_RELEASE_GATES_D02_D06_2026-10-09.md",
+          "why": "Recovered original master and adapter only. No independently certified live approved-visual for design-16; TEST-only until genuine evidence."
         }
       }
     }
