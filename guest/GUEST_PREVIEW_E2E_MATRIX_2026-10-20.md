@@ -64,3 +64,19 @@ La tabla original representa el plan ANTERIOR a la publicación. No usar su «PE
 | Comercialización | **NO_GO:** cobros no autorizados, D03 histórico no vendible; resolver defecto BOTÁNICA antes de venta |
 
 **Orden aprobado por la titular:** continuar conectando los componentes y corrigiendo los bloqueos de integración, después eliminar el cuadro visual de «Lo esencial» antes de GO. No marcar test visual completo como PASS porque la navegación preliminar pareciese correcta.
+
+
+## Actualización FASE 12 — integración UI aislada (20/10/2026)
+
+Se mantiene la matriz E2E real pendiente; **no interpretar pruebas de interfaz sin servidor como prueba comercial de la integración**.
+
+| Control | Estado actualizado y evidencia |
+| --- | --- |
+| PREVIEW integración GUEST, sin datos ni venta | **PASS:** Cloudflare URL inmutable `https://f1b97db0.guest-weddlysmartdesign.pages.dev`, commit PREVIEW `77347f4...` |
+| HTTPS y medidas de seguridad efectivas | **PASS:** [GitHub Actions 39465936172](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39465936172), siete rutas con noindex+CSP, manifest no-sale y hashes de cinco recursos clave |
+| Proyecto/QA status no expuestos | **PASS:** fichero de estado, QA interna y SOURCE_LOCK excluidos del bundle y no descargables como JSON |
+| Código GUEST + checkout individual combinación en navegador | **PASS solo OFFLINE simulado:** [run 39462831943](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39462831943), external APIs deliberadamente bloqueadas |
+| Stripe TEST / entrega / emails / acceso GUEST y RSVP reales | **PENDING**: no se han probado; requieren entorno aislado seguro |
+| PR #144/#145 en main | **DRAFT, sin publicar**: necesitan validación real y aprobación explícita |
+| Reparación BOTÁNICA «Lo esencial» | **BUG ABIERTO**, pendiente después de conexión, antes de GO |
+| Venta | **NO_GO** |
