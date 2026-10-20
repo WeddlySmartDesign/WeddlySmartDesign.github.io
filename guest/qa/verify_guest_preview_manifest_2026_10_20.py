@@ -22,9 +22,32 @@ MAX_FILE_BYTES = 25 * 1024 * 1024
 class VerificationError(Exception):
     pass
 
-class NoRedirect(urllib.request.HTTPRedirectHandler):
+def canonical_html_redirect(original, destination, origin):
+    """Allow ONLY the canonical HTML redirects documented for Cloudflare Pages."""
+    src, dst = urllib.parse.urlsplit(original), urllib.parse.urlsplit(destination)
+    base = urllib.parse.urlsplit(origin)
+    if (src.scheme != "https" or dst.scheme != "https"
+            or src.netloc != base.netloc or dst.netloc != base.netloc
+            or src.username or dst.username or src.password or dst.password
+            or src.query or dst.query or src.fragment or dst.fragment):
+        return False
+    if src.path.endswith("/index.html"):
+        return dst.path == src.path[:-10]
+    if src.path.endswith(".html"):
+        return dst.path == src.path[:-5]
+    return False
+
+class SafeCanonicalRedirect(urllib.request.HTTPRedirectHandler):
+    def __init__(self, origin):
+        self.origin = origin
+        self.count = 0
+
     def redirect_request(self, req, fp, code, msg, headers, newurl):
-        raise VerificationError("Unexpected redirect: HTTP " + str(code))
+        if (code not in (301, 302, 307, 308) or self.count != 0
+                or not canonical_html_redirect(req.full_url, newurl, self.origin)):
+            raise VerificationError("Unexpected or unsafe redirect: HTTP " + str(code))
+        self.count += 1
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 def validate_origin(value):
     u = urllib.parse.urlsplit(value)
@@ -65,7 +88,7 @@ def fetch_file(origin, f):
     url = origin + "/" + urllib.parse.quote(f["name"], safe="/-._~")
     req = urllib.request.Request(url, headers={"User-Agent": "GUEST-Preview-Integrity/1.0", "Accept-Encoding": "identity"})
     try:
-        with urllib.request.build_opener(NoRedirect()).open(req, timeout=45) as response:
+        with urllib.request.build_opener(SafeCanonicalRedirect(origin)).open(req, timeout=45) as response:
             if response.status != 200:
                 raise VerificationError("HTTP " + str(response.status))
             directives = {v.strip().lower() for v in response.headers.get("X-Robots-Tag", "").split(",")}
@@ -119,11 +142,16 @@ def main():
         registry = json.loads(registry_raw)
         templates = registry.get("templates", {})
         names = {f["name"] for f in files}
-        if (len(templates) == 16 and all(v.get("mode") == "iframe"
+        designs = {d["templateId"]: d for d in manifest["designs"]}
+        if (set(templates) == set(designs)
+                and templates.get("design-03", {}).get("status") == "certification-pending"
+                and all(v.get("mode") == "iframe"
+                and v.get("version") == designs[design_id].get("version")
+                and v.get("status") in ("commercially-frozen", "certification-pending")
                 and isinstance(v.get("src"), str) and v["src"].startswith("/")
                 and v["src"][1:] in names
-                and v.get("applyApi") in ("GUEST_APPLY_CONFIG", "BOTANICA_APPLY_CONFIG")
-                for v in templates.values())):
+                and v.get("applyApi") == ("BOTANICA_APPLY_CONFIG" if design_id == "botanica" else "GUEST_APPLY_CONFIG")
+                for design_id, v in templates.items())):
             renderer_result = "PASS"
     ok = all(r["status"] == "PASS" for r in rows) and renderer_result == "PASS"
     report = {
