@@ -1,6 +1,6 @@
 {
   "schemaVersion": "guest-project-status-v1",
-  "asOf": "2026-10-12",
+  "asOf": "2026-10-20",
   "moduleContinuity2026_10_17": {
     "asOf": "2026-10-17",
     "documentation": "guest/GUEST_FIRST_DELIVERY_RSVP_GATE_2026-10-17.md",
@@ -551,13 +551,186 @@
       "ownerCodeAvailableToChat": false
     },
     "design-04": {
-      "status": "not-started"
+      "name": "AZULEJO",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-04/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-04-adapter-v1.js",
+      "visualMasterGitBlobSha1": "adfc97e9e2a745f815f201e9197c17e45fb500e1",
+      "originalMasterBytes": 27448936,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
     },
     "design-05": {
-      "status": "not-started"
+      "name": "GALA",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-05/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-05-adapter-v1.js",
+      "visualMasterGitBlobSha1": "74a7e8ce989a4a8c95aab0d6263a85e2ae7b54ba",
+      "originalMasterBytes": 19827547,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
     },
     "design-06": {
-      "status": "not-started"
+      "name": "INVERNADERO",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-06/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-06-adapter-v1.js",
+      "visualMasterGitBlobSha1": "4a184fb11ef18e97d9173e93528645e2b12631b9",
+      "originalMasterBytes": 14135186,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
+    },
+    "design-07": {
+      "name": "REFLEJO",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-07/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-07-adapter-v1.js",
+      "visualMasterGitBlobSha1": "4bc7bdadc38e45a32fd75f1b018eebd25c2026ca",
+      "originalMasterBytes": 30954481,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
+    },
+    "design-08": {
+      "name": "CAJA DE MÚSICA",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-08/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-08-adapter-v1.js",
+      "visualMasterGitBlobSha1": "406442c12400ba17b9698913a969ca24b87498f6",
+      "originalMasterBytes": 24068615,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
+    },
+    "design-09": {
+      "name": "LIMONEROS · VERSIÓN CLAUDE",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-09/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-09-adapter-v1.js",
+      "visualMasterGitBlobSha1": "3d689aaf7995c8dcaac8e82d319016506496172f",
+      "originalMasterBytes": 24178059,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
+    },
+    "design-10": {
+      "name": "CUENTO DE PAPEL",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-10/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-10-adapter-v1.js",
+      "visualMasterGitBlobSha1": "c9e1d6fa3ef31faa90cfa2e387a884106742f518",
+      "originalMasterBytes": 20346599,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
+    },
+    "design-11": {
+      "name": "BOLA DE CRISTAL",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-11/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-11-adapter-v1.js",
+      "visualMasterGitBlobSha1": "c0a34078f0f985a35dbee1cec92e87b324906455",
+      "originalMasterBytes": 21042009,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
+    },
+    "design-12": {
+      "name": "ABANICO",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-12/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-12-adapter-v1.js",
+      "visualMasterGitBlobSha1": "2509733e4bc0d5c3a54fba36db1d7b11a220b0d7",
+      "originalMasterBytes": 13506667,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
+    },
+    "design-13": {
+      "name": "VIÑETAS",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-13/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-13-adapter-v1.js",
+      "visualMasterGitBlobSha1": "64df7209f495e19b1c2c134f51cae954a23c22a2",
+      "originalMasterBytes": 12861173,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
+    },
+    "design-14": {
+      "name": "VIÑETAS · ELLAS",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-14/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-14-adapter-v1.js",
+      "visualMasterGitBlobSha1": "ae1bf2b5a79dd30090ea69fae535f0cb403bc19c",
+      "originalMasterBytes": 13071169,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
+    },
+    "design-15": {
+      "name": "VIÑETAS · ELLOS",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-15/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-15-adapter-v1.js",
+      "visualMasterGitBlobSha1": "f7680ec795cb4f3f7ec29ea372e87b6a8e55367f",
+      "originalMasterBytes": 12930550,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
+    },
+    "design-16": {
+      "name": "EL MAPA",
+      "version": "1.0.0",
+      "status": "certification-pending",
+      "catalogAsset": "guest/catalog-assets/design-16/1.0.0/index.html",
+      "adapter": "guest/guest-catalog-template-design-16-adapter-v1.js",
+      "visualMasterGitBlobSha1": "5454eb2dfe20a9a8a6156c0aae43da7d93e2e9b0",
+      "originalMasterBytes": 16980612,
+      "commerciallyCertified": false,
+      "scalabilityCertified": false,
+      "backendTestOnly": true,
+      "stagedAssetReady": false,
+      "ownerVisualApproved": false
     }
   },
   "runtime": {
@@ -2556,5 +2729,50 @@
     "sourceFilesExactVerified": true,
     "ownerVisualApprovalOfAllRecoveredNotYetVerified": true,
     "productAccessRule": "No customer edit invitation or RSVP; invite and GUEST management only after final delivered"
+  },
+  "auditContinuity2026_10_20_phase2": {
+    "checkpoint": "guest/GUEST_AUDIT_CONTINUITY_PHASE2_2026-10-20.md",
+    "catalogEntries": 16,
+    "distinctCandidateCount": 15,
+    "historicIncorrectLimoneros": "design-03",
+    "correctLimonerosCandidate": "design-09",
+    "recoveredClaudeCandidatesRegistered": 13,
+    "allNewCandidatesTestOnly": true,
+    "originalMastersPreserved": true,
+    "sourceManifests": [
+      "guest-claude-candidates-import-v1",
+      "guest-claude-designs-d10-d16-import-v1"
+    ],
+    "edgeSourceExactLive": {
+      "guest-invitation-flow": 21,
+      "guest-stripe-checkout": 26,
+      "guest-rsvp": 6,
+      "guest-rsvp-ensure": 3,
+      "guest-personalization": 3,
+      "guest-license-access": 5
+    },
+    "testOrdersSummaryReadOnly": {
+      "botanica": {
+        "delivered": 4,
+        "review_sent": 1
+      },
+      "veil-light": {
+        "delivered": 2,
+        "designing": 1
+      },
+      "design-03-and-design-04-through-16": 0
+    },
+    "ciAfterThisAudit": "NOT_VERIFIED",
+    "stagedMultimediaQA": "NOT_VERIFIED",
+    "publishedAssetUrlsVerified": false,
+    "realEndToEndCertified": false,
+    "commerciallyReady": false,
+    "nextActions": [
+      "Verify GitHub Actions staging/registry QA",
+      "Certify all recovered media and visual renderers including Claude Limoneros",
+      "Prepare isolated TEST-only staging and final generic delivery runtime",
+      "Complete authenticated TEST/E2E real RSVP/payment/email/two-device tests",
+      "Verify commercial rights/individual prices, obtain final launch approval"
+    ]
   }
 }
