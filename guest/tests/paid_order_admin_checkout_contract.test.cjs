@@ -31,7 +31,7 @@ assert.match(checkout,/payment_intent_data\[metadata\]\[guest_catalog_template_i
 assert.match(checkout,/guest_catalog_template_id:templateId,guest_catalog_template_version:templateVersion/,'license metadata persists Stripe pins');
 assert.match(checkout,/b\.catalogTemplateId/,'Checkout requests may explicitly choose certified catalog design');
 assert.match(checkout,/catalogTemplateVersion:p\?\.metadata\?\.guest_catalog_template_version/,'Checkout status exposes paid version pin for downstream');
-assert.match(checkout,/if\(!id\)return null/,'Legacy Essential/Signature checkout must remain valid without design pin');
+assert.match(checkout,/if\(!id\)throw new Error\('catalog_template_required'\)/,'New checkout must require an individual design ID');
 // Exercise exact production allowlist code, offline and with no Stripe calls.
 const {stripTypeScriptTypes}=require('node:module');
 const hostStart=checkout.indexOf('function catalogStaticHost('),hostEnd=checkout.indexOf('function editionOf(',hostStart);
@@ -51,8 +51,8 @@ assert.deepEqual(catalog('veil-light','signature'),{id:'veil-light',version:'5.3
 assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990}},'')('veil-light','signature'),/catalog_host_not_configured/,'cannot initiate payment before static host is configured');
 assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990}},'http://unsafe.invalid')('veil-light','signature'),/catalog_host_invalid/,'HTTP non-production host must be refused');
 assert.throws(()=>options({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:4990}},'https://example.com/fake/')('veil-light','signature'),/catalog_host_invalid/,'host must have no hidden path');
-assert.equal(options({},'')('','essential'),null,'legacy purchases work with no catalog host');
-assert.equal(catalog('', 'essential'),null,'legacy purchases remain untouched');
+assert.throws(()=>options({},'')('','essential'),/catalog_template_required/,'legacy collection checkout must not create new orders');
+assert.throws(()=>catalog('', 'essential'),/catalog_template_required/,'new collection-only checkout must be rejected');
 assert.throws(()=>catalog('botanica','signature'),/catalog_template_not_for_sale/);
 assert.throws(()=>catalog('veil-light','essential'),/catalog_template_not_for_sale/);
 assert.throws(()=>catalog('../veil-light','signature'),/catalog_template_not_for_sale/);
