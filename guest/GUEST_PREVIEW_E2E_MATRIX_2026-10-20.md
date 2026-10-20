@@ -80,3 +80,18 @@ Se mantiene la matriz E2E real pendiente; **no interpretar pruebas de interfaz s
 | PR #144/#145 en main | **DRAFT, sin publicar**: necesitan validación real y aprobación explícita |
 | Reparación BOTÁNICA «Lo esencial» | **BUG ABIERTO**, pendiente después de conexión, antes de GO |
 | Venta | **NO_GO** |
+
+
+## Fase 15 — Supabase local real y Stripe sandbox simulated (sin servidor público)
+
+| Verificación | Resultado |
+| --- | --- |
+| Backend Supabase efímero (Docker, 2 pedidos, aprobación/entrega, RSVP local) | **PASS** en [CI 39468741478](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39468741478), **sin** pago/correos reales |
+| Checkout GUEST (código TS real transpilado, Stripe totalmente falso en VM) | **PASS** en [CI 39469442766](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39469442766); LIVE, precios o estados erróneos rechazados; no API externa |
+| Seguridad: sin clave TEST cifrada no puede llamar a Stripe | **PASS** en [CI 39470359265](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39470359265) |
+| Un pago Stripe TEST real con tarjeta ficticia | **PENDING**. Preparado test *sesión TEST impagada*, bloqueado `if:false` hasta entorno secreto protegido GitHub |
+| Dos compras Stripe TEST completas, correo Resend auténtico, entrega, GUEST y RSVP remoto | **PENDING**. Requieren backend TEST remoto separado de Weddly Supabase LIVE y sin exceder 2/2 proyectos FREE |
+| Diseño BOTÁNICA «Lo esencial» | **BUG ABIERTO**, corregir antes de GO |
+| Ventas | **NO_GO** |
+
+No cambiar estados históricos de la tabla de planificación original; el avance real está indicado arriba por evidencia.
