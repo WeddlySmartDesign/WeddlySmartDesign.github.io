@@ -1,5 +1,8 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+> **FASE 14 — NO REACTIVAR SUPABASE TEST (20/10/2026):** [GUEST_AUDIT_CONTINUITY_PHASE14_FREE_TIER_STAGING_2026-10-20.md](GUEST_AUDIT_CONTINUITY_PHASE14_FREE_TIER_STAGING_2026-10-20.md). Comprobado en el conector: la organización WeddlySmartDesign es **Free con 2/2 proyectos activos** (principal + STUDIO), y `GUEST-Botanica-Certificacion-Temporal` figura pausado. La captura de la propietaria ofrece Resume y Upgrade, pero **NO pulsar**: límite Free 2 activos; no pagar ni pausar STUDIO para liberar plaza de forma tácita. Stripe Sandbox confirmado visualmente. Preparar entorno GUEST TEST con runner GitHub + Supabase local desechable ya documentado, sin secretos LIVE. E2E real de pagos/correos/RSVP exige backend TEST accesible y todavía no está certificado. BUG BOTÁNICA pendiente. **VENTA NO_GO.**
+
+
 > **FASE 13 — SIGUIENTE PASO STRIPE TEST (20/10/2026):** [GUEST_AUDIT_CONTINUITY_PHASE13_PAYMENT_TEST_ISOLATION_2026-10-20.md](GUEST_AUDIT_CONTINUITY_PHASE13_PAYMENT_TEST_ISOLATION_2026-10-20.md). La propietaria confirmó en Chrome la portada de PREVIEW de integración `https://f1b97db0.guest-weddlysmartdesign.pages.dev`; QA remota previa PASS; API Stripe/Resend/Supabase bloqueada deliberadamente. Conector Stripe solo LIVE; `guest-stripe-checkout` usa clave `STRIPE_SECRET_KEY` del Supabase compartido, **NO sustituir** por `sk_test`. Existe Supabase `GUEST-Botanica-Certificacion-Temporal` INACTIVE, **NO reactivar sin evaluar coste y autorización**. Siguiente intervención: abrir Stripe Dashboard y mostrar selector Sandbox/Modo de prueba **sin mostrar claves**. Después preparar E2E de prueba en entorno realmente segregado. PR #144/#145 sin fusionar, bug de BOTÁNICA «Lo esencial» pendiente, NO_GO.
 
 
