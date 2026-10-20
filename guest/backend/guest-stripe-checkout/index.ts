@@ -45,12 +45,13 @@ function catalogSaleOption(raw:any,edition:string){
  let published:any={};
  try{published=JSON.parse(env('GUEST_CATALOG_SALE_OPTIONS')||'{}')}catch{throw new Error('catalog_not_configured')}
  const option=published&&Object.prototype.hasOwnProperty.call(published,id)?published[id]:null;
- if(!option||option.status!=='commercially-frozen'||option.edition!==edition||
-    option.amountCents!==amountFor(edition)||typeof option.version!=='string'||
-    !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,30}$/.test(option.version))
+ if(!option||option.status!=='commercially-frozen'||typeof option.version!=='string'||
+    !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,30}$/.test(option.version)||
+    !Number.isInteger(option.amountCents)||option.amountCents<1000||option.amountCents>200000||
+    typeof option.displayName!=='string'||!/^[^<>\r\n]{2,85}$/.test(option.displayName.trim()))
   throw new Error('catalog_template_not_for_sale');
  catalogStaticHost(); // cannot begin a charge unless common catalog routes have a configured host
- return {id,version:option.version};
+ return {id,version:option.version,amountCents:option.amountCents,displayName:option.displayName.trim()};
 }
 function activationCode(){const a=crypto.randomUUID().replaceAll('-','').toUpperCase(),b=crypto.randomUUID().replaceAll('-','').toUpperCase();return `WSD-GUEST-${a.slice(0,8)}-${a.slice(8,16)}-${b.slice(0,8)}`}
 function normalizeCode(v:string){return String(v||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'')}
@@ -63,16 +64,16 @@ async function createSession(edition:string,consent:boolean,attempt:any,requeste
  if(!consent)throw new Error('consent_required');
  const key=String(attempt||'').trim();if(!/^[A-Za-z0-9-]{16,100}$/.test(key))throw new Error('invalid_checkout_attempt');
  const option=catalogSaleOption(requestedTemplateId,edition);
- const amount=amountFor(edition),base=origin(),p=new URLSearchParams();
+ const amount=option.amountCents,base=origin(),p=new URLSearchParams();
  p.set('ui_mode','embedded_page');p.set('mode','payment');p.set('locale','es');p.set('submit_type','pay');
  p.set('billing_address_collection','auto');p.set('customer_creation','always');p.set('redirect_on_completion','always');
  p.set('return_url',base+'/guest-checkout-return.html?session_id={CHECKOUT_SESSION_ID}');
  p.set('client_reference_id','guest_'+crypto.randomUUID());
  p.set('line_items[0][quantity]','1');p.set('line_items[0][price_data][currency]','eur');
  p.set('line_items[0][price_data][unit_amount]',String(amount));
- p.set('line_items[0][price_data][product_data][name]',labelFor(edition)+' by WeddlySmartDesign');
- p.set('line_items[0][price_data][product_data][description]',descriptionFor(edition));
- p.set('metadata[product]','guest');p.set('metadata[edition]',edition);p.set('metadata[pricing]','launch');
+ p.set('line_items[0][price_data][product_data][name]','Invitación '+option.displayName+' by WeddlySmartDesign');
+ p.set('line_items[0][price_data][product_data][description]','Invitación digital personalizada, RSVP y gestión de invitados GUEST incluidos.');
+ p.set('metadata[product]','guest');p.set('metadata[edition]',edition);p.set('metadata[pricing]','individual-design');
  p.set('metadata[amount_cents]',String(amount));p.set('metadata[start_personalization_consent]','true');
  if(option){
   p.set('metadata[guest_catalog_template_id]',option.id);
@@ -93,7 +94,11 @@ function validatePaid(session:any){
  const edition=editionOf(session?.metadata?.edition);
  if(String(session?.metadata?.product||'')!=='guest')throw new Error('invalid_checkout_session');
  if(session?.status!=='complete'||session?.payment_status!=='paid')throw new Error('not_paid');
- if(Number(session?.amount_total||0)!==amountFor(edition)||String(session?.currency||'').toLowerCase()!=='eur')throw new Error('invalid_checkout_session');
+ const catalogPin=String(session.metadata?.guest_catalog_template_id||'');
+ const pinnedCents=Number(session.metadata?.amount_cents);
+ const subtotal=Number(session.amount_subtotal??session.amount_total);
+ const expected= catalogPin?(Number.isInteger(pinnedCents)&&pinnedCents>=1000&&pinnedCents<=200000?pinnedCents:0):amountFor(edition);
+ if(!expected||subtotal!==expected||Number(session.amount_total||0)<subtotal||String(session.currency||'').toLowerCase()!=='eur')throw new Error('invalid_checkout_session');
  return edition
 }
 async function resend(payload:any){
@@ -244,7 +249,15 @@ Deno.serve(async req=>{
   const action=String(b.action||'');
   if(action==='config'){
    const pk=env('STRIPE_PUBLISHABLE_KEY')||'pk_live_51UHSpGGsLCo0tfLrCEFrbgR8GuH08Ug3czX35u4W2HUoCjKQSvzOC3ZfRleCXg67h05eytwFeE31ycgw7ozHHLvK00CPs5ZG8P';if(!pk)return json({ok:false,error:'stripe_not_configured'},503);
-   return json({ok:true,publishableKey:pk,launch:true,prices:{essential:{current:amountFor('essential'),normal:normalFor('essential')},signature:{current:amountFor('signature'),normal:normalFor('signature')}}})
+   const published=JSON.parse(env('GUEST_CATALOG_SALE_OPTIONS')||'{}');
+   const catalog:any={};
+   for(const [id,item] of Object.entries(published||{})){const op:any=item;
+     if(/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(id)&&op?.status==='commercially-frozen'&&
+       Number.isInteger(op.amountCents)&&op.amountCents>=1000&&op.amountCents<=200000&&
+       typeof op.displayName==='string'&&/^[^<>\\r\\n]{2,85}$/.test(op.displayName.trim()))
+       catalog[id]={name:op.displayName.trim(),version:op.version,priceCents:op.amountCents,status:'available'};
+   }
+   return json({ok:true,publishableKey:pk,launch:true,catalog})
   }
   if(action==='create'){const edition=editionOf(b.edition),session=await createSession(edition,b.startPersonalizationConsent===true,b.checkoutAttemptId,b.catalogTemplateId);return json({ok:true,clientSecret:session.client_secret,sessionId:session.id,edition})}
   if(action==='status'){
