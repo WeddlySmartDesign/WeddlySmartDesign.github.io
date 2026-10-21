@@ -1,5 +1,8 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+> **DIRECCIÓN ARTÍSTICA WEB GUEST — REINICIO TOTAL V3 (21/10/2026):** [GUEST_CREATIVE_WEB_TOTAL_RESTART_ATELIER_V3_2026-10-21.md](GUEST_CREATIVE_WEB_TOTAL_RESTART_ATELIER_V3_2026-10-21.md). La titular rechazó íntegramente el prototipo Atelier V2; se retiraron archivos V2 locales y se limpiaron y reconstruyeron sus dos páginas Figma. **Nueva web conceptual V3 con 30 vídeos originales completos de apertura/cierre, 14 diseños visibles en escenario único + galería paginada, recorrido real de cada invitación vía PREVIEW y demostraciones visuales de GUEST.** ZIP con SHA256 `ba90f13ff20e9bbdd289fb5a04f6c3e43669152bcc71b01c21a97842ddb7fcb5`, accesible como artefacto del chat; **respaldo en Biblioteca NO conseguido (cuota agotada)**. Figma V3 estático editable, audiovisuales en HTML. **Browser/Android no verificados, NO_GO comercial**. ONE/STUDIO/producción intactos.
+
+
 > **APROBACIÓN VISUAL BOTÁNICA 20/10/2026 — INCIDENCIA «LO ESENCIAL» CERRADA:** la propietaria publicó la corrección en Cloudflare Pages PREVIEW `guest-botanica-lo-esencial-fix-2026-10-20` y confirmó en su PC **«ya se ve bien»**. URL inmutable **https://55620fad.guest-weddlysmartdesign.pages.dev/guest/catalog-assets/botanica/14.7/**. Código de corrección `guest/catalog-patches/botanica/14.7/patch.css` validado en Chrome 1440/768/390/320px; máster V14.7 inalterado. Documentación y aceptación: [Fase 17](GUEST_AUDIT_CONTINUITY_PHASE17_BOTANICA_PRACTICAL_FIX_2026-10-20.md). **No reabrir ese defecto sin regresión demostrada.** Futuro pipeline de venta debe incluir el parche versionado; producción no se modificó. El **GO comercial sigue BLOQUEADO** por E2E de compra/entrega/correo/RSVP y demás autorizaciones.
 
 
