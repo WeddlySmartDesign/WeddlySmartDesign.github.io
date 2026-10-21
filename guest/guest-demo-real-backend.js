@@ -5,14 +5,14 @@ const storage={get:(k,f)=>{try{return JSON.parse(localStorage.getItem(k))||struc
 const guests=()=>storage.get(OWNER,{guests:{}}).guests||{};
 const demoEvent=()=>({schema:1,events:{e_preboda:{id:'e_preboda',name:'Cena de bienvenida',date:'2027-06-11',time:'20:30',venue:'Jardín de la Finca',address:'Murcia',enabled:true,budget:0,guestIds:Object.keys(guests()).filter((x,i)=>i<13),tasks:{},payments:{},responses:{},updatedAt:new Date().toISOString()}},updatedAt:new Date().toISOString()});
 function eventState(){return storage.get(EVENT,{state:demoEvent(),version:1})}
-function guestResponses(){return storage.get(RSVP,{forms:[{public_token:'demo-rsvp-ficticio'}],submissions:[],contacts:[],delivery:[]})}
+function guestResponses(){return storage.get(RSVP,{forms:[{public_token:'demo-rsvp-ficticio',config:{transportOffered:true,accommodationOffered:true,questions:{transport:true,meal:true},customQuestions:[{id:'q_song',label:'¿Qué canción te gustaría escuchar?',type:'text'},{id:'q_veg',label:'¿Necesitas alguna alternativa de menú?',type:'yesno'}]}}],submissions:[{guest_key:'demo_p01',name:'Ana Moreno',attend:true,received_at:'2026-10-20T12:00:00.000Z',payload:{custom_answers:{q_song:'Viva la vida',q_veg:false}}},{guest_key:'demo_p04',name:'María Ruiz',attend:true,received_at:'2026-10-20T13:00:00.000Z',payload:{custom_answers:{q_song:'Dancing Queen',q_veg:true}}},{guest_key:'demo_p11',name:'Lucía Vega',attend:true,received_at:'2026-10-20T14:00:00.000Z',payload:{custom_answers:{q_song:'La vida es un carnaval',q_veg:false}}}],contacts:[],delivery:[]})}
 function recipients(){return storage.get(RECIP,{invitation:{title:'Cena de bienvenida',subtitle:'Antes de nuestro gran día, brindamos juntos.',message:'¡Nos vemos en la preboda!',heroPhoto:'',secondPhoto:''},recipients:[]})}
 function ok(data={},status=200){return Promise.resolve(new Response(JSON.stringify({ok:status>=200&&status<300,...data}),{status,headers:{'content-type':'application/json'}}))}
 function guardedJSON(body){try{return JSON.parse(body||'{}')}catch{return {}}}
 const previousFetch=window.fetch.bind(window);
 window.fetch=(input,opts={})=>{
  const url=typeof input==='string'?input:input?.url||'';
- if(!url.includes('supabase.co/functions/v1/'))return previousFetch(input,opts);
+ if(!url.includes('supabase.co/functions/v1/')){try{if(new URL(url,location.href).origin===location.origin)return previousFetch(input,opts)}catch{}return ok({error:'external_network_disabled'},403)}
  const method=(opts.method||'GET').toUpperCase(),body=guardedJSON(opts.body);
  if(url.includes('/guest-event-state')){
   const curr=eventState();if(method==='GET')return ok(curr);
@@ -73,6 +73,6 @@ const block=(e)=>{
  }
  const a=e.target.closest?.('a[href]');if(a&&/^https?:\/\//.test(a.href)&&new URL(a.href).origin!==location.origin){e.preventDefault();e.stopImmediatePropagation();alert('DEMOSTRACIÓN: no se realizan envíos reales ni se abre ninguna cuenta externa.')}};
 document.addEventListener('click',block,true);
-window.open=(url)=>{alert('DEMO: envío externo deshabilitado.');return null};
+const safeOpen=window.open.bind(window);window.open=(url,...rest)=>{if(!url||url==='about:blank')return safeOpen(url,...rest);try{if(new URL(String(url),location.href).origin===location.origin)return safeOpen(url,...rest)}catch{}alert('No se abren servicios externos desde esta vista de muestra.');return null};
 /* No visible test-data ribbon: screenshot controls and test isolation are handled by the demo wrapper. */
 })();
