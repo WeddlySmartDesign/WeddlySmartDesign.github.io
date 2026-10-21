@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow,noarchive"><title>GUEST by WeddlySmartDesign</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#F2EFE9;color:#2C2A26;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+#app{width:100%;height:100dvh;border:0;display:block;background:#F2EFE9}
+#back{display:none;align-items:center;background:#fbf8f3;border-bottom:1px solid #e4ded2;min-height:48px;padding:4px 15px}
+#back.on{display:flex}#back button{border:0;background:transparent;color:#525c43;font-size:14px;font-weight:750;min-height:40px;cursor:pointer}
+body.sub #app{height:calc(100dvh - 48px)}
+button:focus-visible{outline:3px solid #6e7a5c;outline-offset:3px}
+</style></head>
+<body><div id="back"><button id="returnGuest" type="button">← Volver a invitados</button></div><iframe id="app" title="GUEST by WeddlySmartDesign"></iframe>
+<script>
+(()=>{'use strict';
+/* Captura editorial aislada: solo este origen, sin licencia ni red ni usuarios reales. */
+const KEY='weddly_guests_qa_v67',INIT='guest_demo_original_complete_20261021_v2';
+const people=[
+['Ana Moreno','Familia Clara','Tíos',1,'confirmed','Mesa 1','Estándar',true],
+['Luis Moreno','Familia Clara','Tíos',1,'confirmed','Mesa 1','Vegetariano',false],
+['Julia Moreno','Familia Clara','Tíos',1,'pending','','',false],
+['María Ruiz','Familia Clara','Primos',2,'confirmed','Mesa 1','Estándar',true],
+['Pablo Ruiz','Familia Clara','Primos',2,'confirmed','Mesa 1','Vegano',false],
+['Inés Ruiz','Familia Clara','Primos',2,'pending','','',false],
+['Miguel Torres','Familia Mateo','Padres',3,'confirmed','Mesa 2','Estándar',false],
+['Elena Torres','Familia Mateo','Padres',3,'confirmed','Mesa 2','Estándar',false],
+['Raúl Torres','Familia Mateo','Primos',4,'pending','','',false],
+['Sofía Torres','Familia Mateo','Primos',4,'pending','','',false],
+['Lucía Vega','Amigos Clara','Universidad',5,'confirmed','Mesa 3','Estándar',true],
+['Javier Vega','Amigos Clara','Universidad',5,'confirmed','Mesa 3','Estándar',false],
+['Alicia Soto','Amigos Clara','Universidad',6,'confirmed','Mesa 3','Vegetariano',false],
+['Carmen Soto','Amigos Clara','Universidad',6,'declined','','',false],
+['Diego Ramos','Amigos Mateo','Trabajo',7,'confirmed','Mesa 4','Estándar',false],
+['Paula Ramos','Amigos Mateo','Trabajo',7,'confirmed','Mesa 4','Vegano',false],
+['Hugo Gil','Amigos Mateo','Fútbol',8,'pending','','',false],
+['Nora Gil','Amigos Mateo','Fútbol',8,'pending','','',false],
+['Claudia Pardo','Amigos Mateo','Fútbol',9,'confirmed','Mesa 4','Estándar',true],
+['Marcos Pardo','Amigos Mateo','Fútbol',9,'confirmed','Mesa 4','Estándar',false]
+];
+function fixture(){
+ const guests={},recipient={};
+ people.forEach(([name,group,subgroup,unit,rsvp,table,meal,accommodation],i)=>{
+  const id='demo_p'+String(i+1).padStart(2,'0');
+  if(!recipient[unit])recipient[unit]=id;
+  guests[id]={name,group,unitId:subgroup,invitationUnitId:'unidad_'+unit,invitationUnitLabel:group+' · '+subgroup,invitationRecipientId:recipient[unit],rsvp,table,meal,mealRequired:true,transport:i%5===0,accommodation,phone:'',email:''};
+ });
+ const tables={t1:{name:'Mesa 1',cap:8},t2:{name:'Mesa 2',cap:8},t3:{name:'Mesa 3',cap:8},t4:{name:'Mesa 4',cap:8},t5:{name:'Mesa 5',cap:8}};
+ return{guests,tables,meta:{couple:['Clara','Mateo'],weddingDate:'2027-06-12'},prepared:null,sent:null,preparedV:1,sentV:1,activity:[]};
+}
+if(localStorage.getItem(INIT)!=='1'){
+ localStorage.setItem(KEY,JSON.stringify(fixture()));
+ localStorage.setItem('weddly_shared_wedding_token','guest-demo-token-ONLY-FICTITIOUS-000000000000000000000000');
+ localStorage.setItem('weddly_access_lang','es');
+ localStorage.setItem('weddly_personal_theme_v51','nordic');
+ localStorage.setItem('weddly_wedding_services_v1',JSON.stringify({transport:true,accommodation:true}));
+ for(const key of ['guest_demo_event_v1','guest_demo_event_recipients_v1','guest_demo_rsvp_v1'])localStorage.removeItem(key);
+ localStorage.setItem(INIT,'1');
+}
+const f=document.getElementById('app');
+const G=window.__GuestsProd={f,KEY,APP:'guests-v114-integrated.html?v=full-20261021',API:'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-state',token:localStorage.getItem('weddly_shared_wedding_token'),ver:1,last:'',notice:()=>{},clearNotice:()=>{},pushing:false};
+const routes={core:'guests-v114-integrated.html?v=full-20261021',rsvp:'guest-demo-rsvp-real.html?v=full-20261021',events:'guest-demo-events-real.html?v=full-20261021'};
+let current='core';
+function show(view){
+ if(!routes[view])return;
+ current=view;
+ document.body.classList.toggle('sub',view!=='core');
+ document.getElementById('back').classList.toggle('on',view!=='core');
+ if(!f.getAttribute('src')?.startsWith(routes[view].split('?')[0]))f.src=routes[view];
+}
+window.__GUEST_PREVIEW_SHOW=show;
+document.getElementById('returnGuest').onclick=()=>show('core');
+f.addEventListener('load',()=>{
+ if(current!=='core')return;
+ let d;try{d=f.contentDocument}catch{return}
+ if(!d?.body)return;
+ // Enrutamiento seguro de las funciones originales: sin abrir enlaces de clientes ni editores.
+ if(d.documentElement.dataset.guestPreviewNavigation==='1')return;
+ d.documentElement.dataset.guestPreviewNavigation='1';
+ d.addEventListener('click',e=>{
+  const b=e.target.closest?.('button,a');if(!b)return;
+  const id=b.id;
+  let view='';
+  if(['rsvpBtn','wsdOpenRsvpOps'].includes(id)||/^(?:Envíos y respuestas|Gestionar RSVP|Abrir envíos y respuestas)$/i.test(b.textContent.trim()))view='rsvp';
+  if(['wsdEventsBtn','wsdEventsQuick'].includes(id))view='events';
+  if(view){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();show(view)}
+ },true);
+});
+window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data?.type==='guest-demo-navigate')show(e.data.view)});
+window.__GUEST_PREVIEW_START=()=>{show('core');dispatchEvent(new Event('guests-prod-open'))};
+})();
+</script>
+<script src="guest-demo-real-backend.js?v=oneparity2"></script>
+<script src="guests-state-integrity-v1.js"></script>
+<script src="guests-plusone-placeholder-link-v1.js"></script>
+<script src="guests-production-ui.js"></script>
+<script src="guests-catalog-invitation-bridge-v1.js"></script>
+<script src="guests-production-ops.js"></script>
+<script src="guests-rsvp-route-v1.js"></script>
+<script src="guests-home-rsvp-status-v1.js"></script>
+<script src="guests-smart-actions-v1.js"></script>
+<script src="guests-mobile-compat-hotfix-v1.js"></script>
+<script src="guests-import-audit-v1.js"></script>
+<script src="guests-service-visibility-v1.js"></script>
+<script src="guests-custom-lists-v1.js"></script>
+<script src="guests-extra-event-lists-v1.js"></script>
+<script src="guests-copy-control-v1.js"></script>
+<script src="guests-people-manager-v1.js"></script>
+<script src="guests-people-polish-v1.js"></script>
+<script src="guests-rsvp-clarity-v1.js"></script>
+<script src="guests-rsvp-plusone-core-label-v1.js"></script>
+<script src="guests-seating-v2.js"></script>
+<script src="guests-seating-sync-hotfix-v1.js"></script>
+<script src="guest-one-parity-v1.js"></script>
+<script src="guest-visual-premium-v1.js"></script>
+<script src="guest-visual-hoy-invitados-v1.js"></script>
+<script src="guest-visual-tables-lists-v1.js"></script>
+<script>window.__GUEST_PREVIEW_START();</script>
+</body></html>
