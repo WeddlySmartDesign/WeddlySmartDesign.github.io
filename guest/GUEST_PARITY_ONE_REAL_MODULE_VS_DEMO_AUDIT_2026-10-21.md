@@ -36,6 +36,7 @@ La propietaria aporta dos grabaciones: `1000097653.mp4` (DEMOSTRACIÓN PROVISION
 ## Rectificación de la DEMO y prohibiciones
 
 - La versión `https://354213a1.guest-weddlysmartdesign.pages.dev/guest/guest-demo-capturas.html` es una **maqueta alternativa simplificada**, no se usará como aceptación, capturas de venta, ni prueba de funcionalidad GUEST; el branch `guest-demo-capturas-2026-10-21` no es source of truth.
+- **Retirada de la maqueta de la rama PREVIEW**: commit `612d0dee006d4dac88a5616f86879ca4b60d4e31` sustituye su HTML por un aviso de demostración retirada, sin modificar el motor real. Cloudflare vuelve a desplegar esa rama; la URL inmutable del despliegue anterior puede seguir accesible por diseño de Cloudflare. No afirmar que ha sido borrada del proveedor.
 - La URL antigua `https://f1b97db0.guest-weddlysmartdesign.pages.dev` es una PREVIEW de integración con backend deliberadamente bloqueado; no demuestra manejo real.
 - La fuente autorizada del motor continúa `guest-independent/guest/index.html`, no una UI reconstruida. Publicar una PREVIEW para capturas con el **motor real** exigirá datos de boda ficticios en aislamiento y prueba de navegación a todas las rutas, sin conectar secretos ni datos de terceros, y sin simular funcionamiento de backend como real.
 - NO tocar ONE, ONE Partner, STUDIO, diseños maestros, cuentas/recursos de otras apps, ni activar venta.
