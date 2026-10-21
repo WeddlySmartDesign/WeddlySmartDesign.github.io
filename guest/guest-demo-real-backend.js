@@ -74,5 +74,5 @@ const block=(e)=>{
  const a=e.target.closest?.('a[href]');if(a&&/^https?:\/\//.test(a.href)&&new URL(a.href).origin!==location.origin){e.preventDefault();e.stopImmediatePropagation();alert('DEMOSTRACIÓN: no se realizan envíos reales ni se abre ninguna cuenta externa.')}};
 document.addEventListener('click',block,true);
 window.open=(url)=>{alert('DEMO: envío externo deshabilitado.');return null};
-const style=document.createElement('style');style.textContent='body:before{content:"DEMO · DATOS FICTICIOS · SIN ENVÍOS REALES";position:sticky;top:0;z-index:999;display:block;padding:8px;background:#e9ede4;color:#3d5333;font-size:11px;font-weight:800;letter-spacing:.04em;text-align:center}';document.head.appendChild(style);
+/* No visible test-data ribbon: screenshot controls and test isolation are handled by the demo wrapper. */
 })();
