@@ -29,7 +29,7 @@
 - Los recursos del centro de cada invitación se abren con el enlace REAL de Cloudflare PREVIEW inmutable `https://eebba5b2.guest-weddlysmartdesign.pages.dev`. En modo «Se descubre», existe opción de cargar el original en iframe y opción visible de pestaña externa si la política de origen impide embeberlo.
 
 ## Archivos fuente y prototipo
-- **Nuevo artefacto de revisión generado en esta conversación:** `/mnt/data/GUEST_Atelier_Artistico_V3_REDENO_TOTAL_14_DISENOS.zip`, tamaño **138757483 B**, SHA256 **`ba90f13ff20e9bbdd289fb5a04f6c3e43669152bcc71b01c21a97842ddb7fcb5`**, **73 entradas**, ZIP CRC PASS.
+- **Nuevo artefacto de revisión generado en esta conversación:** `/mnt/data/GUEST_ATELIER_V3_REDISENO_TOTAL_14_DISENOS.zip`, tamaño **138757483 B**, SHA256 **`ba90f13ff20e9bbdd289fb5a04f6c3e43669152bcc71b01c21a97842ddb7fcb5`**, **73 entradas**, ZIP CRC PASS.
 - Dentro de ese ZIP, `index.html`, `styles.css`, `app.js`, `catalog.js`, `media/` con 30 originales y 30 JPG, `asset_register.json`, `LEEME_PRIMERO.txt`, `qa_check.py` y `QA_RESULTADO.txt`.
 - El prototipo se abre descomprimiendo y ejecutando **`index.html`**; los vídeos se cargan cuando el usuario los selecciona. El paquete es pesado (135 MB de originales) por exigencia de fidelidad; las optimizaciones para venta requerirán política de streaming respetuosa con todos los movimientos y son tarea FUTURA.
 - **Biblioteca:** se intentó subir el nuevo ZIP a `/GUEST by WeddlySmartDesign/Direccion_Artistica_Web/`, pero falló con error `library_storage_limit_exceeded`. La carpeta se creó, **NO hay backup de este ZIP en Biblioteca**. No borrar otros materiales del usuario para hacer espacio. La fuente puede recuperarse del ZIP adjunto a esta conversación más el ZIP original sellado, pero no declarar persistencia de binario independiente de esta conversación.
@@ -53,3 +53,5 @@
 2. Decidir y validar qué identidad LIMONEROS es definitiva, y revisar BOTÁNICA cierre repetido y defecto PC «Lo esencial».
 3. Optimizar streaming/video bajo demanda y dar acceso al catálogo definitivo creciente sin saturar ancho de banda.
 4. Confirmación precisa del copy de funciones, permisos, derechos, precios y condiciones; certificación completa Stripe TEST E2E, correos, entrega, acceso y RSVP en 2 móviles; aprobar GO por diseño. Hasta entonces **NO_GO**.
+
+**Nota de nomenclatura:** el ZIP generado se renombró sin cambiar ni un byte, preservando SHA256, a `GUEST_ATELIER_V3_REDISENO_TOTAL_14_DISENOS.zip`. El upload de Biblioteca fallido quedó registrado antes del renombrado; no existe copia allí.
