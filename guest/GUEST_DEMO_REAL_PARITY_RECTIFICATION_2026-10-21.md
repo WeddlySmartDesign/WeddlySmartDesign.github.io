@@ -24,3 +24,11 @@ La DEMO `guest/guest-demo-capturas.html` entregada a la propietaria era una repr
 - Los archivos de la rama son exactamente documentos y scripts de interfaz; no se alteró backend.
 - Comprobación funcional auténtica en dispositivo Android, operatividad de las interacciones de EVENTOS/RSVP en HTTP PREVIEW y enlace inmutable requieren certificación posterior. **No afirmar comercialización ni paridad E2E demostrada.**
 - El programa debe conservar el estado GUEST **NO_GO para ventas** hasta los E2E originales completos.
+
+## Ajuste solicitado: capturas sin etiquetas (21/10/2026)
+La titular comunicó que las marcas visibles «DEMO · DATOS FICTICIOS» y «SIN ENVÍOS REALES» impedían utilizar capturas del módulo. En la rama PREVIEW aislada `guest-demo-capturas-2026-10-21`:
+- Se eliminó el distintivo visual del encabezado en `guest/guest-demo-motor-real.html` y el pseudo-elemento adhesivo introducido en `guest/guest-demo-real-backend.js`.
+- Se añadió `Pantalla limpia` para ocultar barra y navegación superiores sin alterar el motor de invitados ni el contenido del iframe; recargar restaura los controles para cambiar de módulo.
+- Se conserva el aviso ético y técnico fuera de las imágenes: todos los nombres son ficticios, RSVP/eventos simulados localmente, sin envíos ni pagos, sin sincronización real. No presentar capturas de muestra como actividad real de clientes.
+- Commits de la rama de PREVIEW: `56831bd70c16947f253052e8275b3e89661c5f54`, `96b33bb895f8fbdf90ffc336077093d3e418184a`. Se debe consultar el resultado del despliegue Cloudflare y no inventar URL inmutable antes de SUCCESS.
+- No se han modificado ni producción comercial, ni ONE, STUDIO, ni servicios Supabase.
