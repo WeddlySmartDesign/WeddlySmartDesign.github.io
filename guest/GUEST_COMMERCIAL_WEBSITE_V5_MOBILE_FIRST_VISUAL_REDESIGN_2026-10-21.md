@@ -27,7 +27,7 @@ La revisión del vídeo `20261021-0818-45.4077933.mp4` y las observaciones del 2
 ## QA ejecutada
 - Script de browser por renderización HTML/CSS/JS en memoria `guest_v5_dev/qa_v5.py` con pruebas interactivas **320 / 390 / 1440px**; 15 tarjetas, 0 overflow, cero errores JS; enlace interno a la invitación completa, métricas de plazo, cambio de asientos, RSVP ficticio, simulación de dos móviles, preboda, marcado de envío y listas presentes. **PASS en los tres tamaños**.
 - 15 capturas de portada final construidas con CSS/DOM del original sobre fotograma final real y renderizadas sin video: `assets/finished-01.webp` a `finished-15.webp`.
-- Archivo ZIP existente y central directory leído, 129 entradas, 15 rutas `invitaciones/NN/index.html` presentes; contrastes SHA256 de recurso con manifiesto superados en `index.html`, JS, varias miniaturas y muestras de invitaciones. **No alegar CRC de todas las entradas comprobado si no hay testzip PASS**.
+- Archivo ZIP existente y central directory leído, 129 entradas, 15 rutas `invitaciones/NN/index.html` presentes; contrastes SHA256 de recurso con manifiesto superados en `index.html`, JS, varias miniaturas y muestras de invitaciones. **ZIP CRC 129/129 PASS real:** `ZipFile.testzip() is None` en 4,37 segundos, tras la creación; adicionalmente SHA256 puntual del ZIP frente al manifiesto y hash del contenedor verificados.
 - No hay pruebas de vídeo/autoplay/Android físico desde esta entrega. Prototipo local en PC, no URL publicada ni E2E comercial.
 
 ## Continuidad
