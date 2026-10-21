@@ -21,7 +21,21 @@ window.fetch=(input,opts={})=>{
  }
  if(url.includes('/guest-event-invite')){
   const d=recipients();const action=body.action||'';
-  if(method==='GET')return ok(d);
+  if(method==='GET'){
+   if(new URL(url).searchParams.has('token')){
+     const tk=new URL(url).searchParams.get('token');
+     let rec=d.recipients.find(x=>x.token===tk);
+     if(!rec){const gs=guests(),m=Object.entries(gs).slice(0,2).map(([id,g])=>({id,name:g.name}));rec={recipient_key:'demostracion',token:tk,members:m,response:{}}}
+     const ev=eventState().state.events?.e_preboda||Object.values(eventState().state.events||{})[0]||{};
+     return ok({event:ev,recipient:rec,invitation:d.invitation});
+   }
+   return ok(d);
+  }
+  if(action==='respond'){
+    const rec=d.recipients.find(x=>x.token===body.token);
+    if(rec){rec.response={...body.response};rec.responded_at=new Date().toISOString();storage.put(RECIP,d)}
+    return ok({responded_at:new Date().toISOString()});
+  }
   if(action==='sync_recipients'){const prev=new Map(d.recipients.map(x=>[x.recipient_key,x]));d.recipients=(body.recipients||[]).map((r,i)=>{const old=prev.get(String(r.key))||{};return {recipient_key:String(r.key),members:r.members||[],phone:r.phone||'',token:'demo-event-'+(i+1),response:old.response||{},status:old.status||'pending',sent_at:old.sent_at||null,responded_at:old.responded_at||null}});storage.put(RECIP,d);return ok({recipients:d.recipients,invitation:d.invitation});}
   if(action==='save_payload'){d.invitation={...d.invitation,...body.payload};storage.put(RECIP,d);return ok({invitation:d.invitation,recipients:d.recipients});}
   if(action==='mark_sent'){const r=d.recipients.find(x=>x.recipient_key===String(body.recipient_key));if(r){r.status='sent';r.sent_at=new Date().toISOString()}storage.put(RECIP,d);return ok({});}
@@ -43,7 +57,21 @@ window.fetch=(input,opts={})=>{
  }
  return ok({error:'not_available_in_demo'},403);
 };
-const block=(e)=>{const a=e.target.closest?.('a[href]');if(a&&/^https?:\/\//.test(a.href)&&new URL(a.href).origin!==location.origin){e.preventDefault();e.stopImmediatePropagation();alert('DEMOSTRACIÓN: no se realizan envíos reales ni se abre ninguna cuenta externa.')}};
+const block=(e)=>{
+ const b=e.target.closest?.('button');
+ if(b?.id==='invitePreview'){
+  e.preventDefault();e.stopImmediatePropagation();
+  const d=recipients(); const t=d.recipients[0]?.token||'demo-event-1';
+  location.assign('guest-demo-event-invite-real.html?t='+encodeURIComponent(t));return;
+ }
+ if(b?.matches('[data-wa],[data-remind]')){
+  e.preventDefault();e.stopImmediatePropagation();
+  const d=recipients();const key=b.dataset.wa||b.dataset.remind;
+  const rec=d.recipients.find(x=>x.recipient_key===key);
+  if(rec){rec.status='sent';rec.sent_at=new Date().toISOString();storage.put(RECIP,d)}
+  alert('DEMO: invitación del evento preparada. No se ha enviado ningún mensaje real.');return;
+ }
+ const a=e.target.closest?.('a[href]');if(a&&/^https?:\/\//.test(a.href)&&new URL(a.href).origin!==location.origin){e.preventDefault();e.stopImmediatePropagation();alert('DEMOSTRACIÓN: no se realizan envíos reales ni se abre ninguna cuenta externa.')}};
 document.addEventListener('click',block,true);
 window.open=(url)=>{alert('DEMO: envío externo deshabilitado.');return null};
 const style=document.createElement('style');style.textContent='body:before{content:"DEMO · DATOS FICTICIOS · SIN ENVÍOS REALES";position:sticky;top:0;z-index:999;display:block;padding:8px;background:#e9ede4;color:#3d5333;font-size:11px;font-weight:800;letter-spacing:.04em;text-align:center}';document.head.appendChild(style);
