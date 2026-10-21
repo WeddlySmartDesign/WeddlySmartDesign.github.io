@@ -54,7 +54,7 @@ const headers=[
  '  Referrer-Policy: no-referrer',
  '  X-Content-Type-Options: nosniff',
  '  Permissions-Policy: camera=(), microphone=(), geolocation=()',
- '  Content-Security-Policy: default-src \'self\' data:; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' data: blob:; media-src \'self\' data: blob:; connect-src \'none\'; form-action \'none\'; frame-src \'none\'; worker-src \'none\'; object-src \'none\'; base-uri \'self\''
+ '  Content-Security-Policy: default-src \'self\' data:; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' data: blob:; media-src \'self\' data: blob:; connect-src \'none\'; form-action \'none\'; frame-src \'self\'; worker-src \'none\'; object-src \'none\'; base-uri \'self\''
 ].join('\n')+'\n';
 add('_headers',Buffer.from(headers));
 const payload={schemaVersion:'guest-integration-preview-v1',status:'PREVIEW_NO_REMOTE_DATA_NO_SALE',commercialApproved:false,
