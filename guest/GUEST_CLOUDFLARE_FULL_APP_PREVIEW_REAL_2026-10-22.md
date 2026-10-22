@@ -35,3 +35,15 @@ El builder de GUEST, correctamente diseñado para una galería artística sin ve
 5. Promoción a `guest-independent` y el dominio estable únicamente después de verificaciones y aprobación comercial; no actualizar por suposición la rama de producción de Cloudflare.
 
 **Estado:** bloqueo técnico de empaquetado de app **resuelto en PREVIEW**, estado comercial `NO_GO`; los riesgos de las rutas LIVE y ventas continúan identificados.
+
+
+## Cierre de publicación real de la PREVIEW (segunda revisión)
+- Commit Cloudflare `7c8ed28e23feb448fc1cf8053580d6f6c54bf568`: **SUCCESS**, URL inmutable `https://265a5e27.guest-weddlysmartdesign.pages.dev`.
+- Ruta real **de acceso privado**, funcional a nivel de HTTP y CSS/JS: `https://265a5e27.guest-weddlysmartdesign.pages.dev/guest/access.html`.
+- Ruta real **de aplicación autenticada**: `https://265a5e27.guest-weddlysmartdesign.pages.dev/guest/index.html`.
+- También publica rutas secundarias de RSVP v3/v114, `guest.webmanifest` y las hojas/script necesarios sin fallback.
+- [GitHub Actions 39785011784](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39785011784) — **SUCCESS: HTTP real de rutas de acceso, app protegida, invitados, mesas, eventos, archivos JS, subrutas RSVP, webmanifest, Botánica 11 MB, manifiesto de 15 candidatos y cabecera noindex**.
+- [GitHub Actions 39784651694](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39784651694) — **SUCCESS: reconstrucción fuente→bundle con 15 masters SHA, scripts de acceso GUEST, sin cobros ni secretos**.
+- El alias anunciado por Cloudflare para la rama puede ser `https://guest-cloudflare-full-app-pr.guest-weddlysmartdesign.pages.dev`. **Preferir enlace inmutable `265a5e27`**, no depender del alias para certificar una revisión fija.
+- URL estable `https://guest-weddlysmartdesign.pages.dev/guest/index.html` **sigue sin publicar la app**: es portada de preproducción hasta la promoción comercial autorizada.
+- No se ha probado autenticación E2E de un cliente verdadero en el dominio PREVIEW ni se ha hecho ningún cobro, envío real o modificación de pedido. **Estado comercial NO_GO**.
