@@ -46,5 +46,9 @@ jobs:
         run: node guest/qa/hoy_sharing_settings_browser_2026_10_22.cjs
       - name: Theme changes with premium layer
         run: node guest/qa/theme_premium_browser_2026_10_22.cjs
+      - name: ONE events + independent invitations browser regression
+        run: node guest/qa/b6_5_extra_events_test.js
+      - name: ONE extra-event tasks/payments and mobile visual regression
+        run: node guest/qa/b7_5_extra_events_visual_test.js
       - name: ONE modules and guest-only invariants
         run: node guest/qa/guest_independent_regression_test.js
