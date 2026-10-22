@@ -23,7 +23,7 @@ const TOKEN='m'.repeat(64);
   await page.goto(BASE+'/guest/index.html',{waitUntil:'domcontentloaded'});
   let core=null;
   for(let i=0;i<120;i++){
-   core=page.frames().find(f=>/guests-v114-integrated\.html/.test(f.url()));
+   core=page.frames().find(f=>/guests-v114-integrated(?:\.html)?/.test(f.url()));
    if(core){try{await core.waitForSelector('#nav',{timeout:500});break}catch{}}
    await page.waitForTimeout(100)
   }
