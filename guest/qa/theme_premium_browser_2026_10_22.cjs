@@ -31,7 +31,7 @@ async function checkTheme(f,key){
  const browser=await chromium.launch({headless:true}),ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
  const page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await mock(page);
- await page.addInitScript(t=>{localStorage.setItem('weddly_shared_wedding_token',t);localStorage.setItem('weddly_personal_theme_v51','blush')},TOKEN);
+ await page.addInitScript(t=>{localStorage.setItem('weddly_shared_wedding_token',t);if(!sessionStorage.getItem('guestThemeTestBoot')){localStorage.setItem('weddly_personal_theme_v51','blush');sessionStorage.setItem('guestThemeTestBoot','1')}},TOKEN);
  try{
   await page.goto(BASE+'/guest/index.html#hoy',{waitUntil:'domcontentloaded'});
   let f=await core(page);await checkTheme(f,'blush');
