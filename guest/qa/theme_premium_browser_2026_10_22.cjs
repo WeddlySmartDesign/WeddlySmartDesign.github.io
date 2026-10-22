@@ -19,7 +19,7 @@ async function mock(page){
  });
 }
 async function core(page){
- for(let i=0;i<100;i++){const f=page.frames().find(f=>/guests-v114-integrated\.html/.test(f.url()));if(f){await f.waitForSelector('#nav button.on');return f}await page.waitForTimeout(100)}
+ for(let i=0;i<100;i++){const f=page.frames().find(f=>/guests-v114-integrated(?:\.html)?/.test(f.url()));if(f){await f.waitForSelector('#nav button.on');return f}await page.waitForTimeout(100)}
  throw new Error('core not mounted');
 }
 async function checkTheme(f,key){
