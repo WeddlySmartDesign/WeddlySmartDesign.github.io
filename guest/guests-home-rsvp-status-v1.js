@@ -1,7 +1,7 @@
 (()=>{
   const G=window.__GuestsProd;if(!G)return;
   const KEY='weddly_guests_qa_v67',TOKEN_KEY='weddly_shared_wedding_token',API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-rsvp',EVENTS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-event-state',EVENT_INVITES='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-event-invite';
-  let remote=null,eventNotices=[],lastFetch=0,busy=false,expandedNotifications=false;
+  let remote=null,eventNotices=[],lastFetch=0,lastEventFetch=0,busy=false,expandedNotifications=false;
   function docs(){const out=[];try{let d=G.f.contentDocument;for(let i=0;i<8&&d;i++){out.push(d);const f=d.querySelector('iframe');if(!f||!f.contentDocument)break;d=f.contentDocument}}catch{}return out}
   const appDoc=()=>docs().find(d=>d.getElementById('hoy')&&d.getElementById('invitados'))||null;
   function state(){try{const s=JSON.parse(localStorage.getItem(KEY)||'null')||{};s.guests=s.guests||{};return s}catch{return{guests:{}}}}
@@ -51,7 +51,7 @@
     }));
     return all.flat();
   }
-  async function refresh(force=false){const token=localStorage.getItem(TOKEN_KEY)||'';if(!token||busy||(!force&&Date.now()-lastFetch<12000)){render();return}busy=true;try{const r=await fetch(API+'?manage=1',{headers:{'x-weddly-token':token},cache:'no-store'}),x=await r.json().catch(()=>({}));if(r.ok&&x.ok){remote=x;lastFetch=Date.now();try{eventNotices=await fetchEventNotices(token)}catch{/* Conserva el último estado de eventos sin bloquear el RSVP. */}}}catch{}finally{busy=false;render()}}
+  async function refresh(force=false){const token=localStorage.getItem(TOKEN_KEY)||'';if(!token||busy||(!force&&Date.now()-lastFetch<12000)){render();return}busy=true;try{const r=await fetch(API+'?manage=1',{headers:{'x-weddly-token':token},cache:'no-store'}),x=await r.json().catch(()=>({}));if(r.ok&&x.ok){remote=x;lastFetch=Date.now();if(Date.now()-lastEventFetch>=60000){lastEventFetch=Date.now();try{eventNotices=await fetchEventNotices(token)}catch{/* Conserva el último estado de eventos sin bloquear el RSVP. */}}}}catch{}finally{busy=false;render()}}
   function tick(){render();refresh(false)}
   G.f.addEventListener('load',()=>setTimeout(()=>refresh(true),250));addEventListener('guests-prod-open',()=>setTimeout(()=>refresh(true),150));addEventListener('focus',()=>refresh(true));addEventListener('visibilitychange',()=>{if(!document.hidden)refresh(true)});setInterval(tick,1800);setTimeout(()=>refresh(true),500);
 })();
