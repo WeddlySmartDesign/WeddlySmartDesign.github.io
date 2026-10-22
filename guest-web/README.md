@@ -10,5 +10,5 @@ Web nueva de venta de invitaciones, en una carpeta aislada. No sustituye ni modi
 
 Antes de publicar:
 1. Quitar `<meta name="robots" content="noindex, nofollow">` de `index.html`.
-2. Revisar `og:url` y `og:image`: son absolutas y apuntan a `https://weddlysmartdesign.github.io/guest-web/`. Si la dirección definitiva es otra, cambiarlas.
+2. Revisar `og:url` y `og:image`: son absolutas y apuntan a `https://guest-invitaciones.vercel.app/` (proyecto de Vercel guest-invitaciones, publicado desde esta rama). Si se añade un dominio propio, cambiarlas.
 3. Poner el enlace de pago en `js/config.js` → `checkoutUrl`.
