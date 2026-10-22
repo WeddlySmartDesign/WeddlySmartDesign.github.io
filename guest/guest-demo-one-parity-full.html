@@ -6,9 +6,10 @@
 #back{display:none;align-items:center;background:#fbf8f3;border-bottom:1px solid #e4ded2;min-height:48px;padding:4px 15px}
 #back.on{display:flex}#back button{border:0;background:transparent;color:#525c43;font-size:14px;font-weight:750;min-height:40px;cursor:pointer}
 body.sub #app{height:calc(100dvh - 48px)}
+#settingsOverlay{position:fixed;inset:0;z-index:400;background:#F2EFE9;display:none}#settingsOverlay.on{display:block}#settingsFrame{width:100%;height:100dvh;border:0;background:#F2EFE9}
 button:focus-visible{outline:3px solid #6e7a5c;outline-offset:3px}
 </style></head>
-<body><div id="back"><button id="returnGuest" type="button">← Volver a invitados</button></div><iframe id="app" title="GUEST by WeddlySmartDesign"></iframe>
+<body><div id="back"><button id="returnGuest" type="button">← Volver a invitados</button></div><div id="settingsOverlay"><iframe id="settingsFrame" title="Ajustes del estilo de GUEST"></iframe></div><iframe id="app" title="GUEST by WeddlySmartDesign"></iframe>
 <script>
 (()=>{'use strict';
 /* Captura editorial aislada: solo este origen, sin licencia ni red ni usuarios reales. */
@@ -49,7 +50,8 @@ if(localStorage.getItem(INIT)!=='1'){
  localStorage.setItem(KEY,JSON.stringify(fixture()));
  localStorage.setItem('weddly_shared_wedding_token','guest-demo-token-ONLY-FICTITIOUS-000000000000000000000000');
  localStorage.setItem('weddly_access_lang','es');
- localStorage.setItem('weddly_personal_theme_v51','nordic');
+ if(!localStorage.getItem('weddly_personal_theme_v51'))localStorage.setItem('weddly_personal_theme_v51','nordic');
+ localStorage.setItem('weddly_pro_v7',JSON.stringify({settings:{partner1:'Clara',partner2:'Mateo',weddingDate:'2027-06-12',lang:'es'}}));
  localStorage.setItem('weddly_wedding_services_v1',JSON.stringify({transport:true,accommodation:true}));
  for(const key of ['guest_demo_event_v1','guest_demo_event_recipients_v1','guest_demo_rsvp_v1'])localStorage.removeItem(key);
  localStorage.setItem(INIT,'1');
@@ -58,9 +60,14 @@ const f=document.getElementById('app');
 const G=window.__GuestsProd={f,KEY,APP:'guests-v114-integrated.html?v=full-20261021',API:'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-state',token:localStorage.getItem('weddly_shared_wedding_token'),ver:1,last:'',notice:()=>{},clearNotice:()=>{},pushing:false};
 const routes={core:'guests-v114-integrated.html?v=full-20261021',rsvp:'guest-demo-rsvp-real.html?v=full-20261021',events:'guest-demo-events-real.html?v=full-20261021'};
 let current='core';
+function showSettings(){const el=document.getElementById('settingsOverlay'),sf=document.getElementById('settingsFrame');if(!sf.getAttribute('src'))sf.src='guest-demo-settings-real.html';el.classList.add('on')}
+function hideSettings(){document.getElementById('settingsOverlay').classList.remove('on')}
+function suppressOfflinePreviewLabel(){if(current!=='core')return;let d;try{d=f.contentDocument}catch{return}if(!d?.body)return;for(const el of d.querySelectorAll('span,button,div,small')){if(el.children.length||!el.textContent)continue;if(/^(?:pendiente de conexión|sin conexión|sincronización pendiente)$/i.test(el.textContent.trim())){const bubble=el.closest('.badge,.pill,.status,.sync-status,.syncStatus')||el;bubble.style.setProperty('display','none','important')}}}
+setInterval(suppressOfflinePreviewLabel,850);
 function show(view){
  if(!routes[view])return;
  current=view;
+ hideSettings();
  document.body.classList.toggle('sub',view!=='core');
  document.getElementById('back').classList.toggle('on',view!=='core');
  if(!f.getAttribute('src')?.startsWith(routes[view].split('?')[0]))f.src=routes[view];
@@ -78,12 +85,13 @@ f.addEventListener('load',()=>{
   const b=e.target.closest?.('button,a');if(!b)return;
   const id=b.id;
   let view='';
+  if(id==='editWedding'||id==='wsdAppSettings'||b.textContent.trim()==='Ajustes'){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();showSettings();return}
   if(['rsvpBtn','wsdOpenRsvpOps'].includes(id)||/^(?:Envíos y respuestas|Gestionar RSVP|Abrir envíos y respuestas)$/i.test(b.textContent.trim()))view='rsvp';
   if(['wsdEventsBtn','wsdEventsQuick'].includes(id))view='events';
   if(view){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();show(view)}
  },true);
 });
-window.addEventListener('message',e=>{if(e.origin===location.origin&&e.data?.type==='guest-demo-navigate')show(e.data.view)});
+window.addEventListener('message',e=>{if(e.origin!==location.origin)return;if(e.data?.type==='guest-demo-settings-back'){hideSettings();dispatchEvent(new Event('guests-prod-open'));return}if(e.data?.type==='guest-demo-theme'){dispatchEvent(new Event('guest-demo-theme-changed'));dispatchEvent(new Event('guests-prod-open'));return}if(e.data?.type==='guest-demo-navigate')show(e.data.view)});
 window.__GUEST_PREVIEW_START=()=>{show('core');dispatchEvent(new Event('guests-prod-open'))};
 })();
 </script>
@@ -112,5 +120,6 @@ window.__GUEST_PREVIEW_START=()=>{show('core');dispatchEvent(new Event('guests-p
 <script src="guest-visual-premium-v1.js"></script>
 <script src="guest-visual-hoy-invitados-v1.js"></script>
 <script src="guest-visual-tables-lists-v1.js"></script>
+<script src="guest-demo-theme-preview-v1.js"></script>
 <script>window.__GUEST_PREVIEW_START();</script>
 </body></html>
