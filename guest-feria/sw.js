@@ -1,6 +1,6 @@
 /* GUEST · Feria: todo se sirve desde la caché del dispositivo para funcionar sin conexión.
    La página descarga los archivos (precache.json) y este worker los entrega, también por trozos para los vídeos. */
-const CACHE = 'guest-feria-v2';
+const CACHE = 'guest-feria-v3';
 const SHELL = ['./', 'index.html', 'kiosk.css', 'kiosk.js', 'fonts/fonts.css', 'manifest.webmanifest', 'precache.json'];
 
 self.addEventListener('install', (event) => {

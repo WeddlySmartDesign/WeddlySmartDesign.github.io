@@ -311,7 +311,7 @@
   addEventListener('contextmenu', (e) => e.preventDefault());
 
   /* ---------- Sin conexión ---------- */
-  const CACHE = 'guest-feria-v2';
+  const CACHE = 'guest-feria-v3';
   const prep = $('#prep');
   const offline = { total: 0, done: 0, missing: [], running: false };
   const setStatus = (text) => { $('#staffStatus').textContent = text; };
