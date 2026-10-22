@@ -81,7 +81,7 @@ f.addEventListener('load',()=>{
  // Enrutamiento seguro de las funciones originales: sin abrir enlaces de clientes ni editores.
  if(d.documentElement.dataset.guestPreviewNavigation==='1')return;
  d.documentElement.dataset.guestPreviewNavigation='1';
- d.addEventListener('click',e=>{
+ f.contentWindow.addEventListener('click',e=>{
   const b=e.target.closest?.('button,a');if(!b)return;
   const id=b.id;
   let view='';
