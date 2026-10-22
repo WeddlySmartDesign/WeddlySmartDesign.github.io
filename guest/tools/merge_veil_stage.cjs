@@ -6,6 +6,7 @@
  * Never publish automatically; never modify ONE, Partner or STUDIO.
  */
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
+const {patchVeilUnlock}=require('./patch_veil_unlock_2026_10_22.cjs');
 const args=process.argv.slice(2);
 const arg=k=>{const i=args.indexOf(k);return i<0?null:args[i+1]};
 const source=arg('--source'),stage=arg('--stage');
@@ -59,13 +60,18 @@ const bridge=[
 ].join('\n')+'\n';
 html=html.replace(anchor,bridge+'<script id="guest-catalog-delivery-boot">(()=>{if(window.parent!==window)return;');
 if(!html.includes('window.GUEST_APPLY_CONFIG=function(config)'))throw Error('VEIL_BRIDGE_INVALID');
+// Portada bloqueada en móviles reales (22/10/2026): el arreglo validado por la propietaria va en la copia
+// derivada, nunca en el máster congelado. Si un anclaje no cuadra, falla antes de escribir nada.
+const unlock=patchVeilUnlock(html);
+if(!unlock.changed)throw Error('VEIL_UNLOCK_PATCH_NOT_APPLIED');
+html=unlock.html;
 const render={...reg,templates:{...reg.templates,'veil-light':{...reg.templates['veil-light'],mode:'iframe',src:'/'+sub+'/index.html',applyApi:'GUEST_APPLY_CONFIG'}}};
 const renderText=JSON.stringify(render,null,2)+'\n';
 const newReport={...report,designs:[
  {templateId:'veil-light',version:'5.3.3',status:'commercially-frozen',
   sourcePinKind:'pilot-verified-sha256',deployedHtmlSha256:sha(Buffer.from(html)),
   visualIncluded:true,commercialApproved:false},...(report.designs||[])
-],veilBridge:{testOnly:true,sourceFrozenMasterSha256:pilot.source_sha256,
+],veilBridge:{testOnly:true,unlockPatch:'patch_veil_unlock_2026_10_22',sourceFrozenMasterSha256:pilot.source_sha256,
  derivedHtmlSha256:sha(Buffer.from(html)),assets:media.length,remoteVerified:false}};
 if(new Set(newReport.designs.map(x=>x.templateId)).size!==newReport.designs.length)
   throw Error('DUPLICATE_DESIGN_IN_STAGE');
@@ -76,7 +82,7 @@ newReport.files.push(entry(sub+'/index.html',Buffer.from(html)));
 for(const m of media)newReport.files.push(entry(sub+'/media/'+m.name,m.bytes));
 const meta={schemaVersion:'guest-veil-common-iframe-stage-v1',
  status:'PREPRODUCTION_DO_NOT_SELL',originalMasterSha256:pilot.source_sha256,
- originalPilotHtmlSha256:pilot.output_html_sha256,derivedSha256:sha(Buffer.from(html)),
+ originalPilotHtmlSha256:pilot.output_html_sha256,unlockPatch:'patch_veil_unlock_2026_10_22',derivedSha256:sha(Buffer.from(html)),
  mediaCount:media.length,commercialApproved:false};
 newReport.files.push(entry(sub+'/bridge-manifest.json',Buffer.from(JSON.stringify(meta,null,2)+'\n')));
 // Inputs and integrity must pass before any stage write; failures never touch the visual SOURCE.

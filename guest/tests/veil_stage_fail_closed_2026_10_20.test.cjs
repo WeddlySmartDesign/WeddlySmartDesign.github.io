@@ -35,5 +35,14 @@ try{
   // Derived VEIL metadata must be covered by the same immutable file-integrity report.
   assert.match(programSource,/newReport\.files\.push\(entry\(sub\+'\/bridge-manifest\.json'/);
   assert.doesNotMatch(programSource,/https:\/\/api\.stripe\.com/);
+  // The cover-unlock fix is applied to the derived stage copy, fail-closed, never to the frozen master.
+  assert.match(programSource,/patchVeilUnlock\(html\)/);
+  assert.match(programSource,/VEIL_UNLOCK_PATCH_NOT_APPLIED/);
+  const {patchVeilUnlock,MARK}=require(path.join(root,'guest/tools/patch_veil_unlock_2026_10_22.cjs'));
+  assert.throws(()=>patchVeilUnlock('<html>no anchors</html>'),/VEIL_UNLOCK_ANCHOR_MISSING/);
+  const anchors="body.lock{overflow:hidden}\n entry.addEventListener('ended',()=>{entry.currentTime=CLEAN_VEIL_START;entry.play().catch(()=>{})});\n $('#openBtn').onclick=()=>{\n   setTimeout(()=>entry.play().catch(()=>{}),230);\n };";
+  const once=patchVeilUnlock(anchors);
+  assert(once.changed&&once.html.includes(MARK)&&once.html.includes('setTimeout(openNow,6500)'),'unlock patch applies to the known anchors');
+  assert.deepEqual(patchVeilUnlock(once.html),{html:once.html,changed:false},'unlock patch is idempotent');
   console.log('PASS: VEIL stage merge is fail-closed, no original changes, no sales, no partial write on invalid master');
 }finally{fs.rmSync(tmp,{recursive:true,force:true})}
