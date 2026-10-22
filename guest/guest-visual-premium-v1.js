@@ -2,6 +2,18 @@
 'use strict';
 if(window.__guestVisualPremiumV1)return;window.__guestVisualPremiumV1=true;
 const G=window.__GuestsProd;if(!G?.f)return;
+const THEMES={
+ nordic:{bg:'#F2EFE9',paper:'#FBF8F3',olive:'#525C43',line:'#E4DED2',soft:'#EEE8DF',muted:'#736F63'},
+ blush:{bg:'#F5EEEC',paper:'#FFF9F7',olive:'#825F5D',line:'#E9DAD6',soft:'#F5E9E7',muted:'#796461'},
+ sand:{bg:'#F1EAE1',paper:'#FCF8F2',olive:'#725A45',line:'#DED3C5',soft:'#F2E9DE',muted:'#756857'},
+ slate:{bg:'#EEF1F3',paper:'#F8FAFB',olive:'#4C5963',line:'#D8DEE2',soft:'#E9EEF1',muted:'#65737F'},
+ editorial:{bg:'#F0ECE8',paper:'#FBF8F5',olive:'#443833',line:'#DED6D0',soft:'#EFE8E4',muted:'#655A52'}
+};
+function applyPalette(d){
+ const key=localStorage.getItem('weddly_personal_theme_v51')||localStorage.getItem('weddly_personal_theme_v20')||'nordic',p=THEMES[key]||THEMES.nordic;
+ for(const [name,value] of Object.entries(p))d.documentElement.style.setProperty('--guest-'+name,value);
+ d.documentElement.dataset.guestTheme=key;
+}
 
 const CSS=`
 :root{
@@ -45,7 +57,7 @@ h3{line-height:1.18}
   transition:transform .14s ease,box-shadow .14s ease,background .14s ease
 }
 .btn:active{transform:scale(.985)}
-.btn:not(.soft):not(.line){background:var(--guest-ink)!important}
+.btn:not(.soft):not(.line){background:var(--guest-olive)!important}
 .btn.soft{background:var(--guest-soft)!important}
 .btn.line{border-color:var(--guest-line)!important}
 .field,.choice{min-height:50px!important;border-color:#D7D0C6!important}
@@ -128,6 +140,7 @@ function apply(){
   addFont(d);
   let s=d.getElementById('guestVisualPremiumV1');
   if(!s){s=d.createElement('style');s.id='guestVisualPremiumV1';s.textContent=CSS;d.head.appendChild(s)}
+  applyPalette(d);
   d.documentElement.dataset.guestVisualPremium='1';
   brand(d);
 }
