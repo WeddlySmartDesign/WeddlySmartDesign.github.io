@@ -15,6 +15,8 @@ for(const name of ['index.html','access.html','guest-settings.html','guests-v114
 }
 for(const name of core){assert.match(name,/^[a-z0-9][a-z0-9.-]*$/i,'unsafe cache filename');assert.ok(fs.existsSync(path.join(stage,'guest',name)),'PWA cached path missing from published stage: '+name)}
 assert.ok(!core.includes('guests-v116-production.html'),'retired frontend in PWA cache');
+assert.ok(sw.includes('cleanRoutes.has(url.pathname)')&&sw.includes('cleanRoutes.get(url.pathname)'),'Cloudflare extensionless HTML routes must resolve to precached .html files offline');
+assert.ok(sw.includes("cleanRoutes.set(ROOT.pathname,publicPath('index.html'))"),'offline canonical guest directory must point to authorized app shell');
 assert.ok(sw.includes('cacheKey(u)')&&sw.includes('url.pathname'),'PWA cache must strip all token/query strings');
 assert.ok(!sw.includes('cache.put(e.request'),'PWA must not key by private query');
 assert.ok(sw.includes("u.origin===ROOT.origin")&&sw.includes('staticFile.test'),'cross-origin API must never enter service worker cache');
