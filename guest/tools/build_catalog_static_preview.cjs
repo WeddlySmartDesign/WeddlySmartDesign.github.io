@@ -215,13 +215,18 @@ if(fullGuestPreview){
  const html=new Set(['index.html','access.html','guest-settings.html','guests.html','guests-v114-integrated.html',
   'guests-v081-visual-seating.html','guests-events-v3.html','guests-events.html',
   'guests-rsvp-operations-live.html','guests-rsvp-v116-single-live.html',
-  'event-invite-v2.html','event-invite.html','guests-rsvp-design-live.html','guests-rsvp-form.html']);
+  'event-invite-v2.html','event-invite.html','guests-rsvp-design-live.html','guests-rsvp-form.html',
+  'guests-rsvp-operations-v3.html','guests-rsvp-v114-single-flex.html','guests-rsvp-v105.html',
+  'guests-rsvp-public-clean.html','guests-rsvp-v115-wedding-flex-live.html',
+  'guests-rsvp-v105-mobile.html','guests-rsvp-signature-live.html','guests-rsvp-essential-live.html',
+  'guest.webmanifest']);
  const names=fs.readdirSync(path.join(root,'guest')).filter(n=>
   html.has(n) || /^(?:guest|guests)-[\w.-]+\.(?:js|css|svg|webmanifest)$/.test(n)
  ).sort();
  for(const must of ['index.html','access.html','guest-settings.html','guests-v114-integrated.html',
    'guests-v081-visual-seating.html','guests-rsvp-operations-live.html','guests-rsvp-v116-single-live.html',
-   'guests-events-v3.html','guest-sw.js'])
+   'guests-events-v3.html','guest-sw.js','guest.webmanifest','guests-rsvp-operations-v3.html',
+   'guests-rsvp-v114-single-flex.html'])
    if(!names.includes(must))throw Error('GUEST_PREVIEW_MISSING_REQUIRED:'+must);
  for(const n of names){const p='guest/'+n;if(!files.some(x=>x.name===p))files.push(write(p,read(p)))}
  const ready=new Set(files.map(x=>x.name));
