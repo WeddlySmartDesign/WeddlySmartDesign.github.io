@@ -44,7 +44,7 @@ async function coreFrame(page){
 }
 async function noOverflow(f,label){const x=await f.evaluate(()=>({sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth,bw:document.body.scrollWidth}));ok(x.sw<=x.cw+2&&x.bw<=x.cw+2,label+' overflow '+JSON.stringify(x))}
 async function run(){
- const browser=await chromium.launch({headless:true});
+ const browser=await chromium.launch({headless:true,...(process.env.GUEST_USE_SYSTEM_CHROME==='1'?{channel:'chrome',args:['--no-sandbox','--disable-dev-shm-usage']}: {})});
  const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
  const page=await ctx.newPage();await mock(page);
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
