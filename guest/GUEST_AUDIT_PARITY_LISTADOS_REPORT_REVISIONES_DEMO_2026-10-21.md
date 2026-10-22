@@ -45,3 +45,20 @@ Para no alterar una rama de producto ni hacer pasar pruebas antiguas, se creó l
 
 ## Política de continuidad
 No reconstruir ONE. No modificar producción ONE, STUDIO, Partner ni masters de las invitaciones. Para hacer capturas de características, usar únicamente la página nueva de captura con motor completo, con datos ficticios identificados fuera de la imagen comercial. No presentar ficticios como experiencias reales de clientes.
+
+## Incidencia visual — 22/10/2026 · Aviso de conexión y cambio de color en la PREVIEW
+
+La propietaria aporta captura de la PREVIEW de «Clara & Mateo» (20 invitados), con pastilla «Pendiente de conexión» y dificultad para cambiar la paleta de colores.
+
+**Diagnóstico:**
+- La PREVIEW aislada no carga `guests-production-sync.js` ni el backend real. No dispone de cuenta, licencia ni dos móviles sincronizados. Cualquier aviso de conexión en esta pantalla NO demuestra una caída del wifi/móvil ni indica el estado de producción; es impropio de la vista editorial.
+- La entrada anterior `guest-demo-one-parity-full.html` utilizaba capas UI del producto, cuyo botón `Ajustes` navega a `guest-settings.html` mediante `window.top.location.assign`. Eso abandonaba el contenedor local ficticio y no permitía un retorno fiable.
+- `guest-settings.html` guarda el estilo en `weddly_personal_theme_v51`, con las cinco opciones Nordic, Blush, Arena, Slate, Editorial. La capa `guest-visual-premium-v1.js`, aplicada después de `guests-production-ui.js`, contiene variables CSS con la paleta verde por defecto y reglas !important que pueden ocultar visualmente cambios de tema; requiere una corrección de coherencia en la interfaz real antes de certificar el cambio de estilo fuera de la PREVIEW.
+
+**Cambios realizados, exclusivamente en la rama `guest-demo-capturas-2026-10-21`:**
+- `guest/guest-demo-settings-real.html` deriva de los ajustes reales. Guarda el tema en almacenamiento local, envía un aviso seguro al contenedor y regresa a la misma PREVIEW. Se evita consultar acceso real y se muestra explícitamente que la sincronización está desactivada en la muestra.
+- `guest/guest-demo-one-parity-full.html`: abre Ajustes dentro de un marco superpuesto conservando el módulo original y sus 24 capas. Intercepta el clic al nivel de la ventana del iframe para evitar la navegación a la aplicación real; elimina únicamente cualquier pastilla local con el texto exacto de «Pendiente de conexión». Protege los nombres y el tema local ficticio.
+- `guest/guest-demo-theme-preview-v1.js`: aplica las cinco paletas aprobadas después de la capa premium, actualizando fondo, tarjetas, barra inferior, botones y acentos, sin alterar el producto comercial.
+- Análisis sintáctico de los nuevos scripts de PREVIEW superado, con las cinco opciones presentes. Cloudflare despliega por rama; comprobar `check-runs` del commit final antes de comunicar URL.
+
+**Límites:** no se han modificado `guest-independent` (salvo documentación), ONE, STUDIO, backend, licencias, ni producción. La ausencia de backend real en PREVIEW es deliberada y, por definición, no permite una prueba de sincronización. Publicación de Cloudflare y revisión estática no equivalen a verificar clics y visual de un móvil real. Antes de vender, corregir y probar coherencia de estilos en el runtime comercial aislado.
