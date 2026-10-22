@@ -1,0 +1,3303 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#f4efe8" name="theme-color"/>
+<meta content="noindex,nofollow,noarchive" name="robots"/>
+<title>Invitación de boda · Muestra</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{
+ --paper:#f8f4ee;--paper2:#eee4d7;--ink:#4b4037;--muted:#786a5e;--gold:#9a8168;
+ --dark:#27211e;--line:rgba(87,68,53,.17);
+ --serif:"Playfair Display",Georgia,serif;--sans:"Manrope",system-ui,sans-serif;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth;background:#e8dfd5}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.lock{overflow:hidden;touch-action:none;overscroll-behavior:none} html:has(body.lock){overflow:hidden}
+button,a{font:inherit;color:inherit} a{text-decoration:none} img,video{display:block}
+.invite{width:min(100%,560px);margin:auto;background:var(--paper);overflow:hidden;min-height:100vh;box-shadow:0 0 50px rgba(50,38,29,.08)}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.75,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.kicker{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:#8b7968;font-weight:600}
+h2{font-family:var(--serif);font-weight:500;letter-spacing:-.025em;margin:0}
+p{margin:0}
+.cta{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 20px;border-radius:999px;background:#6b5848;color:#fff;font-size:13px;font-weight:600;letter-spacing:.035em;border:1px solid #6b5848}
+.cta.alt{background:rgba(255,255,255,.54);color:#5b4b3e;border-color:rgba(89,70,54,.2);backdrop-filter:blur(12px)}
+
+/* CANVA OPENING + COVER — one continuous shot */
+.cover{height:100svh;min-height:720px;position:relative;background:#eee5da;overflow:hidden;color:#4c4036}
+.cover video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cover-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(250,247,242,.05) 0%,rgba(250,247,242,.02) 50%,rgba(43,33,26,.24) 100%);pointer-events:none}
+.start-layer{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 24px max(36px,env(safe-area-inset-bottom));transition:opacity .45s ease}
+.start-layer.hide{opacity:0;pointer-events:none}
+.open-btn{border:0;border-radius:999px;background:rgba(248,244,238,.9);color:#5a493c;min-height:52px;padding:0 24px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 12px 34px rgba(68,48,35,.14);backdrop-filter:blur(12px)}
+.cover-copy{position:absolute;z-index:3;left:0;right:0;bottom:max(42px,env(safe-area-inset-bottom));padding:0 28px;color:#fff;text-shadow:0 2px 18px rgba(34,25,19,.25);opacity:0;transform:translateY(12px);transition:opacity 1s ease,transform 1s ease}
+.cover.hero-ready .cover-copy{opacity:1;transform:none}
+.cover-top{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
+.cover h1{font-family:var(--serif);font-size:clamp(68px,19vw,100px);font-weight:500;line-height:.72;letter-spacing:-.04em;margin:0}
+.cover h1 span{display:block} .cover h1 em{display:block;font-size:.28em;font-weight:400;margin:7px 0 7px 42px}
+.cover h1 span:last-child{margin-left:34px}
+.cover-meta{display:flex;justify-content:space-between;gap:16px;margin-top:24px;padding-top:14px;border-top:1px solid rgba(255,255,255,.5);font-size:13px;letter-spacing:.055em}
+
+/* warm note + story */
+.welcome{padding:84px 26px 28px;background:radial-gradient(circle at 90% 4%,rgba(210,190,168,.2),transparent 30%),var(--paper)}
+.welcome h2{font-size:46px;line-height:.98;max-width:10ch}
+.welcome p{font-size:17px;line-height:1.75;color:#65574c;margin-top:22px;max-width:33ch}
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:34px;border-top:1px solid var(--line);padding-top:24px}
+.count div{text-align:center} .count strong{display:block;font-family:var(--serif);font-size:28px;font-weight:500} .count span{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#8a7867}
+.story{padding:70px 24px 26px;background:#f6f1ea}
+.story h2{font-size:42px;line-height:1.02;max-width:11ch}
+.story p{font-size:16px;line-height:1.72;color:#67594d;margin-top:18px}
+.story-photo{height:67svh;min-height:520px;margin:38px -24px 0;position:relative;overflow:hidden;background:url("media/8cbf5e4f6bcc8d3604b4.jpg") center/cover no-repeat}
+.story-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(247,242,235,.55),transparent 20%,transparent 66%,rgba(39,29,22,.3))}
+.story-photo blockquote{position:absolute;z-index:2;left:26px;right:26px;bottom:28px;margin:0;color:#fff;font-family:var(--serif);font-size:34px;line-height:1.08;text-shadow:0 2px 14px rgba(30,21,15,.28)}
+
+/* real venue */
+.venue{padding:70px 0 0;background:#eee4d8}
+.venue-head{padding:0 26px 28px} .venue-head h2{font-size:44px;line-height:.98;max-width:10ch} .venue-head p{font-size:16px;line-height:1.7;color:#6c5d50;margin-top:16px}
+.venue-photo{height:67svh;min-height:520px;background:url("media/9005f6f5268f72de1434.webp") center/cover no-repeat;position:relative}
+.venue-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(35,25,19,.05),rgba(35,25,19,.12) 50%,rgba(36,27,21,.58) 100%)}
+.venue-copy{position:absolute;z-index:2;left:20px;right:20px;bottom:20px;padding:24px;background:rgba(249,245,239,.9);border:1px solid rgba(255,255,255,.5);border-radius:26px;color:#594a3e;backdrop-filter:blur(14px)}
+.venue-copy h3{font-family:var(--serif);font-size:33px;font-weight:500;line-height:1;margin:0 0 10px}
+.venue-copy p{font-size:15px;line-height:1.65;color:#67584b}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}
+
+
+
+
+
+
+.venue-extra{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid rgba(91,72,56,.16);
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:14px;
+  color:#65564a;
+}
+.venue-extra .label{
+  font-size:10px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#8a7867;
+}
+.venue-extra .value{
+  font-family:var(--serif);
+  font-size:19px;
+  line-height:1;
+  color:#57483b;
+}
+
+/* agenda — one visual screen, compact, no extra descriptive copy */
+.agenda{padding:0;background:#241d19;color:#fff;overflow:hidden}
+.agenda-panel{position:relative;height:100svh;min-height:720px;overflow:hidden}
+.agenda-panel::before{content:"";position:absolute;inset:0;background:
+ linear-gradient(180deg,rgba(24,17,13,.18) 0%,rgba(24,17,13,.05) 32%,rgba(24,17,13,.28) 62%,rgba(24,17,13,.68) 100%),
+ url("media/4a6cdaa39045402cdf93.png") center/cover no-repeat;transform:scale(1.035)}
+.agenda-heading{position:absolute;z-index:2;left:24px;right:24px;top:34px;text-shadow:0 2px 15px rgba(22,15,11,.26)}
+.agenda-heading .kicker{color:rgba(255,255,255,.82)}
+.agenda-heading h2{font-family:var(--serif);font-size:40px;line-height:.98;font-weight:500;margin:7px 0 0;max-width:8ch}
+.agenda-list{position:absolute;z-index:2;left:24px;right:24px;bottom:max(34px,env(safe-area-inset-bottom));display:grid}
+.agenda-row{display:grid;grid-template-columns:96px 1fr;align-items:baseline;gap:14px;padding:15px 0;border-top:1px solid rgba(255,255,255,.36);opacity:0;transform:translateY(14px);transition:opacity .55s ease,transform .7s cubic-bezier(.2,.75,.2,1)}
+.agenda-row.in{opacity:1;transform:none}
+.agenda-row time{font-family:var(--serif);font-size:35px;line-height:.9;font-weight:500;letter-spacing:-.03em}
+.agenda-row strong{font-family:var(--serif);font-size:28px;line-height:1;font-weight:500}
+.agenda-note{position:absolute;z-index:2;right:20px;top:36px;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.68);writing-mode:vertical-rl}
+
+
+
+
+
+
+
+/* practical — V8.7 visual baseline, simplified and scalable */
+.practical{
+  position:relative;
+  background:#f6f1ea;
+  color:#594b3f;
+  overflow:hidden;
+  padding:0
+}
+.practical-bg-soft{
+  position:absolute;
+  inset:0;
+  background:url("media/48cd93e446620bfa5b73.png") center/cover no-repeat;
+  opacity:1
+}
+.practical-wash-soft{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    180deg,
+    rgba(250,247,242,.10) 0%,
+    rgba(250,247,242,.16) 48%,
+    rgba(250,247,242,.28) 100%
+  )
+}
+.practical-inner{
+  position:relative;
+  z-index:2;
+  min-height:100svh;
+  padding:58px 24px 62px;
+  display:flex;
+  flex-direction:column
+}
+.practical-heading{
+  max-width:300px;
+  margin:0 0 24px
+}
+.practical-heading .kicker{
+  color:#8b7866;
+  font-size:10px;
+  letter-spacing:.17em;
+  text-transform:uppercase
+}
+.practical-heading h2{
+  font-family:var(--serif);
+  font-size:34px;
+  line-height:1;
+  font-weight:500;
+  letter-spacing:-.02em;
+  margin:7px 0 0;
+  max-width:10ch;
+  color:#57483b
+}
+.practical-heading p{display:none}
+
+.practical-list{
+  flex:1;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:auto 1fr auto;
+  align-content:space-between;
+  gap:22px 24px;
+  margin:0;
+  padding:10px 0 0
+}
+.practical-item{
+  min-width:0;
+  padding:0
+}
+.practical-item::before{
+  content:"";
+  display:block;
+  width:28px;
+  height:1px;
+  background:rgba(91,72,56,.28);
+  margin:0 0 9px
+}
+.practical-item h3{
+  font-family:var(--serif);
+  font-size:29px;
+  line-height:.96;
+  font-weight:500;
+  margin:0 0 7px;
+  color:#57483b
+}
+.practical-item p{
+  font-size:12.6px;
+  line-height:1.5;
+  color:#625246;
+  margin:0;
+  max-width:24ch
+}
+.practical-link{
+  display:inline-block;
+  margin-top:8px;
+  padding-bottom:2px;
+  border-bottom:1px solid rgba(91,72,56,.34);
+  font-size:9.5px;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  font-weight:600;
+  color:#5c4b3e
+}
+
+/* 1 module */
+.practical-list.count-1{
+  grid-template-columns:1fr;
+  grid-template-rows:1fr;
+  place-items:center
+}
+.practical-list.count-1 .slot-1{
+  width:min(76%,300px);
+  text-align:center
+}
+.practical-list.count-1 .slot-1::before{margin-left:auto;margin-right:auto}
+
+/* 2 modules */
+.practical-list.count-2{
+  grid-template-rows:1fr;
+  align-items:center
+}
+.practical-list.count-2 .slot-2{text-align:right}
+.practical-list.count-2 .slot-2::before{margin-left:auto}
+
+/* 3 modules */
+.practical-list.count-3 .slot-3{
+  grid-column:1/-1;
+  align-self:center;
+  justify-self:center;
+  width:min(68%,300px);
+  text-align:center
+}
+.practical-list.count-3 .slot-3::before{margin-left:auto;margin-right:auto}
+
+/* 4 modules */
+.practical-list.count-4{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-rows:1fr 1fr;
+  align-items:center;
+  gap:30px 34px
+}
+.practical-list.count-4 .slot-1,
+.practical-list.count-4 .slot-3{justify-self:start}
+.practical-list.count-4 .slot-2,
+.practical-list.count-4 .slot-4{justify-self:end;text-align:right}
+.practical-list.count-4 .slot-2::before,
+.practical-list.count-4 .slot-4::before{margin-left:auto}
+
+/* 5 modules: 2 – 1 – 2 */
+.practical-list.count-5 .slot-1{grid-column:1;grid-row:1}
+.practical-list.count-5 .slot-2{grid-column:2;grid-row:1;text-align:right}
+.practical-list.count-5 .slot-2::before{margin-left:auto}
+.practical-list.count-5 .slot-3{
+  grid-column:1/-1;
+  grid-row:2;
+  align-self:center;
+  justify-self:center;
+  width:min(62%,290px);
+  text-align:center
+}
+.practical-list.count-5 .slot-3::before{margin-left:auto;margin-right:auto}
+.practical-list.count-5 .slot-3 h3{
+  font-size:34px;
+  font-style:italic
+}
+.practical-list.count-5 .slot-4{grid-column:1;grid-row:3}
+.practical-list.count-5 .slot-5{grid-column:2;grid-row:3;text-align:right}
+.practical-list.count-5 .slot-5::before{margin-left:auto}
+
+@media(max-width:420px){
+.venue-copy.split{padding:15px 16px 14px}
+.venue-split-row{grid-template-columns:67px minmax(0,1fr) auto;gap:8px 9px;padding:12px 0}
+.venue-split-row h3{font-size:21px}
+.venue-split-row p{font-size:11px}
+.venue-time{font-size:17px}
+
+  .practical-inner{padding-left:22px;padding-right:22px}
+  .practical-heading h2{font-size:32px}
+  .practical-list{gap:20px 20px}
+  .practical-item h3{font-size:27px}
+  .practical-item p{font-size:12.2px}
+}
+
+
+
+
+/* 2026-10-06 — fused Practical -> Gallery transition.
+   No standalone band edges: the bridge overlaps both sections and fades them together. */
+.practical{position:relative;overflow:visible}
+.practical-gallery-bridge{
+  height:176px;
+  margin-top:-92px;
+  margin-bottom:-86px;
+  position:relative;
+  z-index:2;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,
+      rgba(246,241,234,0) 0%,
+      rgba(246,241,234,.06) 9%,
+      rgba(236,227,217,.18) 20%,
+      rgba(218,206,193,.30) 31%,
+      rgba(182,165,149,.42) 44%,
+      rgba(132,114,100,.55) 58%,
+      rgba(88,72,62,.72) 74%,
+      rgba(52,43,37,.88) 88%,
+      #2b2420 100%
+    );
+}
+.practical-gallery-bridge::before,
+.practical-gallery-bridge::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;
+  pointer-events:none;
+}
+.practical-gallery-bridge::before{
+  top:0;
+  height:78px;
+  background:linear-gradient(180deg,rgba(246,241,234,0),rgba(246,241,234,.20) 45%,rgba(246,241,234,0));
+}
+.practical-gallery-bridge::after{
+  inset:0;
+  background:radial-gradient(120% 88% at 76% 0%,rgba(255,255,255,.14),transparent 58%);
+  mix-blend-mode:screen;
+  opacity:.55;
+}
+@media(max-width:420px){
+  .practical-gallery-bridge{
+    height:158px;
+    margin-top:-82px;
+    margin-bottom:-76px;
+  }
+}
+
+/* gallery — baseline preserved, with a deeper top fade so the handoff feels merged */
+.gallery{
+  position:relative;
+  z-index:1;
+  padding:112px 0 72px;
+  background:#2b2420;
+  color:#f8f3ed;
+  overflow:hidden
+}
+.gallery::before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;
+  height:120px;
+  pointer-events:none;
+  z-index:1;
+  background:linear-gradient(180deg,
+    rgba(43,36,32,0) 0%,
+    rgba(43,36,32,.16) 16%,
+    rgba(43,36,32,.42) 36%,
+    rgba(43,36,32,.72) 64%,
+    rgba(43,36,32,.92) 86%,
+    #2b2420 100%
+  );
+}
+.gallery-head,.gallery-track,.gallery-foot{position:relative;z-index:2}
+.gallery-head{padding:0 24px 24px}
+.gallery-head .kicker{color:#cfbfb1}
+.gallery-head h2{
+  font-family:var(--serif);
+  font-size:42px;
+  line-height:.98;
+  font-weight:500;
+  max-width:9ch;
+  margin:7px 0 0
+}
+.gallery-track{
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  padding:0 12px 8px;
+  scroll-padding-left:12px;
+  scrollbar-width:none;
+  overscroll-behavior-inline:contain;
+  align-items:center
+}
+.gallery-track::-webkit-scrollbar{display:none}
+
+.gallery-card{
+  position:relative;
+  flex:0 0 88%;
+  aspect-ratio:4/5;
+  scroll-snap-align:center;
+  overflow:hidden;
+  margin:0;
+  background:#171311;
+  box-shadow:0 20px 46px rgba(11,8,6,.22)
+}
+.gallery-card > img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:var(--focus-x,50%) var(--focus-y,50%)
+}
+
+
+
+.gallery-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:3;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)
+}
+.gallery-foot{
+  padding:16px 24px 0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between
+}
+.gallery-dots{display:flex;gap:7px}
+.gallery-dots i{
+  width:5px;height:5px;border-radius:50%;
+  background:#74665c;
+  transition:width .3s ease,background .3s ease
+}
+.gallery-dots i.active{
+  width:24px;
+  border-radius:999px;
+  background:#fff
+}
+.gallery-foot span{
+  font-size:10px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#bba99b
+}
+
+
+/* RSVP */
+.rsvp{padding:82px 26px 88px;background:linear-gradient(160deg,#eadfd2,#f8f4ed)}
+.rsvp h2{font-size:52px;line-height:.92;max-width:8ch} .rsvp p{font-size:16px;line-height:1.7;color:#65564a;margin-top:16px;max-width:32ch}
+.rsvp .cta{margin-top:24px;min-width:220px}
+
+/* close */
+.close{height:100svh;min-height:720px;position:relative;overflow:hidden;background:#c8b6a5;color:#fff}
+.close video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.close::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(38,28,22,.04),rgba(38,28,22,.62))}
+.close-copy{position:absolute;z-index:2;left:26px;right:26px;bottom:max(40px,env(safe-area-inset-bottom));text-shadow:0 2px 18px rgba(28,20,15,.3)}
+.close-copy .kicker{color:rgba(255,255,255,.86)} .close-copy h2{font-size:64px;line-height:.8;margin-top:10px} .close-copy p{font-size:15px;line-height:1.65;margin-top:18px;max-width:30ch}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}}
+
+/* ===== VEIL LIGHT TEMPLATE LAYER — preserves V8.10 visual master ===== */
+.is-hidden{display:none!important}
+.initial-patch{display:none;position:absolute;z-index:2;left:50%;top:52.8%;width:170px;height:96px;transform:translate(-50%,-50%);align-items:center;justify-content:center;font-family:var(--name-serif,var(--serif));font-size:42px;color:#998775;background:linear-gradient(90deg,rgba(232,222,209,.99),rgba(239,230,218,.99));box-shadow:0 0 22px rgba(232,222,209,.55);pointer-events:none;transition:opacity .45s ease}
+.cover.custom-initials .initial-patch{display:flex}
+.cover.custom-initials.initials-moving .initial-patch{animation:initialDoorMove 5.05s cubic-bezier(.48,.01,.24,1) forwards}
+@keyframes initialDoorMove{0%,18%{transform:translate(-50%,-50%);opacity:1}100%{transform:translate(-330%,-50%);opacity:.2}}
+.cover.long-names h1{font-size:clamp(54px,15.8vw,84px);line-height:.78}
+.cover.long-names h1 span:last-child{margin-left:18px}
+body.name-romantic{--name-serif:"Cormorant Garamond",Georgia,serif}
+body.name-contemporary{--name-serif:"Bodoni Moda","Times New Roman",serif}
+body.name-romantic .cover h1,body.name-romantic .close-copy h2,.cover.custom-initials .initial-patch{font-family:var(--name-serif,var(--serif))}
+body.name-contemporary .cover h1,body.name-contemporary .close-copy h2,body.name-contemporary .initial-patch{font-family:var(--name-serif,var(--serif))}
+.story-full-img{display:none}
+.story-photo[data-fit="full"]{height:auto;min-height:0;background:url("media/48cd93e446620bfa5b73.png") center/cover no-repeat;padding:18px 0 0}
+.story-photo[data-fit="full"] .story-full-img{display:block;width:100%;height:auto;object-fit:contain}
+.story-photo[data-fit="full"]::after{content:"";position:absolute;inset:auto 0 0;height:38%;background:linear-gradient(transparent,rgba(35,25,19,.35));pointer-events:none}
+.story.story-text-only{min-height:76svh;display:flex;flex-direction:column;justify-content:center;background:url("media/48cd93e446620bfa5b73.png") center/cover no-repeat;padding-top:90px;padding-bottom:90px}
+.story.story-text-only #storyText{font-family:var(--serif);font-size:26px;line-height:1.4;color:#584b41;max-width:18ch}
+.venue-photo.use-custom-photo{background-image:var(--venue-custom)!important;background-position:var(--venue-x,50%) var(--venue-y,50%)!important}
+.venue-copy.split{
+  padding:17px 19px 16px;
+  background:rgba(249,245,239,.94);
+  border:1px solid rgba(255,255,255,.64);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 18px 44px rgba(40,29,22,.12)
+}
+.venue-split-row{
+  display:grid;
+  grid-template-columns:75px minmax(0,1fr) auto;
+  gap:9px 10px;
+  align-items:center;
+  padding:13px 0;
+  border-top:1px solid rgba(91,72,56,.18)
+}
+.venue-split-row:first-child{border-top:0;padding-top:0}
+.venue-split-row:last-child{padding-bottom:0}
+.venue-kind{
+  font-size:9.5px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:#79685a;
+  font-weight:700
+}
+.venue-split-row h3{
+  font-size:23px;
+  margin:0 0 3px;
+  color:#514338
+}
+.venue-split-row p{
+  font-size:11.5px;
+  line-height:1.42;
+  margin:0;
+  color:#66574b
+}
+.venue-time{
+  font-family:var(--serif);
+  font-size:18px;
+  white-space:nowrap;
+  color:#58483c
+}
+.venue-row-actions{grid-column:2/4;display:flex;gap:13px;align-items:center}
+.venue-row-actions a{
+  font-size:9px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:#5c4b3e;
+  border-bottom:1px solid rgba(91,72,56,.42);
+  padding-bottom:2px
+}
+.venue-copy.split .venue-extra{
+  margin-top:12px;
+  padding-top:10px;
+  border-top-color:rgba(91,72,56,.18)
+}
+.agenda.count-1 .agenda-list{height:calc(100% - 178px);display:grid;place-items:center}
+.agenda.count-1 .agenda-row{width:min(82%,340px);grid-template-columns:1fr;text-align:center;border-top:0;padding:0}
+.agenda.count-1 .agenda-row time{font-size:28px}
+.agenda.count-1 .agenda-row strong{font-size:43px}
+.agenda.count-2 .agenda-list,.agenda.count-3 .agenda-list{display:grid;align-content:center}
+.agenda.count-2 .agenda-row{padding:22px 0}
+.agenda.count-3 .agenda-row{padding:17px 0}
+.agenda.count-5 .agenda-row{padding:9px 0}
+.agenda.count-5 .agenda-row time{font-size:20px}
+.agenda.count-5 .agenda-row strong{font-size:23px}
+.gallery.single .gallery-foot{display:none}
+.gallery.single .gallery-track{padding-right:12px}
+.gallery.single .gallery-card{flex-basis:calc(100% - 24px)}
+.gallery-card[data-fit="full"]{aspect-ratio:auto;height:auto;background:#2b2420;display:flex;align-items:center}
+.gallery-card[data-fit="full"]>img{width:100%;height:auto;object-fit:contain;object-position:center}
+.gallery-card[data-fit="full"]::before{content:"";position:absolute;inset:0;background:url("media/48cd93e446620bfa5b73.png") center/cover no-repeat;opacity:.08;z-index:0}
+.gallery-card[data-fit="full"]>img{position:relative;z-index:1}
+.template-sheet{position:fixed;inset:0;z-index:90;background:rgba(31,23,18,.46);display:none;align-items:flex-end;padding:14px}
+.template-sheet.open{display:flex}
+.template-sheet-card{width:min(100%,520px);margin:0 auto;background:#fbf8f3;border-radius:24px;padding:22px;box-shadow:0 20px 60px rgba(30,22,18,.24)}
+.template-sheet-card h3{font-family:var(--serif);font-size:29px;font-weight:500;margin:0 0 9px}
+.template-sheet-card pre{white-space:pre-wrap;font:14px/1.6 var(--sans);color:#65564a;margin:0 0 18px}
+.qa-badge{display:none;position:fixed;z-index:120;right:8px;top:8px;background:#18130f;color:white;border-radius:8px;padding:7px 9px;font:10px/1.35 monospace;max-width:60vw}
+body.qa .qa-badge{display:block}
+@media(max-width:420px){.venue-copy.split{padding:15px 16px}.venue-split-row{grid-template-columns:68px minmax(0,1fr) auto;gap:8px}.venue-split-row h3{font-size:21px}}
+
+
+/* ===== V4: true reusable opening + final scalability corrections ===== */
+.initial-overlay{
+  display:flex!important;position:absolute;z-index:3;left:0;top:0;width:auto;height:auto;
+  align-items:center;justify-content:center;pointer-events:none;white-space:nowrap;
+  font-family:var(--name-serif,var(--serif));font-weight:500;letter-spacing:-.055em;
+  color:rgba(139,117,98,.67);text-shadow:0 1px rgba(255,255,255,.34);
+  transform:translate(-50%,-50%);will-change:left,top,font-size,opacity;opacity:1;background:none!important;box-shadow:none!important;transition:opacity .16s linear
+}
+.cover.custom-initials .initial-overlay{display:flex!important}
+.cover.custom-initials.initials-moving .initial-overlay{animation:none!important}
+.cover.long-names h1{font-size:inherit;line-height:.72}
+.cover.long-names h1 span:last-child{margin-left:34px}
+.cover-top span:last-child{max-width:55%;text-align:right}
+.venue-copy.split{background:rgba(249,245,239,.955);padding:16px 18px 15px}
+.venue-split-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 13px;align-items:center;padding:12px 0;border-top:1px solid rgba(91,72,56,.16)}
+.venue-split-row:first-child{border-top:0;padding-top:0}
+.venue-split-row:last-of-type{padding-bottom:0}
+.venue-kind{grid-column:1;font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:#806e5f;font-weight:600}
+.venue-split-row>div:nth-child(2){grid-column:1;min-width:0}
+.venue-split-row h3{font-size:24px;line-height:1.02;margin:1px 0 4px;color:#57483b}
+.venue-split-row p{font-size:12.4px;line-height:1.42;color:#67584b;margin:0}
+.venue-time{grid-column:2;grid-row:1/3;font-family:var(--serif);font-size:19px;color:#675447;white-space:nowrap;align-self:center}
+.venue-row-actions{grid-column:1/3;display:flex;gap:14px;align-items:center;margin-top:4px}
+.venue-row-actions a{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid rgba(91,72,56,.34);padding-bottom:2px;color:#5d4c40}
+.venue-copy.split .venue-extra{margin-top:12px;padding-top:10px}
+@media(max-width:420px){.venue-copy.split{padding:15px 16px}.venue-split-row{grid-template-columns:minmax(0,1fr) auto;gap:3px 10px}.venue-split-row h3{font-size:22px}.venue-split-row p{font-size:11.8px}}
+
+/* V5 — photo-orientation and schema-compatible states */
+.story-photo[data-fit="full"][data-orientation="portrait"]{min-height:72svh;padding:24px;display:grid;place-items:center}
+.story-photo[data-fit="full"][data-orientation="portrait"] .story-full-img{width:auto;max-width:100%;max-height:76svh;object-fit:contain}
+.story-photo[data-fit="full"][data-orientation="square"]{padding:22px}
+.story-photo[data-fit="full"][data-orientation="square"] .story-full-img{width:100%;height:auto;object-fit:contain}
+.gallery-card[data-fit="full"][data-orientation="portrait"]{height:72svh;min-height:520px;padding:0 8px}
+.gallery-card[data-fit="full"][data-orientation="portrait"]>img{width:auto;max-width:100%;height:100%;object-fit:contain;margin:auto}
+.gallery-card[data-fit="full"][data-orientation="square"]{aspect-ratio:1/1}
+.gallery-card[data-fit="full"][data-orientation="square"]>img{width:100%;height:100%;object-fit:contain}
+
+/* V6 robustness only — no visual redesign */
+#cover h1{max-width:100%;overflow:visible}
+.practical.is-hidden,.gallery.is-hidden,.story.is-hidden,.agenda.is-hidden,.venue.is-hidden{display:none!important}
+
+
+/* ===== V9 COHESION PASS — premium continuity, no redesign of protected master ===== */
+
+/* Important copy is readable even during fast scroll; motion remains subtle. */
+.welcome .reveal,
+.story .reveal,
+.venue .reveal,
+.practical .reveal,
+.gallery .reveal,
+.rsvp .reveal {
+  opacity:.82;
+  transform:translateY(8px);
+  transition:opacity .58s ease,transform .68s cubic-bezier(.2,.75,.2,1)
+}
+.welcome .reveal.in,
+.story .reveal.in,
+.venue .reveal.in,
+.practical .reveal.in,
+.gallery .reveal.in,
+.rsvp .reveal.in {
+  opacity:1;
+  transform:none
+}
+
+/* QUÉ ILUSIÓN — becomes an emotional transition, not a plain web block. */
+.welcome {
+  position:relative;
+  overflow:hidden;
+  min-height:72svh;
+  display:flex;
+  align-items:center;
+  padding:72px 26px 56px;
+  background:#f5eee6
+}
+.welcome::before {
+  content:"";
+  position:absolute;
+  inset:-10% -18% -14% 20%;
+  background:url("media/48cd93e446620bfa5b73.png") center/cover no-repeat;
+  opacity:.34;
+  transform:scale(1.08);
+  animation:welcomeVeilDrift 15s ease-in-out infinite alternate;
+  pointer-events:none
+}
+.welcome::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 16% 18%,rgba(255,255,255,.88),transparent 30%),
+    linear-gradient(180deg,rgba(250,247,242,.26),rgba(250,247,242,.04) 55%,rgba(246,241,234,.74));
+  pointer-events:none
+}
+.welcome>.reveal{position:relative;z-index:2;width:100%}
+.welcome h2 {
+  font-size:50px;
+  line-height:.96;
+  max-width:9.5ch;
+  text-wrap:balance
+}
+.welcome p {
+  font-size:16.5px;
+  line-height:1.72;
+  color:#625449;
+  margin-top:20px;
+  max-width:31ch
+}
+.count {
+  position:relative;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:0;
+  margin-top:30px;
+  padding-top:20px;
+  border-top:0
+}
+.count::before {
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(91,72,56,.28) 14%,rgba(91,72,56,.28) 86%,transparent)
+}
+.count div{position:relative;padding:0 4px}
+.count div+div::before {
+  content:"";
+  position:absolute;
+  left:0;
+  top:7px;
+  bottom:6px;
+  width:1px;
+  background:rgba(91,72,56,.12)
+}
+.count strong {
+  font-size:32px;
+  color:#58493e;
+  letter-spacing:-.02em
+}
+.count span{font-size:9px;color:#817164}
+@keyframes welcomeVeilDrift {
+  from{transform:scale(1.08) translate3d(0,0,0)}
+  to{transform:scale(1.12) translate3d(-2.2%,1.2%,0)}
+}
+
+/* STORY — faster route to the photograph + zero white seam before venue. */
+#story:not(.story-text-only) {
+  padding-top:58px;
+  padding-bottom:0
+}
+#story:not(.story-text-only) .story-photo {
+  margin-top:30px;
+  margin-bottom:0
+}
+#story.story-text-only{padding-bottom:84px}
+#story h2{max-width:10.5ch}
+#story p{max-width:35ch}
+
+/* STORY -> VENUE — direct tonal handoff, no blank band. */
+#venue {
+  padding-top:0;
+  margin-top:0;
+  position:relative
+}
+#venue .venue-head {
+  padding-top:58px;
+  padding-bottom:24px;
+  background:linear-gradient(180deg,#eee4d8 0%,#eee4d8 74%,rgba(238,228,216,.98) 100%)
+}
+#venue .venue-head p{max-width:34ch}
+
+/* PRACTICAL — keep the approved no-card composition, raise depth/legibility. */
+.practical-bg-soft {
+  opacity:.96;
+  transform:scale(1.025);
+  animation:practicalVeilDrift 18s ease-in-out infinite alternate
+}
+.practical-wash-soft {
+  background:linear-gradient(
+    180deg,
+    rgba(250,247,242,.04) 0%,
+    rgba(250,247,242,.08) 48%,
+    rgba(250,247,242,.16) 100%
+  )
+}
+.practical-inner{padding-top:62px;padding-bottom:66px}
+.practical-heading{margin-bottom:28px}
+.practical-heading .kicker{font-size:11px;color:#796859}
+.practical-heading h2 {
+  font-size:38px;
+  line-height:.98;
+  max-width:9ch;
+  color:#514237
+}
+.practical-list{gap:30px 30px;padding-top:12px}
+.practical-item::before {
+  width:34px;
+  background:rgba(91,72,56,.38);
+  margin-bottom:11px
+}
+.practical-item h3 {
+  font-size:31px;
+  line-height:.98;
+  color:#4f4136;
+  margin-bottom:8px
+}
+.practical-item p {
+  font-size:14px;
+  line-height:1.55;
+  color:#594b40;
+  max-width:23ch
+}
+.practical-link {
+  margin-top:10px;
+  font-size:10.5px;
+  color:#514237;
+  border-bottom-color:rgba(81,66,55,.46)
+}
+@keyframes practicalVeilDrift {
+  from{transform:scale(1.025) translate3d(0,0,0)}
+  to{transform:scale(1.06) translate3d(-1.8%,1%,0)}
+}
+
+/* GALLERY — heading is readable immediately, not only after reveal fires. */
+.gallery-head.reveal {
+  opacity:.92;
+  transform:translateY(5px)
+}
+.gallery-head.reveal.in{opacity:1;transform:none}
+.gallery-head h2 {
+  color:#fff;
+  text-shadow:0 2px 18px rgba(0,0,0,.28)
+}
+.gallery-head .kicker{color:#d8c9bd}
+
+/* RSVP — same VEIL LIGHT material language, still quieter than cover/close. */
+.rsvp {
+  position:relative;
+  overflow:hidden;
+  min-height:72svh;
+  display:flex;
+  align-items:center;
+  padding:78px 26px 82px;
+  background:#eee4da
+}
+.rsvp::before {
+  content:"";
+  position:absolute;
+  inset:-12% -18% -12% 14%;
+  background:url("media/48cd93e446620bfa5b73.png") center/cover no-repeat;
+  opacity:.43;
+  transform:scale(1.08);
+  animation:rsvpVeilDrift 16s ease-in-out infinite alternate;
+  pointer-events:none
+}
+.rsvp::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 15% 12%,rgba(255,255,255,.78),transparent 27%),
+    linear-gradient(180deg,rgba(248,244,238,.12),rgba(238,228,218,.44));
+  pointer-events:none
+}
+.rsvp>.reveal{position:relative;z-index:2;width:100%}
+.rsvp .kicker{color:#79695d}
+.rsvp h2 {
+  font-size:56px;
+  line-height:.9;
+  max-width:7.5ch;
+  color:#504238
+}
+.rsvp p {
+  font-size:16.5px;
+  line-height:1.68;
+  color:#5d5046;
+  max-width:30ch
+}
+.rsvp .cta {
+  min-width:230px;
+  min-height:54px;
+  margin-top:28px;
+  background:#675345;
+  border-color:#675345;
+  box-shadow:0 14px 34px rgba(74,55,43,.16)
+}
+@keyframes rsvpVeilDrift {
+  from{transform:scale(1.08) translate3d(0,0,0)}
+  to{transform:scale(1.12) translate3d(2%,-1%,0)}
+}
+
+/* Narrow mobile: preserve readability without creating a different design. */
+@media(max-width:420px) {
+  .welcome{padding-left:23px;padding-right:23px;min-height:70svh}
+  .welcome h2{font-size:45px}
+  .count strong{font-size:29px}
+  .practical-inner{padding-left:22px;padding-right:22px}
+  .practical-heading h2{font-size:36px}
+  .practical-item h3{font-size:29px}
+  .practical-item p{font-size:13.5px}
+  .rsvp{padding-left:23px;padding-right:23px}
+  .rsvp h2{font-size:51px}
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .welcome::before,.practical-bg-soft,.rsvp::before{animation:none!important}
+}
+
+
+/* ===== V10 GLOBAL RHYTHM PASS — preserve master, remove changes of gear ===== */
+
+/* 1) QUÉ ILUSIÓN becomes a short interlude, not a full editorial page. */
+#welcome {
+  min-height:54svh;
+  padding:46px 26px 42px;
+  align-items:center
+}
+#welcome::before {
+  inset:-18% -20% -22% 24%;
+  opacity:.30
+}
+#welcome h2 {
+  font-size:44px;
+  max-width:9ch
+}
+#welcome p {
+  margin-top:16px;
+  max-width:30ch;
+  font-size:16px
+}
+#welcome .count {
+  margin-top:23px;
+  padding-top:16px
+}
+#welcome .count strong{font-size:29px}
+
+/* 2) Story flows directly into the place: no second beige editorial stop. */
+#story:not(.story-text-only) {
+  padding-bottom:0
+}
+#story:not(.story-text-only) .story-photo {
+  margin-bottom:0
+}
+#venue {
+  position:relative;
+  padding:0;
+  margin:0;
+  background:#2f2925;
+  overflow:hidden
+}
+#venue .venue-photo {
+  height:79svh;
+  min-height:610px;
+  position:relative;
+  margin:0
+}
+#venue .venue-photo::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:
+    linear-gradient(180deg,rgba(30,23,19,.56) 0%,rgba(30,23,19,.32) 24%,rgba(30,23,19,.04) 48%,transparent 62%);
+  pointer-events:none
+}
+#venue .venue-photo::after {
+  z-index:1;
+  background:linear-gradient(180deg,rgba(35,25,19,.02) 42%,rgba(35,25,19,.14) 65%,rgba(36,27,21,.62) 100%)
+}
+#venue .venue-head {
+  position:absolute;
+  z-index:4;
+  top:0;
+  left:0;
+  right:0;
+  padding:54px 26px 112px;
+  background:none;
+  color:#fff;
+  pointer-events:none
+}
+#venue .venue-head.reveal {
+  opacity:.96;
+  transform:translateY(4px)
+}
+#venue .venue-head.reveal.in{opacity:1;transform:none}
+#venue .venue-head .kicker {
+  color:rgba(255,255,255,.82);
+  text-shadow:0 2px 12px rgba(20,14,11,.38)
+}
+#venue .venue-head h2 {
+  color:#fff;
+  font-size:42px;
+  max-width:9.5ch;
+  text-shadow:0 3px 20px rgba(20,14,11,.42)
+}
+#venue .venue-head p {
+  color:rgba(255,255,255,.92);
+  font-size:15px;
+  line-height:1.56;
+  margin-top:11px;
+  max-width:29ch;
+  text-shadow:0 2px 14px rgba(20,14,11,.40)
+}
+#venue .venue-copy {
+  z-index:4
+}
+
+/* 3) Global mobile legibility floor for functional content. */
+.venue-copy p,
+.venue-split-row p {
+  font-size:13.5px!important;
+  line-height:1.5!important
+}
+.venue-kind {
+  font-size:10.5px!important
+}
+.venue .actions .cta,
+.venue-row-actions a {
+  font-size:11.5px!important;
+  line-height:1.35;
+  padding-top:5px;
+  padding-bottom:5px
+}
+.venue-extra .label {
+  font-size:10.5px!important
+}
+.venue-extra .value {
+  font-size:18px!important
+}
+.practical-item p {
+  font-size:14.5px;
+  line-height:1.58
+}
+.practical-link {
+  font-size:12px;
+  min-height:34px;
+  display:inline-flex;
+  align-items:center
+}
+button.practical-link{
+  appearance:none;
+  -webkit-appearance:none;
+  font-family:inherit;
+  width:auto;
+  min-width:0;
+  height:auto;
+  padding:0 0 2px;
+  margin-top:10px;
+  background:transparent;
+  border:0;
+  border-bottom:1px solid rgba(81,66,55,.46);
+  border-radius:0;
+  box-shadow:none;
+  cursor:pointer;
+  line-height:1.35;
+}
+.gallery-foot span {
+  font-size:11.5px
+}
+.close-copy p {
+  font-size:15.5px
+}
+
+/* 5) RSVP and closing become one last act. Dark gallery -> light veil -> closing veil. */
+#rsvp {
+  min-height:68svh;
+  padding:104px 26px 106px;
+  background:
+    linear-gradient(
+      180deg,
+      #332a25 0%,
+      #a99a8d 8%,
+      #e9ded3 18%,
+      #eee4da 72%,
+      #c8b6a5 100%
+    )
+}
+#rsvp::before {
+  inset:4% -20% -7% 8%;
+  opacity:.48;
+  background:url("media/48cd93e446620bfa5b73.png") center/cover no-repeat
+}
+#rsvp::after {
+  background:
+    radial-gradient(circle at 16% 27%,rgba(255,255,255,.76),transparent 30%),
+    linear-gradient(180deg,rgba(238,228,218,0) 0%,rgba(238,228,218,.08) 48%,rgba(200,182,165,.26) 100%)
+}
+#rsvp>.reveal {
+  padding-top:12px
+}
+#rsvp h2 {
+  font-size:54px
+}
+#rsvp .cta {
+  min-height:56px;
+  font-size:12.5px;
+  letter-spacing:.055em
+}
+
+/* The close begins in the same warm material family as RSVP. */
+#close {
+  margin-top:-1px
+}
+
+/* Desktop keeps the same narrative rhythm, with slightly more air. */
+@media(min-width:800px) {
+  #welcome{min-height:52svh;padding-top:58px;padding-bottom:50px}
+  #venue .venue-head{padding-left:42px;padding-right:42px}
+  #rsvp{min-height:64svh;padding-left:42px;padding-right:42px}
+}
+
+@media(max-width:420px) {
+  #welcome{min-height:52svh;padding:42px 23px 38px}
+  #welcome h2{font-size:41px}
+  #venue .venue-photo{height:78svh;min-height:590px}
+  #venue .venue-head{padding:46px 23px 105px}
+  #venue .venue-head h2{font-size:39px}
+  #venue .venue-head p{font-size:14.5px}
+  #rsvp{min-height:66svh;padding:98px 23px 96px}
+  #rsvp h2{font-size:50px}
+}
+
+
+/* ===== V10.1 RHYTHM FINISH — bounded correction, no redesign ===== */
+
+/* Keep horizontal clipping without creating a sticky containing block. */
+.invite{overflow:clip}
+
+/* Counter -> Story: keep the V8.10 composition but bring the first photograph forward. */
+#welcome{
+  padding-bottom:30px;
+}
+#story:not(.story-text-only){
+  padding-top:46px;
+}
+#story:not(.story-text-only) p{
+  margin-top:15px;
+  line-height:1.64;
+}
+#story:not(.story-text-only) .story-photo{
+  margin-top:22px;
+}
+
+/* Gallery -> RSVP -> closing is one continuous final act.
+   The approved closing video stays viewport-sized and sticky, so its crop/motion
+   is preserved while it is already visible behind the RSVP. */
+.final-act{
+  position:relative;
+  overflow:clip;
+  background:#c8b6a5;
+}
+.final-act-video{
+  position:sticky;
+  top:0;
+  z-index:0;
+  width:100%;
+  height:100svh;
+  min-height:720px;
+  object-fit:cover;
+  display:block;
+  margin-bottom:-100svh;
+  pointer-events:none;
+}
+#rsvp,
+#close{
+  position:relative;
+  z-index:1;
+}
+#rsvp{
+  min-height:0;
+  align-items:flex-start;
+  padding:82px 26px 50px;
+  background:transparent;
+  overflow:visible;
+}
+#rsvp::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  opacity:1;
+  transform:none;
+  animation:none;
+  background:
+    linear-gradient(
+      180deg,
+      #2b2420 0%,
+      rgba(43,36,32,.88) 3%,
+      rgba(103,87,74,.48) 12%,
+      rgba(238,228,218,.62) 28%,
+      rgba(238,228,218,.50) 72%,
+      rgba(200,182,165,.14) 100%
+    );
+  pointer-events:none;
+}
+#rsvp::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 14% 38%,rgba(255,255,255,.70),transparent 34%),
+    linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(248,244,238,.08) 68%,rgba(200,182,165,.05) 100%);
+  pointer-events:none;
+}
+#rsvp>.reveal{
+  z-index:2;
+  padding-top:0;
+}
+#rsvp .kicker{color:#746256}
+#rsvp h2{color:#4e4036}
+#rsvp p{color:#5a4c42}
+#rsvp .cta{
+  margin-top:25px;
+}
+#close{
+  margin-top:0;
+  background:transparent;
+}
+#close::before{
+  content:"";
+  position:absolute;
+  z-index:1;
+  left:0;
+  right:0;
+  top:0;
+  height:34%;
+  background:linear-gradient(180deg,rgba(200,182,165,.19) 0%,rgba(200,182,165,.08) 42%,rgba(200,182,165,0) 100%);
+  pointer-events:none;
+}
+#close::after{
+  z-index:1;
+  background:linear-gradient(180deg,rgba(38,28,22,.02),rgba(38,28,22,.62));
+}
+#close .close-copy{z-index:2}
+
+/* No horizontal seam can appear between RSVP and closing. */
+#rsvp + #close{
+  border-top:0;
+}
+
+@media(max-width:420px){
+  #welcome{min-height:50svh;padding-bottom:24px}
+  #story:not(.story-text-only){padding-top:40px}
+  #story:not(.story-text-only) p{margin-top:14px;line-height:1.62}
+  #story:not(.story-text-only) .story-photo{margin-top:20px}
+  #rsvp{padding:78px 23px 44px}
+}
+
+
+/* V10.1 final-act seam lock: one continuous tonal veil over RSVP + closing. */
+.final-act::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 14% 19%,rgba(255,255,255,.58),transparent 24%),
+    linear-gradient(
+      180deg,
+      #2b2420 0%,
+      rgba(43,36,32,.90) 2.5%,
+      rgba(108,91,77,.46) 8.5%,
+      rgba(238,228,218,.60) 16%,
+      rgba(238,228,218,.48) 31%,
+      rgba(210,194,179,.22) 39%,
+      rgba(92,73,61,.10) 52%,
+      rgba(38,28,22,.26) 72%,
+      rgba(38,28,22,.66) 100%
+    );
+}
+.final-act > #rsvp,
+.final-act > #close{z-index:2}
+.final-act > #rsvp::before,
+.final-act > #rsvp::after,
+.final-act > #close::before,
+.final-act > #close::after{
+  content:none !important;
+  background:none !important;
+}
+#rsvp>.reveal,#close .close-copy{position:relative;z-index:3}
+
+@media(prefers-reduced-motion:reduce){
+  .final-act-video{position:relative;margin-bottom:-100svh}
+}
+
+
+
+/* ===== V10.2 HOLISTIC UNITY — integrate venue + repair close-copy timing ===== */
+
+/* Venue remains photo-led, but now speaks the same material language as VEIL LIGHT.
+   The venue photo is toned into the warm neutral family and the UI-like floating card
+   becomes an editorial lower-third rather than a separate component. */
+#venue .venue-photo{
+  isolation:isolate;
+  overflow:hidden;
+  background-color:transparent;
+  background-blend-mode:normal;
+}
+#venue .venue-photo::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(35,27,23,.48) 0%,rgba(48,37,31,.24) 25%,rgba(82,66,55,.05) 48%,rgba(238,228,216,.04) 68%,rgba(238,228,216,.14) 100%),
+    linear-gradient(118deg,transparent 0 40%,rgba(247,241,235,.04) 49%,rgba(247,241,235,.08) 55%,transparent 66%);
+}
+#venue .venue-photo::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,0) 48%,rgba(222,208,194,.03) 64%,rgba(229,217,205,.10) 84%,rgba(238,228,216,.22) 100%),
+    radial-gradient(ellipse at 88% 44%,rgba(246,239,231,.07),transparent 34%);
+}
+#venue .venue-head{z-index:4}
+#venue .venue-copy{
+  z-index:5;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:22px 24px 24px;
+  border:0;
+  border-top:1px solid rgba(255,255,255,.48);
+  border-radius:0;
+  background:rgba(241,232,222,.88);
+  -webkit-backdrop-filter:blur(11px) saturate(.88);
+  backdrop-filter:blur(11px) saturate(.88);
+  box-shadow:none;
+}
+#venue .venue-copy.split{
+  padding:18px 22px 20px;
+  border:0;
+  border-top:1px solid rgba(255,255,255,.48);
+  border-radius:0;
+  background:rgba(241,232,222,.90);
+  box-shadow:none;
+}
+#venue .venue-extra{border-top-color:rgba(91,72,56,.14)}
+
+/* Closing copy must belong to the closing act, not overlap the RSVP copy.
+   Keep the shared moving veil behind both; delay only the closing typography. */
+#close .close-copy{
+  position:absolute!important;
+  z-index:3;
+  left:26px;
+  right:26px;
+  top:auto!important;
+  bottom:max(40px,env(safe-area-inset-bottom))!important;
+}
+
+@media(max-width:420px){
+  #venue .venue-copy{padding:20px 22px 22px}
+  #venue .venue-copy.split{padding:17px 20px 19px}
+}
+
+
+/* Reuse VEIL LIGHT's own veil material over the venue photograph: same world, new image. */
+#venue .venue-veil{
+  position:absolute;
+  inset:-2%;
+  z-index:1;
+  opacity:.24!important;
+  pointer-events:none;
+  transform:scale(1.035);
+  animation:practicalVeilDrift 22s ease-in-out infinite alternate;
+  mix-blend-mode:normal;
+}
+#venue .venue-photo::before{z-index:2}
+#venue .venue-photo::after{z-index:3}
+#venue .venue-head{z-index:5}
+#venue .venue-copy{z-index:6}
+
+
+/* ===== V10.3 SCALABLE FLOW FINISH — continuity + 1/2 location parity + zero-scroll close ===== */
+
+/* Story -> venue is a material dissolve, not a hard template cut.
+   The bridge exists only when Story actually ends in photography. */
+#venue{
+  overflow:visible;
+  isolation:isolate;
+}
+#venue .venue-bridge{
+  display:none;
+  position:absolute;
+  z-index:8;
+  top:-82px;
+  left:-8%;
+  right:-8%;
+  height:164px;
+  inset:auto -8% auto -8%;
+  opacity:.48;
+  pointer-events:none;
+  transform:rotate(-2.2deg) scale(1.04);
+  background-position:52% 42%;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.22) 16%,#000 42%,rgba(0,0,0,.72) 66%,transparent 100%);
+  mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.22) 16%,#000 42%,rgba(0,0,0,.72) 66%,transparent 100%);
+  filter:saturate(.78) brightness(1.08);
+}
+#venue.from-story-photo .venue-bridge{display:block}
+#venue .venue-photo{overflow:hidden}
+
+/* One and two locations use the same edge-to-edge lower-third grammar.
+   Split mode is content expansion, never a second card system. */
+#venue .venue-copy,
+#venue .venue-copy.split{
+  left:0;
+  right:0;
+  bottom:0;
+  border-radius:0;
+  box-shadow:none;
+}
+#venue .venue-copy.split{
+  padding-top:16px;
+  padding-bottom:18px;
+}
+#venue .venue-copy.split .venue-split-row{
+  padding:10px 0;
+}
+#venue .venue-copy.split .venue-split-row + .venue-split-row{
+  border-top:1px solid rgba(91,72,56,.14);
+}
+#venue .venue-copy.split .venue-extra{
+  margin-top:8px;
+  padding-top:9px;
+}
+@media(max-width:420px){
+  #venue .venue-copy.split .venue-split-row{padding:9px 0}
+  #venue .venue-copy.split .venue-split-row h3{font-size:21px}
+}
+
+/* ===== V10.4 VENUE REDESIGN — rebuild the location act as one coherent composition ===== */
+#venue{
+  padding:88px 0 0;
+  background:linear-gradient(180deg,#efe7dd 0%,#e9ded2 34%,#e9ded2 100%);
+  isolation:isolate;
+  overflow:hidden;
+}
+#venue.from-story-photo .venue-bridge,
+#venue .venue-bridge{display:none!important}
+#venue .venue-head{
+  position:relative;
+  z-index:4;
+  padding:0 26px 28px;
+}
+#venue .venue-head .kicker{
+  font-size:10px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:#8a7869;
+  margin-bottom:10px;
+}
+#venue .venue-head h2{
+  font-size:38px;
+  line-height:.94;
+  letter-spacing:-.03em;
+  max-width:6.4ch;
+  color:#56473a;
+  margin:0;
+}
+#venue .venue-head p{
+  margin-top:14px;
+  max-width:30ch;
+  font-size:15px;
+  line-height:1.62;
+  color:#6f6054;
+}
+#venue .venue-photo{
+  height:74svh;
+  min-height:560px;
+  margin:0 14px;
+  border-radius:28px 28px 0 0;
+  overflow:hidden;
+  background-position:center center;
+  box-shadow:0 24px 60px rgba(60,44,33,.08);
+}
+#venue .venue-photo::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,rgba(248,242,235,.14) 0%,rgba(248,242,235,.08) 26%,rgba(40,28,20,.18) 56%,rgba(37,27,20,.58) 100%),
+    radial-gradient(circle at 24% 12%,rgba(255,245,233,.32),transparent 36%);
+  z-index:1;
+}
+#venue .venue-photo::after{
+  content:"";
+  position:absolute;
+  left:0;right:0;bottom:0;height:52%;
+  background:linear-gradient(180deg,rgba(36,27,20,0) 0%,rgba(36,27,20,.14) 24%,rgba(32,23,18,.74) 100%);
+  z-index:2;
+}
+#venue .venue-veil{
+  inset:auto -10% -4% -10%;
+  height:48%;
+  opacity:.28;
+  filter:blur(.2px) saturate(.9);
+  transform:rotate(-2deg) scale(1.08);
+  z-index:3;
+  background-position:54% 56%;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.12) 10%,rgba(0,0,0,.82) 52%,#000 100%);
+  mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.12) 10%,rgba(0,0,0,.82) 52%,#000 100%);
+}
+#venue .venue-copy,
+#venue .venue-copy.split{
+  position:absolute;
+  z-index:5;
+  left:0;right:0;bottom:0;
+  padding:22px 22px 20px;
+  border-radius:0;
+  background:linear-gradient(180deg,rgba(244,237,229,.88) 0%,rgba(244,237,229,.96) 30%,rgba(241,233,223,.985) 100%);
+  border-top:1px solid rgba(255,255,255,.36);
+  box-shadow:none;
+  backdrop-filter:blur(10px);
+  color:#5d4d40;
+}
+#venue .venue-copy h3{
+  font-family:var(--serif);
+  font-size:34px;
+  font-weight:500;
+  line-height:.98;
+  letter-spacing:-.03em;
+  margin:0 0 10px;
+  color:#55463a;
+}
+#venue .venue-copy p,
+#venue .venue-split-row p{
+  font-size:14px;
+  line-height:1.55;
+  color:#6b5d50;
+}
+#venue .venue-meta{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:10px;
+}
+#venue .venue-date{
+  font-size:14px;
+  line-height:1.45;
+  color:#6f6054;
+}
+#venue .venue-date strong{
+  display:block;
+  font-size:15px;
+  font-weight:600;
+  color:#5f5043;
+}
+#venue .venue-actions,
+#venue .actions,
+#venue .venue-row-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 16px;
+  align-items:center;
+  margin-top:16px;
+}
+#venue .venue-actions a,
+#venue .actions .cta,
+#venue .venue-row-actions a{
+  font-size:10px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  padding-bottom:2px;
+  border-bottom:1px solid rgba(91,72,56,.34);
+  color:#5d4c40;
+}
+#venue .venue-extra{
+  margin-top:15px;
+  padding-top:12px;
+  border-top:1px solid rgba(91,72,56,.14);
+}
+#venue .venue-extra .label{
+  font-size:10px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:#8a7767;
+}
+#venue .venue-extra .value{
+  margin-top:4px;
+  font-size:14px;
+  color:#66584c;
+}
+#venue .venue-copy.split{padding-top:18px;padding-bottom:18px}
+#venue .venue-copy.split .venue-split-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:4px 14px;
+  align-items:flex-start;
+  padding:12px 0;
+  border-top:1px solid rgba(91,72,56,.12);
+}
+#venue .venue-copy.split .venue-split-row:first-child{border-top:0;padding-top:0}
+#venue .venue-copy.split .venue-split-row:last-of-type{padding-bottom:2px}
+#venue .venue-kind{
+  grid-column:1;
+  font-size:10px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#8a7767;
+  margin-bottom:4px;
+}
+#venue .venue-copy.split .venue-split-main{grid-column:1;min-width:0}
+#venue .venue-copy.split .venue-split-row h3{font-size:25px;line-height:1.02;margin:0 0 5px;color:#55463a}
+#venue .venue-time{
+  grid-column:2;
+  grid-row:1/3;
+  font-family:var(--serif);
+  font-size:20px;
+  color:#69594c;
+  white-space:nowrap;
+  align-self:flex-start;
+}
+#venue .venue-copy.split .venue-row-actions{grid-column:1/3;margin-top:10px}
+#venue .venue-copy.split .venue-extra{margin-top:12px;padding-top:10px}
+@media(max-width:420px){
+  #venue{padding-top:76px}
+  #venue .venue-head{padding:0 24px 24px}
+  #venue .venue-head h2{font-size:35px;max-width:6.6ch}
+  #venue .venue-head p{font-size:14.2px;max-width:27ch}
+  #venue .venue-photo{min-height:525px;margin:0 12px;border-radius:24px 24px 0 0}
+  #venue .venue-copy,#venue .venue-copy.split{padding:20px 18px 18px}
+  #venue .venue-copy h3{font-size:31px}
+  #venue .venue-copy.split .venue-split-row h3{font-size:22px}
+}
+
+/* RSVP + closing are one final screen.
+   Once the guest reaches the CTA there is no second mandatory scroll just to see the farewell. */
+.final-act{
+  position:relative;
+  height:100svh;
+  min-height:720px;
+  overflow:hidden;
+  background:#c8b6a5;
+}
+.final-act-video{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  width:100%;
+  height:100%;
+  min-height:0;
+  margin:0;
+  object-fit:cover;
+  display:block;
+}
+.final-act::before{
+  inset:0;
+  background:
+    radial-gradient(circle at 14% 18%,rgba(255,255,255,.54),transparent 24%),
+    linear-gradient(
+      180deg,
+      rgba(43,36,32,.86) 0%,
+      rgba(93,77,65,.42) 11%,
+      rgba(238,228,218,.52) 28%,
+      rgba(238,228,218,.40) 56%,
+      rgba(90,72,60,.16) 73%,
+      rgba(38,28,22,.62) 100%
+    );
+}
+.final-act > #rsvp,
+.final-act > #close{
+  position:absolute!important;
+  inset:0;
+  width:100%;
+  height:100%;
+  min-height:0;
+  margin:0;
+}
+.final-act > #rsvp{
+  display:flex;
+  align-items:flex-start;
+  padding:68px 26px 250px;
+  background:transparent;
+}
+#rsvp>.reveal{
+  width:100%;
+  padding-top:0;
+  margin:0;
+}
+#rsvp h2{font-size:50px}
+#rsvp p{max-width:31ch}
+#rsvp .cta{margin-top:22px}
+.final-act > #close{
+  pointer-events:none;
+  overflow:hidden;
+  background:transparent;
+}
+#close .close-copy{
+  position:absolute!important;
+  left:26px!important;
+  right:26px!important;
+  top:auto!important;
+  bottom:max(34px,env(safe-area-inset-bottom))!important;
+  opacity:1!important;
+  transform:none!important;
+  z-index:4;
+}
+#close .close-copy h2{margin-top:8px}
+#close .close-copy p{margin-top:12px}
+
+@media(max-width:420px){
+  .final-act{min-height:680px}
+  .final-act > #rsvp{padding:58px 23px 236px}
+  #rsvp h2{font-size:46px}
+  #close .close-copy{
+    left:23px!important;
+    right:23px!important;
+    bottom:max(28px,env(safe-area-inset-bottom))!important;
+  }
+}
+@media(min-width:800px){
+  .final-act{min-height:760px}
+  .final-act > #rsvp{padding:86px 42px 250px}
+  #rsvp>.reveal{max-width:560px}
+  #close .close-copy{left:42px!important;right:42px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .final-act-video{position:absolute;margin:0}
+}
+
+
+/* ===== V10.3b — scalable handoff + true single-screen final act ===== */
+
+/* Real photographic handoff:
+   when Story ends in a photo, Locations overlaps it and fades from transparent
+   to opaque. Net document height stays essentially unchanged. */
+#venue.from-story-photo{
+  margin-top:-72px;
+  background:transparent;
+}
+#venue.from-story-photo .venue-photo{
+  height:calc(79svh + 72px);
+  min-height:682px;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 72px,#000 100%);
+  mask-image:linear-gradient(180deg,transparent 0,#000 72px,#000 100%);
+}
+#venue.from-story-photo .venue-head{
+  top:72px;
+}
+#venue.from-story-photo .venue-bridge{
+  display:block;
+  top:0;
+  left:-9%;
+  right:-9%;
+  height:144px;
+  opacity:.40;
+  transform:rotate(-2deg) scale(1.04);
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.45) 22%,#000 48%,rgba(0,0,0,.62) 72%,transparent 100%);
+  mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.45) 22%,#000 48%,rgba(0,0,0,.62) 72%,transparent 100%);
+}
+@media(max-width:420px){
+  #venue.from-story-photo{margin-top:-64px}
+  #venue.from-story-photo .venue-photo{
+    height:calc(78svh + 64px);
+    min-height:654px;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 64px,#000 100%);
+    mask-image:linear-gradient(180deg,transparent 0,#000 64px,#000 100%);
+  }
+  #venue.from-story-photo .venue-head{top:64px}
+  #venue.from-story-photo .venue-bridge{height:128px}
+}
+
+/* Final act is structurally one screen, not two stacked sections.
+   Grid allocation prevents CTA/farewell collision and scales with wrapped names. */
+.final-act{
+  position:relative;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) auto;
+  height:100svh;
+  min-height:680px;
+  overflow:hidden;
+}
+.final-act-video{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  margin:0!important;
+  object-fit:cover;
+}
+.final-act > #rsvp{
+  position:relative!important;
+  inset:auto!important;
+  grid-row:1;
+  width:auto!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:0!important;
+  display:flex;
+  align-items:center;
+  padding:54px 26px 20px;
+  overflow:visible;
+}
+.final-act > #close{
+  position:relative!important;
+  inset:auto!important;
+  grid-row:2;
+  width:auto!important;
+  height:auto!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:0 26px max(32px,env(safe-area-inset-bottom));
+  overflow:visible;
+  pointer-events:none;
+  background:transparent;
+}
+#close .close-copy{
+  position:relative!important;
+  inset:auto!important;
+  left:auto!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:auto!important;
+  width:100%;
+  opacity:1!important;
+  transform:none!important;
+}
+#close.long-close-names .close-copy h2{
+  font-size:clamp(42px,12vw,54px);
+  line-height:.92;
+}
+#close.long-close-names .close-copy p{
+  margin-top:10px;
+}
+@media(max-width:420px){
+  .final-act{min-height:640px}
+  .final-act > #rsvp{padding:46px 23px 16px}
+  .final-act > #close{padding:0 23px max(26px,env(safe-area-inset-bottom))}
+  #rsvp h2{font-size:44px}
+  #rsvp p{font-size:14.5px;line-height:1.55}
+  #rsvp .cta{min-height:52px;margin-top:18px}
+  #close .close-copy h2{font-size:clamp(46px,13.2vw,58px)}
+  #close .close-copy p{font-size:14px}
+  #close.long-close-names .close-copy h2{font-size:clamp(39px,11vw,49px)}
+}
+@media(min-width:800px){
+  .final-act{min-height:720px}
+  .final-act > #rsvp{padding:70px 42px 24px}
+  .final-act > #close{padding:0 42px max(38px,env(safe-area-inset-bottom))}
+}
+
+
+/* ===== V10.5 CINEMATIC VENUE — discard web-card grammar entirely ===== */
+#venue{
+  position:relative;
+  padding:0;
+  background:#eee5da;
+  isolation:isolate;
+  overflow:hidden;
+}
+#venue .venue-head{
+  position:relative;
+  height:112px;
+  padding:0;
+  margin:0;
+  overflow:hidden;
+}
+#venue .venue-head .kicker,
+#venue .venue-head h2,
+#venue .venue-head p{display:none!important}
+#venue .venue-bridge{
+  display:block!important;
+  position:absolute;
+  z-index:1;
+  inset:-26px -12% auto -12%;
+  height:148px;
+  opacity:.30;
+  pointer-events:none;
+  transform:rotate(-2.4deg) scale(1.08);
+  background-position:50% 43%;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.55) 28%,#000 58%,transparent 100%);
+  mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.55) 28%,#000 58%,transparent 100%);
+  filter:saturate(.76) brightness(1.08);
+}
+#venue.from-story-photo .venue-bridge{display:block!important}
+#venue .venue-photo{
+  position:relative;
+  height:82svh;
+  min-height:620px;
+  margin:0;
+  border-radius:0;
+  overflow:hidden;
+  background-position:var(--venue-x,50%) var(--venue-y,50%);
+  box-shadow:none;
+}
+#venue .venue-photo.split-mode{
+  height:92svh;
+  min-height:700px;
+}
+#venue .venue-photo::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:
+    radial-gradient(circle at 18% 12%,rgba(255,242,226,.22),transparent 31%),
+    linear-gradient(180deg,rgba(24,17,13,.02) 0%,rgba(24,17,13,.03) 30%,rgba(24,17,13,.18) 52%,rgba(24,17,13,.72) 100%);
+}
+#venue .venue-photo::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  inset:auto 0 0 0;
+  height:58%;
+  background:linear-gradient(180deg,transparent 0%,rgba(25,17,13,.10) 18%,rgba(25,17,13,.58) 68%,rgba(25,17,13,.80) 100%);
+  pointer-events:none;
+}
+#venue .venue-veil{
+  position:absolute;
+  z-index:3;
+  inset:5% -22% auto 36%;
+  width:92%;
+  height:62%;
+  opacity:.34;
+  transform:rotate(7deg) scale(1.05);
+  background-position:58% 43%;
+  filter:saturate(.72) brightness(1.08);
+  -webkit-mask-image:linear-gradient(125deg,transparent 2%,rgba(0,0,0,.22) 20%,#000 52%,rgba(0,0,0,.68) 76%,transparent 100%);
+  mask-image:linear-gradient(125deg,transparent 2%,rgba(0,0,0,.22) 20%,#000 52%,rgba(0,0,0,.68) 76%,transparent 100%);
+}
+#venue .venue-photo-label{
+  position:absolute;
+  z-index:7;
+  top:28px;
+  left:24px;
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:rgba(255,250,244,.98);
+  text-shadow:0 2px 18px rgba(6,5,4,.56),0 1px 2px rgba(6,5,4,.42);
+}
+#venue .venue-copy,
+#venue .venue-copy.split{
+  position:absolute;
+  z-index:6;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:128px 24px 30px;
+  margin:0;
+  border:0;
+  border-radius:0;
+  background:linear-gradient(180deg,transparent 0%,rgba(27,19,14,.12) 14%,rgba(27,19,14,.55) 54%,rgba(27,19,14,.76) 100%);
+  box-shadow:none;
+  backdrop-filter:none;
+  color:#fffaf4;
+}
+#venue .venue-copy h3,
+#venue .venue-copy.split .venue-split-row h3{
+  font-family:var(--serif);
+  font-weight:500;
+  color:#fffaf4;
+  letter-spacing:-.035em;
+  text-shadow:0 2px 18px rgba(22,15,10,.18);
+}
+#venue .venue-copy h3{
+  font-size:46px;
+  line-height:.93;
+  margin:0 0 12px;
+  max-width:8.2ch;
+}
+#venue .venue-copy p,
+#venue .venue-split-row p{
+  color:rgba(255,250,244,.86);
+  font-size:14px;
+  line-height:1.5;
+  margin:0;
+}
+#venue .venue-meta{
+  display:block;
+  margin:0;
+}
+#venue .venue-kind{
+  font-size:9.5px;
+  letter-spacing:.20em;
+  text-transform:uppercase;
+  color:rgba(255,250,244,.70);
+  margin-bottom:8px;
+}
+#venue .venue-date{
+  margin-top:13px;
+  color:rgba(255,250,244,.84);
+  font-size:13.5px;
+  line-height:1.5;
+}
+#venue .venue-date strong{
+  display:inline-block;
+  margin-right:8px;
+  font-family:var(--serif);
+  font-size:25px;
+  line-height:1;
+  font-weight:500;
+  color:#fffaf4;
+}
+#venue .venue-actions,
+#venue .actions,
+#venue .venue-row-actions{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+  margin-top:18px;
+}
+#venue .venue-actions a,
+#venue .actions .cta,
+#venue .venue-row-actions a{
+  min-height:38px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 16px;
+  border:1px solid rgba(255,250,244,.52);
+  border-radius:999px;
+  background:rgba(255,250,244,.08);
+  color:#fffaf4;
+  font-size:9.5px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  text-decoration:none;
+  backdrop-filter:blur(5px);
+}
+#venue .venue-actions a:first-child,
+#venue .actions .cta:first-child,
+#venue .venue-row-actions a:first-child{
+  background:rgba(255,250,244,.92);
+  color:#5c4a3c;
+  border-color:rgba(255,250,244,.92);
+}
+#venue .venue-extra{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:14px;
+  margin-top:17px;
+  padding-top:13px;
+  border-top:1px solid rgba(255,250,244,.20);
+}
+#venue .venue-extra .label{
+  font-size:9px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(255,250,244,.64);
+}
+#venue .venue-extra .value{
+  margin:0;
+  font-family:var(--serif);
+  font-size:16px;
+  color:#fffaf4;
+}
+#venue .venue-copy.split{
+  padding-top:138px;
+  padding-bottom:26px;
+}
+#venue .venue-copy.split .venue-split-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:5px 14px;
+  align-items:start;
+  padding:16px 0;
+  border-top:1px solid rgba(255,250,244,.20);
+}
+#venue .venue-copy.split .venue-split-row:first-child{border-top:0;padding-top:0}
+#venue .venue-copy.split .venue-split-row:last-of-type{padding-bottom:2px}
+#venue .venue-copy.split .venue-kind{
+  grid-column:1;
+  margin-bottom:2px;
+}
+#venue .venue-copy.split .venue-split-main{grid-column:1;min-width:0}
+#venue .venue-copy.split .venue-split-row h3{
+  font-size:31px;
+  line-height:.96;
+  margin:0 0 7px;
+  max-width:10ch;
+}
+#venue .venue-copy.split .venue-time{
+  grid-column:2;
+  grid-row:1/3;
+  font-family:var(--serif);
+  font-size:24px;
+  line-height:1;
+  color:#fffaf4;
+  white-space:nowrap;
+  align-self:start;
+}
+#venue .venue-copy.split .venue-row-actions{
+  grid-column:1/3;
+  margin-top:11px;
+}
+#venue .venue-copy.split .venue-extra{
+  margin-top:14px;
+}
+@media(max-width:420px){
+  #venue .venue-head{height:102px}
+  #venue .venue-photo{height:80svh;min-height:590px}
+  #venue .venue-photo.split-mode{height:92svh;min-height:680px}
+  #venue .venue-photo-label{top:24px;left:22px}
+  #venue .venue-copy,#venue .venue-copy.split{padding-left:22px;padding-right:22px;padding-bottom:26px}
+  #venue .venue-copy h3{font-size:42px}
+  #venue .venue-copy.split .venue-split-row h3{font-size:28px}
+  #venue .venue-copy.split .venue-time{font-size:22px}
+}
+
+/* ===== V10.6 ADAPTIVE TONAL FIELD — photo-agnostic venue treatment ===== */
+#venue .venue-photo::before{
+  z-index:1;
+  background:
+    radial-gradient(circle at 18% 10%,rgba(255,244,232,.12),transparent 34%),
+    linear-gradient(180deg,rgba(25,19,15,.12) 0%,rgba(25,19,15,.14) 30%,rgba(25,19,15,.22) 48%,rgba(25,19,15,.44) 66%,rgba(25,19,15,.70) 82%,rgba(25,19,15,.88) 100%);
+}
+#venue .venue-photo::after{
+  z-index:2;
+  inset:0;
+  height:auto;
+  background:linear-gradient(180deg,rgba(18,14,11,.00) 0%,rgba(18,14,11,.00) 30%,rgba(18,14,11,.05) 43%,rgba(18,14,11,.18) 56%,rgba(18,14,11,.38) 68%,rgba(18,14,11,.62) 80%,rgba(18,14,11,.82) 92%,rgba(18,14,11,.90) 100%);
+}
+#venue .venue-photo.split-mode::after{
+  background:linear-gradient(180deg,rgba(18,14,11,.00) 0%,rgba(18,14,11,.00) 24%,rgba(18,14,11,.06) 36%,rgba(18,14,11,.20) 48%,rgba(18,14,11,.42) 60%,rgba(18,14,11,.66) 72%,rgba(18,14,11,.84) 86%,rgba(18,14,11,.91) 100%);
+}
+#venue .venue-copy,#venue .venue-copy.split{background:transparent!important;backdrop-filter:none!important}
+#venue .venue-dayline{margin:0 0 16px;font-size:10px;line-height:1.2;letter-spacing:.17em;text-transform:uppercase;color:rgba(255,250,244,.68)}
+#venue .venue-copy.split{padding-top:156px}
+#venue .venue-copy.split .venue-split-row{padding:14px 0}
+#venue .venue-copy.split .venue-split-row p{max-width:27ch}
+@media(max-width:420px){#venue .venue-copy.split{padding-top:145px}#venue .venue-dayline{margin-bottom:14px}}
+</style>
+
+<style id="v10-7-photo-robust-venue">
+/* V10.7 — remove dead Story→Venue band and use exactly one continuous tonal field. */
+#venue .venue-head{height:34px!important;background:#eee5da!important}
+#venue .venue-bridge{
+  height:66px!important;
+  inset:-18px -10% auto -10%!important;
+  opacity:.22!important;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.5) 34%,rgba(0,0,0,.72) 58%,transparent 100%)!important;
+  mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.5) 34%,rgba(0,0,0,.72) 58%,transparent 100%)!important;
+}
+#venue .venue-photo::before{
+  z-index:1!important;
+  background:linear-gradient(180deg,
+    rgba(20,16,13,.08) 0%,
+    rgba(20,16,13,.09) 18%,
+    rgba(20,16,13,.12) 34%,
+    rgba(20,16,13,.18) 48%,
+    rgba(20,16,13,.27) 59%,
+    rgba(20,16,13,.38) 69%,
+    rgba(20,16,13,.50) 78%,
+    rgba(20,16,13,.62) 87%,
+    rgba(20,16,13,.72) 94%,
+    rgba(20,16,13,.80) 100%)!important;
+}
+#venue .venue-photo.split-mode::before{
+  background:linear-gradient(180deg,
+    rgba(20,16,13,.10) 0%,
+    rgba(20,16,13,.11) 16%,
+    rgba(20,16,13,.14) 30%,
+    rgba(20,16,13,.20) 43%,
+    rgba(20,16,13,.29) 54%,
+    rgba(20,16,13,.39) 64%,
+    rgba(20,16,13,.50) 73%,
+    rgba(20,16,13,.61) 82%,
+    rgba(20,16,13,.71) 91%,
+    rgba(20,16,13,.80) 100%)!important;
+}
+#venue .venue-photo::after,
+#venue .venue-photo.split-mode::after{background:none!important}
+#venue .venue-copy.split .venue-split-row,
+#venue .venue-copy.split .venue-split-row + .venue-split-row{border-top:0!important}
+#venue .venue-copy.split .venue-split-row + .venue-split-row{padding-top:18px!important}
+#venue .venue-copy h3,
+#venue .venue-copy p,
+#venue .venue-kind,
+#venue .venue-time,
+#venue .venue-dayline,
+#venue .venue-extra{
+  text-shadow:0 2px 15px rgba(12,9,7,.44)!important;
+}
+#venue .venue-dayline{color:rgba(255,250,244,.82)!important}
+@media(max-width:420px){#venue .venue-head{height:30px!important}}
+</style>
+
+<style id="v10-8-continuity-story-venue">
+/* V10.8 — one tonal field for all venue states + designed Story without photo. */
+#venue .venue-photo::before,
+#venue .venue-photo.split-mode::before{
+  background:linear-gradient(180deg,
+    rgba(18,14,11,.18) 0%,
+    rgba(18,14,11,.22) 32%,
+    rgba(18,14,11,.34) 56%,
+    rgba(18,14,11,.52) 78%,
+    rgba(18,14,11,.72) 100%)!important;
+}
+#venue .venue-photo::after,
+#venue .venue-photo.split-mode::after{background:none!important}
+#venue .venue-copy.split .venue-split-row,
+#venue .venue-copy.split .venue-split-row + .venue-split-row{
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#venue .venue-copy.split .venue-split-row + .venue-split-row{
+  padding-top:22px!important;
+  margin-top:0!important;
+}
+
+/* No-photo Story uses the exact Practical material asset already embedded in the template,
+   but muted into an ambient layer instead of behaving like a substitute photograph. */
+#story.story-text-only{
+  position:relative;
+  isolation:isolate;
+  min-height:58svh!important;
+  padding-top:74px!important;
+  padding-bottom:82px!important;
+  background-position:52% 48%!important;
+  background-size:cover!important;
+  overflow:hidden;
+}
+#story.story-text-only::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(246,241,234,.76) 0%,rgba(246,241,234,.82) 55%,rgba(238,229,219,.88) 100%);
+}
+#story.story-text-only > *{position:relative;z-index:1}
+#story.story-text-only #storyText{max-width:24ch!important}
+@media(max-width:420px){
+  #story.story-text-only{min-height:55svh!important;padding-top:68px!important;padding-bottom:72px!important}
+}
+</style>
+
+<style id="v10-9-adaptive-uniform-venue">
+/* V10.9 — remove the split-location band at the rendering-system level.
+   There is no vertical tonal gradient at all: one photo = one uniform tonal field. */
+#venue .venue-photo::before,
+#venue .venue-photo.split-mode::before{
+  background:
+    radial-gradient(circle at 16% 8%,rgba(255,246,236,.07),transparent 42%),
+    linear-gradient(rgba(18,14,11,var(--venue-dim,.34)),rgba(18,14,11,var(--venue-dim,.34)))!important;
+}
+#venue .venue-photo::after,
+#venue .venue-photo.split-mode::after{display:none!important;background:none!important}
+#venue .venue-copy,
+#venue .venue-copy.split,
+#venue .venue-copy.split .venue-split-row,
+#venue .venue-copy.split .venue-split-row + .venue-split-row{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#venue .venue-copy.split .venue-split-row + .venue-split-row{
+  padding-top:28px!important;
+  margin-top:0!important;
+}
+#venue .venue-copy h3,
+#venue .venue-copy p,
+#venue .venue-kind,
+#venue .venue-time,
+#venue .venue-dayline,
+#venue .venue-extra .label,
+#venue .venue-extra .value{
+  text-shadow:0 2px 16px rgba(7,5,4,.62)!important;
+}
+
+/* Story without photography: use the Practical material as a visible art layer,
+   not a near-invisible watermark. Text keeps an ivory reading field on the left,
+   while the veil is allowed to breathe on the right/bottom. */
+#story.story-text-only{
+  min-height:58svh!important;
+  padding-top:70px!important;
+  padding-bottom:76px!important;
+  background-position:68% 46%!important;
+  background-size:cover!important;
+}
+#story.story-text-only::after{
+  background:linear-gradient(98deg,
+      rgba(246,241,234,.90) 0%,
+      rgba(246,241,234,.72) 42%,
+      rgba(246,241,234,.34) 72%,
+      rgba(246,241,234,.10) 100%)!important;
+}
+#story.story-text-only #storyText{
+  max-width:23ch!important;
+  text-shadow:0 1px 12px rgba(255,255,255,.46);
+}
+@media(max-width:420px){
+  #story.story-text-only{min-height:56svh!important;padding-top:66px!important;padding-bottom:70px!important;background-position:70% 46%!important}
+}
+</style>
+
+<style id="v10-10-seamless-transitions">
+/* V10.10 — soften structural seams with atmospheric transitions instead of hard bands.
+   1) Two-location venue gets a wide, diffused mid-field veil so the Ceremonia→Celebración
+      change does not read like a horizontal cut on any uploaded photo.
+   2) Dress-code separator becomes a faded rule, never a harsh line.
+   3) Story without photo keeps the practical asset visible enough to avoid looking empty. */
+#venue .venue-photo::before,
+#venue .venue-photo.split-mode::before{
+  background:
+    radial-gradient(circle at 16% 8%,rgba(255,246,236,.08),transparent 42%),
+    linear-gradient(rgba(18,14,11,var(--venue-dim,.33)),rgba(18,14,11,var(--venue-dim,.33)))!important;
+}
+#venue .venue-photo::after{display:none!important;background:none!important}
+#venue .venue-photo.split-mode::after{
+  display:block!important;
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    radial-gradient(140% 32% at 50% 49%,rgba(246,238,228,.26) 0%,rgba(246,238,228,.16) 18%,rgba(246,238,228,.08) 34%,rgba(246,238,228,0) 62%),
+    linear-gradient(180deg,
+      rgba(18,14,11,0) 0%,
+      rgba(18,14,11,0) 34%,
+      rgba(18,14,11,.02) 43%,
+      rgba(18,14,11,.06) 50%,
+      rgba(18,14,11,.02) 58%,
+      rgba(18,14,11,0) 68%);
+  filter:blur(12px) saturate(.96);
+  opacity:.92;
+}
+#venue .venue-photo.split-mode .venue-veil{
+  opacity:.30!important;
+  inset:3% -18% auto 34%!important;
+  width:94%!important;
+  height:68%!important;
+}
+#venue .venue-copy.split .venue-split-row{
+  position:relative;
+  padding:15px 0!important;
+}
+#venue .venue-copy.split .venue-split-row + .venue-split-row{
+  padding-top:26px!important;
+  margin-top:0!important;
+}
+#venue .venue-copy.split .venue-split-row + .venue-split-row::before{
+  content:"";
+  position:absolute;
+  left:-24px;
+  right:-24px;
+  top:-6px;
+  height:54px;
+  pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 50%,rgba(255,250,244,.10) 0%,rgba(255,250,244,.06) 34%,rgba(255,250,244,0) 72%);
+}
+#venue .venue-extra{
+  position:relative;
+  border-top:0!important;
+  padding-top:15px!important;
+  margin-top:17px!important;
+}
+#venue .venue-extra::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:1px;
+  background:linear-gradient(90deg,rgba(255,250,244,0) 0%,rgba(255,250,244,.14) 16%,rgba(255,250,244,.22) 50%,rgba(255,250,244,.14) 84%,rgba(255,250,244,0) 100%);
+}
+#story.story-text-only{
+  background-position:64% 44%!important;
+}
+#story.story-text-only::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(120% 92% at 84% 28%,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 54%),
+    linear-gradient(98deg,rgba(246,241,234,.92) 0%,rgba(246,241,234,.80) 40%,rgba(246,241,234,.48) 70%,rgba(246,241,234,.18) 100%);
+}
+#story.story-text-only::after{
+  background:linear-gradient(180deg,rgba(246,241,234,.18) 0%,rgba(238,229,219,.34) 100%)!important;
+}
+@media(max-width:420px){
+  #venue .venue-photo.split-mode::after{filter:blur(10px)}
+  #venue .venue-copy.split .venue-split-row + .venue-split-row::before{left:-22px;right:-22px;height:48px}
+  #story.story-text-only{background-position:66% 44%!important}
+}
+</style>
+
+
+<style id="recovery-approved-agenda-venue-only">
+/* RECOVERY BUILD — based on V10.10, the last build before Agenda was altered.
+   HARD RULE: no #agenda/.agenda selectors in this recovery block.
+   Only Locations and its handoff are corrected. */
+
+/* Story -> Location: short material breath, not a blank band. */
+#venue .venue-head{
+  height:18px!important;
+  min-height:18px!important;
+  padding:0!important;
+  background:#eee5da!important;
+}
+#venue .venue-bridge{
+  height:54px!important;
+  inset:-21px -9% auto -9%!important;
+  opacity:.20!important;
+  pointer-events:none;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.36) 30%,rgba(0,0,0,.68) 58%,transparent 100%)!important;
+  mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.36) 30%,rgba(0,0,0,.68) 58%,transparent 100%)!important;
+}
+
+/* One photograph = one continuous tonal field. No row-specific tonal layers. */
+#venue .venue-photo,
+#venue .venue-photo.split-mode{
+  background-position:var(--venue-x,50%) var(--venue-y,50%)!important;
+}
+#venue .venue-photo::before,
+#venue .venue-photo.split-mode::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  background:
+    radial-gradient(circle at 16% 8%,rgba(255,246,236,.08),transparent 38%),
+    linear-gradient(180deg,
+      rgba(17,13,10,.18) 0%,
+      rgba(17,13,10,.22) 24%,
+      rgba(17,13,10,.32) 42%,
+      rgba(17,13,10,.46) 58%,
+      rgba(17,13,10,.61) 72%,
+      rgba(17,13,10,.75) 86%,
+      rgba(36,29,25,.94) 100%),
+    linear-gradient(rgba(18,14,11,var(--venue-dim,.30)),rgba(18,14,11,var(--venue-dim,.30)))!important;
+  pointer-events:none!important;
+}
+#venue .venue-photo::after,
+#venue .venue-photo.split-mode::after{
+  display:none!important;
+  content:none!important;
+  background:none!important;
+}
+
+/* Absolutely no visual bands between Ceremony and Celebration. */
+#venue .venue-copy,
+#venue .venue-copy.split,
+#venue .venue-copy.split .venue-split-row,
+#venue .venue-copy.split .venue-split-row + .venue-split-row{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#venue .venue-copy.split .venue-split-row,
+#venue .venue-copy.split .venue-split-row + .venue-split-row{
+  position:relative!important;
+  padding:15px 0!important;
+  margin:0!important;
+}
+#venue .venue-copy.split .venue-split-row + .venue-split-row{
+  padding-top:26px!important;
+}
+#venue .venue-copy.split .venue-split-row::before,
+#venue .venue-copy.split .venue-split-row::after,
+#venue .venue-copy.split .venue-split-row + .venue-split-row::before,
+#venue .venue-copy.split .venue-split-row + .venue-split-row::after{
+  display:none!important;
+  content:none!important;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+/* Dress code: no hard rule. */
+#venue .venue-extra{
+  border:0!important;
+  background:none!important;
+  box-shadow:none!important;
+  margin-top:18px!important;
+  padding-top:15px!important;
+}
+#venue .venue-extra::before,
+#venue .venue-extra::after{
+  display:none!important;
+  content:none!important;
+}
+
+/* Recover readability on arbitrary photography without boxes. */
+#venue .venue-copy h3,
+#venue .venue-copy.split h3{
+  color:#fffaf4!important;
+  text-shadow:0 2px 20px rgba(5,4,3,.72),0 1px 2px rgba(5,4,3,.52)!important;
+}
+#venue .venue-copy p,
+#venue .venue-copy.split p,
+#venue .venue-kind,
+#venue .venue-time,
+#venue .venue-dayline,
+#venue .venue-date,
+#venue .venue-extra .label,
+#venue .venue-extra .value{
+  color:rgba(255,250,244,.96)!important;
+  text-shadow:0 2px 14px rgba(5,4,3,.72),0 1px 2px rgba(5,4,3,.55)!important;
+}
+#venue .venue-kind,
+#venue .venue-dayline,
+#venue .venue-extra .label{color:rgba(255,250,244,.82)!important}
+
+#venue .venue-row-actions a,
+#venue .venue-actions a{
+  border-color:rgba(255,250,244,.66)!important;
+  background:rgba(24,18,14,.20)!important;
+  color:#fffaf4!important;
+  box-shadow:0 2px 12px rgba(8,6,5,.12)!important;
+}
+#venue .venue-row-actions a:first-child,
+#venue .venue-actions a:first-child{
+  background:rgba(249,245,239,.97)!important;
+  border-color:rgba(249,245,239,.97)!important;
+  color:#5d4b3e!important;
+  text-shadow:none!important;
+}
+
+/* Venue -> Agenda handoff: Venue itself fades to the exact dark family used by Agenda.
+   Agenda markup, positions, image, rows and CSS remain untouched. */
+#venue{
+  background:linear-gradient(180deg,#eee5da 0 18px,#241d19 18px 100%)!important;
+}
+#venue .venue-photo{
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 93%,rgba(0,0,0,.96) 95%,rgba(0,0,0,.76) 97%,rgba(0,0,0,.30) 99%,transparent 100%)!important;
+  mask-image:linear-gradient(180deg,#000 0%,#000 93%,rgba(0,0,0,.96) 95%,rgba(0,0,0,.76) 97%,rgba(0,0,0,.30) 99%,transparent 100%)!important;
+}
+
+@media(max-width:420px){
+  #venue .venue-head{height:16px!important;min-height:16px!important}
+  #venue{background:linear-gradient(180deg,#eee5da 0 16px,#241d19 16px 100%)!important}
+  #venue .venue-copy.split .venue-split-row + .venue-split-row{padding-top:24px!important}
+}
+</style>
+
+
+<style id="venue-two-location-rebuild">
+/* Two-location architecture rebuild — clean revision.
+   Agenda remains untouched. In split mode we keep a single continuous photo
+   with no visible veil shape, no row backgrounds and no divider seams. */
+#venue .venue-photo.split-mode{
+  height:112svh!important;
+  min-height:860px!important;
+  position:relative!important;
+  overflow:hidden!important;
+  -webkit-mask-image:none!important;
+  mask-image:none!important;
+  background-position:var(--venue-x,50%) var(--venue-y,50%)!important;
+}
+#venue .venue-photo.split-mode::before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  pointer-events:none!important;
+  background:
+    linear-gradient(90deg,rgba(16,12,10,.56) 0%,rgba(16,12,10,.50) 22%,rgba(16,12,10,.40) 48%,rgba(16,12,10,.28) 74%,rgba(16,12,10,.22) 100%),
+    linear-gradient(180deg,rgba(16,12,10,.16) 0%,rgba(16,12,10,.22) 40%,rgba(16,12,10,.34) 100%)!important;
+}
+#venue .venue-photo.split-mode::after{display:none!important;content:none!important;background:none!important}
+#venue .venue-photo.split-mode .venue-veil{display:none!important;opacity:0!important}
+#venue .venue-copy.split{
+  position:absolute!important;
+  inset:0!important;
+  padding:0!important;
+  margin:0!important;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  color:#fffaf4!important;
+  z-index:6!important;
+  pointer-events:none;
+}
+#venue .venue-copy.split a{pointer-events:auto}
+#venue .venue-dayline{
+  position:absolute!important;
+  left:24px!important;
+  top:37%!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:11px!important;
+  font-weight:500!important;
+  letter-spacing:.20em!important;
+  text-transform:uppercase!important;
+  color:rgba(255,250,244,.97)!important;
+  text-shadow:0 2px 18px rgba(6,5,4,.66),0 1px 2px rgba(6,5,4,.48)!important;
+}
+#venue .venue-event{
+  position:absolute!important;
+  left:24px!important;
+  right:24px!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  column-gap:16px!important;
+  row-gap:5px!important;
+  align-items:start!important;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#venue .venue-event--ceremony{top:44%!important}
+#venue .venue-event--celebration{top:67%!important}
+#venue .venue-event .venue-kind{
+  grid-column:1!important;
+  margin:0 0 5px!important;
+  font-size:9.5px!important;
+  letter-spacing:.20em!important;
+  text-transform:uppercase!important;
+  color:rgba(255,250,244,.84)!important;
+  text-shadow:0 2px 16px rgba(6,5,4,.66)!important;
+}
+#venue .venue-event .venue-split-main{grid-column:1!important;min-width:0!important}
+#venue .venue-event h3{
+  margin:0 0 7px!important;
+  max-width:10ch!important;
+  font-family:var(--serif)!important;
+  font-size:31px!important;
+  line-height:.96!important;
+  font-weight:500!important;
+  letter-spacing:-.035em!important;
+  color:#fffaf4!important;
+  text-shadow:0 2px 18px rgba(6,5,4,.74),0 1px 2px rgba(6,5,4,.58)!important;
+}
+#venue .venue-event p{
+  margin:0!important;
+  font-size:13px!important;
+  line-height:1.46!important;
+  color:rgba(255,250,244,.97)!important;
+  text-shadow:0 2px 14px rgba(6,5,4,.72),0 1px 2px rgba(6,5,4,.56)!important;
+}
+#venue .venue-event .venue-time{
+  grid-column:2!important;
+  grid-row:1/3!important;
+  align-self:start!important;
+  margin:0!important;
+  white-space:nowrap!important;
+  font-family:var(--serif)!important;
+  font-size:24px!important;
+  line-height:1!important;
+  color:#fffaf4!important;
+  text-shadow:0 2px 18px rgba(6,5,4,.74),0 1px 2px rgba(6,5,4,.58)!important;
+}
+#venue .venue-event .venue-row-actions{
+  grid-column:1/3!important;
+  display:flex!important;
+  gap:10px!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  margin-top:11px!important;
+}
+#venue .venue-event .venue-row-actions a{
+  min-height:38px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0 16px!important;
+  border:1px solid rgba(255,250,244,.64)!important;
+  border-radius:999px!important;
+  background:rgba(20,15,12,.16)!important;
+  color:#fffaf4!important;
+  font-size:9.5px!important;
+  letter-spacing:.14em!important;
+  text-transform:uppercase!important;
+  text-decoration:none!important;
+  backdrop-filter:blur(4px)!important;
+  box-shadow:0 2px 12px rgba(5,4,3,.10)!important;
+}
+#venue .venue-event .venue-row-actions a:first-child{
+  background:rgba(249,245,239,.98)!important;
+  border-color:rgba(249,245,239,.98)!important;
+  color:#5d4b3e!important;
+  text-shadow:none!important;
+}
+#venue .venue-copy.split .venue-extra{
+  position:absolute!important;
+  left:24px!important;
+  right:24px!important;
+  bottom:28px!important;
+  display:flex!important;
+  justify-content:space-between!important;
+  align-items:baseline!important;
+  gap:16px!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  background:none!important;
+  box-shadow:none!important;
+}
+#venue .venue-copy.split .venue-extra::before,
+#venue .venue-copy.split .venue-extra::after{display:none!important;content:none!important}
+#venue .venue-copy.split .venue-extra .label{
+  font-size:9px!important;
+  letter-spacing:.18em!important;
+  text-transform:uppercase!important;
+  color:rgba(255,250,244,.82)!important;
+  text-shadow:0 2px 14px rgba(6,5,4,.66)!important;
+}
+#venue .venue-copy.split .venue-extra .value{
+  font-family:var(--serif)!important;
+  font-size:18px!important;
+  color:#fffaf4!important;
+  text-shadow:0 2px 16px rgba(6,5,4,.68)!important;
+}
+#venue .venue-copy.split .venue-split-row,
+#venue .venue-copy.split .venue-split-row::before,
+#venue .venue-copy.split .venue-split-row::after{display:none!important;content:none!important}
+@media(max-width:420px){
+  #venue .venue-photo.split-mode{height:112svh!important;min-height:835px!important}
+  #venue .venue-dayline{left:22px!important;top:36.5%!important;font-size:10.8px!important}
+  #venue .venue-event{left:22px!important;right:22px!important}
+  #venue .venue-event--ceremony{top:43.5%!important}
+  #venue .venue-event--celebration{top:67%!important}
+  #venue .venue-event h3{font-size:29px!important}
+  #venue .venue-event .venue-time{font-size:23px!important}
+  #venue .venue-copy.split .venue-extra{left:22px!important;right:22px!important;bottom:24px!important}
+}
+</style>
+
+
+<style id="practical-touch-targets">
+/* Invisible mobile hit-area enlargement. Visual treatment remains unchanged. */
+#practical .practical-link{
+  position:relative;
+  overflow:visible;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+#practical .practical-link::after{
+  content:"";
+  position:absolute;
+  left:-10px;
+  right:-10px;
+  top:50%;
+  height:48px;
+  transform:translateY(-50%);
+  background:transparent;
+  pointer-events:auto;
+}
+</style>
+
+<style id="welcome-veil-visible-final">
+/* Correct target: intensify the actual welcome veil, still below Practical. */
+.welcome::before{
+  opacity:.58 !important;
+}
+.welcome::after{
+  background:
+    radial-gradient(circle at 16% 18%,rgba(255,255,255,.66),transparent 31%),
+    linear-gradient(180deg,rgba(250,247,242,.18),rgba(250,247,242,.02) 55%,rgba(246,241,234,.48)) !important;
+}
+</style>
+
+<style id="wsd-production-workbench-style">
+#wsdProdBtn{position:fixed;right:12px;top:12px;z-index:2147483646;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.45);background:rgba(38,32,28,.78);color:#fff;font:700 18px/1 system-ui;backdrop-filter:blur(12px);box-shadow:0 8px 24px rgba(0,0,0,.18)}
+#wsdProd{position:fixed;inset:0;z-index:2147483647;background:rgba(24,21,19,.72);backdrop-filter:blur(8px);display:grid;place-items:center;padding:14px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#433d3b}
+#wsdProd.off{display:none}#wsdProd .box{width:min(94vw,650px);max-height:88dvh;overflow:auto;background:#f7f1ea;border-radius:22px;padding:19px;box-shadow:0 30px 90px rgba(0,0,0,.28)}#wsdProd h2{font:400 29px/1.05 Georgia,serif;margin:0 0 7px}#wsdProd p{font-size:12px;line-height:1.5;color:#756963}#wsdProd input,#wsdProd select,#wsdProd textarea{width:100%;min-height:44px;border:1px solid rgba(67,61,59,.18);border-radius:11px;background:#fff;padding:10px;font:15px system-ui;color:#433d3b;margin:6px 0}#wsdProd button{min-height:42px;border:0;border-radius:10px;background:#433d3b;color:#fff;padding:9px 12px;font:700 12px system-ui;margin:4px 4px 4px 0}#wsdProd button.sec{background:#fff;color:#433d3b;border:1px solid rgba(67,61,59,.18)}#wsdProd .row{display:flex;gap:7px;flex-wrap:wrap}#wsdProd .msg{font:12px/1.5 system-ui;color:#63705b;margin-top:8px}#wsdProd .err{color:#a24e45}#wsdProd .meta{font:11px/1.5 system-ui;background:#fff;border-radius:10px;padding:9px;margin:9px 0;white-space:pre-wrap}
+</style>
+
+<style id="guest-real-pilot-v4-fixes">
+#entryVideo{transition:opacity .24s ease!important}
+.cover.hero-cut #entryVideo{opacity:1!important}
+.story-photo[data-auto-safe="1"]{transition:height .22s ease}
+.gallery-card[data-auto-safe="1"]{transition:height .22s ease,aspect-ratio .22s ease}
+</style>
+
+
+<style id="guest-real-pilot-v4-4-lock">
+/* V4.4: approved Agenda scale + clean typographic initials, no patch/card. */
+.agenda.count-5 .agenda-row time{font-size:35px!important}
+.agenda.count-5 .agenda-row strong{font-size:28px!important}
+.initial-overlay{display:none!important}
+.cover.custom-initials .initial-overlay{display:flex!important}
+#initialOverlay{
+  width:auto!important;height:auto!important;padding:0!important;
+  background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important;
+  font-weight:400!important;letter-spacing:-.055em!important;line-height:1!important;
+  color:rgba(139,117,98,.64)!important;text-shadow:0 1px rgba(255,255,255,.22)!important;
+}
+.cover.opening-complete #initialOverlay{display:none!important}
+</style>
+
+<style id="guest-scalable-entry-v5-2">
+/* Recraft visual language, generic motion asset, deterministic personalization. */
+#initialOverlay{
+  display:flex!important;left:50%!important;top:49.6%!important;
+  width:auto!important;height:auto!important;padding:0!important;
+  transform:translate(-50%,-50%)!important;
+  font-size:clamp(24px,7.2vw,31px)!important;
+  font-weight:400!important;letter-spacing:-.055em!important;line-height:1!important;
+  background:none!important;box-shadow:none!important;border:0!important;border-radius:0!important;
+  color:rgba(139,117,98,.64)!important;text-shadow:0 1px rgba(255,255,255,.22)!important;
+  opacity:1!important;transition:opacity .26s ease!important;will-change:opacity!important;
+}
+.cover.entry-initials-out #initialOverlay{opacity:0!important}
+.cover.opening-complete #initialOverlay{display:none!important}
+#entryVideo{opacity:1!important;transition:none!important}
+.cover.hero-cut #entryVideo{opacity:1!important}
+</style>
+
+<style id="guest-v52-scale-cert-fixes">
+/* Non-visual scalability corrections discovered by matrix QA. */
+.cover.long-names h1{font-size:clamp(54px,15.8vw,84px);line-height:.72}
+.practical-item p{overflow-wrap:anywhere;word-break:normal}
+</style>
+<style id="wsd-final-style">#wsdFinalMsg{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:2147483647;background:rgba(246,241,234,.94);color:#433d3b;border-radius:999px;padding:10px 13px;font:700 11px system-ui;box-shadow:0 8px 24px rgba(0,0,0,.14);max-width:90vw;text-align:center}#wsdFinalMsg.ok{opacity:0;pointer-events:none;transition:opacity .5s 1.2s}</style>
+
+<style id="guest-visual-robustness-v1">
+/* Safe visual-tuning layer. Only personalized typography/contrast is adjustable. */
+#cover.visual-tuned h1{
+  font-family:var(--veil-name-font,var(--name-serif,var(--serif)))!important;
+  font-size:var(--cover-name-size,clamp(68px,19vw,100px));
+  line-height:var(--cover-name-line,.76);
+  letter-spacing:var(--cover-name-tracking,-.035em);
+}
+
+#close .close-copy h2{
+  font-family:var(--veil-name-font,var(--name-serif,var(--serif)))!important;
+}
+#cover.micro-high .cover-top,
+#cover.micro-high .cover-meta{
+  color:#fff;
+  font-weight:600;
+  text-shadow:0 2px 8px rgba(38,28,21,.82),0 0 22px rgba(38,28,21,.46);
+}
+#cover.micro-large .cover-top{font-size:14px;line-height:1.34;letter-spacing:.105em}
+#cover.micro-large .cover-meta{font-size:14px;line-height:1.32;letter-spacing:.045em}
+#story.visual-tuned h2{
+  font-size:var(--story-title-size,42px);
+  line-height:var(--story-title-line,1.02);
+  max-width:var(--story-title-width,11ch);
+}
+#story.visual-tuned #storyText{
+  font-family:var(--story-body-font,var(--serif))!important;
+  font-size:var(--story-body-size,16px);
+  line-height:var(--story-body-line,1.72);
+}
+#story.visual-tuned.story-text-only #storyText{max-width:var(--story-body-width,23ch)!important}
+#story.visual-tuned.story-text-only.story-long{
+  padding-top:56px!important;
+  padding-bottom:60px!important;
+}
+@media(max-width:420px){
+  #story.visual-tuned.story-text-only.story-long{
+    padding-top:48px!important;
+    padding-bottom:54px!important;
+  }
+}
+</style>
+
+
+<style id="guest-v532-amp-kicker-coherence">
+/* V5.3.2: one neutral readable ampersand treatment + matched cover/closing microcopy. */
+#cover.visual-tuned h1 em#amp{
+  font-family:var(--sans)!important;
+  font-style:normal!important;
+  font-weight:500!important;
+  font-size:.34em!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  margin:9px 0 8px 42px!important;
+  opacity:.98;
+  text-shadow:0 2px 8px rgba(38,28,21,.62);
+}
+#close .close-copy .close-amp{
+  font-family:var(--sans)!important;
+  font-style:normal!important;
+  font-weight:500!important;
+  font-size:.42em!important;
+  line-height:1!important;
+  letter-spacing:0!important;
+  display:inline-block;
+  vertical-align:.12em;
+  margin:0 .06em;
+  text-shadow:0 2px 8px rgba(38,28,21,.52);
+}
+#close .close-copy .kicker{
+  font-family:var(--sans)!important;
+  font-size:var(--veil-micro-size,14px)!important;
+  line-height:var(--veil-micro-line,1.34)!important;
+  letter-spacing:var(--veil-micro-track,.105em)!important;
+  text-transform:uppercase!important;
+  font-weight:var(--veil-micro-weight,600)!important;
+  color:#fff!important;
+  text-shadow:var(--veil-micro-shadow,0 2px 8px rgba(38,28,21,.82),0 0 22px rgba(38,28,21,.46))!important;
+  opacity:1!important;
+  margin-bottom:18px!important;
+}
+#close .close-copy h2{margin-top:0!important}
+</style>
+
+<style id="guest-v533-amp-scale-final">
+/* V5.3.3: final structural ampersand scale — same readable size token in Cover + Closing. */
+:root{--veil-amp-size:clamp(30px,8vw,36px)}
+#cover.visual-tuned h1 em#amp{
+  font-size:var(--veil-amp-size)!important;
+  margin-top:10px!important;
+  margin-bottom:9px!important;
+}
+#close .close-copy .close-amp{
+  font-size:var(--veil-amp-size)!important;
+  vertical-align:.08em;
+  margin:0 .09em;
+}
+</style>
+
+<meta name="robots" content="noindex,nofollow"><meta name="guest-sample-mode" content="public-design-demo"><style id="galleryDemoNoticeRemove">#stage-notice{display:none!important}</style></head>
+<body class="lock">
+<main class="invite">
+<section class="cover" id="cover">
+<video id="entryVideo" muted="" playsinline="" poster="media/18f9f43f0168bbcc029b.jpg" preload="auto">
+<source src="media/2028a0ac4cb78da7511a.mp4" type="video/mp4"/>
+</video>
+<div class="cover-shade"></div><div aria-hidden="true" class="initial-overlay" id="initialOverlay">I&amp;H</div>
+<div class="start-layer" id="startLayer"><button class="open-btn" id="openBtn">Abrir invitación</button></div>
+<div class="cover-copy">
+<div class="cover-top"><span id="coverKicker">Nos casamos</span><span id="coverPlace">Madrid</span></div>
+<h1><span id="name1">Isabel</span><em id="amp">&amp;</em><span id="name2">Hugo</span></h1>
+<div class="cover-meta"><span id="coverDate">18 · 09 · 2027</span><span id="coverTime">17:30</span></div>
+</div>
+</section>
+<section class="welcome" id="welcome">
+<div class="reveal">
+<div class="kicker">Qué ilusión</div>
+<h2>Por fin ha llegado nuestro día.</h2>
+<p>Y no tendría sentido celebrarlo sin vosotros. Nos hace muchísima ilusión reuniros a todos y compartir juntos cada momento.</p>
+<div class="count">
+<div><strong id="dd">000</strong><span>días</span></div>
+<div><strong id="hh">00</strong><span>horas</span></div>
+<div><strong id="mm">00</strong><span>min</span></div>
+<div><strong id="ss">00</strong><span>seg</span></div>
+</div>
+</div>
+</section>
+<section class="story" id="story">
+<div class="reveal">
+<div class="kicker">Nuestra historia</div>
+<h2>Todo empezó mucho antes de este sí.</h2>
+<p id="storyText">Han sido años de planes, viajes, domingos tranquilos, risas y muchas historias que ya son nuestras. Ahora empieza una nueva, y queremos estrenarla rodeados de la gente que queremos.</p>
+</div>
+<div class="story-photo reveal" id="storyPhoto"><img alt="" class="story-full-img" id="storyFullImg"/>
+<blockquote>“Lo mejor de todo es que esto solo acaba de empezar.”</blockquote>
+</div>
+</section>
+<section class="venue" id="venue">
+<div aria-hidden="true" class="venue-bridge practical-bg-soft"></div>
+<div class="venue-head reveal">
+<div class="kicker">Nos vemos allí</div>
+<h2 id="venueTitle">Un lugar para celebrar sin prisas.</h2>
+<p id="venueIntro">La ceremonia y la celebración serán en Finca El Olivar. Llegad con tiempo: queremos que disfrutéis del lugar desde el primer momento.</p>
+</div>
+<div class="venue-photo" id="venuePhoto">
+<div class="venue-veil practical-bg-soft" aria-hidden="true"></div>
+<div class="venue-photo-label" aria-hidden="true">Nos vemos allí</div>
+<div class="venue-copy reveal" id="venueCopy">
+<h3>Finca El Olivar</h3>
+<p>Carretera de Colmenar, Madrid<br/>18 de septiembre · 17:30</p>
+<div class="actions"><a class="cta" href="#">Cómo llegar</a><a class="cta alt" href="#">Guardar fecha</a></div><div class="venue-extra" data-module="dressCode"><span class="label">Dress code</span><span class="value">Formal de verano</span></div>
+</div>
+</div>
+</section>
+<section class="agenda" id="agenda">
+<div class="agenda-panel">
+<div class="agenda-heading reveal"><div class="kicker">Así será el día</div><h2>Todo en un vistazo.</h2></div>
+<div class="agenda-note" id="agendaNote">18 · 09 · 2027</div>
+<div class="agenda-list" id="agendaList">
+<div class="agenda-row"><time>17:30</time><strong>Ceremonia</strong></div>
+<div class="agenda-row"><time>19:00</time><strong>Cóctel</strong></div>
+<div class="agenda-row"><time>21:00</time><strong>Cena</strong></div>
+<div class="agenda-row"><time>00:00</time><strong>Fiesta</strong></div>
+</div>
+</div>
+</section>
+<section class="practical" id="practical">
+<div class="practical-bg-soft"></div>
+<div class="practical-wash-soft"></div>
+<div class="practical-inner">
+<div class="practical-heading reveal">
+<div class="kicker">Para que lo tengáis fácil</div>
+<h2>Detalles prácticos.</h2>
+</div>
+<div class="practical-list" id="practicalList">
+<article class="practical-item reveal" data-module="bus">
+<h3>Bus</h3>
+<p>Plaza Colón · 16:30 · regresos 02:00 y 04:00.</p>
+</article>
+<article class="practical-item reveal" data-module="hotel">
+<h3>Hotel</h3>
+<p>Hotel Jardín · código ISABELHUGO.</p>
+<a class="practical-link" data-field="hotelWebsite" href="#">Ver hotel</a>
+</article>
+<article class="practical-item reveal" data-module="gift">
+<h3>Regalo</h3>
+<p>Si os apetece tener un detalle.</p>
+<a class="practical-link" data-field="giftDetails" href="#">Ver detalles</a>
+</article>
+<article class="practical-item reveal" data-module="playlist">
+<h3>Playlist</h3>
+<p>Mandadnos esa canción que no puede faltar.</p>
+<a class="practical-link" data-field="playlist" href="#">Añadir canción</a>
+</article>
+</div>
+</div>
+</section>
+<div class="practical-gallery-bridge" aria-hidden="true"></div>
+<section class="gallery" id="gallery">
+<div class="gallery-head reveal">
+<div class="kicker">Un poco de nosotros</div>
+<h2>Nuestras fotos favoritas.</h2>
+</div>
+<div aria-label="Galería de fotos" class="gallery-track" id="galleryTrack">
+<figure class="gallery-card" data-layout="portrait" style="--focus-x:50%;--focus-y:50%">
+<img alt="Foto de la pareja" src="media/9440e557fc3b1b5bf41c.jpg"/>
+</figure>
+<figure class="gallery-card" data-layout="portrait" style="--focus-x:64%;--focus-y:50%">
+<img alt="Foto de la pareja" src="media/d703aaea410cdd72f558.jpg"/>
+</figure>
+<figure class="gallery-card" data-layout="portrait" style="--focus-x:50%;--focus-y:50%">
+<img alt="Foto de la pareja" src="media/62eda5df166fdf4e985e.jpg"/>
+</figure>
+<figure class="gallery-card" data-layout="portrait" style="--focus-x:62%;--focus-y:50%">
+<img alt="Pareja sentada frente a un viñedo" src="media/8cbf5e4f6bcc8d3604b4.jpg"/>
+</figure>
+</div>
+<div class="gallery-foot">
+<span id="galleryHint">Desliza para ver más</span>
+<span class="gallery-dots" id="galleryDots"><i class="active"></i><i></i><i></i><i></i></span>
+</div>
+</section>
+<div class="final-act" id="finalAct">
+<video class="final-act-video" id="closeVideo" loop="" muted="" playsinline="" preload="auto"><source src="media/5b0c4899023155e42ff6.mp4" type="video/mp4"/></video>
+<section class="rsvp" id="rsvp">
+<div class="reveal">
+<div class="kicker">Solo falta una cosa</div>
+<h2>¿Nos acompañáis?</h2>
+<p>Contadnos si venís para que podamos preparar todo con cariño. Tenemos muchísimas ganas de veros.</p>
+<a class="cta" href="#" id="rsvpBtn">Confirmar asistencia</a>
+</div>
+</section>
+<section class="close" id="close">
+<div class="close-copy reveal"><div class="kicker">Nos vemos allí</div><h2 id="closeNames">Isabel &amp; Hugo</h2><p id="closeText">18 de septiembre de 2027 · Madrid<br/>Gracias por formar parte de nuestra historia.</p></div>
+</section>
+</div>
+</main>
+<div aria-hidden="true" class="template-sheet" id="detailSheet"><div class="template-sheet-card"><h3 id="detailTitle"></h3><pre id="detailBody"></pre><button class="cta" id="detailClose" type="button">Cerrar</button></div></div><div class="qa-badge" id="qaBadge"></div><script>
+const ASSETS={"story": "media/9440e557fc3b1b5bf41c.jpg", "venue": "media/9005f6f5268f72de1434.webp", "agenda": "media/4a6cdaa39045402cdf93.png", "practical": "media/48cd93e446620bfa5b73.png", "gallery1": "media/9440e557fc3b1b5bf41c.jpg", "gallery2": "media/d703aaea410cdd72f558.jpg", "gallery3": "media/62eda5df166fdf4e985e.jpg", "gallery4": "media/8cbf5e4f6bcc8d3604b4.jpg"};
+const STORY_PRESETS={"story-01": "Llevamos años compartiendo planes, viajes, domingos tranquilos y muchas risas. Ahora nos hace muchísima ilusión celebrar el siguiente capítulo con vosotros.", "story-02": "No sabemos exactamente cuándo empezó todo, pero sí sabemos que desde entonces la vida es mucho más divertida juntos. Y este día no tendría sentido sin vosotros.", "story-03": "Entre planes improvisados, viajes, cenas que se alargan y días de sofá, hemos ido construyendo lo nuestro. Ahora toca celebrarlo con nuestra gente.", "story-04": "Después de tantos momentos compartidos, ha llegado uno que queremos vivir rodeados de las personas que forman parte de nuestra historia: vosotros.", "story-05": "Nos elegimos hace tiempo y seguimos eligiéndonos cada día. Ahora queremos celebrarlo como más nos gusta: con nuestra familia y amigos cerca."};
+const SCENARIOS={"default": {"template": {"id": "veil-light", "version": "3.3.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "split": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "split", "heroPhoto": null, "items": [{"type": "ceremony", "time": "17:30", "name": "Iglesia de Santa María", "address": "Calle Mayor, 18 · Madrid", "mapsUrl": "#", "websiteUrl": null}, {"type": "celebration", "time": "19:00", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "agenda-1": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "16:45", "label": "Llegada"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "agenda-2": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "16:45", "label": "Llegada"}, {"time": "17:30", "label": "Ceremonia"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "agenda-3": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "16:45", "label": "Llegada"}, {"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "agenda-5": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "16:45", "label": "Llegada"}, {"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "practical-0": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": false, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": false, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": false, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": false, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "practical-1": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": false, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": false, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": false, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "practical-2": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": false, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": false, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "practical-3": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": false, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "story-text": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": null}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "story-off": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": false, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "story-full": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@gallery4", "fit": "full", "focusX": 50, "focusY": 50, "alt": "Pareja"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "gallery-1": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery4", "fit": "full", "focusX": 50, "focusY": 50, "alt": "Pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "cover-min": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": false, "showTime": false}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "long-names": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "classic"}, "couple": {"name1": "Alejandra", "name2": "Maximiliano"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "San Sebastián"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "type-romantic": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "romantic"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}, "type-contemporary": {"template": {"id": "veil-light", "version": "3.1.0", "typographyVariant": "contemporary"}, "couple": {"name1": "Isabel", "name2": "Hugo"}, "wedding": {"date": "2027-09-18", "time": "17:30", "coverPlace": "Madrid"}, "cover": {"showPlace": true, "showTime": true}, "countdown": {"enabled": true}, "story": {"enabled": true, "textMode": "preset", "presetId": "story-03", "body": "", "photo": {"src": "@story", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Isabel y Hugo"}}, "locations": {"mode": "shared", "heroPhoto": null, "items": [{"type": "shared", "time": "17:30", "name": "Finca El Olivar", "address": "Carretera de Colmenar, Madrid", "mapsUrl": "#", "websiteUrl": "#"}], "dressCode": {"enabled": true, "text": "Formal de verano"}}, "agenda": {"enabled": true, "moments": [{"time": "17:30", "label": "Ceremonia"}, {"time": "19:00", "label": "Cóctel"}, {"time": "21:00", "label": "Cena"}, {"time": "00:00", "label": "Fiesta"}]}, "practical": {"bus": {"enabled": true, "pickupPoints": ["Plaza Colón"], "outboundTimes": ["16:30"], "returnTimes": ["02:00", "04:00"], "note": "", "mapsUrl": "#"}, "accommodation": {"enabled": true, "mode": "room_block", "name": "Hotel Jardín", "websiteUrl": "#", "bookingCode": "ISABELHUGO", "bookingName": "Isabel y Hugo", "discountText": "", "deadline": "", "externalBookingUrl": null, "note": ""}, "gift": {"enabled": true, "mode": "bank", "displayText": "Si os apetece tener un detalle.", "details": "Titular: Isabel & Hugo\nIBAN: ES00 0000 0000 0000 0000 0000", "externalUrl": null}, "playlist": {"enabled": true, "mode": "external_link", "prompt": "Mandadnos esa canción que no puede faltar.", "url": "#"}}, "gallery": {"enabled": true, "photos": [{"src": "@gallery1", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery2", "fit": "crop", "focusX": 64, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery3", "fit": "crop", "focusX": 50, "focusY": 50, "alt": "Foto de la pareja"}, {"src": "@gallery4", "fit": "crop", "focusX": 62, "focusY": 50, "alt": "Foto de la pareja"}]}, "rsvp": {"route": "#", "ctaLabel": "Confirmar asistencia"}, "closing": {"line": "Gracias por formar parte de nuestra historia."}}};
+const params=new URLSearchParams(location.search);
+const CASE=params.get('case')||'split';
+const config=structuredClone(window.GUEST_INVITATION_CONFIG||SCENARIOS[CASE]||SCENARIOS.default);
+(function hydrate(v){if(Array.isArray(v)){v.forEach(hydrate);return}if(!v||typeof v!=='object')return;Object.keys(v).forEach(k=>{if(typeof v[k]==='string'&&v[k].startsWith('@')&&ASSETS[v[k].slice(1)])v[k]=ASSETS[v[k].slice(1)];else hydrate(v[k])})})(config);
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+if(params.get('qa')==='1')document.body.classList.add('qa');
+function shortDate(d){const [y,m,dd]=d.split('-');return `${dd} · ${m} · ${y}`}
+function longDate(d){return new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'long',year:'numeric'}).format(new Date(d+'T12:00:00'))}
+function initials(){return `${(config.couple.name1||'').trim().charAt(0).toUpperCase()}&${(config.couple.name2||'').trim().charAt(0).toUpperCase()}`}
+function sortMoments(a){const k=t=>{if(!t)return 99999;let[h,m]=t.split(':').map(Number),v=h*60+m;if(v<360)v+=1440;return v};return[...(a||[])].sort((x,y)=>k(x.time)-k(y.time))}
+function photoOrientation(p){if(p?.orientation&&p.orientation!=='unknown')return p.orientation;if(p?.width&&p?.height){const r=p.width/p.height;return r<.84?'portrait':r>1.7?'panorama':r>1.18?'landscape':'square'}return 'landscape'}
+function setNameStyle(){document.body.classList.toggle('name-romantic',config.template.typographyVariant==='romantic');document.body.classList.toggle('name-contemporary',config.template.typographyVariant==='contemporary')}
+function renderCover(){
+ document.title=`${config.couple.name1||''} & ${config.couple.name2||''}`.trim();
+ $('#name1').textContent=config.couple.name1;$('#name2').textContent=config.couple.name2;$('#coverDate').textContent=shortDate(config.wedding.date);
+ $('#coverPlace').textContent=config.cover.showPlace?(config.wedding.coverPlace||''):'';$('#coverPlace').style.visibility=config.cover.showPlace?'visible':'hidden';
+ $('#coverTime').textContent=config.cover.showTime?(config.wedding.time||''):'';$('#coverTime').style.visibility=config.cover.showTime?'visible':'hidden';
+ const init=initials();$('#initialOverlay').textContent=init;$('#cover').classList.add('custom-initials');
+ requestAnimationFrame(()=>{fitCoverNames();positionInitials(0)});
+}
+function renderCountdown(){const c=$('#welcome .count');if(window.__veilTimer){clearInterval(window.__veilTimer);window.__veilTimer=0}if(!config.countdown.enabled){c.classList.add('is-hidden');return}c.classList.remove('is-hidden');const target=new Date(`${config.wedding.date}T${config.wedding.time||'00:00'}:00`).getTime();const tick=()=>{let d=Math.max(0,target-Date.now()),days=Math.floor(d/86400000);d%=86400000;let h=Math.floor(d/3600000);d%=3600000;let m=Math.floor(d/60000),ss=Math.floor((d%60000)/1000);$('#dd').textContent=String(days).padStart(3,'0');$('#hh').textContent=String(h).padStart(2,'0');$('#mm').textContent=String(m).padStart(2,'0');$('#ss').textContent=String(ss).padStart(2,'0')};tick();window.__veilTimer=setInterval(tick,1000)}
+function autoSafeStoryFrame(photo,ph,img){
+ if(!photo?.src||photo.autoFrame===false||photo.fit==='full')return;
+ const probe=new Image();
+ probe.onload=()=>{const iw=probe.naturalWidth||1,ih=probe.naturalHeight||1,ir=iw/ih,cr=(ph.clientWidth||390)/(ph.clientHeight||520);const severe=ir>cr*1.28||ir<cr/1.38;if(!severe)return;ph.dataset.fit='full';ph.dataset.autoSafe='1';ph.dataset.orientation=ir<.84?'portrait':ir>1.7?'panorama':ir>1.18?'landscape':'square';ph.style.backgroundImage='';img.src=photo.src;img.alt=photo.alt||'Foto de la pareja'};
+ probe.src=photo.src;
+}
+function renderStory(){const s=config.story,sec=$('#story');if(!s.enabled){sec.classList.add('is-hidden');return}sec.classList.remove('is-hidden','story-text-only');const body=s.textMode==='preset'?(STORY_PRESETS[s.presetId]||STORY_PRESETS['story-01']):(s.body||'');$('#storyText').textContent=body;const ph=$('#storyPhoto'),img=$('#storyFullImg');ph.removeAttribute('data-auto-safe');if(!s.photo){ph.classList.add('is-hidden');sec.classList.add('story-text-only');return}ph.classList.remove('is-hidden');ph.dataset.fit=s.photo.fit==='full'?'full':'crop';ph.dataset.orientation=photoOrientation(s.photo);ph.style.setProperty('--focus-x',(s.photo.focusX??50)+'%');ph.style.setProperty('--focus-y',(s.photo.focusY??50)+'%');if(s.photo.fit==='full'){img.src=s.photo.src;img.alt=s.photo.alt||'Foto de la pareja';ph.style.backgroundImage=''}else{img.removeAttribute('src');ph.style.backgroundImage=`url("${s.photo.src}")`;ph.style.backgroundPosition=`${s.photo.focusX??50}% ${s.photo.focusY??50}%`;autoSafeStoryFrame(s.photo,ph,img)}}
+
+function setVenueAdaptiveTone(photo,src){
+ photo.style.setProperty('--venue-dim','.34');
+ let source=src||'';
+ if(!source){
+   const bg=getComputedStyle(photo).backgroundImage||'';
+   const m=bg.match(/url\(["']?(.*?)["']?\)/);
+   if(m)source=m[1];
+ }
+ if(!source)return;
+ const im=new Image();
+ im.onload=()=>{
+   try{
+     const c=document.createElement('canvas');c.width=24;c.height=24;
+     const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(im,0,0,24,24);
+     const d=x.getImageData(0,6,24,18).data,ls=[];
+     for(let i=0;i<d.length;i+=4){if(d[i+3]<32)continue;const r=d[i]/255,g=d[i+1]/255,b=d[i+2]/255;ls.push(.2126*r+.7152*g+.0722*b)}
+     if(!ls.length)return;ls.sort((a,b)=>a-b);
+     const p85=ls[Math.min(ls.length-1,Math.floor(ls.length*.85))];
+     const avg=ls.reduce((a,b)=>a+b,0)/ls.length;
+     const light=Math.max(avg,p85*.88);
+     let alpha=.28;
+     if(light>.82)alpha=.46;else if(light>.70)alpha=.40;else if(light>.58)alpha=.35;else if(light>.46)alpha=.31;
+     photo.style.setProperty('--venue-dim',alpha.toFixed(2));
+     photo.dataset.tone=alpha.toFixed(2);
+   }catch(e){photo.dataset.tone='fallback'}
+ };
+ im.onerror=()=>{photo.dataset.tone='fallback'};
+ im.src=source;
+}
+
+function resetSplitVenueFit(){
+ const photo=$('#venuePhoto'),events=$$('#venueCopy .venue-event');
+ if(photo){photo.style.removeProperty('height');photo.style.removeProperty('min-height')}
+ events.forEach(e=>e.style.removeProperty('top'));
+}
+function fitSplitVenue(){
+ const photo=$('#venuePhoto'),box=$('#venueCopy');
+ if(!photo||!box||!photo.classList.contains('split-mode'))return;
+ const events=$$('#venueCopy .venue-event');
+ if(events.length!==2)return;
+ const first=events[0],second=events[1];
+ /* resetSplitVenueFit() already restores the base height when a new config is rendered.
+    Do not collapse an adaptive height on every fit pass: long supported venue text
+    needs the passes to converge instead of oscillating back to the base geometry. */
+ second.style.removeProperty('top');
+ const pr=photo.getBoundingClientRect(),r1=first.getBoundingClientRect(),r2=second.getBoundingClientRect();
+ const minGap=24;
+ if(r1.bottom+minGap<=r2.top)return;
+ const desiredTop=(r1.bottom-pr.top)+minGap;
+ second.style.setProperty('top',desiredTop+'px','important');
+ const shifted=second.getBoundingClientRect(),extra=box.querySelector('.venue-extra');
+ const extraTop=extra?extra.getBoundingClientRect().top:pr.bottom-44;
+ const reserve=extra?22:38;
+ const deficit=shifted.bottom+reserve-extraTop;
+ if(deficit>0){
+   const newH=Math.ceil(pr.height+deficit+18);
+   photo.style.setProperty('height',newH+'px','important');
+   photo.style.setProperty('min-height',newH+'px','important');
+ }
+}
+function scheduleSplitVenueFit(){
+ requestAnimationFrame(()=>{fitSplitVenue();requestAnimationFrame(fitSplitVenue)});
+ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>requestAnimationFrame(fitSplitVenue)).catch(()=>{});
+}
+
+function renderVenue(){const v=config.locations,items=(v.items||[]).slice(0,2),sec=$('#venue');if(!items.length){sec.classList.add('is-hidden');return}sec.classList.remove('is-hidden');sec.classList.remove('from-story-photo');const photo=$('#venuePhoto');resetSplitVenueFit();photo.classList.toggle('split-mode',items.length===2);if(v.heroPhoto?.src){photo.classList.add('use-custom-photo');photo.style.setProperty('--venue-custom',`url("${v.heroPhoto.src}")`);photo.style.setProperty('--venue-x',(v.heroPhoto.focusX??50)+'%');photo.style.setProperty('--venue-y',(v.heroPhoto.focusY??50)+'%')}else{photo.classList.remove('use-custom-photo');photo.style.removeProperty('--venue-custom')}
+ requestAnimationFrame(()=>setVenueAdaptiveTone(photo,v.heroPhoto?.src||''));
+ const box=$('#venueCopy');const dateLabel=longDate(config.wedding.date);box.classList.toggle('split',items.length===2);
+ if(items.length===1){const x=items[0];$('#venueTitle').textContent='';$('#venueIntro').textContent='';let acts='';if(x.mapsUrl)acts+=`<a class="cta" href="${esc(x.mapsUrl)}">Cómo llegar</a>`;if(x.websiteUrl)acts+=`<a class="cta alt" href="${esc(x.websiteUrl)}">Ver lugar</a>`;box.innerHTML=`<div class="venue-meta"><div class="venue-kind">Ceremonia y celebración</div><h3>${esc(x.name)}</h3><p>${esc(x.address)}</p><div class="venue-date"><strong>${esc(x.time)}</strong>${dateLabel}</div></div><div class="venue-actions">${acts}</div>${v.dressCode?.enabled?`<div class="venue-extra"><span class="label">Dress code</span><span class="value">${esc(v.dressCode.text)}</span></div>`:''}`}
+ else{$('#venueTitle').textContent='';$('#venueIntro').textContent='';const eventHtml=items.map((x,i)=>{const kind=x.type==='ceremony'?'Ceremonia':'Celebración';let acts='';if(x.mapsUrl)acts+=`<a href="${esc(x.mapsUrl)}">Cómo llegar</a>`;if(x.websiteUrl)acts+=`<a href="${esc(x.websiteUrl)}">Ver lugar</a>`;return `<div class="venue-event venue-event--${i===0?'ceremony':'celebration'}"><div class="venue-kind">${kind}</div><div class="venue-split-main"><h3>${esc(x.name)}</h3><p>${esc(x.address)}</p></div><div class="venue-time">${esc(x.time)}</div><div class="venue-row-actions">${acts}</div></div>`}).join('');box.innerHTML=`<div class="venue-dayline">${dateLabel}</div>${eventHtml}${v.dressCode?.enabled?`<div class="venue-extra"><span class="label">Dress code</span><span class="value">${esc(v.dressCode.text)}</span></div>`:''}`}
+ scheduleSplitVenueFit();
+}
+function bindAgendaReveal(){try{window.__veilAgendaObs?.disconnect?.()}catch{}const rows=$$('#agendaList .agenda-row'),panel=$('.agenda-panel');if(!panel||!rows.length)return;rows.forEach(r=>r.classList.remove('in'));const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){rows.forEach((r,i)=>setTimeout(()=>r.classList.add('in'),110*i));obs.disconnect()}}),{threshold:.18,rootMargin:'0px 0px 12% 0px'});window.__veilAgendaObs=obs;obs.observe(panel)}
+function renderAgenda(){const a=config.agenda,items=sortMoments(a.moments||[]),sec=$('#agenda'),list=$('#agendaList');if(!a.enabled||!items.length){list.innerHTML='';sec.className='agenda is-hidden';return}sec.className=`agenda count-${items.length}`;$('#agendaNote').textContent=shortDate(config.wedding.date);list.innerHTML=items.map(x=>`<div class="agenda-row"><time>${esc(x.time)}</time><strong>${esc(x.label)}</strong></div>`).join('');requestAnimationFrame(bindAgendaReveal)}
+function giftDetail(g){
+ if(g.mode==='bank'){
+   const lines=[];if(g.accountHolder)lines.push('Titular: '+g.accountHolder);if(g.iban)lines.push('IBAN: '+g.iban);if(g.bicSwift)lines.push('BIC/SWIFT: '+g.bicSwift);return lines.join('\n')||g.details||'';
+ }
+ if(g.mode==='bizum'){
+   const lines=[];if(g.bizumPhone)lines.push('Bizum: '+g.bizumPhone);if(g.bizumRecipient)lines.push('A nombre de: '+g.bizumRecipient);return lines.join('\n')||g.details||'';
+ }
+ return g.details||g.displayText||'';
+}
+function practicalModel(){
+ const p=config.practical||{},a=[];
+ if(p.bus?.enabled){
+   const b=[];if(p.bus.pickupPoints?.length)b.push(p.bus.pickupPoints.join(' · '));if(p.bus.outboundTimes?.length)b.push('Salida '+p.bus.outboundTimes.join(' / '));if(p.bus.returnTimes?.length)b.push('regresos '+p.bus.returnTimes.join(' y '));if(p.bus.note)b.push(p.bus.note);
+   a.push({title:'Bus',text:b.join(' · '),action:p.bus.mapsUrl?{label:'Cómo llegar',href:p.bus.mapsUrl}:null});
+ }
+ if(p.accommodation?.enabled){
+   const x=p.accommodation,b=[];if(x.name)b.push(x.name);
+   if(x.mode==='room_block'){if(x.bookingCode)b.push('código '+x.bookingCode);if(x.discountText)b.push(x.discountText);if(x.deadline)b.push('hasta '+x.deadline)}
+   else if(x.mode==='on_site'){b.push(x.note||'Alojamiento disponible en el lugar')}
+   else if(x.mode==='couple_managed'){b.push(x.note||'Nosotros organizaremos las habitaciones')}
+   else if(x.mode==='recommended'){if(x.note)b.push(x.note)}
+   else if(x.mode==='external_booking'){if(x.bookingCode)b.push('código '+x.bookingCode);if(x.discountText)b.push(x.discountText);if(x.deadline)b.push('hasta '+x.deadline)}
+   let action=null;if(x.mode==='external_booking'&&x.externalBookingUrl)action={label:'Reservar',href:x.externalBookingUrl};else if(x.websiteUrl)action={label:'Ver hotel',href:x.websiteUrl};
+   const title=(x.mode==='on_site'||x.mode==='couple_managed')?'Alojamiento':'Hotel';a.push({title,text:b.join(' · '),action});
+ }
+ if(p.gift?.enabled){
+   const g=p.gift;
+   if(g.mode==='external_link')a.push({title:'Regalo',text:g.displayText||'Si os apetece tener un detalle.',action:g.externalUrl?{label:g.linkLabel||'Ver lista',href:g.externalUrl}:null});
+   else if(g.mode==='short_text')a.push({title:'Regalo',text:g.displayText||g.details||'Si os apetece tener un detalle.',action:null});
+   else a.push({title:'Regalo',text:g.displayText||'Si os apetece tener un detalle.',action:{label:'Ver detalles',detail:giftDetail(g)}});
+ }
+ if(p.playlist?.enabled){const l=p.playlist;a.push({title:'Playlist',text:l.prompt||'Mandadnos esa canción que no puede faltar.',action:l.url?{label:'Añadir canción',href:l.url}:null})}
+ return a.slice(0,4);
+}
+function updatePracticalLayout(){const list=$('#practicalList'),visible=[...list.children];[...list.classList].filter(c=>c.startsWith('count-')).forEach(c=>list.classList.remove(c));visible.forEach(el=>[...el.classList].filter(c=>c.startsWith('slot-')).forEach(c=>el.classList.remove(c)));list.classList.add(`count-${visible.length}`);visible.forEach((el,i)=>el.classList.add(`slot-${i+1}`))}
+function renderPractical(){const a=practicalModel(),sec=$('#practical'),list=$('#practicalList');if(!a.length){list.innerHTML='';[...list.classList].filter(c=>c.startsWith('count-')).forEach(c=>list.classList.remove(c));sec.classList.add('is-hidden');return}sec.classList.remove('is-hidden');list.innerHTML=a.map(x=>`<article class="practical-item reveal"><h3>${esc(x.title)}</h3><p>${esc(x.text)}</p>${x.action?(x.action.detail!=null?`<button class="practical-link" type="button" data-title="${esc(x.title)}" data-detail="${esc(x.action.detail)}">${esc(x.action.label)}</button>`:`<a class="practical-link" href="${esc(x.action.href||'#')}">${esc(x.action.label)}</a>`):''}</article>`).join('');updatePracticalLayout();list.querySelectorAll('[data-detail]').forEach(b=>b.onclick=()=>openDetail(b.dataset.title,b.dataset.detail))}
+function galleryPhotosForRender(){
+ const raw=(config.gallery?.photos||[]).slice(0,4);
+ const storySrc=config.story?.enabled&&config.story?.photo?.src?config.story.photo.src:null;
+ if(!storySrc||raw.length<=1)return raw;
+ const filtered=raw.filter(p=>p.src!==storySrc);
+ return filtered.length?filtered:raw;
+}
+function autoSafeGalleryFrames(photos){requestAnimationFrame(()=>{$$('#galleryTrack .gallery-card').forEach((card,i)=>{const img=card.querySelector('img'),p=photos[i];if(!img||!p||p.autoFrame===false||p.fit==='full')return;const check=()=>{const iw=img.naturalWidth||1,ih=img.naturalHeight||1,ir=iw/ih,cr=(card.clientWidth||300)/(card.clientHeight||420);const severe=ir>cr*1.24||ir<cr/1.42;if(!severe)return;card.dataset.fit='full';card.dataset.autoSafe='1';card.dataset.orientation=ir<.84?'portrait':ir>1.7?'panorama':ir>1.18?'landscape':'square'};if(img.complete)check();else img.addEventListener('load',check,{once:true})})})}
+function renderGallery(){const g=config.gallery,photos=galleryPhotosForRender(),sec=$('#gallery'),track=$('#galleryTrack'),dots=$('#galleryDots'),hint=$('#galleryHint');if(!g.enabled||!photos.length){track.innerHTML='';dots.innerHTML='';hint.textContent='';sec.classList.add('is-hidden');sec.classList.remove('single');return}sec.classList.remove('is-hidden');sec.classList.toggle('single',photos.length===1);hint.textContent=photos.length>1?'Desliza para ver más':'';track.innerHTML=photos.map(p=>`<figure class="gallery-card" data-fit="${p.fit==='full'?'full':'crop'}" data-orientation="${photoOrientation(p)}" style="--focus-x:${p.focusX??50}%;--focus-y:${p.focusY??50}%"><img src="${p.src}" alt="${esc(p.alt||'Foto de la pareja')}"></figure>`).join('');dots.innerHTML=photos.map((_,i)=>`<i class="${i===0?'active':''}"></i>`).join('');bindSnapDots('galleryTrack','galleryDots');autoSafeGalleryFrames(photos)}
+function bindSnapDots(trackId,dotsId){const track=document.getElementById(trackId),dots=[...document.querySelectorAll(`#${dotsId} i`)];if(!track||!dots.length)return;let raf=0;const update=()=>{const cards=[...track.children],center=track.scrollLeft+track.clientWidth/2;let best=0,dist=Infinity;cards.forEach((c,i)=>{const d=Math.abs((c.offsetLeft+c.offsetWidth/2)-center);if(d<dist){dist=d;best=i}});dots.forEach((d,i)=>d.classList.toggle('active',i===best));raf=0};track.addEventListener('scroll',()=>{if(!raf)raf=requestAnimationFrame(update)},{passive:true});update()}
+function renderRSVP(){const a=$('#rsvpBtn');a.href=config.rsvp.route||'#';a.textContent=config.rsvp.ctaLabel||'Confirmar asistencia'}
+function renderClose(){const n=$('#closeNames'),p=$('#closeText'),close=$('#close');const full=`${config.couple.name1} & ${config.couple.name2}`;n.textContent=full;close.classList.toggle('long-close-names',full.length>24);p.innerHTML=`${longDate(config.wedding.date)}${config.cover.showPlace&&config.wedding.coverPlace?' · '+esc(config.wedding.coverPlace):''}<br>${esc(config.closing.line||'Gracias por formar parte de nuestra historia.')}`}
+function openDetail(t,b){$('#detailTitle').textContent=t;$('#detailBody').textContent=b;$('#detailSheet').classList.add('open');$('#detailSheet').setAttribute('aria-hidden','false')}function closeDetail(){$('#detailSheet').classList.remove('open');$('#detailSheet').setAttribute('aria-hidden','true')}$('#detailClose').onclick=closeDetail;$('#detailSheet').onclick=e=>{if(e.target===$('#detailSheet'))closeDetail()};
+function fitCoverNames(){
+ const h=$('#cover h1');if(!h)return;h.style.fontSize='';const spans=[...h.querySelectorAll('span')];let size=parseFloat(getComputedStyle(h).fontSize);let guard=0;
+ const bad=()=>h.scrollWidth>h.clientWidth+1||spans.some(x=>x.scrollWidth>x.clientWidth+1);
+ while(bad()&&size>46&&guard++<18){size-=2;h.style.fontSize=size+'px'}
+ $('#cover').classList.toggle('long-names',size<60);
+}
+const CLEAN_VEIL_START=5.02,CLEAN_VEIL_END=10.42;
+function positionInitials(){/* V5.2: initials remain stationary on the closed Recraft door and fade before motion begins. */}
+function setupMotion(){
+ const entry=$('#entryVideo'),cover=$('#cover'),start=$('#startLayer'),closeVideo=$('#closeVideo');
+ let started=false,heroShown=false;
+ const setClosed=()=>{try{entry.pause();entry.currentTime=0}catch(_){}};
+ if(entry.readyState>=1)setClosed();else entry.addEventListener('loadedmetadata',setClosed,{once:true});
+ const onTime=()=>{
+   const t=entry.currentTime||0;
+   if(started&&!heroShown&&t>=4.96){
+     heroShown=true;
+     cover.classList.add('hero-ready','opening-complete');
+     setTimeout(()=>document.body.classList.remove('lock'),260);
+   }
+   if(t>=CLEAN_VEIL_END){
+     entry.currentTime=CLEAN_VEIL_START;entry.play().catch(()=>{});
+   }
+ };
+ entry.addEventListener('timeupdate',onTime);
+ entry.addEventListener('ended',()=>{entry.currentTime=CLEAN_VEIL_START;entry.play().catch(()=>{})});
+ /* Mientras está cerrada, cualquier toque o intento de desplazar abre la invitación desde la portada */
+ cover.addEventListener('click',e=>{if(!started&&e.target!==$('#openBtn'))$('#openBtn').click()});
+ window.addEventListener('touchmove',e=>{if(!started){e.preventDefault();$('#openBtn').click()}},{passive:false});
+ window.addEventListener('scroll',()=>{if(document.body.classList.contains('lock')&&window.scrollY>0)window.scrollTo(0,0)},{passive:true});
+ $('#openBtn').onclick=()=>{
+   if(started)return;started=true;heroShown=false;
+   start.classList.add('hide');
+   cover.classList.remove('hero-ready','hero-cut','opening-complete');
+   cover.classList.add('entry-initials-out');
+   entry.pause();entry.currentTime=0;
+   setTimeout(()=>entry.play().catch(()=>{}),230);
+    /* Si el vídeo aún no puede reproducirse, se abre sin esperar a la animación */
+    const openNow=()=>{if(heroShown)return;heroShown=true;cover.classList.add('hero-ready','opening-complete');document.body.classList.remove('lock')};
+    setTimeout(()=>{if(entry.readyState<3||entry.paused)openNow()},1800);
+    setTimeout(openNow,6500);
+ };
+ window.addEventListener('resize',()=>{requestAnimationFrame(()=>{fitCoverNames();scheduleSplitVenueFit()})},{passive:true});
+ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.04,rootMargin:'0px 0px 10% 0px'});$$('.reveal').forEach(el=>io.observe(el));
+ bindAgendaReveal();
+ const cio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){cover.classList.add('opening-complete');closeVideo.play().catch(()=>{})}else closeVideo.pause()}),{threshold:.02});cio.observe($('#finalAct'));
+ document.querySelectorAll('a[href="#"]').forEach(a=>a.addEventListener('click',e=>e.preventDefault()));
+ if(params.get('qa')==='1'){
+   started=true;heroShown=true;start.classList.add('hide');cover.classList.add('hero-ready','opening-complete','entry-initials-out');document.body.classList.remove('lock');entry.currentTime=CLEAN_VEIL_START;entry.play().catch(()=>{});
+ }
+}
+function runQA(){fitCoverNames();const errs=[],req=(c,m)=>{if(!c)errs.push(m)};req($('#name1').textContent===config.couple.name1,'name1');req($('#name2').textContent===config.couple.name2,'name2');req($$('#venueCopy .venue-event').length===(config.locations.items.length===2?2:0),'split count');req($$('#agendaList .agenda-row').length===(config.agenda.enabled?config.agenda.moments.length:0),'agenda count');if(config.agenda.enabled)req(JSON.stringify($$('#agendaList time').map(x=>x.textContent))===JSON.stringify(sortMoments(config.agenda.moments).map(x=>x.time)),'agenda order');const pc=practicalModel().length;req($$('#practicalList .practical-item').length===pc,'practical count');req($('#practical').classList.contains('is-hidden')===(pc===0),'practical zero state');const gc=config.gallery.enabled?galleryPhotosForRender().length:0;req($$('#galleryTrack .gallery-card').length===gc,'gallery count');req($('#gallery').classList.contains('is-hidden')===(gc===0),'gallery zero state');const rawGallery=(config.gallery?.photos||[]);const storySrc=config.story?.enabled&&config.story?.photo?.src?config.story.photo.src:null;window.__VEIL_WARNINGS__={duplicateStoryPhoto:!!(storySrc&&rawGallery.some(p=>p.src===storySrc))};req(document.documentElement.scrollWidth<=window.innerWidth+2,'overflow');const h=$('#cover h1');req(!h||h.scrollWidth<=h.clientWidth+2,'cover fit');window.__VEIL_QA__={case:CASE,pass:!errs.length,errors:errs};$('#qaBadge').textContent=`${!errs.length?'PASS':'FAIL'} · ${CASE}${errs.length?' · '+errs.join(' / '):''}`;document.documentElement.dataset.qaPass=!errs.length?'1':'0'}
+
+function visualStoryBody(){
+ const s=config.story||{};
+ return s.textMode==='preset'?(STORY_PRESETS[s.presetId]||STORY_PRESETS['story-01']):(s.body||'');
+}
+function applyVisualTuning(){
+ const cover=$('#cover'),story=$('#story');if(!cover||!story)return;
+ const t=config.visualTuning||{},ct=t.cover||{},st=t.story||{};
+ cover.classList.remove('visual-tuned','micro-high','micro-large');
+ story.classList.remove('visual-tuned','story-long');
+ cover.classList.add('visual-tuned');story.classList.add('visual-tuned');
+ const full=`${config.couple?.name1||''} & ${config.couple?.name2||''}`.trim();
+ const longest=Math.max(...[config.couple?.name1||'',config.couple?.name2||''].map(x=>String(x).length),0);
+ let nameFont=ct.namesFont||'auto';
+ if(nameFont==='auto'){
+   if(full.length>22||longest>12)nameFont='playfair';
+   else nameFont=config.template?.typographyVariant==='romantic'?'cormorant':config.template?.typographyVariant==='contemporary'?'bodoni':'playfair';
+ }
+ const fonts={playfair:'"Playfair Display",Georgia,serif',cormorant:'"Cormorant Garamond",Georgia,serif',bodoni:'"Bodoni Moda","Times New Roman",serif'};
+ document.documentElement.style.setProperty('--veil-name-font',fonts[nameFont]||fonts.playfair);
+ let nameSize=ct.namesSize||'auto',size;
+ if(nameSize==='compact')size='clamp(50px,14vw,76px)';
+ else if(nameSize==='standard')size='clamp(58px,16.5vw,88px)';
+ else if(nameSize==='large')size='clamp(66px,18.5vw,98px)';
+ else if(full.length>32||longest>17)size='clamp(48px,13.6vw,70px)';
+ else if(full.length>24||longest>13)size='clamp(54px,15vw,80px)';
+ else size='clamp(66px,18.5vw,98px)';
+ cover.style.setProperty('--cover-name-size',size);
+ cover.style.setProperty('--cover-name-line',full.length>30?'.80':'.76');
+ const microHigh=(ct.microContrast||'high')==='high';
+ const microLarge=(ct.microSize||'large')==='large';
+ cover.classList.toggle('micro-high',microHigh);
+ cover.classList.toggle('micro-large',microLarge);
+ document.documentElement.style.setProperty('--veil-micro-size',microLarge?'14px':'12px');
+ document.documentElement.style.setProperty('--veil-micro-line',microLarge?'1.34':'1.3');
+ document.documentElement.style.setProperty('--veil-micro-track',microLarge?'.105em':'.12em');
+ document.documentElement.style.setProperty('--veil-micro-weight',microHigh?'600':'500');
+ document.documentElement.style.setProperty('--veil-micro-shadow',microHigh?'0 2px 8px rgba(38,28,21,.82),0 0 22px rgba(38,28,21,.46)':'0 2px 18px rgba(34,25,19,.25)');
+ const closeNames=$('#closeNames');if(closeNames){closeNames.innerHTML=`${esc(config.couple?.name1||'')} <span class="close-amp">&amp;</span> ${esc(config.couple?.name2||'')}`;}
+ const body=visualStoryBody(),n=body.length;
+ story.classList.toggle('story-long',n>280&&!config.story?.photo);
+ let bodyFont=st.bodyFont||'auto';if(bodyFont==='auto')bodyFont='playfair';
+ const sfonts={playfair:'"Playfair Display",Georgia,serif',cormorant:'"Cormorant Garamond",Georgia,serif',manrope:'"Manrope",system-ui,sans-serif'};
+ story.style.setProperty('--story-body-font',sfonts[bodyFont]||sfonts.playfair);
+ let bodySize=st.bodySize||'auto',bp;
+ if(bodySize==='18')bp=18;else if(bodySize==='20')bp=20;else if(bodySize==='22')bp=22;else if(bodySize==='24')bp=24;else if(bodySize==='26')bp=26;
+ else bp=config.story?.photo?16:(n>380?19:n>280?20:n>190?22:24);
+ story.style.setProperty('--story-body-size',bp+'px');
+ story.style.setProperty('--story-body-line',config.story?.photo?(bp<=18?'1.7':'1.62'):(bp<=20?'1.48':bp<=22?'1.45':'1.4'));
+ story.style.setProperty('--story-body-width',n>280?'28ch':n>190?'26ch':'23ch');
+ let titleSize=st.titleSize||'auto',tp;
+ if(titleSize==='34')tp=34;else if(titleSize==='38')tp=38;else if(titleSize==='42')tp=42;else if(titleSize==='46')tp=46;
+ else tp=n>300?34:n>210?38:42;
+ story.style.setProperty('--story-title-size',tp+'px');
+ story.style.setProperty('--story-title-width',n>300?'13ch':'11ch');
+}
+
+window.VEIL_APPLY_CONFIG=function(next){
+ const nc=structuredClone(next);(function hyd(v){if(Array.isArray(v)){v.forEach(hyd);return}if(!v||typeof v!=='object')return;Object.keys(v).forEach(k=>{if(typeof v[k]==='string'&&v[k].startsWith('@')&&ASSETS[v[k].slice(1)])v[k]=ASSETS[v[k].slice(1)];else hyd(v[k])})})(nc);
+ for(const k of Object.keys(config))delete config[k];Object.assign(config,nc);
+ document.body.classList.remove('name-romantic','name-contemporary');$('#cover').classList.remove('custom-initials','long-names');$('#story').classList.remove('is-hidden','story-text-only');$('#storyPhoto').classList.remove('is-hidden');$('#venue').classList.remove('is-hidden');$('#agenda').classList.remove('is-hidden');$('#practical').classList.remove('is-hidden');$('#gallery').classList.remove('is-hidden','single');
+ setNameStyle();renderCover();renderCountdown();renderStory();renderVenue();renderAgenda();renderPractical();renderGallery();renderRSVP();renderClose();applyVisualTuning();requestAnimationFrame(()=>{fitCoverNames();bindAgendaReveal()});
+};
+setNameStyle();renderCover();renderCountdown();renderStory();renderVenue();renderAgenda();renderPractical();renderGallery();renderRSVP();renderClose();applyVisualTuning();setupMotion();setTimeout(runQA,450);
+</script>
+
+
+
+
+</body></html>

@@ -1,0 +1,1133 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f1e8">
+<title>Invitación de boda · Muestra</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{
+ --paper:#f7f1e8;--ink:#4b3b2d;--moss:#6c715a;--ochre:#9d775b;--muted:#776c60;
+ --serif:"Cormorant Garamond", "EB Garamond", Georgia,serif;
+ --sans:"DM Sans","Avenir Next",Arial,sans-serif;
+ --gutter:clamp(24px,7.5vw,68px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--paper);scroll-behavior:smooth;overflow-x:clip}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:clip}
+button,a{font:inherit}button{cursor:pointer}[hidden]{display:none!important}
+img,video{display:block;max-width:100%}
+button:focus-visible,a:focus-visible{outline:2px solid var(--ochre);outline-offset:4px}
+h1,h2,h3,p,figure{margin:0}
+#invitation{width:100%;overflow-x:clip;background:var(--paper);position:relative}
+.serif{font-family:var(--serif);font-weight:400;letter-spacing:-.045em}
+.italic{font-style:italic;font-weight:400}
+.label{font-family:var(--sans);font-weight:600;letter-spacing:.205em;text-transform:uppercase;font-size:10px;line-height:1.5;color:#867365}
+.bodycopy{font-size:clamp(14px,3.8vw,16px);line-height:1.64;letter-spacing:-.012em;color:#6b6055}
+.inner{width:100%;max-width:770px;margin-inline:auto;padding-inline:var(--gutter);min-width:0;position:relative;z-index:2}
+/* Cover is native cinematic footage. The lower edge actually dissolves into the ground. */
+.cover{height:100svh;min-height:620px;position:relative;display:grid;align-items:center;justify-items:center;isolation:isolate;overflow:hidden}
+.cover video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-2}
+.cover:after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(247,241,232,.04) 0%,rgba(247,241,232,.06) 58%,rgba(247,241,232,.4) 84%,var(--paper) 100%)}
+.cover-content{text-align:center;width:100%;padding:16vh var(--gutter) 18vh}
+.cover .label{color:#433a30;letter-spacing:.29em}
+.hero-names{margin:28px auto 23px;display:grid;justify-items:center;width:100%;line-height:.7}
+.hero-name{display:block;max-width:100%;font-family:var(--serif);font-weight:500;font-size:clamp(87px,25vw,140px);letter-spacing:-.07em;overflow-wrap:anywhere;line-height:.74}
+.hero-name.long{font-size:clamp(52px,17vw,104px);line-height:.84;letter-spacing:-.055em}
+.hero-name.xlong{font-size:clamp(39px,12vw,75px);line-height:.96;letter-spacing:-.035em}
+.cover .hero-name:first-child{animation:nameIn 1.15s cubic-bezier(.2,.68,.27,1) .12s both}
+.cover .hero-and{animation:nameIn 1.3s cubic-bezier(.2,.68,.27,1) .42s both}
+.cover .hero-name:last-child{animation:nameIn 1.45s cubic-bezier(.2,.68,.27,1) .65s both}
+@keyframes nameIn{from{opacity:0;transform:translateY(11px)}to{opacity:1;transform:translateY(0)}}
+.hero-and{display:block;font:italic 400 clamp(42px,11vw,60px)/.78 var(--serif);color:#926e53;margin:10px 0 7px}
+.cover-date{font-size:11px;letter-spacing:.24em;font-weight:600}
+.cover-location{margin-top:11px;font-size:13px;letter-spacing:.07em}
+.swipe{position:absolute;bottom:max(30px,calc(env(safe-area-inset-bottom) + 18px));left:0;right:0;text-align:center;font-size:10px;letter-spacing:.24em;font-weight:600;text-transform:uppercase;opacity:.82}
+/* Continuous film-body: no section-specific backgrounds, no fixed/sticky backgrounds. */
+.journey{position:relative;background:var(--paper);isolation:isolate}
+.chapter{position:relative;padding:0;min-width:0}
+/* Video was PRECOMPOSITED to exactly var(--paper) on every perimeter pixel: no CSS masks. */
+.film-breath{position:absolute;z-index:0;pointer-events:none;width:min(110vw,650px);height:auto;aspect-ratio:540/946;overflow:hidden;background:var(--paper);}
+.film-breath video{width:100%;height:100%;object-fit:cover;}
+.film-breath.poster{background-size:cover;background-position:center}
+.film-breath--begin{right:-12vw;top:2%;opacity:.94}
+.film-breath--agenda{right:-8vw;top:6%;opacity:.86}
+.film-breath--gallery{left:-18vw;bottom:-7%;opacity:.70;transform:scaleX(-1)}
+/* Luminous counting: not a slide; photograph continues directly into the story. */
+.intro{padding-top:2vh}
+.intro .inner{padding-bottom:20px}
+.intro .label{margin-bottom:11px}
+.count-stat{position:relative;padding-top:3vh}
+.count-num{font:400 clamp(108px,30vw,163px)/.8 var(--serif);letter-spacing:-.10em;font-variant-numeric:lining-nums tabular-nums}
+.count-unit{margin-top:2px;font-size:10px;letter-spacing:.25em;font-weight:600}
+.count-phrase{margin-top:32px;max-width:10ch;font-size:clamp(54px,14vw,81px);line-height:.83;text-wrap:balance}
+.count-phrase em{font-weight:400;color:#8f6e53}
+.count-body{max-width:31ch;margin-top:18px}
+/* A candid portrait is the bridge: no card, no fake frame, no black tint. */
+.photo-interlude{margin-top:20px;position:relative;overflow:hidden}
+.photo-interlude img{width:100%;height:auto;aspect-ratio:4/3.7;object-fit:cover;object-position:50% 42%;animation:photographBreathe 18s ease-in-out infinite alternate}
+@keyframes photographBreathe{from{transform:scale(1)}to{transform:scale(1.028)}}
+.photo-interlude::before{content:"";position:absolute;pointer-events:none;left:0;right:0;top:-1px;height:11%;z-index:1;background:linear-gradient(to bottom,var(--paper),transparent);}
+.photo-interlude::after{content:"";position:absolute;pointer-events:none;left:0;right:0;bottom:-1px;height:18%;background:linear-gradient(to bottom,transparent,var(--paper));}
+.story{padding-top:10px;padding-bottom:32px}
+.story .inner{padding-top:0}
+.story h2{font-size:clamp(57px,15.4vw,86px);line-height:.82;max-width:10ch;margin:15px 0 17px;text-wrap:balance}
+.story h2 em{font-weight:400;color:#8a6853}
+.story p{max-width:34ch}
+/* Places are a run in the story, photo and words belong to same paper. */
+.places{padding-top:26px;padding-bottom:26px}
+.places-heading{margin-bottom:22px}
+.places-heading h2{font-size:clamp(56px,14vw,87px);line-height:.85;margin-top:8px}
+.place{margin:0 0 26px;min-width:0;position:relative}
+.place-image{position:relative;width:100%;height:auto;aspect-ratio:1.4;overflow:hidden}
+.place-image img{width:100%;height:100%;object-fit:cover;object-position:center 46%;animation:photographBreathe 21s ease-in-out infinite alternate}
+.place-image:before{content:"";position:absolute;left:0;right:0;top:-1px;height:15%;z-index:1;pointer-events:none;background:linear-gradient(to bottom,var(--paper),transparent)}
+.place-image:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:27%;background:linear-gradient(transparent,var(--paper))}
+.place-copy{position:relative;max-width:770px;margin:-2px auto 0;padding:0 var(--gutter) 8px;z-index:2}
+.place-label{color:#90765e;margin:1px 0 6px}
+.place-name{font-size:clamp(48px,13vw,79px);line-height:.85;overflow-wrap:break-word}
+.place-where{margin-top:12px;font-size:13px;line-height:1.7;color:#66594e}
+.place-address{font-size:13px;color:#75685d;line-height:1.5;margin-top:3px;overflow-wrap:anywhere}
+.place-link{margin-top:14px;background:transparent;color:var(--ink);border:1px solid #ab9987;border-radius:100px;min-height:42px;padding:9px 18px;font-size:12px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.places--empty{display:none}
+/* Wedding timetable: bespoke editorial score, not tabular SaaS boxes or flower-pointer diagrams. */
+.score{padding-top:26px;padding-bottom:26px}
+.score .label{margin-bottom:8px}
+.score h2{font-size:clamp(60px,15.4vw,88px);line-height:.83;max-width:11ch;margin-bottom:30px;overflow-wrap:normal}
+.score h2 em{font-weight:400;color:#8d7158}
+.score-list{display:grid;gap:0;width:100%;position:relative;padding-right:6px}
+.score-row{display:grid;grid-template-columns:58px minmax(0,1fr);column-gap:18px;padding:16px 0 15px;min-width:0;border-bottom:1px solid rgba(95,75,59,.17)}
+.score-row:last-child{border-bottom:0}
+.score-time{font-size:12px;letter-spacing:.085em;font-weight:600;color:#957359;padding-top:10px}
+.score-text{min-width:0}
+.score-text h3{font-size:clamp(35px,9vw,48px);line-height:.86;letter-spacing:-.045em;overflow-wrap:break-word}
+.score-text p{font-size:12px;line-height:1.35;color:#75695f;padding-top:7px}
+/* A02 cinema is local but ends in exactly the underlying paper: not a free-floating geometric layer. */
+.score .film-breath{opacity:.82}
+/* Practical: readable touch interface: all of row clickable, clear plus but no arrows. */
+.late-world{position:relative;isolation:isolate}.late-world .film-breath{right:-12vw;top:6%;opacity:.70}
+.practical{padding-top:34px;padding-bottom:36px}
+.practical .label{margin-bottom:9px;font-size:clamp(13px,3.4vw,15px);letter-spacing:.17em;line-height:1.4}
+.practical h2{font-size:clamp(58px,15.4vw,88px);line-height:.81;max-width:10ch;margin-bottom:28px;}
+.practical-list{border-top:1px solid rgba(95,75,59,.30)}
+.prac-row{border-bottom:1px solid rgba(95,75,59,.30)}
+.prac-trigger{appearance:none;background:none;color:inherit;border:0;width:100%;text-align:left;padding:17px 0;display:grid;grid-template-columns:minmax(0,1fr) 42px;align-items:center;gap:14px;min-height:90px}
+.prac-trigger .micro{display:block;color:#9a765b;font-size:clamp(12px,3.2vw,14px);line-height:1.35;font-weight:600;letter-spacing:.15em;text-transform:uppercase;margin-bottom:3px}
+.prac-trigger strong{font:400 clamp(33px,8.5vw,45px)/.92 var(--serif);letter-spacing:-.04em;display:block;overflow-wrap:break-word}
+.prac-trigger .desc{display:block;font-size:12px;color:#726359;margin-top:5px}
+.plus{width:38px;height:38px;display:grid;place-items:center;border:1px solid rgba(94,69,50,.44);border-radius:50%;font-size:25px;line-height:1;color:#70543c;transition:transform .25s}
+.prac-row.open .plus{transform:rotate(45deg)}
+.prac-detail{display:none;padding:0 32px 17px 0;color:#695a4d;font-size:14px;line-height:1.55}
+.prac-row.open .prac-detail{display:block}
+/* Photographs have full natural colour; the couple, not a filter, takes centre stage. */
+.gallery{padding-top:22px;padding-bottom:32px}
+.gallery .label{font-size:clamp(14px,3.65vw,16px);font-weight:700;letter-spacing:.16em;line-height:1.4;color:#6d5442}
+.gallery h2{font-size:clamp(59px,15.5vw,91px);line-height:.8;margin:8px 0 20px;max-width:10ch}
+.gallery-strip{display:flex;gap:14px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;padding:0 var(--gutter) 0;min-width:0}
+.gallery-strip::-webkit-scrollbar{display:none}
+.gallery-shot{margin:0;flex:0 0 min(76vw,420px);scroll-snap-align:start}
+.gallery-shot img{width:100%;aspect-ratio:.8;object-fit:cover;object-position:center;}
+.gallery-note{margin-top:13px;font-size:10px;font-weight:600;letter-spacing:.15em;display:flex;align-items:center;justify-content:space-between;color:#83705f}
+.dots{display:flex;gap:6px}.dots i{width:5px;height:5px;border-radius:50%;background:#a9a096;opacity:.5}.dots i.on{background:#6d5442;opacity:1}
+/* Final RSVP and closing are ONE act of cinema, no blank outro. */
+.finale{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;isolation:isolate;overflow:hidden;padding:clamp(88px,12vh,130px) 24px max(8vh,env(safe-area-inset-bottom));text-align:center}
+.finale video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:-2;filter:brightness(1.01) saturate(1)}
+.finale:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(to bottom,rgba(247,241,232,.20) 0%,rgba(247,241,232,.14) 14%,rgba(247,241,232,.01) 36%,rgba(247,241,232,0) 100%)}
+.finale h2{font-size:clamp(74px,20vw,121px);max-width:7ch;line-height:.78;margin:25px 0 20px}
+.finale p{font-size:16px;line-height:1.4;margin:0 auto 24px}
+.finale .label{font-size:clamp(15px,3.65vw,17px);line-height:1.4;font-weight:700;letter-spacing:.165em;color:#513e30;text-shadow:0 1px 14px rgba(247,241,232,.93),0 0 6px rgba(247,241,232,.76)}
+.rsvp{min-height:54px;padding:14px 27px;min-width:220px;background:#644d3b;border:1px solid rgba(64,42,23,.15);border-radius:999px;color:#fff;font-size:13px;font-weight:600}
+.finale-sign{position:relative;isolation:isolate;width:min(100%,560px);margin-top:clamp(43px,8vh,74px);display:grid;justify-items:center;gap:9px;padding:0 6px 3px}
+/* Soft optical light only behind the lower sign-off: no panel edges or changes to the moving film. */
+.finale-sign::after{content:"";position:absolute;pointer-events:none;z-index:-1;inset:-30px -22px -31px;background:radial-gradient(ellipse 58% 57% at 50% 68%,rgba(247,241,232,.87) 0%,rgba(247,241,232,.75) 47%,rgba(247,241,232,.28) 76%,rgba(247,241,232,0) 100%);filter:blur(9px)}
+.finale-sign::before{content:"";width:60px;height:1px;background:#7a6250;margin-bottom:18px;justify-self:center}
+.finale-sign .names{font-size:clamp(37px,10.5vw,55px);line-height:1;overflow-wrap:anywhere;max-width:82vw;justify-self:center;text-align:center;width:100%}
+.finale-sign .date{font-size:clamp(13px,3.35vw,15px);line-height:1.42;font-weight:700;letter-spacing:.055em;max-width:100%;text-wrap:balance;color:#4b3b2d;text-shadow:0 0 9px rgba(247,241,232,.72)}
+.finale-sign .thanks{font-size:clamp(15px,3.65vw,17px);font-weight:500;color:#49392d;max-width:28ch;line-height:1.46;margin-top:9px;text-wrap:balance;text-shadow:0 0 9px rgba(247,241,232,.65)}
+/* Only functional dialog during review. Production action routes come from GUEST engine. */
+dialog{border:0;border-radius:18px;box-shadow:0 20px 70px #2d221c44;padding:27px;max-width:min(88vw,430px);font-family:var(--sans);background:var(--paper);color:var(--ink)}
+dialog::backdrop{background:rgba(39,30,22,.45)}dialog h2{font:400 39px/.95 var(--serif);margin:0 0 15px}dialog p{font-size:14px;line-height:1.55}dialog button{background:#644d3b;color:white;border:none;border-radius:100px;padding:12px 20px;margin-top:20px}
+@media(min-width:700px){.photo-interlude{max-width:680px;margin-inline:auto}.place-image{max-width:800px;margin-inline:auto}.place-copy{max-width:800px}.journey{max-width:1040px;margin-inline:auto}.film-breath--begin{right:0}.film-breath--agenda{right:0}}
+@media(max-width:350px){.score-row{grid-template-columns:52px minmax(0,1fr);gap:11px}.score-text h3{font-size:33px}.hero-name{font-size:84px}.score h2,.practical h2{font-size:53px}}
+@media(prefers-reduced-motion:reduce){.cover .hero-name:first-child,.cover .hero-name:last-child,.cover .hero-and,.photo-interlude img,.place-image img{animation:none}html{scroll-behavior:auto}.film-breath video{display:none}.film-breath{background-image:url('media/x4e3e8f86ea79ffd1.webp');background-size:cover;background-position:center}}
+
+/* GUEST D02 · AJUSTE PUNTUAL DE LEGIBILIDAD (08/10/2026)
+   Revisión adicional: cierre final con frase inferior más baja y centrada (08/10/2026)
+   Sobre el master congelado: no cambia videos, medios, arquitectura ni experiencia.
+   Para aprobar por revisión visual Android; el bloque práctico no se rediseña. */
+.cover .label{font-size:clamp(15px,3.85vw,18px);line-height:1.45;letter-spacing:.21em;text-shadow:0 1px 7px rgba(247,241,232,.6)}
+.cover-date{font-size:clamp(13px,3.35vw,15px);letter-spacing:.19em}
+.cover-location{font-size:clamp(14px,3.6vw,17px)}
+.swipe{font-size:clamp(11px,2.95vw,13px);letter-spacing:.18em}
+.intro .label,.story .label,.places-heading .label,.place-label{
+  font-size:clamp(15px,3.8vw,18px);line-height:1.45;letter-spacing:.15em;
+  font-weight:700;color:#6c5140;
+}
+.count-unit{font-size:clamp(15px,3.85vw,18px);letter-spacing:.18em;color:#624a39}
+.bodycopy{font-size:clamp(17px,4.35vw,20px);line-height:1.57;color:#584b41}
+.count-body{max-width:33ch}
+.story p{max-width:35ch}
+.place-label{margin-bottom:8px}
+.place-where,.place-address{font-size:clamp(15px,3.75vw,17px);line-height:1.54}
+.score-time{font-size:clamp(16px,4.05vw,19px);line-height:1.3;letter-spacing:.02em;color:#735038;padding-top:4px}
+.score-row{grid-template-columns:72px minmax(0,1fr);column-gap:16px}
+.score-text p{font-size:clamp(14px,3.55vw,16px);line-height:1.45}
+/* Práctico: SOLO legibilidad de cabeceras y títulos menores. */
+.practical .label{font-size:clamp(16px,3.95vw,19px);line-height:1.45;letter-spacing:.13em}
+.prac-trigger .micro{font-size:clamp(15px,3.85vw,18px);letter-spacing:.11em;line-height:1.4}
+.gallery .label{font-size:clamp(17px,4.15vw,20px);letter-spacing:.11em;line-height:1.4}
+.finale .label{font-size:clamp(18px,4.7vw,22px);letter-spacing:.115em;line-height:1.3;color:#433124;text-shadow:0 0 12px rgba(247,241,232,.92),0 0 3px var(--paper)}
+/* Ajuste óptico de titular en el cierre: la palabra larga no debe salir del viewport. */
+.finale h2{font-size:clamp(58px,16.3vw,96px);line-height:.86;letter-spacing:-.05em;max-width:100%;width:100%;display:grid;justify-items:center;text-align:center;margin-inline:auto}.finale h2 .lead{display:block;line-height:.92}.finale h2 em{display:block;line-height:.9;font-style:italic}
+/* La dedicatoria sube visualmente y gana contraste sin paneles ni recuadros. */
+.finale-sign{margin-top:clamp(18px,3.6vh,34px);gap:12px;width:min(100%,560px);padding:0 14px 3px;justify-items:start;text-align:left}
+.finale-sign::after{display:none}
+.finale-sign .date{font-size:clamp(14px,3.55vw,17px);line-height:1.35;letter-spacing:0;color:#2f241b;text-shadow:0 0 2px rgba(247,241,232,.28);max-width:none;text-wrap:normal;white-space:nowrap;justify-self:center;text-align:center;width:100%}
+.finale-sign .thanks{font-size:clamp(13px,3.3vw,15px);line-height:1.3;color:#1f1711;text-shadow:0 0 2px rgba(247,241,232,.18);max-width:none;text-wrap:normal;white-space:nowrap;margin-top:26px;position:relative;top:34px;left:0;letter-spacing:-.01em;justify-self:center;text-align:center}
+@media(max-width:350px){.score-row{grid-template-columns:65px minmax(0,1fr);column-gap:12px}}
+
+
+/* BOTÁNICA — final content layout. Media, film-breath, late-world and original transitions untouched. */
+.score{padding-top:28px;padding-bottom:45px}
+.score h2{font-size:clamp(58px,15.4vw,88px);margin-bottom:24px}
+.score-list{padding:0}
+.score-row{display:grid;grid-template-columns:71px minmax(0,1fr);gap:17px;padding:11px 0 12px;border-bottom:0;align-items:baseline}
+.score-time{font-size:clamp(15px,3.8vw,18px);letter-spacing:.012em;padding-top:0;color:#765440;font-weight:700}
+.score-text h3{font-size:clamp(37px,9.4vw,52px);line-height:1.02;letter-spacing:-.04em}
+.score-text p{display:none!important}
+.practical{padding-top:52px;padding-bottom:24px}
+.practical .label{font-size:clamp(15px,3.8vw,18px);font-weight:700;letter-spacing:.14em}
+.practical h2{font-size:clamp(59px,15.4vw,88px);line-height:.82;margin-bottom:11px}
+.practical h2 em{color:#8a6853}
+.practical-list{border:0;display:grid;gap:0}
+.atelier-note{border:0;min-width:0;padding:9px 0 11px;position:relative}
+.atelier-note + .atelier-note{border-top:1px solid rgba(95,75,59,.19);padding-top:11px}
+.atelier-note-body{min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:0}
+.atelier-category{display:block;flex:0 0 100%;font-size:clamp(12px,3.25vw,14px);font-family:var(--sans);font-weight:700;line-height:1.3;letter-spacing:.15em;color:#765b47;margin-bottom:3px}
+.atelier-note-title{display:block;flex:0 0 100%;font-size:clamp(34px,9.1vw,48px);letter-spacing:-.045em;line-height:1.04;overflow-wrap:break-word}
+.atelier-note-summary{flex:1 1 100%;font-family:var(--sans);font-weight:400;line-height:1.38;letter-spacing:-.016em;font-size:clamp(16px,4vw,18px);color:#504438;margin-top:5px;overflow-wrap:anywhere}
+.atelier-actions{display:flex;flex:0 0 100%;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap;margin-top:7px}
+.atelier-action{appearance:none;min-height:36px;border:1px solid #816b57;background:rgba(247,241,232,.65);color:#483729;border-radius:999px;padding:8px 16px;display:inline-flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;line-height:1.1;font-family:var(--sans);font-size:clamp(13px,3.5vw,15px);font-weight:700;white-space:nowrap}
+.atelier-action:first-child{background:#644d3b;border-color:#644d3b;color:#fff}
+.atelier-action:not(:first-child){border:0;border-bottom:1px solid #816b57;background:transparent;color:#483729;border-radius:0;padding:7px 0;font-weight:600}
+/* Cormorant Garamond & DM Sans are inherited from the master: no new font requests. */
+@media(min-width:600px){.atelier-note-body{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:20px}.atelier-category,.atelier-note-title,.atelier-note-summary{grid-column:1}.atelier-actions{grid-column:2;grid-row:1 / span 3;align-self:end;justify-content:flex-end}}
+@media(max-width:359px){.score-row{grid-template-columns:62px minmax(0,1fr);gap:11px}.practical{padding-top:44px}}
+
+
+/* BOTÁNICA — agenda restaurada sobre el mismo fondo aprobado.
+   Se mantiene el lenguaje editorial y se introduce una línea vertical premium
+   entre hora y texto, con un movimiento muy sutil de avance. */
+.score{isolation:isolate;padding-top:clamp(35px,6vh,60px);padding-bottom:clamp(65px,8vh,90px)}
+.score .inner{position:relative;z-index:3}
+.score .label{margin-bottom:12px}
+.score h2{font-size:clamp(58px,15.4vw,88px);max-width:11ch;line-height:.82;margin-bottom:24px}
+.score-list{display:flex;flex-direction:column;gap:4px;position:relative;z-index:2;padding:2px 0 0;overflow:visible}
+/* Un trazo de seda estable y otro dibujado a medida que se recorre la agenda. */
+.score-list:before,.score-list:after{content:"";position:absolute;top:var(--agenda-track-top,30px);left:var(--agenda-track-x,88px);height:var(--agenda-track-height,280px);border-radius:9px;pointer-events:none;z-index:0}
+.score-list:before{width:1px;background:rgba(116,87,67,.34)}
+.score-list:after{width:2px;margin-left:-.5px;background:linear-gradient(to bottom,#9a8068,#76543d 65%,#ad8c73);transform:scaleY(var(--agenda-progress,0));transform-origin:top center;transition:transform 90ms linear;box-shadow:0 0 5px rgba(143,103,75,.15)}
+.score-row{position:relative;isolation:isolate;display:grid;grid-template-columns:clamp(58px,16vw,82px) clamp(28px,7vw,36px) minmax(0,1fr);column-gap:clamp(12px,3.2vw,20px);align-items:center;width:100%;max-width:520px;margin:0;padding:10px 0 14px;border:0;min-width:0;text-align:left}
+.score-time{display:block;font-family:var(--sans);font-size:clamp(14px,3.55vw,16px);letter-spacing:.14em;color:#7b5d49;font-weight:700;line-height:1.1;text-align:right;padding:0;opacity:.82;transform:translateY(4px);transition:opacity .45s ease,transform .62s cubic-bezier(.22,1,.36,1),color .42s ease,text-shadow .45s ease}
+.score-divider{position:relative;display:block;align-self:stretch;min-height:52px;overflow:visible}
+.score-divider:before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.86);width:8px;height:8px;border-radius:50%;background:#8a6a54;box-shadow:0 0 0 4px rgba(247,241,232,.78);transition:background-color .28s ease,box-shadow .28s ease,transform .55s cubic-bezier(.22,1,.36,1)}
+.score-text{position:relative;min-width:0;padding-left:clamp(3px,.9vw,9px)}
+.score-text h3{font-size:clamp(31px,8.9vw,47px);line-height:.95;letter-spacing:-.04em;max-width:100%;overflow-wrap:break-word;color:#5b4334;opacity:.76;transform:translateX(10px) translateY(3px);text-shadow:0 0 0 rgba(0,0,0,0);transition:opacity .48s ease,transform .78s cubic-bezier(.22,1,.36,1),color .48s ease,text-shadow .62s ease,letter-spacing .62s ease}
+.score-row:before{content:"";position:absolute;left:clamp(70px,19vw,94px);right:-10px;top:6px;bottom:6px;border-radius:28px;background:radial-gradient(115% 90% at 0% 50%,rgba(255,255,255,.76) 0%,rgba(255,255,255,.28) 38%,rgba(255,255,255,0) 74%),linear-gradient(90deg,rgba(255,255,255,.12),rgba(255,255,255,0));opacity:0;transform:translateX(14px) scale(.98);transition:opacity .55s ease,transform .9s cubic-bezier(.22,1,.36,1);pointer-events:none;z-index:0}
+.score-text:before{content:"";position:absolute;left:calc(clamp(3px,.9vw,9px) * -1);top:50%;width:clamp(26px,6.4vw,34px);height:1px;background:linear-gradient(90deg,rgba(122,91,70,.06) 0%,rgba(122,91,70,.52) 52%,rgba(122,91,70,.88) 100%);transform:translate(calc(-100% - 8px),-50%) scaleX(.14);transform-origin:right center;opacity:0;transition:transform .72s cubic-bezier(.22,1,.36,1),opacity .45s ease,box-shadow .55s ease}
+.score-text:after{content:"";position:absolute;left:0;right:4%;bottom:-8px;height:1px;background:linear-gradient(90deg,rgba(122,91,70,.18),rgba(122,91,70,.06) 60%,rgba(122,91,70,0));opacity:0;transform:scaleX(.82);transform-origin:left center;transition:opacity .45s ease,transform .72s cubic-bezier(.22,1,.36,1);pointer-events:none}
+.score .film-breath{z-index:0;opacity:.86}
+.score-row.is-current:before{opacity:1;transform:none}
+.score-row.is-passed:before{opacity:.36;transform:none}
+.score-row.is-current .score-divider:before{background:#6c503c;box-shadow:0 0 0 4px rgba(247,241,232,.84),0 0 0 7px rgba(129,95,70,.10),0 0 16px rgba(129,95,70,.18);transform:translate(-50%,-50%) scale(1.18)}
+.score-row.is-passed .score-divider:before{background:#674b38;box-shadow:0 0 0 4px rgba(247,241,232,.8),0 0 0 5px rgba(116,86,63,.12);transform:translate(-50%,-50%) scale(1.05)}
+.score-row.is-current .score-time,.score-row.is-passed .score-time{opacity:1;transform:none;color:#694d3a}.score-row.is-current .score-time{text-shadow:0 0 12px rgba(155,124,100,.08)}
+.score-row.is-passed .score-text:before{opacity:.45;transform:translate(calc(-100% - 8px),-50%) scaleX(.52)}
+.score-row.is-current .score-text:before{opacity:1;transform:translate(calc(-100% - 8px),-50%) scaleX(1);box-shadow:0 0 10px rgba(139,108,86,.10)}
+.score-row.is-passed .score-text:after{opacity:.22;transform:scaleX(.92)}
+.score-row.is-current .score-text:after{opacity:.48;transform:scaleX(1)}
+.score-row.is-passed .score-text h3{opacity:.98;transform:none;color:#4e3a2d}.score-row.is-current .score-text h3{opacity:1;transform:none;color:#4a3428;text-shadow:0 10px 28px rgba(141,111,89,.12);letter-spacing:-.045em}
+.score:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:clamp(90px,12vh,120px);z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(247,241,232,0),rgba(247,241,232,.65) 40%,var(--paper) 100%)}
+@media (prefers-reduced-motion:reduce){.score-list:after{transition:none}.score-row:before,.score-text:before,.score-text:after,.score-time,.score-text h3{transition:none;transform:none;opacity:1;filter:none;text-shadow:none}}
+/* Dos capítulos completos con una transición de papel entre ambos, nunca una arista. */
+.practical{position:relative;isolation:isolate;padding-top:clamp(57px,7vh,75px);padding-bottom:clamp(35px,7vh,68px)}
+.practical .inner{position:relative;z-index:3}
+.practical:before{content:"";position:absolute;top:-2px;left:0;right:0;height:clamp(78px,11vh,120px);z-index:2;pointer-events:none;background:linear-gradient(to bottom,var(--paper) 0%,rgba(247,241,232,.95) 15%,rgba(247,241,232,0) 100%)}
+/* Datos de cada opción una vez, acciones verdaderas, composición contenida. */
+.practical h2{margin-bottom:18px}
+.atelier-note{padding:10px 0 13px}
+.atelier-note + .atelier-note{padding-top:13px}
+.atelier-note-title{font-size:clamp(33px,8.5vw,45px)}
+.atelier-note-summary{font-size:clamp(16px,4vw,18px);line-height:1.38}
+.atelier-actions{margin-top:7px;gap:14px}
+.atelier-action{min-height:38px;padding:9px 18px}
+/* Entrada al cierre: primero el mismo papel de Galería, después las flores cinematográficas.
+   La parte inferior del cierre aprobado, sus letras y el vídeo permanecen intactos. */
+.finale:before{background:linear-gradient(to bottom,var(--paper) 0%,rgba(247,241,232,.99) 5%,rgba(247,241,232,.88) 12%,rgba(247,241,232,.56) 21%,rgba(247,241,232,.12) 33%,rgba(247,241,232,0) 44%)}
+@media(max-width:350px){.score-row{grid-template-columns:54px 24px minmax(0,1fr);column-gap:10px}.score-text h3{font-size:clamp(29px,9.1vw,36px)}.score-divider{min-height:46px}.practical h2{font-size:53px}}
+
+
+/* AGENDA / fix 2026-10-09: stable legible text, single active moment.
+   Scoped strictly to #agenda. The backdrop, transitions, other blocks are untouched. */
+#agenda .score-time{opacity:.96;transform:none;transition:color .36s ease,opacity .36s ease}
+#agenda .score-text h3{opacity:1;transform:none;filter:none;letter-spacing:-.04em;color:#4e3a2d;transition:color .38s ease,text-shadow .45s ease}
+#agenda .score-row.is-current .score-text h3{opacity:1;transform:none;letter-spacing:-.04em;animation:agendaTypeFocus .62s cubic-bezier(.22,1,.36,1) both}
+#agenda .score-row.is-passed .score-text h3{opacity:1;transform:none;letter-spacing:-.04em;animation:none}
+#agenda .score-row.is-current .score-time{animation:agendaTimeFocus .55s cubic-bezier(.22,1,.36,1) both}
+#agenda .score-row.is-passed .score-time{animation:none}
+#agenda .score-row:before{opacity:0!important;transform:none!important}
+@keyframes agendaTypeFocus{0%{opacity:.86;transform:translateY(5px);color:#80634d}100%{opacity:1;transform:translateY(0);color:#4a3428}}
+@keyframes agendaTimeFocus{0%{opacity:.8;transform:translateY(3px)}100%{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){#agenda .score-row.is-current .score-text h3,#agenda .score-row.is-current .score-time{animation:none}}
+</style>
+
+<style id="botanica-premium-global-pass">
+/* Premium pass 2 — strengthens the agenda choreography and cleans practical actions,
+   without touching the approved floral/video background language. */
+#agenda .inner,#practical .inner{max-width:560px;margin-inline:auto}
+#agenda .score-list{gap:6px;padding-top:4px}
+#agenda .score-row{grid-template-columns:64px 28px minmax(0,1fr);column-gap:14px;align-items:center;padding:13px 0 15px;max-width:100%}
+#agenda .score-time{font-size:clamp(15px,3.7vw,17px);letter-spacing:.035em;line-height:1.1;color:#72523e;opacity:.96}
+#agenda .score-divider{min-height:58px}
+#agenda .score-divider:before{width:8px;height:8px;background:#8b6850;box-shadow:0 0 0 4px rgba(247,241,232,.84)}
+#agenda .score-text{padding-left:10px}
+#agenda .score-text h3{font-size:clamp(38px,9.45vw,50px);line-height:.94;letter-spacing:-.045em;color:#4a372c}
+#agenda .score-text:before{width:clamp(30px,7vw,40px);background:linear-gradient(90deg,rgba(122,91,70,.03) 0%,rgba(122,91,70,.40) 45%,rgba(122,91,70,.92) 100%)}
+#agenda .score-text:after{left:0;right:8%;bottom:-9px;height:1px;background:linear-gradient(90deg,rgba(122,91,70,.26),rgba(122,91,70,.10) 54%,rgba(122,91,70,0) 100%)}
+#agenda .score-row.is-passed .score-text:before{opacity:.42;transform:translate(calc(-100% - 8px),-50%) scaleX(.58)}
+#agenda .score-row.is-current .score-text:before{opacity:1;transform:translate(calc(-100% - 8px),-50%) scaleX(1);box-shadow:0 0 11px rgba(139,108,86,.12);animation:agendaConnectorSweep .72s cubic-bezier(.22,1,.36,1) both}
+#agenda .score-row.is-current .score-text:after{opacity:.58;transform:scaleX(1);box-shadow:0 0 10px rgba(139,108,86,.11)}
+#agenda .score-row.is-current .score-text h3{animation:agendaTypeLuxury .72s cubic-bezier(.22,1,.36,1) both;text-shadow:0 10px 28px rgba(141,111,89,.10)}
+#agenda .score-row.is-current .score-time{animation:agendaTimeLuxury .6s cubic-bezier(.22,1,.36,1) both}
+#agenda .score-row.is-current .score-divider:before{animation:agendaDotPulse .72s cubic-bezier(.22,1,.36,1) both;box-shadow:0 0 0 4px rgba(247,241,232,.86),0 0 0 7px rgba(129,95,70,.11),0 0 18px rgba(129,95,70,.18)}
+@keyframes agendaConnectorSweep{0%{opacity:0;transform:translate(calc(-100% - 8px),-50%) scaleX(.14)}100%{opacity:1;transform:translate(calc(-100% - 8px),-50%) scaleX(1)}}
+@keyframes agendaTypeLuxury{0%{opacity:.84;transform:translateY(6px);letter-spacing:-.02em;color:#856650}100%{opacity:1;transform:translateY(0);letter-spacing:-.045em;color:#4a372c}}
+@keyframes agendaTimeLuxury{0%{opacity:.82;transform:translateY(3px);color:#846753}100%{opacity:1;transform:translateY(0);color:#72523e}}
+@keyframes agendaDotPulse{0%{transform:translate(-50%,-50%) scale(.82)}55%{transform:translate(-50%,-50%) scale(1.24)}100%{transform:translate(-50%,-50%) scale(1.16)}}
+
+#practical{padding-top:50px;padding-bottom:28px}
+#practical .label{margin-bottom:8px}
+#practical h2{margin-bottom:16px}
+#practical .practical-list{display:grid;gap:0}
+#practical .atelier-note{padding:13px 0 15px}
+#practical .atelier-note + .atelier-note{padding-top:15px;border-top:1px solid rgba(95,75,59,.17)}
+#practical .atelier-note-body{display:block;min-width:0}
+#practical .atelier-category{margin-bottom:6px;color:#765746;letter-spacing:.16em}
+#practical .atelier-note-title{font-size:clamp(33px,8.7vw,45px);line-height:.98;letter-spacing:-.045em;max-width:11ch}
+#practical .atelier-note-summary{margin-top:8px;max-width:30ch;font-size:clamp(16px,4vw,18px);line-height:1.42;color:#4f4337}
+#practical .atelier-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:18px;row-gap:10px;margin-top:12px}
+#practical .atelier-action{font-size:clamp(13px,3.55vw,15px);min-height:42px;padding:11px 20px}
+#practical .atelier-action:first-child{grid-column:2;justify-self:end;min-width:146px;padding-inline:24px;background:#644d3b;border-color:#644d3b;color:#fff;box-shadow:0 10px 24px rgba(100,77,59,.14)}
+#practical .atelier-action:not(:first-child){grid-column:1;justify-self:start;align-self:center;border:0;border-bottom:1px solid #816b57;background:transparent;color:#4b392d;border-radius:0;padding:8px 0 7px;min-height:auto;box-shadow:none;font-weight:600}
+#practical .atelier-note:first-child .atelier-actions{margin-top:8px}
+#practical .atelier-note:last-child{padding-bottom:8px}
+@media (max-width:359px){#agenda .score-row{grid-template-columns:58px 24px minmax(0,1fr);column-gap:10px}#agenda .score-text h3{font-size:clamp(34px,9.5vw,42px)}#practical .atelier-note-title{font-size:clamp(31px,8.6vw,40px)}#practical .atelier-action:first-child{min-width:136px;padding-inline:20px}}
+@media (prefers-reduced-motion:reduce){#agenda .score-row.is-current .score-text h3,#agenda .score-row.is-current .score-time,#agenda .score-row.is-current .score-divider:before,#agenda .score-row.is-current .score-text:before{animation:none}}
+</style>
+
+
+<style id="botanica-premium-global-pass-v3">
+/* Pass V3 — agenda refined and practical background extended */
+#agenda .inner{max-width:540px}
+#agenda .score-list{gap:4px;padding-top:2px}
+#agenda .score-row{grid-template-columns:56px 22px minmax(0,1fr);column-gap:12px;padding:12px 0 14px}
+#agenda .score-time{font-size:clamp(14px,3.55vw,16px);letter-spacing:.03em;line-height:1.08;color:#72523e}
+#agenda .score-divider{min-height:54px}
+#agenda .score-divider:before{width:7px;height:7px}
+#agenda .score-text{padding-left:8px}
+#agenda .score-text h3{font-size:clamp(31px,8vw,39px);line-height:.92;letter-spacing:-.032em;font-weight:500;color:#49362b;text-wrap:balance}
+#agenda .score-text:before{width:clamp(24px,5.6vw,30px)}
+#agenda .score-text:after{right:12%;bottom:-8px}
+#agenda .score-row.is-current .score-text h3{letter-spacing:-.032em;color:#463328;text-shadow:0 8px 22px rgba(141,111,89,.10)}
+#agenda .score-row.is-passed .score-text h3{color:#4b382c}
+
+@media (max-width:520px){
+  .late-world .film-breath{width:min(132vw,760px);right:-22vw;top:2%;opacity:.73}
+  #practical{padding-top:28px;padding-bottom:16px}
+  #gallery{padding-top:6px}
+}
+
+#practical .inner{max-width:540px}
+#practical h2{margin-bottom:14px}
+#practical .practical-list{gap:0}
+#practical .atelier-note{padding:11px 0 12px}
+#practical .atelier-note + .atelier-note{padding-top:12px}
+#practical .atelier-category{margin-bottom:4px}
+#practical .atelier-note-title{font-size:clamp(30px,7.8vw,40px);line-height:.96;max-width:10.5ch}
+#practical .atelier-note-summary{margin-top:6px;font-size:clamp(15px,3.8vw,17px);line-height:1.36;max-width:28ch}
+#practical .atelier-actions{margin-top:10px;row-gap:8px}
+#practical .atelier-action:first-child{min-width:138px;min-height:40px;padding-inline:22px}
+#practical .atelier-action:not(:first-child){padding:6px 0 6px}
+#practical .atelier-note:last-child{padding-bottom:0}
+#practical .atelier-note:last-child .atelier-note-summary{max-width:24ch}
+
+@media (max-width:359px){
+  #agenda .score-row{grid-template-columns:54px 20px minmax(0,1fr);column-gap:10px}
+  #agenda .score-text h3{font-size:clamp(29px,7.8vw,35px)}
+  #practical .atelier-note-title{font-size:clamp(29px,7.6vw,36px)}
+}
+</style>
+
+
+
+
+<style id="botanica-premium-integral-v6">
+/* Editorial intervention, scoped to agenda and practical only. Cinematic films untouched. */
+#agenda .score-row{position:relative;transition:filter .35s ease}
+#agenda .score-text h3{font-kerning:normal}
+#agenda .score-row.is-current .score-text h3{animation:agendaInkRiseV6 .66s cubic-bezier(.16,1,.3,1) both}
+#agenda .score-row.is-current .score-text:after{opacity:.66!important;transform:scaleX(1);box-shadow:0 0 7px rgba(141,111,89,.09)}
+#agenda .score-row.is-current .score-divider:before{box-shadow:0 0 0 4px rgba(247,241,232,.85),0 0 0 6px rgba(125,93,68,.16),0 0 17px rgba(125,93,68,.22)}
+/* Scroll-linked writing accent: its stroke is triggered by the line reaching an event. */
+#agenda .score-text h3{position:relative;z-index:1}
+#agenda .score-text h3::after{content:"";display:block;position:absolute;left:0;right:15%;bottom:-9px;height:1px;transform-origin:left center;transform:scaleX(.08);opacity:0;background:linear-gradient(90deg,rgba(99,70,51,.6),rgba(154,117,88,.28) 70%,transparent);pointer-events:none}
+#agenda .score-row.is-current .score-text h3::after{animation:agendaWrittenStrokeV6 1.05s cubic-bezier(.16,1,.3,1) both}
+#agenda .score-row.is-passed .score-text h3::after{opacity:.25;transform:scaleX(.75)}
+@keyframes agendaWrittenStrokeV6{0%{opacity:0;transform:scaleX(.05)}35%{opacity:.78}100%{opacity:.68;transform:scaleX(1)}}
+
+@keyframes agendaInkRiseV6{0%{color:#9a7a60;letter-spacing:-.01em;text-shadow:0 0 0 transparent}100%{color:#4a3428;letter-spacing:-.032em;text-shadow:0 7px 20px rgba(122,88,66,.09)}}
+
+#practical{padding-top:28px;padding-bottom:40px}
+#practical .inner{max-width:540px}
+#practical .label{margin-bottom:9px}
+#practical h2{margin-bottom:20px}
+#practical .practical-list{display:flex;flex-direction:column;gap:0;margin:0}
+#practical .atelier-note{position:relative;padding:12px 0 14px;min-width:0}
+#practical .atelier-note+.atelier-note{border-top:1px solid rgba(112,85,66,.17);padding-top:16px}
+#practical .atelier-note:last-child{padding-bottom:13px}
+#practical .atelier-note::after{content:"";pointer-events:none;position:absolute;height:1px;bottom:-1px;left:0;width:100%;background:linear-gradient(90deg,rgba(104,77,59,.38),rgba(104,77,59,.12) 55%,transparent);transform:scaleX(.45);transform-origin:left;opacity:0;transition:transform 1.0s cubic-bezier(.16,1,.3,1),opacity .7s ease}
+#practical .atelier-note.in-view::after{opacity:.55;transform:scaleX(1)}
+#practical .atelier-note-body{display:block;min-width:0}
+#practical .atelier-category{display:block;letter-spacing:.16em;font-size:clamp(12px,3.15vw,14px);font-weight:700;line-height:1.2;margin:0 0 7px;color:#785a46}
+#practical .atelier-heading-row,#practical .hotel-feature-header{display:flex;justify-content:space-between;align-items:center;gap:14px;min-width:0}
+#practical .atelier-note-title{font-size:clamp(33px,8.7vw,42px);font-weight:400;line-height:1.01;max-width:none;letter-spacing:-.046em;flex:1 1 auto;min-width:0;overflow-wrap:normal;text-wrap:balance}
+#practical .atelier-note-summary{font-size:clamp(15px,3.8vw,17px);line-height:1.36;font-weight:400;letter-spacing:-.015em;max-width:none;margin:8px 0 0;color:#514438}
+#practical .atelier-action{min-height:39px;padding:10px 18px;font-size:clamp(13px,3.35vw,15px);line-height:1.1;border-radius:999px;box-shadow:none}
+#practical .atelier-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin:10px 0 0;flex-wrap:wrap}
+#practical .atelier-actions .atelier-action:first-child{min-width:139px;min-height:39px;background:#644d3b;color:#fff;border:1px solid #644d3b;padding:10px 19px;box-shadow:0 9px 19px rgba(91,67,50,.09)}
+#practical .atelier-actions .atelier-action:not(:first-child){padding:5px 0 6px;min-height:0;white-space:normal;background:transparent;border:0;border-bottom:1px solid #816b57;border-radius:0;color:#493a2e}
+#practical .atelier-note--transport .atelier-note-summary{max-width:34ch}
+#practical .atelier-note--transport .atelier-note-title{max-width:100%}
+#practical .atelier-note--music .atelier-note-summary{max-width:31ch}
+#practical .atelier-note--music .atelier-actions{margin-top:8px}
+#practical .atelier-note--gift .atelier-note-summary{max-width:32ch}
+#practical .atelier-note--gift .atelier-actions{margin-top:8px}
+/* Hotel: the CTA shares the headline; the information link shares the hotel name. */
+#practical .atelier-note--hotel{padding-top:14px;padding-bottom:17px}
+#practical .hotel-feature-header{align-items:center;gap:12px}
+#practical .hotel-feature-header .atelier-note-title{max-width:8ch;font-size:clamp(31px,8.2vw,39px);line-height:1.0}
+#practical .hotel-main-action{flex:0 0 auto;align-self:center}
+#practical .hotel-main-action .hotel-primary{display:inline-flex;min-width:128px;min-height:41px;padding:10px 19px;background:#644d3b;color:#fff;border:1px solid #644d3b;border-radius:999px;box-shadow:0 9px 18px rgba(91,67,50,.12);justify-content:center;align-items:center}
+#practical .hotel-meta-row{display:flex;justify-content:space-between;gap:12px;align-items:baseline;margin-top:11px;min-width:0}
+#practical .hotel-meta-row .atelier-note-summary{flex:1 1 auto;min-width:0;margin:0;line-height:1.25;font-size:clamp(15px,3.8vw,17px)}
+#practical .hotel-meta-row .hotel-information{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;min-height:27px;padding:1px 0 4px;border:0;border-bottom:1px solid rgba(91,65,44,.72);background:transparent;color:#4f3d31;border-radius:0;font-size:clamp(13px,3.3vw,15px);font-weight:700;white-space:nowrap;box-shadow:none}
+#practical .hotel-other-actions{display:flex;justify-content:flex-end;gap:15px;margin-top:7px;flex-wrap:wrap}
+#practical .hotel-other-actions .atelier-action{background:transparent;color:#4f3d31;border:0;border-bottom:1px solid #816b57;border-radius:0;min-height:0;padding:4px 0 5px;white-space:normal}
+/* Visual breathing space before the gallery belongs to gallery, without touching the films. */
+#gallery{padding-top:36px}
+@media(max-width:365px){
+ #practical .hotel-feature-header .atelier-note-title{font-size:clamp(28px,8.25vw,33px)}
+ #practical .hotel-main-action .hotel-primary{min-width:120px;padding-inline:14px}
+ #practical .hotel-meta-row{gap:8px}
+ #practical .atelier-note-title{font-size:clamp(31px,8.4vw,37px)}
+}
+@media(max-width:330px){
+ #practical .hotel-feature-header{flex-wrap:wrap}
+ #practical .hotel-feature-header .atelier-note-title{max-width:none}
+ #practical .hotel-main-action{margin-left:auto}
+ #practical .hotel-meta-row{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){#agenda .score-row.is-current .score-text h3,#agenda .score-row.is-current .score-text h3::after{animation:none}#practical .atelier-note::after{transition:none;opacity:.45;transform:scaleX(1)}}
+</style>
+<style id="botanica-editorial-folios-v7">
+/* Genuine new visual grammar for Práctico: category and action form the editorial
+   header, the full-width title follows, and the actual detail is the caption.
+   Existing videos, floral backgrounds, Gallery and Cierre remain untouched. */
+#practical{padding-top:28px;padding-bottom:44px}
+#practical .inner{max-width:540px}
+#practical .label{margin-bottom:8px}
+#practical h2{margin-bottom:14px}
+#practical .practical-list{display:flex;flex-direction:column;gap:0;overflow:visible}
+#practical .editorial-entry{
+ position:relative;overflow:visible;min-width:0;padding:12px 0 13px;
+ border:0;border-top:1px solid rgba(104,78,57,.27)!important;
+}
+#practical .editorial-entry:first-child{border-top:0!important}
+#practical .editorial-entry:last-child{padding-bottom:14px}
+#practical .editorial-entry-body{display:block;min-width:0}
+#practical .editorial-entry::before{content:"";position:absolute;top:-1px;left:0;width:34%;height:1px;
+ background:linear-gradient(90deg,#89654b,rgba(137,101,75,.38),transparent);
+ transform-origin:left;transform:scaleX(.2);opacity:.25;
+ transition:transform .8s cubic-bezier(.22,1,.36,1),opacity .5s ease}
+#practical .editorial-entry:first-child::before{display:none}
+#practical .editorial-entry.in-view::before{transform:scaleX(1);opacity:.88}
+#practical .editorial-entry::after{display:none!important}
+#practical .editorial-entry-top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;min-height:35px;margin:0 0 2px}
+#practical .editorial-entry .atelier-category{display:block;flex:0 1 auto;
+ font:700 clamp(12px,3.25vw,14px)/1.3 var(--sans);letter-spacing:.17em;
+ margin:0;color:#765744;text-transform:uppercase;white-space:nowrap}
+#practical .editorial-entry-action{display:flex;align-items:center;justify-content:flex-end;flex:0 0 auto;min-width:0}
+#practical .editorial-primary{display:inline-flex;justify-content:center;align-items:center;
+ min-height:36px;min-width:126px;padding:7px 17px;border-radius:99px;
+ background:#644d3b;color:#fff;border:1px solid #644d3b;
+ font:700 clamp(12px,3.3vw,14px)/1.1 var(--sans);white-space:nowrap;
+ text-decoration:none;box-shadow:0 7px 18px rgba(91,67,50,.12);
+ transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease}
+#practical .editorial-primary:active{transform:scale(.97)}
+#practical .editorial-title{display:block;min-width:0;max-width:none!important;
+ font:400 clamp(35px,9.25vw,45px)/.98 var(--serif)!important;
+ letter-spacing:-.045em;color:#49362b;margin:1px 0 0;
+ text-wrap:balance;overflow-wrap:break-word}
+#practical .editorial-entry-detail{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:3px 0 0;flex-wrap:wrap;min-width:0}
+#practical .editorial-entry-detail .atelier-note-summary{flex:1 1 auto;min-width:0;margin:0;
+ font:400 clamp(15px,3.8vw,17px)/1.37 var(--sans);
+ letter-spacing:-.015em;color:#514438;max-width:none!important;overflow-wrap:break-word}
+#practical .editorial-entry-detail .editorial-info{display:inline-flex;align-items:center;
+ min-height:24px;padding:0 0 3px;border:0;border-bottom:1px solid rgba(88,65,49,.7);
+ border-radius:0;background:transparent;color:#533c2e;
+ font:700 clamp(13px,3.4vw,15px)/1.1 var(--sans);
+ white-space:nowrap;text-decoration:none;box-shadow:none}
+#practical .editorial-entry-extras{display:flex;gap:14px;align-items:center;justify-content:flex-start;margin-top:7px;flex-wrap:wrap}
+#practical .editorial-entry-extras .atelier-action{padding:0 0 3px;min-height:22px;
+ background:transparent!important;border:0!important;border-bottom:1px solid rgba(88,65,49,.7)!important;
+ border-radius:0!important;color:#533c2e!important;box-shadow:none!important;
+ font:700 14px/1.1 var(--sans)}
+/* The blank stock paper can breathe, but Gallery never collides with Regalo. */
+#gallery{padding-top:27px}
+@media(max-width:360px){
+ #practical .editorial-entry{padding-block:11px 12px}
+ #practical .editorial-primary{min-width:118px;padding-inline:13px}
+ #practical .editorial-title{font-size:clamp(33px,9vw,39px)!important}
+ #practical .editorial-entry-top{gap:9px}
+}
+@media(max-width:320px){
+ #practical .editorial-entry-top{flex-wrap:wrap}
+ #practical .editorial-entry-action{margin-left:auto}
+}
+/* Agenda: a legible ink-and-silk choreography, with no additional subtitle. */
+#agenda .score-row.is-current .score-text h3{
+ animation:agendaSatinTypeV7 .9s cubic-bezier(.16,1,.3,1) both!important}
+#agenda .score-row.is-current .score-text:before{
+ animation:agendaSatinThreadV7 .9s cubic-bezier(.16,1,.3,1) both!important}
+#agenda .score-row.is-current .score-text h3::after{
+ animation:agendaSatinUnderlineV7 .95s cubic-bezier(.16,1,.3,1) both!important}
+#agenda .score-row.is-current .score-divider:before{
+ animation:agendaSatinPinV7 .8s cubic-bezier(.16,1,.3,1) both!important}
+@keyframes agendaSatinTypeV7{
+ 0%{opacity:.78;transform:translateX(13px);color:#89674e;letter-spacing:-.015em}
+ 100%{opacity:1;transform:translateX(0);color:#4a3428;letter-spacing:-.032em}}
+@keyframes agendaSatinThreadV7{
+ 0%{opacity:.12;transform:translate(calc(-100% - 8px),-50%) scaleX(.15)}
+ 100%{opacity:.95;transform:translate(calc(-100% - 8px),-50%) scaleX(1)}}
+@keyframes agendaSatinUnderlineV7{
+ 0%{opacity:0;transform:scaleX(.08)}
+ 100%{opacity:.68;transform:scaleX(1)}}
+@keyframes agendaSatinPinV7{
+ 0%{transform:translate(-50%,-50%) scale(.82)}
+ 55%{transform:translate(-50%,-50%) scale(1.4)}
+ 100%{transform:translate(-50%,-50%) scale(1.12)}}
+@media(prefers-reduced-motion:reduce){
+ #practical .editorial-entry::before{transition:none;transform:scaleX(1);opacity:.6}
+ #agenda .score-row.is-current .score-text h3,
+ #agenda .score-row.is-current .score-text:before,
+ #agenda .score-row.is-current .score-text h3::after,
+ #agenda .score-row.is-current .score-divider:before{animation:none!important}}
+</style>
+
+<style id="botanica-practico-folios-v9">
+/* V9: entirely scoped to practical. All original media, transitions and other chapters retained. */
+#practical{padding-top:clamp(25px,4vh,42px);padding-bottom:clamp(50px,8vh,72px)}
+#practical .inner{max-width:570px}
+#practical .label{margin-bottom:7px}
+#practical h2{margin-bottom:19px}
+#practical .practical-list{display:flex;flex-direction:column;gap:0;overflow:visible}
+#practical .v9-scene{display:block;position:relative;padding:0!important;margin:0!important;border:0!important;background:transparent!important;min-width:0;isolation:isolate}
+#practical .v9-scene::before,#practical .v9-scene::after{display:none!important}
+#practical .v9-content{position:relative;display:block;min-width:0}
+#practical .v9-label{font:700 clamp(12px,3.3vw,14px)/1.25 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:#86664f;margin-bottom:8px;display:block}
+#practical .v9-heading{font:400 clamp(35px,9.25vw,49px)/.95 var(--serif);letter-spacing:-.052em;color:#49382c;max-width:none;overflow-wrap:break-word;text-wrap:balance}
+#practical .v9-summary{font:400 clamp(15px,3.9vw,18px)/1.38 var(--sans);letter-spacing:-.012em;color:#56473a;margin:8px 0 0;overflow-wrap:break-word}
+#practical .v9-cta{font:700 clamp(13px,3.42vw,15px)/1.2 var(--sans)!important;letter-spacing:0!important;display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 18px;border-radius:999px;white-space:nowrap;text-decoration:none;cursor:pointer;transition:background .24s ease,color .24s ease,transform .24s ease;max-width:100%}
+#practical .v9-cta--filled{background:#644d3b!important;color:#fff!important;border:1px solid #644d3b!important;box-shadow:0 9px 18px rgba(76,53,37,.09)!important}
+#practical .v9-cta--outline{background:rgba(247,241,232,.35)!important;color:#594332!important;border:1px solid rgba(99,76,58,.52)!important;box-shadow:none!important}
+#practical .v9-cta--quiet{background:transparent!important;color:#574434!important;border:0!important;border-bottom:1px solid rgba(99,76,58,.68)!important;border-radius:0!important;min-height:30px;padding:4px 0 5px;box-shadow:none!important;font-weight:600!important}
+#practical .v9-scene .v9-cta.v9-cta--filled{background:#644d3b!important;color:#fff!important;border:1px solid #644d3b!important;border-radius:999px!important;box-shadow:0 9px 18px rgba(76,53,37,.09)!important;padding:10px 18px!important;min-height:42px!important;max-width:100%}
+#practical .v9-scene .v9-cta.v9-cta--outline{background:rgba(247,241,232,.35)!important;color:#594332!important;border:1px solid rgba(99,76,58,.52)!important;border-radius:999px!important;padding:10px 18px!important;min-height:42px!important;box-shadow:none!important}
+#practical .v9-scene .v9-cta.v9-cta--quiet{background:transparent!important;color:#574434!important;border:0!important;border-bottom:1px solid rgba(99,76,58,.68)!important;border-radius:0!important;min-height:30px!important;padding:4px 0 5px!important;box-shadow:none!important;font-weight:600!important}
+#practical .v9-scene .v9-cta.v9-cta--filled:active,#practical .v9-scene .v9-cta.v9-cta--outline:active{transform:scale(.98)}
+#practical .v9-stroke{display:block;height:1px;width:100%;transform-origin:left center;transform:scaleX(.24);opacity:.34;background:linear-gradient(90deg,rgba(113,84,62,.66) 0%,rgba(113,84,62,.24) 45%,rgba(113,84,62,0) 100%);transition:transform 1.2s cubic-bezier(.16,1,.3,1),opacity .7s ease}
+#practical .v9-scene.in-view .v9-stroke{transform:scaleX(1);opacity:.85}
+#practical .v9-entry{opacity:.88;transform:translateY(5px);transition:opacity .65s ease,transform .95s cubic-bezier(.2,1,.25,1)}
+#practical .v9-scene.in-view .v9-entry{opacity:1;transform:none}
+/* Transport: a miniature printed itinerary with times as graphic material. */
+#practical .v9-transport{padding:0 0 11px!important}
+#practical .v9-transport .v9-heading{font-size:clamp(35px,9.1vw,46px)}
+#practical .v9-transit-meta{display:flex;flex-direction:column;align-items:stretch;gap:4px;margin:5px 0 0}
+#practical .v9-transit-stop{font:400 clamp(15px,3.8vw,17px)/1.3 var(--sans);color:#56473a;min-width:0;overflow-wrap:break-word}
+#practical .v9-transit-stop strong{font-weight:600;color:#69523f}
+#practical .v9-times{display:flex;align-items:baseline;gap:clamp(24px,8vw,45px);justify-content:flex-start;flex-wrap:wrap}
+#practical .v9-time{display:flex;align-items:baseline;gap:7px;min-width:0}
+#practical .v9-time em{font:700 clamp(10px,2.9vw,12px)/1 var(--sans);font-style:normal;letter-spacing:.14em;color:#8c6a53;text-transform:uppercase}
+#practical .v9-time b{font:400 clamp(23px,6.2vw,29px)/1 var(--serif);letter-spacing:-.03em;color:#4a3528;white-space:normal}
+#practical .v9-transit-note{margin-top:7px;font:400 clamp(14px,3.55vw,16px)/1.32 var(--sans);color:#6b5c4e}
+#practical .v9-transit-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:8px}
+#practical .v9-transport .v9-stroke{margin-top:12px}
+/* Hotel: one featured destination; data given visual primacy over generic title. */
+#practical .v9-hotel{padding:0 0 13px!important}
+#practical .v9-hotel .v9-label{margin:0}
+#practical .v9-hotel-overline{display:flex;align-items:baseline;gap:15px;flex-wrap:wrap;margin-bottom:3px}#practical .v9-hotel-intro{font:italic 400 clamp(22px,6.1vw,30px)/1 var(--serif);letter-spacing:-.04em;color:#765743}
+#practical .v9-hotel-feature{margin:4px 0 0;padding:0}
+#practical .v9-hotel-name{font:400 clamp(36px,9.5vw,52px)/.95 var(--serif);letter-spacing:-.052em;color:#483529;text-wrap:balance;overflow-wrap:break-word}
+#practical .v9-hotel-extra{font:400 clamp(14px,3.7vw,16px)/1.3 var(--sans);color:#6b5c4d;margin-top:5px}
+#practical .v9-hotel-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:15px;margin-top:7px}
+#practical .v9-hotel .v9-stroke{margin-top:12px}
+/* Music: a single line of melody and the invitation to participate. */
+#practical .v9-music{padding:0 0 12px!important}
+#practical .v9-music .v9-label{margin:0 0 6px}
+#practical .v9-music .v9-heading{font-style:italic;font-size:clamp(37px,9.9vw,51px);color:#795a45}
+#practical .v9-music .v9-summary{max-width:35ch;margin:4px 0 0}
+#practical .v9-music-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:5px}
+#practical .v9-melody{height:23px;flex:1 1 auto;max-width:150px;position:relative;overflow:hidden}
+#practical .v9-melody:before{content:"";position:absolute;top:50%;left:0;right:0;height:1px;background:linear-gradient(90deg,rgba(121,89,67,.72),rgba(121,89,67,.05))}
+#practical .v9-melody:after{content:"";position:absolute;top:calc(50% - 3px);left:7%;height:7px;width:7px;border-radius:50%;background:#a28269;box-shadow:24px 3px 0 -2px #a28269,55px -2px 0 -1px #a28269;animation:v9melody 5.5s ease-in-out infinite alternate}
+@keyframes v9melody{from{transform:translateX(0);opacity:.5}to{transform:translateX(24px);opacity:.8}}
+#practical .v9-music .v9-stroke{margin-top:10px}
+/* Gift: a typographic signature, not a fourth identical service row. */
+#practical .v9-gift{padding:0!important}
+#practical .v9-gift .v9-label{margin:0 0 8px}
+#practical .v9-gift .v9-heading{font-size:clamp(40px,10.2vw,55px);font-style:italic;color:#785841}#practical .v9-gift-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#practical .v9-gift .v9-summary{max-width:34ch;margin-top:5px}
+#practical .v9-gift-foot{display:flex;justify-content:flex-end;gap:12px;margin:0}
+@media(max-width:380px){
+ #practical .v9-heading{font-size:clamp(32px,9vw,43px)}
+ #practical .v9-transit-meta{gap:5px}
+ #practical .v9-times{gap:15px}
+ #practical .v9-time b{font-size:clamp(22px,6.2vw,27px)}
+ #practical .v9-hotel-name{font-size:clamp(33px,9.25vw,45px)}
+ #practical .v9-hotel-actions{gap:13px}
+ #practical .v9-music .v9-heading{font-size:clamp(34px,9.6vw,46px)}
+}
+@media(max-width:345px){#practical .v9-times{gap:10px;flex-wrap:wrap}#practical .v9-time{gap:5px}#practical .v9-gift-header{gap:6px}}
+@media(prefers-reduced-motion:reduce){#practical .v9-entry,#practical .v9-stroke{transition:none;opacity:1;transform:none}#practical .v9-melody:after{animation:none}}
+</style>
+
+<style id="botanica-v10-practical-only">
+/* Only practical typography, layout and actions. All original backdrop/film layers remain unchanged. */
+#practical{padding-top:clamp(26px,4vh,45px);padding-bottom:clamp(50px,8vh,72px)}
+#practical .inner{max-width:570px}
+#practical>.inner>.label{margin-bottom:8px}
+#practical>.inner>h2{margin-bottom:24px}
+#practical #practicalList{display:flex;flex-direction:column;gap:0;overflow:visible}
+#practical .v10-piece{display:block;position:relative;border:0!important;margin:0!important;padding:0!important;background:transparent!important;isolation:isolate;min-width:0}
+#practical .v10-piece::before,#practical .v10-piece::after{display:none!important}
+#practical .v10-body{display:block;position:relative;padding:0;min-width:0}
+#practical .v10-label{font:700 clamp(12px,3.35vw,14px)/1.25 var(--sans);letter-spacing:.17em;color:#775944;text-transform:uppercase;margin:0 0 8px}
+#practical .v10-heading{font:400 clamp(38px,10.0vw,52px)/.94 var(--serif);letter-spacing:-.043em;color:#49362b;overflow-wrap:break-word;margin:0;text-wrap:balance}
+#practical .v10-copy{font:400 clamp(15px,4.0vw,18px)/1.43 var(--sans);color:#4f4339;margin:10px 0 0;overflow-wrap:break-word}
+#practical .v10-button{appearance:none;box-sizing:border-box;display:inline-flex;justify-content:center;align-items:center;text-decoration:none;white-space:nowrap;border-radius:999px;min-height:43px;padding:10px 21px;font:700 clamp(13px,3.56vw,15px)/1.15 var(--sans);cursor:pointer;transition:transform .28s cubic-bezier(.22,1,.36,1),background-color .28s ease,color .28s ease;max-width:100%}
+#practical .v10-button:active{transform:scale(.97)}
+#practical .v10-button:focus-visible{outline:2px solid #76543f;outline-offset:4px}
+#practical .v10-button--solid{background:#644d3b!important;border:1px solid #644d3b!important;color:#fff!important;box-shadow:0 7px 19px rgba(71,50,37,.10)!important}
+#practical .v10-button--outline{background:rgba(247,241,232,.54)!important;border:1px solid rgba(95,69,51,.54)!important;color:#4d3b2c!important;box-shadow:none!important}
+#practical .v10-button--text{min-height:35px;padding:4px 0;border:0!important;border-radius:0!important;background:transparent!important;color:#564130!important;border-bottom:1px solid rgba(97,75,55,.7)!important;box-shadow:none!important}
+/* The journey: timings have visual weight; the rule draws through them, not a fake audio scrubber. */
+#practical .v10-transport{padding-bottom:23px!important}
+#practical .v10-transit-stop{font:400 clamp(15px,3.9vw,17px)/1.3 var(--sans);color:#584536;margin:10px 0 0}
+#practical .v10-transit-stop span{font-weight:700}
+#practical .v10-timeboard{position:relative;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;padding:13px 0 0;margin:7px 0 0;border-top:1px solid rgba(101,75,57,.35)}
+#practical .v10-timeboard::before{content:"";position:absolute;left:0;top:-1px;height:2px;width:25%;background:linear-gradient(90deg,#8f7058,rgba(143,112,88,0));transform-origin:left;animation:v10Thread 3.2s ease-in-out infinite alternate}
+#practical .v10-time-group{display:flex;gap:8px;align-items:baseline;min-width:0}
+#practical .v10-time-label{font:700 clamp(11px,3.0vw,13px)/1 var(--sans);letter-spacing:.15em;text-transform:uppercase;color:#8b6d58}
+#practical .v10-time-value{font:500 clamp(18px,4.6vw,21px)/1.12 var(--serif);letter-spacing:-.01em;color:#4d392c;overflow-wrap:anywhere}
+#practical .v10-extra{font:400 clamp(15px,3.8vw,17px)/1.4 var(--sans);margin:7px 0 0;color:#584536}
+#practical .v10-transit-actions{display:flex;gap:13px;justify-content:flex-start;margin-top:11px;flex-wrap:wrap}
+/* Hotel is the sole typographic hero of Practical. */
+#practical .v10-hotel{padding:22px 0 27px!important;border-top:1px solid rgba(101,75,57,.28)!important}
+#practical .v10-hotel-intro{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap;margin-bottom:8px}
+#practical .v10-hotel-intro .v10-label{margin:0}
+#practical .v10-hotel-subtitle{font:italic 400 clamp(19px,5.0vw,25px)/1 var(--serif);color:#8b6953;letter-spacing:-.035em;margin:0}
+#practical .v10-hotel-name{font:400 clamp(44px,12vw,62px)/.90 var(--serif);letter-spacing:-.056em;color:#49362b;margin:0;overflow-wrap:break-word;text-wrap:balance}
+#practical .v10-hotel-note{font:400 clamp(15px,3.8vw,17px)/1.35 var(--sans);color:#594a3d;margin:8px 0 0}
+#practical .v10-hotel-links{display:flex;align-items:center;justify-content:flex-start;gap:15px 24px;flex-wrap:wrap;margin-top:14px}
+/* Distinguish the two personal elements rather than repeating hotel-style rows. */
+#practical .v10-music{padding:21px 0 21px!important;border-top:1px solid rgba(101,75,57,.28)!important}
+#practical .v10-music .v10-heading{font-style:italic;color:#65503e}
+#practical .v10-music .v10-copy{max-width:29ch;margin-top:8px}
+#practical .v10-music-actions{margin-top:13px;display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+#practical .v10-gift{border-top:1px solid rgba(101,75,57,.28)!important;padding:20px 0 0!important}
+#practical .v10-gift-main{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+#practical .v10-gift-title{font:italic 400 clamp(39px,10.5vw,54px)/.96 var(--serif);letter-spacing:-.05em;color:#5c4436;overflow-wrap:break-word}
+#practical .v10-gift-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+#practical .v10-gift-copy{font:400 clamp(15px,3.85vw,17px)/1.42 var(--sans);color:#564539;margin-top:10px;max-width:35ch}
+#gallery{padding-top:clamp(26px,5vh,46px)}
+@keyframes v10Thread{from{transform:scaleX(.24);opacity:.4}to{transform:scaleX(2.1);opacity:1}}
+@media(max-width:359px){
+ #practical .v10-heading{font-size:clamp(35px,9.9vw,43px)}
+ #practical .v10-hotel-name{font-size:clamp(42px,11.7vw,50px)}
+ #practical .v10-timeboard{gap:8px 13px}
+ #practical .v10-hotel-links{gap:10px 19px}
+ #practical .v10-gift-title{font-size:clamp(36px,10.2vw,43px)}
+}
+@media(prefers-reduced-motion:reduce){#practical .v10-timeboard::before{animation:none;transform:none;opacity:.7}}
+</style>
+
+<style id="botanica-practico-atelier-compuesto-v11">
+/* A separate, deliberately paced typographic chapter. Scoped to Práctico only;
+   all original film layers, visual transitions and approved chapters remain intact. */
+#practical{padding-top:clamp(29px,4.5vh,45px);padding-bottom:clamp(54px,8vh,74px)}
+#practical>.inner{max-width:570px}
+#practical>.inner>h2{margin-bottom:clamp(19px,3vh,26px)}
+#practical #practicalList{display:flex;flex-direction:column;gap:0}
+#practical .v11-item{position:relative;isolation:isolate;border:0!important;margin:0!important;padding:0!important;background:none!important;min-width:0}
+#practical .v11-item::before,#practical .v11-item::after{content:none!important;display:none!important}
+#practical .v11-body{display:block;position:relative;min-width:0}
+#practical .v11-eyebrow{font:700 clamp(13px,3.35vw,14px)/1.25 var(--sans);letter-spacing:.165em;color:#775944;text-transform:uppercase;margin:0 0 8px}
+#practical .v11-title{font:400 clamp(37px,9.3vw,48px)/.96 var(--serif);letter-spacing:-.041em;color:#4b372b;margin:0;max-width:100%;overflow-wrap:break-word}
+#practical .v11-copy{font:400 clamp(16px,4.0vw,18px)/1.36 var(--sans);letter-spacing:-.008em;color:#4e4137;margin:8px 0 0;max-width:35ch;overflow-wrap:break-word}
+#practical .v11-note{font:400 clamp(15px,3.85vw,17px)/1.38 var(--sans);color:#57483b;margin:8px 0 0;overflow-wrap:anywhere}
+#practical .v11-action{appearance:none;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;text-decoration:none;min-height:43px;padding:9px 19px;max-width:100%;border-radius:999px;font:700 clamp(14px,3.6vw,16px)/1.2 var(--sans);white-space:normal;text-align:center;cursor:pointer;transition:background-color .22s ease,transform .22s ease}
+#practical .v11-action:active{transform:scale(.98)}
+#practical .v11-action:focus-visible{outline:2px solid #775643;outline-offset:4px}
+#practical .v11-action--primary{color:#fff!important;background:#644d3b!important;border:1px solid #644d3b!important;box-shadow:none!important;min-width:122px}
+#practical .v11-action--secondary{color:#593f2f!important;background:rgba(247,241,232,.68)!important;border:1px solid rgba(104,79,60,.56)!important;box-shadow:none!important}
+#practical .v11-action--link{color:#58402f!important;background:transparent!important;border:0!important;border-bottom:1px solid rgba(93,68,49,.74)!important;border-radius:0!important;min-height:33px;padding:6px 0 4px;box-shadow:none!important;font-weight:600}
+/* Transport is a compact itinerary rather than a list or a faux controls row. */
+#practical .v11-transport{padding-bottom:24px!important}
+#practical .v11-transport .v11-title{font-size:clamp(38px,9.35vw,48px)}
+#practical .v11-stop{font:400 clamp(16px,4vw,18px)/1.3 var(--sans);color:#574537;margin:10px 0 0}
+#practical .v11-stop strong{font-weight:700}
+#practical .v11-timetable{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px;margin-top:15px;padding-top:14px;border-top:1px solid rgba(111,82,61,.26)}
+#practical .v11-time-cell{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 9px;min-width:0}
+#practical .v11-time-cell+.v11-time-cell{padding-left:14px;border-left:1px solid rgba(111,82,61,.22)}
+#practical .v11-time-label{font:700 clamp(12px,3.15vw,14px)/1.2 var(--sans);color:#8b6954;text-transform:uppercase;letter-spacing:.12em}
+#practical .v11-time-value{font:400 clamp(23px,6.2vw,29px)/1.04 var(--serif);letter-spacing:-.025em;color:#4b372b;overflow-wrap:anywhere}
+#practical .v11-transport-actions{display:flex;gap:16px;flex-wrap:wrap;margin-top:7px}
+/* Hotel is the visual focal point, without putting information links at odd heights. */
+#practical .v11-hotel{padding:21px 0 24px!important;border-top:1px solid rgba(111,82,61,.26)!important}
+#practical .v11-hotel-top{display:flex;align-items:baseline;gap:10px 16px;flex-wrap:wrap;margin-bottom:7px}
+#practical .v11-hotel-top .v11-eyebrow{margin:0}
+#practical .v11-subtitle{font:italic 400 clamp(20px,5.2vw,26px)/1 var(--serif);letter-spacing:-.025em;color:#83634f;margin:0}
+#practical .v11-hotel-name{font:400 clamp(44px,11.3vw,61px)/.91 var(--serif);letter-spacing:-.053em;color:#483428;margin:0;overflow-wrap:break-word;text-wrap:balance}
+#practical .v11-hotel-name--long{font-size:clamp(36px,9vw,49px)}
+#practical .v11-hotel .v11-note{margin-top:7px}
+#practical .v11-hotel-actions{display:flex;align-items:center;justify-content:flex-start;gap:9px 20px;flex-wrap:wrap;margin-top:12px}
+/* A gentle typographic coda: two deliberately different rhythms. */
+#practical .v11-music{padding:22px 0 23px!important;border-top:1px solid rgba(111,82,61,.24)!important}
+#practical .v11-music .v11-title{font-style:italic;color:#674e3e}
+#practical .v11-music .v11-copy{max-width:34ch}
+#practical .v11-music-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-start;margin-top:12px}
+#practical .v11-gift{padding:19px 0 0!important;border-top:1px solid rgba(111,82,61,.24)!important}
+#practical .v11-gift-intro{display:flex;align-items:center;justify-content:space-between;gap:8px 15px;flex-wrap:wrap}
+#practical .v11-gift .v11-title{font-style:italic;font-size:clamp(37px,9.7vw,51px);color:#614735}
+#practical .v11-gift-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+#practical .v11-gift .v11-copy{margin-top:8px;max-width:34ch}
+/* No fake progress bars, graphic flourishes or decorative arrows. */
+#practical .v11-item.in-view .v11-title,#practical .v11-item.in-view .v11-hotel-name{animation:v11TypographyRise .65s cubic-bezier(.22,1,.36,1) both}
+@keyframes v11TypographyRise{from{opacity:.78;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:359px){#practical .v11-time-value{font-size:21px}#practical .v11-timetable{column-gap:8px}#practical .v11-time-cell+.v11-time-cell{padding-left:10px}#practical .v11-hotel-name{font-size:clamp(40px,11.5vw,48px)}}
+@media(prefers-reduced-motion:reduce){#practical .v11-item.in-view .v11-title,#practical .v11-item.in-view .v11-hotel-name{animation:none}}
+</style>
+
+<meta name="robots" content="noindex,nofollow"><meta name="guest-sample-mode" content="public-design-demo"><style id="galleryDemoNoticeRemove">#stage-notice{display:none!important}</style></head><body>
+<main id="invitation" aria-label="Invitación de boda botánica">
+<header class="cover" id="cover"><video id="coverVideo" muted autoplay loop playsinline preload="auto" poster="media/x65b493e848b4565d.webp"></video>
+ <div class="cover-content"><span class="label">Nos casamos</span><h1 class="hero-names serif" id="heroNames"></h1><p class="cover-date" id="coverDate"></p><p class="cover-location" id="coverCity"></p></div><div class="swipe">Desliza para descubrirlo</div></header>
+<div class="journey">
+<section class="intro chapter" id="countdown"><div class="film-breath film-breath--begin" aria-hidden="true"><video class="breathVideo" muted autoplay loop playsinline preload="metadata" poster="media/x4e3e8f86ea79ffd1.webp"></video></div>
+ <div class="inner"><div class="count-stat"><p class="label">Ya queda menos</p><div class="count-num serif" id="daysNum">—</div><div class="count-unit">DÍAS</div></div>
+ <h2 class="count-phrase serif">Qué ganas <em class="italic">de veros.</em></h2>
+ <p class="count-body bodycopy" id="countCopy"></p></div>
+ <figure class="photo-interlude" id="introPhoto"><img id="heroCouplePhoto" alt="Fotografía de la pareja"></figure></section>
+<section class="story chapter" id="story"><div class="inner"><p class="label">Nosotros</p><h2 class="serif" id="storyTitle"></h2><p class="bodycopy" id="storyCopy"></p></div></section>
+<section class="places chapter" id="places"><div class="inner places-heading"><p class="label">Nos vemos aquí</p><h2 class="serif">El <em class="italic">lugar.</em></h2></div><div id="placeList"></div></section>
+<section class="score chapter" id="agenda"><div class="film-breath film-breath--agenda" aria-hidden="true"><video class="breathVideo" muted autoplay loop playsinline preload="metadata" poster="media/x4e3e8f86ea79ffd1.webp"></video></div><div class="inner">
+<h2 class="serif">Así lo hemos <em class="italic">imaginado.</em></h2><div class="score-list" id="agendaList"></div></div></section>
+<div class="late-world"><div class="film-breath" aria-hidden="true"><video id="glowVideo" muted autoplay loop playsinline preload="metadata" poster="media/xe94f823d92fb4e81.webp"></video></div>
+<section class="practical chapter" id="practical"><div class="inner"><p class="label">Para tenerlo a mano</p><h2 class="serif">Lo <em class="italic">esencial.</em></h2><div class="practical-list" id="practicalList"></div></div></section>
+<section class="gallery chapter" id="gallery"><div class="inner"><p class="label">Un poco de nosotros</p><h2 class="serif">Hasta llegar <em class="italic">aquí.</em></h2></div><div class="gallery-strip" id="galleryTrack" aria-label="Fotografías de la pareja"></div><div class="inner gallery-note"><span id="galleryHint">Desliza para ver más</span><span class="dots" id="galleryDots"></span></div></section>
+</div>
+</div>
+<footer class="finale" id="finale"><video id="finalVideo" muted autoplay loop playsinline preload="auto" poster="media/x65b493e848b4565d.webp"></video>
+<p class="label">Solo falta una cosa</p><h2 class="serif"><span class="lead">¿Nos</span><em class="italic">acompañáis?</em></h2><p>Nos hará muy felices.</p><button class="rsvp" id="rsvp">Confirmar asistencia</button>
+<div class="finale-sign"><div class="names serif" id="finalNames"></div><div class="date" id="finalDate"></div><div class="thanks">Gracias por formar parte de este día.</div></div></footer>
+</main>
+<dialog id="previewDialog"><h2 id="dialogTitle">Invitación de muestra</h2><p id="dialogCopy">En la invitación entregada, esta acción abrirá el sistema GUEST configurado para la pareja.</p><button id="dialogClose" type="button">Volver a la invitación</button></dialog>
+<script>
+const MEDIA={"opening": "media/xbce101619b180f47.mp4", "breath": "media/x0e2addbe5eca93ca.mp4", "glow": "media/xffbbbaaf68392b59.mp4", "breathPoster": "media/x4e3e8f86ea79ffd1.webp", "glowPoster": "media/xe94f823d92fb4e81.webp", "heroPoster": "media/x65b493e848b4565d.webp", "couple1": "media/x4867c971b354b4a8.webp", "couple2": "media/x82a2d4eab9e4f456.webp", "couple3": "media/xacc2a28999dc8dba.webp", "couple4": "media/x0bdee42d8c2d70f3.webp", "venue": "media/x7403c09be6dafce4.webp"};
+const DEFAULT={
+ couple:{first:'Lucía',second:'Mateo',date:'2027-09-18',city:'Cartagena',hour:'19:00'},
+ copy:{countdown:'Nos hace muchísima ilusión celebrar este día con vosotros. Guardad la fecha; lo demás os lo contamos aquí.',storyTitle:'Y de repente, este plan.',story:'Entre viajes, cenas que se alargan, planes improvisados y muchos domingos tranquilos, hemos ido construyendo lo nuestro. Ahora toca celebrarlo con nuestra gente.'},
+ storyPhoto:MEDIA.couple1,
+ venues:[{role:'Celebración',name:'La Rosaleda',hour:'19:00',city:'Cartagena',address:'Camino del Mar, Cartagena · Murcia',photo:MEDIA.venue,directions:''}],
+ agenda:[{time:'18:30',label:'Llegamos'},{time:'19:00',label:'Nos damos el sí'},{time:'20:00',label:'Brindamos'},{time:'21:30',label:'Cenamos'},{time:'00:00',label:'Bailamos'}],
+ practical:{
+    bus:{enabled:true,pickupPoints:['La Rosaleda'],outboundTimes:['18:00'],returnTimes:['02:00','04:00'],note:null,mapsUrl:null,collectUsageInRSVP:true,collectRouteChoiceInRSVP:false,collectReturnChoiceInRSVP:false},
+    accommodation:{enabled:true,mode:'room_block',name:'Hotel del Puerto',address:'Cartagena',websiteUrl:'https://example.com/hotel-muestra',mapsUrl:null,phone:null,bookingCode:null,bookingName:'Lucía y Mateo',discountText:null,deadline:null,priceText:null,externalBookingUrl:null,note:null,collectAccommodationInRSVP:false},
+    gift:{enabled:true,mode:'bank',displayText:'Vuestra compañía es nuestro mejor regalo.',details:null,externalUrl:null,accountHolder:'Lucía y Mateo',iban:'ES00 0000 0000 0000 0000 0000',bicSwift:null,bizumPhone:null,bizumRecipient:null,linkLabel:null},
+    playlist:{enabled:true,mode:'external_link',prompt:'Elegid la canción que no puede faltar en nuestra fiesta.',url:'https://example.com/playlist-muestra'}
+  },
+ gallery:[MEDIA.couple2,MEDIA.couple3,MEDIA.couple4],
+ rsvpUrl:''
+};
+window.BOTANICA_DEFAULT=structuredClone(DEFAULT);let CONF=structuredClone(DEFAULT);
+const $=(id)=>document.getElementById(id);
+function applyPhotoLayout(el,photo){if(!el||!photo)return;el.style.objectFit=photo.fit==='full'?'contain':'cover';el.style.objectPosition=`${Math.min(100,Math.max(0,Number(photo.focusX??50)))}% ${Math.min(100,Math.max(0,Number(photo.focusY??50)))}%`;}
+
+const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
+function dateParts(v){const d=new Date(v+'T12:00:00');return Number.isNaN(d.getTime())?null:d}
+function names(){return `${CONF.couple.first} & ${CONF.couple.second}`}
+function setNames(){const holder=$('heroNames');holder.replaceChildren();for(const [i,name] of [CONF.couple.first,CONF.couple.second].entries()){
+ if(i)holder.append(el('span','hero-and','y'));
+ const n=el('span','hero-name',name);if(name.length>17)n.classList.add('xlong');else if(name.length>10)n.classList.add('long');holder.append(n);
+ }
+ const d=dateParts(CONF.couple.date);const full=d?new Intl.DateTimeFormat('es-ES',{day:'numeric',month:'long',year:'numeric'}).format(d):CONF.couple.date;
+ $('coverDate').textContent=d?[String(d.getDate()).padStart(2,'0'),String(d.getMonth()+1).padStart(2,'0'),d.getFullYear()].join(' · '):CONF.couple.date;
+ $('coverCity').textContent=[CONF.coverShowPlace===false?'':CONF.couple.city,CONF.coverShowTime===false?'':CONF.couple.hour].filter(Boolean).join(' · ');
+ $('finalNames').textContent=names();const finalDateNode=$('finalDate');finalDateNode.textContent=full+' · '+CONF.couple.city;finalDateNode.classList.toggle('date--adaptive',(CONF.couple.city||'').length>16);
+ const today=new Date();today.setHours(12,0,0,0);$('daysNum').textContent=d?Math.max(0,Math.ceil((d-today)/86400000)):'—';
+}
+function render(){setNames();$('countCopy').textContent=CONF.copy.countdown;$('countdown').hidden=CONF.countdownEnabled===false;$('rsvp').textContent=CONF.rsvpLabel||'Confirmar asistencia';const closingText=$('finale').querySelector('.thanks');closingText.textContent=CONF.closingLine||'Gracias por formar parte de este día.';closingText.classList.toggle('thanks--custom-long',!!CONF.closingLine&&CONF.closingLine.length>43);
+ const storyOn=CONF.storyEnabled!==false && !!String(CONF.copy?.story||'').trim();
+ $('story').hidden=!storyOn;$('introPhoto').hidden=!CONF.storyPhoto;
+ if(storyOn){$('storyTitle').textContent=CONF.copy.storyTitle;$('storyCopy').textContent=CONF.copy.story;}else{$('storyTitle').textContent='';$('storyCopy').textContent='';} const heroPhoto=$('heroCouplePhoto');heroPhoto.src=CONF.storyPhoto||'';applyPhotoLayout(heroPhoto,CONF.storyPhotoMeta);
+ const pv=$('places'),container=$('placeList');container.replaceChildren();pv.hidden=!CONF.venues?.length;
+ (CONF.venues||[]).slice(0,2).forEach((v,i)=>{
+ const unit=el('article','place');
+ if(v.photo){const f=el('figure','place-image'),im=el('img');im.src=v.photo;im.alt='Lugar de '+(v.role||'la boda');im.loading='lazy';applyPhotoLayout(im,v.photoMeta);f.append(im);unit.append(f)}
+ const info=el('div','place-copy');info.append(el('p','place-label label',(v.role||'Lugar').toUpperCase()));info.append(el('h3','place-name serif',v.name));
+ info.append(el('p','place-where',[(v.hour||''),(v.city||'')].filter(Boolean).join(' · ')));
+ if(v.address)info.append(el('p','place-address',v.address)); if(i===0 && CONF.dressCode?.enabled && CONF.dressCode.text)info.append(el('p','place-address guest-dresscode','Código de vestimenta · '+CONF.dressCode.text));
+ const btn=el('a','place-link','Cómo llegar');btn.href=v.directions||'#';btn.addEventListener('click',event=>{if(!v.directions){event.preventDefault();notice('Cómo llegar','Aquí se abrirá el enlace de ubicación configurado en el pedido.')}});if(v.directions||!CONF.schemaResolved)info.append(btn);
+   if(v.websiteUrl){try{const target=new URL(v.websiteUrl);if(['http:','https:'].includes(target.protocol)){const siteLink=el('a','place-link guest-place-website','Sitio web');siteLink.href=target.href;siteLink.target='_blank';siteLink.rel='noopener noreferrer';siteLink.style.marginLeft=v.directions?'8px':'0';info.append(siteLink)}}catch{}}
+   unit.append(info);container.append(unit)
+ });
+ const ag=$('agendaList');ag.replaceChildren();(CONF.agenda||[]).slice(0,5).forEach((m,i)=>{const row=el('article','score-row');row.style.setProperty('--row-index',i);row.append(el('time','score-time',m.time));const divider=el('span','score-divider');divider.setAttribute('aria-hidden','true');row.append(divider);const t=el('div','score-text');t.append(el('h3','serif',m.label||m.title||''));row.append(t);ag.append(row)});
+ $('agenda').hidden=!CONF.agenda?.length;
+ // GUEST real questionnaire contract: bus, accommodation, gift and playlist. No extra subtitle fields.
+ const pc=CONF.practical && !Array.isArray(CONF.practical)?CONF.practical:{};
+ const pr=$('practicalList');pr.replaceChildren();
+ const usableUrl=(u)=>{try{const z=new URL(u);return ['https:','http:'].includes(z.protocol)}catch{return false}};
+ const isDemo=(u)=>/^https?:\/\/example\.(com|org|net)(?:\/|$)/i.test(u||'');
+ function action(label,url){
+   if(!usableUrl(url))return null;
+   const a=el('a','atelier-action',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';
+   if(isDemo(url))a.addEventListener('click',ev=>{ev.preventDefault();notice(label,'Este enlace es de demostración. Se sustituye automáticamente por el enlace facilitado en el cuestionario.')});
+   return a;
+ }
+ function details(label,message){const b=el('button','atelier-action',label);b.type='button';b.addEventListener('click',()=>notice(label,message));return b}
+ function note(category,title,summary,actions=[],extras=[]){
+   const kind=({TRANSPORTE:'transport',ALOJAMIENTO:'hotel','MÚSICA':'music',REGALO:'gift'}[category]||'other');
+   const card=el('article','atelier-note v11-item v11-'+kind);
+   const body=el('div','v11-body');
+   const eyebrow=()=>el('p','v11-eyebrow',category);
+   const heading=(text,klass)=>el('h3',klass||'v11-title',text);
+   const copy=(text,klass)=>text?el('p',klass||'v11-copy',text):null;
+   const buttons=actions.filter(Boolean);
+   const makeAction=(node,type)=>{node.classList.add('v11-action','v11-action--'+type);return node};
+   if(kind==='transport'){
+     body.append(eyebrow(),heading(title));
+     const bus=pc.bus||{};
+     if(bus.pickupPoints?.length){
+       const stop=el('p','v11-stop');
+       stop.append(el('strong','',bus.pickupPoints.length>1?'Paradas':'Parada'),document.createTextNode(' · '+bus.pickupPoints.join(' · ')));
+       body.append(stop);
+     }
+     const timetable=el('div','v11-timetable');
+     for(const [label,arr] of [['Ida',bus.outboundTimes],['Vuelta',bus.returnTimes]]){
+       if(!arr?.length)continue;
+       const cell=el('div','v11-time-cell');
+       cell.append(el('span','v11-time-label',label),el('span','v11-time-value',arr.join(' · ')));
+       timetable.append(cell);
+     }
+     if(timetable.childElementCount)body.append(timetable);
+     if(bus.note)body.append(copy(bus.note,'v11-note'));
+     if(buttons.length){const bar=el('div','v11-transport-actions');buttons.forEach((b,i)=>bar.append(makeAction(b,i?'link':'link')));body.append(bar)}
+   }else if(kind==='hotel'){
+     const hotel=pc.accommodation||{};
+     const top=el('div','v11-hotel-top');
+     top.append(eyebrow(),el('p','v11-subtitle',title));
+     body.append(top);
+     const name=heading(hotel.name||title,'v11-hotel-name');
+     if((hotel.name||'').length>28)name.classList.add('v11-hotel-name--long');
+     body.append(name);
+     if(hotel.note)body.append(copy(hotel.note,'v11-note'));
+     const main=buttons.find(b=>/^(ver hotel|reservar)$/i.test((b.textContent||'').trim()))||buttons.find(b=>b.tagName==='A')||buttons[0];
+     const detail=buttons.find(b=>/^(información|condiciones|detalles)$/i.test((b.textContent||'').trim()));
+     const row=el('div','v11-hotel-actions');
+     if(main)row.append(makeAction(main,'primary'));
+     if(detail&&detail!==main)row.append(makeAction(detail,'link'));
+     buttons.filter(b=>b!==main&&b!==detail).forEach(b=>row.append(makeAction(b,'link')));
+     if(row.childElementCount)body.append(row);
+   }else if(kind==='music'){
+     body.append(eyebrow(),heading(title));
+     if(summary)body.append(copy(summary));
+     if(buttons.length){const row=el('div','v11-music-actions');buttons.forEach((b,i)=>row.append(makeAction(b,i?'link':'secondary')));body.append(row)}
+   }else if(kind==='gift'){
+     body.append(eyebrow());
+     const intro=el('div','v11-gift-intro');intro.append(heading(title));
+     if(buttons.length){const bar=el('div','v11-gift-actions');buttons.forEach((b,i)=>bar.append(makeAction(b,i?'link':'primary')));intro.append(bar)}
+     body.append(intro);
+     if(summary)body.append(copy(summary));
+   }else{
+     body.append(eyebrow(),heading(title));
+     if(summary)body.append(copy(summary));
+     buttons.forEach((b,i)=>body.append(makeAction(b,i?'link':'primary')));
+   }
+   extras.filter(Boolean).forEach(x=>body.append(x));card.append(body);pr.append(card);
+ }
+ const bus=pc.bus;
+ if(bus?.enabled){
+   const chunks=[];if(bus.pickupPoints?.length)chunks.push('Parada'+(bus.pickupPoints.length>1?'s':'')+': '+bus.pickupPoints.join(' · '));
+   if(bus.outboundTimes?.length)chunks.push('Ida '+bus.outboundTimes.join(' · '));
+   if(bus.returnTimes?.length)chunks.push('Vuelta '+bus.returnTimes.join(' · '));
+   const busAction=action('Ver parada',bus.mapsUrl);
+   // Do not repeat available times behind a redundant button. Long real itineraries can wrap naturally.
+   note('TRANSPORTE','De ida y vuelta',chunks.join('  ·  ')+(bus.note?' · '+bus.note:''),[busAction]);
+ }
+ const hotel=pc.accommodation;
+ if(hotel?.enabled && hotel.mode!=='none'){
+   const short=[hotel.name,hotel.note].filter(Boolean).join(' · ');
+   const meta=[];
+   if(hotel.bookingName)meta.push('Reserva a nombre de '+hotel.bookingName);
+   if(hotel.bookingCode)meta.push('Código: '+hotel.bookingCode);
+   if(hotel.discountText)meta.push(hotel.discountText);
+   if(hotel.deadline)meta.push('Hasta '+hotel.deadline);
+   if(hotel.priceText)meta.push(hotel.priceText);
+   if(hotel.address)meta.push(hotel.address);
+   if(hotel.phone)meta.push('Teléfono: '+hotel.phone);
+   const actions=[];
+   if(hotel.mode==='external_booking' && usableUrl(hotel.externalBookingUrl))actions.push(action('Reservar',hotel.externalBookingUrl));
+   else if(usableUrl(hotel.websiteUrl))actions.push(action('Ver hotel',hotel.websiteUrl));
+   else if(usableUrl(hotel.externalBookingUrl))actions.push(action('Reservar',hotel.externalBookingUrl));
+   if(meta.length)actions.push(details('Información',meta.join('\n')));
+   if(usableUrl(hotel.mapsUrl))actions.push(action('Cómo llegar',hotel.mapsUrl));
+   note('ALOJAMIENTO','Dónde descansar',short,actions);
+ }
+ const playlist=pc.playlist;
+ if(playlist?.enabled && playlist.mode!=='none'){
+   const playlistTarget=usableUrl(playlist.url)?playlist.url:(playlist.mode==='guest_request'&&usableUrl(CONF.rsvpUrl)?CONF.rsvpUrl:null);
+   const playlistButton=playlistTarget?action(playlist.mode==='guest_request'?'Proponer canción':'Abrir playlist',playlistTarget):null;
+   note('MÚSICA','Vuestra canción',playlist.prompt||'',[playlistButton]);
+ }
+ const gift=pc.gift;
+ if(gift?.enabled && gift.mode!=='none'){
+   const act=[];
+   if(gift.mode==='external_link'){if(usableUrl(gift.externalUrl))act.push(action(gift.linkLabel||'Ver lista',gift.externalUrl))}
+   else if(gift.mode==='bank'){
+     const items=[gift.accountHolder&&'Titular: '+gift.accountHolder,gift.iban&&'IBAN: '+gift.iban,gift.bicSwift&&'BIC/SWIFT: '+gift.bicSwift].filter(Boolean);
+     if(items.length||gift.details)act.push(details('Ver datos',items.join('\n')||gift.details));
+   } else if(gift.mode==='bizum'){
+     const items=[gift.bizumRecipient&&'Destinatario: '+gift.bizumRecipient,gift.bizumPhone&&'Bizum: '+gift.bizumPhone].filter(Boolean);
+     if(items.length||gift.details)act.push(details('Ver datos',items.join('\n')||gift.details));
+   }
+   else if(gift.mode==='short_text' && gift.details) { /* the message is visible, no duplicate popup */ }
+   const message=gift.mode==='short_text'?(gift.details||gift.displayText||''):(gift.displayText||'');
+   note('REGALO','Con cariño',message,act);
+ }
+ $('practical').hidden=!pr.childElementCount;
+ const gal=$('galleryTrack');gal.replaceChildren();(CONF.gallery||[]).forEach((item,i)=>{const f=el('figure','gallery-shot');const im=el('img');im.src=typeof item==='string'?item:item.src;im.alt=(typeof item==='object'&&item.alt)||'Recuerdo '+(i+1)+' de la pareja';im.loading='lazy';applyPhotoLayout(im,typeof item==='string'?null:item);f.append(im);gal.append(f)});$('gallery').hidden=!CONF.gallery?.length;
+ $('galleryHint').textContent=(CONF.gallery||[]).length>1?'Desliza para ver más':'Un recuerdo nuestro';
+ const dots=$('galleryDots');dots.replaceChildren();(CONF.gallery||[]).slice(0,8).forEach((v,i)=>dots.append(el('i',i===0?'on':'')));
+}
+function notice(title,content){$('dialogTitle').textContent=title;$('dialogCopy').textContent=content;$('previewDialog').showModal()}
+$('dialogClose').addEventListener('click',()=>$('previewDialog').close());
+$('rsvp').addEventListener('click',()=>{if(CONF.rsvpUrl){window.location.assign(CONF.rsvpUrl)}else{notice('Confirmar asistencia','Esta es una prueba visual. La invitación comercial conectará este botón al RSVP existente de GUEST para el destinatario correspondiente.')}});
+$('galleryTrack').addEventListener('scroll',()=>{const g=$('galleryTrack');const idx=Math.round(g.scrollLeft/(g.firstElementChild?.getBoundingClientRect().width+14||1));[...$('galleryDots').children].forEach((d,i)=>d.classList.toggle('on',i===idx))},{passive:true});
+function setupFilm(){for(const id of ['coverVideo','finalVideo']){let v=$(id);v.src=MEDIA.opening;v.load();v.play().catch(()=>{});}
+ document.querySelectorAll('.breathVideo').forEach(v=>{v.src=MEDIA.breath;v.load();v.play().catch(()=>{});});const glow=$('glowVideo');if(glow){glow.src=MEDIA.glow;glow.load();glow.play().catch(()=>{});}
+}
+const STORY_PRESET_COPY={
+ 'story-01':'Llevamos años compartiendo planes, viajes, domingos tranquilos y muchas risas. Ahora nos hace muchísima ilusión celebrar el siguiente capítulo con vosotros.',
+ 'story-02':'No sabemos exactamente cuándo empezó todo, pero sí sabemos que desde entonces la vida es mucho más divertida juntos. Y este día no tendría sentido sin vosotros.',
+ 'story-03':'Entre planes improvisados, viajes, cenas que se alargan y días de sofá, hemos ido construyendo lo nuestro. Ahora toca celebrarlo con nuestra gente.',
+ 'story-04':'Después de tantos momentos compartidos, ha llegado uno que queremos vivir rodeados de las personas que forman parte de nuestra historia: vosotros.',
+ 'story-05':'Nos elegimos hace tiempo y seguimos eligiéndonos cada día. Ahora queremos celebrarlo como más nos gusta: con nuestra familia y amigos cerca.'
+};
+function fromQuestionnaire(input){
+  const canonical=input?.schemaVersion==='guest-invitation-config-v1'||!!(input?.template && input?.couple && input?.wedding && input?.locations && input?.practical);
+  if(!canonical)return structuredClone(input);
+  const result=structuredClone(DEFAULT);
+  result.schemaResolved=true;
+  result.couple={first:input.couple.name1,second:input.couple.name2,date:input.wedding.date,city:input.wedding.coverPlace,hour:input.wedding.time||''};
+  result.coverShowPlace=input.cover.showPlace;
+  result.coverShowTime=input.cover.showTime;
+  result.countdownEnabled=input.countdown.enabled;
+  result.storyEnabled=input.story.enabled && (input.story.textMode!=='none'||!!(input.story.photo?.src||input.cover.photo?.src));
+  const selectedPhoto=(input.story.enabled && input.story.photo?.src?input.story.photo:null) || input.cover.photo || null;
+  result.storyPhoto=selectedPhoto?.src||null;result.storyPhotoMeta=selectedPhoto;
+  result.copy.story=input.story.body||(input.story.textMode==='preset'?STORY_PRESET_COPY[input.story.presetId]||STORY_PRESET_COPY['story-03']:'');
+  result.venues=(input.locations?.items||[]).map(v=>({role:v.type==='ceremony'?'Ceremonia':v.type==='celebration'?'Celebración':'Ceremonia y celebración',name:v.name,hour:v.time,city:input.wedding.coverPlace,address:v.address,photo:input.locations.heroPhoto?.src||null,photoMeta:input.locations.heroPhoto,directions:v.mapsUrl||'',websiteUrl:v.websiteUrl||''}));result.dressCode=input.locations?.dressCode||{enabled:false};
+  result.agenda=input.agenda.enabled?input.agenda.moments:[];
+  result.practical=input.practical;
+  result.gallery=input.gallery.enabled?input.gallery.photos:[];
+  result.rsvpUrl=(input.rsvp?.route&&input.rsvp.route!=='#')?input.rsvp.route:'';
+  result.rsvpLabel=input.rsvp.ctaLabel;
+  result.closingLine=input.closing?.line||null;
+  return result;
+}
+window.BOTANICA_APPLY_CONFIG=(next)=>{CONF=fromQuestionnaire(next);render();return true};
+window.BOTANICA_GET_CONFIG=()=>structuredClone(CONF);
+setupFilm();render();
+</script>
+<script id="botanica-agenda-advance">
+/* Agenda only: progressive line follows the reader's vertical scrolling. */
+(()=>{'use strict';
+ const list=document.getElementById('agendaList');
+ if(!list)return;
+ let scheduled=false;
+ const clamp=(v)=>Math.min(1,Math.max(0,v));
+ const update=()=>{
+   scheduled=false;
+   const rows=[...list.querySelectorAll('.score-row')];
+   const markers=rows.map(row=>row.querySelector('.score-divider')).filter(Boolean);
+   if(!markers.length){list.style.setProperty('--agenda-progress','0');return;}
+   const bounds=list.getBoundingClientRect();
+   const centers=markers.map(marker=>{const rect=marker.getBoundingClientRect();return rect.top+rect.height/2});
+   const first=markers[0].getBoundingClientRect();
+   const start=centers[0], end=centers[centers.length-1];
+   const height=Math.max(2,end-start);
+   list.style.setProperty('--agenda-track-x',((first.left+first.width/2)-bounds.left).toFixed(2)+'px');
+   list.style.setProperty('--agenda-track-top',(start-bounds.top).toFixed(2)+'px');
+   list.style.setProperty('--agenda-track-height',height.toFixed(2)+'px');
+   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+   const head=innerHeight*.55;
+   const progress=reduced?1:clamp((head-start)/height);
+   list.style.setProperty('--agenda-progress',progress.toFixed(3));
+   // Activate exactly one title at a time: from one midpoint to the next.
+   const entered=reduced || head>=start-60;
+   let active=0;
+   for(let i=0;i<centers.length-1;i++){
+     const midpoint=(centers[i]+centers[i+1])/2;
+     if(head>=midpoint)active=i+1;
+   }
+   rows.forEach((row,i)=>{
+     row.classList.toggle('is-passed',i<active);
+     row.classList.toggle('is-current',entered && i===active);
+   });
+ };
+ const schedule=()=>{if(!scheduled){scheduled=true;requestAnimationFrame(update)}};
+ addEventListener('scroll',schedule,{passive:true});
+ addEventListener('resize',schedule,{passive:true});
+ new MutationObserver(schedule).observe(list,{childList:true});
+ if(document.fonts?.ready)document.fonts.ready.then(schedule).catch(()=>{});
+ schedule();
+})();
+</script>
+
+
+
+
+
+
+
+<script id="botanica-practical-viewport-v6">
+(function(){
+ const root=document.getElementById('practicalList'); if(!root)return;
+ const reveal=()=>{const cards=[...root.querySelectorAll('.atelier-note')];
+   if('IntersectionObserver' in window){
+     const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in-view')})},{threshold:.16});
+     cards.forEach(c=>observer.observe(c));
+   }else cards.forEach(c=>c.classList.add('in-view'));
+ };
+ const observer=new MutationObserver(reveal);observer.observe(root,{childList:true});reveal();
+})();
+</script>
+
+<style id="botanica-practico-v12-overrides">
+/* V12: compact, clearer Practical without touching approved floral backgrounds. */
+#practical{padding-top:clamp(24px,3.6vh,34px)!important;padding-bottom:clamp(34px,5.4vh,48px)!important}
+#practical>.inner>h2{margin-bottom:16px!important}
+#practical .v11-eyebrow{margin-bottom:6px!important;color:#6f5442!important}
+#practical .v11-title{font-size:clamp(34px,8.5vw,43px)!important;line-height:.95!important;color:#443126!important;letter-spacing:-.038em!important;text-wrap:balance}
+#practical .v11-copy{font-size:clamp(15px,3.75vw,17px)!important;line-height:1.3!important;color:#40352d!important;max-width:34ch!important;margin-top:6px!important}
+#practical .v11-note{font-size:clamp(14px,3.45vw,15px)!important;line-height:1.28!important;color:#4b3d33!important;margin-top:5px!important}
+#practical .v11-action{min-height:40px!important;padding:8px 18px!important;font-size:clamp(13px,3.35vw,15px)!important}
+#practical .v11-action--primary{min-width:116px!important}
+#practical .v11-action--link{min-height:30px!important;padding:4px 0 3px!important}
+#practical .v11-transport{padding-bottom:16px!important}
+#practical .v11-transport .v11-title{font-size:clamp(31px,8.0vw,39px)!important;white-space:normal!important}
+#practical .v11-stop{font-size:clamp(14px,3.55vw,16px)!important;line-height:1.22!important;margin-top:7px!important}
+#practical .v11-timetable{margin-top:10px!important;padding-top:10px!important;column-gap:12px!important}
+#practical .v11-time-cell+.v11-time-cell{padding-left:12px!important}
+#practical .v11-time-label{font-size:clamp(11px,2.8vw,12px)!important}
+#practical .v11-time-value{font-size:clamp(19px,5.3vw,24px)!important;line-height:1.02!important}
+#practical .v11-hotel{padding:15px 0 16px!important}
+#practical .v11-hotel-top{margin-bottom:4px!important;gap:8px 12px!important}
+#practical .v11-subtitle{font-size:clamp(18px,4.8vw,22px)!important;color:#7a5d49!important}
+#practical .v11-hotel-name{font-size:clamp(31px,8.8vw,44px)!important;line-height:.92!important;letter-spacing:-.048em!important;margin:0!important}
+#practical .v11-hotel-name--long{font-size:clamp(29px,8.2vw,39px)!important}
+#practical .v11-hotel-actions{margin-top:8px!important;gap:8px 16px!important}
+#practical .v12-hotel-name-row{display:flex;align-items:flex-end;justify-content:space-between;gap:8px 16px;flex-wrap:wrap}
+#practical .v12-hotel-inline-link{display:inline-flex;align-items:flex-end;white-space:nowrap;min-height:unset!important;padding:0 0 2px!important;align-self:flex-end}
+#practical .v12-hotel-inline-link.v11-action--link{font-size:clamp(13px,3.3vw,15px)!important;border-bottom-width:1px!important}
+#practical .v11-music{padding:15px 0 16px!important}
+#practical .v11-music .v11-body{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:14px;align-items:end}
+#practical .v11-music .v11-eyebrow,#practical .v11-music .v11-title,#practical .v11-music .v11-copy{grid-column:1}
+#practical .v11-music-actions{grid-column:2;grid-row:1 / span 3;align-self:end;justify-content:flex-end;margin-top:0!important}
+#practical .v11-music .v11-title{font-size:clamp(33px,8.4vw,41px)!important}
+#practical .v11-gift{padding:15px 0 0!important}
+#practical .v11-gift .v11-body{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:14px;align-items:end}
+#practical .v11-gift-intro{display:contents!important}
+#practical .v11-gift .v11-eyebrow,#practical .v11-gift .v11-title,#practical .v11-gift .v11-copy{grid-column:1}
+#practical .v11-gift .v11-title{font-size:clamp(34px,8.6vw,42px)!important}
+#practical .v11-gift-actions{grid-column:2;grid-row:2 / span 2;align-self:end;justify-content:flex-end}
+#practical .v11-gift .v11-copy{max-width:28ch!important}
+#practical #practicalList > .v11-item:last-child{padding-bottom:0!important}
+#gallery{padding-top:clamp(34px,5vh,48px)!important}
+/* V13: a very slight contrast lift only inside Practical, preserving readability and the approved composition. */
+#practical{overflow:hidden!important}
+#practical::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    radial-gradient(58% 42% at 84% 18%, rgba(118,97,81,.11) 0%, rgba(118,97,81,.07) 22%, rgba(118,97,81,0) 58%),
+    radial-gradient(54% 44% at 18% 64%, rgba(131,112,96,.09) 0%, rgba(131,112,96,.05) 20%, rgba(131,112,96,0) 56%),
+    radial-gradient(48% 34% at 86% 86%, rgba(123,103,87,.06) 0%, rgba(123,103,87,.03) 22%, rgba(123,103,87,0) 54%),
+    linear-gradient(180deg, rgba(255,255,255,.03) 0%, rgba(115,96,79,.035) 36%, rgba(255,255,255,0) 100%);
+  mix-blend-mode:multiply;opacity:.88}
+#practical>.inner{position:relative;z-index:3}
+@media (max-width:370px){
+  #practical .v11-music .v11-body,#practical .v11-gift .v11-body{grid-template-columns:1fr!important}
+  #practical .v11-music-actions,#practical .v11-gift-actions{grid-column:1!important;grid-row:auto!important;justify-content:flex-start!important;margin-top:10px!important}
+  #practical .v12-hotel-name-row{align-items:baseline}
+}
+
+/* V14: portada separator refined + improved readability for bus times and hotel subtitle. */
+.cover .hero-and{display:flex;align-items:center;justify-content:center;gap:12px;
+  font:italic 500 clamp(27px,7.2vw,36px)/1 var(--serif);
+  color:#8a6852;margin:12px 0 10px;letter-spacing:.01em;text-shadow:0 1px 8px rgba(247,241,232,.55)}
+.cover .hero-and::before,.cover .hero-and::after{content:"";display:block;width:30px;max-width:11vw;height:1px;background:rgba(138,104,82,.34)}
+#practical .v11-time-label{font-size:clamp(12px,3.05vw,13px)!important;line-height:1.2!important;color:#775b47!important;letter-spacing:.11em!important}
+#practical .v11-time-value{font-size:clamp(21px,5.6vw,26px)!important;line-height:1.06!important;color:#4a362b!important;text-shadow:0 1px 0 rgba(247,241,232,.26)}
+#practical .v11-subtitle{font-size:clamp(20px,5vw,24px)!important;line-height:1.04!important;color:#6a5140!important;text-shadow:0 1px 0 rgba(247,241,232,.24)}
+@media (max-width:370px){
+  .cover .hero-and{gap:10px;font-size:clamp(24px,6.8vw,31px)}
+  .cover .hero-and::before,.cover .hero-and::after{width:24px}
+}
+</style>
+<script id="botanica-practico-v12-script">
+document.addEventListener('DOMContentLoaded', function(){
+  const hotel = document.querySelector('#practical .v11-hotel .v11-body');
+  if(hotel && !hotel.querySelector('.v12-hotel-name-row')){
+    const name = hotel.querySelector('.v11-hotel-name');
+    const actions = hotel.querySelector('.v11-hotel-actions');
+    if(name && actions){
+      const inline = actions.querySelector('.v11-action--link');
+      if(inline){
+        const row = document.createElement('div');
+        row.className = 'v12-hotel-name-row';
+        name.replaceWith(row);
+        row.appendChild(name);
+        inline.classList.add('v12-hotel-inline-link');
+        row.appendChild(inline);
+        if(!actions.children.length) actions.remove();
+      }
+    }
+  }
+});
+</script>
+
+<style id="botanica-v14-4-only-variable-closing">
+/* Scalable long custom closing: default V14 closing remains byte-geometry identical. */
+.finale-sign .thanks.thanks--custom-long{white-space:normal;overflow-wrap:anywhere;max-width:min(88vw,325px);width:100%;margin-left:auto;margin-right:auto;line-height:1.36;text-align:center;text-wrap:balance}
+</style>
+<style id="botanica-v14-5-long-date-only">.finale-sign .date.date--adaptive{white-space:normal;overflow-wrap:break-word;text-wrap:balance;max-width:min(88vw,360px);width:100%;font-size:clamp(13px,3.45vw,16px);line-height:1.35;justify-self:center;text-align:center}</style>
+</body></html>

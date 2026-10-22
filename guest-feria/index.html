@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f0c4bc">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="GUEST Feria">
+  <title>GUEST Feria</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/brand/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <link rel="stylesheet" href="fonts/fonts.css">
+  <link rel="stylesheet" href="kiosk.css">
+  <script src="kiosk.js" defer></script>
+</head>
+<body>
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13m-5-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H6m5 6-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5 9.5 17.5 19.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-tap" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11.5V5.75a1.75 1.75 0 0 1 3.5 0V11l3.6.6a2.4 2.4 0 0 1 2 2.6l-.5 4.3A3 3 0 0 1 14.6 21H11a3 3 0 0 1-2.4-1.2L5.4 15.6a1.6 1.6 0 0 1 2.3-2.2L9 14.6"/><path d="M5.6 6.4a5 5 0 0 1 9.8 0"/></g></symbol>
+</svg>
+
+<!-- Escaparate: vídeo en bucle hasta que alguien toca -->
+<section class="attract" id="attract" aria-label="Escaparate">
+  <video id="loop" muted loop playsinline autoplay preload="auto"></video>
+  <button class="attract-cta" id="attractCta" type="button"><svg aria-hidden="true"><use href="#i-tap"/></svg>Tocad para abrir una invitación</button>
+</section>
+
+<div class="shell" id="shell" hidden>
+  <header class="bar">
+    <button class="logo" id="logo" type="button" aria-label="GUEST by WeddlySmartDesign"><b>GUEST</b><span>by WeddlySmartDesign</span></button>
+    <nav class="tabs" aria-label="Secciones">
+      <button type="button" data-tab="disenos" aria-pressed="true">Diseños</button>
+      <button type="button" data-tab="app" aria-pressed="false">La app</button>
+      <button type="button" data-tab="precio" aria-pressed="false">Precio</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="view view-designs" id="disenos" aria-labelledby="designs-title">
+      <div class="view-head">
+        <p class="kicker">Los diseños</p>
+        <h1 id="designs-title">Abridlas como lo harán vuestros invitados.</h1>
+        <p class="lead">Tocad un sello y recorred la invitación entera, de la portada al cierre.</p>
+      </div>
+      <ul class="grid" id="grid"></ul>
+      <p class="more">Y más diseños en camino.</p>
+    </section>
+
+    <section class="view view-app" id="app" aria-labelledby="app-title" hidden>
+      <div class="view-head">
+        <p class="kicker">La app incluida</p>
+        <h1 id="app-title">Y cuando responden, todo llega a vuestra app.</h1>
+        <p class="lead">Para los dos, cada uno desde su móvil. Capturas reales de GUEST, con datos de ejemplo.</p>
+      </div>
+      <div class="rail" id="rail"></div>
+    </section>
+
+    <section class="view view-price" id="precio" aria-labelledby="price-title" hidden>
+      <div class="price-main">
+        <p class="kicker">Un precio. Todo incluido.</p>
+        <h1 class="sr-only" id="price-title">Precio</h1>
+        <p class="price">59,90&nbsp;€</p>
+        <p class="price-sub">IVA incluido · pago único · precio de lanzamiento</p>
+        <div class="includes">
+          <div>
+            <h2>La invitación</h2>
+            <ul>
+              <li>Personalizada con vuestros nombres, fecha, lugares, agenda, historia y fotos</li>
+              <li>Propuesta en 48–72 h y cambios hasta que la aprobéis</li>
+              <li>Confirmación de asistencia con acompañantes, niños, menús y alergias</li>
+            </ul>
+          </div>
+          <div>
+            <h2>La app GUEST</h2>
+            <ul>
+              <li>Invitados por grupos y familias, con envío por WhatsApp</li>
+              <li>Plano del salón para colocar las mesas y sentar a cada invitado</li>
+              <li>Listados para el catering, el transporte y el alojamiento</li>
+              <li>Para los dos, cada uno desde su móvil</li>
+            </ul>
+          </div>
+        </div>
+        <p class="guarantee"><b>Sin riesgo.</b> Si la propuesta no os convence, os devolvemos el 100&nbsp;% antes de aprobarla.</p>
+        <p class="custom">¿Queréis algo único? <b>Diseño a medida, desde 120&nbsp;€.</b></p>
+      </div>
+      <aside class="price-side">
+        <ol class="steps">
+          <li><span>01</span><div><b>Elegís vuestro diseño</b><small>Lo veis entero, de la portada al cierre.</small></div></li>
+          <li><span>02</span><div><b>Nos contáis vuestra boda</b><small>Un cuestionario sencillo, en menos de 24 h.</small></div></li>
+          <li><span>03</span><div><b>Recibís vuestra propuesta</b><small>Con vuestros datos, en 48–72 h.</small></div></li>
+          <li><span>04</span><div><b>Pedís los cambios que queráis</b><small>Hasta que esté perfecta y la aprobáis.</small></div></li>
+          <li><span>05</span><div><b>La recibís en vuestra app</b><small>Lista para enviarla a cada invitado.</small></div></li>
+        </ol>
+        <div class="qr-card">
+          <p class="qr-title">Preguntadnos aquí mismo</p>
+          <p class="qr-hint">o escanead y escribidnos por WhatsApp</p>
+          <img src="assets/qr-whatsapp.svg" alt="Código QR para escribir por WhatsApp al 620 843 264" width="330" height="330">
+          <p class="qr-tel">620 843 264</p>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<!-- Visor: la invitación entera, desde la portada -->
+<section class="viewer" id="viewer" aria-label="Invitación" hidden>
+  <div class="viewer-side">
+    <button class="chip" type="button" id="viewerBack"><svg aria-hidden="true"><use href="#i-back"/></svg>Todos los diseños</button>
+    <div class="viewer-info">
+      <p class="kicker" id="viewerNo">01</p>
+      <h2 id="viewerName">Azahar</h2>
+      <p class="viewer-note" id="viewerNote"></p>
+      <p class="viewer-hint">Así la verá cada invitado en su móvil. Tocad y deslizad.</p>
+    </div>
+    <div class="viewer-nav">
+      <button class="btn btn-line" type="button" id="viewerPrev"><svg aria-hidden="true"><use href="#i-back"/></svg>Anterior</button>
+      <button class="btn btn-ink" type="button" id="viewerNext">Siguiente<svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    </div>
+  </div>
+  <div class="viewer-stage" id="viewerStage">
+    <div class="device" id="device">
+      <img class="device-poster" id="viewerPoster" alt="">
+      <iframe id="viewerFrame" title="Invitación" allow="autoplay; fullscreen"></iframe>
+    </div>
+  </div>
+  <aside class="viewer-aside">
+    <div class="aside-card">
+      <p class="kicker">¿Os gusta?</p>
+      <p class="aside-title">La personalizamos con vuestra historia.</p>
+      <p class="aside-text">Nombres, fecha, lugares, agenda y fotos. Y os llega con su propia app.</p>
+      <button class="btn btn-ink" type="button" id="viewerPrice">Ver precio<svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    </div>
+  </aside>
+  <div class="viewer-dock">
+    <button class="dock-btn" type="button" id="dockBack" aria-label="Todos los diseños"><svg aria-hidden="true"><use href="#i-back"/></svg></button>
+    <p class="dock-name" id="dockName">Azahar</p>
+    <button class="dock-btn" type="button" id="dockNext" aria-label="Siguiente diseño"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+  </div>
+</section>
+
+<p class="toast" id="toast" role="status" hidden></p>
+
+<!-- Solo para la expositora: mantener pulsado el logo -->
+<section class="staff" id="staff" hidden aria-label="Estado del modo sin conexión">
+  <div class="staff-card">
+    <h2>Modo sin conexión</h2>
+    <p id="staffStatus">Comprobando…</p>
+    <div class="meter"><span id="staffMeter"></span></div>
+    <div class="staff-actions">
+      <button class="btn btn-ink" type="button" id="staffFull">Pantalla completa</button>
+      <button class="btn btn-line" type="button" id="staffRetry">Comprobar y descargar lo que falte</button>
+      <button class="btn btn-line" type="button" id="staffClose">Cerrar</button>
+    </div>
+  </div>
+</section>
+<p class="prep" id="prep" hidden></p>
+</body>
+</html>
