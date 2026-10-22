@@ -206,19 +206,51 @@ for(const [name,t] of candidates){
 // Only staging copies get temporary src pointers. Canonical registry remains
 // certification-gated; published HTML never by itself authorizes a purchase.
 files.push(write('guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',Buffer.from(JSON.stringify(viewRegistry,null,2)+'\n')));
+
+// ONLY on the Cloudflare branch preview; production still publishes no-sale review assets.
+const guestPreviewBranch='guest-cloudflare-full-app-preview-2026-10-22';
+const fullGuestPreview=process.env.CF_PAGES_BRANCH===guestPreviewBranch ||
+ (process.env.GUEST_FULL_APP_PREVIEW_QA==='1' && args.includes('--verify-only-runtime'));
+if(fullGuestPreview){
+ const html=new Set(['index.html','access.html','guest-settings.html','guests.html','guests-v114-integrated.html',
+  'guests-v081-visual-seating.html','guests-events-v3.html','guests-events.html',
+  'guests-rsvp-operations-live.html','guests-rsvp-v116-single-live.html',
+  'event-invite-v2.html','event-invite.html','guests-rsvp-design-live.html','guests-rsvp-form.html']);
+ const names=fs.readdirSync(path.join(root,'guest')).filter(n=>
+  html.has(n) || /^(?:guest|guests)-[\w.-]+\.(?:js|css|svg|webmanifest)$/.test(n)
+ ).sort();
+ for(const must of ['index.html','access.html','guest-settings.html','guests-v114-integrated.html',
+   'guests-v081-visual-seating.html','guests-rsvp-operations-live.html','guests-rsvp-v116-single-live.html',
+   'guests-events-v3.html','guest-sw.js'])
+   if(!names.includes(must))throw Error('GUEST_PREVIEW_MISSING_REQUIRED:'+must);
+ for(const n of names){const p='guest/'+n;if(!files.some(x=>x.name===p))files.push(write(p,read(p)))}
+ const ready=new Set(files.map(x=>x.name));
+ const main=read('guest/index.html').toString('utf8');
+ for(const m of main.matchAll(/<script\s+src="([^"?]+)[^"]*"/g))
+  if(!ready.has('guest/'+m[1]))throw Error('GUEST_PREVIEW_MISSING_SCRIPT:'+m[1]);
+ for(const n of ['guests-access-layer.js','guests-production-sync.js','guests-copy-control-v1.js',
+   'guests-home-rsvp-status-v1.js','guest-visual-tables-lists-v1.js'])
+  if(!ready.has('guest/'+n))throw Error('GUEST_PREVIEW_MISSING_MODULE:'+n);
+ console.log('PREVIEW_GUEST_LICENSED_FRONTEND: '+names.length+' flat assets, auth and synchronization preserved. NO SALE.');
+}
+
 const selected=designs.find(x=>x.templateId===id);
 const visualIncluded=Boolean(selected);
 // Public QA entry is intentionally inert: never advertises or accepts checkout.
 // One template-neutral URL per catalog design; owner can inspect the exact frozen HTML.
 const href='/guest/catalog-assets/'+encodeURIComponent(id)+'/'+encodeURIComponent(selected.version)+'/index.html';
 const landing='<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer"><title>GUEST · preproducción</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f8f5f0;color:#38312d;font-family:system-ui,sans-serif}main{padding:30px;max-width:500px;text-align:center}h1{font:400 38px Georgia,serif}p{line-height:1.65}a{display:inline-block;padding:14px 18px;background:#41362f;color:#fff;border-radius:10px;text-decoration:none}</style></head><body><main><h1>GUEST by WeddlySmartDesign</h1><p>Entorno de revisión visual. No es una tienda ni una invitación entregada a una pareja.</p>'+ (visualIncluded?'<a href="'+href+'">Ver diseño en el móvil</a>':'<p>Diseño pendiente de instalar.</p>')+'</main></body></html>';
-files.push(write('index.html',Buffer.from(landing)));
+files.push(write('index.html',Buffer.from(fullGuestPreview?landing.replace('</main>','<p><a href="/guest/access.html">Acceso privado a GUEST (PREVIEW)</a></p></main>'):landing)));
 // Noindex is intentional. NEVER deploy commercial catalog while pending certification.
 const headers=`/*\n  X-Robots-Tag: noindex, nofollow, noarchive\n  Referrer-Policy: no-referrer\n  X-Content-Type-Options: nosniff\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n`;
-files.push(write('_headers',Buffer.from(headers)));
+const previewCsp="  Content-Security-Policy: default-src 'self' data: blob:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://dnjsxequwgtyyauuofxj.supabase.co; media-src 'self' data: blob: https://dnjsxequwgtyyauuofxj.supabase.co; connect-src 'self' https://dnjsxequwgtyyauuofxj.supabase.co; frame-src 'self'; form-action 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'";
+const effectiveHeaders=fullGuestPreview?headers+previewCsp+'\n'+'  Cache-Control: no-store\n':headers;
+files.push(write('_headers',Buffer.from(effectiveHeaders)));
 const design=selected;
 const manifest={schemaVersion:'guest-static-catalog-stage-v1',status:'PREPRODUCTION_DO_NOT_SELL',
  commercialApproved:false,design,designs,...(id==='botanica'?{botanica:design}:{}),
+ fullAppPreviewBranch:fullGuestPreview?guestPreviewBranch:null,
+ fullGuestManagementPresent:fullGuestPreview,
  singleDesignAdditionProcedure:'Existing visual master and visual-plugin.json; no per-design backend or checkout',
  productionPromotionForbidden:true,
  pages:['/guest/catalog-final.html','/guest-review-v1.html','/guest/catalog-questionnaire.html'],
