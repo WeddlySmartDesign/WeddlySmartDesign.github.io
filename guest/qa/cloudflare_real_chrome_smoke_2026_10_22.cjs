@@ -1,6 +1,6 @@
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
-const BASE='https://775213e7.guest-weddlysmartdesign.pages.dev';
+const BASE='https://0db89765.guest-weddlysmartdesign.pages.dev';
 const TOKEN='m'.repeat(64);
 (async()=>{
  const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});
