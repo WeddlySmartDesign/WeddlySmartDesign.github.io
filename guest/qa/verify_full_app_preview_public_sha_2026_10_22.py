@@ -12,7 +12,7 @@ import urllib.parse
 import urllib.request
 from pathlib import PurePosixPath
 
-ORIGIN = "https://bc6b3fa9.guest-weddlysmartdesign.pages.dev"
+ORIGIN = "https://775213e7.guest-weddlysmartdesign.pages.dev"
 MAX_FILE_BYTES = 28 * 1024 * 1024
 TIMEOUT = 40
 
