@@ -39,7 +39,7 @@ async function mock(page){
  })
 }
 async function coreFrame(page){
- for(let i=0;i<120;i++){const f=page.frames().find(x=>/guests-v114-integrated\.html/.test(x.url()));if(f){try{await f.waitForSelector('#nav',{timeout:500});return f}catch{}}await page.waitForTimeout(100)}
+ for(let i=0;i<120;i++){const f=page.frames().find(x=>/guests-v114-integrated(?:\.html)?/.test(x.url()));if(f){try{await f.waitForSelector('#nav',{timeout:500});return f}catch{}}await page.waitForTimeout(100)}
  throw new Error('core frame unavailable')
 }
 async function noOverflow(f,label){const x=await f.evaluate(()=>({sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth,bw:document.body.scrollWidth}));ok(x.sw<=x.cw+2&&x.bw<=x.cw+2,label+' overflow '+JSON.stringify(x))}
