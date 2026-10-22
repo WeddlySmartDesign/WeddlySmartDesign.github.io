@@ -1,5 +1,7 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+> **ACTUALIZACIÓN GUEST PREVIEW / CHROME / PWA (22/10/2026):** [Checklist P0 actualizado](GUEST_CIERRE_PENDIENTES_Y_ENLACES_2026-10-22.md). PREVIEW corregida y aislada: `https://0db89765.guest-weddlysmartdesign.pages.dev/guest/access.html` (con licencia o acceso sintético autorizado; NO DEMO pública). [Chrome real HTTPS PASS](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39793573548); [223/223 assets SHA-256](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39788551824); [PWA V6, rutas sin .html](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39794977086). **VENTA NO_GO**, Stripe TEST y recorrido completo pendientes. Mantener ramas PR #147 y #149 aisladas.
+
 > **CLOUDFLARE PREVIEW GUEST REAL (22/10/2026):** [Despliegue del módulo completo y auditoría HTTPS](GUEST_CLOUDFLARE_FULL_APP_PREVIEW_REAL_2026-10-22.md). **App con acceso privado publicada en PREVIEW:** `https://265a5e27.guest-weddlysmartdesign.pages.dev/guest/access.html` y `.../guest/index.html`. [HTTP y recursos reales SUCCESS](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39785011784). El dominio estable de producción todavía sirve portada provisional, y la venta permanece NO_GO. No confundir PREVIEW con entrega comercial ni activar cobros.
 
 
