@@ -12,6 +12,7 @@ jobs:
     timeout-minutes: 20
     env:
       GUEST_QA_BASE: https://775213e7.guest-weddlysmartdesign.pages.dev
+      GUEST_USE_SYSTEM_CHROME: '1'
       STRIPE_SECRET_KEY: ''
       SUPABASE_SERVICE_ROLE_KEY: ''
       CLOUDFLARE_API_TOKEN: ''
@@ -20,10 +21,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: {node-version: '22'}
-      - name: Install isolated Chromium
+      - name: Use installed Chrome with Playwright API (no browser download)
         run: |
+          google-chrome --version
           npm install --no-save playwright@1.55.0
-          npx playwright install --with-deps chromium
       - name: Verify Cloudflare's CSP permits same-origin GUEST iframe but no other domains
         shell: bash
         run: |
