@@ -129,7 +129,7 @@
     header.innerHTML='<div class="sectiontag">Novedades</div><span class="pill">'+unread.length+' sin leer</span>';
     section.appendChild(header);
     if(unread.length){
-      const info=d.createElement('p');info.className='small';info.textContent='Nuevas respuestas de la boda y de los eventos. El historial completo sigue disponible aunque marques los avisos como leídos.';
+      const info=d.createElement('p');info.className='small';info.textContent='Respuestas recibidas, incluidas las rectificaciones. Los totales de asistentes usan la última respuesta de cada persona; leer los avisos no resuelve tareas.';
       section.appendChild(info);
       const cards=d.createElement('div');cards.className='card';cards.style.padding='10px 14px';
       groups.forEach((g,i)=>{
@@ -140,7 +140,7 @@
         const title=g.type==='rsvp'?'respuestas de la boda':'respuestas de '+g.eventName;
         const row=d.createElement('div');row.className='row';row.style.cssText='display:block;padding:13px 0;border-bottom:1px solid #eee7de';
         const label=d.createElement('div');label.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap';
-        label.innerHTML='<div><b>'+g.items.length+' '+esc(title)+'</b><div class="small">'+yes+' asisten · '+no+' no asisten · '+esc(g.day)+'</div></div>';
+        label.innerHTML='<div><b>'+g.items.length+' '+esc(title)+'</b><div class="small">'+yes+' sí · '+no+' no · '+esc(g.day)+'</div></div>';
         if(many){
           const btn=d.createElement('button');btn.type='button';btn.className='btn line';btn.style.cssText='min-height:44px;padding:8px 12px';
           btn.textContent=expanded?'Ocultar detalles':'Ver '+g.items.length+' respuestas';
