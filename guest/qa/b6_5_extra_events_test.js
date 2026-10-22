@@ -139,7 +139,7 @@ async function mock(page){
  ok(topText.includes('¿Haréis preboda?'),'empty extra-event state missing');
  await page.waitForTimeout(500);
  const simplified=(await page.locator('body').innerText()).slice(0,5000);
- ok(!simplified.includes('Presupuesto y pagos')&&!simplified.includes('Tareas específicas'),'ONE planning/payment scope leaked into GUEST event product');
+ ok(simplified.includes('Presupuesto y pagos')&&simplified.includes('Tareas específicas'),'ONE extra-event budgeting/tasks parity missing in GUEST');
 
  // Preboda activation must be explicit and active.
  await page.locator('#activate').click();
