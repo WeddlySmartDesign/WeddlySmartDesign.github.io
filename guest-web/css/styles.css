@@ -564,6 +564,7 @@ html.has-dialog { overflow: hidden; }
 .footer-links { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
 .footer-links a { text-decoration: none; display: inline-flex; min-height: 44px; align-items: center; }
 .footer-links a:hover { color: var(--on-ink); text-decoration: underline; }
+.footer-ico { width: 1.05em; height: 1.05em; margin-right: .55em; flex: none; }
 .footer-copy { font-size: .8125rem; }
 
 /* ---------- Barra de compra (móvil) y WhatsApp ---------- */
