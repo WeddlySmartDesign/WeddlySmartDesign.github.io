@@ -37,7 +37,7 @@ async function mock(page){
 async function core(page){
   await page.waitForSelector('#app',{state:'visible',timeout:12000});
   for(let i=0;i<100;i++){
-    const f=page.frames().find(x=>/guests-v114-integrated\.html/.test(x.url()));
+    const f=page.frames().find(x=>/guests-v114-integrated(?:\.html)?/.test(x.url()));
     if(f){try{await f.waitForSelector('#nav',{timeout:500});return f}catch{}}
     await page.waitForTimeout(100);
   }
