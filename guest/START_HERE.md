@@ -1,5 +1,8 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+> **FUENTE ÚNICA DE PENDIENTES Y ENLACES (22/10/2026):** [GUEST_CIERRE_PENDIENTES_Y_ENLACES_2026-10-22.md](GUEST_CIERRE_PENDIENTES_Y_ENLACES_2026-10-22.md). Verificado que Cloudflare **estable y rama candidata sirven solo una portada de preproducción de 877 bytes**, NO la app; [diagnóstico HTTP público](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39748331464). El antiguo enlace `dc3b7ffd` sirve la app/demo previa, NO versión final. **30/30 QA internos PASS pero salida comercial NO_GO.** Seguir la lista P0-01 a P0-09 antes de afirmar «terminado» o activar cobros.
+
+
 > **CONTINUIDAD DEL CIERRE TÉCNICO — 22/10/2026:** leer primero [GUEST_FINALIZATION_CONTINUITY_REAL_STATUS_2026-10-22.md](GUEST_FINALIZATION_CONTINUITY_REAL_STATUS_2026-10-22.md) y el [PR #147](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/pull/147), que incluye Hoy agrupado para 20 RSVP, incidencias persistentes, compartir seguro, temas y paridad ONE en eventos. **Chromium QA PASS; ventas NO_GO** hasta despliegue de todos los recursos, pedidos E2E TEST y dos dispositivos reales. **NO fusionar main ni activar Stripe LIVE.**
 
 
