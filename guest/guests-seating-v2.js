@@ -30,7 +30,7 @@
           const prev=guestSeats.get(id);if(!prev)return;
           const tableName=String(g?.table||''),tableId=tableName?(nameToId.get(tableName)||'name:'+tableName):'';
           if(prev.tableId===tableId)return;
-          changes.push({id,name:String(g?.name||prev.name||id),from:prev.tableName||'',to:tableName,ts:now});
+          let byDevice='';try{byDevice=localStorage.getItem('weddly_guests_device_id_v1')||'';if(!byDevice){byDevice='d_'+(crypto.randomUUID?.()||Date.now().toString(36)+'_'+Math.random().toString(36).slice(2));localStorage.setItem('weddly_guests_device_id_v1',byDevice)}}catch{}changes.push({id,name:String(g?.name||prev.name||id),from:prev.tableName||'',to:tableName,ts:now,byDevice});
         });
         if(changes.length){
           M.meta=M.meta||{};
