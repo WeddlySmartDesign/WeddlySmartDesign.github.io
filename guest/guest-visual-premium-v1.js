@@ -79,7 +79,7 @@ h3{line-height:1.18}
 }
 .nav button:active{transform:scale(.97)}
 #nav button{border-radius:16px!important}
-.nav button.on{background:var(--guest-olive)!important;color:#fff!important}
+.nav button.on,#nav button.on{background:var(--guest-olive)!important;color:#fff!important}
 .sheet{background:rgba(30,28,25,.34)!important;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
 .panel{
   border-radius:28px 28px 0 0!important;padding:24px 20px calc(28px + env(safe-area-inset-bottom))!important;
