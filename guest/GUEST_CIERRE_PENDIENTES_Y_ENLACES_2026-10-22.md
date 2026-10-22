@@ -110,3 +110,28 @@
 6. Manifest del ZIP `GUEST_PREPRODUCTION_16_VERIFICADO_2026-10-20.zip` y registro maestro individual, sin recrear diseños con assets aproximados.
 
 **Estado al cierre: NO_GO; no existe aún un enlace FINAL de GUEST que cargue el producto nuevo completo en el dominio estable.**
+
+
+## ACTUALIZACIÓN CERTIFICADA: MÓDULO DE GESTIÓN PREVIEW Y PWA (22/10/2026)
+
+Esta actualización modifica la lectura de los pendientes P0-01 y P0-07 y se impone al diagnóstico anterior del placeholder 877 bytes **solo para la rama PREVIEW**. El dominio estable de producción NO ha sido promocionado.
+
+| Área | Estado verificable |
+|---|---|
+| P0-01A — GUEST íntegro en Cloudflare PREVIEW | **HECHO Y COMPROBADO**: frontend real, 26 scripts, acceso, Invitados, Mesas, Hoy, Ajustes, eventos y RSVP. No es versión LIVE de clientes |
+| P0-01B — Dirección estable comercial | **PENDIENTE** de certificación y promoción; producción sigue aislada |
+| P0-02 — Biblioteca multimedia de 15 candidatos | **223/223 recursos publicados y hashes SHA-256 exactos** en PREVIEW [run 39788551824](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39788551824). No implica que 15 diseños estén aprobados comercialmente ni que el antiguo D03 sea elegible |
+| P0-07A — Acceso y gestión con datos sintéticos en HTTPS real | **PASS** [Chrome run 39793573548](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39793573548): abre motor e iframe reales, Hoy, navegación y denegación 403 sin revelar la caché |
+| P0-07B — Regresión extensa Cloudflare con usuarios sintéticos | **TODOS LOS PASOS FUNCIONALES DEL JOB PASS** en [run 39794561142](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39794561142): red, permisos, Hoy, invitados, 20 RSVP, temas. Consultar conclusión global del run, no dar por finalizado si aún procesa limpieza |
+| P0-07C — Instalación PWA, caché y rutas limpias | **CÓDIGO Y EMPAQUETADO QA PASS** [run 39794977086](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39794977086): 44 recursos actuales, redirecciones Cloudflare sin .html, caché sin URL de token ni API. **Uso físico sin conexión aún no certificado** |
+| P0-03 a P0-09 — Flujo comercial completo | **NO_GO**: Stripe TEST 2 pedidos, cuestionario, aprobación, diseño final, correo, entrega, licencia real, dos dispositivos reales, web comercial, derecho de uso y autorización de venta |
+
+### Referencias exactas e invariantes
+- [Rama PREVIEW](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/tree/guest-cloudflare-full-app-preview-2026-10-22) y [PR #149](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/pull/149) siguen aislados y en borrador.
+- PREVIEW verificada con origen de prueba `https://775213e7.guest-weddlysmartdesign.pages.dev/guest/access.html`; la última compilación Cloudflare del PWA limpio fue `https://0db89765.guest-weddlysmartdesign.pages.dev/guest/access.html` (comprobar prueba de navegador del último commit antes de difundir).
+- [PR #147](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/pull/147) contiene el módulo GUEST candidato, no está fusionado.
+- Hallazgo técnico: Cloudflare Pages redirige rutas `*.html` a rutas limpias sin la extensión; pruebas Chromium se corrigieron para admitir ambas. El service worker V6 precachea 44 recursos del núcleo ONE-parity y normaliza redirecciones. Una denegación auténtica 401/403 impide mostrar la copia local; una caída de red permite uso offline previamente autorizado.
+- No se desplegó ningún cambio de Stripe, Resend o Supabase ni se enviaron correos o cargos. No se creó licencia ni se alteraron datos existentes.
+- **Ventas deshabilitadas.** NO confundir QA remoto sintético con cliente real o sincronización física.
+
+**Siguiente paso que sí depende de autorización/capacidad externa:** acceso seguro a Stripe TEST + verificación real de Cloudflare/Resend con pedido E2E y dos dispositivos. Preparar todo autónomamente y pedir a la titular solo la mínima autorización inevitable fuera de jornada.
