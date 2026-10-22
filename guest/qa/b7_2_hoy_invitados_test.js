@@ -112,7 +112,7 @@ async function runViewport(browser,width,height){
   await ctx.close();
 }
 (async()=>{
- const browser=await chromium.launch({headless:true});
+ const browser=await chromium.launch({headless:true,...(process.env.GUEST_USE_SYSTEM_CHROME==='1'?{channel:'chrome',args:['--no-sandbox','--disable-dev-shm-usage']}: {})});
  for(const [w,h] of [[320,700],[390,844],[430,900]])await runViewport(browser,w,h);
  await browser.close();
  console.log('B7.2 Hoy + Invitados: PASS');
