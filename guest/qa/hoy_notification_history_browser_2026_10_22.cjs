@@ -14,7 +14,8 @@ async function run(){
   else if(slug==='guest-rsvp'){x={ok:true,forms:[form],submissions:subms,contacts:[],delivery:[]}}
   else if(slug==='guest-license-access')x={ok:true,role:'primary',partnerJoined:false};
   else if(slug==='guest-access-check')x={ok:true,product:'guests'};
-  else if(slug==='guest-event-state')x={ok:true,state:{events:{}},version:1};
+  else if(slug==='guest-event-state')x={ok:true,state:{events:{e1:{id:'e1',enabled:true,name:'Preboda'}}},version:1};
+  else if(slug==='guest-event-invite')x={ok:true,recipients:[{recipient_key:'unit_2',members:[{id:'g2',name:'María Ruiz'}],response:{g2:'yes'},responded_at:ts(30000)}]};
   await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(x)});
  });
  try{
@@ -26,10 +27,11 @@ async function run(){
   const panel=core.locator('#wsdRecentChanges'),title=await panel.innerText();
   assert.match(title,/Notificaciones recientes/i);
   const count=await panel.locator('.pill').first().innerText();
-  assert.equal(Number(count),8,'all seven RSVP changes and one table movement are unread');
+  assert.equal(Number(count),9,'seven RSVP changes, one table movement and one preboda response are unread');
   assert.equal(await panel.locator('.row').count(),5,'collapsed notifications must show five without flooding mobile');
   await panel.locator('#wsdToggleRecent').click();
-  assert.equal(await panel.locator('.row').count(),8,'show all allows all unread notifications');
+  assert.equal(await panel.locator('.row').count(),9,'show all allows all unread notifications');
+  assert.match(await panel.innerText(),/Preboda.+Ha confirmado asistencia/s,'extra-event response missing from Hoy');
   await panel.locator('#wsdMarkRecentRead').click();
   await core.waitForFunction(()=>!document.getElementById('wsdRecentChanges'),{timeout:10000});
   assert.ok((await page.evaluate(()=>JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'{}').meta.todayRecentChangesReadAt))>0,'mark-read persists');
