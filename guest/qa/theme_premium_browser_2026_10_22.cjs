@@ -23,7 +23,7 @@ async function core(page){
  throw new Error('core not mounted');
 }
 async function checkTheme(f,key){
- await f.waitForFunction(expected=>getComputedStyle(document.querySelector('#nav button.on')).backgroundColor===expected,themeRGB[key],{timeout:12000});
+ try{await f.waitForFunction(expected=>getComputedStyle(document.querySelector('#nav button.on')).backgroundColor===expected,themeRGB[key],{timeout:6000})}catch(e){const debug=await f.evaluate(()=>({actual:getComputedStyle(document.querySelector('#nav button.on')).backgroundColor,root:getComputedStyle(document.documentElement).getPropertyValue('--guest-olive'),body:getComputedStyle(document.body).backgroundColor,styles:[...document.querySelectorAll('style')].map(x=>x.id).filter(Boolean),store:localStorage.getItem('weddly_personal_theme_v51')}));throw new Error('Theme '+key+' actual='+JSON.stringify(debug)+' '+e.message)}
  const values=await f.evaluate(()=>({selected:getComputedStyle(document.querySelector('#nav button.on')).backgroundColor,body:getComputedStyle(document.body).backgroundColor,root:getComputedStyle(document.documentElement).getPropertyValue('--guest-olive').trim()}));
  assert.equal(values.selected,themeRGB[key],key+' premium bottom navigation did not change theme');
 }
