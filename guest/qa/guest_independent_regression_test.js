@@ -104,6 +104,12 @@ for(const p of sourceFiles){
   else if(['guests-rsvp-design-manage.html','guests-rsvp-form-flow.html'].includes(p)){
     ok(dst.includes('href="index.html"')&&!/<(?:input|textarea|select)\b/i.test(dst),'retired editor route unexpectedly active: '+p);
   }
+  // Modern GUEST Hoy replaces the original flat seven-day feed with stable-ID grouped notifications and separate table activity.
+  else if(p==='guests-home-rsvp-status-v1.js'){
+    const names=namedFns(dst);
+    for(const fn of namedFns(src))if(fn!=='recentChanges')ok(names.includes(fn),'source Hoy function lost in '+p+': '+fn);
+    for(const fn of ['entries','activityEntries','groupEntries','readIds','renderAttention','renderRecent','markRecentRead'])ok(names.includes(fn),'smart Hoy functional module missing '+fn);
+  }
   // Single final-invitation sender intentionally replaces THREE generic RSVP URL functions.
   else if(p==='guests-rsvp-operations-v3.html'){
     const retired=new Set(['publicLink','copyInvite','sendWA']);
