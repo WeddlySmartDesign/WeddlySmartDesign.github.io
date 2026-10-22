@@ -1,0 +1,39 @@
+name: GUEST Routes Diagnostic — Read Only
+on:
+  push:
+    branches: [guest-finalization-candidate-2026-10-22]
+    paths:
+      - '.github/workflows/guest-public-routes-diagnostic-2026-10-22.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  routes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Diagnose published GUEST routes, no credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          for host in \
+            'https://guest-weddlysmartdesign.pages.dev' \
+            'https://guest-finalization-candidate.guest-weddlysmartdesign.pages.dev' \
+            'https://dc3b7ffd.guest-weddlysmartdesign.pages.dev'; do
+            echo "ORIGIN: ${host}"
+            for path in \
+              '/guest/index.html' \
+              '/guest/access.html' \
+              '/guest/guests-v114-integrated.html' \
+              '/guest/guest-demo-one-parity-full.html' \
+              '/guest/catalog-assets/botanica/14.7/index.html' \
+              '/guest.html'; do
+              result="$(curl --location --silent --show-error --max-time 12 --output /tmp/guest-http-body.html --write-out '%{http_code} %{size_download}' "${host}${path}" || true)"
+              title="$(grep -o -m 1 '<title>[^<]*</title>' /tmp/guest-http-body.html 2>/dev/null || true)"
+              markers='not-full-app'
+              if grep -q 'guests-access-layer.js' /tmp/guest-http-body.html; then markers='app-entry'; fi
+              if grep -q 'id="nav"' /tmp/guest-http-body.html; then markers='guest-engine'; fi
+              if grep -q 'guest-demo-theme' /tmp/guest-http-body.html; then markers='guest-demo'; fi
+              echo "ROUTE ${path}: ${result}; ${markers}; ${title}"
+            done
+          done

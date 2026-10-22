@@ -1,0 +1,54 @@
+name: GUEST Finalization Candidate — Regression
+on:
+  push:
+    branches: [guest-finalization-candidate-2026-10-22]
+    paths:
+      - 'guest/**'
+      - '.github/workflows/guest-finalization-candidate-2026-10-22.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  finalization-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax checks
+        run: |
+          node --check guest/guests-home-rsvp-status-v1.js
+          node --check guest/guests-seating-v2.js
+          node --check guest/guest-visual-premium-v1.js
+          node --check guest/qa/b6_2_today_guests_test.js
+          node --check guest/qa/hoy_notification_history_browser_2026_10_22.cjs
+          node --check guest/qa/hoy_20_rsvp_bulk_and_activity_2026_10_22.cjs
+      - name: Install browser tools
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve local source with no real backend
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/guest-final-qa-http.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0; sleep 1; done
+          exit 1
+      - name: Core Hoy and Guests regression
+        run: node guest/qa/b6_2_today_guests_test.js
+      - name: Hoy and Guests 320/390/430 mobile regression
+        run: node guest/qa/b7_2_hoy_invitados_test.js
+      - name: Grouped notifications and event response regression
+        run: node guest/qa/hoy_notification_history_browser_2026_10_22.cjs
+      - name: 20 RSVPs, 16 yes 4 no, table activity, late response
+        run: node guest/qa/hoy_20_rsvp_bulk_and_activity_2026_10_22.cjs
+      - name: Settings secure sharing roles and errors
+        run: node guest/qa/hoy_sharing_settings_browser_2026_10_22.cjs
+      - name: Theme changes with premium layer
+        run: node guest/qa/theme_premium_browser_2026_10_22.cjs
+      - name: ONE events + independent invitations browser regression
+        run: node guest/qa/b6_5_extra_events_test.js
+      - name: ONE extra-event tasks/payments and mobile visual regression
+        run: node guest/qa/b7_5_extra_events_visual_test.js
+      - name: ONE modules and guest-only invariants
+        run: node guest/qa/guest_independent_regression_test.js

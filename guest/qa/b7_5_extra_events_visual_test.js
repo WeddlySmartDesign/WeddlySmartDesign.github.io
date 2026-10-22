@@ -66,9 +66,9 @@ async function runViewport(browser,width,height){
   const details=page.locator('#app>.card.guest-event-details');
   ok(await details.isVisible(),'event details card not classified');
   ok(await page.locator('#disable').evaluate(el=>el.classList.contains('guest-event-deactivate')),'active event disable state not visually classified');
-  ok(await page.locator('.summary.guest-event-summary .stat').count()===1,'GUEST event summary should be simplified to invited count');
-  ok(!(await page.locator('body').innerText()).includes('Presupuesto y pagos'),'payment scope leaked visually');
-  ok(!(await page.locator('body').innerText()).includes('Tareas específicas'),'task scope leaked visually');
+  ok(await page.locator('.summary.guest-event-summary .stat').count()===3,'ONE extra-event guest/tasks/budget summary must be preserved');
+  ok((await page.locator('body').innerText()).includes('Presupuesto y pagos'),'ONE extra-event payments panel missing');
+  ok((await page.locator('body').innerText()).includes('Tareas específicas'),'ONE extra-event tasks panel missing');
 
   await page.waitForSelector('.sectionTitle.guest-event-guests-title',{timeout:6000});
   await page.waitForSelector('.guest-event-guest-card',{timeout:6000});
