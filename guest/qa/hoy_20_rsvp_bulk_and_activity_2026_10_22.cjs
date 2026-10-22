@@ -6,7 +6,7 @@ const replies=Array.from({length:20},(_,i)=>({id:'r'+i,form_id:'f01',client_subm
 const wedding={meta:{couple:['Clara','Mateo'],weddingDate:'2027-06-12',todaySeatChanges:[{id:'g1',name:'Invitado 1',from:'Mesa 1',to:'Mesa 2',ts:now-5000,byDevice:'device-self'}]},guests:Object.fromEntries(replies.map((g,i)=>['g'+i,{name:g.name,rsvp:i<16?'confirmed':'declined',table:i===0?'Mesa 2':'',meal:i<16?'':'',mealRequired:true}])),tables:{a:{name:'Mesa 1',cap:8},b:{name:'Mesa 2',cap:8}}};
 const form={id:'f01',config:{customQuestions:[],questions:{meal:true}},public_token:'r'.repeat(48)};
 (async()=>{
- const browser=await chromium.launch({headless:true}),ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true}),page=await ctx.newPage();
+ const browser=await chromium.launch({headless:true,...(process.env.GUEST_USE_SYSTEM_CHROME==='1'?{channel:'chrome',args:['--no-sandbox','--disable-dev-shm-usage']}: {})}),ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true}),page=await ctx.newPage();
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.addInitScript(t=>{localStorage.setItem('weddly_shared_wedding_token',t);localStorage.setItem('weddly_guests_device_id_v1','device-self')},TOKEN);
  await page.route('https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/**',async route=>{
