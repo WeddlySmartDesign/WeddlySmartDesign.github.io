@@ -81,7 +81,7 @@ const allowedModified=new Set([
   'guests-home-rsvp-status-v1.js','guests-production-ops.js','guests-production-sync.js','guests-production-ui.js','guests-rsvp-design-manage.html','guests-rsvp-essential-live.html',
   'guests-rsvp-form-flex.html','guests-rsvp-form.html','guests-rsvp-form-flow.html','guests-rsvp-operations-live.html','guests-rsvp-operations-v3.html','guests-rsvp-public-clean.html','guests-rsvp-signature-live.html',
   'guests-smart-actions-v1.js','guests-v114-integrated.html','guests-v116-production.html','guests-personalizacion-essential.html','guests-personalizacion-signature-integrated.html',
-  'guests-rsvp-children-public-v1.js','guests-rsvp-plusone-public-v1.js','guests-rsvp-postsubmit-calendar-v1.js','guests-rsvp-calendar-action-v2.js','guests-rsvp-custom-answers-v1.js','guests-rsvp-children-answers-v1.js','guests-rsvp-v112-wedding-flex.html','guests-rsvp-v114-single-flex.html','guests-rsvp-v105-mobile.html','guests-rsvp-v115-wedding-flex-live.html','guests-rsvp-v116-single-live.html','guests-rsvp-services-hotfix-v1.js','guests-rsvp-operations-feedback-v1.js','guests-rsvp-operations-flow-v1.js','guests-rsvp-share-primary-v1.js','guests-rsvp-share-composer-v2.js','guests-rsvp-plusone-ops-v1.js','guests-rsvp-manual-parity-v1.js','guests-invitation-editor-feedback-inner-v1.js','guests-v081-visual-seating.html','guests-custom-lists-v1.js','guests-service-visibility-v1.js','guests-copy-control-v1.js','guests-extra-event-lists-v1.js','guests-events-group-select-v1.js','guests-events-ui-compact-photo-v1.js','guests-seating-v2.js'
+  'guests-rsvp-children-public-v1.js','guests-rsvp-plusone-public-v1.js','guests-rsvp-postsubmit-calendar-v1.js','guests-rsvp-calendar-action-v2.js','guests-rsvp-custom-answers-v1.js','guests-rsvp-children-answers-v1.js','guests-rsvp-v112-wedding-flex.html','guests-rsvp-v114-single-flex.html','guests-rsvp-v105-mobile.html','guests-rsvp-v115-wedding-flex-live.html','guests-rsvp-v116-single-live.html','guests-rsvp-services-hotfix-v1.js','guests-rsvp-operations-feedback-v1.js','guests-rsvp-operations-flow-v1.js','guests-rsvp-share-primary-v1.js','guests-rsvp-share-composer-v2.js','guests-rsvp-plusone-ops-v1.js','guests-rsvp-manual-parity-v1.js','guests-invitation-editor-feedback-inner-v1.js','guests-v081-visual-seating.html','guests-custom-lists-v1.js','guests-service-visibility-v1.js','guests-copy-control-v1.js','guests-extra-event-lists-v1.js','guests-events-group-select-v1.js','guests-events-ui-compact-photo-v1.js','guests-seating-v2.js','guests.html'
 ]);
 const namedFns=s=>[...new Set([...s.matchAll(/(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(/g)].map(m=>m[1]))];
 for(const p of sourceFiles){
@@ -96,6 +96,11 @@ for(const p of sourceFiles){
     continue;
   }
   if(!allowedModified.has(p)){const privacyOnly=s=>s.replace(/<meta\s+name=["']robots["']\s+content=["']noindex,nofollow(?:,noarchive)?["']\s*\/?>/gi,'').replace(/>\s+</g,'><');ok(src===dst||privacyOnly(src)===privacyOnly(dst),'unexpected functional modification vs latest ONE source: '+p)}
+  // Public legacy /guest/guests.html must always route to canonical GUEST index, including complete Hoy and settings.
+  else if(p==='guests.html'){
+    ok(dst.includes("new URL('index.html',location.href)"),'legacy guest shortcut points to incomplete shell');
+    ok(!dst.includes("new URL('guests-v116-production.html',location.href)"),'retired shortcut still points to v116');
+  }
   // GUEST extends ONE's identical seating engine only to record a pseudonymous local device identifier.
   else if(p==='guests-seating-v2.js'){
     for(const fn of namedFns(src))ok(namedFns(dst).includes(fn),'original ONE seating function lost: '+fn);
