@@ -1,0 +1,59 @@
+name: GUEST Cloudflare HTTPS Browser E2E — Synthetic and No Sale
+on:
+  push:
+    branches: [guest-cloudflare-full-app-preview-2026-10-22]
+    paths: ['.github/workflows/guest-cloudflare-browser-real-preview-2026-10-22.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      GUEST_QA_BASE: https://775213e7.guest-weddlysmartdesign.pages.dev
+      STRIPE_SECRET_KEY: ''
+      SUPABASE_SERVICE_ROLE_KEY: ''
+      CLOUDFLARE_API_TOKEN: ''
+      RESEND_API_KEY: ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Install isolated Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Verify Cloudflare's CSP permits same-origin GUEST iframe but no other domains
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSI "$GUEST_QA_BASE/guest/guests-v114-integrated.html" >/tmp/guest-headers.txt
+          grep -i 'content-security-policy' /tmp/guest-headers.txt
+          grep -iE "content-security-policy: .*frame-ancestors 'self'" /tmp/guest-headers.txt
+          ! grep -iE "content-security-policy: .*frame-ancestors 'none'" /tmp/guest-headers.txt
+          ready=0
+          for attempt in $(seq 1 10); do
+            curl -fsSL --max-time 20 "$GUEST_QA_BASE/guest/index.html" --output /tmp/guest-auth-shell.html || true
+            if grep -q 'guests-access-layer.js' /tmp/guest-auth-shell.html; then ready=1; break; fi
+            echo "Cloudflare propagation attempt $attempt: $(wc -c </tmp/guest-auth-shell.html) bytes, not real app yet"
+            sleep 3
+          done
+          if [ "$ready" != 1 ]; then
+            echo 'ERROR: GUEST app HTML still not available after ten attempts'
+            head -c 180 /tmp/guest-auth-shell.html
+            exit 1
+          fi
+          echo 'PASS: real licensed GUEST app HTML confirmed after CDN readiness check'
+      - name: Real-host no token, revoked access and genuine offline cache
+        run: node guest/qa/access_revoked_vs_offline_browser_2026_10_22.cjs
+      - name: Real-host synthetic license + Hoy, access, guests, list and seating
+        run: node guest/qa/b6_2_today_guests_test.js
+      - name: Real-host Hoy mobile 320/390/430
+        run: node guest/qa/b7_2_hoy_invitados_test.js
+      - name: Real-host 20 RSVP grouping, table activity and read state
+        run: node guest/qa/hoy_20_rsvp_bulk_and_activity_2026_10_22.cjs
+      - name: Real-host sharing permission branches (no real invite generated)
+        run: node guest/qa/hoy_sharing_settings_browser_2026_10_22.cjs
+      - name: Real-host persisted premium theme Blush → Slate
+        run: node guest/qa/theme_premium_browser_2026_10_22.cjs

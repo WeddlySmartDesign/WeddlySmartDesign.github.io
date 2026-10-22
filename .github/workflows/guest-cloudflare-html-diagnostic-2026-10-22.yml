@@ -1,0 +1,34 @@
+name: GUEST Cloudflare Public HTML Diagnostic — Read Only
+on:
+  push:
+    branches: [guest-cloudflare-full-app-preview-2026-10-22]
+    paths: ['.github/workflows/guest-cloudflare-html-diagnostic-2026-10-22.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Distinguish expected GUEST engine from fallback under different HTTP clients
+        run: |
+          set -euo pipefail
+          base=https://775213e7.guest-weddlysmartdesign.pages.dev
+          for profile in curl identity; do
+            if [ "$profile" = identity ]; then
+              curl --fail --location --silent --show-error -H 'Accept-Encoding: identity' -A 'GUEST-Full-Preview-Hash-QA/1.0' "$base/guest/index.html" -o /tmp/guest-index.html
+            else
+              curl --fail --location --silent --show-error "$base/guest/index.html" -o /tmp/guest-index.html
+            fi
+            echo "PROFILE=$profile bytes=$(wc -c </tmp/guest-index.html)"
+            sha256sum /tmp/guest-index.html
+            if grep -q 'guests-access-layer.js' /tmp/guest-index.html; then
+              echo "PROFILE=$profile REAL_APP"
+            else
+              echo "PROFILE=$profile DIFFERENT_CONTENT"
+              head -c 180 /tmp/guest-index.html
+              echo
+            fi
+          done
