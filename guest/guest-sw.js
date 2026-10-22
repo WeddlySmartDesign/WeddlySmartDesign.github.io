@@ -53,9 +53,14 @@ const CORE=[
 ];
 const publicPath=name=>new URL(name,ROOT).pathname;
 const corePaths=new Set(CORE.map(publicPath));
+const cleanRoutes=new Map(CORE.filter(name=>name.endsWith('.html')).map(name=>{
+ const original=publicPath(name);
+ return [original.slice(0,-5),original];
+}));
+cleanRoutes.set(ROOT.pathname,publicPath('index.html'));
 const staticFile=/^\/(?:guest)\/[^/]+\.(?:html?|js|css|svg|webmanifest)$/i;
-const safe=(url)=>url.origin===ROOT.origin&&staticFile.test(url.pathname);
-const cacheKey=(url)=>new Request(ROOT.origin+url.pathname,{method:'GET'});
+const safe=(url)=>url.origin===ROOT.origin&&(staticFile.test(url.pathname)||cleanRoutes.has(url.pathname));
+const cacheKey=(url)=>new Request(ROOT.origin+(cleanRoutes.get(url.pathname)||url.pathname),{method:'GET'});
 self.addEventListener('install',event=>{
   event.waitUntil((async()=>{
     const c=await caches.open(CACHE);
