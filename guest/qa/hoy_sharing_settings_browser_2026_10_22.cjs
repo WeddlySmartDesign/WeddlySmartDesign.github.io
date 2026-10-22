@@ -38,7 +38,7 @@ async function scenario(browser,{name,status,joined,role,expectedEnabled}) {
 }
 async function assertVisible(locator,label){assert.equal(await locator.isVisible(),true,label+' must be visible')}
 (async()=>{
- const browser=await chromium.launch({headless:true});
+ const browser=await chromium.launch({headless:true,...(process.env.GUEST_USE_SYSTEM_CHROME==='1'?{channel:'chrome',args:['--no-sandbox','--disable-dev-shm-usage']}: {})});
  try{
   const checks=[];
   checks.push(await scenario(browser,{name:'primary_without_partner',status:200,role:'primary',joined:false,expectedEnabled:true}));
