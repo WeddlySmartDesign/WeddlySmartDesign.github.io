@@ -566,6 +566,9 @@ html.has-dialog { overflow: hidden; }
 .footer-links a:hover { color: var(--on-ink); text-decoration: underline; }
 .footer-ico { width: 1.05em; height: 1.05em; margin-right: .55em; flex: none; }
 .footer-copy { font-size: .8125rem; }
+.footer-legal { display: flex; flex-wrap: wrap; column-gap: 1.25rem; padding-top: 1.2rem; border-top: 1px solid rgba(255,255,255,.14); }
+.footer-legal a { display: inline-flex; align-items: center; min-height: 44px; font-size: .9375rem; text-decoration: none; }
+.footer-legal a:hover { color: var(--on-ink); text-decoration: underline; }
 
 /* ---------- Barra de compra (móvil) y WhatsApp ---------- */
 .buybar {
@@ -629,7 +632,7 @@ body.past-hero .wa-float { opacity: 1; transform: none; pointer-events: auto; }
   .faq-grid { grid-template-columns: .8fr 1.2fr; gap: 3rem; }
   .faq-grid .head { align-self: start; position: sticky; top: 100px; }
   .footer-grid { grid-template-columns: 1fr auto; align-items: start; }
-  .footer-copy { grid-column: 1 / -1; }
+  .footer-copy, .footer-legal { grid-column: 1 / -1; }
   .buybar { display: none; }
   .footer { padding-bottom: 3rem; }
   .stamp-strip { width: 120px; }

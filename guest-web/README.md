@@ -3,7 +3,9 @@
 Web nueva de venta de invitaciones, en una carpeta aislada. No sustituye ni modifica
 `guest.html`, `guest-legal.html` ni ningún otro archivo de la web actual.
 
-- `index.html`: la web. `guest-legal.html`: condiciones de contratación (pendientes de revisión del asesor).
+- `index.html`: la web. `guest-legal.html`: aviso legal, privacidad, cookies y condiciones de compra (enlazados por separado en el pie).
+- Tipografías alojadas en `assets/fonts/` + `css/fonts.css` (sin llamadas a Google desde la web).
+- Estadísticas: Vercel Web Analytics, sin cookies (`/_vercel/insights/script.js` en `index.html` y `guest-legal.html`). Hay que activarlo en Vercel → proyecto guest-invitaciones → Analytics → Enable. Si se añaden más páginas, copiar las dos líneas del script.
 - `js/config.js`: precio, WhatsApp, email y `checkoutUrl` (null mientras no haya enlace de Stripe; «La quiero» abre WhatsApp).
 - `invitaciones/01–15`: invitaciones de muestra que se abren desde la portada. Incluye Seda (02), Ellas (12) y Ellos (13) corregidas.
 - `assets/brand/`: icono de pestaña y `og.jpg` (imagen al compartir, 1200×630).
