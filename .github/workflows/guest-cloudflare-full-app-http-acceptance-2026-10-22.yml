@@ -14,7 +14,7 @@ jobs:
       - name: Verify PREVIEW serves real licensed GUEST app, not a placeholder
         shell: bash
         env:
-          ORIGIN: https://4ed5f3b4.guest-weddlysmartdesign.pages.dev
+          ORIGIN: https://265a5e27.guest-weddlysmartdesign.pages.dev
         run: |
           set -euo pipefail
           get(){
@@ -29,7 +29,7 @@ jobs:
           grep -q 'guests-production-sync.js' /tmp/guest-index.html
           grep -q 'guests-copy-control-v1.js' /tmp/guest-index.html
           grep -q 'guests-home-rsvp-status-v1.js' /tmp/guest-index.html
-          for path in guest/access.html guest/guest-settings.html guest/guests-v114-integrated.html guest/guests-v081-visual-seating.html guest/guests-events-v3.html guest/guests-rsvp-operations-live.html guest/guests-rsvp-v116-single-live.html; do
+          for path in guest/access.html guest/guest-settings.html guest/guests-v114-integrated.html guest/guests-v081-visual-seating.html guest/guests-events-v3.html guest/guests-rsvp-operations-live.html guest/guests-rsvp-v116-single-live.html guest/guests-rsvp-operations-v3.html guest/guests-rsvp-v114-single-flex.html guest/guests-rsvp-public-clean.html; do
             get "$path" /tmp/guest-page.html
             test "$(wc -c </tmp/guest-page.html)" -gt 1000
           done
@@ -37,6 +37,8 @@ jobs:
             get "$file" /tmp/guest-script.js
             test "$(wc -c </tmp/guest-script.js)" -gt 300
           done
+          get guest/guest.webmanifest /tmp/guest-manifest-pwa.json
+          grep -q 'GUEST' /tmp/guest-manifest-pwa.json
           get guest/catalog-assets/botanica/14.7/index.html /tmp/guest-botanica.html
           test "$(wc -c </tmp/guest-botanica.html)" -gt 1000000
           get GUEST_STAGE_MANIFEST.json /tmp/guest-manifest.json
@@ -52,4 +54,4 @@ jobs:
           print('PASS REAL APP: 15 designs, source/payload staging, access and management routes')
           PY
           curl --fail --silent --show-error --head --max-time 20 "$ORIGIN/guest/index.html" | grep -iq 'x-robots-tag: noindex'
-          echo 'PASS HTTP real GUEST app served with noindex. ONLY PREVIEW, NO SALE.'
+          echo 'PASS HTTP real GUEST app, secondary RSVP routes and PWA served with noindex. ONLY PREVIEW, NO SALE.'
