@@ -76,3 +76,18 @@
 **P0 comercial fuera de esta intervención:** completar dos recorridos TEST íntegros compra→cuestionario→aprobación→entrega→dos accesos→envío→RSVP→mesas/listados/eventos, sin intervenciones manuales técnicas; únicamente entonces considerar activación de venta.
 
 **No se ha enviado correo, creado pedido real, tocado licencias ni consultado datos privados de parejas.** 
+
+## 8. Cierre de pruebas de la rama candidata (22/10/2026)
+**Resultado final verificado:** [GUEST Hoy + Sharing Audit (isolated), run 39737733724](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39737733724) — **SUCCESS, 5 bloques de prueba de navegador PASS** en commit `0f4b8d4c2e2890e8c0e3a4fc95c2af3924886c5c`.
+
+| Prueba | Resultado |
+|---|---|
+| B6.2 Hoy e Invitados, alertas, altas/importación | PASS |
+| B7.2 Hoy en 320/390/430 px | PASS |
+| Notificaciones RSVP repetidas + cambios de mesa + respuesta de preboda, contador, despliegue y marcar leído | PASS |
+| Compartir en Ajustes: titular habilitado, pareja incorporada bloqueada, segundo miembro bloqueado, backend inaccesible bloqueado | PASS |
+| Cambiar tema Blush → Slate desde Ajustes y recuperar el color correcto de la barra inferior | PASS |
+
+**Diagnóstico obtenido durante las pruebas:** el primer fallo de tema (barra de navegación en color suave cuando se elegía Blush) era de precedencia CSS real, y se corrigió con `#nav button.on`. Un fallo posterior se debió exclusivamente a una rutina de inicialización del TEST que escribía Blush en cada navegación, reiniciando el tema guardado; el TEST se corrigió para inicializarlo una sola vez. La ejecución final demostró cambio a Slate real. Los errores intermedios y sus causas permanecen registrados en las ejecuciones del workflow; no se ocultan.
+
+**Candidato auditado:** `guest-hoy-sharing-audit-2026-10-22`; la rama comercial `guest-independent` sigue sin integrar cambios de aplicación. No existe todavía aceptación Android/iPhone físicos, dos miembros con licencia real, ni compra-entrega-RSVP E2E certificada. Mantener ventas bloqueadas. 
