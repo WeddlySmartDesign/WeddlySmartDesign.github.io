@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      GUEST_QA_BASE: https://bc6b3fa9.guest-weddlysmartdesign.pages.dev
+      GUEST_QA_BASE: https://775213e7.guest-weddlysmartdesign.pages.dev
       STRIPE_SECRET_KEY: ''
       SUPABASE_SERVICE_ROLE_KEY: ''
       CLOUDFLARE_API_TOKEN: ''
