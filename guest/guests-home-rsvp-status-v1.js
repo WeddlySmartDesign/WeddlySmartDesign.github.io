@@ -83,6 +83,39 @@
     localStorage.setItem(KEY,JSON.stringify(S));
     render();
   }
+  let attentionExpanded=false;
+  function renderAttention(d,S){
+    const hoy=d?.getElementById('hoy');if(!hoy)return;
+    const meals=Object.entries(S.guests||{}).filter(([,g])=>g?.rsvp==='confirmed'&&g.mealRequired!==false&&!g.meal);
+    const over=Object.values(S.tables||{}).filter(t=>Object.values(S.guests||{}).filter(g=>g&&g.rsvp!=='declined'&&g.table===t.name).length>Number(t.cap||0));
+    const extraMeals=meals.slice(3),extraOver=over.slice(2),more=extraMeals.length+extraOver.length;
+    const prev=hoy.querySelector('#wsdExtraAttention');
+    if(!more){prev?.remove();return}
+    const signature=JSON.stringify([extraMeals.map(([id])=>id),extraOver.map(t=>t.name),attentionExpanded]);
+    if(prev?.dataset.signature===signature)return;
+    prev?.remove();
+    const section=d.createElement('section');section.id='wsdExtraAttention';section.dataset.signature=signature;section.style.marginTop='12px';
+    const button=d.createElement('button');button.type='button';button.className='btn line';button.id='wsdAttentionToggle';
+    button.style.cssText='width:100%;min-height:44px';
+    button.textContent=attentionExpanded?'Ocultar incidencias adicionales':'Ver las '+more+' incidencias restantes';
+    button.onclick=()=>{attentionExpanded=!attentionExpanded;renderAttention(d,state())};
+    section.appendChild(button);
+    if(attentionExpanded){
+      const list=d.createElement('div');list.className='card';list.style.marginTop='9px';
+      const rowFor=(title,desc,where)=>{
+        const row=d.createElement('div');row.className='row';row.style.cssText='display:flex;justify-content:space-between;gap:9px;align-items:center;flex-wrap:wrap';
+        const info=d.createElement('div');info.innerHTML='<b>'+esc(title)+'</b><div class="small">'+esc(desc)+'</div>';row.appendChild(info);
+        const act=d.createElement('button');act.type='button';act.className='btn soft';act.style.cssText='min-height:44px';act.textContent='Resolver';
+        act.onclick=()=>d.querySelector('#nav button[data-go="'+where+'"]')?.click();
+        row.appendChild(act);list.appendChild(row)
+      };
+      extraMeals.forEach(([,g])=>rowFor(String(g.name||'Invitado'),'Confirmado sin menú','invitados'));
+      extraOver.forEach(t=>rowFor(String(t.name||'Mesa'),'Se ha superado la capacidad','mesas'));
+      section.appendChild(list);
+    }
+    const inbox=hoy.querySelector('#wsdRecentChanges');
+    if(inbox)hoy.insertBefore(section,inbox);else hoy.appendChild(section)
+  }
   function renderRecent(d,S){
     const hoy=d?.getElementById('hoy');if(!hoy)return;
     const all=entries(S),unread=all.filter(x=>!x.read),activity=activityEntries(S),groups=groupEntries(unread);
@@ -149,7 +182,7 @@
     }
     hoy.appendChild(section)
   }
-function render(){const d=appDoc(),card=d?.getElementById('wsdRsvpHome');if(!d)return;const p=card?.querySelector('p.small');const S=state(),gs=Object.entries(S.guests||{}).map(([id,g])=>({id,...g}));let yes=0,no=0,pendingSent=0,unsent=0;for(const g of gs){const st=status(g);if(st==='confirmed')yes++;else if(st==='declined')no++;else if(remote&&inviteSent(g,S))pendingSent++;else unsent++}if(p&&remote)p.innerHTML=`${yes} confirmados · ${no} no asisten<br>${pendingSent} pendientes de respuesta${unsent?` · ${unsent} aún sin enviar`:''}.`;else if(p)p.textContent=`${yes} confirmados · ${no} no asisten · ${unsent} sin respuesta.`;renderRecent(d,S)}
+function render(){const d=appDoc(),card=d?.getElementById('wsdRsvpHome');if(!d)return;const p=card?.querySelector('p.small');const S=state(),gs=Object.entries(S.guests||{}).map(([id,g])=>({id,...g}));let yes=0,no=0,pendingSent=0,unsent=0;for(const g of gs){const st=status(g);if(st==='confirmed')yes++;else if(st==='declined')no++;else if(remote&&inviteSent(g,S))pendingSent++;else unsent++}if(p&&remote)p.innerHTML=`${yes} confirmados · ${no} no asisten<br>${pendingSent} pendientes de respuesta${unsent?` · ${unsent} aún sin enviar`:''}.`;else if(p)p.textContent=`${yes} confirmados · ${no} no asisten · ${unsent} sin respuesta.`;renderAttention(d,S);renderRecent(d,S)}
   async function fetchEventNotices(token){
     const headers={'x-weddly-token':token};
     const r=await fetch(EVENTS,{headers,cache:'no-store'}),data=await r.json().catch(()=>({}));
