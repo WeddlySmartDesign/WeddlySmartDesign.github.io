@@ -46,7 +46,11 @@
       <div class="view-head">
         <p class="kicker">Los diseños</p>
         <h1 id="designs-title">Abridlas como lo harán vuestros invitados.</h1>
-        <p class="lead">Tocad un sello y recorred la invitación entera, de la portada al cierre.</p>
+        <p class="lead" id="designsLead">Tocad un sello y recorred la invitación entera, de la portada al cierre.</p>
+        <div class="mode" role="group" aria-label="Qué enseñan los sellos">
+          <button type="button" data-mode="portadas" aria-pressed="true">Portadas</button>
+          <button type="button" data-mode="cierres" aria-pressed="false">Cierres</button>
+        </div>
       </div>
       <ul class="grid" id="grid"></ul>
       <p class="more">Y más diseños en camino.</p>
@@ -117,6 +121,7 @@
       <h2 id="viewerName">Azahar</h2>
       <p class="viewer-note" id="viewerNote"></p>
       <p class="viewer-hint">Así la verá cada invitado en su móvil. Tocad y deslizad.</p>
+      <button class="btn btn-line end-toggle" type="button" data-end data-label-on="Ver el cierre" data-label-off="Verla entera desde la portada" aria-pressed="false"><span>Ver el cierre</span></button>
     </div>
     <div class="viewer-nav">
       <button class="btn btn-line" type="button" id="viewerPrev"><svg aria-hidden="true"><use href="#i-back"/></svg>Anterior</button>
@@ -127,6 +132,7 @@
     <div class="device" id="device">
       <img class="device-poster" id="viewerPoster" alt="">
       <iframe id="viewerFrame" title="Invitación" allow="autoplay; fullscreen"></iframe>
+      <video class="device-end" id="viewerEnd" muted playsinline preload="none" aria-label="Cierre de la invitación"></video>
     </div>
   </div>
   <aside class="viewer-aside">
@@ -140,6 +146,7 @@
   <div class="viewer-dock">
     <button class="dock-btn" type="button" id="dockBack" aria-label="Todos los diseños"><svg aria-hidden="true"><use href="#i-back"/></svg></button>
     <p class="dock-name" id="dockName">Azahar</p>
+    <button class="dock-end" type="button" data-end data-label-on="Cierre" data-label-off="Entera" aria-pressed="false"><span>Cierre</span></button>
     <button class="dock-btn" type="button" id="dockNext" aria-label="Siguiente diseño"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
   </div>
 </section>

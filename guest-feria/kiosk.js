@@ -27,7 +27,7 @@
     { name: 'Viñeta', note: 'Vuestra historia en viñetas de cómic, con fotomatón final.', n: '11' },
     { name: 'Ellas', note: 'El cómic, protagonizado por dos novias.', n: '12' },
     { name: 'Ellos', note: 'El cómic, protagonizado por dos novios.', n: '13' }
-  ].map((d) => ({ ...d, cover: `assets/cover-${d.n}.jpg`, clip: `assets/clip-${d.n}.mp4`, full: `invitaciones/${d.n}/index.html` }));
+  ].map((d) => ({ ...d, cover: `assets/cover-${d.n}.jpg`, clip: `assets/clip-${d.n}.mp4`, end: `assets/close-${d.n}.jpg`, endClip: `assets/close-${d.n}.mp4`, endHD: `assets/cierre-${d.n}.mp4`, endPoster: `assets/cierre-${d.n}.jpg`, full: `invitaciones/${d.n}/index.html` }));
 
   const features = [
     { title: 'Sentadlos en el plano', text: 'Dibujáis vuestro salón con sus mesas, la pista y la cabina, y lo movéis todo con el dedo.', points: ['Arrastrad, girad y cambiad el tamaño', 'Mesas redondas y rectangulares', 'Las plazas ocupadas de cada mesa, a la vista'], video: 'mesas' },
@@ -111,7 +111,12 @@
   };
   const pauseAll = () => $$('video[data-auto]').forEach((v) => v.pause());
 
-  /* ---------- Catálogo ---------- */
+  /* ---------- Catálogo: portadas o cierres ---------- */
+  const MODES = {
+    portadas: { title: 'Abridlas como lo harán vuestros invitados.', lead: 'Tocad un sello y recorred la invitación entera, de la portada al cierre.' },
+    cierres: { title: 'Y un final que se recuerda.', lead: 'Así se despide cada invitación. Tocad un sello para ver el cierre y, después, la invitación entera.' }
+  };
+  let mode = 'portadas';
   $('#grid').innerHTML = catalog.map((d, i) => `
     <li><button class="stamp-btn" type="button" data-open="${i}" aria-label="Abrir la invitación ${d.name}">
       <span class="stamp-wrap"><span class="stamp"><span class="stamp-art">
@@ -121,9 +126,27 @@
       <span class="stamp-name">${d.name}</span>
     </button></li>`).join('');
   $$('#grid video').forEach((v) => io.observe(v));
+  const setMode = (next) => {
+    if (next === mode) return;
+    mode = next;
+    $$('.mode button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.mode === mode)));
+    $('#designs-title').textContent = MODES[mode].title;
+    $('#designsLead').textContent = MODES[mode].lead;
+    $$('#grid li').forEach((li, i) => {
+      const d = catalog[i];
+      const img = $('img', li), video = $('video', li);
+      img.src = mode === 'cierres' ? d.end : d.cover;
+      video.pause();
+      video.poster = img.src;
+      video.src = mode === 'cierres' ? d.endClip : d.clip;
+      $('.stamp-btn', li).setAttribute('aria-label', `${mode === 'cierres' ? 'Ver el cierre de' : 'Abrir la invitación'} ${d.name}`);
+    });
+    syncVideos();
+  };
+  $$('.mode button').forEach((b) => b.addEventListener('click', () => setMode(b.dataset.mode)));
   $('#grid').addEventListener('click', (e) => {
     const b = e.target.closest('[data-open]');
-    if (b) viewer.open(+b.dataset.open);
+    if (b) viewer.open(+b.dataset.open, mode === 'cierres');
   });
 
   /* ---------- La app ---------- */
@@ -149,6 +172,26 @@
     const stage = $('#viewerStage');
     let frame = $('#viewerFrame');
     let current = 0;
+    const ending = $('#viewerEnd');
+    const endBtns = $$('[data-end]');
+
+    // El cierre es la grabación de la invitación real; «Verla entera» vuelve a la portada viva
+    const showEnd = (on) => {
+      const d = catalog[current];
+      device.classList.toggle('show-end', on);
+      endBtns.forEach((b) => {
+        b.setAttribute('aria-pressed', String(on));
+        b.querySelector('span').textContent = on ? b.dataset.labelOff : b.dataset.labelOn;
+      });
+      if (on) {
+        ending.poster = d.endPoster;
+        if (!ending.src.endsWith(d.endHD)) ending.src = d.endHD;
+        ending.currentTime = 0;
+        ending.play().catch(() => {});
+      } else {
+        ending.pause();
+      }
+    };
 
     // La invitación ve siempre un móvil de 390 × 844 y se escala para caber en el hueco
     const fit = () => {
@@ -184,7 +227,7 @@
       } catch (err) { /* distinto origen: no debería pasar */ }
     };
 
-    const load = (index) => {
+    const load = (index, end = false) => {
       current = (index + catalog.length) % catalog.length;
       const d = catalog[current];
       $('#viewerNo').textContent = `${String(current + 1).padStart(2, '0')} · Diseño`;
@@ -201,20 +244,22 @@
       frame.replaceWith(fresh);
       frame = fresh;
       fit();
+      if (end) showEnd(true); else if (device.classList.contains('show-end')) { device.classList.remove('show-end'); ending.pause(); endBtns.forEach((b) => { b.setAttribute('aria-pressed', 'false'); b.querySelector('span').textContent = b.dataset.labelOn; }); }
     };
 
-    const open = (index) => {
+    const open = (index, end = false) => {
       root.hidden = false;
       pauseAll();
       fit();
       requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('is-open')));
-      load(index);
+      load(index, end);
       wakeUp();
     };
 
     const close = (instant = false) => {
       if (root.hidden) return;
       root.classList.remove('is-open');
+      ending.pause();
       const done = () => {
         root.hidden = true;
         const blank = frame.cloneNode(false);
@@ -229,9 +274,11 @@
 
     $('#viewerBack').addEventListener('click', () => close());
     $('#dockBack').addEventListener('click', () => close());
-    $('#viewerPrev').addEventListener('click', () => load(current - 1));
-    $('#viewerNext').addEventListener('click', () => load(current + 1));
-    $('#dockNext').addEventListener('click', () => load(current + 1));
+    const keepMode = () => device.classList.contains('show-end');
+    $('#viewerPrev').addEventListener('click', () => load(current - 1, keepMode()));
+    $('#viewerNext').addEventListener('click', () => load(current + 1, keepMode()));
+    $('#dockNext').addEventListener('click', () => load(current + 1, keepMode()));
+    endBtns.forEach((b) => b.addEventListener('click', () => showEnd(!keepMode())));
     $('#viewerPrice').addEventListener('click', () => { close(); tabs.go('precio'); });
     addEventListener('resize', () => { if (!root.hidden) fit(); });
     return { open, close, isClosed: () => root.hidden };
@@ -264,7 +311,7 @@
   addEventListener('contextmenu', (e) => e.preventDefault());
 
   /* ---------- Sin conexión ---------- */
-  const CACHE = 'guest-feria-v1';
+  const CACHE = 'guest-feria-v2';
   const prep = $('#prep');
   const offline = { total: 0, done: 0, missing: [], running: false };
   const setStatus = (text) => { $('#staffStatus').textContent = text; };

@@ -125,6 +125,10 @@ main { position: relative; overflow: hidden; }
 }
 .stamp-art { position: relative; aspect-ratio: 390 / 844; overflow: hidden; background: var(--line); }
 .stamp-art img, .stamp-art video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.mode { justify-self: start; display: flex; gap: 6px; margin-top: .4rem; padding: 5px; border-radius: 99px; background: rgba(251, 247, 244, .6); }
+.mode button { min-height: 48px; padding: 0 1.3rem; border-radius: 99px; font-weight: 600; font-size: 1.0625rem; color: var(--ink-soft); transition: background-color 200ms ease, color 200ms ease, transform 160ms var(--ease-out); }
+.mode button:active { transform: scale(0.97); }
+.mode button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: 0 1px 2px rgba(27, 38, 80, .12); }
 .stamp-name { font: 700 1.0625rem/1 var(--mono); letter-spacing: .03em; }
 .more { margin-top: 2.5rem; font: 400 1.0625rem/1.4 var(--mono); color: var(--ink-soft); text-align: center; }
 
@@ -206,6 +210,10 @@ main { position: relative; overflow: hidden; }
 }
 .device iframe { position: absolute; left: 0; top: 0; width: 390px; border: 0; transform-origin: 0 0; background: var(--paper); opacity: 0; transition: opacity 260ms ease; }
 .device.is-loaded iframe { opacity: 1; }
+.device-end { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; background: var(--paper); opacity: 0; visibility: hidden; transition: opacity 260ms ease, visibility 0s 260ms; }
+.device.show-end .device-end { opacity: 1; visibility: visible; transition: opacity 260ms ease; }
+.end-toggle { justify-self: start; margin-top: .6rem; }
+.dock-end { display: none; }
 .device-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; }
 .viewer-dock { display: none; }
 .viewer-aside { display: grid; align-content: end; min-width: 0; padding-bottom: 8px; }
@@ -225,6 +233,7 @@ main { position: relative; overflow: hidden; }
   .viewer-info h2 { grid-column: 1; font-size: 3rem; }
   .viewer-nav { grid-row: 3; justify-self: end; align-self: end; }
   .viewer-hint { display: none; }
+  .end-toggle { grid-column: 1; }
   .viewer-stage { grid-row: 2; }
   .viewer-aside { display: none; }
   .view-price { grid-template-columns: 1fr; }
@@ -240,7 +249,7 @@ main { position: relative; overflow: hidden; }
   .device iframe { width: 100%; height: 100% !important; transform: none !important; }
   .viewer-dock {
     position: absolute; left: 50%; bottom: calc(10px + var(--bottom)); z-index: 2;
-    display: grid; grid-template-columns: 44px minmax(84px, auto) 44px; align-items: center; gap: 6px;
+    display: grid; grid-template-columns: 44px minmax(84px, auto) auto 44px; align-items: center; gap: 6px;
     padding: 4px; border-radius: 99px; transform: translateX(-50%);
     background: rgba(27, 38, 80, .82); color: var(--paper);
     -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
@@ -248,6 +257,8 @@ main { position: relative; overflow: hidden; }
   .dock-btn { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; background: rgba(255, 255, 255, .12); transition: transform 160ms var(--ease-out); }
   .dock-btn:active { transform: scale(0.94); }
   .dock-btn svg { width: 22px; height: 22px; }
+  .dock-end { display: block; min-height: 44px; padding: 0 14px; border-radius: 99px; background: var(--paper); color: var(--ink); font: 700 .875rem/1 var(--mono); transition: transform 160ms var(--ease-out); }
+  .dock-end:active { transform: scale(0.96); }
   .dock-name { padding-inline: 6px; text-align: center; font: 700 .9375rem/1 var(--mono); letter-spacing: .04em; }
   .bar { gap: .75rem; padding-block: calc(10px + var(--top)) 10px; }
   .logo b { font-size: 1.4rem; }
