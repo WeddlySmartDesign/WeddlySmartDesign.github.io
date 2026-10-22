@@ -1,0 +1,22 @@
+name: GUEST Full Cloudflare Asset Integrity — HTTPS 15 Designs and App
+on:
+  push:
+    branches: [guest-cloudflare-full-app-preview-2026-10-22]
+    paths:
+      - 'guest/qa/verify_full_app_preview_public_sha_2026_10_22.py'
+      - '.github/workflows/guest-full-preview-https-integrity-2026-10-22.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-assets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Read-only verify actual HTTPS bytes of GUEST app and 15 designs
+        run: |
+          python -m py_compile guest/qa/verify_full_app_preview_public_sha_2026_10_22.py
+          python guest/qa/verify_full_app_preview_public_sha_2026_10_22.py
