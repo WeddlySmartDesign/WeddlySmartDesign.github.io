@@ -32,8 +32,19 @@ jobs:
           grep -i 'content-security-policy' /tmp/guest-headers.txt
           grep -iE "content-security-policy: .*frame-ancestors 'self'" /tmp/guest-headers.txt
           ! grep -iE "content-security-policy: .*frame-ancestors 'none'" /tmp/guest-headers.txt
-          curl -fsS "$GUEST_QA_BASE/guest/index.html" --output /tmp/guest-auth-shell.html
-          grep -q 'guests-access-layer.js' /tmp/guest-auth-shell.html
+          ready=0
+          for attempt in $(seq 1 10); do
+            curl -fsSL --max-time 20 "$GUEST_QA_BASE/guest/index.html" --output /tmp/guest-auth-shell.html || true
+            if grep -q 'guests-access-layer.js' /tmp/guest-auth-shell.html; then ready=1; break; fi
+            echo "Cloudflare propagation attempt $attempt: $(wc -c </tmp/guest-auth-shell.html) bytes, not real app yet"
+            sleep 3
+          done
+          if [ "$ready" != 1 ]; then
+            echo 'ERROR: GUEST app HTML still not available after ten attempts'
+            head -c 180 /tmp/guest-auth-shell.html
+            exit 1
+          fi
+          echo 'PASS: real licensed GUEST app HTML confirmed after CDN readiness check'
       - name: Real-host no token, revoked access and genuine offline cache
         run: node guest/qa/access_revoked_vs_offline_browser_2026_10_22.cjs
       - name: Real-host synthetic license + Hoy, access, guests, list and seating
