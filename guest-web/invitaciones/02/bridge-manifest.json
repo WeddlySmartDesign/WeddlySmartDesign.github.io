@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "guest-veil-common-iframe-stage-v1",
+  "status": "PREPRODUCTION_DO_NOT_SELL",
+  "originalMasterSha256": "977d275d22c609aeb87c88115f6deca6ab2cfd32bd7487c6f4b425e2ae3e0440",
+  "originalPilotHtmlSha256": "8f09e6bb3c0d975108b8c985266eadf339c11bedc50abd189445af040714ad30",
+  "derivedSha256": "2d5041e3722000a0d307b3392c82ad1cad42df8ef8e329b4989662b33578f899",
+  "mediaCount": 10,
+  "commercialApproved": false
+}

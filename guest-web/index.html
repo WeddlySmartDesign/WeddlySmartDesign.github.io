@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <!-- Vista previa: quitar noindex al lanzar -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f0c4bc">
+  <link rel="icon" href="assets/brand/favicon.ico" sizes="any">
+  <link rel="icon" href="assets/brand/icon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <!-- Al compartir (WhatsApp, redes). og:image y og:url deben ser absolutas: ajustarlas si cambia la dirección definitiva -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:site_name" content="GUEST by WeddlySmartDesign">
+  <meta property="og:title" content="La invitación de vuestra boda, lista para enviar · GUEST">
+  <meta property="og:description" content="Invitaciones de boda digitales personalizadas, con su propia app para enviarla y saber quién viene.">
+  <meta property="og:url" content="https://weddlysmartdesign.github.io/guest-web/">
+  <meta property="og:image" content="https://weddlysmartdesign.github.io/guest-web/assets/brand/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Invitación Azahar como sello de un sobre rosa, junto al texto: La invitación de vuestra boda, lista para enviar.">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Invitaciones de boda digitales personalizadas · GUEST by WeddlySmartDesign</title>
+  <meta name="description" content="Invitaciones de boda digitales personalizadas, listas para enviar. Elegís el diseño, nosotros la personalizamos con vuestra historia y os llega con su propia app para enviarla, recibir las confirmaciones y organizar las mesas. Pago único.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Courier+Prime:wght@400;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=41">
+  <script src="js/config.js?v=41" defer></script>
+  <script src="js/catalog.js?v=41" defer></script>
+  <script src="js/main.js?v=41" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#disenos">Ir a los diseños</a>
+
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13m-5-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5 9.5 17.5 19.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-zoom" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5M10.5 7.8v5.4M7.8 10.5h5.4"/></g></symbol>
+  <symbol id="i-sync" viewBox="0 0 24 24"><path d="M4 9h14l-4-4M20 15H6l4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l1-4.5L15.5 5a2.1 2.1 0 0 1 3 3L8 18.5 4 20zM13.5 7l3 3" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-redo" viewBox="0 0 24 24"><path d="M19.5 9.5A8 8 0 0 0 5 7.5M4.5 4v4h4M4.5 14.5A8 8 0 0 0 19 16.5M19.5 20v-4h-4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="6.5" y="2.75" width="11" height="18.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.9"/><path d="M10.5 18h3" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Zm0 1.8a7.2 7.2 0 1 1-3.7 13.4l-.3-.2-2.7.7.7-2.6-.2-.3A7.2 7.2 0 0 1 12 4.8Zm-3 3.4c-.2 0-.5 0-.7.3-.3.3-1 .9-1 2.2s1 2.6 1.1 2.8c.1.2 2 3.1 4.9 4.2 2.4.9 2.900.8 3.4.7.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4l-.4-.3-1.8-.9c-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6 6 0 0 1-3-2.6c-.2-.4.2-.4.6-1.2.1-.2 0-.3 0-.4l-.8-2c-.2-.5-.4-.4-.6-.4H9Z"/></symbol>
+</svg>
+
+<header class="header" id="header">
+  <a class="logo" href="#top" aria-label="GUEST by WeddlySmartDesign, inicio"><b>GUEST</b><span>by WeddlySmartDesign</span></a>
+  <nav class="nav" aria-label="Secciones">
+    <a href="#disenos">Diseños</a>
+    <a href="#como-funciona">Cómo funciona</a>
+    <a href="#app">App incluida</a>
+    <a href="#precio">Precio</a>
+    <a href="#preguntas">Preguntas</a>
+  </nav>
+  <a class="btn btn-ink btn-sm header-cta" href="#disenos">Ver los diseños</a>
+</header>
+
+<main id="top">
+  <!-- 1 · PORTADA -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <h1 id="hero-title">La invitación de vuestra boda, lista para enviar.</h1>
+        <p class="hero-lead">Elegís el diseño y nosotros la personalizamos con vuestra historia. Os llega con su propia app para enviarla y saber quién viene.</p>
+        <div class="hero-actions">
+          <a class="btn btn-ink" href="#disenos">Ver los diseños <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <button class="btn btn-line" type="button" data-open="design-09">Abrir una de muestra</button>
+        </div>
+      </div>
+
+      <div class="envelope" aria-label="Sobre de ejemplo con la invitación Azahar como sello">
+        <div class="env-top">
+          <p class="mono from">Lucía &amp; Pablo<br>18 · 09 · 2027<br>Murcia</p>
+          <figure class="stamp stamp-hero">
+            <div class="stamp-art">
+              <video id="heroVideo" autoplay muted loop playsinline preload="metadata" poster="assets/cover-15.jpg" aria-label="Apertura animada de la invitación Azahar: una verja se abre a un huerto al atardecer">
+                <source src="assets/clip-15.webm" type="video/webm">
+                <source src="assets/clip-15.mp4" type="video/mp4">
+              </video>
+            </div>
+            <figcaption class="mono">Azahar</figcaption>
+            <button class="hero-toggle" id="heroToggle" type="button" aria-pressed="false"><svg aria-hidden="true"><use href="#i-pause"/></svg><span class="hero-toggle-label">Pausar</span></button>
+          </figure>
+          <svg class="postmark" viewBox="0 0 130 130" aria-hidden="true"><defs><path id="ring" d="M65 65 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs><circle cx="65" cy="65" r="60" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="65" cy="65" r="34" fill="none" stroke="currentColor" stroke-width="1.5"/><text font-family="Courier Prime, monospace" font-size="12" font-weight="700" fill="currentColor" letter-spacing="2"><textPath href="#ring">GUEST · INVITACIÓN ENVIADA ·</textPath></text><text x="65" y="70" text-anchor="middle" font-family="Courier Prime, monospace" font-size="13" font-weight="700" fill="currentColor">18·09</text></svg>
+        </div>
+        <p class="mono to">Para:<b>todos vuestros invitados</b>por WhatsApp o <span class="nowrap">con un enlace</span></p>
+      </div>
+    </div>
+
+    <ul class="wrap promises" aria-label="Lo que incluye">
+      <li><span class="promise-mark" aria-hidden="true"><svg><use href="#i-pen"/></svg></span><div><strong>Nada que rellenar</strong><p>La personalizamos nosotros con vuestra historia. Sin editores ni plantillas.</p></div></li>
+      <li><span class="promise-mark" aria-hidden="true"><svg><use href="#i-redo"/></svg></span><div><strong>Cambios hasta el «sí»</strong><p>Ajustamos todo lo que pidáis. Y si no os convence, os devolvemos el dinero.</p></div></li>
+      <li><span class="promise-mark" aria-hidden="true"><svg><use href="#i-phone"/></svg></span><div><strong>Con su propia app</strong><p>Envíos, confirmaciones, menús y mesas, todo en un mismo sitio.</p></div></li>
+    </ul>
+  </section>
+
+  <!-- 2 · DISEÑOS -->
+  <section class="section designs" id="disenos" aria-labelledby="designs-title">
+    <div class="wrap head-row">
+      <div class="head">
+        <h2 id="designs-title">Abridlas como lo harán vuestros invitados.</h2>
+        <p>Cada sello es la portada real de una invitación, en movimiento. Tocad cualquiera y recorredla entera, de la portada al cierre.</p>
+      </div>
+      <div class="rail-arrows">
+        <button type="button" id="railPrev" aria-label="Diseños anteriores"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <button type="button" id="railNext" aria-label="Más diseños"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+    <div class="rail" id="catalogRail" tabindex="0" role="region" aria-label="Diseños de invitación; desplazad en horizontal"></div>
+    <div class="wrap rail-foot">
+      <div class="meter" aria-hidden="true"><span id="railProgress"></span></div>
+      <span class="mono rail-soon">Nuevos diseños en camino</span>
+    </div>
+    <p class="wrap note">Muestras con nombres y fechas de ejemplo. La vuestra llevará vuestros nombres, lugares, horarios y fotos.</p>
+  </section>
+
+  <!-- 3 · APERTURA Y CIERRE -->
+  <section class="section moments" aria-labelledby="moments-title">
+    <div class="wrap moments-grid">
+      <div class="head">
+        <h2 id="moments-title">Una entrada que sorprende. Un final que se recuerda.</h2>
+        <p>Cada diseño tiene su propia apertura y su propio cierre. Entre medias, vuestra historia, los lugares, el programa y la confirmación de asistencia.</p>
+      </div>
+      <div class="moments-picker" id="momentsPicker" role="group" aria-label="Elegid un diseño para ver su apertura y su cierre"></div>
+      <div class="moments-pair" id="momentsPair">
+        <figure class="moment">
+          <div class="stamp"><div class="stamp-art"><video muted loop playsinline preload="none" data-autoplay poster="assets/cover-04.jpg" aria-label="Apertura de la invitación Cristal" id="momentOpenVideo"><source src="assets/clip-04.webm" type="video/webm"><source src="assets/clip-04.mp4" type="video/mp4"></video></div></div>
+          <figcaption class="mono">La apertura</figcaption>
+        </figure>
+        <figure class="moment moment-close">
+          <div class="stamp"><div class="stamp-art"><video muted loop playsinline preload="none" data-autoplay poster="assets/close-04.jpg?v=41" aria-label="Cierre de la invitación Cristal" id="momentCloseVideo"><source src="assets/close-04.webm?v=41" type="video/webm"><source src="assets/close-04.mp4?v=41" type="video/mp4"></video></div></div>
+          <figcaption class="mono">El cierre</figcaption>
+        </figure>
+      </div>
+      <div class="moments-cta">
+        <button class="btn btn-ink" type="button" data-open="design-11" id="momentsOpen"><span>Ver <span id="momentsName">Cristal</span> completa</span> <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+  </section>
+  <!-- 4 · CÓMO FUNCIONA -->
+  <section class="section how" id="como-funciona" aria-labelledby="how-title">
+    <div class="wrap">
+      <div class="head">
+        <h2 id="how-title">Elegís el diseño.<br> Nosotros, <span class="nowrap">todo lo demás.</span></h2>
+        <p>No tenéis que diseñar nada: nos contáis vuestra boda y vosotros solo dais el visto bueno.</p>
+      </div>
+      <ol class="steps" id="route">
+        <li class="step">
+          <div class="step-visual" aria-hidden="true">
+            <span class="stamp stamp-step"><span class="stamp-art"><img src="assets/cover-06.jpg" alt="" loading="lazy" decoding="async"></span></span>
+          </div>
+          <div class="step-text">
+            <span class="step-no mono">01</span>
+            <h3>Elegís vuestro diseño</h3>
+            <p>Lo veis entero, de la portada al cierre, y os quedáis con el que os enamore.</p>
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-visual" aria-hidden="true">
+            <span class="stamp stamp-step"><span class="stamp-art mini-form"><b></b><i></i><i></i><i></i><u></u></span></span>
+            <span class="step-postmark"><small>máx.</small><b>24</b><small>horas</small></span>
+          </div>
+          <div class="step-text">
+            <span class="step-no mono">02</span>
+            <h3>Nos contáis vuestra boda</h3>
+            <p>Os llega un cuestionario sencillo: nombres, fecha, lugares, horarios, fotos y lo que queráis preguntar a los invitados.</p>
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-visual" aria-hidden="true">
+            <span class="stamp stamp-step"><span class="stamp-art"><img src="assets/cover-15.jpg" alt="" loading="lazy" decoding="async"></span></span>
+            <span class="step-postmark is-range"><small>en</small><b>48–72</b><small>horas</small></span>
+          </div>
+          <div class="step-text">
+            <span class="step-no mono">03</span>
+            <h3>Recibís vuestra propuesta</h3>
+            <p>La preparamos con vuestros datos y os la enviamos para que la veáis en el móvil.</p>
+          </div>
+        </li>
+        <li class="step">
+          <div class="step-visual" aria-hidden="true">
+            <span class="stamp stamp-step"><span class="stamp-art mini-form mini-edit"><b></b><i></i><i></i><i></i><s></s></span></span>
+          </div>
+          <div class="step-text">
+            <span class="step-no mono">04</span>
+            <h3>Pedís los cambios que queráis</h3>
+            <p>La ajustamos hasta que esté perfecta y la aprobáis.</p>
+          </div>
+        </li>
+        <li class="step step-final">
+          <div class="step-visual" aria-hidden="true">
+            <span class="stamp stamp-step"><span class="stamp-art mini-app"><b></b><i></i><i></i><i></i></span></span>
+          </div>
+          <div class="step-text">
+            <span class="step-no mono">05</span>
+            <h3>La recibís en vuestra app</h3>
+            <p>Lista para enviarla a cada invitado y ver sus respuestas en un solo sitio.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 5 · APP INCLUIDA -->
+  <section class="section app" id="app" aria-labelledby="app-title">
+    <div class="wrap head-row">
+      <div class="head">
+        <h2 id="app-title">Y cuando responden, todo llega a vuestra app.</h2>
+        <p>Vuestra invitación viene con GUEST, la app para enviarla, saber quién viene y organizarlo todo hasta el día de la boda. Sin hojas de cálculo ni mensajes sueltos.</p>
+      </div>
+      <div class="rail-arrows">
+        <button type="button" id="appPrev" aria-label="Función anterior"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        <button type="button" id="appNext" aria-label="Siguiente función"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+    <ol class="features" id="appFeatures" tabindex="0" aria-label="Lo que podéis hacer con la app; desplazad en horizontal"></ol>
+    <div class="wrap features-foot">
+      <span class="mono features-count" id="appCount" aria-hidden="true">01 / 08</span>
+      <p class="note">Capturas reales de la app, con datos de ejemplo.</p>
+    </div>
+  </section>
+
+  <!-- 6 · PRECIO -->
+  <section class="section pricing" id="precio" aria-labelledby="price-title">
+    <div class="wrap price-grid">
+      <div class="head">
+        <h2 id="price-title">Un precio. Todo incluido.</h2>
+        <p>Sin planes, sin cuotas y sin sorpresas.</p>
+      </div>
+      <article class="price-card">
+        <div class="price-top">
+          <div>
+            <p class="mono price-label" data-config="priceLabel">Precio de lanzamiento</p>
+            <p class="price-amount"><strong data-config="price">59,90 €</strong><span>IVA incluido · pago único</span></p>
+          </div>
+          <span class="stamp stamp-mini" aria-hidden="true"><span class="stamp-art"><img id="pickCover" src="assets/cover-04.jpg" alt="" loading="lazy"></span></span>
+        </div>
+        <div class="includes">
+          <p class="includes-label mono">La invitación</p>
+          <ul class="checks">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Personalizada con vuestros nombres, fecha, lugares, agenda, historia y fotos</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Propuesta en 48–72 h y cambios hasta que la aprobéis</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Confirmación de asistencia dentro de la invitación: acompañantes, niños, menús y alergias</li>
+          </ul>
+          <p class="includes-label mono">La app GUEST</p>
+          <ul class="checks">
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Invitados por grupos y familias, con envío por WhatsApp</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Plano del salón para colocar las mesas y sentar a cada invitado</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Listados para el catering, el transporte y el alojamiento, en Excel o PDF</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Preboda y otros eventos, cada uno con su invitación y su lista</li>
+            <li><svg aria-hidden="true"><use href="#i-check"/></svg>Para los dos, cada uno desde su móvil</li>
+          </ul>
+        </div>
+        <div class="pick" role="group" aria-labelledby="pickLabel">
+          <p class="pick-label mono" id="pickLabel">Vuestro diseño</p>
+          <div class="pick-row" id="pickRow"></div>
+        </div>
+        <a class="btn btn-ink btn-block" id="pickBuy" href="#disenos" target="_blank" rel="noopener"><span>La quiero: <span id="pickName">Cristal</span></span></a>
+        <p class="guarantee"><span class="guarantee-seal" aria-hidden="true">100&nbsp;%</span><span><strong>Sin riesgo.</strong> Si la propuesta no os convence, os devolvemos el 100&nbsp;% antes de aprobarla. <a href="guest-legal.html#contratacion">Ver condiciones</a></span></p>
+      </article>
+      <article class="custom-card" id="a-medida">
+        <h3>¿No encontráis ninguna que os encante?</h3>
+        <p>Contadnos cómo sería vuestra invitación ideal: adaptamos uno de nuestros diseños o la creamos desde cero, con la misma app incluida. Os damos un precio cerrado antes de empezar y pagáis la mitad al aceptarlo y la otra mitad al aprobar el diseño.</p>
+        <p class="custom-price"><span class="mono">desde</span><strong data-config="customPrice">120 €</strong><span class="mono">diseño a medida · IVA incluido</span></p>
+        <a class="btn btn-line btn-block" data-whatsapp="Hola, nos gustaría una invitación a medida. Os contamos nuestra idea:" href="#">Contadnos vuestra idea</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- 7 · PREGUNTAS -->
+  <section class="section faq" id="preguntas" aria-labelledby="faq-title">
+    <div class="wrap faq-grid">
+      <div class="head">
+        <h2 id="faq-title">Antes de elegir.</h2>
+        <p>¿Otra duda? Escribidnos por <a data-whatsapp="Hola, tengo una pregunta sobre las invitaciones:" href="#">WhatsApp</a> y os respondemos enseguida.</p>
+      </div>
+      <div class="faq-list">
+        <details><summary>¿Tenemos que diseñar algo nosotros?</summary><p>No. Elegís el diseño, rellenáis un cuestionario con vuestros datos y nosotros preparamos la invitación.</p></details>
+        <details><summary>¿Cuánto tarda?</summary><p>Recibís el cuestionario en menos de 24 h desde la compra. Con todos vuestros datos, os enviamos la propuesta en 48–72 h. Los cambios pueden alargar un poco el plazo hasta la aprobación.</p></details>
+        <details><summary>¿Cuántos cambios podemos pedir?</summary><p>Todos los necesarios hasta que la invitación esté como queréis y la aprobéis.</p></details>
+        <details><summary>¿Y si no nos convence?</summary><p data-config="guarantee">Si después de los cambios la propuesta no os convence, os devolvemos el 100 % antes de aprobarla.</p></details>
+        <details><summary>¿Podemos cambiarla después de aprobarla?</summary><p>No. Al aprobarla generamos la invitación definitiva y queda cerrada. Por eso revisamos todo con vosotros antes: fecha, lugares, horarios, textos y preguntas. Vuestra lista de invitados, las mesas y los listados sí podéis cambiarlos cuando queráis en la app.</p></details>
+        <details><summary>¿Cómo se la enviamos a los invitados?</summary><p>Desde la app: elegís a quién, preparáis el mensaje y la compartís por WhatsApp o con un enlace.</p></details>
+        <details><summary>¿Qué pasa cuando responden?</summary><p>Cada confirmación entra en vuestra lista: quién viene, acompañantes, menús, alergias, transporte o alojamiento. Después podéis organizar las mesas y sacar listados.</p></details>
+        <details><summary>¿Podemos usarla los dos?</summary><p>Sí. Cada uno entra desde su propio móvil y los dos veis la misma boda.</p></details>
+        <details><summary>¿Hay que instalar una app de la tienda?</summary><p>No. Se abre desde el navegador y podéis añadirla a la pantalla de inicio del móvil.</p></details>
+        <details><summary>¿Hay cuotas o pagos extra?</summary><p>No. Es un pago único de 59,90 € con IVA incluido, sin cuotas. Es nuestro precio de lanzamiento.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · CIERRE -->
+  <section class="closing" aria-labelledby="closing-title">
+    <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+    <div class="wrap closing-copy">
+      <h2 id="closing-title">Lo difícil será elegir solo una.</h2>
+      <div class="closing-actions">
+        <a class="btn btn-ink" href="#disenos">Ver los diseños <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-line" data-whatsapp="Hola, me gustaría saber más sobre las invitaciones." href="#"><svg aria-hidden="true"><use href="#i-wa"/></svg>Hablar por WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <a class="logo" href="#top"><b>GUEST</b><span>by WeddlySmartDesign</span></a>
+    <ul class="footer-links">
+      <li><a data-whatsapp="Hola, tengo una pregunta sobre las invitaciones:" href="#">WhatsApp&nbsp;·&nbsp;<span data-config="whatsappDisplay">620 843 264</span></a></li>
+      <li><a data-mail href="mailto:weddlysmartdesign@gmail.com"><span data-config="email">weddlysmartdesign@gmail.com</span></a></li>
+      <li><a href="guest-legal.html">Legal y privacidad</a></li>
+    </ul>
+    <p class="footer-copy">© 2026 WeddlySmartDesign · Invitaciones de boda digitales</p>
+  </div>
+</footer>
+
+<div class="buybar" id="buybar">
+  <p><strong data-config="price">59,90 €</strong><span><span id="buybarName">Cristal</span> · IVA incl.</span></p>
+  <a class="btn btn-ink btn-sm" id="buybarBuy" href="#precio" target="_blank" rel="noopener">La quiero</a>
+</div>
+<a class="wa-float" data-whatsapp="Hola, me gustaría saber más sobre las invitaciones." href="#" aria-label="Escribir por WhatsApp"><svg aria-hidden="true"><use href="#i-wa"/></svg></a>
+<!-- Visor: cada invitación se abre aquí mismo, siempre por su portada -->
+<dialog class="shot-dialog" id="shotDialog" aria-label="Pantalla ampliada de la app">
+  <div class="shot-panel">
+    <div class="shot-stage"></div>
+    <div class="shot-bar"><span class="shot-caption"></span><button class="shot-close" type="button">Cerrar</button></div>
+  </div>
+</dialog>
+
+<div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="viewerName" hidden>
+  <div class="viewer-bar">
+    <p class="viewer-title"><span class="mono" id="viewerNo"></span><b id="viewerName"></b></p>
+    <button class="viewer-close" type="button" id="viewerClose" aria-label="Cerrar la invitación"><svg aria-hidden="true"><use href="#i-close"/></svg></button>
+  </div>
+  <div class="viewer-stage" id="viewerStage">
+    <button class="viewer-nav viewer-prev" type="button" id="viewerPrev" aria-label="Diseño anterior"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    <div class="viewer-device" id="viewerDevice">
+      <img class="viewer-poster" id="viewerPoster" alt="">
+      <iframe id="viewerFrame" title="Invitación de muestra" allow="autoplay; fullscreen"></iframe>
+    </div>
+    <button class="viewer-nav viewer-next" type="button" id="viewerNext" aria-label="Diseño siguiente"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    <aside class="viewer-info">
+      <p class="mono">Muestra con datos de ejemplo</p>
+      <h2 id="viewerHeading"></h2>
+      <p id="viewerNote"></p>
+      <a class="btn btn-paper btn-block" id="viewerBuy" href="#" target="_blank" rel="noopener">La quiero</a>
+    </aside>
+  </div>
+  <div class="viewer-dock">
+    <button type="button" id="viewerPrevM" aria-label="Diseño anterior"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    <a class="btn btn-paper btn-sm" id="viewerBuyM" href="#" target="_blank" rel="noopener">La quiero</a>
+    <button type="button" id="viewerNextM" aria-label="Diseño siguiente"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+  </div>
+</div>
+</body>
+</html>
