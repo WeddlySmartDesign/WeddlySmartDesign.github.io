@@ -1,0 +1,26 @@
+name: GUEST HTTPS Live Chrome Smoke — No Downloads No Sale
+on:
+  push:
+    branches: [guest-cloudflare-full-app-preview-2026-10-22]
+    paths:
+      - 'guest/qa/cloudflare_real_chrome_smoke_2026_10_22.cjs'
+      - '.github/workflows/guest-cloudflare-chrome-fast-smoke-2026-10-22.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Verify runner has Chromium-compatible system Chrome
+        run: |
+          which google-chrome || which google-chrome-stable
+          google-chrome --version || google-chrome-stable --version
+      - name: Install JS API only (Chrome already on runner)
+        run: npm install --no-save playwright@1.55.0
+      - name: Exercise real HTTPS app and revoked credentials with synthetic intercept
+        run: node guest/qa/cloudflare_real_chrome_smoke_2026_10_22.cjs
