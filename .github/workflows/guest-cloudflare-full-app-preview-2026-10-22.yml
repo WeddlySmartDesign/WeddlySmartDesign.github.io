@@ -4,6 +4,8 @@ on:
     branches: [guest-cloudflare-full-app-preview-2026-10-22]
     paths:
       - 'guest/tools/build_catalog_static_preview.cjs'
+      - 'guest/guest-sw.js'
+      - 'guest/qa/guest_sw_offline_contract_2026_10_22.cjs'
       - '.github/workflows/guest-cloudflare-full-app-preview-2026-10-22.yml'
   workflow_dispatch:
 permissions:
@@ -33,6 +35,7 @@ jobs:
         env:
           OUT: ${{ runner.temp }}/guest-full-app-preview
         run: |
+          GUEST_STAGE_DIR="$OUT" node guest/qa/guest_sw_offline_contract_2026_10_22.cjs
           python3 - <<'PY'
           import json,os,pathlib,hashlib,re
           d=pathlib.Path(os.environ['OUT'])
