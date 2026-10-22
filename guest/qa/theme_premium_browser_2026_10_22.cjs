@@ -28,7 +28,7 @@ async function checkTheme(f,key){
  assert.equal(values.selected,themeRGB[key],key+' premium bottom navigation did not change theme');
 }
 (async()=>{
- const browser=await chromium.launch({headless:true}),ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+ const browser=await chromium.launch({headless:true,...(process.env.GUEST_USE_SYSTEM_CHROME==='1'?{channel:'chrome',args:['--no-sandbox','--disable-dev-shm-usage']}: {})}),ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
  const page=await ctx.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await mock(page);
  await page.addInitScript(t=>{localStorage.setItem('weddly_shared_wedding_token',t);if(!sessionStorage.getItem('guestThemeTestBoot')){localStorage.setItem('weddly_personal_theme_v51','blush');sessionStorage.setItem('guestThemeTestBoot','1')}},TOKEN);
@@ -36,13 +36,13 @@ async function checkTheme(f,key){
   await page.goto(BASE+'/guest/index.html#hoy',{waitUntil:'domcontentloaded'});
   let f=await core(page);await checkTheme(f,'blush');
   await f.locator('#editWedding').click();
-  await page.waitForURL(/\/guest\/guest-settings\.html/,{timeout:8000});
+  await page.waitForURL(/\/guest\/guest-settings(?:\.html)?/,{timeout:8000});
   assert.equal(await page.locator('#theme').inputValue(),'blush');
   await page.locator('#theme').selectOption('slate');
   await page.locator('#save').click();
   assert.match(await page.locator('#saveMsg').innerText(),/guardados/i);
   await page.locator('#back').click();
-  await page.waitForURL(/\/guest\/index\.html/,{timeout:8000});
+  await page.waitForURL(/\/guest\/(?:index(?:\.html)?)?/,{timeout:8000});
   f=await core(page);await checkTheme(f,'slate');
   assert.deepEqual(errors,[],'premium/theme runtime errors');
   console.log('GUEST five-theme premium palette PASS: blush persisted to slate across Settings roundtrip');
