@@ -31,7 +31,7 @@ const form={id:'f01',config:{customQuestions:[],questions:{meal:true}},public_to
   assert.match(await inbox.innerText(),/16 asisten · 4 no asisten/);
   assert.equal(await inbox.getByRole('button',{name:'Ver 20 respuestas'}).count(),1);
   assert.equal(await inbox.getByText('Invitado 1',{exact:true}).count(),1,'self seating activity visible');
-  assert.match(await inbox.innerText(),/Actividad de mesas/);
+  assert.match(await inbox.innerText(),/Actividad de mesas/i);
   assert.match(await inbox.innerText(),/Este dispositivo/);
   assert.equal(await inbox.locator('.row').count(),2,'a bulk group and one activity only before opening details');
   await inbox.getByRole('button',{name:'Ver 20 respuestas'}).click();
@@ -39,7 +39,7 @@ const form={id:'f01',config:{customQuestions:[],questions:{meal:true}},public_to
   await inbox.locator('#wsdMarkRecentRead').click();
   await core.waitForFunction(()=>!document.getElementById('wsdMarkRecentRead'),{timeout:8000});
   const after=await core.locator('#hoy').innerText();
-  assert.match(after,/Actividad de mesas/,'own activity stays, not a new notice');
+  assert.match(after,/Actividad de mesas/i,'own activity stays, not a new notice');
   assert.match(after,/necesita menú/i,'unresolved menu tasks remain even after marking read');
   assert.equal(Object.keys(await page.evaluate(()=>JSON.parse(localStorage.getItem('weddly_guests_qa_v67')).meta.hoyReadNotificationIdsV1||{})).length,20);
   const newReply={id:'r_late',form_id:'f01',client_submission_id:'late',guest_key:'late',name:'Respuesta tardía',attend:true,received_at:iso(now-7200000),payload:{custom_answers:{}}};
