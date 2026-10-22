@@ -138,8 +138,7 @@ async function mock(page){
  ok(/GUEST/i.test(topText)&&/by WeddlySmartDesign/i.test(topText),'event product brand missing');
  ok(topText.includes('¿Haréis preboda?'),'empty extra-event state missing');
  await page.waitForTimeout(500);
- const simplified=(await page.locator('body').innerText()).slice(0,5000);
- ok(simplified.includes('Presupuesto y pagos')&&simplified.includes('Tareas específicas'),'ONE extra-event budgeting/tasks parity missing in GUEST');
+ // The zero-event onboarding view correctly has no budget/tasks until a specific event exists.
 
  // Preboda activation must be explicit and active.
  await page.locator('#activate').click();
@@ -148,6 +147,8 @@ async function mock(page){
  ok(await page.locator('#newEventDate').inputValue()==='2027-09-11','pre-wedding default date should be wedding-1');
  await page.locator('#eventCreate').click();
  await page.waitForSelector('.eventTabs [data-tab].on',{timeout:10000});
+ const completeEventText=await page.locator('body').innerText();
+ ok(completeEventText.includes('Presupuesto y pagos')&&completeEventText.includes('Tareas específicas'),'ONE extra-event budgeting/tasks parity missing after activation');
  let preId=Object.keys(eventState.events)[0];
  ok(!!preId,'pre-wedding event not persisted');
  ok(eventState.events[preId].enabled===true,'pre-wedding should activate explicitly');
