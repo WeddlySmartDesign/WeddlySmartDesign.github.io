@@ -325,7 +325,7 @@
     {
       scene: 'lista', tab: 'Grupos y subgrupos',
       title: 'Grupos y subgrupos, como los pensáis',
-      text: 'Ordenáis la lista a vuestra manera: el grupo «Familia de Ana» y, dentro, «Tíos de Murcia». La importáis de Excel o añadís a cada invitado desde la agenda del móvil.',
+      text: 'Ordenáis la lista a vuestra manera: el grupo «Familia de Clara» y, dentro, «Tíos de Murcia». La importáis de Excel o añadís a cada invitado desde la agenda del móvil.',
       points: ['Por persona, pareja o familia', 'Desde Excel o CSV', 'Desde la agenda de cada uno de los dos'],
       shot: { src: 'lista.jpg', alt: 'Pantalla Invitados de GUEST con los botones Importar lista y Crear mi lista.' }
     },
