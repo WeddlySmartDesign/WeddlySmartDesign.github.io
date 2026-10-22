@@ -26,14 +26,14 @@ ok(form.includes('accommodationOffered===true'),'accommodation opt-in behavior m
 ok(form.includes('plusone'),'plus-one config missing');
 
 const home=read('guests-home-rsvp-status-v1.js');
-ok(home.includes('todaySeatChanges')&&home.includes('recentChanges'),'Today table-change behavior missing');
+ok(home.includes('todaySeatChanges')&&home.includes('activityEntries')&&home.includes('hoyReadNotificationIdsV1'),'Hoy must keep table activity separate from stable-ID RSVP notifications');
 const seating=read('guests-seating-v2.js');
 ok(/activity|table/i.test(seating),'seating change registration missing');
 const sync=read('guests-seating-sync-hotfix-v1.js');
 ok(sync.length>500,'seating sync hotfix unexpectedly empty');
 
 const settings=read('guest-settings.html');
-for(const s of ['GUEST para los dos','Invitar a mi pareja','Instalar GUEST','weddlysmartdesign@gmail.com'])ok(settings.includes(s),'settings flow missing: '+s);
+for(const s of ['Compartir GUEST con tu pareja','Compartir acceso con mi pareja','Instalar GUEST','weddlysmartdesign@gmail.com'])ok(settings.includes(s),'settings flow missing: '+s);
 ok(settings.includes("action:'invite'"),'partner invite API flow missing');
 
 const events=read('guests-events-v3.html'),eventProduct=read('guest-events-product-v1.js');
