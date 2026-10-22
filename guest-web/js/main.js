@@ -285,61 +285,71 @@
   const APP_SHOTS = 'assets/app/';
   const features = [
     {
-      scene: 'mesas',
-      title: 'Sentadlos en el plano',
-      text: 'Dibujáis vuestro salón con sus mesas, la pista y la cabina, y lo movéis todo con el dedo.',
-      points: ['Arrastrad, girad y cambiad el tamaño', 'Mesas redondas y rectangulares', 'Las plazas ocupadas de cada mesa, a la vista'],
+      scene: 'mesas', tab: 'Plano del salón',
+      title: 'Vuestro salón, tal como es',
+      text: 'Dibujáis el plano con mesas redondas, rectangulares o presidencial, y también la pista, el escenario o la cabina del DJ. Todo se mueve, se gira y se ajusta con el dedo.',
+      points: ['Mesas de cada tipo y tamaño', 'Pista, escenario y otros elementos', 'Las plazas libres de cada mesa, a la vista'],
       video: { src: 'mesas', poster: 'mesas-poster.jpg', label: 'Plano del salón en GUEST: las mesas se arrastran y se giran.' }
     },
     {
-      scene: 'varios',
-      title: 'Varios de una vez',
-      text: 'Tocáis a los que van juntos y elegís mesa. La app solo os ofrece las mesas donde caben.',
-      points: ['Toda una familia, sin ir uno a uno', 'Sin pasarse de plazas', 'Cambios rápidos de una mesa a otra'],
+      scene: 'varios', tab: 'Varios a la vez',
+      title: 'Varios a la vez, incluso a una mesa nueva',
+      text: 'Seleccionáis a los que van juntos y los sentáis en una mesa con sitio. ¿No queda ninguna? Creáis una mesa nueva para ellos en el mismo paso.',
+      points: ['Toda una familia de una vez', 'Solo os ofrece las mesas donde caben', 'Una mesa nueva con los que habéis elegido'],
       video: { src: 'varios', poster: 'varios-poster.jpg', label: 'En GUEST se seleccionan tres invitados y se asignan juntos a una mesa con sitio.' }
     },
     {
-      scene: 'dos',
+      scene: 'dos', tab: 'Dos móviles',
       title: 'Para los dos, desde el móvil',
-      text: 'Cada uno entra desde su propio móvil y los dos veis la misma boda: lo que añade uno, le aparece al otro.',
-      points: ['Un acceso para cada uno', 'Sin descargar nada: se añade a la pantalla de inicio', 'En español y en inglés'],
-      pair: { src: 'hoy.jpg', names: ['Clara', 'Mateo'], alt: 'La misma pantalla Hoy de GUEST abierta en dos móviles, uno de cada novio.' }
+      text: 'Cada uno entra desde su propio móvil y los dos veis la misma boda: lo que cambia uno, le aparece al otro. Y cada uno la ve con el tema que más le gusta.',
+      points: ['Un acceso para cada uno', 'Cinco temas: Nordic, Blush, Arena, Slate y Editorial', 'Sin descargar nada, en español o en inglés'],
+      pair: {
+        phones: [{ src: 'hoy-nordic.jpg', name: 'Clara', theme: 'Nordic' }, { src: 'hoy-blush.jpg', name: 'Mateo', theme: 'Blush' }],
+        alt: 'La misma boda en dos móviles: Clara la ve con el tema Nordic y Mateo con el tema Blush.'
+      }
     },
     {
-      scene: 'respuestas',
-      title: 'Sabed quién viene',
-      text: 'Cada invitado confirma desde la propia invitación y su respuesta os llega al momento, con todo lo que le habéis preguntado.',
-      points: ['Acompañantes y niños', 'Menús, alergias e intolerancias', 'Vuestras preguntas, como la canción que no puede faltar'],
+      scene: 'preguntas', tab: 'RSVP a medida',
+      title: 'Una confirmación a vuestra medida',
+      text: 'Elegís qué os contesta cada invitado al confirmar y añadís vuestras propias preguntas: el brunch, una actividad o la canción que no puede faltar.',
+      points: ['Menús, alergias e intolerancias', 'Niños, acompañante, transporte y alojamiento', 'Cada respuesta llega ordenada a la app'],
+      shot: { src: 'preguntas.jpg', alt: 'Preguntas de la boda en GUEST: alergias, niños y acompañante activados, y el botón para añadir preguntas personalizadas.' }
+    },
+    {
+      scene: 'respuestas', tab: 'Avisos',
+      title: 'Cada cambio, avisado',
+      text: 'Un panel os cuenta todo lo que pasa: quién confirma, quién cambia de menú y qué falta por hacer, sin revisar la lista entera.',
+      points: ['Los cambios recientes, con fecha y hora', 'Lo que necesita vuestra atención, primero', 'Menús pendientes y mesas que se pasan de plazas'],
       shot: { src: 'respuestas.jpg', alt: 'Cambios recientes en GUEST: tres invitados han confirmado y han elegido su canción.' }
     },
     {
-      scene: 'envio',
-      title: 'Enviadla a cada invitado',
-      text: 'Elegís el contacto y la mandáis por WhatsApp, por mensaje o con un enlace. Cada familia recibe la suya.',
-      points: ['Una invitación para toda la familia', 'Veis a quién falta por enviar', 'Sin guardar teléfonos en la app'],
-      shot: { src: 'envio.jpg', alt: 'Ficha de la familia en GUEST con el botón Enviar o compartir invitación.' }
-    },
-    {
-      scene: 'lista',
-      title: 'Vuestra lista, por familias',
-      text: 'Importáis la lista que ya tenéis o la creáis en la app, ordenada por grupos y subgrupos.',
-      points: ['Desde Excel o CSV', 'Por persona, pareja o familia', 'O directamente desde la agenda del móvil'],
+      scene: 'lista', tab: 'Grupos y subgrupos',
+      title: 'Grupos y subgrupos, como los pensáis',
+      text: 'Ordenáis la lista a vuestra manera: el grupo «Familia de Ana» y, dentro, «Tíos de Murcia». La importáis de Excel o añadís a cada invitado desde la agenda del móvil.',
+      points: ['Por persona, pareja o familia', 'Desde Excel o CSV', 'Desde la agenda de cada uno de los dos'],
       shot: { src: 'lista.jpg', alt: 'Pantalla Invitados de GUEST con los botones Importar lista y Crear mi lista.' }
     },
     {
-      scene: 'listados',
-      title: 'Listados para el catering',
-      text: 'Generáis solo lo que os piden: mesas, menús, transporte o alojamiento, listo para entregar.',
-      points: ['En PDF o en Excel', 'Menús y alergias para el catering', 'Cada copia con su revisión y su fecha'],
-      shot: { src: 'listados.jpg', alt: 'Pantalla Listados de GUEST con los botones Imprimir o PDF y Excel o CSV.' },
-      sheet: { src: 'pdf.jpg', alt: 'Listado de mesas en PDF con el nombre y la respuesta de cada invitado.' }
+      scene: 'envio', tab: 'WhatsApp',
+      title: 'Por WhatsApp, con recordatorio',
+      text: 'La mandáis por WhatsApp a cada familia y veis quién la tiene y quién no ha contestado. A los que faltan, les enviáis un recordatorio en un momento.',
+      points: ['Una invitación para toda la familia', 'Enviados y pendientes, a la vista', 'Recordatorios a quien no ha respondido'],
+      shot: { src: 'envio.jpg', alt: 'Ficha de la familia en GUEST con el botón Enviar o compartir invitación.' }
     },
     {
-      scene: 'eventos',
-      title: 'Preboda y otros eventos',
-      text: 'Cada evento tiene su propia invitación sencilla, su lista y sus respuestas, sin mezclarse con la boda.',
-      points: ['Preboda, brunch o cena de bienvenida', 'Solo con quien vosotros elijáis', 'Recordatorios y enlace al calendario'],
+      scene: 'eventos', tab: 'Preboda',
+      title: 'La preboda, con su propia invitación',
+      text: 'Preboda, brunch o cena de bienvenida: cada evento tiene su invitación, su lista y sus respuestas. Elegís a los invitados de vuestra lista, sin volver a crearlos.',
+      points: ['Personas sueltas o grupos enteros', 'Sin mezclarse con la boda', 'Recordatorios y enlace al calendario'],
       shot: { src: 'eventos.jpg', alt: 'Eventos extra en GUEST junto al paso Ajusta las mesas.' }
+    },
+    {
+      scene: 'listados', tab: 'Listados con versión',
+      title: 'Listados con su versión',
+      text: 'Mesas, menús, transporte o alojamiento, en PDF o en Excel. Cada listado lleva su número de revisión y su fecha, para saber si vuestro proveedor tiene el que está en vigor.',
+      points: ['En PDF o en Excel', 'Revisión y fecha en cada copia', 'Aviso si un listado se ha quedado antiguo'],
+      shot: { src: 'listados.jpg', alt: 'Pantalla Listados de GUEST con los botones Imprimir o PDF y Excel o CSV.' },
+      sheet: { src: 'pdf.jpg', alt: 'Listado de mesas en PDF con el nombre y la respuesta de cada invitado.' }
     }
   ];
 
@@ -353,11 +363,11 @@
       const { src, poster, label } = feature.video;
       return `<div class="feature-phone"><div class="phone-screen is-video"><video data-autoplay muted loop playsinline preload="none" poster="${APP_SHOTS}${poster}" aria-label="${label}"><source src="${APP_SHOTS}${src}.webm" type="video/webm"><source src="${APP_SHOTS}${src}.mp4" type="video/mp4"></video>${zoomButton(index, 'video', feature.title)}</div></div>`;
     }
-    // Dos móviles con la misma boda: uno para cada novio.
+    // Dos móviles con la misma boda: uno para cada novio, cada uno con su tema.
     if (feature.pair) {
-      const { src, names, alt } = feature.pair;
-      return `<div class="feature-pair"><div class="feature-phone pair-spacer" aria-hidden="true"><div class="phone-screen"></div></div>${names.map((name, n) => `
-        <figure class="pair-phone"><div class="feature-phone"><div class="phone-screen">${shotImg(src, n ? '' : alt)}${n ? zoomButton(index, 'shot', feature.title) : ''}</div></div><figcaption class="mono">${name}</figcaption></figure>`).join('')}
+      const { phones, alt } = feature.pair;
+      return `<div class="feature-pair"><div class="feature-phone pair-spacer" aria-hidden="true"><div class="phone-screen"></div></div>${phones.map(({ src, name, theme }, n) => `
+        <figure class="pair-phone"><div class="feature-phone"><div class="phone-screen">${shotImg(src, n ? '' : alt)}${n ? zoomButton(index, 'shot', feature.title) : ''}</div></div><figcaption><b>${name}</b><span>tema ${theme}</span></figcaption></figure>`).join('')}
         <span class="pair-sync" aria-hidden="true"><svg><use href="#i-sync"/></svg></span></div>`;
     }
     // El listado en PDF asoma por fuera del móvil, como el papel que se entrega al catering.
@@ -379,7 +389,7 @@
         return `<video ${reduceMotion ? 'controls' : 'autoplay'} muted loop playsinline poster="${APP_SHOTS}${poster}" aria-label="${label}"><source src="${APP_SHOTS}${src}.webm" type="video/webm"><source src="${APP_SHOTS}${src}.mp4" type="video/mp4"></video>`;
       }
       if (kind === 'sheet') return `<img class="is-sheet" src="${APP_SHOTS}${feature.sheet.src}" alt="${feature.sheet.alt}" width="640" height="578">`;
-      const shot = feature.shot || feature.pair;
+      const shot = feature.shot || { src: feature.pair.phones[1].src, alt: feature.pair.alt };
       return `<img src="${APP_SHOTS}${shot.src}" alt="${shot.alt}" width="720" height="1008">`;
     };
     list.addEventListener('click', (event) => {
@@ -409,10 +419,9 @@
     const pad = (n) => String(n).padStart(2, '0');
 
     list.innerHTML = features.map((feature, index) => `
-      <li class="feature" data-scene="${feature.scene}">
+      <li class="feature" id="app-${feature.scene}" data-scene="${feature.scene}">
         ${featureMedia(feature, index)}
         <div class="feature-text">
-          <span class="mono feature-no">${pad(index + 1)}</span>
           <h3>${feature.title}</h3>
           <p>${feature.text}</p>
           <ul class="feature-points">${feature.points.map((point) => `<li><svg aria-hidden="true"><use href="#i-check"/></svg>${point}</li>`).join('')}</ul>
@@ -420,6 +429,27 @@
       </li>`).join('');
 
     initZoom(list);
+
+    // Índice de lo que hace distinta a la app: cada botón lleva a su ficha y se marca la que se ve.
+    const nav = $('#appIndex');
+    nav.innerHTML = features.map((feature, n) => `<a class="features-chip" href="#app-${feature.scene}" data-go="${n}">${feature.tab}</a>`).join('');
+    const chips = $$('.features-chip', nav);
+    let chosen = -1;
+    let chosenAt = 0;
+    nav.addEventListener('click', (event) => {
+      const chip = event.target.closest('[data-go]');
+      if (!chip) return;
+      event.preventDefault();
+      chosen = Number(chip.dataset.go);
+      chosenAt = performance.now();
+      const card = list.children[chosen];
+      list.scrollTo({ left: card.offsetLeft - list.firstElementChild.offsetLeft, behavior: reduceMotion ? 'auto' : 'smooth' });
+      // Si la ficha queda fuera de la vista, la página baja (o sube) hasta el índice, que queda bajo la cabecera.
+      if (nav.getBoundingClientRect().top < 60 || list.getBoundingClientRect().top > innerHeight * 0.55) {
+        nav.scrollIntoView({ block: 'start', behavior: reduceMotion ? 'auto' : 'smooth' });
+      }
+      update();
+    });
 
     // El vídeo del plano solo se reproduce mientras se ve; con movimiento reducido queda el fotograma.
     const videos = $$('video[data-autoplay]', list);
@@ -442,7 +472,19 @@
       frame = requestAnimationFrame(() => {
         const max = list.scrollWidth - list.clientWidth;
         const index = max > 4 ? Math.round(list.scrollLeft / stride()) : 0;
-        count.textContent = `${pad(Math.min(features.length, index + 1))} / ${pad(features.length)}`;
+        // Al final del carril se ven varias fichas: se respeta la que se eligió en el índice si sigue a la vista.
+        const box = list.getBoundingClientRect();
+        const visible = (n) => { const card = list.children[n].getBoundingClientRect(); return card.left >= box.left - 8 && card.right <= box.right + 8; };
+        if (chosen >= 0 && performance.now() - chosenAt > 900 && !visible(chosen)) chosen = -1;
+        const current = chosen >= 0 ? chosen : Math.min(features.length - 1, index);
+        count.textContent = `${pad(current + 1)} / ${pad(features.length)}`;
+        chips.forEach((chip, n) => chip.toggleAttribute('aria-current', n === current));
+        // En el móvil el índice también se desliza para que la función marcada quede a la vista.
+        const on = chips[current];
+        const inset = parseFloat(getComputedStyle(nav).paddingLeft);
+        if (nav.scrollWidth > nav.clientWidth && (on.offsetLeft < nav.scrollLeft + inset || on.offsetLeft + on.offsetWidth > nav.scrollLeft + nav.clientWidth - inset)) {
+          nav.scrollTo({ left: on.offsetLeft - inset, behavior: reduceMotion ? 'auto' : 'smooth' });
+        }
         prev.disabled = list.scrollLeft <= 4;
         next.disabled = list.scrollLeft >= max - 4;
       });
