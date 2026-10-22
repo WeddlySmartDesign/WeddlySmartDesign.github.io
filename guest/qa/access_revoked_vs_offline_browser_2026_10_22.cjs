@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 const BASE=process.env.GUEST_QA_BASE||'http://127.0.0.1:4173',TOKEN='x'.repeat(64);
 const mockState={meta:{couple:['Prueba','Seguridad'],weddingDate:'2027-06-12'},guests:{test:{name:'Invitada prueba',rsvp:'confirmed'}},tables:{}};
 (async()=>{
-  const browser=await chromium.launch({headless:true});
+  const browser=await chromium.launch({headless:true,...(process.env.GUEST_USE_SYSTEM_CHROME==='1'?{channel:'chrome',args:['--no-sandbox','--disable-dev-shm-usage']}: {})});
   try{
     async function scenario(name,{withToken,withCache,status,networkDown}){
       const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,serviceWorkers:'block'});
