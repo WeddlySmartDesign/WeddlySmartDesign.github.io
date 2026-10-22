@@ -6,7 +6,7 @@
   "sourceCommit": "5b1e418b11c4af0a0b7753963b7079f897016f8d",
   "importCommit": "a7ac960d590dc66bea9fcb497a4f3ff0e7e7e530",
   "sourceFiles": 84,
-  "bytes": 118195733,
+  "bytes": 118195739,
   "commercialApproval": false,
   "allTemplatesTestOnly": true,
   "designs": [
@@ -64,13 +64,13 @@
     },
     {
       "path": "guest/catalog-assets/design-14/1.0.0/index.html",
-      "gitBlobSha1": "ae1bf2b5a79dd30090ea69fae535f0cb403bc19c",
-      "bytes": 13071169
+      "gitBlobSha1": "ed7bfa0753cc888ca4882ba7c98ce1aca5dee660",
+      "bytes": 13071173
     },
     {
       "path": "guest/catalog-assets/design-15/1.0.0/index.html",
-      "gitBlobSha1": "f7680ec795cb4f3f7ec29ea372e87b6a8e55367f",
-      "bytes": 12930550
+      "gitBlobSha1": "75f8fc54e27ff4db9863d254ddfe0921e3c34fd5",
+      "bytes": 12930552
     },
     {
       "path": "guest/catalog-assets/design-16/1.0.0/index.html",
