@@ -23,7 +23,9 @@ jobs:
             curl --fail --location --silent --show-error --retry 2 --max-time 15 \
               --output /tmp/guest-page.html --write-out 'HTTP %{http_code}; URL %{url_effective}; bytes %{size_download}\n' \
               "${prefix}/guest/index.html"
-            grep -q 'GUEST by WeddlySmartDesign' /tmp/guest-page.html
+            if ! grep -q 'id="app"' /tmp/guest-page.html || ! grep -q 'guests-access-layer.js' /tmp/guest-page.html; then
+              echo 'ERROR candidate URL serves a branded placeholder instead of real app'; head -c 877 /tmp/guest-page.html; echo; exit 1
+            fi
             grep -q 'guest' /tmp/guest-page.html
             echo 'PASS GUEST candidate page HTML served'
           done
@@ -34,5 +36,7 @@ jobs:
           curl --fail --location --silent --show-error --retry 2 --max-time 15 \
              --output /tmp/guest-production.html --write-out 'HTTP %{http_code}; URL %{url_effective}; bytes %{size_download}\n' \
              'https://guest-weddlysmartdesign.pages.dev/guest/index.html'
-          grep -q 'GUEST by WeddlySmartDesign' /tmp/guest-production.html
+          if ! grep -q 'id="app"' /tmp/guest-production.html || ! grep -q 'guests-access-layer.js' /tmp/guest-production.html; then
+            echo 'ERROR stable URL serves a branded placeholder instead of real app'; head -c 877 /tmp/guest-production.html; echo; exit 1
+          fi
           echo 'PASS stable GUEST URL serves an app shell; not proof of latest candidate or license'
