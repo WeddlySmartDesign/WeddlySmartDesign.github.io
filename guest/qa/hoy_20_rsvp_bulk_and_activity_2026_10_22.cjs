@@ -22,7 +22,7 @@ const form={id:'f01',config:{customQuestions:[],questions:{meal:true}},public_to
  try{
   await page.goto(BASE+'/guest/index.html#hoy',{waitUntil:'domcontentloaded'});
   let core;
-  for(let i=0;i<100;i++){core=page.frames().find(f=>/guests-v114-integrated\.html/.test(f.url()));if(core)break;await page.waitForTimeout(100)}
+  for(let i=0;i<100;i++){core=page.frames().find(f=>/guests-v114-integrated(?:\.html)?/.test(f.url()));if(core)break;await page.waitForTimeout(100)}
   assert.ok(core,'actual ONE-derived GUEST guest core');
   await core.waitForSelector('#wsdRecentChanges',{timeout:12000});
   const inbox=core.locator('#wsdRecentChanges');
