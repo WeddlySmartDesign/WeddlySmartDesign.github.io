@@ -1,0 +1,55 @@
+name: GUEST Cloudflare App Preview — Real HTTP Acceptance
+on:
+  push:
+    branches: [guest-cloudflare-full-app-preview-2026-10-22]
+    paths: ['.github/workflows/guest-cloudflare-full-app-http-acceptance-2026-10-22.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Verify PREVIEW serves real licensed GUEST app, not a placeholder
+        shell: bash
+        env:
+          ORIGIN: https://4ed5f3b4.guest-weddlysmartdesign.pages.dev
+        run: |
+          set -euo pipefail
+          get(){
+            local path="$1" outfile="$2"
+            curl --fail --location --silent --show-error --max-time 30 --retry 2 \
+              --output "$outfile" --write-out "%{http_code} %{size_download} ${path}\n" \
+              "$ORIGIN/$path"
+          }
+          get guest/index.html /tmp/guest-index.html
+          test "$(wc -c </tmp/guest-index.html)" -gt 3000
+          grep -q 'guests-access-layer.js' /tmp/guest-index.html
+          grep -q 'guests-production-sync.js' /tmp/guest-index.html
+          grep -q 'guests-copy-control-v1.js' /tmp/guest-index.html
+          grep -q 'guests-home-rsvp-status-v1.js' /tmp/guest-index.html
+          for path in guest/access.html guest/guest-settings.html guest/guests-v114-integrated.html guest/guests-v081-visual-seating.html guest/guests-events-v3.html guest/guests-rsvp-operations-live.html guest/guests-rsvp-v116-single-live.html; do
+            get "$path" /tmp/guest-page.html
+            test "$(wc -c </tmp/guest-page.html)" -gt 1000
+          done
+          for file in guest/guests-access-layer.js guest/guests-production-sync.js guest/guests-home-rsvp-status-v1.js guest/guests-seating-v2.js guest/guests-copy-control-v1.js guest/guest-visual-premium-v1.js; do
+            get "$file" /tmp/guest-script.js
+            test "$(wc -c </tmp/guest-script.js)" -gt 300
+          done
+          get guest/catalog-assets/botanica/14.7/index.html /tmp/guest-botanica.html
+          test "$(wc -c </tmp/guest-botanica.html)" -gt 1000000
+          get GUEST_STAGE_MANIFEST.json /tmp/guest-manifest.json
+          python3 - <<'PY'
+          import json
+          p=json.load(open('/tmp/guest-manifest.json'))
+          assert p['status']=='PREPRODUCTION_DO_NOT_SELL'
+          assert p['commercialApproved'] is False
+          assert p['fullGuestManagementPresent'] is True
+          assert len(p['designs'])==15,len(p['designs'])
+          files={f['name']:f for f in p['files']}
+          assert files['guest/index.html']['size']>3000
+          print('PASS REAL APP: 15 designs, source/payload staging, access and management routes')
+          PY
+          curl --fail --silent --show-error --head --max-time 20 "$ORIGIN/guest/index.html" | grep -iq 'x-robots-tag: noindex'
+          echo 'PASS HTTP real GUEST app served with noindex. ONLY PREVIEW, NO SALE.'
