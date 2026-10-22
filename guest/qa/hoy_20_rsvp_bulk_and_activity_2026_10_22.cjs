@@ -41,6 +41,9 @@ const form={id:'f01',config:{customQuestions:[],questions:{meal:true}},public_to
   const after=await core.locator('#hoy').innerText();
   assert.match(after,/Actividad de mesas/i,'own activity stays, not a new notice');
   assert.match(after,/necesita menú/i,'unresolved menu tasks remain even after marking read');
+  assert.match(after,/13 incidencias restantes/i,'all additional menu issues remain reachable beyond the first three');
+  await core.locator('#wsdAttentionToggle').click();
+  assert.ok((await core.locator('#wsdExtraAttention .row').count())>=13,'every additional unresolved menu has a selectable row');
   assert.equal(Object.keys(await page.evaluate(()=>JSON.parse(localStorage.getItem('weddly_guests_qa_v67')).meta.hoyReadNotificationIdsV1||{})).length,20);
   const newReply={id:'r_late',form_id:'f01',client_submission_id:'late',guest_key:'late',name:'Respuesta tardía',attend:true,received_at:iso(now-7200000),payload:{custom_answers:{}}};
   replies.push(newReply); // Older timestamp than all marked items, but newly arrived now.
