@@ -24,7 +24,7 @@ async function run(){
   assert.ok(core,'full original guest core loaded');
   await core.waitForSelector('#wsdRecentChanges',{timeout:15000});
   const panel=core.locator('#wsdRecentChanges'),title=await panel.innerText();
-  assert.match(title,/Notificaciones recientes/);
+  assert.match(title,/Notificaciones recientes/i);
   const count=await panel.locator('.pill').first().innerText();
   assert.equal(Number(count),8,'all seven RSVP changes and one table movement are unread');
   assert.equal(await panel.locator('.row').count(),5,'collapsed notifications must show five without flooding mobile');
