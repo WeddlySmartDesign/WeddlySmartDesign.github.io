@@ -38,3 +38,43 @@ La auditoría comercial independiente sigue devolviendo `NO_GO`, principalmente 
 5. Toda operación realizada debe quedar en documentación verificable fuera del chat; no afirmar «entregado» hasta constatarlo.
 
 **Situación al cierre de esta auditoría:** módulo de gestión con candidato probado en navegador; no liberación comercial certificada, no se han activado cobros, no se ha modificado producción.
+
+
+## 22/10/2026 — Comprobación directa final de servicios y regresión extensa (sin alterar producción)
+
+### Evidencia verificable del estado técnico
+- **GitHub rama de cierre**, commit `25fca51fd9e34614087db8ae836142c7073c46a0`: [matriz extensa de regresión](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39745953137) **30/30 trabajos SUCCESS**. Las dos pruebas antiguas que fallaban al principio se revisaron para verificar el comportamiento aprobado de ONE: opción Compartir visible pero bloqueada cuando el segundo miembro ya está vinculado; tareas, presupuesto y pagos preservados en eventos adicionales. No se relajaron las comprobaciones de permisos ni de aforo/RSVP.
+- [Regresión específica de módulo](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39745953236) **SUCCESS** (incluye ráfaga de 20 RSVP, novedades agrupadas, actividades de mesas, leído por IDs, cambios tardíos, compartir y cinco paletas).
+- [Preflight comercial aislado](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39745953115) **SUCCESS de pruebas estáticas, salida comercial NO_GO**.
+- **Cloudflare Pages PREVIEW del commit `25fca51` desplegada SUCCESS**: `https://b9fa74ec.guest-weddlysmartdesign.pages.dev` (y alias de rama `https://guest-finalization-candidate.guest-weddlysmartdesign.pages.dev`). Publicación de PREVIEW confirmada por el control Cloudflare, sin sustitución de producción, pago ni licencia. No certificada navegación física en Android/iPhone.
+
+### Backend: cotejo GitHub↔Supabase en tiempo real
+Las siguientes **7 funciones ACTIVAS** se compararon por igualdad exacta de contenido completo, sin mutarlas:
+- `guest-stripe-checkout` v26 — 26.177 bytes, **idéntica**.
+- `guest-invitation-flow` v21 — 72.878 bytes, **idéntica**.
+- `guest-license-access` v5 — 8.495 bytes, **idéntica**.
+- `guest-rsvp-ensure` v3 — 6.827 bytes, **idéntica**.
+- `guest-rsvp` v6 — 28.022 bytes, **idéntica**.
+- `guest-orders-admin` v4 — 12.824 bytes, **idéntica**.
+- `guest-personalization` v3 — 10.247 bytes, **idéntica**.
+Las 12 funciones `guest-*` están ACTIVE, pero las cinco restantes no se cotejaron por fuente raíz porque varias no tienen `guest/backend/<slug>/index.ts` en GitHub; no interpretar ACTIVE como prueba E2E.
+
+### Evidencia de pedidos de prueba reales en base de datos (solo estadísticas, sin PII)
+Consulta agregada, lectura exclusiva, en `public.guest_invitation_orders`:
+- **8 pedidos `mode=test` y cero `mode=production`**: seis `delivered`, uno `designing`, uno `review_sent`.
+- Seis `delivered` tienen token público de entrega y cuestionario enviado/recibido y aprobación registrada; cuatro de seis tienen `delivery_url`, solo **uno** está vinculado a una `license_id`.
+- **0/8** poseen `checkout_session_id`; el código `create_test` **intencionalmente** crea pedidos sin compra, licencia y sesión. No es prueba de que falle el checkout; demuestra que todavía NO se ha ejecutado la compra Stripe TEST → webhook → licencia → pedido → correo → entrega en una cadena completa.
+- El código `guest-stripe-checkout` solo provisiona licencia si `checkout.session.completed` tiene pago comprobado, y `guest-invitation-flow` `create_paid` valida licencia, ID `cs_test_...`/`cs_live_...`, producto, plantilla, versión y vínculo exacto. Es verificación de código, no del comportamiento remoto de Stripe.
+
+### Correo y conexión Stripe
+- Resend: dominio `weddlysmartdesign.com` **verified / sending enabled**. Historial de transaccionales confirma entrega de correos de prueba GUEST (pedido, datos recibidos, revisión, aprobación y entrega) el 6 y 7/10/2026. La cuenta tiene plantilla publicada de ONE, pero la integración GUEST envía directamente mediante API Resend con claves de idempotencia; no requiere esa plantilla ONE. Cero webhooks de Resend configurados: no impide un envío confirmado por API, pero se debe cubrir supervisión de rebotes o fallos antes de explotar ventas.
+- Stripe conectado mediante herramienta: **únicamente cuenta WeddlySmartDesign en livemode=true**. No existe un contexto de prueba Stripe accesible en esta conexión. **No se intentó pago ni petición con cargo real.** Para probar compras de GUEST hay que habilitar contexto TEST o un ensayo seguro autorizado y aislarlo del catálogo LIVE; no cambiar de modo con suposiciones.
+- Supabase advisors: tablas GUEST tienen RLS activo sin políticas cliente deliberadamente, pues el acceso transcurre por Edge Functions con autorización; no desactivar RLS. Avisos `SECURITY DEFINER` observados pertenecen a funciones internas/Partner, fuera del alcance aislado de GUEST; no cambiar ONE/Partner por una alerta de GUEST.
+
+### Único camino de certificación aún faltante
+1. Publicar y verificar los 16 diseños técnicos del ZIP íntegro y la ruta maestra `catalog-final` en Cloudflare **PREVIEW**, con integridad de todos los medios. No publicar un ZIP incompleto ni activar cobros.
+2. Obtener entorno Stripe **TEST realmente autenticado**. Ejecutar al menos dos pedidos pagados ficticios de diseño certificado hasta `checkout_session_id` real de test, licencia emitida, creación automática del pedido, cuestionario, entrega y URL final; comprobar correos y reintentos.
+3. Dos accesos independientes de la pareja, la invitación y su RSVP pública, sincronización PC↔móvil y móviles reales, gestión de mesas/listados/preboda. Probar expiración, aislamiento entre bodas, recuperación, facturación y rollback.
+4. Registrar GO/NO_GO por **diseño individual** y solo habilitar venta tras aceptar las evidencias; no declarar 15 diseños comercialmente terminados por el test de staging estático.
+
+**Estado:** código GUEST en PR #147 listo para revisión con 30/30 QA PASS; **NO certificación comercial**. No se mutaron datos de clientes, no se envió correo nuevo, no se hicieron pagos, no se tocaron ONE/STUDIO ni producción.
