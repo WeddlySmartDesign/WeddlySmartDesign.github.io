@@ -28,7 +28,7 @@ const form={id:'f01',config:{customQuestions:[],questions:{meal:true}},public_to
   const inbox=core.locator('#wsdRecentChanges');
   assert.match(await inbox.innerText(),/20 sin leer/);
   assert.match(await inbox.innerText(),/20 respuestas de la boda/);
-  assert.match(await inbox.innerText(),/16 asisten · 4 no asisten/);
+  assert.match(await inbox.innerText(),/16 sí · 4 no/);
   assert.equal(await inbox.getByRole('button',{name:'Ver 20 respuestas'}).count(),1);
   assert.equal(await inbox.getByText('Invitado 1',{exact:true}).count(),1,'self seating activity visible');
   assert.match(await inbox.innerText(),/Actividad de mesas/i);
