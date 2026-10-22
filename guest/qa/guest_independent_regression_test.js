@@ -37,8 +37,8 @@ for(const s of ['GUEST para los dos','Invitar a mi pareja','Instalar GUEST','wed
 ok(settings.includes("action:'invite'"),'partner invite API flow missing');
 
 const events=read('guests-events-v3.html'),eventProduct=read('guest-events-product-v1.js');
-ok(events.includes('guest-events-product-v1.js'),'GUEST event simplification layer not loaded');
-ok(eventProduct.includes('Presupuesto y pagos')&&eventProduct.includes('Tareas específicas'),'event non-GUEST sections are not actively removed');
+ok(events.includes('guest-events-product-v1.js'),'GUEST event branding layer not loaded');
+ok(eventProduct.includes('brand();')&&!eventProduct.includes('next.remove()'),'GUEST event styling must preserve ONE tasks and budget sections');
 const smart=read('guests-smart-actions-v1.js');
 ok(!smart.includes('Invitados, tareas, pagos y calendario'),'ONE event copy leaked into GUEST');
 
