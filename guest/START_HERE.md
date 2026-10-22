@@ -1,5 +1,8 @@
 # GUEST by WeddlySmartDesign — EMPEZAR AQUÍ
 
+> **CLOUDFLARE PREVIEW GUEST REAL (22/10/2026):** [Despliegue del módulo completo y auditoría HTTPS](GUEST_CLOUDFLARE_FULL_APP_PREVIEW_REAL_2026-10-22.md). **App con acceso privado publicada en PREVIEW:** `https://265a5e27.guest-weddlysmartdesign.pages.dev/guest/access.html` y `.../guest/index.html`. [HTTP y recursos reales SUCCESS](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39785011784). El dominio estable de producción todavía sirve portada provisional, y la venta permanece NO_GO. No confundir PREVIEW con entrega comercial ni activar cobros.
+
+
 > **FUENTE ÚNICA DE PENDIENTES Y ENLACES (22/10/2026):** [GUEST_CIERRE_PENDIENTES_Y_ENLACES_2026-10-22.md](GUEST_CIERRE_PENDIENTES_Y_ENLACES_2026-10-22.md). Verificado que Cloudflare **estable y rama candidata sirven solo una portada de preproducción de 877 bytes**, NO la app; [diagnóstico HTTP público](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/39748331464). El antiguo enlace `dc3b7ffd` sirve la app/demo previa, NO versión final. **30/30 QA internos PASS pero salida comercial NO_GO.** Seguir la lista P0-01 a P0-09 antes de afirmar «terminado» o activar cobros.
 
 
