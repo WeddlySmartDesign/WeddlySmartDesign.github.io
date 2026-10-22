@@ -25,16 +25,16 @@ async function run(){
   assert.ok(core,'full original guest core loaded');
   await core.waitForSelector('#wsdRecentChanges',{timeout:15000});
   const panel=core.locator('#wsdRecentChanges'),title=await panel.innerText();
-  assert.match(title,/Notificaciones recientes/i);
+  assert.match(title,/Novedades/i);
   const count=await panel.locator('.pill').first().innerText();
-  assert.equal(Number(count),9,'seven RSVP changes, one table movement and one preboda response are unread');
-  assert.equal(await panel.locator('.row').count(),5,'collapsed notifications must show five without flooding mobile');
-  await panel.locator('#wsdToggleRecent').click();
-  assert.equal(await panel.locator('.row').count(),9,'show all allows all unread notifications');
-  assert.match(await panel.innerText(),/Preboda.+Ha confirmado asistencia/s,'extra-event response missing from Hoy');
+  assert.match(count,/8 sin leer/,'seven RSVP changes and one preboda response are unread (seat move is activity)');
+  assert.equal(await panel.locator('.row').count(),4,'bulk RSVP is one summary card, with separate event and activity');
+  await panel.getByRole('button',{name:/Ver 7 respuestas/}).click();
+  assert.ok((await panel.locator('.row').count())>=10,'expanded bulk RSVP must reveal individual answers');
+  assert.match(await panel.innerText(),/Preboda/,'extra-event response missing from Hoy');
   await panel.locator('#wsdMarkRecentRead').click();
-  await core.waitForFunction(()=>!document.getElementById('wsdRecentChanges'),{timeout:10000});
-  assert.ok((await page.evaluate(()=>JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'{}').meta.todayRecentChangesReadAt))>0,'mark-read persists');
+  await core.waitForFunction(()=>!document.getElementById('wsdMarkRecentRead'),{timeout:10000});
+  assert.ok(Object.keys(await page.evaluate(()=>JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'{}').meta.hoyReadNotificationIdsV1||{})).length===8,'all eight unread event IDs are marked read');
   assert.deepEqual(errs,[],'runtime errors');
   console.log('GUEST Hoy notification feed PASS: real RSVP + seating history, expand, read');
  }finally{await ctx.close();await browser.close()}
