@@ -32,7 +32,10 @@ jobs:
           grep -i 'content-security-policy' /tmp/guest-headers.txt
           grep -iE "content-security-policy: .*frame-ancestors 'self'" /tmp/guest-headers.txt
           ! grep -iE "content-security-policy: .*frame-ancestors 'none'" /tmp/guest-headers.txt
-          curl -fsS "$GUEST_QA_BASE/guest/index.html" | grep -q 'guests-access-layer.js'
+          curl -fsS "$GUEST_QA_BASE/guest/index.html" --output /tmp/guest-auth-shell.html
+          grep -q 'guests-access-layer.js' /tmp/guest-auth-shell.html
+      - name: Real-host no token, revoked access and genuine offline cache
+        run: node guest/qa/access_revoked_vs_offline_browser_2026_10_22.cjs
       - name: Real-host synthetic license + Hoy, access, guests, list and seating
         run: node guest/qa/b6_2_today_guests_test.js
       - name: Real-host Hoy mobile 320/390/430
