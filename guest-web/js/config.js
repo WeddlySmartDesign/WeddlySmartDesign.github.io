@@ -5,7 +5,7 @@ window.GUEST_CONFIG = {
   customPrice: '120 €',
   whatsapp: '34620843264',
   whatsappDisplay: '620 843 264',
-  email: 'weddlysmartdesign@gmail.com',
+  email: 'info@weddlysmartdesign.com',
   // Cuando exista la pasarela de pago, poner aquí su URL. Mientras sea null,
   // «La quiero» abre WhatsApp con el nombre del diseño elegido.
   checkoutUrl: null,
