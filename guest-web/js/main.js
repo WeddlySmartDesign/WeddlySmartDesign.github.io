@@ -11,8 +11,11 @@
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
   ));
   const whatsappUrl = (text) => `https://wa.me/${config.whatsapp}?text=${encodeURIComponent(text)}`;
+  // En Stripe, la «Referencia del cliente» de cada pago dice qué diseño eligieron (p. ej. design-11-cristal).
+  const purchaseRef = (design) => `${design.id}-${design.name}`.normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
   const buyUrl = (design) => config.checkoutUrl
-    ? `${config.checkoutUrl}?client_reference_id=${encodeURIComponent(design.id)}`
+    ? `${config.checkoutUrl}?client_reference_id=${purchaseRef(design)}`
     : whatsappUrl(`Hola, queremos la invitación ${design.name}. ¿Cómo seguimos?`);
   const number = (index) => `Nº ${String(index + 1).padStart(2, '0')}`;
 
@@ -28,6 +31,22 @@
       el.rel = 'noopener';
     });
     $$('[data-mail]').forEach((el) => { el.href = `mailto:${config.email}`; });
+  }
+
+  /* ---------- Compra: el pago se abre en la misma pestaña ---------- */
+  // Así, al terminar en Stripe, la pareja vuelve a gracias.html, que lee el diseño guardado aquí.
+  function initCheckout() {
+    if (!config.checkoutUrl) return;
+    document.addEventListener('click', (event) => {
+      const link = event.target.closest(`a[href^="${config.checkoutUrl}"]`);
+      if (!link) return;
+      link.removeAttribute('target');
+      const ref = new URL(link.href).searchParams.get('client_reference_id') || '';
+      const design = catalog.find((item) => ref === purchaseRef(item));
+      try {
+        if (design) localStorage.setItem('guest:purchase', JSON.stringify({ id: design.id, at: Date.now() }));
+      } catch (error) { /* sin almacenamiento: gracias.html funciona sin el diseño */ }
+    });
   }
 
   /* ---------- Cabecera: fondo sólido al desplazarse ---------- */
@@ -642,6 +661,7 @@
   }
 
   applyConfig();
+  initCheckout();
   initHeader();
   initHeroVideo();
   initCatalog();

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f0c4bc">
+  <title>Pedido recibido · GUEST by WeddlySmartDesign</title>
+  <link rel="icon" href="assets/brand/favicon.ico" sizes="any">
+  <link rel="icon" href="assets/brand/icon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <link rel="preload" href="assets/fonts/abril-fatface-zOL64pLDlL-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css?v=43">
+  <link rel="stylesheet" href="css/styles.css?v=44">
+  <style>
+    /* Página de después del pago: el sobre ya lleva su matasellos. */
+    body { background: var(--envelope); }
+    .thanks { min-height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; padding-top: env(safe-area-inset-top, 0px); }
+    .thanks-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.25rem; }
+    .thanks-top .back { font-size: .9375rem; font-weight: 600; color: var(--ink); text-decoration: none; }
+    .thanks-top .back:hover { text-decoration: underline; }
+
+    .thanks-grid { display: grid; gap: 2.25rem; align-content: start; padding-block: 1rem 4rem; }
+    .thanks-copy { display: grid; gap: 1.25rem; align-content: start; min-width: 0; }
+    .thanks h1 { font: 400 clamp(2.5rem, 4vw + 1.1rem, 4.25rem)/1 var(--display); letter-spacing: -.01em; max-width: 12ch; }
+    .thanks-lead { max-width: 34rem; font-size: clamp(1.0625rem, .4vw + 1rem, 1.1875rem); color: var(--ink-soft); }
+    .thanks-lead strong { color: var(--ink); }
+
+    /* Lo que pasa ahora: el orden importa, por eso va numerado como un recorrido */
+    .next ol { margin: 0; padding: 0; list-style: none; }
+    .next { margin: .5rem 0 0; padding: 1.4rem 1.25rem; list-style: none; background: var(--paper); border-radius: 6px; box-shadow: var(--shadow); max-width: 36rem; }
+    .next-title { margin-bottom: .9rem; font: 400 1.5rem/1.1 var(--display); }
+    .next li { position: relative; display: grid; grid-template-columns: 2rem 1fr; gap: .2rem .9rem; padding: .85rem 0; border-top: 1.5px dashed var(--line); }
+    .next li:first-of-type { border-top: 0; padding-top: .2rem; }
+    .next-when { grid-column: 2; font: 700 .8125rem/1.3 var(--mono); color: var(--postmark); }
+    .next strong { grid-column: 2; font-size: 1.0625rem; line-height: 1.35; }
+    .next p { grid-column: 2; font-size: .9688rem; line-height: 1.55; color: var(--ink-soft); }
+    .next-dot { grid-row: 1 / span 3; display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; border: 1.5px solid var(--ink); font: 700 .8125rem/1 var(--mono); }
+    .next li:first-of-type .next-dot { background: var(--ink); color: var(--paper); }
+
+    .thanks-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+    .btn-wa svg { width: 20px; height: 20px; }
+    .thanks-note { max-width: 34rem; font-size: .9375rem; line-height: 1.55; color: var(--ink-soft); }
+    .thanks-note a { color: var(--ink); font-weight: 600; }
+
+    /* El sobre con el sello del diseño elegido */
+    .thanks-envelope { align-self: start; max-width: 420px; padding: 1.4rem 1.4rem 1.8rem; }
+    .thanks-envelope .env-top { align-items: flex-start; }
+    .thanks-stamp { margin: 0; flex: none; width: 46%; max-width: 190px; filter: drop-shadow(0 2px 2px rgba(27, 38, 80, .25)) drop-shadow(0 16px 20px rgba(27, 38, 80, .18)); rotate: 3deg; }
+    .thanks-stamp .stamp { padding: 9px; }
+    .thanks-stamp .stamp-art { aspect-ratio: 390 / 844; }
+    .stamp-blank { display: grid; place-items: center; height: 100%; background: var(--envelope-soft); font: 400 1.15rem/1 var(--display); color: var(--ink); }
+    .thanks-postmark {
+      position: absolute; right: calc(min(46%, 190px) - 54px); top: 58%;
+      width: 112px; height: 112px; color: var(--postmark); opacity: .88; rotate: -14deg; pointer-events: none;
+    }
+    .thanks-envelope .to { margin: 2.2rem 0 0 12%; }
+    .thanks-envelope .to b { font-size: 1.1rem; }
+
+    /* El único momento animado: el matasellos cae sobre el sello */
+    @media (prefers-reduced-motion: no-preference) {
+      .thanks-postmark { animation: postmark-hit 520ms var(--ease-out) 420ms both; }
+      @keyframes postmark-hit {
+        0% { opacity: 0; scale: 1.35; filter: blur(3px); }
+        55% { opacity: .95; scale: .96; filter: blur(0); }
+        100% { opacity: .88; scale: 1; }
+      }
+    }
+
+    .social { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; font-size: .9375rem; }
+    .social a { display: inline-flex; align-items: center; gap: .45rem; min-height: 44px; color: var(--ink); font-weight: 600; text-decoration: none; }
+    .social a:hover { text-decoration: underline; }
+    .social svg { width: 18px; height: 18px; }
+
+    .thanks-foot { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; padding-block: 1.25rem calc(1.25rem + env(safe-area-inset-bottom, 0px)); border-top: 1.5px solid rgba(27, 38, 80, .12); font-size: .875rem; color: var(--ink-soft); }
+    .thanks-foot a { color: var(--ink-soft); }
+
+    @media (max-width: 759.98px) {
+      .thanks-envelope { order: -1; justify-self: stretch; max-width: none; padding: 20px 20px 20px 22px; }
+      .thanks-stamp { grid-column: 2; grid-row: 1 / 3; width: 100%; max-width: 150px; justify-self: end; rotate: 2deg; }
+      .thanks-stamp .stamp { padding: 7px; }
+      .thanks-postmark { top: auto; bottom: 8px; right: calc(20px + 39% - 44px); width: 84px; height: 84px; }
+      .thanks-envelope .to { margin: 0 0 1.6rem; }
+      .next { padding: 1.2rem 1rem; }
+    }
+    @media (min-width: 760px) {
+      .thanks-grid { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: clamp(2.5rem, 6vw, 6rem); padding-top: 2rem; }
+      .thanks-envelope { justify-self: end; position: sticky; top: 2rem; }
+    }
+  </style>
+  <script src="js/config.js?v=46" defer></script>
+  <script src="js/catalog.js?v=41" defer></script>
+  <script src="js/gracias.js?v=1" defer></script>
+</head>
+<body>
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Zm0 1.8a7.2 7.2 0 1 1-3.7 13.4l-.3-.2-2.7.7.7-2.6-.2-.3A7.2 7.2 0 0 1 12 4.8Zm-3 3.4c-.2 0-.5 0-.7.3-.3.3-1 .9-1 2.2s1 2.6 1.1 2.8c.1.2 2 3.1 4.9 4.2 2.4.9 2.900.8 3.4.7.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4l-.4-.3-1.8-.9c-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6 6 0 0 1-3-2.6c-.2-.4.2-.4.6-1.2.1-.2 0-.3 0-.4l-.8-2c-.2-.5-.4-.4-.6-.4H9Z"/></symbol>
+</svg>
+
+<div class="thanks">
+  <header class="wrap thanks-top">
+    <a class="logo" href="index.html" aria-label="GUEST by WeddlySmartDesign, inicio"><b>GUEST</b><span>by WeddlySmartDesign</span></a>
+    <a class="back" href="index.html">Volver a la web</a>
+  </header>
+
+  <main class="wrap thanks-grid">
+    <div class="thanks-copy">
+      <h1>Hecho. Ya estamos con vuestra invitación.</h1>
+      <p class="thanks-lead" id="lead">Hemos recibido el pago. Stripe os acaba de enviar el recibo por email, y nosotros nos ponemos ya con lo vuestro.</p>
+
+      <section class="next" aria-labelledby="nextTitle">
+        <h2 class="next-title" id="nextTitle">Lo que pasa ahora</h2>
+        <ol>
+        <li><span class="next-dot" aria-hidden="true">1</span><span class="next-when">En menos de 24 h</span><strong>Os mandamos el cuestionario</strong><p>Al email y al teléfono que dejasteis al pagar. Nombres, fecha, lugares, vuestra historia y las preguntas que queréis hacer a los invitados.</p></li>
+        <li><span class="next-dot" aria-hidden="true">2</span><span class="next-when">En 48–72 h</span><strong>Recibís vuestra propuesta</strong><p>Desde que tengamos todo lo del cuestionario, la invitación personalizada lista para ver en el móvil.</p></li>
+        <li><span class="next-dot" aria-hidden="true">3</span><span class="next-when">Hasta el «sí»</span><strong>Cambiamos lo que pidáis</strong><p>Ajustamos lo que haga falta hasta que os encante. Si no os convence, os devolvemos el 100 % antes de aprobarla.</p></li>
+        <li><span class="next-dot" aria-hidden="true">4</span><span class="next-when">Al aprobarla</span><strong>Os entregamos la invitación y GUEST</strong><p>La invitación definitiva y la app, para los dos, para enviarla y saber quién viene.</p></li>
+        </ol>
+      </section>
+
+      <div class="thanks-actions">
+        <a class="btn btn-ink btn-wa" id="waBtn" href="https://wa.me/34620843264" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span>Escribidnos por WhatsApp</span></a>
+        <a class="btn btn-line" href="index.html">Volver a la web</a>
+      </div>
+      <p class="thanks-note">¿No os llega nada en 24 h? Mirad en la carpeta de spam o escribidnos a <a data-mail href="mailto:info@weddlysmartdesign.com"><span data-config="email">info@weddlysmartdesign.com</span></a>.</p>
+
+      <div class="social" aria-label="Redes sociales">
+        <a href="https://www.instagram.com/weddlysmartdesign/" target="_blank" rel="noopener me"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.25" fill="currentColor"/></svg>Instagram · @weddlysmartdesign</a>
+        <a href="https://www.tiktok.com/@weddlysmartdesign" target="_blank" rel="noopener me"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 5.8a4.3 4.3 0 0 1-1-2.8h-3.1v12.4a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V9.7a5.8 5.8 0 1 0 5 5.7V9.1a7.3 7.3 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.4-1.6z"/></svg>TikTok · @weddlysmartdesign</a>
+      </div>
+    </div>
+
+    <div class="envelope thanks-envelope" aria-hidden="true">
+      <div class="env-top">
+        <p class="mono from">De:<br><b>WeddlySmartDesign</b><br>Murcia</p>
+        <figure class="thanks-stamp">
+          <span class="stamp"><span class="stamp-art" id="stampArt"><span class="stamp-blank">GUEST</span></span></span>
+        </figure>
+      </div>
+      <svg class="thanks-postmark" viewBox="0 0 130 130"><defs><path id="ring" d="M65 65 m-46 0 a46 46 0 1 1 92 0 a46 46 0 1 1 -92 0"/></defs><circle cx="65" cy="65" r="60" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="65" cy="65" r="34" fill="none" stroke="currentColor" stroke-width="1.5"/><text font-family="Courier Prime, monospace" font-size="12" font-weight="700" fill="currentColor" letter-spacing="2"><textPath href="#ring">GUEST · PEDIDO RECIBIDO ·</textPath></text><text id="postDate" x="65" y="70" text-anchor="middle" font-family="Courier Prime, monospace" font-size="13" font-weight="700" fill="currentColor">PAGADO</text></svg>
+      <p class="mono to">Para:<b id="toName">vosotros dos</b>Invitación <span id="toDesign">GUEST</span></p>
+    </div>
+  </main>
+
+  <footer class="wrap thanks-foot">
+    <span>© 2026 WeddlySmartDesign</span>
+    <a href="guest-legal.html#contratacion">Condiciones de compra</a>
+    <a href="guest-legal.html#privacidad">Privacidad</a>
+  </footer>
+</div>
+</body>
+</html>
