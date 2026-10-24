@@ -6,9 +6,9 @@ window.GUEST_CONFIG = {
   whatsapp: '34620843264',
   whatsappDisplay: '620 843 264',
   email: 'info@weddlysmartdesign.com',
-  // Cuando exista la pasarela de pago, poner aquí su URL. Mientras sea null,
-  // «La quiero» abre WhatsApp con el nombre del diseño elegido.
-  checkoutUrl: null,
+  // Enlace de pago de Stripe. Con null, «La quiero» abre WhatsApp con el nombre del diseño.
+  // PRUEBA (test_): cambiar por el enlace real antes de publicar.
+  checkoutUrl: 'https://buy.stripe.com/test_3cIdRa4HNd4y4ot7VR67S00',
   guarantee:
     'Si después de los cambios la propuesta no os convence, os devolvemos el 100 % antes de aprobarla.'
 };
