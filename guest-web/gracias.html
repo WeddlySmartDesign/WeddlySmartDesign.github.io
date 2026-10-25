@@ -38,6 +38,10 @@
     .next-dot { grid-row: 1 / span 3; display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; border: 1.5px solid var(--ink); font: 700 .8125rem/1 var(--mono); }
     .next li:first-of-type .next-dot { background: var(--ink); color: var(--paper); }
 
+    .q-cta { display: grid; gap: .6rem; justify-items: start; max-width: 34rem; }
+    .q-cta p { font-size: .9375rem; line-height: 1.5; color: var(--ink-soft); }
+    .pay-check { max-width: 34rem; font: 700 .875rem/1.5 var(--mono); color: var(--ink); }
+    .pay-check.is-error { color: var(--postmark); }
     .thanks-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
     .btn-wa svg { width: 20px; height: 20px; }
     .thanks-note { max-width: 34rem; font-size: .9375rem; line-height: 1.55; color: var(--ink-soft); }
@@ -88,9 +92,9 @@
       .thanks-envelope { justify-self: end; position: sticky; top: 2rem; }
     }
   </style>
-  <script src="js/config.js?v=46" defer></script>
+  <script src="js/config.js?v=47" defer></script>
   <script src="js/catalog.js?v=41" defer></script>
-  <script src="js/gracias.js?v=1" defer></script>
+  <script src="js/gracias.js?v=2" defer></script>
 </head>
 <body>
 <svg class="sprite" aria-hidden="true" focusable="false">
@@ -107,11 +111,16 @@
     <div class="thanks-copy">
       <h1>Hecho. Ya estamos con vuestra invitación.</h1>
       <p class="thanks-lead" id="lead">Hemos recibido el pago. Stripe os acaba de enviar el recibo por email, y nosotros nos ponemos ya con lo vuestro.</p>
+      <p class="pay-check" id="payCheck" hidden></p>
+      <div class="q-cta" id="qBox" hidden>
+        <a class="btn btn-ink" id="qBtn" href="#">Rellenar el cuestionario</a>
+        <p>También os lo hemos mandado por email, por si preferís hacerlo más tarde o desde otro dispositivo.</p>
+      </div>
 
       <section class="next" aria-labelledby="nextTitle">
         <h2 class="next-title" id="nextTitle">Lo que pasa ahora</h2>
         <ol>
-        <li><span class="next-dot" aria-hidden="true">1</span><span class="next-when">En menos de 24 h</span><strong>Os mandamos el cuestionario</strong><p>Al email y al teléfono que dejasteis al pagar. Nombres, fecha, lugares, vuestra historia y las preguntas que queréis hacer a los invitados.</p></li>
+        <li id="step1"><span class="next-dot" aria-hidden="true">1</span><span class="next-when">En menos de 24 h</span><strong>Os mandamos el cuestionario</strong><p>Al email y al teléfono que dejasteis al pagar. Nombres, fecha, lugares, vuestra historia y las preguntas que queréis hacer a los invitados.</p></li>
         <li><span class="next-dot" aria-hidden="true">2</span><span class="next-when">En 48–72 h</span><strong>Recibís vuestra propuesta</strong><p>Desde que tengamos todo lo del cuestionario, la invitación personalizada lista para ver en el móvil.</p></li>
         <li><span class="next-dot" aria-hidden="true">3</span><span class="next-when">Hasta el «sí»</span><strong>Cambiamos lo que pidáis</strong><p>Ajustamos lo que haga falta hasta que os encante. Si no os convence, os devolvemos el 100 % antes de aprobarla.</p></li>
         <li><span class="next-dot" aria-hidden="true">4</span><span class="next-when">Al aprobarla</span><strong>Os entregamos la invitación y GUEST</strong><p>La invitación definitiva y la app, para los dos, para enviarla y saber quién viene.</p></li>
