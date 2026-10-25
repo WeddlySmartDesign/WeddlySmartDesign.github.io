@@ -6,7 +6,9 @@ const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),http
 const {spawnSync}=require('node:child_process'),{chromium}=require('playwright');
 const assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),stage=fs.mkdtempSync(path.join(os.tmpdir(),'guest-claude-browser-')),out=path.join(stage,'candidates');
-const ids=Array.from({length:13},(_,i)=>'design-'+String(i+4).padStart(2,'0'));
+const allIds=Array.from({length:13},(_,i)=>'design-'+String(i+4).padStart(2,'0'));
+const ids=process.env.GUEST_CANDIDATE_ONLY?[process.env.GUEST_CANDIDATE_ONLY]:allIds;
+assert(ids.every(x=>allIds.includes(x)),'invalid scoped design id');
 const types={'.html':'text/html; charset=utf-8','.mp4':'video/mp4','.webm':'video/webm','.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png','.webp':'image/webp','.gif':'image/gif','.woff':'font/woff','.woff2':'font/woff2','.otf':'font/otf','.ttf':'font/ttf','.svg':'image/svg+xml','.m4a':'audio/mp4','.mp3':'audio/mpeg','.ogg':'audio/ogg','.wav':'audio/wav'};
 let server, browser, failures=[];
 async function main(){
@@ -53,7 +55,7 @@ async function main(){
     assert.equal(data.api,'function','GUEST_APPLY_CONFIG missing');
     assert.equal(data.variant,scenario.qa,'fixture did not run');
     assert(data.cover?.startsWith('media/')&&data.closing?.startsWith('media/'),'original MP4 references not externalized');
-    assert(data.ns==='Lucía'&&data.dt,'common config did not render');
+    assert(data.ns==='Lucía'&&data.dt,'common config did not render; '+JSON.stringify({name:data.ns,date:data.dt,template:data.template,notice:data.notice,variant:data.variant}));
     assert(data.scenes.includes('cover')&&data.scenes.includes('closing'),'key scenes missing');
     assert.equal(data.agenda,scenario.qa==='full'?5:1,'agenda config mismatch');
     assert.equal(data.gallery,scenario.qa==='full'?4:0,'gallery config mismatch');
