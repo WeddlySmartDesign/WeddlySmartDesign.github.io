@@ -31,6 +31,8 @@ for (const name of ['STRIPE_SECRET_KEY','SUPABASE_ACCESS_TOKEN','RESEND_API_KEY'
  console.log(JSON.stringify({result:'PASS',verification:'LIVE_STRIPE_API_READ_ONLY_WITH_GUEST_SANDBOX_SECRET',
    livemode:false,checkoutSessionsInspected:json.data.length,checkoutStatuses:group,paymentStatuses:payment,
    guestSessionCount:guest.length,guestDesignPinnedSessions:pinned.length,
+   paidGuestSessionCount:guest.filter(x=>x.payment_status==='paid').length,
+   completedPaidGuestSessionCount:guest.filter(x=>x.status==='complete'&&x.payment_status==='paid').length,
    existsGuestSession:guest.length>0,
    moneyMoved:false,checkoutCreated:false,licensesChanged:false,emailSent:false,
    credentialExposed:false,limit:'Last five sessions only; no checkout to fulfillment claim'}));
