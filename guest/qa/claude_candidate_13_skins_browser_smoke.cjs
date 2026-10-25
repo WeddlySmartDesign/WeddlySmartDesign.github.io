@@ -45,7 +45,7 @@ async function main(){
      return {api:typeof window.GUEST_APPLY_CONFIG,variant:document.documentElement.dataset.guestReviewFixture,
       template:document.querySelector('html')?.dataset.skin,cover:c?.getAttribute('src'),closing:d?.getAttribute('src'),
       sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth,
-      ns:document.getElementById('name-1')?.textContent,dt:document.getElementById('cover-date')?.textContent,
+      ns:document.getElementById('name-1')?.textContent,ns2:document.getElementById('name-2')?.textContent,dt:document.getElementById('cover-date')?.textContent,
       scenes:sceneNames,agenda:document.querySelectorAll('#agenda [role="group"][aria-label="Momentos del día"] button[aria-label]').length,notice:document.getElementById('stage-notice')?.textContent||'',
       covers:document.querySelector('#cover-video')?.readyState||0,
       gallery:document.querySelectorAll('#gallery-items img').length};
@@ -54,6 +54,8 @@ async function main(){
     assert.equal(data.variant,scenario.qa,'fixture did not run');
     assert(data.cover?.startsWith('media/')&&data.closing?.startsWith('media/'),'original MP4 references not externalized');
     const expectedName=id==='design-15'?'Álvaro':'Lucía';
+    const exactPairs={'design-14':['Lucía','Martina'],'design-15':['Álvaro','Pablo']};
+    if(exactPairs[id])assert.deepEqual([data.ns,data.ns2],exactPairs[id],'original two-brides/two-grooms fixture changed for '+id);
     assert(data.ns===expectedName&&data.dt,'candidate-specific config not rendered; expected '+expectedName+', got '+JSON.stringify({name:data.ns,date:data.dt}));
     assert(data.scenes.includes('cover')&&data.scenes.includes('closing'),'key scenes missing');
     assert.equal(data.agenda,scenario.qa==='full'?5:1,'agenda config mismatch');
