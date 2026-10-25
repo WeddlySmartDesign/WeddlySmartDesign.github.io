@@ -730,7 +730,8 @@ Deno.serve(async req=>{
         return json({ok:true,status:'approved'});
       }
       const note=txt(b.note,1500);if(!note)return json({ok:false,error:'changes_note_required'},400);
-      const history=[...(Array.isArray(order.revision_requests)?order.revision_requests:[]),{at:ts,note}];
+      // 'before' keeps the questionnaire as it was, so the owner app can show only what changed.
+      const history=[...(Array.isArray(order.revision_requests)?order.revision_requests:[]),{at:ts,note,before:order.questionnaire||{}}];
       const {error}=await c.from('guest_invitation_orders').update({status:'changes_requested',revision_count:Number(order.revision_count||0)+1,revision_requests:history,updated_at:ts}).eq('id',order.id);if(error)throw error;
        const to=emailOf(order.questionnaire,order.buyer_email),part=partFromNote(note);
        if(to&&order.mode!=='test')await resend({to:[to],subject:'Vuestro enlace para hacer el cambio',html:guestMail({kicker:'Cambio pedido',title:part>=0?'Cambiad «'+QUESTIONNAIRE_PARTS[part]+'» cuando queráis.':'Cambiad lo que queráis.',preheader:'El enlace abre esa parte del cuestionario con vuestros datos.',
@@ -889,6 +890,20 @@ Deno.serve(async req=>{
     if(action==='deliver'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
       return await deliverOrder(c,order,b.invitationUrl);
+    }
+    if(action==='owner_fix'){
+      // The owner fixes one text (a typo) without bothering the couple; the invitation is rebuilt.
+      const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
+      if(!['submitted','designing','review_ready'].includes(order.status))return json({ok:false,error:'invalid_status'},409);
+      const path=String(b.path||'').split('.');if(!path.length||path.length>5||path.some(k=>!/^[A-Za-z0-9]{1,40}$/.test(k))||['confirmation','contact'].includes(path[0]))return json({ok:false,error:'invalid_path'},400);
+      const q=sanitizeQuestionnaire(order.questionnaire||{});let node:any=q;
+      for(const k of path.slice(0,-1)){if(!node||typeof node!=='object'||!(k in node))return json({ok:false,error:'invalid_path'},400);node=node[k]}
+      const last=path[path.length-1];if(!node||typeof node!=='object'||typeof node[last]!=='string')return json({ok:false,error:'invalid_path'},400);
+      node[last]=txt(b.value,Math.max(60,node[last].length*2,500));
+      const ts=now(),config=checkInvitationConfig(buildConfig(q,order.files||[],'#',order.template_id,order.template_version),order);
+      const {error}=await c.from('guest_invitation_orders').update({questionnaire:q,resolved_config:config,status:'designing',designing_at:order.designing_at||ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
+      const files=await signedFiles(c,{...order,resolved_config:config},7200);
+      return json({ok:true,status:'designing',questionnaire:q,config:hydrateConfig(config,files)});
     }
     if(action==='owner_note'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);

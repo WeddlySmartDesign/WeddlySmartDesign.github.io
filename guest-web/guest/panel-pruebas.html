@@ -43,6 +43,7 @@
     .btn:active { transform: scale(.97); }
     .btn.line { background: transparent; color: var(--ink); }
     .btn.wide { width: 100%; }
+    .btn.small { min-height: 44px; padding: 0 1rem; font-size: .9375rem; }
     .btn[disabled] { opacity: .5; pointer-events: none; }
 
     /* Entrar */
@@ -220,6 +221,25 @@
       .dock { display: none !important; }
       .d-act { display: grid !important; }
     }
+    .texts h4 { margin: .9rem 0 .4rem; font: 600 .75rem/1.2 var(--text); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+    .tx-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
+    .tx { padding: .75rem .85rem; border-radius: 10px; background: var(--paper); }
+    .tx > b { display: block; font-size: .8125rem; color: var(--ink-soft); font-weight: 600; margin-bottom: .2rem; }
+    .tx p { color: var(--ink); white-space: pre-line; overflow-wrap: anywhere; }
+    .tx .tx-was { color: var(--ink-soft); text-decoration: line-through; text-decoration-color: rgba(179, 38, 58, .6); font-size: .875rem; }
+    .tx .tx-is { margin-top: .15rem; }
+    .tx mark { background: none; color: var(--postmark); text-decoration: underline wavy var(--postmark); text-underline-offset: 3px; }
+    .tx .tx-note { margin-top: .3rem; color: var(--postmark); font-size: .875rem; }
+    .texts .tx-ok { color: var(--ok); }
+    .tx-fix { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; }
+    .tx-fix button { min-height: 36px; padding: 0 .75rem; border: 1px solid var(--line); border-radius: 999px; background: var(--white); color: var(--ink); font: 500 .875rem var(--text); cursor: pointer; transition: transform 160ms var(--ease-out); }
+    .tx-fix button:active { transform: scale(.97); }
+    .tx-fix button.used { background: var(--ok-soft); border-color: transparent; }
+    .tx-fix span { font-size: .8125rem; color: var(--ink-soft); }
+    .tx-edit { margin-top: .5rem; }
+    .tx-edit summary { cursor: pointer; font-size: .875rem; font-weight: 600; min-height: 32px; display: inline-flex; align-items: center; }
+    .tx-edit textarea { width: 100%; margin-top: .4rem; padding: .6rem .7rem; border: 1px solid var(--line); border-radius: 8px; font: 400 1rem/1.45 var(--text); color: var(--ink); background: var(--white); resize: vertical; }
+    .tx-go { display: flex; align-items: center; gap: .6rem; margin-top: .5rem; flex-wrap: wrap; }
   </style>
   <script src="../js/catalog.js?v=41" defer></script>
   <script src="catalog/guest-catalog-owner-viewer-v2.js" defer></script>
@@ -453,6 +473,7 @@ async function openOrder(id) {
           <div class="box">${(() => { const d = due(o); if (!d) return ''; const t = dueText(d); return `<p class="deadline ${t.level}"><b>${esc(t.short)}</b>${esc(t.long)}</p>`; })()}<h3>${esc(a.title)}</h3><p>${esc(a.text)}</p>
             ${a.btn ? `<div class="d-act"><button class="btn" data-act type="button">${esc(a.btn)}</button><p class="msg" role="alert"></p></div>` : ''}
             ${reqs.length && ['designing', 'review_ready'].includes(o.status) ? `<div class="ask"><b>Lo que pidieron cambiar${reqs.length > 1 ? ` (la última de ${reqs.length} veces)` : ''}</b>${esc(reqs[0].note)}</div>` : ''}</div>
+          ${config?.template && ['designing', 'review_ready'].includes(o.status) ? '<div class="box texts" id="texts"><h3>Textos</h3><p>Revisando los textos…</p></div>' : ''}
           <div class="box"><h3>Cómo va</h3>${timeline(o)}</div>
           <div class="box"><h3>La pareja</h3><ul class="rows">
             ${email ? `<li><a href="mailto:${esc(email)}"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>Escribirles<small>${esc(email)}</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>` : ''}
@@ -468,6 +489,7 @@ async function openOrder(id) {
         </div>
       </div>`;
     loadInvoices(o.id);
+    if ($('texts')) renderTexts(o, $('texts'));
     if ($('refundAsk')) {
       $('refundAsk').onclick = () => { $('refundAsk').parentElement.hidden = true; $('refundAsk').closest('.box').querySelector('.refund-confirm').hidden = false; };
       $('refundNo').onclick = () => { $('refundAsk').parentElement.hidden = false; $('refundNo').closest('.refund-confirm').hidden = true; };
@@ -485,6 +507,143 @@ async function openOrder(id) {
     }
   } catch (e) { if (e.message !== 'manager_required') $('order').innerHTML = '<div class="calm"><b>No se ha podido abrir</b>Comprueba la conexión y toca actualizar arriba.</div>'; }
 }
+/* ---- Textos: qué han cambiado y posibles faltas ---- */
+const SECTION = { story: 'Historia', agenda: 'Programa', bus: 'Autobús', accommodation: 'Alojamiento', gift: 'Regalo', playlist: 'Canciones', gallery: 'Galería' };
+const LABELS = [
+  [/^couple\.name[12]$/, 'Nombre'], [/^couple\.date$/, 'Fecha de la boda'], [/^couple\.coverPlace$/, 'Lugar en la portada'], [/^couple\.coverTime$/, 'Hora en la portada'],
+  [/^couple\.typographyVariant$/, 'Estilo de letra'], [/^story\.customText$/, 'Su historia'], [/^story\.presetId$/, 'Texto de historia elegido'],
+  [/^locations\.(shared|ceremony|celebration)\.(name|time|address|mapsUrl|websiteUrl)$/, (m) => ({ name: 'Lugar', time: 'Hora', address: 'Dirección', mapsUrl: 'Mapa', websiteUrl: 'Web' }[m[2]]) + ({ shared: '', ceremony: ' de la ceremonia', celebration: ' de la celebración' }[m[1]])],
+  [/^locations\.dressCode$/, 'Vestimenta'], [/^agenda\.moments\.(\d+)\.label$/, (m) => 'Momento ' + (+m[1] + 1)], [/^agenda\.moments\.(\d+)\.time$/, (m) => 'Hora del momento ' + (+m[1] + 1)],
+  [/^practical\.bus\.(pickupPoints|outboundTimes|returnTimes)\.\d+$|^practical\.bus\.(note|mapsUrl)$/, (m) => 'Autobús · ' + ({ pickupPoints: 'salida', outboundTimes: 'hora de ida', returnTimes: 'vuelta', note: 'nota', mapsUrl: 'mapa' }[m[1] || m[2]])],
+  [/^practical\.accommodation\.(name|address|note|phone|bookingCode|deadline|websiteUrl|externalBookingUrl|mapsUrl)$/, (m) => 'Alojamiento · ' + ({ name: 'nombre', address: 'dirección', note: 'nota', phone: 'teléfono', bookingCode: 'código', deadline: 'fecha límite', websiteUrl: 'web', externalBookingUrl: 'reserva', mapsUrl: 'mapa' }[m[1]])],
+  [/^practical\.gift\.(displayText|holder|iban|phone|reference|url|message)$/, (m) => 'Regalo · ' + ({ displayText: 'texto', holder: 'titular', iban: 'IBAN', phone: 'Bizum', reference: 'concepto', url: 'enlace', message: 'mensaje' }[m[1]])],
+  [/^practical\.playlist\.(url|prompt)$/, (m) => 'Canciones · ' + ({ url: 'enlace', prompt: 'texto' }[m[1]])],
+  [/^rsvp\.customQuestions\.(\d+)$/, (m) => 'Pregunta ' + (+m[1] + 1)], [/^closing\.customLine$/, 'Frase final'],
+  [/^(?:practical\.)?(story|agenda|bus|accommodation|gift|playlist|gallery)\.enabled$|^practical\.(bus|accommodation|gift|playlist)\.enabled$/, (m) => SECTION[m[1] || m[2]]]
+];
+// Textos que salen escritos en la invitación: en estos se buscan faltas.
+const PROSE = /^(couple\.coverPlace|story\.customText|locations\.(shared|ceremony|celebration)\.(name|address)|locations\.dressCode|agenda\.moments\.\d+\.label|practical\.bus\.(pickupPoints\.\d+|note)|practical\.accommodation\.(name|address|note)|practical\.gift\.(displayText|message)|practical\.playlist\.prompt|rsvp\.customQuestions\.\d+|closing\.customLine)$/;
+const SENTENCE = /^(story\.customText|practical\.(bus|accommodation)\.note|practical\.gift\.(displayText|message)|practical\.playlist\.prompt|rsvp\.customQuestions\.\d+|closing\.customLine)$/;
+const ALLOW = ['bizum', 'playlist', 'whatsapp', 'email', 'online', 'photocall', 'brunch', 'dj', 'spotify', 'parking', 'ok', 'finger', 'food', 'show', 'cocktail', 'wedding', 'planner', 'look', 'dress', 'code', 'tardeo', 'preboda', 'postboda', 'resopón', 'barra', 'libre'];
+
+function label(path) { for (const [re, l] of LABELS) { const m = path.match(re); if (m) return typeof l === 'function' ? l(m) : l; } return ''; }
+function flat(v, pre = '', out = {}) {
+  if (Array.isArray(v)) v.forEach((x, i) => flat(x, pre + i + '.', out));
+  else if (v && typeof v === 'object') Object.keys(v).forEach((k) => flat(v[k], pre + k + '.', out));
+  else if (pre) out[pre.slice(0, -1)] = v;
+  return out;
+}
+function active(q, path) {
+  const p = q.practical || {}, l = q.locations || {}, split = l.mode === 'split';
+  if (path === 'couple.coverPlace') return !!q.couple?.coverPlaceEnabled;
+  if (path === 'couple.coverTime') return !!q.couple?.coverTimeEnabled;
+  if (path === 'story.customText') return !!q.story?.enabled && q.story?.textMode === 'custom';
+  if (path === 'story.presetId') return !!q.story?.enabled && q.story?.textMode === 'preset';
+  if (/^locations\.shared\./.test(path)) return !split;
+  if (/^locations\.(ceremony|celebration)\./.test(path)) return split;
+  if (path === 'locations.dressCode') return !!l.dressCodeEnabled;
+  if (/^agenda\.moments/.test(path)) return !!q.agenda?.enabled;
+  for (const k of ['bus', 'accommodation', 'gift', 'playlist']) if (path.startsWith('practical.' + k + '.') && !path.endsWith('.enabled')) return !!p[k]?.enabled;
+  if (path === 'closing.customLine') return q.closing?.mode === 'custom';
+  return true;
+}
+function shown(v, path = '') { if (path === 'couple.date' && /^\d{4}-\d{2}-\d{2}$/.test(v || '')) return day(v); return v === true ? 'Sí' : v === false ? 'No' : v == null || v === '' ? '(vacío)' : String(v); }
+function changes(before, now) {
+  const a = flat(before), b = flat(now), out = [];
+  for (const path of new Set([...Object.keys(a), ...Object.keys(b)])) {
+    const l = label(path); if (!l) continue;
+    const was = active(before, path) ? a[path] : undefined, is = active(now, path) ? b[path] : undefined;
+    if ((was ?? '') === (is ?? '')) continue;
+    out.push({ path, label: l, was: shown(was, path), is: shown(is, path) });
+  }
+  return out;
+}
+
+let spellerP = null;
+function speller() {
+  spellerP = spellerP || (async () => {
+    await new Promise((ok, ko) => { const s = document.createElement('script'); s.src = 'vendor/nspell.min.js'; s.onload = ok; s.onerror = ko; document.head.append(s); });
+    const [aff, dic] = await Promise.all(['vendor/es.aff', 'vendor/es.dic'].map((u) => fetch(u).then((r) => { if (!r.ok) throw Error(u); return r.text(); })));
+    const sp = window.GUEST_NSPELL(aff, dic); ALLOW.forEach((w) => sp.add(w)); return sp;
+  })().catch((e) => { spellerP = null; throw e; });
+  return spellerP;
+}
+const VOWEL = { a: 'á', e: 'é', i: 'í', o: 'ó', u: 'ú' };
+function suggest(sp, w) {
+  const accented = [];
+  for (let i = 0; i < w.length; i++) if (VOWEL[w[i]]) { const t = w.slice(0, i) + VOWEL[w[i]] + w.slice(i + 1); if (sp.correct(t)) accented.push(t); }
+  if (w.includes('n')) { const t = w.replace('n', 'ñ'); if (sp.correct(t)) accented.push(t); }
+  // Si basta con una tilde o una ñ, esa es la corrección; si no, las dos más probables.
+  return accented.length ? accented.slice(0, 1) : sp.suggest(w).slice(0, 2);
+}
+// Devuelve [{word, fix[]}] y avisos de puntuación para un texto.
+function problems(sp, text, sentence) {
+  const words = [], notes = [];
+  for (const m of text.matchAll(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+/g)) {
+    const w = m[0];
+    if (w.length < 2 || words.some((x) => x.word === w)) continue;
+    if (/^[A-ZÁÉÍÓÚÜÑ]/.test(w)) {
+      // Con mayúscula puede ser un nombre propio: solo se avisa si le falta una tilde («Vendras» → «Vendrás»).
+      const low = w.toLowerCase(); if (low === w || sp.correct(w) || sp.correct(low)) continue;
+      const acc = suggest(sp, low).filter((f) => f.normalize('NFD').replace(/[\u0301]/g, '') === low.normalize('NFD').replace(/[\u0301]/g, ''));
+      if (acc.length) words.push({ word: w, fix: acc.map((f) => f[0].toUpperCase() + f.slice(1)) });
+      continue;
+    }
+    if (!sp.correct(w)) words.push({ word: w, fix: suggest(sp, w) });
+  }
+  if (/\?/.test(text) && !/¿/.test(text)) notes.push('Falta el «¿» al empezar la pregunta.');
+  if (/!/.test(text) && !/¡/.test(text)) notes.push('Falta el «¡» al empezar la exclamación.');
+  if (/ {2,}/.test(text)) notes.push('Hay dos espacios seguidos.');
+  if (/ [,.;:?!]/.test(text)) notes.push('Sobra un espacio antes de un signo.');
+  const rep = text.match(/\b([a-záéíóúüñ]+) \1\b/i); if (rep) notes.push(`Palabra repetida: «${rep[1]} ${rep[1]}».`);
+  if (sentence && /^[a-záéíóúüñ]/.test(text.trim())) notes.push('Empieza en minúscula.');
+  return { words, notes };
+}
+function markWords(text, words) {
+  let h = esc(text);
+  for (const { word } of words) h = h.replace(new RegExp(`(^|[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ])(${word})(?![A-Za-zÁÉÍÓÚÜÑáéíóúüñ])`, 'g'), '$1<mark>$2</mark>');
+  return h;
+}
+
+async function renderTexts(o, host) {
+  const q = o.questionnaire || {}, reqs = o.revision_requests || [], before = reqs.length ? reqs[reqs.length - 1].before : null;
+  const diff = before ? changes(before, q) : [];
+  let sp = null; try { sp = await speller(); } catch { /* sin diccionario: solo se ven los cambios */ }
+  const all = flat(q), checks = [];
+  if (sp) for (const [path, v] of Object.entries(all)) {
+    if (!PROSE.test(path) || typeof v !== 'string' || !v.trim() || !active(q, path)) continue;
+    const p = problems(sp, v, SENTENCE.test(path));
+    if (p.words.length || p.notes.length) checks.push({ path, label: label(path), text: v, ...p });
+  }
+  const editable = new Set(diff.filter((d) => typeof all[d.path] === 'string' && (PROSE.test(d.path) || /^couple\.name[12]$/.test(d.path))).map((d) => d.path));
+  const row = (path, lbl, text, words = [], notes = []) => `
+    <li class="tx" data-path="${esc(path)}">
+      <b>${esc(lbl)}</b>
+      <p class="tx-now">${markWords(text, words)}</p>
+      ${notes.map((n) => `<p class="tx-note">${esc(n)}</p>`).join('')}
+      ${words.length ? `<div class="tx-fix">${words.map((w) => w.fix.length ? w.fix.map((f) => `<button type="button" data-from="${esc(w.word)}" data-to="${esc(f)}">${esc(w.word)} → ${esc(f)}</button>`).join('') : `<span>${esc(w.word)}: sin sugerencia</span>`).join('')}</div>` : ''}
+      <details class="tx-edit"><summary>Corregir yo</summary><textarea rows="${Math.min(8, Math.ceil(text.length / 38) + 1)}" spellcheck="true" lang="es">${esc(text)}</textarea><div class="tx-go"><button class="btn small" type="button" data-save>Guardar y volver a montar</button><span class="msg" role="alert"></span></div></details>
+    </li>`;
+  const diffHtml = diff.length ? `<h4>Lo que han cambiado</h4><ul class="tx-list">${diff.map((d) => `<li class="tx"><b>${esc(d.label)}</b><p class="tx-was">${esc(d.was)}</p><p class="tx-is">${esc(d.is)}</p></li>`).join('')}</ul>` : before ? '<p>No han cambiado ningún texto: puede que solo hayan cambiado fotos.</p>' : '';
+  const checkHtml = !sp ? '<p class="tx-note">No se ha podido cargar el corrector. Revisa los textos a ojo.</p>'
+    : checks.length ? `<h4>Revisa ${checks.length === 1 ? 'este texto' : 'estos textos'}</h4><ul class="tx-list">${checks.map((c) => row(c.path, c.label, c.text, c.words, c.notes)).join('')}</ul>`
+    : '<p class="tx-ok">No veo faltas en los textos.</p>';
+  const extra = [...editable].filter((p) => !checks.some((c) => c.path === p));
+  host.innerHTML = `<h3>Textos</h3>${diffHtml}${checkHtml}${extra.length ? `<h4>Corregir lo que han cambiado</h4><ul class="tx-list">${extra.map((p) => row(p, label(p), all[p])).join('')}</ul>` : ''}`;
+  host.querySelectorAll('.tx[data-path]').forEach((li) => {
+    const ta = li.querySelector('textarea');
+    li.querySelectorAll('[data-from]').forEach((b) => b.onclick = () => {
+      ta.value = ta.value.replace(new RegExp(`(^|[^A-Za-zÁÉÍÓÚÜÑáéíóúüñ])${b.dataset.from}(?![A-Za-zÁÉÍÓÚÜÑáéíóúüñ])`, 'g'), '$1' + b.dataset.to);
+      li.querySelector('details').open = true; b.classList.add('used');
+    });
+    li.querySelector('[data-save]').onclick = async (e) => {
+      const btn = e.currentTarget, msg = li.querySelector('.msg'); btn.disabled = true; btn.textContent = 'Un momento…'; msg.textContent = '';
+      try { await flow({ action: 'owner_fix', orderId: o.id, path: li.dataset.path, value: ta.value.trim().replace(/ {2,}/g, ' ').replace(/ +([,.;:?!])/g, '$1') }); toast('Corregido. La invitación ya lo lleva.'); openOrder(o.id); }
+      catch (err) { if (err.message !== 'manager_required') { msg.textContent = 'No ha salido. Prueba otra vez.'; btn.disabled = false; btn.textContent = 'Guardar y volver a montar'; } }
+    };
+  });
+}
+
 $('closeFull').onclick = () => { $('full').hidden = true; $('fullHost').replaceChildren(); document.body.style.overflow = ''; };
 
 async function busyRun(b, fn, okText) {
