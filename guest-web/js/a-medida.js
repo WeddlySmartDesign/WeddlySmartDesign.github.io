@@ -25,6 +25,8 @@
     $('introKicker').textContent = 'Vuestro presupuesto';
     $('introTitle').textContent = 'Vuestra invitación a medida.';
     $('introText').textContent = 'Precio cerrado, IVA incluido. Pagáis la mitad para empezar y el resto al aprobarla.';
+    // En el móvil, el precio va primero: las promesas ya están en los pasos del presupuesto.
+    $('promise').hidden = true;
 
     const steps = (q) => {
       const st = q.status, paidDeposit = !['new', 'quoted'].includes(st), paidAll = ['paid', 'delivered'].includes(st);
