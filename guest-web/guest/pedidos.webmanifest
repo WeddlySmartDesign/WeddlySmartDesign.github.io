@@ -1,0 +1,13 @@
+{
+  "name": "GUEST · Pedidos",
+  "short_name": "Pedidos",
+  "start_url": "./panel-pruebas.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbf7f4",
+  "theme_color": "#f0c4bc",
+  "icons": [
+    { "src": "../assets/brand/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "../assets/brand/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
