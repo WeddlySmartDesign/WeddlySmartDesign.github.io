@@ -1,4 +1,5 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { guestMail, mBtn, mP, mSteps, mNote, DESIGN_NAMES } from './guest-mail.ts';
 
 const cors={
   'Access-Control-Allow-Origin':'*',
@@ -154,6 +155,14 @@ function emailStep(n:string,title:string,body:string){
 function emailPanel(inner:string,soft=false){
   return '<div style="margin:20px 0;padding:18px;border:1px solid #ded3ca;border-radius:18px;background:'+(soft?'#f7f1ec':'#fffefd')+'">'+inner+'</div>';
 }
+
+// Mismas partes y orden que el cuestionario y la pantalla de revisión.
+const QUESTIONNAIRE_PARTS=['La portada','Vuestra historia','Lugares y programa','Detalles prácticos','Confirmación y final'];
+const catalogOrigin=()=>String(qaEnv('GUEST_CATALOG_PUBLIC_ORIGIN')||'').trim().replace(/\/+$/,'');
+function partFromNote(note:string){const m=String(note||'').match(/^Parte: (.+)$/m);const i=m?QUESTIONNAIRE_PARTS.indexOf(m[1].trim()):-1;return i}
+function lastChangePart(order:any){const r=Array.isArray(order.revision_requests)?order.revision_requests:[];return r.length?partFromNote(r[r.length-1]?.note):-1}
+async function changeLink(order:any,part:number){return catalogOrigin()+'/guest/catalog-questionnaire.html?t='+encodeURIComponent(await capability(order.id,'q'))+(part>=0?'&parte='+part:'')}
+function namesOf(q:any){return [txt(q?.couple?.name1,40),txt(q?.couple?.name2,40)].filter(Boolean).join(' & ')}
 
 function sortedMoments(a:any[]){
   const k=(t:any)=>{const s=String(t||'');if(!/^\d{2}:\d{2}$/.test(s))return 99999;const [h,m]=s.split(':').map(Number);let v=h*60+m;if(v<360)v+=1440;return v};
@@ -559,20 +568,17 @@ Deno.serve(async req=>{
       const fresh={...order,questionnaire,resolved_config:config,buyer_email:email,status:'submitted',submitted_at:ts};
        if(order.mode!=='test')await internalSubmittedEmail(fresh);
        if(email&&order.mode!=='test'){
-         const steps='<div style="font-size:11px;letter-spacing:.15em;font-weight:700;color:#aa8472;margin-bottom:8px">QUÉ PASA A PARTIR DE AHORA</div>'
-          +'<table role="presentation" width="100%" cellspacing="0" cellpadding="0">'
-          +emailStep('01','Datos recibidos','Ya tenemos la información que nos habéis enviado.')
-          +emailStep('02','Preparamos','Montamos vuestra invitación con el diseño que habéis elegido.')
-          +emailStep('03','Revisáis','Os enviaremos la invitación completa para comprobar todos los detalles.')
-          +emailStep('04','Entrega','Cuando la aprobéis, recibiréis la versión definitiva para compartir.')
-          +'</table>';
-        const html=emailBox(
-          'PEDIDO RECIBIDO',
-          'Ya tenemos vuestros datos.',
-          coupleGreeting(questionnaire)+' Hemos recibido correctamente la información de vuestra invitación.',
-          emailPanel(steps)+'<p style="font-size:14px;line-height:1.6;color:#83756b">Por ahora no tenéis que hacer nada más. Os escribiremos cuando vuestra invitación esté preparada para revisar.</p>'
-        );
-        await resend({to:[email],subject:'Hemos recibido vuestros datos',html},'guest-questionnaire-confirm/'+order.id);
+        const isChange=order.status==='changes_requested',who=namesOf(questionnaire);
+        const html=isChange
+          ?guestMail({kicker:'Cambios recibidos',title:'Recibido. Lo dejamos como queréis.',preheader:'En un máximo de 72 h os llega la versión corregida para revisar.',
+            body:mP((who?'Gracias, '+esc(who)+'. ':'')+'Ya tenemos vuestros cambios.')
+              +mP('Preparamos la versión corregida y os la mandamos para revisar <b>en un máximo de 72 h</b>, igual que la primera vez: la veis en el móvil y la aprobáis o cambiáis otra cosa.')
+              +mP('Por ahora no tenéis que hacer nada más.',true)})
+          :guestMail({kicker:'Datos recibidos',title:'Ya estamos con vuestra invitación.',preheader:'En un máximo de 72 h os llega para verla completa en el móvil.',
+            body:mP((who?'Gracias, '+esc(who)+'. ':'')+'Tenemos todo lo que necesitamos para prepararla.')
+              +mSteps([['La preparamos','Montamos vuestra invitación con vuestros datos y fotos.'],['Os la mandamos para revisar','En un máximo de 72 h os llega un email para verla completa en el móvil, tal y como la verán vuestros invitados.'],['La aprobáis o cambiáis algo','Si queréis cambiar algo, elegís la parte y la corregís vosotros mismos.'],['Os la entregamos','Lista para enviar, con la app para organizar a vuestros invitados.']],'Qué pasa ahora')
+              +mP('Por ahora no tenéis que hacer nada más.',true)});
+        await resend({to:[email],subject:isChange?'Hemos recibido vuestros cambios':'Hemos recibido vuestros datos',html},isChange?'guest-changes-confirm/'+order.id+'/'+String(order.revision_count||0):'guest-questionnaire-confirm/'+order.id);
       }
       return json({ok:true,submittedAt:ts});
     }
@@ -580,7 +586,8 @@ Deno.serve(async req=>{
       const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
       if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);
       const files=await signedFiles(c,order,7200),config=checkInvitationRead(hydrateConfig(order.resolved_config||{},files),order,files);
-      return json({ok:true,order:{id:order.id,status:order.status,label:orderLabel(order),config,revisionCount:order.revision_count||0}});
+      const pending=order.status==='changes_requested'?{questionnaireToken:await capability(order.id,'q'),part:lastChangePart(order)}:{};
+      return json({ok:true,order:{id:order.id,status:order.status,label:orderLabel(order),config,revisionCount:order.revision_count||0,...pending}});
     }
     if(action==='review_respond'){
       const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
@@ -590,12 +597,24 @@ Deno.serve(async req=>{
       if(decision==='approve'){
         checkInvitationConfig(order.resolved_config||{},order);
         const {error}=await c.from('guest_invitation_orders').update({status:'approved',approved_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
+         const to=emailOf(order.questionnaire,order.buyer_email);
+         if(to&&order.mode!=='test')await resend({to:[to],subject:'Vuestra invitación está aprobada',html:guestMail({kicker:'Aprobada',title:'¡Aprobada! Ahora la dejamos lista para enviar.',preheader:'Os llega la versión definitiva con el acceso a la app de invitados.',
+           body:mP('Gracias por confiar en nosotros'+(namesOf(order.questionnaire)?', '+esc(namesOf(order.questionnaire)):'')+'.')
+             +mP('Ahora preparamos la versión definitiva. Normalmente en menos de 48 h os llega otro email con:')
+             +mSteps([['El enlace de vuestra invitación','Para enviarla a vuestros invitados.'],['El acceso a la app de invitados','Para mandarla, recibir las respuestas y organizar las mesas.']])
+             +mP('No tenéis que hacer nada más hasta entonces.',true)})},'guest-approved-couple/'+order.id);
          if(order.mode!=='test')await resend({to:['weddlysmartdesign@gmail.com'],subject:'Invitación GUEST aprobada · '+orderLabel(order),html:'<p>La pareja ha aprobado la invitación. Pedido <b>'+esc(order.id)+'</b>.</p>'},'guest-review-approved/'+order.id);
         return json({ok:true,status:'approved'});
       }
       const note=txt(b.note,1500);if(!note)return json({ok:false,error:'changes_note_required'},400);
       const history=[...(Array.isArray(order.revision_requests)?order.revision_requests:[]),{at:ts,note}];
       const {error}=await c.from('guest_invitation_orders').update({status:'changes_requested',revision_count:Number(order.revision_count||0)+1,revision_requests:history,updated_at:ts}).eq('id',order.id);if(error)throw error;
+       const to=emailOf(order.questionnaire,order.buyer_email),part=partFromNote(note);
+       if(to&&order.mode!=='test')await resend({to:[to],subject:'Vuestro enlace para hacer el cambio',html:guestMail({kicker:'Cambio pedido',title:part>=0?'Cambiad «'+QUESTIONNAIRE_PARTS[part]+'» cuando queráis.':'Cambiad lo que queráis.',preheader:'El enlace abre esa parte del cuestionario con vuestros datos.',
+         body:mP('Este enlace abre esa parte de vuestro cuestionario con todo lo que ya pusisteis. Cambiad lo que necesitéis y pulsad <b>«Enviar los cambios»</b>.')
+           +mBtn(await changeLink(order,part),'Hacer el cambio')
+           +mNote('Cuando lo enviéis, os mandamos la versión corregida para revisar <b>en un máximo de 72 h</b>.')
+           +mP('Si ya lo habéis hecho, podéis ignorar este email.',true)})},'guest-changes-link/'+order.id+'/'+String(order.revision_count||0));
        if(order.mode!=='test')await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados · '+orderLabel(order),html:'<p><b>'+esc(orderLabel(order))+'</b></p><p>'+esc(note).replaceAll('\n','<br>')+'</p>'},'guest-review-changes/'+order.id+'/'+String(order.revision_count||0));
       return json({ok:true,status:'changes_requested',questionnaireToken:await capability(order.id,'q')});
     }
@@ -765,23 +784,14 @@ Deno.serve(async req=>{
       if(paidCatalogReview&&supplied&&supplied!==expectedReviewUrl)
         return json({ok:false,error:'invalid_review_url'},400);
       const reviewUrl=supplied||(!localTest?expectedReviewUrl:'');
-      const reviewSteps='<div style="font-size:11px;letter-spacing:.15em;font-weight:700;color:#aa8472;margin-bottom:8px">REVISAD ESTOS DETALLES</div>'
-        +'<table role="presentation" width="100%" cellspacing="0" cellpadding="0">'
-        +emailStep('01','Datos principales','Nombres, fecha y horarios.')
-        +emailStep('02','Lugares y enlaces','Direcciones, mapas, alojamiento, transporte y enlaces.')
-        +emailStep('03','Textos','Historia, agenda, regalo, playlist y cualquier texto personal.')
-        +'</table>';
+      const isRevision=Number(order.revision_count||0)>0;
       const content=localTest
-        ? emailBox('REVISIÓN DE PRUEBA','Vuestra invitación ya está preparada.','La revisión del pedido de prueba está lista.',emailPanel(reviewSteps)+'<p style="font-size:14px;line-height:1.6;color:#83756b">Revisadla completa en el entorno de validación y desde allí podréis aprobarla o solicitar cambios.</p>')
-        : emailBox(
-            'REVISIÓN',
-            'Vuestra invitación ya está preparada.',
-            'Ya podéis verla completa y comprobar con calma que todo está exactamente como queréis.',
-            emailPanel(reviewSteps)
-              +'<div style="margin:18px 0;padding:16px;border-radius:16px;background:#f7f1ec;font-size:14px;line-height:1.55"><b>Si todo está bien</b>, la aprobáis desde la misma pantalla.<br><br><b>Si queréis cambiar algo</b>, nos indicáis allí mismo qué necesitáis modificar.</div>'
-              +emailButton(reviewUrl,'Revisar nuestra invitación')
-              +'<p style="font-size:13px;line-height:1.55;color:#83756b">No hace falta responder a este correo para pedir cambios: la pantalla de revisión os guía en todo el proceso.</p>'
-          );
+        ? emailBox('REVISIÓN DE PRUEBA','Vuestra invitación ya está preparada.','La revisión del pedido de prueba está lista.','<p style="font-size:14px;line-height:1.6;color:#83756b">Revisadla completa en el entorno de validación y desde allí podréis aprobarla o solicitar cambios.</p>')
+        : guestMail({kicker:isRevision?'Versión corregida':'Para revisar',title:isRevision?'Ya está corregida.':'Vuestra invitación ya está lista.',preheader:'Abridla en el móvil y aprobadla o cambiad lo que queráis.',
+            body:mP(isRevision?'Hemos aplicado vuestros cambios. Abridla de nuevo y comprobad que ahora está como queréis.':'Abridla en el móvil: la veréis entera, desde la portada hasta el final, tal y como la recibirán vuestros invitados.')
+              +mBtn(reviewUrl,'Ver nuestra invitación')
+              +mSteps([['Recorredla entera','Nombres, fecha, horas, direcciones y fotos.'],['Si os encanta, pulsad «Aprobar»','Os la preparamos para enviar.'],['Si queréis cambiar algo, pulsad «Cambiar algo»','Elegís la parte y la corregís vosotros mismos. Os mandamos la versión nueva para revisar.']],'Cómo funciona')
+              +mP('No hace falta responder a este email: todo se hace desde la invitación.',true)});
       const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Revisión de prueba preparada':'Vuestra invitación está lista para revisar',html:content},'guest-review-send/'+order.id+'/'+String(order.revision_count||0));
       if(!ok)return json({ok:false,error:'email_failed'},502);
       const {error}=await c.from('guest_invitation_orders').update({status:'review_sent',review_sent_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
@@ -826,29 +836,14 @@ Deno.serve(async req=>{
       }
       if(order.mode==='production'&&!order.license_id)return json({ok:false,error:'missing_management_license'},409);
       if(order.mode==='production'&&!accessUrl)return json({ok:false,error:'missing_management_access'},409);
-      const deliveryBody=localTest
-        ? emailPanel('<div style="font-size:14px;line-height:1.6">La entrega final de esta prueba está disponible en el archivo final del entorno de validación.</div>',true)
-        : emailButton(inviteUrl,'Ver nuestra invitación')
-          +emailPanel(
-             '<div style="font-size:11px;letter-spacing:.15em;font-weight:700;color:#aa8472;margin-bottom:8px">GESTIÓN DE INVITADOS INCLUIDA</div>'
-             +'<div style="font-family:Georgia,serif;font-size:24px;line-height:1.15;margin:0 0 10px;color:#4a3e37">Todo lo que viene después, en el mismo sitio.</div>'
-             +'<p style="font-size:14px;line-height:1.6;color:#5d5049;margin:0 0 12px">Con vuestra invitación tenéis incluida una app para organizar a vuestros invitados y enviarles esta misma invitación sin tener que llevar respuestas, mesas y cambios por separado.</p>'
-             +'<table role="presentation" width="100%" cellspacing="0" cellpadding="0">'
-             +emailStep('01','Añadid o importad invitados','Podéis crear personas, grupos y subgrupos.')
-             +emailStep('02','Preparad el mensaje','Personalizad el texto que acompañará a la invitación.')
-             +emailStep('03','Elegid destinatarios y enviad','Seleccionad personas o unidades de invitación y compartidla desde la gestión.')
-             +emailStep('04','Las respuestas llegan solas','Asistencia, acompañantes, menús, transporte y demás datos quedan reunidos automáticamente.')
-             +'</table>'
-             +'<p style="font-size:13px;line-height:1.55;color:#83756b;margin:14px 0 0">Después, desde el mismo sitio, podréis organizar mesas, mover varios invitados, preparar listados PDF para catering y gestionar eventos extra.</p>'
-             ,true)
-          +emailButton(accessUrl,'Organizar invitados y enviarla',true)
-          +'<p style="font-size:13px;line-height:1.55;color:#83756b">Guardad este correo: será vuestro acceso rápido tanto a la invitación como a la gestión de invitados.</p>';
-      const deliveryHtml=emailBox(
-        localTest?'ENTREGA DE PRUEBA':'ENTREGA FINAL',
-        'Lista para compartir.',
-        localTest?'La entrega final de prueba está completada.':'Vuestra invitación está aprobada y terminada. Ya podéis enviarla a vuestros invitados.',
-        deliveryBody
-      );
+      const deliveryHtml=localTest
+        ? emailBox('ENTREGA DE PRUEBA','Lista para compartir.','La entrega final de prueba está completada.',emailPanel('<div style="font-size:14px;line-height:1.6">La entrega final de esta prueba está disponible en el archivo final del entorno de validación.</div>',true))
+        : guestMail({kicker:'Entrega',title:'Lista para compartir.',preheader:'Vuestra invitación definitiva y el acceso a la app de invitados.',
+            body:mP('Vuestra invitación está terminada. Aquí tenéis las dos cosas que necesitáis:')
+              +mBtn(inviteUrl,'Ver nuestra invitación')
+              +mBtn(accessUrl,'Abrir la app de invitados',true)
+              +mSteps([['Añadid a vuestros invitados','Uno a uno, por grupos o desde los contactos del móvil.'],['Enviad la invitación','Desde la app, por WhatsApp, a quien elijáis.'],['Las respuestas llegan solas','Asistencia, acompañantes, menús, alergias y transporte, todo reunido.'],['Organizad las mesas','Y sacad los listados para el catering cuando los necesitéis.']],'Con la app')
+              +mNote('<b>Guardad este email.</b> Es vuestro acceso a la invitación y a la app. Los dos podéis usarla, cada uno desde su móvil.')});
       const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Vuestra invitación está lista para compartir',html:deliveryHtml},'guest-deliver-v3/'+order.id);
       if(!ok)return json({ok:false,error:'email_failed'},502);
       const {error}=await c.from('guest_invitation_orders').update({files,resolved_config:order.mode==='test'?order.resolved_config:config,delivery_url:inviteUrl||null,status:'delivered',delivered_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;

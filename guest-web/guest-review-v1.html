@@ -25,7 +25,7 @@
     .sheet h2 { margin: 0; font: 400 1.35rem/1.15 var(--display); }
     .sheet p { margin: .35rem 0 0; font-size: .9375rem; line-height: 1.5; color: var(--ink-soft); }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-top: .9rem; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 1rem; border: 1.5px solid var(--ink); border-radius: 8px; background: var(--ink); color: var(--paper); font: 600 1rem/1 var(--text); cursor: pointer; transition: transform 140ms var(--ease-out), opacity 160ms ease; }
+    .btn { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 1rem; border: 1.5px solid var(--ink); border-radius: 8px; background: var(--ink); color: var(--paper); font: 600 1rem/1 var(--text); cursor: pointer; transition: transform 140ms var(--ease-out), opacity 160ms ease; }
     .btn:active { transform: scale(.97); }
     .btn.line { background: transparent; color: var(--ink); }
     .btn[disabled] { opacity: .55; pointer-events: none; }
@@ -159,7 +159,16 @@ $('send').onclick = () => respond('changes');
     if (!spec || spec.mode !== 'iframe' || !spec.src) throw Error('template_asset_not_ready');
     await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({ order: { template_id: id, template_version: String(cfg.template.version || ''), mode: 'test' }, config: cfg, host: $('host'), registry: manifest });
     $('state').hidden = true; $('sheet').hidden = false;
-    if (order.status === 'changes_requested') done('Ya nos pedisteis un cambio.', 'Usad el enlace del email para corregir esa parte. Cuando la enviéis, os mandamos la nueva versión.');
+    if (order.status === 'changes_requested') {
+      const part = PARTS[order.part] ? order.part : null;
+      done('Ya nos pedisteis un cambio.', `${part != null ? `Falta corregir «${PARTS[part][0]}». ` : ''}Cuando lo enviéis, os mandamos la versión nueva para revisar.`);
+      if (order.questionnaireToken) {
+        const a = document.createElement('a');
+        a.className = 'btn'; a.textContent = 'Hacer el cambio';
+        a.href = `guest/catalog-questionnaire.html?t=${encodeURIComponent(order.questionnaireToken)}${part != null ? '&parte=' + part : ''}`;
+        const row = document.createElement('div'); row.className = 'row'; row.append(a); $('done').append(row);
+      }
+    }
     else if (!['review_ready', 'review_sent'].includes(order.status)) done('Esta revisión ya está cerrada.', 'Si necesitáis algo, responded a nuestro email.');
   } catch (e) { console.warn('[GUEST review]', String(e?.message || 'review_failed')); failure(); }
 })();

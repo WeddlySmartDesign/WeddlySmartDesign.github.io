@@ -1,4 +1,5 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { guestMail, mBtn, mP, mSteps, DESIGN_NAMES } from './guest-mail.ts';
 
 const cors={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'content-type,stripe-signature','Access-Control-Allow-Methods':'POST,OPTIONS','Cache-Control':'no-store'};
 const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...cors,'Content-Type':'application/json'}});
@@ -165,7 +166,12 @@ async function startCatalogEmail(to:string,sessionId:string,edition:string,catal
  if(!catalog?.questionnaireUrl)throw new Error('catalog_questionnaire_unavailable');
  return await resend({idempotencyKey:'guest-catalog-start/'+sessionId,body:{to:[to],
   subject:'Pago recibido · completa los datos de vuestra invitación',
-  html:`<div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;color:#2C2A26"><h1 style="font-family:Georgia,serif;font-weight:400">Vuestra invitación empieza aquí.</h1><p>Hemos recibido vuestro pago y reservado el diseño de invitación que habéis elegido.</p><p>Para preparar vuestra invitación, rellenad el cuestionario y adjuntad allí las fotografías que queráis incluir.</p><p><a href="${esc(catalog.questionnaireUrl)}" style="display:inline-block;background:#2C2A26;color:#fff;text-decoration:none;padding:13px 18px;border-radius:10px">Completar vuestro cuestionario</a></p><p>Os enviaremos la invitación preparada para que la reviséis y aprobéis. Con la entrega de la versión definitiva recibiréis también el acceso a la gestión de invitados incluida, para enviarla y recibir las respuestas.</p><p style="font-size:13px;color:#736F63">Si necesitáis ayuda, responded a este correo o escribid a weddlysmartdesign@gmail.com.</p></div>`}})
+  html:guestMail({kicker:'Pago recibido',title:'Vuestra invitación empieza aquí.',preheader:'Contadnos vuestra boda y en un máximo de 72 h os la mandamos para revisar.',
+   body:mP('Ya tenemos vuestro pago'+(DESIGN_NAMES[catalog.templateId]?' y el diseño <b>'+esc(DESIGN_NAMES[catalog.templateId])+'</b> reservado para vosotros':'')+'.')
+    +mP('Ahora solo falta que nos contéis vuestra boda: nombres, fecha, lugares y las fotos que queráis. Son unos minutos, se guarda solo y podéis dejarlo a medias.')
+    +mBtn(catalog.questionnaireUrl,'Contadnos vuestra boda')
+    +mSteps([['Rellenáis el cuestionario','Desde el móvil, a vuestro ritmo.'],['La preparamos','En un máximo de 72 h os llega para revisar.'],['La revisáis','La aprobáis o cambiáis lo que queráis vosotros mismos.'],['Os la entregamos','Lista para enviar, con la app para organizar a vuestros invitados.']],'Cómo sigue')
+    +mP('La factura os llega en otro email.',true)})}})
 }
 async function provision(session:any){
  const edition=validatePaid(session),sessionId=String(session.id||''),buyer=String(session.customer_details?.email||session.customer_email||'').trim().toLowerCase();

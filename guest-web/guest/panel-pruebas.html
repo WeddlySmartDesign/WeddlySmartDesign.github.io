@@ -96,6 +96,14 @@
     .bar-row b { text-align: right; font-variant-numeric: tabular-nums; }
     .tiles + .sec { margin-top: 1.75rem; }
     .hint { margin: 1.25rem 0 .5rem; font-size: .875rem; color: var(--ink-soft); }
+    .sums { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; margin: .2rem 0 .9rem; }
+    .sums div { display: grid; gap: .2rem; }
+    .sums span { font: 700 .6875rem/1 var(--mono); color: var(--ink-soft); }
+    .sums b { font: 700 1.0625rem/1.2 var(--text); font-variant-numeric: tabular-nums; }
+    .book-actions { display: grid; gap: .5rem; margin-top: .9rem; }
+    .book-actions .btn { width: 100%; }
+    .rows .amt { flex: none; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .rows .neg { color: var(--postmark); }
     .link-btn { min-height: 44px; border: 0; background: none; font-weight: 600; text-decoration: underline; text-underline-offset: .25em; cursor: pointer; }
     .calm { padding: 1.25rem; border-radius: 12px; background: var(--white); color: var(--ink-soft); }
     .calm b { display: block; color: var(--ink); font: 400 1.35rem/1.15 var(--display); margin-bottom: .25rem; }
@@ -498,10 +506,53 @@ async function renderSales() {
       <div class="hello"><strong>${esc(eur(s.month.cents))}</strong><span>este mes, IVA incluido${showTest ? ' · compras de prueba' : ''}</span></div>
       <div class="tiles">${tile('Esta semana', s.week, s.lastWeek.cents || s.week.cents ? (diff >= 0 ? '+' : '−') + esc(eur(Math.abs(diff))) + ' que la anterior' : '')}${tile('Semana pasada', s.lastWeek)}${tile('Desde el principio', s.total)}</div>
       <section class="sec"><h3>Diseños más vendidos</h3>${s.designs.length ? `<div class="bars">${s.designs.map(([n, c]) => `<div class="bar-row"><span>${esc(n)}</span><i style="--w:${(c / max) * 100}%"></i><b>${c}</b></div>`).join('')}</div>` : '<div class="calm">Aún no hay ventas.</div>'}</section>
-      <p class="hint">Cada venta tiene su factura, numerada sola. Cada lunes te llega este resumen por email.</p>
+      <section class="sec" id="book"><h3>Facturas</h3><div class="box"><div class="skel"><i></i></div></div></section>
+      <p class="hint">Cada venta tiene su factura, numerada sola, y a la pareja le llega por email. Cada lunes te llega este resumen.</p>
       <p style="text-align:center"><button class="link-btn" type="button" id="toggleTest">${showTest ? 'Ver ventas reales' : 'Ver compras de prueba'}</button></p>`;
     $('toggleTest').onclick = () => { showTest = !showTest; renderSales(); };
+    renderBook();
   } catch (e) { if (e.message !== 'manager_required') $('sales').innerHTML = '<div class="calm"><b>No se han podido cargar</b>Toca actualizar arriba.</div>'; }
+}
+
+/* ---- Libro de facturas ---- */
+let book = null, bookYear = null, bookQ = 0;
+const quarter = (d) => Math.floor(new Date(d).getMonth() / 3) + 1;
+async function renderBook() {
+  const host = $('book')?.querySelector('.box'); if (!host) return;
+  try {
+    if (!book) book = (await auto({ action: 'invoice_book' })).invoices;
+    const mine = book.filter((f) => f.test === showTest);
+    const years = [...new Set(mine.map((f) => new Date(f.issuedAt).getFullYear()))].sort((a, b) => b - a);
+    if (!years.length) { host.innerHTML = `<div class="calm" style="padding:1rem 0">${showTest ? 'Aún no hay facturas de prueba.' : 'Aún no hay facturas. La primera saldrá sola con tu primera venta.'}</div>`; return; }
+    if (!years.includes(bookYear)) bookYear = years[0];
+    const list = mine.filter((f) => new Date(f.issuedAt).getFullYear() === bookYear && (!bookQ || quarter(f.issuedAt) === bookQ));
+    const sum = (k) => list.reduce((a, f) => a + f[k], 0);
+    const sales = list.filter((f) => f.kind === 'invoice').length, refunds = list.length - sales;
+    const chip = (attr, val, text, on) => `<button class="chip" type="button" ${attr}="${val}" aria-pressed="${on}">${text}</button>`;
+    host.innerHTML = `
+      ${years.length > 1 ? `<div class="chips">${years.map((y) => chip('data-y', y, y, y === bookYear)).join('')}</div>` : ''}
+      <div class="chips">${chip('data-q', 0, 'Todo ' + bookYear, !bookQ)}${[1, 2, 3, 4].map((q) => chip('data-q', q, q + 'º trimestre', bookQ === q)).join('')}</div>
+      <div class="sums"><div><span>Base</span><b>${esc(eur(sum('baseCents')))}</b></div><div><span>IVA</span><b>${esc(eur(sum('vatCents')))}</b></div><div><span>Total</span><b>${esc(eur(sum('totalCents')))}</b></div></div>
+      <p class="hint" style="margin:0 0 .4rem">${sales} ${sales === 1 ? 'factura' : 'facturas'}${refunds ? ` y ${refunds} ${refunds === 1 ? 'devolución' : 'devoluciones'}` : ''}${bookQ ? ` en el ${bookQ}º trimestre` : ` en ${bookYear}`}.</p>
+      <ul class="rows">${list.map((f) => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-receipt"/></svg><span>${esc(f.number)} · ${esc(f.buyerName || f.buyerEmail || '')}<small>${f.kind === 'rectificative' ? 'Devolución' + (f.rectifies ? ' de ' + esc(f.rectifies) : '') : 'Venta'} · ${esc(day(f.issuedAt))}</small></span><b class="amt${f.totalCents < 0 ? ' neg' : ''}">${esc(eur(f.totalCents))}</b></a></li>`).join('') || '<li><span style="display:block;padding:.8rem 0;color:var(--ink-soft)">Ninguna en este periodo.</span></li>'}</ul>
+      ${list.length ? `<div class="book-actions"><button class="btn" type="button" id="csv">Descargar para la gestoría (Excel)</button></div>
+      <p class="hint" style="margin:.6rem 0 0">Es el libro de facturas emitidas del periodo. Con la base y el IVA de arriba rellenas el modelo 303 de cada trimestre.</p>` : ''}`;
+    host.querySelectorAll('[data-y]').forEach((b) => { b.onclick = () => { bookYear = +b.dataset.y; renderBook(); }; });
+    host.querySelectorAll('[data-q]').forEach((b) => { b.onclick = () => { bookQ = +b.dataset.q; renderBook(); }; });
+    if ($('csv')) $('csv').onclick = () => downloadBook(list);
+  } catch (e) { if (e.message !== 'manager_required') host.innerHTML = '<div class="calm" style="padding:1rem 0">No se han podido cargar las facturas.</div>'; }
+}
+function downloadBook(list) {
+  // Punto y coma y coma decimal: así lo abre bien Excel en español.
+  const n = (c) => (c / 100).toFixed(2).replace('.', ',');
+  const cell = (v) => { const t = String(v ?? ''); return /[;"\n]/.test(t) ? '"' + t.replaceAll('"', '""') + '"' : t; };
+  const head = ['Número', 'Fecha', 'Tipo', 'Rectifica a', 'Cliente', 'Email', 'Concepto', 'Base imponible', 'Tipo IVA', 'Cuota IVA', 'Total'];
+  const rows = [...list].reverse().map((f) => [f.number, new Date(f.issuedAt).toLocaleDateString('es-ES', { timeZone: 'Europe/Madrid' }), f.kind === 'rectificative' ? 'Rectificativa' : 'Simplificada', f.rectifies || '', f.buyerName || '', f.buyerEmail || '', f.concept, n(f.baseCents), f.vatRate + ' %', n(f.vatCents), n(f.totalCents)]);
+  const csv = '\ufeff' + [head, ...rows].map((r) => r.map(cell).join(';')).join('\r\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = `facturas-guest-${bookYear}${bookQ ? '-T' + bookQ : ''}${showTest ? '-prueba' : ''}.csv`;
+  document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
 
 /* ---- Navegación ---- */
@@ -525,6 +576,7 @@ $('back').onclick = () => (history.length > 1 ? history.back() : (location.hash 
 addEventListener('hashchange', route);
 
 async function refresh() {
+  book = null;
   const r = $('refresh'); r.classList.add('spin');
   try { const j = await flow({ action: 'list' }); orders = j.orders || []; }
   catch (e) { if (e.message !== 'manager_required') toast('Sin conexión. Prueba otra vez.'); throw e; }

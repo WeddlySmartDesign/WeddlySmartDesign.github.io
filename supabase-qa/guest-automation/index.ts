@@ -2,10 +2,11 @@
 // - Cada hora (pg_cron, cuerpo vacío): avisos de plazos, recordatorios a las parejas, facturas de
 //   las compras nuevas, petición de opinión tras la entrega, resumen de la mañana y de los lunes.
 // - action 'invoice' (público, con token firmado): datos de una factura para guest/factura.html.
-// - action 'stats' | 'refund' | 'invoices' (con la sesión de propietaria): para la app de pedidos.
+// - action 'stats' | 'refund' | 'invoices' | 'invoice_book' (con la sesión de propietaria): para la app de pedidos.
 // Es sin estado: cada aviso sale cuando su momento cruza la última hora, y la clave de
 // idempotencia de Resend evita duplicados. Las facturas sí se guardan (guest_invoices).
 import { createClient } from 'npm:@supabase/supabase-js@2';
+import { guestMail, mBtn, mP, mNote, mList, DESIGN_NAMES } from './guest-mail.ts';
 
 const APP_ORIGIN = 'https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
 const OWNER = ['weddlysmartdesign@gmail.com'];
@@ -17,7 +18,7 @@ const AUTOMATION_SINCE = Date.parse('2026-10-25T00:00:00Z');
 const H = 3600_000, D = 24 * H;
 const PROPOSAL_DUE = 72 * H, PROPOSAL_GOAL = 48 * H, DELIVERY_DUE = 48 * H;
 const MORNING_UTC = 7;
-const DESIGNS: Record<string, string> = { 'design-09': 'Azahar', 'design-11': 'Cristal', 'design-07': 'Espejo', 'veil-light': 'Seda', 'design-12': 'Abanico', 'design-05': 'Gala', 'design-06': 'Invernadero', 'design-08': 'Melodía', 'design-10': 'Cuento', 'botanica': 'Botánica', 'design-16': 'Rumbo', 'design-04': 'Brisa', 'design-13': 'Viñeta', 'design-14': 'Ellas', 'design-15': 'Ellos' };
+const DESIGNS = DESIGN_NAMES;
 
 const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'content-type, x-weddly-manager', 'Access-Control-Allow-Methods': 'POST, OPTIONS' };
 const json = (b: unknown, s = 200) => new Response(JSON.stringify(b), { status: s, headers: { ...cors, 'Content-Type': 'application/json' } });
@@ -55,12 +56,10 @@ async function send(to: string[], subject: string, html: string, key: string, fr
   if (!r.ok) console.warn('resend_failed', r.status, await r.text());
   return r.ok;
 }
-const button = (href: string, text: string) => `<p style="margin:24px 0"><a href="${esc(href)}" style="display:inline-block;background:#1b2650;color:#fbf7f4;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:bold">${esc(text)}</a></p>`;
-const mail = (title: string, body: string) => `<div lang="es" style="font-family:Arial,sans-serif;color:#1b2650;max-width:560px;font-size:16px;line-height:1.6">
-  <p style="font-family:Georgia,serif;font-size:20px;margin:0 0 18px">GUEST <span style="font-size:13px;font-family:'Courier New',monospace">by WeddlySmartDesign</span></p>
-  <h2 style="font-family:Georgia,serif;font-weight:400;font-size:28px;line-height:1.15;margin:0 0 14px">${title}</h2>${body}
-  <p style="font-size:13px;color:#4a5480;margin-top:28px">¿Dudas? Responded a este email o escribidnos por WhatsApp al 620 843 264.</p></div>`;
-const ownerMail = (title: string, body: string) => mail(title, body + button(APP_ORIGIN + '/guest/panel-pruebas.html', 'Abrir mis pedidos'));
+const button = (href: string, text: string) => mBtn(href, text);
+// title y kicker van sin escapar; body ya escapado.
+const mail = (kicker: string, title: string, body: string, preheader = title) => guestMail({ kicker, title, body, preheader });
+const ownerMail = (kicker: string, title: string, body: string) => guestMail({ owner: true, kicker, title, preheader: title, body: body + button(APP_ORIGIN + '/guest/panel-pruebas.html', 'Abrir mis pedidos') });
 const crossed = (t: number, now: number) => t > now - H && t <= now;
 
 /* ---------- Plazos de la propietaria ---------- */
@@ -148,7 +147,7 @@ async function tick(c: any) {
     for (const [t, tag, id] of [[d.goal, d.kind === 'proposal' ? 'Quedan 24 h' : 'Lleva 24 h aprobada', 'goal'], [d.due - 6 * H, 'Quedan 6 h', '6h'], [d.due, 'Plazo vencido', 'due']] as [number, string, string][]) {
       if (!crossed(t, now)) continue;
       const ok = await send(OWNER, `${tag} · ${d.what.toLowerCase()} a ${label(o)}${o.mode === 'test' ? ' (prueba)' : ''}`,
-        ownerMail(esc(tag) + '.', `<p><b>${esc(label(o))}</b>: ${esc(d.what.toLowerCase())}.</p><p style="color:#4a5480">Plazo: ${esc(when(d.due))} (${esc(left(d.due - now))}).</p>`),
+        ownerMail('Plazos', tag + '.', mP(`<b>${esc(label(o))}</b>: ${esc(d.what.toLowerCase())}.`) + mP(`Plazo: ${esc(when(d.due))} (${esc(left(d.due - now))}).`, true)),
         `guest-deadline/${o.id}/${d.kind}/${d.start}/${id}`, 'GUEST · Plazos');
       if (ok) sent.push('deadline:' + o.id + ':' + id);
     }
@@ -165,7 +164,7 @@ async function tick(c: any) {
       ] as [number, string, string, string][]) {
         if (!crossed(t, now)) continue;
         const link = APP_ORIGIN + '/guest/catalog-questionnaire.html?t=' + encodeURIComponent(await capability(o.id, 'q'));
-        if (await send(to, title.replace(/\.$/, ''), mail(title, `<p>${text}</p>${button(link, 'Contadnos vuestra boda')}`), `guest-remind/${o.id}/${id}`)) sent.push('couple:' + o.id + ':' + id);
+        if (await send(to, title.replace(/\.$/, ''), mail('Recordatorio', title, mP(esc(text)) + button(link, 'Contadnos vuestra boda')), `guest-remind/${o.id}/${id}`)) sent.push('couple:' + o.id + ':' + id);
       }
     }
     if (o.status === 'review_sent' && o.review_sent_at) {
@@ -175,14 +174,14 @@ async function tick(c: any) {
       ] as [number, string, string, string][]) {
         if (!crossed(t, now)) continue;
         const link = APP_ORIGIN + '/guest-review-v1.html?t=' + encodeURIComponent(await capability(o.id, 'r'));
-        if (await send(to, title.replace(/\.$/, ''), mail(title, `<p>${text}</p>${button(link, 'Ver nuestra invitación')}`), `guest-remind/${o.id}/${id}/${o.review_sent_at}`)) sent.push('couple:' + o.id + ':' + id);
+        if (await send(to, title.replace(/\.$/, ''), mail('Recordatorio', title, mP(esc(text)) + button(link, 'Ver nuestra invitación')), `guest-remind/${o.id}/${id}/${o.review_sent_at}`)) sent.push('couple:' + o.id + ':' + id);
       }
     }
     // 3. Opinión a los 7 días de la entrega.
     if (o.status === 'delivered' && o.delivered_at && crossed(Date.parse(o.delivered_at) + 7 * D, now)) {
-      const html = mail('¿Qué tal la están recibiendo vuestros invitados?', `<p>Esperamos que estéis disfrutando de vuestra invitación${names(o) ? ', ' + esc(names(o)) : ''}.</p>
-        <p>Si os ha gustado, nos ayudaría muchísimo que nos contarais qué os ha parecido respondiendo a este email, en dos líneas. Con vuestro permiso, la compartiremos para que otras parejas nos conozcan.</p>
-        <p>Y si la publicáis en Instagram o TikTok, etiquetadnos en <b>@weddlysmartdesign</b>: nos hace mucha ilusión verla en vuestras manos.</p>${button('https://www.instagram.com/weddlysmartdesign', 'Ir a nuestro Instagram')}`);
+      const html = mail('Una cosa más', '¿Qué tal la están recibiendo vuestros invitados?', mP(`Esperamos que estéis disfrutando de vuestra invitación${names(o) ? ', ' + esc(names(o)) : ''}.`)
+        + mP('Si os ha gustado, nos ayudaría muchísimo que nos contarais qué os ha parecido respondiendo a este email, en dos líneas. Con vuestro permiso, la compartiremos para que otras parejas nos conozcan.')
+        + mP('Y si la publicáis en Instagram o TikTok, etiquetadnos en <b>@weddlysmartdesign</b>: nos hace mucha ilusión verla en vuestras manos.') + button('https://www.instagram.com/weddlysmartdesign', 'Ir a nuestro Instagram'));
       if (await send(to, '¿Qué tal vuestra invitación?', html, `guest-review-ask/${o.id}`)) sent.push('opinion:' + o.id);
     }
   }
@@ -196,7 +195,7 @@ async function tick(c: any) {
       try {
         const inv = await issueInvoice(c, o);
         sent.push('invoice:' + inv.number);
-        if (canWriteCouple(o)) await send([emailOf(o)], `Vuestra factura ${inv.number}`, mail('Gracias por vuestra compra.', `<p>Aquí tenéis la factura de vuestra invitación (${esc(euros(inv.total_cents))}, IVA incluido). Podéis guardarla en PDF desde el propio enlace.</p>${button(await invoiceUrl(inv.id), 'Ver la factura')}`), `guest-invoice-mail/${inv.id}`);
+        if (canWriteCouple(o)) await send([emailOf(o)], `Vuestra factura ${inv.number}`, mail('Factura ' + inv.number, 'Vuestra factura.', mP(`Aquí tenéis la factura de vuestra invitación: <b>${esc(euros(inv.total_cents))}</b>, IVA incluido. Desde el enlace podéis guardarla en PDF.`) + button(await invoiceUrl(inv.id), 'Ver la factura')), `guest-invoice-mail/${inv.id}`);
       } catch (e) { console.error('invoice_failed', o.id, e); }
     }
   }
@@ -206,20 +205,17 @@ async function tick(c: any) {
   if (d.getUTCHours() === MORNING_UTC) {
     open.sort((a, b) => a.d.due - b.d.due);
     const stale = all.filter((o: any) => o.status === 'draft' && now - Date.parse(o.created_at) > 3 * D && Date.parse(o.created_at) >= AUTOMATION_SINCE);
-    const li = (t: string) => `<li style="margin:0 0 10px">${t}</li>`;
     let body = '';
-    if (open.length) body += `<ul style="padding-left:18px;margin:0">${open.map(({ o, d }) => li(`<b>${esc(label(o))}</b>${o.mode === 'test' ? ' (prueba)' : ''}: ${esc(d.what.toLowerCase())}.<br><span style="color:${d.due - now < 12 * H ? '#b3263a' : '#4a5480'}">Antes del ${esc(when(d.due))} · ${esc(left(d.due - now))}</span>`)).join('')}</ul>`;
-    if (stale.length) body += `<p style="margin:18px 0 6px"><b>Sin rellenar el cuestionario desde hace más de 3 días</b> (ya les ha llegado un recordatorio):</p><ul style="padding-left:18px;margin:0">${stale.map((o: any) => li(`${esc(o.buyer_email || label(o))} · compró el ${esc(when(Date.parse(o.created_at)))}`)).join('')}</ul>`;
+    if (open.length) body += mList(open.map(({ o, d }) => `<b>${esc(label(o))}</b>${o.mode === 'test' ? ' (prueba)' : ''}: ${esc(d.what.toLowerCase())}.<br><span style="font-size:15px;color:${d.due - now < 12 * H ? '#b3263a' : '#4a5480'}">Antes del ${esc(when(d.due))} · ${esc(left(d.due - now))}</span>`));
+    if (stale.length) body += mP('<b>Sin rellenar el cuestionario desde hace más de 3 días</b> (ya les ha llegado un recordatorio):') + mList(stale.map((o: any) => `${esc(o.buyer_email || label(o))}<br><span style="font-size:15px;color:#4a5480">Compró el ${esc(when(Date.parse(o.created_at)))}</span>`));
     const monday = new Date(d.toLocaleString('en-US', { timeZone: 'Europe/Madrid' })).getDay() === 1;
     if (monday) {
       const s = (await stats(c)).live;
-      body += `<h3 style="font-family:Georgia,serif;font-weight:400;font-size:22px;margin:26px 0 8px">La semana pasada</h3>
-        <p style="margin:0">${s.lastWeek.sales} ${s.lastWeek.sales === 1 ? 'venta' : 'ventas'} · <b>${esc(euros(s.lastWeek.cents))}</b>${s.lastWeek.refunds ? ` · ${s.lastWeek.refunds} ${s.lastWeek.refunds === 1 ? 'devolución' : 'devoluciones'}` : ''}</p>
-        <p style="margin:4px 0 0;color:#4a5480">Este mes: ${s.month.sales} ${s.month.sales === 1 ? 'venta' : 'ventas'} · ${esc(euros(s.month.cents))}${s.designs.length ? ` · el más vendido: ${esc(s.designs[0][0])}` : ''}</p>`;
+      body += mNote(`<b>La semana pasada:</b> ${s.lastWeek.sales} ${s.lastWeek.sales === 1 ? 'venta' : 'ventas'} · ${esc(euros(s.lastWeek.cents))}${s.lastWeek.refunds ? ` · ${s.lastWeek.refunds} ${s.lastWeek.refunds === 1 ? 'devolución' : 'devoluciones'}` : ''}<br><b>Este mes:</b> ${s.month.sales} ${s.month.sales === 1 ? 'venta' : 'ventas'} · ${esc(euros(s.month.cents))}${s.designs.length ? `<br><b>El más vendido:</b> ${esc(s.designs[0][0])}` : ''}`);
     }
     if (body) {
       const title = open.length ? `Hoy tienes ${open.length} ${open.length === 1 ? 'pendiente' : 'pendientes'}.` : monday ? 'Tu semana en GUEST.' : 'Nada urgente hoy.';
-      if (await send(OWNER, open.length ? `Pedidos de hoy: ${open.length} ${open.length === 1 ? 'pendiente' : 'pendientes'}` : monday ? 'Resumen de la semana' : 'Pedidos de hoy', ownerMail(title, body), `guest-digest/${d.toISOString().slice(0, 10)}`, 'GUEST · Pedidos')) sent.push('digest');
+      if (await send(OWNER, open.length ? `Pedidos de hoy: ${open.length} ${open.length === 1 ? 'pendiente' : 'pendientes'}` : monday ? 'Resumen de la semana' : 'Pedidos de hoy', ownerMail(monday ? 'Tu semana' : 'Buenos días', title, body), `guest-digest/${d.toISOString().slice(0, 10)}`, 'GUEST · Pedidos')) sent.push('digest');
     }
   }
   return { open: open.length, sent };
@@ -254,6 +250,14 @@ Deno.serve(async (req) => {
       return json({ ok: true, invoices: await Promise.all((data || []).map(async (x: any) => ({ number: x.number, kind: x.kind, totalCents: x.total_cents, issuedAt: x.issued_at, url: await invoiceUrl(x.id) }))) });
     }
 
+    // Libro de facturas: todas, para verlas juntas y pasarlas a la gestoría.
+    if (action === 'invoice_book') {
+      const { data, error } = await c.from('guest_invoices').select('id,number,kind,mode,issued_at,buyer_name,buyer_email,concept,base_cents,vat_cents,vat_rate,total_cents,rectifies').order('issued_at', { ascending: false }).limit(5000);
+      if (error) throw error;
+      const num = new Map((data || []).map((x: any) => [x.id, x.number]));
+      return json({ ok: true, invoices: await Promise.all((data || []).map(async (x: any) => ({ number: x.number, kind: x.kind, test: x.mode === 'test', issuedAt: x.issued_at, buyerName: x.buyer_name, buyerEmail: x.buyer_email, concept: x.concept, baseCents: x.base_cents, vatCents: x.vat_cents, vatRate: Number(x.vat_rate), totalCents: x.total_cents, rectifies: x.rectifies ? num.get(x.rectifies) || null : null, url: await invoiceUrl(x.id) }))) });
+    }
+
     if (action === 'refund') {
       const { data: o } = await c.from('guest_invitation_orders').select('*').eq('id', String(b.orderId || '')).maybeSingle();
       if (!o) return json({ ok: false, error: 'order_not_found' }, 404);
@@ -274,7 +278,7 @@ Deno.serve(async (req) => {
         const { data, error } = await c.rpc('guest_issue_invoice', { p_order: o.id, p_kind: 'rectificative', p_mode: original.mode, p_email: original.buyer_email, p_name: original.buyer_name, p_concept: 'Devolución de ' + original.concept.charAt(0).toLowerCase() + original.concept.slice(1), p_total_cents: -Math.abs(Number(refund.amount || original.total_cents)), p_stripe_ref: refund.id, p_rectifies: original.id });
         if (error) console.error('rectificative_failed', error); else rect = data;
       }
-      if (canWriteCouple(o)) await send([emailOf(o)], 'Devolución realizada', mail('Os hemos devuelto el importe.', `<p>Hemos hecho la devolución de ${esc(euros(Number(refund.amount || PRICE_CENTS)))} a la misma tarjeta con la que pagasteis. Según el banco, suele verse en 5 a 10 días.</p>${rect ? `<p>Aquí tenéis la factura de la devolución:</p>${button(await invoiceUrl(rect.id), 'Ver la factura')}` : ''}<p>Sentimos que esta vez no haya sido. Si en el futuro necesitáis algo, aquí estaremos.</p>`), `guest-refund-mail/${o.id}`);
+      if (canWriteCouple(o)) await send([emailOf(o)], 'Devolución realizada', mail('Devolución', 'Os hemos devuelto el importe.', mP(`Hemos hecho la devolución de <b>${esc(euros(Number(refund.amount || PRICE_CENTS)))}</b> a la misma tarjeta con la que pagasteis. Según el banco, suele verse en 5 a 10 días.`) + (rect ? mP('Aquí tenéis la factura de la devolución:') + button(await invoiceUrl(rect.id), 'Ver la factura') : '') + mP('Sentimos que esta vez no haya sido. Si en el futuro necesitáis algo, aquí estaremos.', true)), `guest-refund-mail/${o.id}`);
       return json({ ok: true, status: 'cancelled', refundId: refund.id, amountCents: refund.amount, rectificative: rect?.number || null });
     }
     return json({ ok: false, error: 'invalid_action' }, 400);
