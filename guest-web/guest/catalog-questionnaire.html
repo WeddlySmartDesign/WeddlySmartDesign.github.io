@@ -483,6 +483,7 @@
         <li><span>Os la mandamos completa, con su animación, para que la reviséis desde el móvil.</span></li>
         <li><span>Si está perfecta, la aprobáis. Si no, nos decís qué cambiar desde allí mismo.</span></li>
       </ol>
+      <a class="btn btn-ink" id="doneLink" hidden>Ver la invitación corregida</a>
     </div>
   </section>
 </main>
@@ -793,15 +794,15 @@ $('submit').onclick = async () => {
   if (!chk('reviewed')) { setMsg('Marcad la casilla para confirmar que lo habéis revisado.'); return; }
   const btn = $('submit'); btn.disabled = true; btn.textContent = 'Enviando…'; setMsg();
   try {
-    await api({ action: 'submit', token: TOKEN, questionnaire: collect() });
-    finish();
+    const res = await api({ action: 'submit', token: TOKEN, questionnaire: collect() });
+    finish(res);
   } catch (e) {
     const errs = e.data?.errors;
     setMsg(errs?.length ? errs.join(' ') : 'No hemos podido enviarlo. Todo lo que habéis escrito sigue guardado: probad de nuevo en un momento.');
     btn.disabled = false; btn.textContent = changesMode ? 'Enviar los cambios' : 'Enviar';
   }
 };
-function finish() {
+function finish(res = {}) {
   clearTimeout(saveTimer); loaded = false; $('saveState').hidden = true;
   $('form').hidden = true; $('nav').hidden = true; setMsg();
   $('intro').hidden = true; $('changesBanner').hidden = true;
@@ -810,6 +811,11 @@ function finish() {
     $('doneTitle').textContent = 'Cambios recibidos.';
     $('doneText').textContent = 'Montamos de nuevo vuestra invitación con lo que habéis cambiado y os la mandamos para revisarla.';
     $('doneSteps').hidden = true;
+    if (res.reviewUrl) {
+      $('doneTitle').textContent = 'Ya está corregida.';
+      $('doneText').textContent = 'La tenéis lista para revisar. También os la hemos mandado por email.';
+      $('doneLink').href = res.reviewUrl; $('doneLink').hidden = false;
+    }
   }
   $('mapStep').textContent = 'Enviado'; $('mapTitle').textContent = 'Vuestra invitación'; $('mapWhere').textContent = 'Ya la estamos preparando.';
   $$('.band').forEach((b) => { b.classList.remove('is-on'); b.classList.add('is-done'); });

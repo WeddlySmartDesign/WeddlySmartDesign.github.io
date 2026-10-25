@@ -511,6 +511,106 @@ async function internalSubmittedEmail(order:any){
     : '<p><a href="'+esc(link)+'">Abrir gestor de encargos</a></p>';
   return resend({to:['weddlysmartdesign@gmail.com'],subject:'Nuevo encargo GUEST · '+label,html:`<div lang="es" style="font-family:Arial,sans-serif;color:#2c2a26"><h2>Nuevo encargo GUEST</h2><p><b>${esc(label)}</b></p><p>Estado: datos recibidos.</p>${action}<p style="font-size:12px;color:#736f63">ID ${esc(order.id)}</p></div>`},'guest-invitation-submitted/'+order.id)
 }
+// Sends the review email and moves the order to review_sent. Used by the owner button and,
+// for corrections, automatically right after the couple submits their changes.
+async function sendReview(c:any,order:any,reviewUrlIn:any){
+      if(!['review_ready','review_sent'].includes(order.status))return json({ok:false,error:'invalid_status'},409);
+      const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);
+      checkInvitationConfig(order.resolved_config||{},order);
+      const token=await capability(order.id,'r'),supplied=txt(reviewUrlIn,1200),localTest=order.mode==='test'&&!supplied,ts=now();
+      // Paid catalog: review uses the SAME externally configured static host
+      // as the eventual final URL. Legacy/test reviews keep historic behavior.
+      const paidCatalogReview=order.mode==='production'&&Boolean(order.checkout_session_id);
+      let reviewBase=site();
+      if(paidCatalogReview){
+        const raw=String(qaEnv('GUEST_CATALOG_PUBLIC_ORIGIN')||'').trim();
+        if(!raw)return json({ok:false,error:'catalog_host_not_configured'},503);
+        try{
+          const host=new URL(raw);
+          if(host.protocol!=='https:'||host.username||host.password||
+             host.pathname!=='/'||host.search||host.hash)
+            throw Error('invalid');
+          reviewBase=host.origin;
+        }catch{return json({ok:false,error:'catalog_host_misconfigured'},503)}
+      }
+      const expectedReviewUrl=reviewBase+'/guest-review-v1.html?t='+encodeURIComponent(token);
+      if(paidCatalogReview&&supplied&&supplied!==expectedReviewUrl)
+        return json({ok:false,error:'invalid_review_url'},400);
+      const reviewUrl=supplied||(!localTest?expectedReviewUrl:'');
+      const isRevision=Number(order.revision_count||0)>0;
+      const content=localTest
+        ? emailBox('REVISIÓN DE PRUEBA','Vuestra invitación ya está preparada.','La revisión del pedido de prueba está lista.','<p style="font-size:14px;line-height:1.6;color:#83756b">Revisadla completa en el entorno de validación y desde allí podréis aprobarla o solicitar cambios.</p>')
+        : guestMail({kicker:isRevision?'Versión corregida':'Para revisar',title:isRevision?'Ya está corregida.':'Vuestra invitación ya está lista.',preheader:'Abridla en el móvil y aprobadla o cambiad lo que queráis.',
+            body:mP(isRevision?'Hemos aplicado vuestros cambios. Abridla de nuevo y comprobad que ahora está como queréis.':'Abridla en el móvil: la veréis entera, desde la portada hasta el final, tal y como la recibirán vuestros invitados.')
+              +mBtn(reviewUrl,'Ver nuestra invitación')
+              +mSteps([['Recorredla entera','Nombres, fecha, horas, direcciones y fotos.'],['Si os encanta, pulsad «Aprobar»','Os la preparamos para enviar.'],['Si queréis cambiar algo, pulsad «Cambiar algo»','Elegís la parte y la corregís vosotros mismos. Os mandamos la versión nueva para revisar.']],'Cómo funciona')
+              +mP('No hace falta responder a este email: todo se hace desde la invitación.',true)});
+      const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Revisión de prueba preparada':'Vuestra invitación está lista para revisar',html:content},'guest-review-send/'+order.id+'/'+String(order.revision_count||0));
+      if(!ok)return json({ok:false,error:'email_failed'},502);
+      const {error}=await c.from('guest_invitation_orders').update({status:'review_sent',review_sent_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
+      return json({ok:true,status:'review_sent',reviewUrl,reviewToken:token,localTest});
+}
+// Final delivery (invitation link + app access). Used by the owner button and automatically on approval.
+async function deliverOrder(c:any,order:any,invitationUrlIn:any){
+      if(order.status!=='approved')return json({ok:false,error:'approval_required'},409);
+      const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);
+      checkInvitationConfig(order.resolved_config||{},order);
+      const files=order.mode==='test'?(Array.isArray(order.files)?order.files:[]):await copyPublicFiles(c,order),publicFiles=order.mode==='test'?await signedFiles(c,order,7200):files.map((x:any)=>({...x,url:x.publicUrl||''})),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},publicFiles),order,publicFiles,'hydrated'),ts=now(),token=await capability(order.id,'p'),supplied=txt(invitationUrlIn,1200),localTest=order.mode==='test'&&!supplied,inviteUrl=supplied;
+      if(!inviteUrl)return json({ok:false,error:'missing_invitation_url'},400);
+      let finalUrl:any;try{finalUrl=new URL(inviteUrl)}catch{return json({ok:false,error:'invalid_invitation_url'},400)}
+      let configuredSite:any;try{configuredSite=new URL(site())}catch{return json({ok:false,error:'invalid_site_origin'},500)}
+      // SECONDARY STATIC CATALOG HOST: one operator-configured HTTPS origin, fail closed.
+      // Keep existing site() for activation codes and historic VEIL orders.
+      const publicOriginRaw=String(qaEnv('GUEST_CATALOG_PUBLIC_ORIGIN')||'').trim();
+      let secondaryOrigin='';
+      if(publicOriginRaw){
+        try{
+          const configured=new URL(publicOriginRaw);
+          if(configured.protocol!=='https:'||configured.username||configured.password||
+             configured.pathname!=='/'||configured.search||configured.hash)
+            throw Error('invalid_catalog_public_origin');
+          secondaryOrigin=configured.origin;
+        }catch{return json({ok:false,error:'catalog_host_misconfigured'},503)}
+      }
+      const onPrimary=finalUrl.origin===configuredSite.origin;
+      const onSecondary=secondaryOrigin!==''&&finalUrl.origin===secondaryOrigin&&
+        finalUrl.pathname==='/guest/catalog-final.html'&&
+        finalUrl.searchParams.get('p')===token&&
+        Array.from(finalUrl.searchParams.keys()).length===1&&
+        finalUrl.hash==='';
+      const paidCatalogDelivery=order.mode==='production'&&Boolean(order.checkout_session_id);
+      if(finalUrl.protocol!=='https:'||finalUrl.username||finalUrl.password||
+         !(paidCatalogDelivery?onSecondary:(onPrimary||onSecondary)))
+        return json({ok:false,error:'invalid_invitation_url'},400);
+      let accessUrl='';
+      if(order.license_id){
+        const {data:d}=await c.from('license_delivery_codes').select('activation_code').eq('license_id',order.license_id).maybeSingle();
+        if(d?.activation_code)accessUrl=site()+'/guest/access.html#code='+encodeURIComponent(String(d.activation_code));
+      }
+      if(order.mode==='production'&&!order.license_id)return json({ok:false,error:'missing_management_license'},409);
+      if(order.mode==='production'&&!accessUrl)return json({ok:false,error:'missing_management_access'},409);
+      const deliveryHtml=localTest
+        ? emailBox('ENTREGA DE PRUEBA','Lista para compartir.','La entrega final de prueba está completada.',emailPanel('<div style="font-size:14px;line-height:1.6">La entrega final de esta prueba está disponible en el archivo final del entorno de validación.</div>',true))
+        : guestMail({kicker:'Entrega',title:'Lista para compartir.',preheader:'Vuestra invitación definitiva y el acceso a la app de invitados.',
+            body:mP('Vuestra invitación está terminada. Aquí tenéis las dos cosas que necesitáis:')
+              +mBtn(inviteUrl,'Ver nuestra invitación')
+              +mBtn(accessUrl,'Abrir la app de invitados',true)
+              +mSteps([['Añadid a vuestros invitados','Uno a uno, por grupos o desde los contactos del móvil.'],['Enviad la invitación','Desde la app, por WhatsApp, a quien elijáis.'],['Las respuestas llegan solas','Asistencia, acompañantes, menús, alergias y transporte, todo reunido.'],['Organizad las mesas','Y sacad los listados para el catering cuando los necesitéis.']],'Con la app')
+              +mNote('<b>Guardad este email.</b> Es vuestro acceso a la invitación y a la app. Los dos podéis usarla, cada uno desde su móvil.')});
+      const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Vuestra invitación está lista para compartir',html:deliveryHtml},'guest-deliver-v3/'+order.id);
+      if(!ok)return json({ok:false,error:'email_failed'},502);
+      const {error}=await c.from('guest_invitation_orders').update({files,resolved_config:order.mode==='test'?order.resolved_config:config,delivery_url:inviteUrl||null,status:'delivered',delivered_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
+      return json({ok:true,status:'delivered',inviteUrl,accessUrl,publicToken:token,localTest});
+}
+// Delivers a just-approved paid catalog order without the owner. Returns {ok,inviteUrl} or {tried,error}.
+async function autoDeliver(c:any,order:any){
+  if(order.mode!=='production'||!order.checkout_session_id)return {ok:false,tried:false,error:'not_paid_catalog'};
+  try{
+    const url=catalogOrigin()+'/guest/catalog-final.html?p='+encodeURIComponent(await capability(order.id,'p'));
+    const r=await deliverOrder(c,order,url),j=await r.json().catch(()=>({}));
+    return j?.ok?{ok:true,tried:true,inviteUrl:j.inviteUrl}:{ok:false,tried:true,error:String(j?.error||r.status)};
+  }catch(e){console.error('auto_deliver',e);return {ok:false,tried:true,error:String((e as Error)?.message||'error')}}
+}
 Deno.serve(async req=>{
   if(req.method==='OPTIONS')return new Response('ok',{headers:cors});
   if(req.method!=='POST')return json({ok:false,error:'method_not_allowed'},405);
@@ -566,6 +666,21 @@ Deno.serve(async req=>{
       const config=checkInvitationConfig(buildConfig(questionnaire,order.files||[],'#',order.template_id,order.template_version),order),ts=now(),email=emailOf(questionnaire,order.buyer_email);
       const {error}=await c.from('guest_invitation_orders').update({questionnaire,resolved_config:config,buyer_email:email,status:'submitted',submitted_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
       const fresh={...order,questionnaire,resolved_config:config,buyer_email:email,status:'submitted',submitted_at:ts};
+      // Corrections go out on their own: the couple edited their own data, so the new version
+      // is rebuilt and sent for review straight away (paid catalog orders only).
+      if(order.status==='changes_requested'&&order.mode==='production'&&order.checkout_session_id){
+        const {error:e2}=await c.from('guest_invitation_orders').update({status:'review_ready',updated_at:ts}).eq('id',order.id);
+        if(!e2){
+          const r=await sendReview(c,{...fresh,status:'review_ready'},''),j=await r.json().catch(()=>({}));
+          if(j?.ok){
+            const last=Array.isArray(order.revision_requests)?order.revision_requests[order.revision_requests.length-1]:null;
+            await resend({to:['weddlysmartdesign@gmail.com'],subject:'Corrección enviada sola · '+orderLabel(order),html:guestMail({kicker:'Corrección enviada sola',title:'Han hecho su cambio y ya lo están revisando.',preheader:'No tienes que hacer nada.',body:mP('<b>'+esc(orderLabel(order))+'</b> ha cambiado sus datos y les ha llegado la versión corregida para revisar.')+(last?.note?mNote(esc(last.note).replaceAll('\n','<br>')):'')+mBtn(j.reviewUrl,'Ver la versión corregida')+mP('Si ves algo raro, entra en tu app: puedes corregirlo antes de que la aprueben.',true)})},'guest-auto-review-owner/'+order.id+'/'+String(order.revision_count||0));
+            return json({ok:true,submittedAt:ts,autoReview:true,reviewUrl:j.reviewUrl});
+          }
+          console.error('auto_review',j?.error);
+          await c.from('guest_invitation_orders').update({status:'submitted',updated_at:now()}).eq('id',order.id);
+        }
+      }
        if(order.mode!=='test')await internalSubmittedEmail(fresh);
        if(email&&order.mode!=='test'){
         const isChange=order.status==='changes_requested',who=namesOf(questionnaire);
@@ -597,6 +712,13 @@ Deno.serve(async req=>{
       if(decision==='approve'){
         checkInvitationConfig(order.resolved_config||{},order);
         const {error}=await c.from('guest_invitation_orders').update({status:'approved',approved_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
+        // Auto-delivery: paid catalog orders get the final link and app access right away.
+        const auto=await autoDeliver(c,{...order,status:'approved',approved_at:ts});
+        if(auto.ok){
+          await resend({to:['weddlysmartdesign@gmail.com'],subject:'Entregada sola · '+orderLabel(order),html:guestMail({kicker:'Entregada sola',title:'La han aprobado y ya la tienen.',preheader:'No tienes que hacer nada.',body:mP('<b>'+esc(orderLabel(order))+'</b> ha aprobado su invitación y les ha llegado la versión definitiva con el acceso a la app.')+mBtn(auto.inviteUrl,'Ver su invitación')+mP('No tienes que hacer nada.',true)})},'guest-auto-delivered-owner/'+order.id);
+          return json({ok:true,status:'delivered'});
+        }
+        if(auto.tried)await resend({to:['weddlysmartdesign@gmail.com'],subject:'Aprobada, falta entregar · '+orderLabel(order),html:guestMail({kicker:'Revisar',title:'No se ha podido entregar sola.',preheader:'Entra en tu app y pulsa Entregar.',body:mP('<b>'+esc(orderLabel(order))+'</b> ha aprobado su invitación, pero la entrega automática ha fallado ('+esc(auto.error)+').')+mBtn(QA_PREVIEW+'/guest/panel-pruebas.html','Abrir mis pedidos')+mP('Entra y pulsa «Entregar». Si vuelve a fallar, dímelo.',true)})},'guest-auto-deliver-failed/'+order.id);
          const to=emailOf(order.questionnaire,order.buyer_email);
          if(to&&order.mode!=='test')await resend({to:[to],subject:'Vuestra invitación está aprobada',html:guestMail({kicker:'Aprobada',title:'¡Aprobada! Ahora la dejamos lista para enviar.',preheader:'Os llega la versión definitiva con el acceso a la app de invitados.',
            body:mP('Gracias por confiar en nosotros'+(namesOf(order.questionnaire)?', '+esc(namesOf(order.questionnaire)):'')+'.')
@@ -613,7 +735,7 @@ Deno.serve(async req=>{
        if(to&&order.mode!=='test')await resend({to:[to],subject:'Vuestro enlace para hacer el cambio',html:guestMail({kicker:'Cambio pedido',title:part>=0?'Cambiad «'+QUESTIONNAIRE_PARTS[part]+'» cuando queráis.':'Cambiad lo que queráis.',preheader:'El enlace abre esa parte del cuestionario con vuestros datos.',
          body:mP('Este enlace abre esa parte de vuestro cuestionario con todo lo que ya pusisteis. Cambiad lo que necesitéis y pulsad <b>«Enviar los cambios»</b>.')
            +mBtn(await changeLink(order,part),'Hacer el cambio')
-           +mNote('Cuando lo enviéis, os mandamos la versión corregida para revisar <b>en un máximo de 72 h</b>.')
+           +mNote('Cuando lo enviéis, os llega <b>al momento</b> la versión corregida para revisar.')
            +mP('Si ya lo habéis hecho, podéis ignorar este email.',true)})},'guest-changes-link/'+order.id+'/'+String(order.revision_count||0));
        if(order.mode!=='test')await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados · '+orderLabel(order),html:'<p><b>'+esc(orderLabel(order))+'</b></p><p>'+esc(note).replaceAll('\n','<br>')+'</p>'},'guest-review-changes/'+order.id+'/'+String(order.revision_count||0));
       return json({ok:true,status:'changes_requested',questionnaireToken:await capability(order.id,'q')});
@@ -761,93 +883,11 @@ Deno.serve(async req=>{
     }
     if(action==='send_review'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
-      if(!['review_ready','review_sent'].includes(order.status))return json({ok:false,error:'invalid_status'},409);
-      const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);
-      checkInvitationConfig(order.resolved_config||{},order);
-      const token=await capability(order.id,'r'),supplied=txt(b.reviewUrl,1200),localTest=order.mode==='test'&&!supplied,ts=now();
-      // Paid catalog: review uses the SAME externally configured static host
-      // as the eventual final URL. Legacy/test reviews keep historic behavior.
-      const paidCatalogReview=order.mode==='production'&&Boolean(order.checkout_session_id);
-      let reviewBase=site();
-      if(paidCatalogReview){
-        const raw=String(qaEnv('GUEST_CATALOG_PUBLIC_ORIGIN')||'').trim();
-        if(!raw)return json({ok:false,error:'catalog_host_not_configured'},503);
-        try{
-          const host=new URL(raw);
-          if(host.protocol!=='https:'||host.username||host.password||
-             host.pathname!=='/'||host.search||host.hash)
-            throw Error('invalid');
-          reviewBase=host.origin;
-        }catch{return json({ok:false,error:'catalog_host_misconfigured'},503)}
-      }
-      const expectedReviewUrl=reviewBase+'/guest-review-v1.html?t='+encodeURIComponent(token);
-      if(paidCatalogReview&&supplied&&supplied!==expectedReviewUrl)
-        return json({ok:false,error:'invalid_review_url'},400);
-      const reviewUrl=supplied||(!localTest?expectedReviewUrl:'');
-      const isRevision=Number(order.revision_count||0)>0;
-      const content=localTest
-        ? emailBox('REVISIÓN DE PRUEBA','Vuestra invitación ya está preparada.','La revisión del pedido de prueba está lista.','<p style="font-size:14px;line-height:1.6;color:#83756b">Revisadla completa en el entorno de validación y desde allí podréis aprobarla o solicitar cambios.</p>')
-        : guestMail({kicker:isRevision?'Versión corregida':'Para revisar',title:isRevision?'Ya está corregida.':'Vuestra invitación ya está lista.',preheader:'Abridla en el móvil y aprobadla o cambiad lo que queráis.',
-            body:mP(isRevision?'Hemos aplicado vuestros cambios. Abridla de nuevo y comprobad que ahora está como queréis.':'Abridla en el móvil: la veréis entera, desde la portada hasta el final, tal y como la recibirán vuestros invitados.')
-              +mBtn(reviewUrl,'Ver nuestra invitación')
-              +mSteps([['Recorredla entera','Nombres, fecha, horas, direcciones y fotos.'],['Si os encanta, pulsad «Aprobar»','Os la preparamos para enviar.'],['Si queréis cambiar algo, pulsad «Cambiar algo»','Elegís la parte y la corregís vosotros mismos. Os mandamos la versión nueva para revisar.']],'Cómo funciona')
-              +mP('No hace falta responder a este email: todo se hace desde la invitación.',true)});
-      const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Revisión de prueba preparada':'Vuestra invitación está lista para revisar',html:content},'guest-review-send/'+order.id+'/'+String(order.revision_count||0));
-      if(!ok)return json({ok:false,error:'email_failed'},502);
-      const {error}=await c.from('guest_invitation_orders').update({status:'review_sent',review_sent_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
-      return json({ok:true,status:'review_sent',reviewUrl,reviewToken:token,localTest});
+      return await sendReview(c,order,b.reviewUrl);
     }
     if(action==='deliver'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
-      if(order.status!=='approved')return json({ok:false,error:'approval_required'},409);
-      const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);
-      checkInvitationConfig(order.resolved_config||{},order);
-      const files=order.mode==='test'?(Array.isArray(order.files)?order.files:[]):await copyPublicFiles(c,order),publicFiles=order.mode==='test'?await signedFiles(c,order,7200):files.map((x:any)=>({...x,url:x.publicUrl||''})),config=checkInvitationConfig(hydrateConfig(order.resolved_config||{},publicFiles),order,publicFiles,'hydrated'),ts=now(),token=await capability(order.id,'p'),supplied=txt(b.invitationUrl,1200),localTest=order.mode==='test'&&!supplied,inviteUrl=supplied;
-      if(!inviteUrl)return json({ok:false,error:'missing_invitation_url'},400);
-      let finalUrl:any;try{finalUrl=new URL(inviteUrl)}catch{return json({ok:false,error:'invalid_invitation_url'},400)}
-      let configuredSite:any;try{configuredSite=new URL(site())}catch{return json({ok:false,error:'invalid_site_origin'},500)}
-      // SECONDARY STATIC CATALOG HOST: one operator-configured HTTPS origin, fail closed.
-      // Keep existing site() for activation codes and historic VEIL orders.
-      const publicOriginRaw=String(qaEnv('GUEST_CATALOG_PUBLIC_ORIGIN')||'').trim();
-      let secondaryOrigin='';
-      if(publicOriginRaw){
-        try{
-          const configured=new URL(publicOriginRaw);
-          if(configured.protocol!=='https:'||configured.username||configured.password||
-             configured.pathname!=='/'||configured.search||configured.hash)
-            throw Error('invalid_catalog_public_origin');
-          secondaryOrigin=configured.origin;
-        }catch{return json({ok:false,error:'catalog_host_misconfigured'},503)}
-      }
-      const onPrimary=finalUrl.origin===configuredSite.origin;
-      const onSecondary=secondaryOrigin!==''&&finalUrl.origin===secondaryOrigin&&
-        finalUrl.pathname==='/guest/catalog-final.html'&&
-        finalUrl.searchParams.get('p')===token&&
-        Array.from(finalUrl.searchParams.keys()).length===1&&
-        finalUrl.hash==='';
-      const paidCatalogDelivery=order.mode==='production'&&Boolean(order.checkout_session_id);
-      if(finalUrl.protocol!=='https:'||finalUrl.username||finalUrl.password||
-         !(paidCatalogDelivery?onSecondary:(onPrimary||onSecondary)))
-        return json({ok:false,error:'invalid_invitation_url'},400);
-      let accessUrl='';
-      if(order.license_id){
-        const {data:d}=await c.from('license_delivery_codes').select('activation_code').eq('license_id',order.license_id).maybeSingle();
-        if(d?.activation_code)accessUrl=site()+'/guest/access.html#code='+encodeURIComponent(String(d.activation_code));
-      }
-      if(order.mode==='production'&&!order.license_id)return json({ok:false,error:'missing_management_license'},409);
-      if(order.mode==='production'&&!accessUrl)return json({ok:false,error:'missing_management_access'},409);
-      const deliveryHtml=localTest
-        ? emailBox('ENTREGA DE PRUEBA','Lista para compartir.','La entrega final de prueba está completada.',emailPanel('<div style="font-size:14px;line-height:1.6">La entrega final de esta prueba está disponible en el archivo final del entorno de validación.</div>',true))
-        : guestMail({kicker:'Entrega',title:'Lista para compartir.',preheader:'Vuestra invitación definitiva y el acceso a la app de invitados.',
-            body:mP('Vuestra invitación está terminada. Aquí tenéis las dos cosas que necesitáis:')
-              +mBtn(inviteUrl,'Ver nuestra invitación')
-              +mBtn(accessUrl,'Abrir la app de invitados',true)
-              +mSteps([['Añadid a vuestros invitados','Uno a uno, por grupos o desde los contactos del móvil.'],['Enviad la invitación','Desde la app, por WhatsApp, a quien elijáis.'],['Las respuestas llegan solas','Asistencia, acompañantes, menús, alergias y transporte, todo reunido.'],['Organizad las mesas','Y sacad los listados para el catering cuando los necesitéis.']],'Con la app')
-              +mNote('<b>Guardad este email.</b> Es vuestro acceso a la invitación y a la app. Los dos podéis usarla, cada uno desde su móvil.')});
-      const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Vuestra invitación está lista para compartir',html:deliveryHtml},'guest-deliver-v3/'+order.id);
-      if(!ok)return json({ok:false,error:'email_failed'},502);
-      const {error}=await c.from('guest_invitation_orders').update({files,resolved_config:order.mode==='test'?order.resolved_config:config,delivery_url:inviteUrl||null,status:'delivered',delivered_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
-      return json({ok:true,status:'delivered',inviteUrl,accessUrl,publicToken:token,localTest});
+      return await deliverOrder(c,order,b.invitationUrl);
     }
     if(action==='owner_note'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);

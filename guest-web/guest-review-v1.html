@@ -133,6 +133,7 @@ async function respond(decision) {
     const body = { action: 'review_respond', token, decision };
     if (decision === 'changes') body.note = 'Parte: ' + PARTS[part][0] + (extra ? '\n' + extra : '');
     const x = await api(body);
+    if (x.status === 'delivered') { done('Aprobada. ¡Enhorabuena!', 'Os acabamos de mandar un email con el enlace para vuestros invitados y el acceso a la app de invitados.'); return; }
     if (x.status === 'approved') { done('Aprobada. ¡Enhorabuena!', 'La preparamos para enviar y os escribimos con el enlace para vuestros invitados y el acceso a la app.'); return; }
     if (x.status !== 'changes_requested') throw Error('unexpected_response');
     if (x.questionnaireToken) { location.href = `guest/catalog-questionnaire.html?t=${encodeURIComponent(x.questionnaireToken)}&parte=${part}`; return; }
