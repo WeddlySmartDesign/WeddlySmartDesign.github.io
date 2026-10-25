@@ -4,6 +4,7 @@ on:
     branches: [guest-independent]
     paths:
       - '.github/workflows/guest-stripe-sandbox-readonly-2026-10-25.yml'
+      - 'guest/qa/stripe_sandbox_readonly_2026_10_25.cjs'
   workflow_dispatch:
 permissions:
   contents: read
