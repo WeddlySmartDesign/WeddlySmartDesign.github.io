@@ -135,3 +135,11 @@ Esta actualización modifica la lectura de los pendientes P0-01 y P0-07 y se imp
 - **Ventas deshabilitadas.** NO confundir QA remoto sintético con cliente real o sincronización física.
 
 **Siguiente paso que sí depende de autorización/capacidad externa:** acceso seguro a Stripe TEST + verificación real de Cloudflare/Resend con pedido E2E y dos dispositivos. Preparar todo autónomamente y pedir a la titular solo la mínima autorización inevitable fuera de jornada.
+
+
+## 25/10/2026 — VIÑETAS ELLAS/ELLOS: DISEÑOS ORIGINALES CORRECTOS
+- **D14 VIÑETAS · ELLAS:** dos novias, pareja de la muestra **Lucía y Martina**. No convertirla en pareja mixta.
+- **D15 VIÑETAS · ELLOS:** dos novios, pareja de la muestra **Álvaro y Pablo**. No convertirla en pareja mixta.
+- **No se han modificado** ninguno de los dos diseños originales ni su master, nombres, escenas o activos.
+- Error histórico real **en una prueba automática**, no en el diseño: esperaba el nombre femenino «Lucía» en D15. La prueba aislada [run 40184786851](https://github.com/WeddlySmartDesign/WeddlySmartDesign.github.io/actions/runs/40184786851) confirma ambos nombres de **ambos** diseños, en **320 y 390 px**, sin errores JS ni recursos faltantes. QA actualizada en `guest/qa/claude_candidate_13_skins_browser_smoke.cjs` para comprobar explícitamente estas dos parejas.
+- Invariante permanente: **no modificar nombres o imágenes de los masters para satisfacer pruebas genéricas**; las pruebas deben reflejar el diseño aprobado y las particularidades de cada plantilla. No interpretar este arreglo de QA como cambio del diseño ni como certificación comercial.
