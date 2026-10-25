@@ -81,6 +81,22 @@
     .deadline b { font: 400 1.35rem/1.1 var(--display); }
     .deadline.soon { background: #fbecd9; color: #8a4a0a !important; }
     .deadline.late { background: #fbe4e6; color: var(--postmark) !important; }
+    .btn.danger { background: var(--postmark); border-color: var(--postmark); color: var(--white); }
+    .refund-confirm p { margin: .9rem 0 .6rem; color: var(--ink); }
+    .refund-go { margin-top: .9rem; }
+    .btns { display: flex; flex-wrap: wrap; gap: .6rem; }
+    .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .6rem; }
+    .tile { display: grid; gap: .15rem; padding: 1rem; border-radius: 12px; background: var(--white); box-shadow: 0 1px 2px rgba(27, 38, 80, .08), 0 10px 24px -18px rgba(27, 38, 80, .5); }
+    .tile span { font: 700 .75rem/1 var(--mono); color: var(--ink-soft); }
+    .tile b { font: 400 1.6rem/1.15 var(--display); }
+    .tile small { font-size: .8125rem; color: var(--ink-soft); }
+    .bars { display: grid; gap: .55rem; padding: 1rem; border-radius: 12px; background: var(--white); }
+    .bar-row { display: grid; grid-template-columns: 6.5rem 1fr 2rem; gap: .6rem; align-items: center; font-size: .9375rem; }
+    .bar-row i { display: block; height: 10px; width: var(--w); min-width: 6px; border-radius: 5px; background: var(--ink); }
+    .bar-row b { text-align: right; font-variant-numeric: tabular-nums; }
+    .tiles + .sec { margin-top: 1.75rem; }
+    .hint { margin: 1.25rem 0 .5rem; font-size: .875rem; color: var(--ink-soft); }
+    .link-btn { min-height: 44px; border: 0; background: none; font-weight: 600; text-decoration: underline; text-underline-offset: .25em; cursor: pointer; }
     .calm { padding: 1.25rem; border-radius: 12px; background: var(--white); color: var(--ink-soft); }
     .calm b { display: block; color: var(--ink); font: 400 1.35rem/1.15 var(--display); margin-bottom: .25rem; }
     .search { margin-bottom: .9rem; }
@@ -89,7 +105,7 @@
     .chip { flex: none; min-height: 38px; padding: 0 .9rem; border: 1.5px solid var(--line); border-radius: 99px; background: var(--white); font-weight: 600; font-size: .9375rem; cursor: pointer; }
     .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 
-    .tabs { position: fixed; z-index: 25; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr; padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--white) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
+    .tabs { position: fixed; z-index: 25; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(3, 1fr); padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--white) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
     .tab { display: grid; justify-items: center; gap: 2px; min-height: 52px; padding-top: 6px; border: 0; background: none; font-size: .8125rem; font-weight: 600; color: var(--ink-soft); cursor: pointer; position: relative; }
     .tab svg { width: 24px; height: 24px; }
     .tab[aria-current="page"] { color: var(--ink); }
@@ -160,7 +176,7 @@
       .o-grid { grid-template-columns: 340px minmax(0, 1fr); align-items: start; column-gap: 2.5rem; }
       .stage { position: sticky; top: calc(var(--top) + 1rem); }
       .phone { width: 320px; }
-      .tabs { left: 50%; right: auto; bottom: 16px; translate: -50% 0; width: 22rem; border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 12px 30px -18px rgba(27, 38, 80, .5); }
+      .tabs { left: 50%; right: auto; bottom: 16px; translate: -50% 0; width: 26rem; border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 12px 30px -18px rgba(27, 38, 80, .5); }
       .dock { display: none !important; }
       .d-act { display: grid !important; }
     }
@@ -180,6 +196,9 @@
   <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7 8 6 8-6"/></g></symbol>
   <symbol id="i-link" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></g></symbol>
   <symbol id="i-doc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3.5h8l4 4v13H6z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></g></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16"/><path d="M7 16v-5M12 16V7M17 16v-8"/></g></symbol>
+  <symbol id="i-receipt" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 11.5h6M9 15h3"/></g></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></g></symbol>
   <symbol id="i-out" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v16h-6"/><path d="M10 8l-4 4 4 4M6 12h10"/></g></symbol>
 </svg>
 
@@ -204,11 +223,13 @@
   <div class="cards" id="allList"></div>
   <p style="margin-top:2rem;text-align:center"><button class="btn line" id="logout" type="button"><svg width="18" height="18" aria-hidden="true"><use href="#i-out"/></svg>Salir de este móvil</button></p>
 </main>
+<main id="sales" class="view" hidden></main>
 <main id="order" class="order" hidden></main>
 
 <nav class="tabs" id="tabs" hidden>
   <button class="tab" type="button" data-tab="inbox" aria-current="page"><svg aria-hidden="true"><use href="#i-inbox"/></svg>Para ti<span class="dot" id="dot" hidden></span></button>
   <button class="tab" type="button" data-tab="all"><svg aria-hidden="true"><use href="#i-list"/></svg>Todos</button>
+  <button class="tab" type="button" data-tab="sales"><svg aria-hidden="true"><use href="#i-chart"/></svg>Ventas</button>
 </nav>
 <div class="dock" id="dock" hidden><div class="dock-in" id="dockIn"></div></div>
 <div class="full" id="full" hidden><div class="full-host" id="fullHost"></div><button class="ib" id="closeFull" type="button" aria-label="Cerrar"><svg aria-hidden="true"><use href="#i-x"/></svg></button></div>
@@ -219,6 +240,7 @@
 'use strict';
 const OWNER = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-owner-manager';
 const FLOW = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow-qa';
+const AUTO = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-automation';
 const KEY = 'weddly_owner_manager_token_v1';
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -233,9 +255,10 @@ const STATUS = {
   review_sent: { label: 'Revisándola la pareja', who: 'them', group: 'waiting' },
   changes_requested: { label: 'Corrigiendo la pareja', who: 'them', group: 'waiting' },
   approved: { label: 'Aprobada: entregar', who: 'you', group: 'deliver' },
-  delivered: { label: 'Entregada', who: 'done', group: 'done' }
+  delivered: { label: 'Entregada', who: 'done', group: 'done' },
+  cancelled: { label: 'Devuelto', who: 'done', group: 'done' }
 };
-const FILTERS = [['all', 'Todos'], ['you', 'Te toca'], ['them', 'Esperando'], ['done', 'Entregados']];
+const FILTERS = [['all', 'Todos'], ['you', 'Te toca'], ['them', 'Esperando'], ['done', 'Terminados']];
 let orders = [], filter = 'all', current = null, registry = null, toastTimer = null;
 
 /* ---- Utilidades ---- */
@@ -331,6 +354,7 @@ function next(o) {
   if (s === 'review_sent') return { title: 'Esperando a la pareja', text: 'Tienen el enlace para aprobarla o cambiar una parte. Te avisará la bandeja cuando la aprueben.' };
   if (s === 'changes_requested') return { title: 'La pareja está corrigiendo', text: 'Han abierto la parte que querían cambiar. Cuando la envíen, volverá a tu bandeja ya montada de nuevo.' };
   if (s === 'approved') return { title: 'Aprobada', text: 'Al entregar, les llega por email el enlace definitivo para sus invitados y el acceso a la app de invitados.', btn: 'Entregar', run: deliver };
+  if (s === 'cancelled') return { title: 'Devuelto', text: 'Se les devolvió el importe. Tienen su factura de devolución en el email.' };
   if (s === 'delivered') return { title: 'Entregada', text: 'Ya tienen su invitación y el acceso a la app. No tienes que hacer nada más.' };
   return { title: 'Rellenando el cuestionario', text: 'Aún no lo han enviado. No tienes que hacer nada.' };
 }
@@ -390,8 +414,19 @@ async function openOrder(id) {
             ${['review_sent', 'changes_requested', 'approved'].includes(o.status) ? `<li><button type="button" data-copy="${esc(reviewUrl)}"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Copiar su enlace de revisión<small>Por si no les llega el email</small></span></button></li>` : ''}
             ${o.status === 'delivered' ? `<li><a href="${esc(finalUrl)}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Abrir la invitación final<small>La que comparten con sus invitados</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li><li><button type="button" data-copy="${esc(finalUrl)}"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Copiar el enlace final</span></button></li>` : ''}
           </ul></div>
+          <div class="box"><h3>Facturas</h3><ul class="rows" id="invoices"><li><span style="padding:.8rem 0;color:var(--ink-soft)">Cargando…</span></li></ul></div>
+          ${o.checkout_session_id && !['delivered', 'cancelled'].includes(o.status) ? `<div class="box refund"><h3>Devolver el dinero</h3><p>${o.status === 'approved' ? 'Ya la han aprobado: según tus condiciones, la devolución completa era hasta antes de aprobar.' : 'Prometes devolver el 100 % antes de aprobar. Se devuelve a su tarjeta, se anula el pedido y les llega la factura de devolución.'}</p>
+            <div class="refund-go"><button class="btn line" type="button" id="refundAsk"><svg width="18" height="18" aria-hidden="true"><use href="#i-undo"/></svg>Devolver ${esc(eur(5990))}</button></div>
+            <div class="refund-confirm" hidden><p><b>¿Seguro?</b> No se puede deshacer.</p><div class="btns"><button class="btn danger" type="button" id="refundYes">Sí, devolver</button><button class="btn line" type="button" id="refundNo">No</button></div></div>
+            <p class="msg" id="refundMsg" role="alert"></p></div>` : ''}
         </div>
       </div>`;
+    loadInvoices(o.id);
+    if ($('refundAsk')) {
+      $('refundAsk').onclick = () => { $('refundAsk').parentElement.hidden = true; $('refundAsk').closest('.box').querySelector('.refund-confirm').hidden = false; };
+      $('refundNo').onclick = () => { $('refundAsk').parentElement.hidden = false; $('refundNo').closest('.refund-confirm').hidden = true; };
+      $('refundYes').onclick = () => refund(o);
+    }
     $('order').querySelectorAll('[data-copy]').forEach((b) => b.onclick = () => copy(b.dataset.copy));
     if (a.btn) {
       $('dockIn').innerHTML = `<button class="btn wide" data-act type="button">${esc(a.btn)}</button><p class="msg" role="alert"></p>`;
@@ -428,12 +463,53 @@ function deliver(o, b) {
   }, 'Entregada. Ya tienen su invitación.');
 }
 
+const auto = (b) => call(AUTO, b);
+const eur = (c) => (c / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
+async function loadInvoices(id) {
+  try {
+    const { invoices } = await auto({ action: 'invoices', orderId: id });
+    $('invoices').innerHTML = invoices.length ? invoices.map((f) => `<li><a href="${esc(f.url)}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-receipt"/></svg><span>${f.kind === 'rectificative' ? 'Devolución' : 'Factura'} ${esc(f.number)}<small>${esc(eur(f.totalCents))} · ${esc(day(f.issuedAt))}</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>`).join('')
+      : '<li><span style="padding:.8rem 0;color:var(--ink-soft);display:block">Se crea sola en menos de una hora tras el pago y les llega por email.</span></li>';
+  } catch (e) { if ($('invoices')) $('invoices').innerHTML = '<li><span style="padding:.8rem 0;color:var(--ink-soft);display:block">No se han podido cargar.</span></li>'; }
+}
+async function refund(o) {
+  const b = $('refundYes'); b.disabled = true; b.textContent = 'Devolviendo…'; $('refundMsg').textContent = '';
+  try {
+    const r = await auto({ action: 'refund', orderId: o.id });
+    toast(`Devueltos ${eur(r.amountCents || 5990)}. Les ha llegado por email.`);
+    await refresh(); openOrder(o.id);
+  } catch (e) {
+    if (e.message === 'manager_required') return;
+    $('refundMsg').textContent = { stripe_key_missing: 'Falta conectar Stripe para poder devolver.', already_refunded: 'Ya estaba devuelto.' }[e.message] || 'No se ha podido devolver. Inténtalo otra vez o hazlo desde Stripe.';
+    b.disabled = false; b.textContent = 'Sí, devolver';
+  }
+}
+
+/* ---- Ventas ---- */
+let showTest = false;
+async function renderSales() {
+  $('sales').innerHTML = '<div class="skel"><i></i><i></i></div>';
+  try {
+    const st = await auto({ action: 'stats' });
+    const s = showTest ? st.test : st.live, diff = s.week.cents - s.lastWeek.cents;
+    const tile = (t, x, sub) => `<div class="tile"><span>${t}</span><b>${esc(eur(x.cents))}</b><small>${x.sales} ${x.sales === 1 ? 'venta' : 'ventas'}${x.refunds ? ` · ${x.refunds} ${x.refunds === 1 ? 'devolución' : 'devoluciones'}` : ''}${sub ? ' · ' + sub : ''}</small></div>`;
+    const max = Math.max(1, ...s.designs.map((d) => d[1]));
+    $('sales').innerHTML = `
+      <div class="hello"><strong>${esc(eur(s.month.cents))}</strong><span>este mes, IVA incluido${showTest ? ' · compras de prueba' : ''}</span></div>
+      <div class="tiles">${tile('Esta semana', s.week, s.lastWeek.cents || s.week.cents ? (diff >= 0 ? '+' : '−') + esc(eur(Math.abs(diff))) + ' que la anterior' : '')}${tile('Semana pasada', s.lastWeek)}${tile('Desde el principio', s.total)}</div>
+      <section class="sec"><h3>Diseños más vendidos</h3>${s.designs.length ? `<div class="bars">${s.designs.map(([n, c]) => `<div class="bar-row"><span>${esc(n)}</span><i style="--w:${(c / max) * 100}%"></i><b>${c}</b></div>`).join('')}</div>` : '<div class="calm">Aún no hay ventas.</div>'}</section>
+      <p class="hint">Cada venta tiene su factura, numerada sola. Cada lunes te llega este resumen por email.</p>
+      <p style="text-align:center"><button class="link-btn" type="button" id="toggleTest">${showTest ? 'Ver ventas reales' : 'Ver compras de prueba'}</button></p>`;
+    $('toggleTest').onclick = () => { showTest = !showTest; renderSales(); };
+  } catch (e) { if (e.message !== 'manager_required') $('sales').innerHTML = '<div class="calm"><b>No se han podido cargar</b>Toca actualizar arriba.</div>'; }
+}
+
 /* ---- Navegación ---- */
 function showView(v) {
-  ['inbox', 'all', 'order'].forEach((x) => { $(x).hidden = x !== v; });
+  ['inbox', 'all', 'sales', 'order'].forEach((x) => { $(x).hidden = x !== v; });
   $('tabs').hidden = v === 'order'; $('dock').hidden = true; $('refresh').hidden = false; $('back').hidden = v !== 'order';
   document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-current', t.dataset.tab === v ? 'page' : 'false'));
-  if (v !== 'order') { $('title').textContent = v === 'all' ? 'Todos los pedidos' : 'Pedidos'; current = null; }
+  if (v !== 'order') { $('title').textContent = v === 'all' ? 'Todos los pedidos' : v === 'sales' ? 'Ventas' : 'Pedidos'; current = null; }
   scrollTo({ top: 0 });
 }
 function route() {
@@ -441,9 +517,10 @@ function route() {
   const h = location.hash;
   if (h.startsWith('#/pedido/')) return openOrder(decodeURIComponent(h.slice(9)));
   if (h === '#/todos') { showView('all'); renderAll(); return; }
+  if (h === '#/ventas') { showView('sales'); renderSales(); return; }
   showView('inbox'); renderInbox();
 }
-document.querySelectorAll('.tab').forEach((t) => t.onclick = () => { location.hash = t.dataset.tab === 'all' ? '#/todos' : '#/'; });
+document.querySelectorAll('.tab').forEach((t) => t.onclick = () => { location.hash = { all: '#/todos', sales: '#/ventas' }[t.dataset.tab] || '#/'; });
 $('back').onclick = () => (history.length > 1 ? history.back() : (location.hash = '#/'));
 addEventListener('hashchange', route);
 
