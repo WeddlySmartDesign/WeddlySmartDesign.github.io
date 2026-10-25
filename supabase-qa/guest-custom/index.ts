@@ -174,11 +174,12 @@ const view = (r: any) => ({ id: r.id, createdAt: r.created_at, updatedAt: r.upda
 /* ---------- Entrega con la app de invitados ---------- */
 function activationCode() { const a = crypto.randomUUID().replaceAll('-', '').toUpperCase(), b = crypto.randomUUID().replaceAll('-', '').toUpperCase(); return `WSD-GUEST-${a.slice(0, 8)}-${a.slice(8, 16)}-${b.slice(0, 8)}`; }
 async function sha256(v: string) { const h = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(v)); return Array.from(new Uint8Array(h)).map((x) => x.toString(16).padStart(2, '0')).join(''); }
-// Misma licencia que una compra del catálogo (dos personas, una boda). Si ya existe, devuelve la misma.
+// Licencia de dos personas para una boda. Si ya existe, devuelve la misma. guest-license-access solo
+// abre la app con product 'guests'; no hay pedido del catálogo, así que no espera a una entrega.
 async function access(c: any, r: any) {
   const code = activationCode();
   const { data, error } = await c.rpc('provision_weddly_license', { p_source: 'custom', p_source_order_id: 'custom-' + r.id, p_buyer_email: r.email, p_product_ref: 'guest_custom',
-    p_metadata: { product: 'guest', edition: 'custom', access_kind: 'paid', payment_provider: 'stripe', custom_request_id: r.id, test: r.mode === 'test', amount_total: r.quote_cents, currency: 'eur' },
+    p_metadata: { product: 'guests', edition: 'custom', access_kind: 'paid', payment_provider: 'stripe', custom_request_id: r.id, test: r.mode === 'test', amount_total: r.quote_cents, currency: 'eur' },
     p_activation_code: code, p_purchase_hash: await sha256(code.replace(/[^A-Z0-9]/g, '')) });
   if (error) throw error;
   const row = data?.[0];
