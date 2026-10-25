@@ -566,7 +566,7 @@ function ccard(r) {
     ${d?.image ? `<img src="../${esc(d.image)}" alt="" loading="lazy">` : '<span class="ph"></span>'}
     <span><b>${esc(r.name)}</b><small>${esc(r.tierName)}${r.quoteCents ? ' · ' + esc(eur(r.quoteCents)) : ''}${r.weddingDate ? ' · boda el ' + esc(day(r.weddingDate)) : ''}</small>
     <span class="pill ${s.who === 'you' ? 'you' : s.who === 'done' ? 'ok' : ''}">${esc(s.label)}</span>
-    <small>${esc(r.status === 'new' ? 'Pedido ' + ago(r.createdAt) : ago(r.updatedAt))}${r.urgency === 'urgent' ? ' · ¡urgente!' : ''}${r.test ? ' · prueba' : ''}</small></span>
+    ${r.quoteDueAt ? (() => { const t = dueText({ at: Date.parse(r.quoteDueAt), what: 'Presupuestar' }); return `<small class="due ${t.level}">${esc(t.short)} · ${esc(t.long.toLowerCase())}${r.test ? ' · prueba' : ''}</small>`; })() : `<small>${esc(ago(r.updatedAt))}${r.urgency === 'urgent' ? ' · ¡urgente!' : ''}${r.test ? ' · prueba' : ''}</small>`}</span>
     <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>`;
 }
 document.addEventListener('click', (e) => { const c = e.target.closest('.card[data-cid]'); if (c) location.hash = '#/medida/' + c.dataset.cid; });
@@ -589,7 +589,8 @@ async function openCustom(id) {
     let act = '';
     if (r.status === 'new' || r.status === 'quoted') {
       const start = r.quoteCents || r.suggestedCents;
-      act = `<h3>${r.status === 'new' ? 'Ponle precio' : 'Presupuesto enviado'}</h3>
+      const dl = r.quoteDueAt ? (() => { const t = dueText({ at: Date.parse(r.quoteDueAt), what: 'Mandar el presupuesto' }); return `<p class="deadline ${t.level}"><b>${esc(t.short)}</b>${esc(t.long)}</p>`; })() : '';
+      act = dl + `<h3>${r.status === 'new' ? 'Ponle precio' : 'Presupuesto enviado'}</h3>
         <p>${r.status === 'new' ? `Han elegido <b>${esc(r.tierName)}</b>. Revisa lo que piden y ajusta el precio si hace falta.` : `Les mandaste ${esc(eur(r.quoteCents))} ${esc(ago(r.quotedAt))}. Si lo cambias, les llega el nuevo y el enlace anterior deja de valer.`}</p>
         <ul class="guide">${(SCOPE[r.tier] || []).map((x) => `<li>${esc(x)}</li>`).join('')}<li>Incluye ${rounds} rondas de cambios; cada ronda extra, ${esc(eur(customsCfg.extraCents))}.</li></ul>
         <div class="q-form">
@@ -612,7 +613,12 @@ async function openCustom(id) {
     } else if (r.status === 'final_sent') {
       act = `<h3>Esperando el pago final</h3><p>Tienen el enlace para pagar ${esc(eur(r.quoteCents - Math.round(r.quoteCents / 2)))}. Cuando paguen, te llega un email y la factura sale sola.</p>`;
     } else if (r.status === 'paid') {
-      act = `<h3>Todo pagado</h3><p>Entrégales la invitación definitiva y su acceso a la app. Después márcala como entregada.</p><div class="acts"><button class="btn" type="button" id="cDone">Marcar como entregada</button><p class="msg" role="alert" id="cMsg"></p></div>`;
+      act = `<h3>Todo pagado: entrégala</h3><p>Pega el enlace de su invitación terminada. Al entregar, les llega por email junto con su acceso a la app de invitados, igual que en una compra normal.</p>
+        <div class="q-form"><label>Enlace de la invitación (opcional)<input id="dUrl" type="url" inputmode="url" placeholder="https://…" value="${esc(r.deliveryUrl || '')}"></label></div>
+        <div class="acts"><button class="btn" type="button" id="cDeliver">Entregar con la app</button><p class="msg" role="alert" id="cMsg"></p></div>`;
+    } else if (r.status === 'delivered') {
+      act = `<h3>Entregada</h3><p>Tienen su invitación y su acceso a la app${r.deliveredAt ? ' desde el ' + esc(day(r.deliveredAt)) : ''}. No tienes que hacer nada más.</p>
+        <div class="acts"><button class="btn line" type="button" id="cDeliver">Volver a mandarles la entrega</button><p class="msg" role="alert" id="cMsg"></p></div>`;
     } else act = `<h3>${esc(s.label)}</h3><p>${r.status === 'declined' ? 'No se envió presupuesto.' : 'Terminada. No tienes que hacer nada más.'}</p>${r.status === 'declined' ? '<div class="acts"><button class="btn line" type="button" id="cReopen">Recuperarla</button><p class="msg" role="alert" id="cMsg"></p></div>' : ''}`;
 
     $('order').innerHTML = `
@@ -630,7 +636,9 @@ async function openCustom(id) {
         <div class="box"><h3>La pareja</h3><ul class="rows">
           ${wa ? `<li><a href="https://wa.me/${esc(wa)}?text=${encodeURIComponent(`Hola, ${String(r.name).split(/\s+/)[0]}. Os escribimos de GUEST por vuestra invitación a medida.`)}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span>WhatsApp${r.contactPref === 'whatsapp' ? ' · lo prefieren' : ''}<small>${esc(r.phone)}</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>` : ''}
           <li><a href="mailto:${esc(r.email)}"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>Email${r.contactPref === 'email' ? ' · lo prefieren' : ''}<small>${esc(r.email)}</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>
-          ${r.status !== 'new' ? `<li><button type="button" data-copy="${esc(r.payUrl)}"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Copiar su enlace de pago<small>Por si no les llega el email</small></span></button></li>` : ''}
+          ${r.accessUrl ? `<li><button type="button" data-copy="${esc(r.accessUrl)}"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Copiar su acceso a la app<small>Por si no les llega el email</small></span></button></li>` : ''}
+          ${r.deliveryUrl ? `<li><a href="${esc(r.deliveryUrl)}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Abrir su invitación<small>La que comparten con sus invitados</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>` : ''}
+          ${!['new', 'delivered'].includes(r.status) ? `<li><button type="button" data-copy="${esc(r.payUrl)}"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Copiar su enlace de pago<small>Por si no les llega el email</small></span></button></li>` : ''}
         </ul></div>
         <div class="box"><h3>Tus notas</h3><textarea class="notes" id="cNotes" placeholder="Solo las ves tú. Se guardan solas.">${esc(r.ownerNotes || '')}</textarea></div>
       </div>`;
@@ -640,7 +648,7 @@ async function openCustom(id) {
     const run = async (b, fn, ok) => {
       const old = b.textContent; b.disabled = true; b.textContent = 'Un momento…'; $('cMsg').textContent = '';
       try { const j = await fn(); toast(j?.emailed === false ? 'Hecho, pero el email no ha salido: copia el enlace de pago.' : ok); await loadCustom(); openCustom(id); }
-      catch (e) { if (e.message === 'manager_required') return; $('cMsg').textContent = { invalid_amount: 'Revisa el precio.', invalid_status: 'Ya ha cambiado: actualiza arriba.' }[e.message] || 'No ha salido. Prueba otra vez.'; b.disabled = false; b.textContent = old; }
+      catch (e) { if (e.message === 'manager_required') return; $('cMsg').textContent = { invalid_amount: 'Revisa el precio.', invalid_status: 'Ya ha cambiado: actualiza arriba.', invalid_url: 'Revisa el enlace: tiene que empezar por https://' }[e.message] || 'No ha salido. Prueba otra vez.'; b.disabled = false; b.textContent = old; }
     };
     if ($('qSend')) {
       const amt = $('qAmt'), split = () => { const c = Math.round(Number(amt.value) * 100) || 0, dep = Math.round(c / 2); $('qSplit').innerHTML = c ? `Pagan <b>${esc(eur(dep))}</b> al aceptar y <b>${esc(eur(c - dep))}</b> al aprobar. IVA incluido.` : 'Escribe el precio.'; $('order').querySelectorAll('[data-amt]').forEach((x) => x.setAttribute('aria-pressed', String(+x.dataset.amt === c))); };
@@ -653,7 +661,7 @@ async function openCustom(id) {
     if ($('cStart')) $('cStart').onclick = () => run($('cStart'), () => custom({ action: 'update', id, status: 'designing' }), 'Apuntado.');
     if ($('cFinal')) $('cFinal').onclick = () => run($('cFinal'), () => custom({ action: 'final', id }), 'Les ha llegado el enlace del pago final.');
     if ($('cExtra')) $('cExtra').onclick = () => run($('cExtra'), () => custom({ action: 'extra', id }), 'Les ha llegado el enlace de la ronda extra.');
-    if ($('cDone')) $('cDone').onclick = () => run($('cDone'), () => custom({ action: 'update', id, status: 'delivered' }), 'Entregada.');
+    if ($('cDeliver')) $('cDeliver').onclick = () => run($('cDeliver'), () => custom({ action: 'deliver', id, url: $('dUrl') ? $('dUrl').value.trim() : r.deliveryUrl || '' }), 'Entregada. Les ha llegado la invitación y el acceso a la app.');
   } catch (e) { if (e.message !== 'manager_required') $('order').innerHTML = '<div class="calm"><b>No se ha podido abrir</b>Comprueba la conexión y toca actualizar arriba.</div>'; }
 }
 

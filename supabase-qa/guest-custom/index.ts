@@ -2,7 +2,10 @@
 // - multipart 'submit' (público): guarda la solicitud con sus fotos de inspiración y avisa.
 // - 'pay' / 'pay_status' / 'quote_load' (público, con enlace firmado): la pareja paga la señal,
 //   el resto o una ronda extra con Stripe Checkout; cada pago genera su factura.
-// - 'list' | 'detail' | 'update' | 'quote' | 'final' | 'extra' (sesión de propietaria): para la app de pedidos.
+// - 'list' | 'detail' | 'update' | 'quote' | 'final' | 'extra' | 'deliver' (sesión de propietaria): para la app de pedidos.
+//   'deliver' crea el acceso a la app de invitados (licencia) y se lo manda a la pareja con la invitación.
+// - 'tick' (pg_cron cada hora): registra pagos de quien cerró la página antes de volver, avisa a la
+//   propietaria de su plazo de 48 h para presupuestar y recuerda a las parejas los pagos pendientes.
 // COPIA DE PRUEBA: Stripe solo en modo test y emails a las parejas solo si son de la propietaria.
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { guestMail, mBtn, mP, mSteps, mNote, mList, DESIGN_NAMES } from './guest-mail.ts';
@@ -20,6 +23,10 @@ export const TIERS: Record<string, { name: string; cents: number; what: string }
 };
 const ROUNDS = 2, EXTRA_CENTS = 2000;
 const WISHES = ['Colores', 'Tipografía', 'Ilustración de portada', 'Apertura animada', 'Fotos', 'Secciones nuevas', 'Bilingüe', 'Otra cosa'];
+const H = 3600_000, D = 24 * H, QUOTE_DUE = 48 * H;
+// Solo avisa de lo que cruza la última hora: la tarea corre cada hora y no guarda estado.
+const crossed = (t: number, now: number) => t > now - H && t <= now;
+const site = () => String(Deno.env.get('WEDDLY_SITE_ORIGIN') || 'https://weddlysmartdesign.github.io').replace(/\/$/, '');
 const URGENCY: Record<string, string> = { normal: 'Sin prisa', soon: 'En unas semanas', urgent: 'Lo antes posible' };
 
 const cors = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'content-type, x-weddly-manager', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Cache-Control': 'no-store' };
@@ -107,7 +114,7 @@ async function applyPayment(c: any, r: any, sessionId: string) {
   const patch: any = { paid_sessions: [...(r.paid_sessions || []), sessionId], updated_at: ts };
   if (part === 'deposit') Object.assign(patch, { status: 'accepted', deposit_session: sessionId, deposit_paid_at: ts });
   if (part === 'final') Object.assign(patch, { status: 'paid', final_session: sessionId, final_paid_at: ts });
-  if (part === 'extra') patch.extra_rounds = Number(r.extra_rounds || 0) + 1;
+  if (part === 'extra') Object.assign(patch, { extra_rounds: Number(r.extra_rounds || 0) + 1, extra_session: null });
   const { data: next, error } = await c.from('guest_custom_requests').update(patch).eq('id', r.id).not('paid_sessions', 'cs', `{${sessionId}}`).select('*').maybeSingle();
   if (error) throw error;
   if (!next) return r;
@@ -134,7 +141,7 @@ async function applyPayment(c: any, r: any, sessionId: string) {
 }
 // Comprueba en Stripe los pagos pendientes de esta solicitud (por si cerraron la página antes de volver).
 async function refresh(c: any, r: any) {
-  for (const sid of [r.status === 'quoted' ? r.deposit_session : null, r.status === 'final_sent' ? r.final_session : null]) {
+  for (const sid of [r.status === 'quoted' ? r.deposit_session : null, r.status === 'final_sent' ? r.final_session : null, r.extra_session]) {
     if (sid) { try { r = await applyPayment(c, r, sid); } catch (e) { console.warn('refresh', String(e)); } }
   }
   return r;
@@ -162,7 +169,56 @@ async function signed(c: any, r: any) {
   }
   return out;
 }
-const view = (r: any) => ({ id: r.id, createdAt: r.created_at, updatedAt: r.updated_at, test: r.mode === 'test', status: r.status, tier: r.tier, tierName: tierName(r), suggestedCents: TIERS[r.tier]?.cents || 12000, baseDesign: r.base_design, baseDesignName: DESIGN_NAMES[r.base_design] || null, wishes: r.wishes, idea: r.idea, links: r.links, weddingDate: r.wedding_date, urgency: r.urgency, urgencyLabel: URGENCY[r.urgency] || '', name: r.name, email: r.email, phone: r.phone, contactPref: r.contact_pref, quoteCents: r.quote_cents, quoteDays: r.quote_days, quoteNote: r.quote_note, quotedAt: r.quoted_at, depositPaidAt: r.deposit_paid_at, finalPaidAt: r.final_paid_at, extraRounds: r.extra_rounds, ownerNotes: r.owner_notes, fileCount: (r.files || []).length });
+const view = (r: any) => ({ id: r.id, createdAt: r.created_at, updatedAt: r.updated_at, test: r.mode === 'test', status: r.status, tier: r.tier, tierName: tierName(r), suggestedCents: TIERS[r.tier]?.cents || 12000, baseDesign: r.base_design, baseDesignName: DESIGN_NAMES[r.base_design] || null, wishes: r.wishes, idea: r.idea, links: r.links, weddingDate: r.wedding_date, urgency: r.urgency, urgencyLabel: URGENCY[r.urgency] || '', name: r.name, email: r.email, phone: r.phone, contactPref: r.contact_pref, quoteCents: r.quote_cents, quoteDays: r.quote_days, quoteNote: r.quote_note, quotedAt: r.quoted_at, depositPaidAt: r.deposit_paid_at, finalPaidAt: r.final_paid_at, extraRounds: r.extra_rounds, ownerNotes: r.owner_notes, quoteDueAt: r.status === 'new' ? new Date(Date.parse(r.created_at) + QUOTE_DUE).toISOString() : null, deliveryUrl: r.delivery_url, deliveredAt: r.delivered_at, hasAccess: !!r.license_id, fileCount: (r.files || []).length });
+
+/* ---------- Entrega con la app de invitados ---------- */
+function activationCode() { const a = crypto.randomUUID().replaceAll('-', '').toUpperCase(), b = crypto.randomUUID().replaceAll('-', '').toUpperCase(); return `WSD-GUEST-${a.slice(0, 8)}-${a.slice(8, 16)}-${b.slice(0, 8)}`; }
+async function sha256(v: string) { const h = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(v)); return Array.from(new Uint8Array(h)).map((x) => x.toString(16).padStart(2, '0')).join(''); }
+// Misma licencia que una compra del catálogo (dos personas, una boda). Si ya existe, devuelve la misma.
+async function access(c: any, r: any) {
+  const code = activationCode();
+  const { data, error } = await c.rpc('provision_weddly_license', { p_source: 'custom', p_source_order_id: 'custom-' + r.id, p_buyer_email: r.email, p_product_ref: 'guest_custom',
+    p_metadata: { product: 'guest', edition: 'custom', access_kind: 'paid', payment_provider: 'stripe', custom_request_id: r.id, test: r.mode === 'test', amount_total: r.quote_cents, currency: 'eur' },
+    p_activation_code: code, p_purchase_hash: await sha256(code.replace(/[^A-Z0-9]/g, '')) });
+  if (error) throw error;
+  const row = data?.[0];
+  if (!row?.license_id || !row?.activation_code) throw Error('license_provision_failed');
+  return { licenseId: String(row.license_id), url: site() + '/guest/access.html#code=' + encodeURIComponent(String(row.activation_code)) };
+}
+
+/* ---------- Tarea de cada hora ---------- */
+async function tick(c: any) {
+  const now = Date.now(), done: string[] = [];
+  const { data, error } = await c.from('guest_custom_requests').select('*').in('status', ['new', 'quoted', 'accepted', 'designing', 'final_sent']).limit(500);
+  if (error) throw error;
+  for (let r of data || []) {
+    // 1. Pagos hechos sin volver a la página.
+    if (r.deposit_session || r.final_session || r.extra_session) { const before = r.status + r.extra_rounds; r = await refresh(c, r); if (r.status + r.extra_rounds !== before) done.push('paid:' + r.id); }
+    // 2. Plazo de 48 h para mandar el presupuesto.
+    if (r.status === 'new') {
+      const due = Date.parse(r.created_at) + QUOTE_DUE;
+      for (const [t, tag, id] of [[due - 12 * H, 'Quedan 12 h', '12h'], [due, 'Plazo vencido', 'due']] as [number, string, string][]) {
+        if (!crossed(t, now)) continue;
+        if (await toOwner(`${tag} · presupuesto para ${r.name}${r.mode === 'test' ? ' (prueba)' : ''}`, 'Plazos', tag + '.', mP(`<b>${esc(r.name)}</b> espera el presupuesto de su ${esc(tierName(r).toLowerCase())}. En la web prometemos contestar en 48 h.`), `guest-custom-due/${r.id}/${id}`)) done.push('due:' + r.id + ':' + id);
+      }
+    }
+    // 3. Recordatorios de pago a la pareja.
+    const remind = async (from: string | null, ids: [number, string, string, string][], btn: string, link: string) => {
+      for (const [days, id, title, text] of ids) {
+        if (!from || !crossed(Date.parse(from) + days * D, now)) continue;
+        if (await toCouple(r, title.replace(/\.$/, ''), guestMail({ kicker: 'Recordatorio', title, preheader: text, body: mP(esc(text)) + mBtn(link, btn) }), `guest-custom-remind/${r.id}/${id}/${from}`)) done.push('remind:' + r.id + ':' + id);
+      }
+    };
+    if (r.status === 'quoted') await remind(r.quoted_at, [
+      [3, 'q3d', 'Vuestro presupuesto sigue en pie.', `Os mandamos el precio cerrado de vuestra invitación a medida: ${euros(r.quote_cents)}, IVA incluido. Si os encaja, pagáis la mitad y empezamos. Si queréis ajustar algo antes, respondednos.`],
+      [7, 'q7d', '¿Seguimos con vuestra invitación?', 'No queremos que se os pase. Si tenéis cualquier duda sobre el presupuesto o preferís hablarlo por WhatsApp, respondednos y lo vemos.']
+    ], `Ver el presupuesto`, await payUrl(r));
+    if (r.status === 'final_sent') await remind(r.final_sent_at, [
+      [3, 'f3d', 'Vuestra invitación está lista para entregar.', `Solo falta el resto del pago (${euros(rest(r))}) para mandaros la invitación definitiva con la app de invitados.`]
+    ], `Pagar ${euros(rest(r))}`, await payUrl(r));
+  }
+  return { checked: (data || []).length, done };
+}
 
 /* ---------- Entrada ---------- */
 Deno.serve(async (req) => {
@@ -210,6 +266,7 @@ Deno.serve(async (req) => {
 
     let b: any = {}; try { b = JSON.parse((await req.text()) || '{}'); } catch { return json({ ok: false, error: 'invalid_json' }, 400); }
     const action = txt(b.action, 40);
+    if (action === 'tick') return json({ ok: true, ...(await tick(c)) });
 
     if (['quote_load', 'pay', 'pay_status'].includes(action)) {
       let r = await fromToken(c, txt(b.t, 200));
@@ -220,7 +277,7 @@ Deno.serve(async (req) => {
         const what = b.part === 'extra' ? { part: 'extra', cents: EXTRA_CENTS, label: 'Ronda de cambios extra' } : partOf(r);
         if (!what || (b.part === 'extra' && !['accepted', 'designing'].includes(r.status))) return json({ ok: false, error: 'nothing_to_pay' }, 409);
         const s = await checkout(r, what.part, what.cents, what.label);
-        if (what.part !== 'extra') await c.from('guest_custom_requests').update({ [what.part === 'deposit' ? 'deposit_session' : 'final_session']: s.id }).eq('id', r.id);
+        await c.from('guest_custom_requests').update({ [{ deposit: 'deposit_session', final: 'final_session', extra: 'extra_session' }[what.part]!]: s.id }).eq('id', r.id);
         return json({ ok: true, url: s.url });
       }
       const due = partOf(r);
@@ -239,12 +296,12 @@ Deno.serve(async (req) => {
     const { data: r } = await c.from('guest_custom_requests').select('*').eq('id', txt(b.id, 40)).maybeSingle();
     if (!r) return json({ ok: false, error: 'not_found' }, 404);
 
-    if (action === 'detail') return json({ ok: true, request: { ...view(r), files: await signed(c, r), payUrl: await payUrl(r) } });
+    if (action === 'detail') return json({ ok: true, request: { ...view(r), files: await signed(c, r), payUrl: await payUrl(r), accessUrl: r.license_id ? (await access(c, r)).url : null } });
 
     if (action === 'update') {
       const patch: any = { updated_at: new Date().toISOString() };
       if (typeof b.ownerNotes === 'string') patch.owner_notes = txt(b.ownerNotes, 5000);
-      if (['designing', 'delivered', 'declined', 'new'].includes(b.status)) patch.status = b.status;
+      if (['designing', 'declined', 'new'].includes(b.status)) patch.status = b.status;
       const { data, error } = await c.from('guest_custom_requests').update(patch).eq('id', r.id).select('*').single();
       if (error) throw error;
       return json({ ok: true, request: view(data) });
@@ -269,7 +326,7 @@ Deno.serve(async (req) => {
     if (action === 'final') {
       if (!['accepted', 'designing'].includes(r.status)) return json({ ok: false, error: 'invalid_status' }, 409);
       const ts = new Date().toISOString();
-      const { data: q, error } = await c.from('guest_custom_requests').update({ status: 'final_sent', updated_at: ts, final_session: null }).eq('id', r.id).select('*').single();
+      const { data: q, error } = await c.from('guest_custom_requests').update({ status: 'final_sent', updated_at: ts, final_sent_at: ts, final_session: null }).eq('id', r.id).select('*').single();
       if (error) throw error;
       const ok = await toCouple(q, 'Último paso: el resto del pago', guestMail({ kicker: 'Diseño aprobado', title: 'Último paso.', preheader: `Pagad ${euros(rest(q))} y os la entregamos.`,
         body: mP(`¡Qué bien que os encante, ${esc(first(q.name))}! Para entregaros la invitación definitiva con la app de invitados solo falta el resto del pago.`) + mBtn(await payUrl(q), `Pagar ${euros(rest(q))}`) }), `guest-custom-final-ask/${q.id}`);
@@ -282,6 +339,21 @@ Deno.serve(async (req) => {
       const ok = await toCouple(r, 'Ronda de cambios extra', guestMail({ kicker: 'Cambios', title: 'Una ronda más.', preheader: `Las ${ROUNDS} rondas incluidas ya están usadas.`,
         body: mP(`Ya hemos hecho las ${ROUNDS} rondas de cambios incluidas. Para una ronda más, el precio es de <b>${esc(euros(EXTRA_CENTS))}</b>. Os aconsejamos juntar todos los cambios en ella.`) + mBtn((await payUrl(r)) + '&extra=1', `Pagar ${euros(EXTRA_CENTS)}`) }), `guest-custom-extra-ask/${r.id}/${n}`);
       return json({ ok: true, emailed: ok, payUrl: (await payUrl(r)) + '&extra=1' });
+    }
+    if (action === 'deliver') {
+      if (!['paid', 'delivered'].includes(r.status)) return json({ ok: false, error: 'invalid_status' }, 409);
+      let invite = '';
+      if (b.url) { try { const u = new URL(txt(b.url, 600)); if (u.protocol !== 'https:' || u.username || u.password) throw 0; invite = u.toString(); } catch { return json({ ok: false, error: 'invalid_url' }, 400); } }
+      const a = await access(c, r), ts = new Date().toISOString();
+      const ok = await toCouple(r, 'Vuestra invitación está lista para compartir', guestMail({ kicker: 'Entrega', title: 'Lista para compartir.', preheader: 'Vuestra invitación a medida y el acceso a la app de invitados.',
+        body: mP(`Vuestra invitación a medida está terminada, ${esc(first(r.name))}. Aquí tenéis lo que necesitáis:`)
+          + (invite ? mBtn(invite, 'Ver nuestra invitación') : '')
+          + mBtn(a.url, 'Abrir la app de invitados', !!invite)
+          + mSteps([['Añadid a vuestros invitados', 'Uno a uno, por grupos o desde los contactos del móvil.'], ['Enviad la invitación', 'Desde la app, por WhatsApp, a quien elijáis.'], ['Las respuestas llegan solas', 'Asistencia, acompañantes, menús, alergias y transporte, todo reunido.']], 'Con la app')
+          + mNote('<b>Guardad este email.</b> Es vuestro acceso a la app. Los dos podéis usarla, cada uno desde su móvil.') }), `guest-custom-deliver/${r.id}/${invite}`);
+      const { data: q, error } = await c.from('guest_custom_requests').update({ status: 'delivered', license_id: a.licenseId, delivery_url: invite || r.delivery_url, delivered_at: r.delivered_at || ts, updated_at: ts }).eq('id', r.id).select('*').single();
+      if (error) throw error;
+      return json({ ok: true, emailed: ok, accessUrl: a.url, request: view(q) });
     }
     return json({ ok: false, error: 'invalid_action' }, 400);
   } catch (e) {
