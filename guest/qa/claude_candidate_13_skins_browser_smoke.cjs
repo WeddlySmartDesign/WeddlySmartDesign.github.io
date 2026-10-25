@@ -7,7 +7,7 @@ const {spawnSync}=require('node:child_process'),{chromium}=require('playwright')
 const assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'../..'),stage=fs.mkdtempSync(path.join(os.tmpdir(),'guest-claude-browser-')),out=path.join(stage,'candidates');
 const allIds=Array.from({length:13},(_,i)=>'design-'+String(i+4).padStart(2,'0'));
-const ids=process.env.GUEST_CANDIDATE_ONLY?[process.env.GUEST_CANDIDATE_ONLY]:allIds;
+const ids=process.env.GUEST_CANDIDATE_ONLY?process.env.GUEST_CANDIDATE_ONLY.split(',').map(x=>x.trim()):allIds;
 assert(ids.every(x=>allIds.includes(x)),'invalid scoped design id');
 const types={'.html':'text/html; charset=utf-8','.mp4':'video/mp4','.webm':'video/webm','.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png','.webp':'image/webp','.gif':'image/gif','.woff':'font/woff','.woff2':'font/woff2','.otf':'font/otf','.ttf':'font/ttf','.svg':'image/svg+xml','.m4a':'audio/mp4','.mp3':'audio/mpeg','.ogg':'audio/ogg','.wav':'audio/wav'};
 let server, browser, failures=[];
