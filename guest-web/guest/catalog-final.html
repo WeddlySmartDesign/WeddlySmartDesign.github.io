@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer"><title>Nuestra invitación · GUEST by WeddlySmartDesign</title>
+<style>
+html,body{margin:0;width:100%;height:100%;background:#f5f0ea;color:#37302c;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}*{box-sizing:border-box}
+#host{position:fixed;inset:0;width:100vw;height:100dvh;overflow:auto}#state{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:26px;background:#f5f0ea;text-align:center}#state[hidden]{display:none}
+#state div{max-width:440px}#state strong{display:block;font:400 clamp(30px,7vw,48px)/1.05 Georgia,serif;margin-bottom:18px}#state p{font-size:15px;line-height:1.6}
+#state small{font-size:13px;color:#796f67}#state a{color:inherit;font-weight:700}
+</style></head><body><main id="host" aria-label="Invitación de boda"></main><section id="state" role="status" aria-live="polite"><div><strong>Abriendo vuestra invitación</strong><p>Estamos preparando la versión final de vuestra invitación.</p></div></section>
+<script src="guest-catalog-delivery-runtime-v1.js"></script><script src="catalog/guest-catalog-owner-viewer-v2.js"></script>
+<script>
+(()=>{'use strict';
+const host=document.getElementById('host'),state=document.getElementById('state');
+function error(message){state.hidden=false;state.innerHTML='';const panel=document.createElement('div'),h=document.createElement('strong'),p=document.createElement('p'),hint=document.createElement('small');h.textContent='No hemos podido abrir la invitación';p.textContent=message;hint.textContent='Solicitad a la pareja un enlace actualizado o escribid a weddlysmartdesign@gmail.com.';panel.append(h,p,hint);state.append(panel);}
+async function show(config,verifiedOrder){
+ const response=await fetch('GUEST_CATALOG_OWNER_RENDERERS_V2.json',{cache:'no-store'}),registry=await response.json();
+ if(!response.ok||registry.schemaVersion!=='guest-catalog-owner-renderers-v2')throw Error('registry_unavailable');
+ const id=config?.template?.id,version=String(config?.template?.version||''),spec=registry.templates?.[id];
+ const isTest=verifiedOrder?.mode==='test';
+ // A pending design can only appear with a server-validated TEST-order
+ // capability; PRODUCTION must still be admitted and commercially frozen.
+ if(!spec||spec.mode!=='iframe'||!spec.src||
+    !(spec.status==='commercially-frozen'||(isTest&&spec.status==='certification-pending')))
+   throw Error('template_not_commercially_published');
+ await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order:{template_id:id,template_version:version,mode:isTest?'test':'production'},config,host,registry});
+ if(isTest){
+   const banner=document.createElement('div');
+   banner.id='guestTestOnlyBanner';banner.setAttribute('aria-label','Vista de prueba, no distribuir');
+   banner.textContent='VISTA DE PRUEBA · NO ENVIAR A INVITADOS';
+   banner.style.cssText='position:fixed;z-index:21;top:0;left:0;right:0;background:#3e302d;color:#fff;text-align:center;padding:8px;font:700 11px system-ui;letter-spacing:.05em;pointer-events:none';
+   document.body.appendChild(banner);
+ }
+}
+(async()=>{
+ const token=new URLSearchParams(location.search).get('p')||'';
+ if(token.length<32||token.length>200){error('Este enlace no es válido o está incompleto.');return}
+ try{await window.__GuestCatalogDeliveryRuntime.boot({publicToken:token,applyConfig:show});state.hidden=true;}
+ catch(e){console.warn('[GUEST final] unavailable:',String(e?.message||'request_failed'));error('La invitación no está disponible con este enlace.');}
+})();
+})();
+</script></body></html>

@@ -7,7 +7,7 @@ const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,
  * sells only the QA catalog below and emails only the owner's own addresses. */
 const QA_PREVIEW='https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
 const QA_ENV:Record<string,string>={
- GUEST_CATALOG_SALE_OPTIONS:JSON.stringify({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:5990,displayName:'Seda'}}),
+ GUEST_CATALOG_SALE_OPTIONS:JSON.stringify(Object.fromEntries(Object.entries({'design-09':'Azahar','design-11':'Cristal','design-07':'Espejo','veil-light':'Seda','design-12':'Abanico','design-05':'Gala','design-06':'Invernadero','design-08':'Melodía','design-10':'Cuento','botanica':'Botánica','design-16':'Rumbo','design-04':'Brisa','design-13':'Viñeta','design-14':'Ellas','design-15':'Ellos'}).map(([id,displayName])=>[id,{version:id==='veil-light'?'5.3.3':id==='botanica'?'14.7':'1.0.0',status:'commercially-frozen',edition:'signature',amountCents:5990,displayName}]))),
  WEDDLY_SITE_ORIGIN:QA_PREVIEW,GUEST_CATALOG_PUBLIC_ORIGIN:QA_PREVIEW,
  STRIPE_WEBHOOK_SECRET:'',WEDDLY_STRIPE_AUTOMATIC_TAX:''
 };
@@ -150,7 +150,7 @@ async function paidCatalogQuestionnaire(licenseId:string,metadata:any){
  const key=secrets?String(JSON.parse(secrets).default||''):String(Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')||'');
  if(!key)throw new Error('catalog_manager_unavailable');
  const token='v1.'+payload+'.'+await hmacHex(key,'wsd-owner-manager-v1|'+payload);
- const response=await fetch(env('SUPABASE_URL')+'/functions/v1/guest-invitation-flow',{
+ const response=await fetch(env('SUPABASE_URL')+'/functions/v1/guest-invitation-flow-qa',{
    method:'POST',headers:{'content-type':'application/json','x-weddly-manager':token},
    body:JSON.stringify({action:'create_paid',licenseId,templateId}),
    signal:AbortSignal.timeout(15000)});

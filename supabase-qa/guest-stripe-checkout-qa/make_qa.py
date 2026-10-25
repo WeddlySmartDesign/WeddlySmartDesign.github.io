@@ -13,7 +13,7 @@ once("const env=(n:string)=>(Deno.env.get(n)||'').trim();",
  * sells only the QA catalog below and emails only the owner's own addresses. */
 const QA_PREVIEW='%s';
 const QA_ENV:Record<string,string>={
- GUEST_CATALOG_SALE_OPTIONS:JSON.stringify({'veil-light':{version:'5.3.3',status:'commercially-frozen',edition:'signature',amountCents:5990,displayName:'Seda'}}),
+ GUEST_CATALOG_SALE_OPTIONS:JSON.stringify(Object.fromEntries(Object.entries({'design-09':'Azahar','design-11':'Cristal','design-07':'Espejo','veil-light':'Seda','design-12':'Abanico','design-05':'Gala','design-06':'Invernadero','design-08':'Melodía','design-10':'Cuento','botanica':'Botánica','design-16':'Rumbo','design-04':'Brisa','design-13':'Viñeta','design-14':'Ellas','design-15':'Ellos'}).map(([id,displayName])=>[id,{version:id==='veil-light'?'5.3.3':id==='botanica'?'14.7':'1.0.0',status:'commercially-frozen',edition:'signature',amountCents:5990,displayName}]))),
  WEDDLY_SITE_ORIGIN:QA_PREVIEW,GUEST_CATALOG_PUBLIC_ORIGIN:QA_PREVIEW,
  STRIPE_WEBHOOK_SECRET:'',WEDDLY_STRIPE_AUTOMATIC_TAX:''
 };
@@ -25,6 +25,7 @@ function assertTestKeys(){
 }""" % PREVIEW)
 once("async function stripeRequest(path:string,init:RequestInit={}){","async function stripeRequest(path:string,init:RequestInit={}){assertTestKeys();")
 once("const x=await r.json().catch(()=>({}));if(!r.ok){","const x=await r.json().catch(()=>({}));if(r.ok&&x.livemode!==false)throw new Error('stripe_not_configured');if(!r.ok){")
+once("const response=await fetch(env('SUPABASE_URL')+'/functions/v1/guest-invitation-flow',{","const response=await fetch(env('SUPABASE_URL')+'/functions/v1/guest-invitation-flow-qa',{")
 once("p.set('return_url',base+'/guest-checkout-return.html?session_id={CHECKOUT_SESSION_ID}');","p.set('return_url',base+'/gracias.html?session_id={CHECKOUT_SESSION_ID}');")
 once("const key=env('RESEND_API_KEY'),from=env('WEDDLY_RESEND_FROM');if(!key||!from)return false;",
      "const key=env('RESEND_API_KEY'),from=env('WEDDLY_RESEND_FROM');if(!key||!from)return false;\n const to=(payload.body?.to||[]).map((x:string)=>String(x).toLowerCase());if(!to.length||!to.every((x:string)=>QA_EMAILS.includes(x))){console.warn('qa_email_blocked');return false}\n payload.body.subject='[PRUEBA] '+payload.body.subject;")

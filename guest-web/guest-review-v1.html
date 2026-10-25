@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>Vuestra invitación · GUEST by WeddlySmartDesign</title>
+  <link rel="icon" href="assets/brand/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="css/fonts.css?v=43">
+  <style>
+    /* La invitación ocupa toda la pantalla; la revisión es una hoja que se recoge abajo. */
+    :root { --paper: #fbf7f4; --envelope-soft: #f6dcd6; --ink: #1b2650; --ink-soft: #4a5480; --postmark: #b3263a; --line: #e3d6d1; --white: #fff; --display: 'Abril Fatface', Georgia, serif; --mono: 'Courier Prime', 'Courier New', monospace; --text: 'Hanken Grotesk', system-ui, -apple-system, sans-serif; --ease-out: cubic-bezier(0.23, 1, 0.32, 1); }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--paper); color: var(--ink); font-family: var(--text); -webkit-font-smoothing: antialiased; }
+    [hidden] { display: none !important; }
+    #host { position: fixed; inset: 0; overflow: auto; }
+    #state { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 24px; background: var(--paper); }
+    #state div { max-width: 26rem; }
+    #state h1 { margin: 0; font: 400 clamp(2rem, 6vw, 2.75rem)/1.05 var(--display); }
+    #state p { margin: .8rem 0 0; line-height: 1.6; color: var(--ink-soft); }
+
+    .sheet { position: fixed; z-index: 35; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); width: min(calc(100vw - 24px), 30rem); translate: -50% 0; background: var(--white); border-radius: 14px; box-shadow: 0 1px 2px rgba(27, 38, 80, .15), 0 24px 48px -16px rgba(27, 38, 80, .55); padding: 1rem 1rem 1.05rem; max-height: calc(100dvh - 24px); overflow: auto; transition: translate 280ms var(--ease-out), opacity 200ms ease; }
+    @starting-style { .sheet { translate: -50% 16px; opacity: 0; } }
+    .sheet h2 { margin: 0; font: 400 1.35rem/1.15 var(--display); }
+    .sheet p { margin: .35rem 0 0; font-size: .9375rem; line-height: 1.5; color: var(--ink-soft); }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-top: .9rem; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 1rem; border: 1.5px solid var(--ink); border-radius: 8px; background: var(--ink); color: var(--paper); font: 600 1rem/1 var(--text); cursor: pointer; transition: transform 140ms var(--ease-out), opacity 160ms ease; }
+    .btn:active { transform: scale(.97); }
+    .btn.line { background: transparent; color: var(--ink); }
+    .btn[disabled] { opacity: .55; pointer-events: none; }
+    .min { position: absolute; top: .55rem; right: .55rem; width: 40px; height: 40px; display: grid; place-items: center; border: 0; border-radius: 8px; background: transparent; color: var(--ink-soft); cursor: pointer; }
+    .min:hover { background: var(--paper); }
+    .min svg { width: 18px; height: 18px; }
+    .sheet.is-min { width: auto; left: auto; right: 12px; translate: 0 0; padding: 0; }
+    .sheet.is-min > :not(.pill) { display: none; }
+    .pill { display: none; min-height: 48px; padding: 0 1.1rem; border: 0; border-radius: 14px; background: var(--ink); color: var(--paper); font: 600 .9375rem var(--text); cursor: pointer; }
+    .sheet.is-min .pill { display: block; }
+
+    .parts { display: grid; gap: .5rem; margin-top: .9rem; }
+    .part { position: relative; display: block; cursor: pointer; }
+    .part input { position: absolute; opacity: 0; pointer-events: none; }
+    .part span { display: grid; gap: .1rem; padding: .7rem .9rem; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); transition: border-color 160ms ease, background-color 160ms ease; }
+    .part b { font-weight: 600; }
+    .part small { font-size: .875rem; color: var(--ink-soft); }
+    .part input:checked + span { border-color: var(--ink); background: var(--white); box-shadow: inset 0 0 0 1px var(--ink); }
+    .part input:focus-visible + span { outline: 2px solid var(--postmark); outline-offset: 2px; }
+    label.note { display: grid; gap: .35rem; margin-top: .9rem; font-size: .9375rem; font-weight: 600; }
+    label.note small { font-weight: 400; color: var(--ink-soft); }
+    textarea { width: 100%; min-height: 84px; padding: .75rem .85rem; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); font: 400 1rem/1.5 var(--text); resize: vertical; }
+    textarea:focus { outline: none; border-color: var(--ink); background: var(--white); }
+    .msg { margin-top: .7rem; font-size: .9375rem; color: var(--postmark); }
+    .msg:empty { display: none; }
+  </style>
+</head>
+<body>
+<main id="host" aria-label="Vuestra invitación completa"></main>
+<section id="state" role="status"><div><h1>Abriendo vuestra invitación</h1><p>Un momento: la estamos cargando completa, con su animación.</p></div></section>
+
+<section class="sheet" id="sheet" hidden aria-label="Revisión">
+  <button class="pill" id="restore" type="button">Aprobar o pedir un cambio</button>
+  <button class="min" id="minimize" type="button" aria-label="Recoger para ver la invitación entera"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+
+  <div id="ask">
+    <h2>¿Está como la imaginabais?</h2>
+    <p>Recorredla entera desde el móvil: nombres, fecha, horas, direcciones y fotos.</p>
+    <div class="row"><button class="btn" id="approve" type="button">Aprobar</button><button class="btn line" id="request" type="button">Cambiar algo</button></div>
+  </div>
+
+  <div id="confirmApprove" hidden>
+    <h2>¿La aprobamos así?</h2>
+    <p>Después la preparamos para enviar a vuestros invitados y ya no se modifica. La lista de invitados y las mesas las seguís cambiando cuando queráis desde la app.</p>
+    <div class="row"><button class="btn" id="approveYes" type="button">Sí, aprobarla</button><button class="btn line" data-back type="button">Volver</button></div>
+  </div>
+
+  <div id="changes" hidden>
+    <h2>¿Qué parte queréis cambiar?</h2>
+    <p>La abrimos para que la corrijáis vosotros mismos. Podéis cambiar cualquier dato, texto o foto.</p>
+    <div class="parts" id="parts"></div>
+    <label class="note">Algo que debamos saber <small>Opcional. Por ejemplo: «La foto de la galería se ve oscura».</small><textarea id="note" maxlength="600"></textarea></label>
+    <div class="row"><button class="btn" id="send" type="button">Abrir esa parte</button><button class="btn line" data-back type="button">Volver</button></div>
+  </div>
+
+  <div id="done" hidden><h2 id="doneTitle"></h2><p id="doneText"></p></div>
+  <p class="msg" id="msg" role="alert"></p>
+</section>
+
+<script src="guest/catalog/guest-catalog-owner-viewer-v2.js"></script>
+<script>
+(() => {
+'use strict';
+const FLOW = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow-qa';
+const token = new URLSearchParams(location.search).get('t') || '';
+const $ = (id) => document.getElementById(id);
+// Mismo orden y nombres que las partes del cuestionario.
+const PARTS = [
+  ['La portada', 'Nombres, fecha, lugar y hora'],
+  ['Vuestra historia', 'El texto y la foto'],
+  ['Lugares y programa', 'Sitios, horas, vestimenta y momentos del día'],
+  ['Detalles prácticos', 'Autobús, alojamiento, regalo y canciones'],
+  ['Confirmación y final', 'Preguntas, galería y última frase']
+];
+let busy = false;
+
+async function api(body) {
+  const r = await fetch(FLOW, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), cache: 'no-store' });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || !j?.ok) throw Error(j?.error || 'request_failed');
+  return j;
+}
+function view(id) { ['ask', 'confirmApprove', 'changes', 'done'].forEach((x) => { $(x).hidden = x !== id; }); $('msg').textContent = ''; }
+function done(title, text) { view('done'); $('doneTitle').textContent = title; $('doneText').textContent = text; $('minimize').hidden = true; }
+function failure() {
+  const s = $('state'); s.hidden = false;
+  s.querySelector('h1').textContent = 'No hemos podido abrir la invitación';
+  s.querySelector('p').textContent = 'Responded al email que os mandamos y os enviamos un enlace nuevo.';
+}
+
+$('parts').innerHTML = PARTS.map(([t, d], i) => `<label class="part"><input type="radio" name="part" value="${i}"><span><b>${t}</b><small>${d}</small></span></label>`).join('');
+$('approve').onclick = () => view('confirmApprove');
+$('request').onclick = () => view('changes');
+document.querySelectorAll('[data-back]').forEach((b) => { b.onclick = () => view('ask'); });
+$('minimize').onclick = () => $('sheet').classList.add('is-min');
+$('restore').onclick = () => $('sheet').classList.remove('is-min');
+
+async function respond(decision) {
+  if (busy) return;
+  const part = document.querySelector('input[name="part"]:checked')?.value;
+  if (decision === 'changes' && part == null) { $('msg').textContent = 'Elegid la parte que queréis cambiar.'; return; }
+  busy = true; document.querySelectorAll('.sheet .btn').forEach((b) => { b.disabled = true; }); $('msg').textContent = '';
+  try {
+    const extra = $('note').value.trim();
+    const body = { action: 'review_respond', token, decision };
+    if (decision === 'changes') body.note = 'Parte: ' + PARTS[part][0] + (extra ? '\n' + extra : '');
+    const x = await api(body);
+    if (x.status === 'approved') { done('Aprobada. ¡Enhorabuena!', 'La preparamos para enviar y os escribimos con el enlace para vuestros invitados y el acceso a la app.'); return; }
+    if (x.status !== 'changes_requested') throw Error('unexpected_response');
+    if (x.questionnaireToken) { location.href = `guest/catalog-questionnaire.html?t=${encodeURIComponent(x.questionnaireToken)}&parte=${part}`; return; }
+    done('Recibido.', 'Os mandamos el enlace para hacer el cambio por email.');
+  } catch {
+    $('msg').textContent = 'No se ha podido enviar. Probad de nuevo en un momento.';
+    document.querySelectorAll('.sheet .btn').forEach((b) => { b.disabled = false; });
+  } finally { busy = false; }
+}
+$('approveYes').onclick = () => respond('approve');
+$('send').onclick = () => respond('changes');
+
+(async () => {
+  if (token.length < 32 || token.length > 200) { failure(); return; }
+  try {
+    const [loaded, manifest] = await Promise.all([
+      api({ action: 'review_load', token }),
+      fetch('guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null))
+    ]);
+    if (!manifest || manifest.schemaVersion !== 'guest-catalog-owner-renderers-v2') throw Error('registry_unavailable');
+    const order = loaded.order;
+    if (!order?.config?.template?.id) throw Error('missing_template');
+    const cfg = order.config, id = cfg.template.id, spec = manifest.templates?.[id];
+    if (!spec || spec.mode !== 'iframe' || !spec.src) throw Error('template_asset_not_ready');
+    await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({ order: { template_id: id, template_version: String(cfg.template.version || ''), mode: 'test' }, config: cfg, host: $('host'), registry: manifest });
+    $('state').hidden = true; $('sheet').hidden = false;
+    if (order.status === 'changes_requested') done('Ya nos pedisteis un cambio.', 'Usad el enlace del email para corregir esa parte. Cuando la enviéis, os mandamos la nueva versión.');
+    else if (!['review_ready', 'review_sent'].includes(order.status)) done('Esta revisión ya está cerrada.', 'Si necesitáis algo, responded a nuestro email.');
+  } catch (e) { console.warn('[GUEST review]', String(e?.message || 'review_failed')); failure(); }
+})();
+})();
+</script>
+</body>
+</html>

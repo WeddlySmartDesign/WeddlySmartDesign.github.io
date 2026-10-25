@@ -1,0 +1,126 @@
+{
+ "schemaVersion": "guest-catalog-owner-renderers-v2",
+ "note": "Copia de pruebas: cada diseño se pinta con su página de guest-web/invitaciones, que ya acepta la configuración común del cuestionario.",
+ "templates": {
+  "design-04": {
+   "id": "design-04",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/01/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  },
+  "veil-light": {
+   "id": "veil-light",
+   "version": "5.3.3",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/02/index.html",
+   "applyApi": "VEIL_APPLY_CONFIG"
+  },
+  "design-12": {
+   "id": "design-12",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/03/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  },
+  "design-11": {
+   "id": "design-11",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/04/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  },
+  "design-06": {
+   "id": "design-06",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/05/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  },
+  "design-05": {
+   "id": "design-05",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/06/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  },
+  "botanica": {
+   "id": "botanica",
+   "version": "14.7",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/07/index.html",
+   "applyApi": "BOTANICA_APPLY_CONFIG"
+  },
+  "design-07": {
+   "id": "design-07",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/08/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  },
+  "design-08": {
+   "id": "design-08",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/09/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  },
+  "design-10": {
+   "id": "design-10",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/10/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  },
+  "design-13": {
+   "id": "design-13",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/11/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  },
+  "design-14": {
+   "id": "design-14",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/12/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  },
+  "design-15": {
+   "id": "design-15",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/13/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  },
+  "design-16": {
+   "id": "design-16",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/14/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  },
+  "design-09": {
+   "id": "design-09",
+   "version": "1.0.0",
+   "status": "commercially-frozen",
+   "mode": "iframe",
+   "src": "/invitaciones/15/index.html",
+   "applyApi": "GUEST_APPLY_CONFIG"
+  }
+ }
+}
