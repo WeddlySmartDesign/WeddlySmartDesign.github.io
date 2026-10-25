@@ -111,8 +111,9 @@
     .choice input:focus-visible + span { outline: 2px solid var(--postmark); outline-offset: 2px; }
     .seg { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
 
-    .moments { display: grid; gap: .6rem; }
-    .moment { display: grid; grid-template-columns: 7.2rem 1fr 44px; gap: .5rem; }
+    /* styles.css usa .moments/.moment para la web: aquí se anulan */
+    .moments { display: grid; gap: .6rem; background: none; color: inherit; overflow: visible; }
+    .moment { display: grid; grid-template-columns: 8.4rem 1fr 44px; gap: .5rem; margin: 0; filter: none; }
     .moment input { min-height: 50px; padding: .7rem; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); font: 400 1.0625rem var(--text); color: var(--ink); width: 100%; }
     .moment input:focus { outline: none; border-color: var(--ink); background: var(--white); }
     .icon-btn { display: grid; place-items: center; min-height: 44px; border: 0; border-radius: 8px; background: transparent; color: var(--ink-soft); cursor: pointer; }
@@ -594,12 +595,29 @@ document.addEventListener('click', (e) => {
 $('moments').addEventListener('change', (e) => { if (e.target.classList.contains('mtime')) renderMoments(momentsFromDom()); });
 
 /* ---- Fotos ---- */
+// Las fotos se reducen y se pasan a JPG antes de subirlas: así la invitación carga rápido
+// en el móvil de cada invitado y se ve en cualquier teléfono (HEIC no se ve en Android).
+async function shrink(file, max = 2200) {
+  let img;
+  try { img = await createImageBitmap(file, { imageOrientation: 'from-image' }); }
+  catch {
+    if (/^image\/(jpeg|png|webp)$/.test(file.type) && file.size <= 15728640) return file;
+    throw Error('unreadable');
+  }
+  const k = Math.min(1, max / Math.max(img.width, img.height));
+  if (k === 1 && file.type === 'image/jpeg' && file.size < 1.5e6) return file;
+  const c = document.createElement('canvas'); c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+  c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+  const blob = await new Promise((ok) => c.toBlob(ok, 'image/jpeg', 0.86));
+  if (!blob) throw Error('unreadable');
+  return new File([blob], (file.name || 'foto').replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+}
 function fileFor(slot) { return files.find((x) => x.slot === slot); }
 function renderPhoto(box) {
   const slot = box.dataset.slot, f = fileFor(slot), id = 'file-' + slot;
   box.innerHTML = `<span class="photo-thumb">${f?.url ? `<img src="${esc(f.url)}" alt="">` : '<svg aria-hidden="true"><use href="#i-img"/></svg>'}</span>
-    <span><b>${SLOT_LABEL[slot]}</b><small>${f ? esc(f.name || 'Foto subida') : 'JPG, PNG o HEIC, hasta 15 MB'}</small>
-    <span class="photo-actions"><label for="${id}">${f ? 'Cambiar' : 'Elegir foto'}</label><input id="${id}" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif">${f ? '<button type="button" data-remove>Quitar</button>' : ''}</span></span>`;
+    <span><b>${SLOT_LABEL[slot]}</b><small>${f ? esc(f.name || 'Foto subida') : 'Desde el móvil o el ordenador'}</small>
+    <span class="photo-actions"><label for="${id}">${f ? 'Cambiar' : 'Elegir foto'}</label><input id="${id}" type="file" accept="image/*">${f ? '<button type="button" data-remove>Quitar</button>' : ''}</span></span>`;
   box.querySelector('input').onchange = (e) => upload(slot, e.target.files[0], box);
   box.querySelector('[data-remove]')?.addEventListener('click', () => removeFile(slot, box));
 }
@@ -608,15 +626,16 @@ async function upload(slot, file, box) {
   if (!file) return;
   box.classList.add('is-busy'); setMsg();
   try {
+    const ready = await shrink(file);
     const fd = new FormData();
-    fd.append('action', 'upload'); fd.append('token', TOKEN); fd.append('slot', slot); fd.append('file', file);
+    fd.append('action', 'upload'); fd.append('token', TOKEN); fd.append('slot', slot); fd.append('file', ready, ready.name);
     const r = await fetch(API, { method: 'POST', body: fd });
     const j = await r.json().catch(() => ({}));
     if (!r.ok || !j.ok) throw new Error(j.error || 'upload_failed');
     files = files.filter((x) => x.slot !== slot); files.push(j.file);
     scheduleSave();
   } catch (e) {
-    setMsg('No hemos podido subir esa foto. Probad con una JPG, PNG o HEIC de menos de 15 MB.');
+    setMsg(e.message === 'unreadable' ? 'Esa foto no se puede abrir aquí. Probad a elegirla desde la galería del móvil o guardadla como JPG.' : 'No hemos podido subir esa foto. Probad de nuevo o con otra.');
   } finally { box.classList.remove('is-busy'); renderPhoto(box); }
 }
 async function removeFile(slot, box) {
@@ -696,6 +715,21 @@ function fill(q) {
 
 /* ---- Validación por parte (los mismos requisitos que el servidor) ---- */
 const urlOk = (u) => !u || /^https?:\/\/\S+$/i.test(u);
+// Errores típicos al escribir el email: se avisa una vez, por si de verdad es así.
+let emailWarned = '';
+const MAIL_FIX = { gmial: 'gmail.com', gmal: 'gmail.com', gmai: 'gmail.com', gamil: 'gmail.com', gnail: 'gmail.com', 'gmail.co': 'gmail.com', 'gmail.con': 'gmail.com', 'gmail.es': 'gmail.com', hotmial: 'hotmail.com', hotmal: 'hotmail.com', hotmai: 'hotmail.com', 'hotmail.co': 'hotmail.com', 'hotmail.con': 'hotmail.com', outlok: 'outlook.com', outllok: 'outlook.com', 'outlook.con': 'outlook.com', iclod: 'icloud.com', 'icloud.co': 'icloud.com', 'icloud.con': 'icloud.com', 'yahoo.con': 'yahoo.com' };
+function emailFix(m) {
+  const [user, dom = ''] = m.toLowerCase().split('@'), host = dom.split('.')[0];
+  const to = MAIL_FIX[dom] || (dom.split('.').length === 2 && MAIL_FIX[host]);
+  return to && to !== dom ? user + '@' + to : '';
+}
+function ibanOk(v) {
+  const s = v.replace(/[\s-]/g, '').toUpperCase();
+  if (!/^[A-Z]{2}\d{2}[A-Z0-9]{10,30}$/.test(s) || (s.startsWith('ES') && s.length !== 24)) return false;
+  const n = (s.slice(4) + s.slice(0, 4)).replace(/[A-Z]/g, (c) => c.charCodeAt(0) - 55);
+  let r = 0; for (const d of n) r = (r * 10 + +d) % 97;
+  return r === 1;
+}
 function validate(i) {
   const q = collect(), e = [], L = q.locations, P = q.practical;
   if (i === 0) {
@@ -703,7 +737,9 @@ function validate(i) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(q.couple.date)) e.push('Falta la fecha de la boda.');
     if (q.couple.coverPlaceEnabled && !q.couple.coverPlace) e.push('Escribid el lugar de la portada o apagad esa opción.');
     if (q.couple.coverTimeEnabled && !q.couple.coverTime) e.push('Poned la hora de la portada o apagad esa opción.');
+    if (/^\d{4}-\d{2}-\d{2}$/.test(q.couple.date) && q.couple.date < new Date().toISOString().slice(0, 10)) e.push('Esa fecha ya ha pasado. Revisad el año.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(q.contact.email)) e.push('Revisad el email: ahí os mandaremos la invitación.');
+    else { const fix = emailFix(q.contact.email); if (fix && emailWarned !== q.contact.email) { emailWarned = q.contact.email; e.push(`¿Es «${fix}»? Revisad el email: ahí os mandaremos la invitación. Si está bien, pulsad «Seguir» otra vez.`); } }
   }
   if (i === 1 && q.story.enabled) {
     if (q.story.textMode === 'custom' && !q.story.customText) e.push('Escribid vuestro texto o elegid uno de los propuestos.');
@@ -724,7 +760,9 @@ function validate(i) {
     if (P.gift.enabled) {
       const g = P.gift;
       if (g.mode === 'bank' && !g.iban) e.push('Falta el IBAN del regalo.');
+      else if (g.mode === 'bank' && !ibanOk(g.iban)) e.push('El IBAN no es correcto: falta o sobra algún número. Copiadlo de la app del banco.');
       if (g.mode === 'bizum' && !g.phone) e.push('Falta el teléfono de Bizum.');
+      else if (g.mode === 'bizum' && !/^(\+?34)?[6-9]\d{8}$/.test(g.phone.replace(/[\s.-]/g, ''))) e.push('Revisad el teléfono de Bizum: son 9 números.');
       if (g.mode === 'external_link' && !g.url) e.push('Falta el enlace de la lista de regalos.');
       if (g.mode === 'short_text' && !g.message) e.push('Escribid el mensaje del regalo.');
     }
@@ -843,6 +881,7 @@ async function boot() {
     applyDesign(order.templateId);
     files = order.files || [];
     fill(order.questionnaire || {});
+    if (!val('email') && order.buyerEmail) $('email').value = order.buyerEmail;
     renderPhotos(); sync();
     $('loading').hidden = true;
     if (!['draft', 'changes_requested'].includes(order.status)) {

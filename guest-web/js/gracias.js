@@ -33,7 +33,7 @@
     lead.textContent = '';
     const strong = document.createElement('strong');
     strong.textContent = design.name;
-    lead.append('Hemos recibido el pago de vuestra invitación ', strong, '. Os llega también el recibo por email.');
+    lead.append('Hemos recibido el pago de vuestra invitación ', strong, '. La factura os llega por email.');
   }
 
   function savedDesign() {

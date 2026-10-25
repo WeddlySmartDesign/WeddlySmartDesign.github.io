@@ -286,6 +286,20 @@ Deno.serve(async req=>{
    const session=await retrieveSession(String(b.sessionId||'')),paid=session.status==='complete'&&session.payment_status==='paid';let p=null;if(paid)p=await provision(session);
    return json({ok:true,status:session.status,paymentStatus:session.payment_status,paid,provisioned:!!p,edition:editionOf(session.metadata?.edition),amountTotal:session.amount_total||null,currency:session.currency||'eur',email:p?.buyerEmail||session.customer_details?.email||null,orderSubmittedAt:p?.metadata?.guest_order_submitted_at||null,catalogTemplateId:p?.metadata?.guest_catalog_template_id||null,catalogTemplateVersion:p?.metadata?.guest_catalog_template_version||null,catalogQuestionnaireUrl:p?.catalogQuestionnaireUrl||null})
   }
+  if(action==='sweep'){
+   // Safety net (hourly cron): a couple who pays and closes the tab before the thank-you page
+   // still gets their order and questionnaire email. provision() is idempotent per session.
+   const since=Math.floor(Date.now()/1000)-3*86400;
+   const list=await stripeRequest('/checkout/sessions?limit=100&status=complete&created[gte]='+since);
+   let done=0;const failed:string[]=[];
+   for(const s of (list?.data||[])){
+    if(s?.metadata?.product!=='guest'||s?.payment_status!=='paid')continue;
+    const {data:l}=await admin().from('licenses').select('metadata').eq('source','stripe').eq('source_order_id',String(s.id)).maybeSingle();
+    if(l?.metadata?.guest_order_email_sent_at)continue;
+    try{const full=await retrieveSession(String(s.id));await provision(full);done++}catch(e){failed.push(String(s.id).slice(-8)+':'+String((e as Error)?.message||'error'))}
+   }
+   return json({ok:true,checked:done,failed})
+  }
   if(action==='submit_order'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await submitOrder(session,b.details||{}))}
   return json({ok:false,error:'invalid_action'},400)
  }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','catalog_template_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','catalog_template_not_for_sale','catalog_uses_common_questionnaire','catalog_host_invalid'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable','catalog_host_not_configured'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
