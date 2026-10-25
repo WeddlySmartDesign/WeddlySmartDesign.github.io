@@ -74,6 +74,13 @@
     .pill { display: inline-block; margin-top: .4rem; padding: .25rem .5rem; border-radius: 6px; font: 700 .75rem/1.2 var(--mono); background: var(--wait-soft); color: var(--ink-soft); }
     .pill.you { background: var(--postmark); color: var(--white); }
     .pill.ok { background: var(--ok-soft); color: var(--ok); }
+    .due { font-weight: 600; color: var(--ok) !important; }
+    .due.soon { color: #a4590d !important; }
+    .due.late { color: var(--postmark) !important; }
+    .deadline { display: grid; gap: .1rem; margin: 0 0 .9rem !important; padding: .75rem .9rem; border-radius: 10px; background: var(--ok-soft); color: var(--ok) !important; }
+    .deadline b { font: 400 1.35rem/1.1 var(--display); }
+    .deadline.soon { background: #fbecd9; color: #8a4a0a !important; }
+    .deadline.late { background: #fbe4e6; color: var(--postmark) !important; }
     .calm { padding: 1.25rem; border-radius: 12px; background: var(--white); color: var(--ink-soft); }
     .calm b { display: block; color: var(--ink); font: 400 1.35rem/1.15 var(--display); margin-bottom: .25rem; }
     .search { margin-bottom: .9rem; }
@@ -244,6 +251,21 @@ const design = (id) => (window.GUEST_CATALOG || []).find((d) => d.id === id) || 
 const day = (d, withYear = true) => { if (!d) return ''; const x = new Date(String(d).length === 10 ? d + 'T12:00:00' : d); return isNaN(x) ? '' : x.toLocaleDateString('es-ES', withYear ? { day: 'numeric', month: 'short', year: 'numeric' } : { day: 'numeric', month: 'short' }); };
 const ago = (d) => { if (!d) return ''; const m = Math.round((Date.now() - new Date(d)) / 60000); if (m < 2) return 'ahora mismo'; if (m < 60) return `hace ${m} min`; const h = Math.round(m / 60); if (h < 24) return `hace ${h} h`; const dd = Math.round(h / 24); return dd === 1 ? 'ayer' : dd < 7 ? `hace ${dd} días` : day(d, false); };
 const couple = (o) => o.label || o.buyerEmail || 'Sin nombres todavía';
+// Plazos: la web promete la propuesta en 48–72 h desde el cuestionario; la entrega tras aprobar
+// no tiene plazo público y usamos 48 h como plazo interno. Mismas reglas que los avisos por email.
+const HOUR = 3600000;
+function due(o) {
+  const st = o.status, sub = Date.parse(o.submittedAt || o.submitted_at || ''), app = Date.parse(o.approvedAt || o.approved_at || '');
+  if (['submitted', 'designing', 'review_ready'].includes(st) && sub) return { at: sub + 72 * HOUR, goal: sub + 48 * HOUR, what: 'Enviar' };
+  if (st === 'approved' && app) return { at: app + 48 * HOUR, goal: app + 24 * HOUR, what: 'Entregar' };
+  return null;
+}
+function dueText(d) {
+  const ms = d.at - Date.now(), h = Math.floor(Math.abs(ms) / HOUR);
+  const span = h >= 24 ? `${Math.floor(h / 24)} d ${h % 24} h` : h >= 1 ? `${h} h` : `${Math.max(1, Math.round(Math.abs(ms) / 60000))} min`;
+  const at = new Date(d.at).toLocaleString('es-ES', { weekday: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  return { level: ms <= 0 ? 'late' : ms < 24 * HOUR ? 'soon' : 'ok', short: ms <= 0 ? `Vencido hace ${span}` : `Quedan ${span}`, long: `${d.what} antes del ${at}` };
+}
 function toast(text) { const t = $('toast'); t.textContent = text; t.classList.remove('out'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add('out'), 2400); }
 async function copy(text, done = 'Enlace copiado') { try { await navigator.clipboard.writeText(text); toast(done); } catch { prompt('Copia el enlace:', text); } }
 
@@ -275,13 +297,13 @@ function card(o, flat = false) {
     ${d.image ? `<img src="../${esc(d.image)}" alt="" loading="lazy">` : '<span class="ph"></span>'}
     <span><b>${esc(couple(o))}</b><small>${esc(d.name)}${o.weddingDate ? ' · boda el ' + esc(day(o.weddingDate)) : ''}</small>
     <span class="pill ${s.who === 'you' ? 'you' : s.who === 'done' ? 'ok' : ''}">${esc(s.label)}${o.revisionCount ? ` · ${o.revisionCount} ${o.revisionCount === 1 ? 'cambio' : 'cambios'}` : ''}</span>
-    <small>${esc(when)}${o.mode === 'test' ? ' · prueba' : ''}</small></span>
+    ${(() => { const d = due(o); if (!d) return `<small>${esc(when)}${o.mode === 'test' ? ' · prueba' : ''}</small>`; const t = dueText(d); return `<small class="due ${t.level}">${esc(t.short)} · ${esc(t.long.toLowerCase())}</small>`; })()}</span>
     <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>`;
 }
 document.addEventListener('click', (e) => { const c = e.target.closest('.card[data-id]'); if (c) location.hash = '#/pedido/' + c.dataset.id; });
 
 function renderInbox() {
-  const g = (k) => orders.filter((o) => STATUS[o.status]?.group === k);
+  const g = (k) => orders.filter((o) => STATUS[o.status]?.group === k).sort((a, b) => (due(a)?.at ?? Infinity) - (due(b)?.at ?? Infinity));
   const send = g('send'), deliver = g('deliver'), waiting = g('waiting'), mine = send.length + deliver.length;
   const sec = (title, list, flat) => list.length ? `<section class="sec"><h3><b>${list.length}</b> ${title}</h3><div class="cards">${list.map((o) => card(o, flat)).join('')}</div></section>` : '';
   $('inbox').innerHTML = `
@@ -351,14 +373,14 @@ async function openOrder(id) {
     $('title').textContent = names;
     $('order').innerHTML = `
       <div class="o-head"><span class="pill ${s.who === 'you' ? 'you' : s.who === 'done' ? 'ok' : ''}">${esc(s.label)}</span><h2>${esc(names)}</h2>
-        <p>${esc(d.name)}${c.date ? ' · boda el ' + esc(day(c.date)) : ''}${o.mode === 'test' ? ' · prueba sin pago' : ''}</p></div>
+        <p>${esc(d.name)}${c.date ? ' · boda el ' + esc(day(c.date)) : ''}${o.mode === 'test' ? ' · prueba sin pago' : ''}</p>${(() => { const d = due(o); if (!d) return ''; const t = dueText(d); return `<p class="due ${t.level}">${esc(t.short)} · ${esc(t.long.toLowerCase())}</p>`; })()}</div>
       <div class="o-grid">
         <div class="stage">
           <div class="phone"><div class="screen" id="screen"><p>${config?.template ? 'Montando la invitación…' : 'Se verá aquí cuando envíen el cuestionario.'}</p></div></div>
           ${config?.template ? '<button class="grow" id="grow" type="button"><svg aria-hidden="true"><use href="#i-expand"/></svg>Verla a pantalla completa</button>' : ''}
         </div>
         <div style="display:grid;gap:1rem">
-          <div class="box"><h3>${esc(a.title)}</h3><p>${esc(a.text)}</p>
+          <div class="box">${(() => { const d = due(o); if (!d) return ''; const t = dueText(d); return `<p class="deadline ${t.level}"><b>${esc(t.short)}</b>${esc(t.long)}</p>`; })()}<h3>${esc(a.title)}</h3><p>${esc(a.text)}</p>
             ${a.btn ? `<div class="d-act"><button class="btn" data-act type="button">${esc(a.btn)}</button><p class="msg" role="alert"></p></div>` : ''}
             ${reqs.length && ['designing', 'review_ready'].includes(o.status) ? `<div class="ask"><b>Lo que pidieron cambiar${reqs.length > 1 ? ` (la última de ${reqs.length} veces)` : ''}</b>${esc(reqs[0].note)}</div>` : ''}</div>
           <div class="box"><h3>Cómo va</h3>${timeline(o)}</div>
