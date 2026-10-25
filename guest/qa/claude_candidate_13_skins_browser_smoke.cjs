@@ -53,7 +53,8 @@ async function main(){
     assert.equal(data.api,'function','GUEST_APPLY_CONFIG missing');
     assert.equal(data.variant,scenario.qa,'fixture did not run');
     assert(data.cover?.startsWith('media/')&&data.closing?.startsWith('media/'),'original MP4 references not externalized');
-    assert(data.ns==='Lucía'&&data.dt,'common config did not render');
+    const expectedName=id==='design-15'?'Álvaro':'Lucía';
+    assert(data.ns===expectedName&&data.dt,'candidate-specific config not rendered; expected '+expectedName+', got '+JSON.stringify({name:data.ns,date:data.dt}));
     assert(data.scenes.includes('cover')&&data.scenes.includes('closing'),'key scenes missing');
     assert.equal(data.agenda,scenario.qa==='full'?5:1,'agenda config mismatch');
     assert.equal(data.gallery,scenario.qa==='full'?4:0,'gallery config mismatch');
