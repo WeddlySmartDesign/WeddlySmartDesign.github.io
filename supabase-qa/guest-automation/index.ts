@@ -95,7 +95,7 @@ async function issueInvoice(c: any, o: any) {
 /* ---------- Estadísticas ---------- */
 async function stats(c: any) {
   const [{ data: inv, error: ie }, { data: ord, error: oe }] = await Promise.all([
-    c.from('guest_invoices').select('kind,mode,issued_at,total_cents,order_id').limit(5000),
+    c.from('guest_invoices').select('kind,mode,issued_at,total_cents,order_id,custom_request_id').limit(5000),
     c.from('guest_invitation_orders').select('id,template_id,status,checkout_session_id,created_at').not('checkout_session_id', 'is', null).limit(5000)
   ]);
   if (ie) throw ie; if (oe) throw oe;
@@ -106,12 +106,16 @@ async function stats(c: any) {
   const monthStart = now.getTime() - ((m.getDate() - 1) * D + m.getHours() * H + m.getMinutes() * 60000);
   const pick = (mode: string) => {
     const rows = (inv || []).filter((x: any) => x.mode === mode);
+    const firstCustom = new Map<string, any>();
+    [...rows].sort((a: any, b: any) => Date.parse(a.issued_at) - Date.parse(b.issued_at)).forEach((x: any) => { if (x.kind === 'invoice' && x.custom_request_id && !firstCustom.has(x.custom_request_id)) firstCustom.set(x.custom_request_id, x); });
+    // Un diseño a medida se factura en dos o más pagos: cuenta como una venta, el día de la señal.
+    const isSale = (x: any) => x.kind === 'invoice' && (!x.custom_request_id || firstCustom.get(x.custom_request_id) === x);
     const sum = (from: number, to = Infinity) => {
       const r = rows.filter((x: any) => { const t = Date.parse(x.issued_at); return t >= from && t < to; });
-      return { sales: r.filter((x: any) => x.kind === 'invoice').length, refunds: r.filter((x: any) => x.kind === 'rectificative').length, cents: r.reduce((a: number, x: any) => a + x.total_cents, 0) };
+      return { sales: r.filter(isSale).length, refunds: r.filter((x: any) => x.kind === 'rectificative').length, cents: r.reduce((a: number, x: any) => a + x.total_cents, 0) };
     };
     const byDesign: Record<string, number> = {};
-    rows.filter((x: any) => x.kind === 'invoice').forEach((x: any) => { const n = DESIGNS[tpl.get(x.order_id) as string] || 'Otro'; byDesign[n] = (byDesign[n] || 0) + 1; });
+    rows.filter(isSale).forEach((x: any) => { const n = x.custom_request_id ? 'A medida' : DESIGNS[tpl.get(x.order_id) as string] || 'Otro'; byDesign[n] = (byDesign[n] || 0) + 1; });
     return { week: sum(weekStart), lastWeek: sum(weekStart - 7 * D, weekStart), month: sum(monthStart), total: sum(0), designs: Object.entries(byDesign).sort((a, b) => b[1] - a[1]) };
   };
   return { live: pick('production'), test: pick('test') };
