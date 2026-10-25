@@ -1,0 +1,34 @@
+name: GUEST Stripe TEST Sandbox Read-Only Check
+on:
+  push:
+    branches: [guest-independent]
+    paths:
+      - '.github/workflows/guest-stripe-sandbox-readonly-2026-10-25.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: guest-stripe-sandbox-readonly-once-2026-10-25
+  cancel-in-progress: true
+jobs:
+  verify-test-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    environment: guest-stripe-sandbox
+    env:
+      GUEST_STRIPE_TEST_SECRET_KEY: ${{ secrets.GUEST_STRIPE_TEST_SECRET_KEY }}
+      STRIPE_SECRET_KEY: ''
+      SUPABASE_ACCESS_TOKEN: ''
+      RESEND_API_KEY: ''
+      CLOUDFLARE_API_TOKEN: ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify syntax and strict remote destination
+        run: |
+          node --check guest/qa/stripe_sandbox_readonly_2026_10_25.cjs
+          grep -q "method:'GET'" guest/qa/stripe_sandbox_readonly_2026_10_25.cjs
+      - name: Read Stripe TEST checkout list without any mutation
+        run: node guest/qa/stripe_sandbox_readonly_2026_10_25.cjs
