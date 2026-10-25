@@ -12,6 +12,7 @@ const secretKey=()=>{const x=Deno.env.get('SUPABASE_SECRET_KEYS');return x?JSON.
 const db=()=>createClient(Deno.env.get('SUPABASE_URL')!,secretKey(),{auth:{persistSession:false}});
 /* QA COPY of guest-invitation-flow v21 (live, untouched). Every catalog design is sellable here,
  * review/final links point to the branch preview, and emails only reach the owner's own addresses. */
+const AUTO_CORRECTIONS=false;
 const QA_PREVIEW='https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
 const QA_EMAILS=['weddlysmartdesign@gmail.com','pilarrodriguezbonilla@gmail.com','info@weddlysmartdesign.com'];
 const qaEnv=(n:string)=>n==='GUEST_CATALOG_PUBLIC_ORIGIN'?QA_PREVIEW+'/':(Deno.env.get(n)||'');
@@ -666,9 +667,9 @@ Deno.serve(async req=>{
       const config=checkInvitationConfig(buildConfig(questionnaire,order.files||[],'#',order.template_id,order.template_version),order),ts=now(),email=emailOf(questionnaire,order.buyer_email);
       const {error}=await c.from('guest_invitation_orders').update({questionnaire,resolved_config:config,buyer_email:email,status:'submitted',submitted_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
       const fresh={...order,questionnaire,resolved_config:config,buyer_email:email,status:'submitted',submitted_at:ts};
-      // Corrections go out on their own: the couple edited their own data, so the new version
-      // is rebuilt and sent for review straight away (paid catalog orders only).
-      if(order.status==='changes_requested'&&order.mode==='production'&&order.checkout_session_id){
+      // Corrections could go out on their own, but the owner wants to check every one first
+      // (spelling, the change asked vs. the text written), so this stays off.
+      if(AUTO_CORRECTIONS&&order.status==='changes_requested'&&order.mode==='production'&&order.checkout_session_id){
         const {error:e2}=await c.from('guest_invitation_orders').update({status:'review_ready',updated_at:ts}).eq('id',order.id);
         if(!e2){
           const r=await sendReview(c,{...fresh,status:'review_ready'},''),j=await r.json().catch(()=>({}));
@@ -735,7 +736,7 @@ Deno.serve(async req=>{
        if(to&&order.mode!=='test')await resend({to:[to],subject:'Vuestro enlace para hacer el cambio',html:guestMail({kicker:'Cambio pedido',title:part>=0?'Cambiad «'+QUESTIONNAIRE_PARTS[part]+'» cuando queráis.':'Cambiad lo que queráis.',preheader:'El enlace abre esa parte del cuestionario con vuestros datos.',
          body:mP('Este enlace abre esa parte de vuestro cuestionario con todo lo que ya pusisteis. Cambiad lo que necesitéis y pulsad <b>«Enviar los cambios»</b>.')
            +mBtn(await changeLink(order,part),'Hacer el cambio')
-           +mNote('Cuando lo enviéis, os llega <b>al momento</b> la versión corregida para revisar.')
+           +mNote('Cuando lo enviéis, os mandamos la versión corregida para revisar <b>en un máximo de 72 h</b>.')
            +mP('Si ya lo habéis hecho, podéis ignorar este email.',true)})},'guest-changes-link/'+order.id+'/'+String(order.revision_count||0));
        if(order.mode!=='test')await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados · '+orderLabel(order),html:'<p><b>'+esc(orderLabel(order))+'</b></p><p>'+esc(note).replaceAll('\n','<br>')+'</p>'},'guest-review-changes/'+order.id+'/'+String(order.revision_count||0));
       return json({ok:true,status:'changes_requested',questionnaireToken:await capability(order.id,'q')});
