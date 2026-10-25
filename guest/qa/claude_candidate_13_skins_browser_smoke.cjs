@@ -47,7 +47,7 @@ async function main(){
      return {api:typeof window.GUEST_APPLY_CONFIG,variant:document.documentElement.dataset.guestReviewFixture,
       template:document.querySelector('html')?.dataset.skin,cover:c?.getAttribute('src'),closing:d?.getAttribute('src'),
       sw:document.documentElement.scrollWidth,cw:document.documentElement.clientWidth,
-      ns:document.getElementById('name-1')?.textContent,dt:document.getElementById('cover-date')?.textContent,
+      ns:document.getElementById('name-1')?.textContent,ns2:document.getElementById('name-2')?.textContent,dt:document.getElementById('cover-date')?.textContent,
       scenes:sceneNames,agenda:document.querySelectorAll('#agenda [role="group"][aria-label="Momentos del día"] button[aria-label]').length,notice:document.getElementById('stage-notice')?.textContent||'',
       covers:document.querySelector('#cover-video')?.readyState||0,
       gallery:document.querySelectorAll('#gallery-items img').length};
@@ -56,6 +56,7 @@ async function main(){
     assert.equal(data.variant,scenario.qa,'fixture did not run');
     assert(data.cover?.startsWith('media/')&&data.closing?.startsWith('media/'),'original MP4 references not externalized');
     const expectedName=id==='design-15'?'Álvaro':'Lucía';
+    if(id==='design-14'||id==='design-15')console.log('VIÑETAS FIXTURE',JSON.stringify({id,scenario:scenario.qa,first:data.ns,second:data.ns2}));
     assert(data.ns===expectedName&&data.dt,'candidate-specific config did not render; '+JSON.stringify({expectedName,name:data.ns,date:data.dt,template:data.template,notice:data.notice,variant:data.variant}));
     assert(data.scenes.includes('cover')&&data.scenes.includes('closing'),'key scenes missing');
     assert.equal(data.agenda,scenario.qa==='full'?5:1,'agenda config mismatch');
