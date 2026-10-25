@@ -113,11 +113,43 @@
     .chip { flex: none; min-height: 38px; padding: 0 .9rem; border: 1.5px solid var(--line); border-radius: 99px; background: var(--white); font-weight: 600; font-size: .9375rem; cursor: pointer; }
     .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 
-    .tabs { position: fixed; z-index: 25; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(3, 1fr); padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--white) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
+    .tabs { position: fixed; z-index: 25; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr); padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--white) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
     .tab { display: grid; justify-items: center; gap: 2px; min-height: 52px; padding-top: 6px; border: 0; background: none; font-size: .8125rem; font-weight: 600; color: var(--ink-soft); cursor: pointer; position: relative; }
     .tab svg { width: 24px; height: 24px; }
     .tab[aria-current="page"] { color: var(--ink); }
     .tab .dot { position: absolute; top: 4px; left: calc(50% + 8px); min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--postmark); color: var(--white); font: 700 .6875rem/18px var(--text); }
+
+    /* A medida */
+    .brief { display: grid; gap: .85rem; }
+    .brief dl { margin: 0; display: grid; gap: .7rem; }
+    .brief dt { font: 700 .75rem/1 var(--mono); color: var(--ink-soft); }
+    .brief dd { margin: .25rem 0 0; white-space: pre-line; overflow-wrap: anywhere; }
+    .brief .base-row { display: flex; align-items: center; gap: .7rem; }
+    .brief .base-row img { width: 40px; height: 54px; border-radius: 5px; object-fit: cover; }
+    .tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .tags span { padding: .25rem .55rem; border-radius: 6px; background: var(--wait-soft); font-size: .875rem; font-weight: 600; }
+    .pics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+    .pics a { display: block; aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: var(--envelope-soft); }
+    .pics img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .q-form { display: grid; gap: .9rem; margin-top: .9rem; }
+    .q-form label { display: grid; gap: .35rem; font-size: .875rem; font-weight: 700; }
+    .q-form input, .q-form textarea, .notes { width: 100%; min-height: 52px; padding: .8rem .9rem; border: 1.5px solid var(--line); border-radius: 10px; background: var(--white); color: var(--ink); font: 400 1.0625rem/1.4 var(--text); }
+    .q-form textarea, .notes { min-height: 96px; resize: vertical; }
+    .q-form input:focus, .q-form textarea:focus, .notes:focus { outline: none; border-color: var(--ink); }
+    .amounts { display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; }
+    .amounts button { min-height: 48px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--white); font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; transition: transform 140ms var(--ease-out); }
+    .amounts button:active { transform: scale(.96); }
+    .amounts button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+    .two-in { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; align-items: end; }
+    .split { margin: 0; padding: .7rem .85rem; border-radius: 10px; background: var(--wait-soft); font-size: .9375rem; }
+    .guide { margin: .2rem 0 0; padding-left: 1.1rem; color: var(--ink-soft); font-size: .9375rem; }
+    .guide li { margin-top: .3rem; }
+    .acts { display: grid; gap: .5rem; margin-top: .9rem; }
+    .acts .btn { width: 100%; }
+    .meter { display: flex; gap: .35rem; margin-top: .5rem; }
+    .meter i { flex: 1; height: 8px; border-radius: 4px; background: var(--line); }
+    .meter i.on { background: var(--ink); }
+    .meter i.extra { background: var(--postmark); }
 
     /* Pedido */
     .order { padding: 1rem 16px calc(7.5rem + env(safe-area-inset-bottom, 0px)); max-width: 64rem; margin: 0 auto; }
@@ -184,7 +216,7 @@
       .o-grid { grid-template-columns: 340px minmax(0, 1fr); align-items: start; column-gap: 2.5rem; }
       .stage { position: sticky; top: calc(var(--top) + 1rem); }
       .phone { width: 320px; }
-      .tabs { left: 50%; right: auto; bottom: 16px; translate: -50% 0; width: 26rem; border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 12px 30px -18px rgba(27, 38, 80, .5); }
+      .tabs { left: 50%; right: auto; bottom: 16px; translate: -50% 0; width: 32rem; border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 12px 30px -18px rgba(27, 38, 80, .5); }
       .dock { display: none !important; }
       .d-act { display: grid !important; }
     }
@@ -207,6 +239,8 @@
   <symbol id="i-chart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16"/><path d="M7 16v-5M12 16V7M17 16v-8"/></g></symbol>
   <symbol id="i-receipt" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 11.5h6M9 15h3"/></g></symbol>
   <symbol id="i-undo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></g></symbol>
+ <symbol id="i-pen" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4.5L15.5 5a2.1 2.1 0 0 1 3 3L8 18.5z"/><path d="M13.5 7l3 3"/></g></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4.5 19.5l1.2-3.6A7.8 7.8 0 1 1 8.4 18.4z"/><path d="M9.2 8.8c.3 2.4 2.6 4.7 5 5l1-1.3-1.8-.9-.8.8c-.9-.4-1.6-1.1-2-2l.8-.8-.9-1.8z"/></g></symbol>
   <symbol id="i-out" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v16h-6"/><path d="M10 8l-4 4 4 4M6 12h10"/></g></symbol>
 </svg>
 
@@ -232,11 +266,13 @@
   <p style="margin-top:2rem;text-align:center"><button class="btn line" id="logout" type="button"><svg width="18" height="18" aria-hidden="true"><use href="#i-out"/></svg>Salir de este móvil</button></p>
 </main>
 <main id="sales" class="view" hidden></main>
+<main id="custom" class="view" hidden></main>
 <main id="order" class="order" hidden></main>
 
 <nav class="tabs" id="tabs" hidden>
   <button class="tab" type="button" data-tab="inbox" aria-current="page"><svg aria-hidden="true"><use href="#i-inbox"/></svg>Para ti<span class="dot" id="dot" hidden></span></button>
   <button class="tab" type="button" data-tab="all"><svg aria-hidden="true"><use href="#i-list"/></svg>Todos</button>
+  <button class="tab" type="button" data-tab="custom"><svg aria-hidden="true"><use href="#i-pen"/></svg>A medida<span class="dot" id="cdot" hidden></span></button>
   <button class="tab" type="button" data-tab="sales"><svg aria-hidden="true"><use href="#i-chart"/></svg>Ventas</button>
 </nav>
 <div class="dock" id="dock" hidden><div class="dock-in" id="dockIn"></div></div>
@@ -249,6 +285,7 @@
 const OWNER = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-owner-manager';
 const FLOW = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow-qa';
 const AUTO = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-automation';
+const CUSTOM = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-custom-qa';
 const KEY = 'weddly_owner_manager_token_v1';
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -335,7 +372,7 @@ document.addEventListener('click', (e) => { const c = e.target.closest('.card[da
 
 function renderInbox() {
   const g = (k) => orders.filter((o) => STATUS[o.status]?.group === k).sort((a, b) => (due(a)?.at ?? Infinity) - (due(b)?.at ?? Infinity));
-  const send = g('send'), deliver = g('deliver'), waiting = g('waiting'), mine = send.length + deliver.length;
+  const send = g('send'), deliver = g('deliver'), waiting = g('waiting'), mine = send.length + deliver.length + customs.filter((r) => CSTATUS[r.status]?.who === 'you').length;
   const sec = (title, list, flat) => list.length ? `<section class="sec"><h3><b>${list.length}</b> ${title}</h3><div class="cards">${list.map((o) => card(o, flat)).join('')}</div></section>` : '';
   $('inbox').innerHTML = `
     <div class="hello"><strong>${mine ? (mine === 1 ? 'Tienes 1 pendiente.' : `Tienes ${mine} pendientes.`) : 'Todo al día.'}</strong>
@@ -343,6 +380,7 @@ function renderInbox() {
     ${sec(send.length === 1 ? 'para enviar a revisar' : 'para enviar a revisar', send)}
     ${sec(deliver.length === 1 ? 'aprobada para entregar' : 'aprobadas para entregar', deliver)}
     ${!mine ? '<div class="calm"><b>Nada pendiente</b>Las parejas están rellenando o revisando. No tienes que hacer nada.</div>' : ''}
+    ${(() => { const l = customs.filter((r) => CSTATUS[r.status]?.who === 'you'); return l.length ? `<section class="sec"><h3><b>${l.length}</b> a medida</h3><div class="cards">${l.map(ccard).join('')}</div></section>` : ''; })()}
     ${sec('esperando a la pareja', waiting, true)}`;
   $('dot').hidden = !mine; $('dot').textContent = mine;
 }
@@ -493,6 +531,132 @@ async function refund(o) {
   }
 }
 
+/* ---- A medida ---- */
+// Qué toca en cada solicitud a medida. El precio sale del nivel y lo ajustas antes de enviarlo.
+const CSTATUS = {
+  new: { label: 'Por presupuestar', who: 'you' },
+  quoted: { label: 'Presupuesto enviado', who: 'them' },
+  accepted: { label: 'Señal pagada: a diseñar', who: 'you' },
+  designing: { label: 'Diseñando', who: 'you' },
+  final_sent: { label: 'Esperando el pago final', who: 'them' },
+  paid: { label: 'Pagado: entregar', who: 'you' },
+  delivered: { label: 'Entregada', who: 'done' },
+  declined: { label: 'Descartada', who: 'done' }
+};
+// Lo que entra en cada nivel, para presupuestar sin dudar.
+const SCOPE = {
+  adapt: ['Partes de un diseño del catálogo.', 'Cambias colores, tipografías y un detalle (un icono, un monograma, una frase).', 'No incluye ilustración nueva ni animaciones nuevas.', 'Unas 2 h de trabajo.'],
+  cover: ['Un diseño del catálogo con una portada ilustrada nueva.', 'Incluye la ilustración y adaptar los colores al resto.', 'El resto de la invitación y la apertura no cambian.', 'Unas 4 h de trabajo.'],
+  new: ['Diseño nuevo desde cero: portada, apertura, secciones y cierre.', 'Precio según lo que pidan: 250 € es el mínimo.', 'Cuenta 6–10 h o más: sube el precio si piden animaciones complejas, varias ilustraciones o bilingüe.'],
+  unsure: ['Lee la idea y decide el nivel que encaja.', 'Si cabe en adaptar un diseño, presupuesta 120 €; si piden portada propia, 180 €; si es todo nuevo, 250 € o más.']
+};
+let customs = [], customsCfg = { rounds: 2, extraCents: 2000 };
+const custom = (b) => call(CUSTOM, b);
+async function loadCustom() {
+  try { const j = await custom({ action: 'list' }); customs = j.requests || []; customsCfg = { rounds: j.rounds, extraCents: j.extraCents }; }
+  catch { customs = customs || []; }
+  const n = customs.filter((r) => CSTATUS[r.status]?.who === 'you').length;
+  $('cdot').hidden = !n; $('cdot').textContent = n;
+  if (location.hash === '#/medida') renderCustom();
+  if (location.hash === '#/' || !location.hash) renderInbox();
+}
+function ccard(r) {
+  const s = CSTATUS[r.status] || { label: r.status }, d = r.baseDesign ? design(r.baseDesign) : null;
+  return `<button class="card" type="button" data-cid="${esc(r.id)}">
+    ${d?.image ? `<img src="../${esc(d.image)}" alt="" loading="lazy">` : '<span class="ph"></span>'}
+    <span><b>${esc(r.name)}</b><small>${esc(r.tierName)}${r.quoteCents ? ' · ' + esc(eur(r.quoteCents)) : ''}${r.weddingDate ? ' · boda el ' + esc(day(r.weddingDate)) : ''}</small>
+    <span class="pill ${s.who === 'you' ? 'you' : s.who === 'done' ? 'ok' : ''}">${esc(s.label)}</span>
+    <small>${esc(r.status === 'new' ? 'Pedido ' + ago(r.createdAt) : ago(r.updatedAt))}${r.urgency === 'urgent' ? ' · ¡urgente!' : ''}${r.test ? ' · prueba' : ''}</small></span>
+    <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>`;
+}
+document.addEventListener('click', (e) => { const c = e.target.closest('.card[data-cid]'); if (c) location.hash = '#/medida/' + c.dataset.cid; });
+function renderCustom() {
+  const mine = customs.filter((r) => CSTATUS[r.status]?.who === 'you'), wait = customs.filter((r) => CSTATUS[r.status]?.who === 'them'), done = customs.filter((r) => CSTATUS[r.status]?.who === 'done');
+  const sec = (t, l, flat) => l.length ? `<section class="sec"><h3><b>${l.length}</b> ${t}</h3><div class="cards">${l.map(ccard).join('')}</div></section>` : '';
+  $('custom').innerHTML = customs.length ? `<div class="hello"><strong>${mine.length ? (mine.length === 1 ? 'Tienes 1 a medida.' : `Tienes ${mine.length} a medida.`) : 'A medida, al día.'}</strong><span>Las parejas las piden desde la web. Tú solo pones el precio y le das al botón.</span></div>
+    ${sec('te tocan', mine)}${sec('esperando a la pareja', wait)}${sec('terminadas', done)}`
+    : '<div class="calm"><b>Aún no hay solicitudes</b>Cuando una pareja pida un diseño a medida desde la web, te llega un email y aparece aquí ordenado.</div>';
+}
+async function openCustom(id) {
+  showView('order'); $('back').hidden = false; $('dock').hidden = true;
+  $('order').innerHTML = '<div class="skel"><i style="height:60px"></i><i style="height:320px"></i></div>';
+  try {
+    const { request: r } = await custom({ action: 'detail', id });
+    const s = CSTATUS[r.status] || { label: r.status }, base = r.baseDesign ? design(r.baseDesign) : null;
+    $('title').textContent = r.name;
+    const phone = String(r.phone || '').replace(/\D/g, ''), wa = phone ? (phone.length === 9 ? '34' + phone : phone) : '';
+    const rounds = customsCfg.rounds, extra = r.extraRounds || 0;
+    let act = '';
+    if (r.status === 'new' || r.status === 'quoted') {
+      const start = r.quoteCents || r.suggestedCents;
+      act = `<h3>${r.status === 'new' ? 'Ponle precio' : 'Presupuesto enviado'}</h3>
+        <p>${r.status === 'new' ? `Han elegido <b>${esc(r.tierName)}</b>. Revisa lo que piden y ajusta el precio si hace falta.` : `Les mandaste ${esc(eur(r.quoteCents))} ${esc(ago(r.quotedAt))}. Si lo cambias, les llega el nuevo y el enlace anterior deja de valer.`}</p>
+        <ul class="guide">${(SCOPE[r.tier] || []).map((x) => `<li>${esc(x)}</li>`).join('')}<li>Incluye ${rounds} rondas de cambios; cada ronda extra, ${esc(eur(customsCfg.extraCents))}.</li></ul>
+        <div class="q-form">
+          <div class="amounts" role="group" aria-label="Precio rápido">${[12000, 18000, 25000].map((c) => `<button type="button" data-amt="${c}" aria-pressed="${c === start}">${eur(c)}</button>`).join('')}</div>
+          <div class="two-in"><label>Precio final (€)<input id="qAmt" type="number" inputmode="decimal" min="50" step="1" value="${start / 100}"></label><label>Días para la 1.ª propuesta<input id="qDays" type="number" inputmode="numeric" min="1" max="60" value="${r.quoteDays || ({ adapt: 4, cover: 7, new: 14 }[r.tier] || 5)}"></label></div>
+          <p class="split" id="qSplit"></p>
+          <label>Qué incluye (lo leen en el email)<textarea id="qNote" placeholder="Ej.: Espejo en verde salvia con vuestras iniciales en la portada. Tipografía más fina en los textos.">${esc(r.quoteNote || '')}</textarea></label>
+        </div>
+        <div class="acts"><button class="btn" type="button" id="qSend">${r.status === 'new' ? 'Enviar presupuesto' : 'Enviar el nuevo presupuesto'}</button>${r.status === 'new' ? '<button class="btn line" type="button" id="cDecline">No la hago</button>' : ''}<p class="msg" role="alert" id="cMsg"></p></div>`;
+    } else if (r.status === 'accepted' || r.status === 'designing') {
+      act = `<h3>${r.status === 'accepted' ? 'Han pagado la señal' : 'Diseñando'}</h3>
+        <p>Señal de ${esc(eur(Math.round(r.quoteCents / 2)))} cobrada${r.quoteDays ? `. Les dijiste la primera propuesta en unos ${r.quoteDays} días` : ''}. Manda las propuestas por email o WhatsApp como siempre.</p>
+        <p style="margin-top:.8rem"><b>Rondas de cambios:</b> ${rounds} incluidas${extra ? ` + ${extra} extra pagada${extra > 1 ? 's' : ''}` : ''}.</p>
+        <div class="meter" aria-hidden="true">${Array.from({ length: rounds }, () => '<i class="on"></i>').join('')}${Array.from({ length: extra }, () => '<i class="extra"></i>').join('')}</div>
+        <div class="acts">
+          ${r.status === 'accepted' ? '<button class="btn line" type="button" id="cStart">Ya he empezado</button>' : ''}
+          <button class="btn" type="button" id="cFinal">Lo han aprobado: cobrar el resto (${esc(eur(r.quoteCents - Math.round(r.quoteCents / 2)))})</button>
+          <button class="btn line" type="button" id="cExtra">Piden otra ronda: cobrar ${esc(eur(customsCfg.extraCents))}</button>
+          <p class="msg" role="alert" id="cMsg"></p></div>`;
+    } else if (r.status === 'final_sent') {
+      act = `<h3>Esperando el pago final</h3><p>Tienen el enlace para pagar ${esc(eur(r.quoteCents - Math.round(r.quoteCents / 2)))}. Cuando paguen, te llega un email y la factura sale sola.</p>`;
+    } else if (r.status === 'paid') {
+      act = `<h3>Todo pagado</h3><p>Entrégales la invitación definitiva y su acceso a la app. Después márcala como entregada.</p><div class="acts"><button class="btn" type="button" id="cDone">Marcar como entregada</button><p class="msg" role="alert" id="cMsg"></p></div>`;
+    } else act = `<h3>${esc(s.label)}</h3><p>${r.status === 'declined' ? 'No se envió presupuesto.' : 'Terminada. No tienes que hacer nada más.'}</p>${r.status === 'declined' ? '<div class="acts"><button class="btn line" type="button" id="cReopen">Recuperarla</button><p class="msg" role="alert" id="cMsg"></p></div>' : ''}`;
+
+    $('order').innerHTML = `
+      <div class="o-head"><span class="pill ${s.who === 'you' ? 'you' : s.who === 'done' ? 'ok' : ''}">${esc(s.label)}</span><h2>${esc(r.name)}</h2>
+        <p>${esc(r.tierName)}${r.weddingDate ? ' · boda el ' + esc(day(r.weddingDate)) : ''}${r.urgencyLabel ? ' · ' + esc(r.urgencyLabel.toLowerCase()) : ''}${r.test ? ' · prueba' : ''}</p></div>
+      <div style="display:grid;gap:1rem;margin-top:1.25rem;max-width:44rem">
+        <div class="box">${act}</div>
+        <div class="box brief"><h3>Lo que piden</h3><dl>
+          ${base ? `<div><dt>DISEÑO DE PARTIDA</dt><dd class="base-row">${base.image ? `<img src="../${esc(base.image)}" alt="">` : ''}<span>${esc(base.name)}</span></dd></div>` : ''}
+          ${r.wishes?.length ? `<div><dt>QUIEREN CAMBIAR</dt><dd class="tags">${r.wishes.map((w) => `<span>${esc(w)}</span>`).join('')}</dd></div>` : ''}
+          <div><dt>SU IDEA</dt><dd>${esc(r.idea)}</dd></div>
+          ${r.links ? `<div><dt>ENLACES</dt><dd>${esc(r.links).replace(/(https?:\/\/[^\s,]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>')}</dd></div>` : ''}
+          ${r.files?.length ? `<div><dt>FOTOS DE INSPIRACIÓN</dt><dd class="pics">${r.files.map((f) => `<a href="${esc(f.url)}" target="_blank" rel="noopener"><img src="${esc(f.url)}" alt="${esc(f.name)}" loading="lazy"></a>`).join('')}</dd></div>` : ''}
+        </dl></div>
+        <div class="box"><h3>La pareja</h3><ul class="rows">
+          ${wa ? `<li><a href="https://wa.me/${esc(wa)}?text=${encodeURIComponent(`Hola, ${String(r.name).split(/\s+/)[0]}. Os escribimos de GUEST por vuestra invitación a medida.`)}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span>WhatsApp${r.contactPref === 'whatsapp' ? ' · lo prefieren' : ''}<small>${esc(r.phone)}</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>` : ''}
+          <li><a href="mailto:${esc(r.email)}"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>Email${r.contactPref === 'email' ? ' · lo prefieren' : ''}<small>${esc(r.email)}</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>
+          ${r.status !== 'new' ? `<li><button type="button" data-copy="${esc(r.payUrl)}"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Copiar su enlace de pago<small>Por si no les llega el email</small></span></button></li>` : ''}
+        </ul></div>
+        <div class="box"><h3>Tus notas</h3><textarea class="notes" id="cNotes" placeholder="Solo las ves tú. Se guardan solas.">${esc(r.ownerNotes || '')}</textarea></div>
+      </div>`;
+    $('order').querySelectorAll('[data-copy]').forEach((b) => b.onclick = () => copy(b.dataset.copy));
+    const notes = $('cNotes'); let saved = notes.value;
+    notes.onblur = async () => { if (notes.value === saved) return; try { await custom({ action: 'update', id, ownerNotes: notes.value }); saved = notes.value; toast('Nota guardada'); } catch { toast('No se ha guardado la nota'); } };
+    const run = async (b, fn, ok) => {
+      const old = b.textContent; b.disabled = true; b.textContent = 'Un momento…'; $('cMsg').textContent = '';
+      try { const j = await fn(); toast(j?.emailed === false ? 'Hecho, pero el email no ha salido: copia el enlace de pago.' : ok); await loadCustom(); openCustom(id); }
+      catch (e) { if (e.message === 'manager_required') return; $('cMsg').textContent = { invalid_amount: 'Revisa el precio.', invalid_status: 'Ya ha cambiado: actualiza arriba.' }[e.message] || 'No ha salido. Prueba otra vez.'; b.disabled = false; b.textContent = old; }
+    };
+    if ($('qSend')) {
+      const amt = $('qAmt'), split = () => { const c = Math.round(Number(amt.value) * 100) || 0, dep = Math.round(c / 2); $('qSplit').innerHTML = c ? `Pagan <b>${esc(eur(dep))}</b> al aceptar y <b>${esc(eur(c - dep))}</b> al aprobar. IVA incluido.` : 'Escribe el precio.'; $('order').querySelectorAll('[data-amt]').forEach((x) => x.setAttribute('aria-pressed', String(+x.dataset.amt === c))); };
+      $('order').querySelectorAll('[data-amt]').forEach((x) => x.onclick = () => { amt.value = x.dataset.amt / 100; split(); });
+      amt.oninput = split; split();
+      $('qSend').onclick = () => run($('qSend'), () => custom({ action: 'quote', id, cents: Math.round(Number(amt.value) * 100), days: Number($('qDays').value), note: $('qNote').value }), 'Presupuesto enviado por email.');
+    }
+    if ($('cDecline')) $('cDecline').onclick = () => run($('cDecline'), () => custom({ action: 'update', id, status: 'declined' }), 'Descartada.');
+    if ($('cReopen')) $('cReopen').onclick = () => run($('cReopen'), () => custom({ action: 'update', id, status: 'new' }), 'Recuperada.');
+    if ($('cStart')) $('cStart').onclick = () => run($('cStart'), () => custom({ action: 'update', id, status: 'designing' }), 'Apuntado.');
+    if ($('cFinal')) $('cFinal').onclick = () => run($('cFinal'), () => custom({ action: 'final', id }), 'Les ha llegado el enlace del pago final.');
+    if ($('cExtra')) $('cExtra').onclick = () => run($('cExtra'), () => custom({ action: 'extra', id }), 'Les ha llegado el enlace de la ronda extra.');
+    if ($('cDone')) $('cDone').onclick = () => run($('cDone'), () => custom({ action: 'update', id, status: 'delivered' }), 'Entregada.');
+  } catch (e) { if (e.message !== 'manager_required') $('order').innerHTML = '<div class="calm"><b>No se ha podido abrir</b>Comprueba la conexión y toca actualizar arriba.</div>'; }
+}
+
 /* ---- Ventas ---- */
 let showTest = false;
 async function renderSales() {
@@ -557,27 +721,30 @@ function downloadBook(list) {
 
 /* ---- Navegación ---- */
 function showView(v) {
-  ['inbox', 'all', 'sales', 'order'].forEach((x) => { $(x).hidden = x !== v; });
+  ['inbox', 'all', 'sales', 'custom', 'order'].forEach((x) => { $(x).hidden = x !== v; });
   $('tabs').hidden = v === 'order'; $('dock').hidden = true; $('refresh').hidden = false; $('back').hidden = v !== 'order';
   document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-current', t.dataset.tab === v ? 'page' : 'false'));
-  if (v !== 'order') { $('title').textContent = v === 'all' ? 'Todos los pedidos' : v === 'sales' ? 'Ventas' : 'Pedidos'; current = null; }
+  if (v !== 'order') { $('title').textContent = v === 'all' ? 'Todos los pedidos' : v === 'sales' ? 'Ventas' : v === 'custom' ? 'A medida' : 'Pedidos'; current = null; }
   scrollTo({ top: 0 });
 }
 function route() {
   if (!store.get()) { showLogin(); return; }
   const h = location.hash;
   if (h.startsWith('#/pedido/')) return openOrder(decodeURIComponent(h.slice(9)));
+  if (h.startsWith('#/medida/')) return openCustom(decodeURIComponent(h.slice(9)));
+  if (h === '#/medida') { showView('custom'); renderCustom(); return; }
   if (h === '#/todos') { showView('all'); renderAll(); return; }
   if (h === '#/ventas') { showView('sales'); renderSales(); return; }
   showView('inbox'); renderInbox();
 }
-document.querySelectorAll('.tab').forEach((t) => t.onclick = () => { location.hash = { all: '#/todos', sales: '#/ventas' }[t.dataset.tab] || '#/'; });
+document.querySelectorAll('.tab').forEach((t) => t.onclick = () => { location.hash = { all: '#/todos', sales: '#/ventas', custom: '#/medida' }[t.dataset.tab] || '#/'; });
 $('back').onclick = () => (history.length > 1 ? history.back() : (location.hash = '#/'));
 addEventListener('hashchange', route);
 
 async function refresh() {
   book = null;
   const r = $('refresh'); r.classList.add('spin');
+  loadCustom();
   try { const j = await flow({ action: 'list' }); orders = j.orders || []; }
   catch (e) { if (e.message !== 'manager_required') toast('Sin conexión. Prueba otra vez.'); throw e; }
   finally { r.classList.remove('spin'); }

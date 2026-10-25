@@ -9,6 +9,8 @@ window.GUEST_CONFIG = {
   // Pasarela de compra (Stripe a través de GUEST). Con null, «La quiero» abre WhatsApp.
   // PRUEBA: guest-stripe-checkout-qa solo acepta Stripe en modo test. Cambiar antes de publicar.
   checkoutApi: 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-stripe-checkout-qa',
+  // Diseño a medida: solicitud, presupuesto y cobro. PRUEBA: guest-custom-qa solo usa Stripe en modo test.
+  customApi: 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-custom-qa',
   guarantee:
     'Si después de los cambios la propuesta no os convence, os devolvemos el 100 % antes de aprobarla.'
 };

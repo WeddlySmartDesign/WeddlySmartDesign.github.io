@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f0c4bc">
+  <title>Invitación a medida · GUEST by WeddlySmartDesign</title>
+  <meta name="description" content="Contadnos vuestra idea y os mandamos un precio cerrado en menos de 48 h. Invitaciones digitales a medida desde 120 €, con la app de invitados incluida.">
+  <link rel="icon" href="assets/brand/favicon.ico" sizes="any">
+  <link rel="icon" href="assets/brand/icon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <link rel="preload" href="assets/fonts/abril-fatface-zOL64pLDlL-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css?v=43">
+  <link rel="stylesheet" href="css/styles.css?v=44">
+  <style>
+    /* A medida: un formulario largo pero en un solo paso, ordenado como un sobre que se va llenando. */
+    body { background: var(--envelope); }
+    .cm { min-height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; padding-top: env(safe-area-inset-top, 0px); }
+    .cm-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.25rem; }
+    .cm-top .back { font-size: .9375rem; font-weight: 600; color: var(--ink); text-decoration: none; }
+    .cm-top .back:hover { text-decoration: underline; }
+    .cm-main { padding-block: .5rem 3.5rem; }
+    .cm-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; align-items: start; }
+
+    .intro { display: grid; gap: 1rem; align-content: start; min-width: 0; }
+    .kicker { margin: 0; font: 700 .8125rem/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--postmark); }
+    .intro h1 { margin: 0; font: 400 clamp(2.3rem, 3.4vw + 1.1rem, 3.75rem)/1 var(--display); letter-spacing: -.01em; }
+    .intro p { margin: 0; max-width: 34rem; color: var(--ink-soft); }
+    .promise { display: grid; gap: .55rem; margin: .25rem 0 0; padding: 0; list-style: none; max-width: 34rem; }
+    .promise li { display: grid; grid-template-columns: 18px 1fr; gap: .65rem; font-size: 1rem; line-height: 1.5; color: var(--ink-soft); }
+    .promise svg { width: 18px; height: 18px; margin-top: .2rem; color: var(--postmark); }
+    .promise strong { color: var(--ink); font-weight: 600; }
+
+    .sheet { min-width: 0; background: var(--paper); border-radius: 8px; box-shadow: 0 1px 2px rgba(27, 38, 80, .08), 0 30px 50px -28px rgba(27, 38, 80, .5); overflow: hidden; }
+    .sheet::before { content: ""; display: block; height: 6px; background: repeating-linear-gradient(90deg, var(--postmark) 0 22px, var(--paper) 22px 34px, var(--ink) 34px 56px, var(--paper) 56px 68px); }
+    form, .panel { display: grid; gap: 0; }
+    fieldset { margin: 0; padding: 1.6rem 1.25rem; border: 0; border-top: 1.5px solid var(--line); min-width: 0; }
+    fieldset:first-of-type { border-top: 0; }
+    legend { float: left; width: 100%; padding: 0; margin: 0 0 1rem; display: grid; grid-template-columns: auto 1fr; gap: .2rem .7rem; align-items: baseline; }
+    legend + * { clear: both; }
+    legend b { font: 700 .875rem/1 var(--mono); color: var(--postmark); }
+    legend span { font: 400 1.45rem/1.15 var(--display); color: var(--ink); }
+    legend small { grid-column: 2; font-size: .9375rem; line-height: 1.5; color: var(--ink-soft); }
+
+    /* Niveles: tarjetas con radio */
+    .tiers { display: grid; gap: .7rem; }
+    .tier { position: relative; display: grid; grid-template-columns: 1fr auto; gap: .2rem 1rem; padding: 1rem 1.1rem; background: var(--white); border-radius: 8px; box-shadow: inset 0 0 0 1.5px var(--line); cursor: pointer; transition: box-shadow 180ms ease, transform 160ms var(--ease-out); -webkit-tap-highlight-color: transparent; }
+    .tier:active { transform: scale(.985); }
+    .tier input { position: absolute; opacity: 0; pointer-events: none; }
+    .tier strong { font-size: 1.0625rem; font-weight: 700; }
+    .tier em { font: 400 1.25rem/1 var(--display); font-style: normal; white-space: nowrap; }
+    .tier em small { font: 400 .75rem/1 var(--text); color: var(--ink-soft); margin-right: .25rem; }
+    .tier p { grid-column: 1 / -1; margin: 0; font-size: .9375rem; line-height: 1.5; color: var(--ink-soft); }
+    .tier:has(input:checked) { box-shadow: inset 0 0 0 2px var(--ink); }
+    .tier:has(input:focus-visible) { outline: 3px solid var(--postmark); outline-offset: 2px; }
+    .tier:has(input:checked)::after { content: ""; position: absolute; right: -6px; top: -6px; width: 22px; height: 22px; border-radius: 50%; background: var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5 10 16.5 18 7.5' fill='none' stroke='%23fbf7f4' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat; }
+
+    /* Diseño base: tira de sellos */
+    .bases { display: grid; grid-auto-flow: column; grid-auto-columns: 92px; gap: .75rem; overflow-x: auto; padding: .4rem .2rem 1rem; margin: 0 -.2rem; scroll-snap-type: x proximity; scrollbar-width: thin; }
+    .base { position: relative; display: grid; gap: .45rem; justify-items: center; cursor: pointer; scroll-snap-align: start; -webkit-tap-highlight-color: transparent; }
+    .base input { position: absolute; opacity: 0; pointer-events: none; }
+    .base .stamp { --hole: 3px; --step: 9px; width: 100%; padding: 6px; transition: transform 200ms var(--ease-out); }
+    .base .stamp-art { aspect-ratio: 390 / 844; }
+    .base .stamp-art.none { display: grid; place-items: center; background: var(--envelope-soft); font: 400 .8125rem/1.3 var(--text); color: var(--ink-soft); text-align: center; padding: .4rem; }
+    .base span:last-child { font-size: .875rem; font-weight: 600; color: var(--ink-soft); }
+    .base:has(input:checked) .stamp { transform: rotate(-3deg) translateY(-3px); }
+    .base:has(input:checked) .stamp-wrap { filter: drop-shadow(0 0 0 var(--ink)) drop-shadow(0 8px 10px rgba(27, 38, 80, .25)); }
+    .base:has(input:checked) span:last-child { color: var(--ink); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 4px; text-decoration-color: var(--postmark); }
+    .base:has(input:focus-visible) .stamp { outline: 3px solid var(--postmark); }
+    .stamp-wrap { display: block; width: 100%; filter: drop-shadow(0 2px 2px rgba(27, 38, 80, .18)); transition: filter 200ms ease; }
+
+    /* Chips */
+    .chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .chip { position: relative; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .chip input { position: absolute; opacity: 0; pointer-events: none; }
+    .chip span { display: inline-flex; align-items: center; min-height: 44px; padding: .5rem 1rem; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1.5px var(--line); font-size: .9375rem; font-weight: 600; color: var(--ink-soft); transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms var(--ease-out); }
+    .chip:active span { transform: scale(.96); }
+    .chip input:checked + span { background: var(--ink); color: var(--paper); box-shadow: none; }
+    .chip input:focus-visible + span { outline: 3px solid var(--postmark); outline-offset: 2px; }
+
+    /* Campos */
+    .field { display: grid; gap: .45rem; margin-top: 1.1rem; }
+    .field:first-child, legend + .field { margin-top: 0; }
+    .field > label, .field > .label { font-size: .9375rem; font-weight: 700; color: var(--ink); }
+    .field .help { font-size: .875rem; line-height: 1.5; color: var(--ink-soft); }
+    .field .err { display: none; font-size: .875rem; font-weight: 600; color: var(--postmark); }
+    .field.is-bad .err { display: block; }
+    input[type=text], input[type=email], input[type=tel], input[type=date], textarea {
+      width: 100%; min-height: 52px; padding: .8rem .95rem; border: 0; border-radius: 8px; background: var(--white);
+      box-shadow: inset 0 0 0 1.5px var(--line); font: 400 1.0625rem/1.45 var(--text); color: var(--ink);
+      transition: box-shadow 160ms ease; -webkit-appearance: none; appearance: none;
+    }
+    textarea { min-height: 150px; resize: vertical; }
+    input:focus, textarea:focus { outline: none; box-shadow: inset 0 0 0 2px var(--ink); }
+    .field.is-bad input, .field.is-bad textarea { box-shadow: inset 0 0 0 2px var(--postmark); }
+    ::placeholder { color: #8d93ad; }
+    .two { display: grid; gap: 1.1rem; }
+    .two .field { margin-top: 0; }
+
+    .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; background: var(--white); border-radius: 10px; box-shadow: inset 0 0 0 1.5px var(--line); }
+    .seg label { position: relative; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .seg input { position: absolute; opacity: 0; pointer-events: none; }
+    .seg span { display: grid; place-items: center; min-height: 44px; padding: .4rem .3rem; border-radius: 7px; font-size: .875rem; font-weight: 600; line-height: 1.2; text-align: center; color: var(--ink-soft); transition: background-color 160ms ease, color 160ms ease; }
+    .seg input:checked + span { background: var(--ink); color: var(--paper); }
+    .seg input:focus-visible + span { outline: 3px solid var(--postmark); outline-offset: 1px; }
+    .seg.two-up { grid-template-columns: repeat(2, 1fr); }
+
+    /* Fotos */
+    .drop { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; max-width: 26rem; }
+    .thumb, .add { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .thumb button { position: absolute; right: 6px; top: 6px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: rgba(27, 38, 80, .82); color: var(--paper); display: grid; place-items: center; cursor: pointer; }
+    .thumb button svg { width: 14px; height: 14px; }
+    .add { display: grid; place-items: center; align-content: center; gap: .3rem; background: var(--white); box-shadow: inset 0 0 0 1.5px var(--line); border: 1.5px dashed transparent; cursor: pointer; font-size: .8125rem; font-weight: 600; color: var(--ink-soft); text-align: center; padding: .4rem; transition: transform 160ms var(--ease-out); }
+    .add:active { transform: scale(.97); }
+    .add svg { width: 22px; height: 22px; color: var(--ink); }
+    .add input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+    .consent { display: grid; grid-template-columns: 24px 1fr; gap: .8rem; align-items: start; margin-top: 1.25rem; cursor: pointer; }
+    .consent input { appearance: none; width: 24px; height: 24px; margin: 0; border: 1.5px solid var(--ink); border-radius: 5px; background: var(--white); display: grid; place-items: center; cursor: pointer; transition: background-color 160ms var(--ease-out); }
+    .consent input::after { content: ""; width: 12px; height: 7px; border: solid var(--paper); border-width: 0 0 2.4px 2.4px; rotate: -45deg; translate: 0 -1px; scale: .6; opacity: 0; transition: scale 180ms var(--ease-out), opacity 120ms ease; }
+    .consent input:checked { background: var(--ink); }
+    .consent input:checked::after { scale: 1; opacity: 1; }
+    .consent span { font-size: .9375rem; line-height: 1.55; color: var(--ink-soft); }
+    .consent a { color: var(--ink); font-weight: 600; }
+    .consent.is-bad input { border-color: var(--postmark); box-shadow: 0 0 0 3px rgba(179, 38, 58, .18); }
+
+    .send { padding: 1.4rem 1.25rem 1.6rem; border-top: 1.5px solid var(--line); display: grid; gap: .8rem; }
+    .send .btn { width: 100%; }
+    .send p { margin: 0; font-size: .875rem; line-height: 1.5; color: var(--ink-soft); text-align: center; }
+    .form-err { display: none; padding: .85rem 1rem; border-radius: 8px; background: rgba(179, 38, 58, .09); color: var(--postmark); font-size: .9375rem; font-weight: 600; line-height: 1.45; }
+    .form-err.on { display: block; }
+    .btn[aria-busy=true] { pointer-events: none; opacity: .75; }
+    .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+    /* Estados: enviado, presupuesto, pago */
+    .panel { padding: 1.8rem 1.25rem 1.6rem; gap: 1.1rem; }
+    .panel h2 { margin: 0; font: 400 clamp(1.9rem, 2vw + 1.2rem, 2.5rem)/1.05 var(--display); }
+    .panel p { margin: 0; color: var(--ink-soft); }
+    .panel .big { font: 400 clamp(2.6rem, 3vw + 1.6rem, 3.6rem)/1 var(--display); color: var(--ink); }
+    .panel .big small { display: block; margin-top: .45rem; font: 400 .9375rem/1.4 var(--text); color: var(--ink-soft); }
+    .qnote { padding: 1rem 1.1rem; border-radius: 8px; background: var(--envelope-soft); color: var(--ink); white-space: pre-line; font-size: 1rem; line-height: 1.55; }
+    .qsteps { margin: 0; padding: 0; list-style: none; counter-reset: s; }
+    .qsteps li { display: grid; grid-template-columns: 2.1rem 1fr; gap: .2rem; padding: .85rem 0; border-top: 1.5px solid var(--line); counter-increment: s; }
+    .qsteps li::before { content: counter(s, decimal-leading-zero); grid-row: 1 / 3; font: 700 .9375rem/1.4 var(--mono); color: var(--postmark); }
+    .qsteps b { font-size: 1rem; }
+    .qsteps span { font-size: .9375rem; line-height: 1.5; color: var(--ink-soft); }
+    .qsteps li.done b { text-decoration: line-through; text-decoration-color: var(--postmark); color: var(--ink-soft); }
+    .lock { display: flex; align-items: center; gap: .5rem; font: 700 .8125rem/1 var(--mono); color: var(--ink); }
+    .lock svg { width: 16px; height: 16px; }
+    .skel { display: grid; gap: .7rem; }
+    .skel i { display: block; height: 44px; border-radius: 6px; background: linear-gradient(90deg, var(--envelope-soft), var(--white), var(--envelope-soft)); background-size: 200% 100%; }
+    .skel i:first-child { height: 64px; width: 70%; }
+    @media (prefers-reduced-motion: no-preference) {
+      .skel i { animation: shimmer 1.4s linear infinite; }
+      .panel.enter, .sheet.enter { animation: rise 420ms var(--ease-out) both; }
+    }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+    .pm { justify-self: start; display: grid; place-items: center; width: 92px; height: 92px; border: 2px solid var(--postmark); border-radius: 50%; rotate: -10deg; font: 700 .75rem/1.25 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--postmark); text-align: center; }
+    [hidden] { display: none !important; }
+
+    .cm-foot { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; padding-block: 1.25rem calc(1.25rem + env(safe-area-inset-bottom, 0px)); border-top: 1.5px solid rgba(27, 38, 80, .12); font-size: .875rem; color: var(--ink-soft); }
+    .cm-foot a { color: var(--ink-soft); }
+
+    @media (min-width: 560px) {
+      fieldset, .send, .panel { padding-inline: 1.75rem; }
+      .two { grid-template-columns: 1fr 1fr; }
+      .tiers { grid-template-columns: 1fr 1fr; }
+    }
+    @media (min-width: 960px) {
+      .cm-grid { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(2.5rem, 5vw, 5rem); padding-top: 1.5rem; }
+      .intro { position: sticky; top: 1.5rem; }
+      fieldset, .send, .panel { padding-inline: 2.25rem; }
+    }
+  </style>
+  <script src="js/config.js?v=48" defer></script>
+  <script src="js/catalog.js?v=41" defer></script>
+  <script src="js/a-medida.js?v=1" defer></script>
+</head>
+<body>
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5 9.5 17.5 19.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/></g></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="cm">
+  <header class="wrap cm-top">
+    <a class="logo" href="index.html" aria-label="GUEST by WeddlySmartDesign, inicio"><b>GUEST</b><span>by WeddlySmartDesign</span></a>
+    <a class="back" href="index.html#a-medida">Volver</a>
+  </header>
+
+  <main class="wrap cm-main">
+    <div class="cm-grid">
+      <section class="intro" aria-labelledby="introTitle">
+        <p class="kicker" id="introKicker">Invitación a medida</p>
+        <h1 id="introTitle">Contadnos la invitación que imagináis.</h1>
+        <p id="introText">Cuanto más nos contéis ahora, más exacta será la primera propuesta. Os mandamos un precio cerrado en menos de 48 h, antes de empezar nada.</p>
+        <ul class="promise" id="promise">
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span><strong>Precio cerrado</strong> antes de empezar, IVA incluido.</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span><strong>La mitad para empezar</strong> y la otra mitad al aprobarla.</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span><strong>2 rondas de cambios</strong> incluidas. Cada ronda extra, 20 €.</span></li>
+          <li><svg aria-hidden="true"><use href="#i-check"/></svg><span><strong>La app GUEST para los dos</strong>, igual que en todas nuestras invitaciones.</span></li>
+        </ul>
+      </section>
+
+      <div class="sheet" id="sheet">
+        <form id="form" novalidate>
+          <fieldset>
+            <legend><b>01</b><span>Qué buscáis</span><small>Si dudáis, elegid la última y os aconsejamos.</small></legend>
+            <div class="tiers" id="tiers">
+              <label class="tier"><input type="radio" name="tier" value="adapt"><strong>Adaptar un diseño</strong><em><small>desde</small>120 €</em><p>Uno de nuestros diseños con vuestros colores, tipografías y un detalle propio.</p></label>
+              <label class="tier"><input type="radio" name="tier" value="cover"><strong>Portada ilustrada</strong><em><small>desde</small>180 €</em><p>Una portada nueva, ilustrada para vosotros, sobre uno de nuestros diseños.</p></label>
+              <label class="tier"><input type="radio" name="tier" value="new"><strong>Diseño nuevo</strong><em><small>desde</small>250 €</em><p>Una invitación creada desde cero, con su propia apertura y su cierre.</p></label>
+              <label class="tier"><input type="radio" name="tier" value="unsure"><strong>No lo sabemos</strong><em>&nbsp;</em><p>Nos contáis la idea y os decimos qué encaja y cuánto cuesta.</p></label>
+            </div>
+            <div class="field" data-f="tier"><span class="err">Elegid una opción para seguir.</span></div>
+          </fieldset>
+
+          <fieldset id="baseSet">
+            <legend><b>02</b><span>Diseño de partida</span><small>El que más se parece a lo que queréis. Es opcional.</small></legend>
+            <div class="bases" id="bases" role="radiogroup" aria-label="Diseño de partida"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend><b>03</b><span>Vuestra idea</span></legend>
+            <div class="field">
+              <span class="label" id="wishLabel">¿Qué os gustaría cambiar o tener?</span>
+              <div class="chips" id="wishes" role="group" aria-labelledby="wishLabel"></div>
+            </div>
+            <div class="field" data-f="idea">
+              <label for="idea">Contádnosla con vuestras palabras</label>
+              <textarea id="idea" name="idea" maxlength="3000" placeholder="Ej.: nos casamos en una finca con olivos. Nos encanta Espejo pero en verde salvia, con nuestro perro en la portada y las letras más finas."></textarea>
+              <span class="help">Colores, ambiente, el lugar, algo que os represente. Lo que se os ocurra.</span>
+              <span class="err">Contadnos un poco más (al menos una frase).</span>
+            </div>
+            <div class="field">
+              <span class="label">Fotos de inspiración</span>
+              <div class="drop" id="drop"></div>
+              <span class="help">Hasta 3 imágenes: vuestro sitio, una paleta, una invitación que os guste… (máx. 10 MB cada una).</span>
+              <span class="err" id="fileErr">Esa imagen no vale: tiene que ser JPG, PNG, WEBP o HEIC y pesar menos de 10 MB.</span>
+            </div>
+            <div class="field">
+              <label for="links">Enlaces (opcional)</label>
+              <input type="text" id="links" name="links" maxlength="1200" placeholder="Pinterest, Instagram, la web de la finca…" autocomplete="off">
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend><b>04</b><span>La boda</span></legend>
+            <div class="two">
+              <div class="field" data-f="wedding_date">
+                <label for="date">Fecha (si ya la tenéis)</label>
+                <input type="date" id="date" name="wedding_date">
+                <span class="err">Revisad la fecha.</span>
+              </div>
+              <div class="field">
+                <span class="label" id="urgLabel">¿Para cuándo la necesitáis?</span>
+                <div class="seg" role="radiogroup" aria-labelledby="urgLabel">
+                  <label><input type="radio" name="urgency" value="normal" checked><span>Sin prisa</span></label>
+                  <label><input type="radio" name="urgency" value="soon"><span>En semanas</span></label>
+                  <label><input type="radio" name="urgency" value="urgent"><span>Ya</span></label>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend><b>05</b><span>Cómo os contestamos</span></legend>
+            <div class="field" data-f="name">
+              <label for="name">Vuestros nombres</label>
+              <input type="text" id="name" name="name" maxlength="120" autocomplete="name" placeholder="Lucía y Andrés">
+              <span class="err">Decidnos cómo os llamáis.</span>
+            </div>
+            <div class="two" style="margin-top:1.1rem">
+              <div class="field" data-f="email">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" maxlength="200" autocomplete="email" inputmode="email" placeholder="vosotros@email.com">
+                <span class="help">Os mandamos aquí el presupuesto.</span>
+                <span class="err">Revisad el email.</span>
+              </div>
+              <div class="field">
+                <label for="phone">Móvil (opcional)</label>
+                <input type="tel" id="phone" name="phone" maxlength="40" autocomplete="tel" inputmode="tel" placeholder="600 000 000">
+              </div>
+            </div>
+            <div class="field">
+              <span class="label" id="prefLabel">Si nos surge una duda, preferís…</span>
+              <div class="seg two-up" role="radiogroup" aria-labelledby="prefLabel">
+                <label><input type="radio" name="contact_pref" value="whatsapp" checked><span>WhatsApp</span></label>
+                <label><input type="radio" name="contact_pref" value="email"><span>Email</span></label>
+              </div>
+            </div>
+            <label class="consent" for="consent" data-f="consent">
+              <input type="checkbox" id="consent">
+              <span>He leído la <a href="guest-legal.html#privacidad" target="_blank" rel="noopener">política de privacidad</a> y las <a href="guest-legal.html#medida" target="_blank" rel="noopener">condiciones del diseño a medida</a>. Pedir presupuesto no os compromete a nada.</span>
+            </label>
+            <div class="hp" aria-hidden="true"><label>Web <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+          </fieldset>
+
+          <div class="send">
+            <div class="form-err" id="formErr" role="alert"></div>
+            <button class="btn btn-ink" type="submit" id="submit"><span>Pedir presupuesto</span><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <p>Gratis y sin compromiso. Os contestamos en menos de 48 h.</p>
+          </div>
+        </form>
+
+        <section class="panel enter" id="done" hidden aria-live="polite">
+          <span class="pm" aria-hidden="true">Recibido<br>48 h</span>
+          <h2>Recibido. Ya lo estamos leyendo.</h2>
+          <p id="doneText">Os hemos mandado un email de confirmación. En menos de 48 h os llega el presupuesto con un precio cerrado.</p>
+          <ol class="qsteps">
+            <li><b>Os mandamos el presupuesto</b><span>Precio cerrado y plazo, por email.</span></li>
+            <li><b>Pagáis la mitad para empezar</b><span>Con un enlace de pago seguro.</span></li>
+            <li><b>Diseñamos y lo revisáis</b><span>2 rondas de cambios incluidas.</span></li>
+            <li><b>Pagáis el resto al aprobarla</b><span>Y os la entregamos con la app de invitados.</span></li>
+          </ol>
+          <a class="btn btn-line" href="index.html">Volver a la web</a>
+        </section>
+
+        <section class="panel" id="quote" hidden aria-live="polite">
+          <div class="skel" id="skel"><i></i><i></i><i></i></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="wrap cm-foot">
+    <span>© 2026 WeddlySmartDesign</span>
+    <a href="guest-legal.html#medida">Condiciones a medida</a>
+    <a href="guest-legal.html#privacidad">Privacidad</a>
+    <a href="https://www.instagram.com/weddlysmartdesign" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.tiktok.com/@weddlysmartdesign" target="_blank" rel="noopener">TikTok</a>
+  </footer>
+</div>
+</body>
+</html>
