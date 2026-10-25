@@ -56,6 +56,8 @@ async function main(){
     assert.equal(data.variant,scenario.qa,'fixture did not run');
     assert(data.cover?.startsWith('media/')&&data.closing?.startsWith('media/'),'original MP4 references not externalized');
     const expectedName=id==='design-15'?'Álvaro':'Lucía';
+    const exactPairs={'design-14':['Lucía','Martina'],'design-15':['Álvaro','Pablo']};
+    if(exactPairs[id])assert.deepEqual([data.ns,data.ns2],exactPairs[id],'original two-brides/two-grooms fixture changed for '+id);
     if(id==='design-14'||id==='design-15')console.log('VIÑETAS FIXTURE',JSON.stringify({id,scenario:scenario.qa,first:data.ns,second:data.ns2}));
     assert(data.ns===expectedName&&data.dt,'candidate-specific config did not render; '+JSON.stringify({expectedName,name:data.ns,date:data.dt,template:data.template,notice:data.notice,variant:data.variant}));
     assert(data.scenes.includes('cover')&&data.scenes.includes('closing'),'key scenes missing');
