@@ -1,0 +1,27 @@
+name: GUEST design-15 isolated mobile audit
+on:
+  push:
+    branches: [guest-audit-stripe-test-2026-10-25]
+    paths:
+      - 'guest/qa/claude_candidate_13_skins_browser_smoke.cjs'
+      - '.github/workflows/guest-design15-audit-2026-10-25.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  design15:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated Chromium
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Check Viñetas · Ellos data hydration at 390px and 320px
+        env:
+          GUEST_CANDIDATE_ONLY: design-15
+        run: node guest/qa/claude_candidate_13_skins_browser_smoke.cjs
