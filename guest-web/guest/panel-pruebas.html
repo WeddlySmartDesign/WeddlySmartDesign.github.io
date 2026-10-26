@@ -541,9 +541,12 @@ async function openOrder(id) {
     let config = o.hydratedConfig;
     // Recién enviado o recién corregido: se monta solo a partir del cuestionario.
     if (o.status === 'submitted') {
-      const j = await flow({ action: 'start_design', orderId: id });
-      config = j.config; o = { ...o, status: 'designing' };
-      if (row) row.status = 'designing';
+      // Si a sus datos les falta algo, el pedido se abre igual y lo avisamos.
+      try {
+        const j = await flow({ action: 'start_design', orderId: id });
+        config = j.config; o = { ...o, status: 'designing' };
+        if (row) row.status = 'designing';
+      } catch (e) { if (e.message === 'manager_required') throw e; config = null; toast('No se ha podido montar con sus datos. Revisa su cuestionario.'); }
     }
     current = o;
     const q = o.questionnaire || {}, c = q.couple || {}, d = design(o.template_id), a = next(o), s = STATUS[o.status] || { label: o.status };
