@@ -407,6 +407,11 @@ Deno.serve(async (req) => {
         const what = b.part === 'extra' ? { part: 'extra', cents: EXTRA_CENTS, label: 'Ronda de cambios extra' } : partOf(r);
         if (!what || (b.part === 'extra' && (r.order_id || !['accepted', 'designing'].includes(r.status)))) return json({ ok: false, error: 'nothing_to_pay' }, 409);
         if (what.part === 'deposit' && r.quote_expires_at && Date.parse(r.quote_expires_at) < Date.now()) return json({ ok: false, error: 'quote_expired' }, 409);
+        // Si mientras tanto aprobaron la invitación del catálogo, ya no se puede pasar a a medida: no cobramos una señal que no se podría aplicar.
+        if (what.part === 'deposit' && r.from_order_id) {
+          const { data: o } = await c.from('guest_invitation_orders').select('status, custom_request_id').eq('id', r.from_order_id).maybeSingle();
+          if (!o || (o.custom_request_id && o.custom_request_id !== r.id) || ['approved', 'delivered', 'cancelled'].includes(o.status)) return json({ ok: false, error: 'order_closed' }, 409);
+        }
         const s = await checkout(r, what.part, what.cents, what.label, what.idx ?? -1);
         if (what.part === 'charge') await c.from('guest_custom_requests').update({ extras: r.extras.map((x: any, i: number) => i === what.idx ? { ...x, session: s.id } : x) }).eq('id', r.id);
         else await c.from('guest_custom_requests').update({ [{ deposit: 'deposit_session', final: 'final_session', extra: 'extra_session' }[what.part]!]: s.id }).eq('id', r.id);

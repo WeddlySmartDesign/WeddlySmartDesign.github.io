@@ -65,8 +65,11 @@
     .design i { position: absolute; top: .55rem; left: .55rem; padding: .15rem .4rem; border-radius: 4px; background: var(--ink); color: var(--paper); font: 600 .6875rem/1.3 var(--text); font-style: normal; }
     .peek { display: inline-block; margin-top: .6rem; font-size: .9375rem; color: var(--ink); }
     .peek:empty { display: none; }
-    .upsell { margin-top: .9rem !important; padding-top: .8rem; border-top: 1px solid var(--line); font-size: .875rem !important; }
-    .upsell a { color: var(--ink); font-weight: 600; }
+    .upsell { margin-top: 1.1rem; padding-top: .9rem; border-top: 1px solid var(--line); }
+    .upsell summary { cursor: pointer; font-weight: 600; font-size: .9375rem; line-height: 1.45; color: var(--ink); list-style-position: outside; }
+    .upsell p, .upsell li { font-size: .9375rem; line-height: 1.55; color: var(--ink-soft); }
+    .upsell ul { margin: .6rem 0 1rem; padding-left: 1.1rem; display: grid; gap: .55rem; }
+    .upsell li b { color: var(--ink); }
     .msg { margin-top: .7rem; font-size: .9375rem; color: var(--postmark); }
     .msg:empty { display: none; }
   </style>
@@ -107,7 +110,17 @@
     <div class="parts" id="parts"></div>
     <label class="note">Algo que debamos saber <small>Opcional. Por ejemplo: «La foto de la galería se ve oscura».</small><textarea id="note" maxlength="600"></textarea></label>
     <div class="row"><button class="btn" id="send" type="button">Abrir esa parte</button><button class="btn line" data-back type="button">Volver</button></div>
-    <p class="upsell" id="upsell" hidden>¿Queréis otros colores, otras letras o cambiar la ilustración? Eso ya es diseño a medida. <a id="upsellLink" href="a-medida.html">Pasar a a medida</a>: os descontamos lo ya pagado y seguís con vuestros datos y la app.</p>
+    <details class="upsell" id="upsell" hidden>
+      <summary>¿Queréis otros colores, otras letras o cambiar la ilustración?</summary>
+      <p>Eso ya no es un cambio de datos: es diseño a medida, y tiene un precio aparte. Antes de nada, esto es lo que significa:</p>
+      <ul>
+        <li><b>Pedir precio no cuesta nada.</b> Nos contáis qué queréis y en menos de 48 h os mandamos un precio cerrado. Decidís vosotros.</li>
+        <li><b>Cuánto cuesta.</b> Desde 120&nbsp;€, IVA incluido. Os descontamos los 59,90&nbsp;€ que ya pagasteis, así que lo que pagaríais de más empieza en 60,10&nbsp;€. Se paga en dos mitades: al aceptar el precio y al aprobar el diseño.</li>
+        <li><b>Mientras lo pensáis, nada cambia.</b> Esta propuesta sigue aquí: podéis aprobarla o pedir cambios como siempre. Si el precio no os encaja, seguís con vuestra invitación tal cual, sin pagar nada más.</li>
+        <li><b>Si aceptáis.</b> Mantenéis vuestros datos, fotos y la app. Tenéis 2 rondas de cambios nuevas, de datos y de diseño, y el plazo de entrega es el del presupuesto. La garantía de devolución del catálogo deja de aplicarse: la primera mitad cubre el trabajo de diseño.</li>
+      </ul>
+      <a class="btn line" id="upsellLink" href="a-medida.html">Pedir precio a medida</a>
+    </details>
   </div>
 
   <div id="done" hidden><h2 id="doneTitle"></h2><p id="doneText"></p></div>

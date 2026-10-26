@@ -54,8 +54,8 @@
       } else {
         const extra = wantsExtra && q.canBuyExtra;
         html = `<p class="kicker">${esc(q.tierName)}</p>
-          <p class="big">${euros(q.quoteCents)}<small>Precio cerrado, IVA incluido, con la app de invitados.</small></p>
-          ${q.creditCents ? `<p>Ya pagasteis <b>${euros(q.creditCents)}</b> por la invitación del catálogo: están descontados de los pagos de abajo. Seguís con vuestros datos, fotos y la misma app.</p>` : ''}
+          ${q.creditCents ? `<p class="big">${euros(q.owedCents)}<small>Lo que pagaríais de más, IVA incluido. Precio a medida ${euros(q.quoteCents)} menos los ${euros(q.creditCents)} que ya pagasteis por la invitación del catálogo.</small></p>
+          <p>Seguís con vuestros datos, fotos y la misma app. Si no os encaja, no hagáis nada: seguís con vuestra invitación del catálogo tal cual, con su garantía, y podéis aprobarla desde su enlace.</p>` : `<p class="big">${euros(q.quoteCents)}<small>Precio cerrado, IVA incluido, con la app de invitados.</small></p>`}
           ${q.expiresAt ? `<p style="font-size:.875rem">Este presupuesto vale hasta el ${esc(new Date(q.expiresAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }))}.</p>` : ''}
           ${q.what ? `<p>${esc(q.what)}</p>` : ''}
           ${q.quoteNote ? `<div class="qnote">${esc(q.quoteNote)}</div>` : ''}
@@ -63,7 +63,7 @@
         if (extra) html += `<p>Ya hemos hecho las ${q.rounds} rondas incluidas. Una ronda más cuesta ${euros(q.extraCents)}; os aconsejamos juntar en ella todos los cambios.</p>` + payBtn('extra', q.extraCents, 'Pagar ronda extra:');
         else if (q.due && q.due.part === 'charge') html += `<div class="qnote">Fuera del presupuesto: <b>${esc(q.due.label)}</b></div>` + payBtn('charge', q.due.cents, 'Pagar el extra:')
         else if (q.due) html += payBtn(q.due.part, q.due.cents, q.due.part === 'deposit' ? 'Aceptar y pagar' : 'Pagar el resto:')
-          + (q.due.part === 'deposit' ? `<p style="font-size:.875rem">Al ser un diseño exclusivo, la señal cubre el trabajo desde el primer día y no se devuelve una vez empezado. <a href="guest-legal.html#medida" target="_blank" rel="noopener">Condiciones</a>.</p>` : '');
+          + (q.due.part === 'deposit' ? `<p style="font-size:.875rem">${q.creditCents ? 'Al aceptar, vuestra invitación pasa a ser a medida y deja de aplicarse la garantía de devolución del catálogo. ' : ''}Al ser un diseño exclusivo, la señal cubre el trabajo desde el primer día y no se devuelve una vez empezado. <a href="guest-legal.html#medida" target="_blank" rel="noopener">Condiciones</a>.</p>` : '');
         else if (['paid', 'delivered'].includes(q.status)) html += `<p>Todo pagado. ¡Gracias!</p>`;
         else html += q.withApp ? `<p>Tenéis el cuestionario en vuestro email. Cuando lo enviéis, os mandamos la propuesta para revisarla y aprobarla desde el enlace.</p>` : `<p>Estamos con vuestro diseño. Os escribimos con cada propuesta.</p>`;
       }
@@ -74,7 +74,7 @@
         catch (e) {
           b.removeAttribute('aria-busy');
           const err = $('payErr'); err.classList.add('on');
-          err.textContent = e.code === 'nothing_to_pay' ? 'Este pago ya está hecho. Recargad la página.' : e.code === 'quote_expired' ? 'Este presupuesto ha caducado. Escribidnos y os mandamos uno nuevo.' : 'No hemos podido abrir el pago. Probad otra vez o escribidnos por WhatsApp al 620 843 264.';
+          err.textContent = e.code === 'nothing_to_pay' ? 'Este pago ya está hecho. Recargad la página.' : e.code === 'quote_expired' ? 'Este presupuesto ha caducado. Escribidnos y os mandamos uno nuevo.' : e.code === 'order_closed' ? 'Vuestra invitación del catálogo ya está aprobada, así que este presupuesto ya no se aplica. No se ha cobrado nada.' : 'No hemos podido abrir el pago. Probad otra vez o escribidnos por WhatsApp al 620 843 264.';
         }
       });
     };
@@ -116,7 +116,7 @@
   const pedido = /^gif1_r_[0-9a-f-]{36}_[0-9a-f]{40}$/.test(params.get('pedido') || '') ? params.get('pedido') : '';
   if (pedido) {
     const r = form.querySelector('input[name=tier][value="adapt"]'); if (r && !form.tier.value) r.checked = true;
-    $('introText').textContent = 'Contadnos qué queréis cambiar de vuestro diseño. Os descontamos los 59,90 € que ya pagasteis y seguís con vuestros datos, fotos y la misma app. Os mandamos un precio cerrado en menos de 48 h.';
+    $('introText').textContent = 'Contadnos qué queréis cambiar de vuestro diseño y en menos de 48 h os mandamos un precio cerrado. Pedirlo no cuesta nada ni os compromete: mientras tanto, vuestra propuesta del catálogo sigue igual y podéis aprobarla si preferís. Si aceptáis, os descontamos los 59,90 € ya pagados y seguís con vuestros datos, fotos y la misma app.';
   }
   // Si quieren un diseño nuevo, el diseño de partida sobra.
   const syncBase = () => { $('baseSet').hidden = form.tier.value === 'new'; };
