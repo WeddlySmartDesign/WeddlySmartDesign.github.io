@@ -118,7 +118,7 @@ function showRounds() {
   el.innerHTML = mustPay()
     ? `<b>${euros(changes.extraCents)}</b><span>Ya habéis usado las ${changes.included} rondas de cambios incluidas. Esta ronda extra se paga antes de abrirla; juntad en ella todo lo que queráis cambiar.</span>`
     : `<b>${changes.left}</b><span>${changes.left === 1 ? 'ronda de cambios os queda' : 'rondas de cambios os quedan'} de las ${changes.included} incluidas. Juntad en cada una todo lo que queráis cambiar. A partir de ahí, cada ronda cuesta ${euros(changes.extraCents)}.</span>`;
-  $('send').textContent = mustPay() ? `Pagar ${euros(changes.extraCents)} y abrir` : 'Abrir esa parte';
+  $('send').textContent = mustPay() ? `Pagar ${euros(changes.extraCents)}` : 'Abrir esa parte';
 }
 
 async function api(body) {
@@ -162,7 +162,7 @@ async function respond(decision) {
     if (x.questionnaireToken) { location.href = `guest/catalog-questionnaire.html?t=${encodeURIComponent(x.questionnaireToken)}&parte=${part}`; return; }
     done('Recibido.', 'Os mandamos el enlace para hacer el cambio por email.');
   } catch (e) {
-    if (e?.message === 'change_payment_required' && changes) { changes.left = 0; showRounds(); $('msg').textContent = `Ya habéis usado las rondas incluidas. Pulsad «Pagar ${euros(changes.extraCents)} y abrir» para hacer este cambio.`; document.querySelectorAll('.sheet .btn').forEach((b) => { b.disabled = false; }); return; }
+    if (e?.message === 'change_payment_required' && changes) { changes.left = 0; showRounds(); $('msg').textContent = `Ya habéis usado las rondas incluidas. Pulsad «Pagar ${euros(changes.extraCents)}» para hacer este cambio.`; document.querySelectorAll('.sheet .btn').forEach((b) => { b.disabled = false; }); return; }
     $('msg').textContent = e?.message === 'payments_unavailable' ? 'Ahora mismo no podemos cobrar la ronda extra. Probad en un rato o escribidnos a info@weddlysmartdesign.com.' : e?.message === 'too_many_changes' ? 'Ya habéis hecho muchos cambios desde aquí. Escribidnos a info@weddlysmartdesign.com y lo vemos juntos.' : e?.message === 'review_locked' ? 'Esta versión ya no admite cambios. Recargad la página.' : 'No se ha podido enviar. Probad de nuevo en un momento.';
     document.querySelectorAll('.sheet .btn').forEach((b) => { b.disabled = false; });
   } finally { busy = false; }
