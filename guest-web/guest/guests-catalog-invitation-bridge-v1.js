@@ -1,7 +1,7 @@
 (()=>{
 'use strict';
 if(window.__GuestCatalogBridge)return;
-const FLOW='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1|guest-stripe-pago-2026-10-24\.)/.test(location.hostname)?'guest-invitation-flow-qa':'guest-order-flow');
+const FLOW='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1)$|^(?!guest-lanzamiento\.).*\.pages\.dev$/.test(location.hostname)?'guest-invitation-flow-qa':'guest-order-flow');
 const MEMBER_KEY='weddly_shared_wedding_token';
 let activePromise=null,activeCache=null,activeAt=0;
 

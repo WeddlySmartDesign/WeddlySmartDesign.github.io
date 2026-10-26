@@ -142,7 +142,7 @@
 <script>
 (() => {
 'use strict';
-const FLOW = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1|guest-stripe-pago-2026-10-24\.)/.test(location.hostname)?'guest-invitation-flow-qa':'guest-order-flow');
+const FLOW = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1)$|^(?!guest-lanzamiento\.).*\.pages\.dev$/.test(location.hostname)?'guest-invitation-flow-qa':'guest-order-flow');
 const params = new URLSearchParams(location.search);
 const token = params.get('t') || '', paid = /^cs_[A-Za-z0-9_]+$/.test(params.get('paid') || '') ? params.get('paid') : '';
 if (paid) history.replaceState(null, '', location.pathname + '?t=' + encodeURIComponent(token));

@@ -5,7 +5,7 @@
 (() => {
   'use strict';
   // QA: al pasar a real, cambiar por guest-custom.
-  const API = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1|guest-stripe-pago-2026-10-24\.)/.test(location.hostname)?'guest-custom-qa':'guest-order-custom');
+  const API = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1)$|^(?!guest-lanzamiento\.).*\.pages\.dev$/.test(location.hostname)?'guest-custom-qa':'guest-order-custom');
   const tile = (() => {
     // Pocas marcas y grandes, en diagonal: se ve que es un borrador sin tapar textos ni fotos.
     const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="360" height="300" viewBox="0 0 360 300">'
