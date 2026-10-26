@@ -53,6 +53,17 @@
     .rounds { display: flex; align-items: baseline; gap: .6rem; margin-top: .8rem; padding: .65rem .85rem; border-radius: 8px; background: var(--envelope-soft); font-size: .9375rem; line-height: 1.45; }
     .rounds b { font: 400 1.35rem/1 var(--display); flex: none; }
     .rounds.pay b { color: var(--postmark); }
+    .alt { display: block; margin: .7rem auto 0; min-height: 44px; padding: 0 .5rem; border: 0; background: none; color: var(--ink); font: 600 .9375rem var(--text); text-decoration: underline; text-underline-offset: .25em; cursor: pointer; }
+    .designs { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; margin-top: .9rem; max-height: min(46vh, 22rem); overflow-y: auto; padding: 2px; overscroll-behavior: contain; }
+    .design { position: relative; display: block; cursor: pointer; }
+    .design input { position: absolute; opacity: 0; pointer-events: none; }
+    .design span { display: grid; gap: .3rem; padding: .3rem; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); transition: border-color 160ms ease; }
+    .design img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top; border-radius: 5px; background: var(--envelope-soft); }
+    .design b { font-weight: 600; font-size: .875rem; text-align: center; }
+    .design input:checked + span { border-color: var(--ink); background: var(--white); box-shadow: inset 0 0 0 1px var(--ink); }
+    .design input:focus-visible + span { outline: 2px solid var(--postmark); outline-offset: 2px; }
+    .peek { display: inline-block; margin-top: .6rem; font-size: .9375rem; color: var(--ink); }
+    .peek:empty { display: none; }
     .msg { margin-top: .7rem; font-size: .9375rem; color: var(--postmark); }
     .msg:empty { display: none; }
   </style>
@@ -69,6 +80,15 @@
     <h2>¿Está como la imaginabais?</h2>
     <p>Recorredla entera desde el móvil: nombres, fecha, horas, direcciones y fotos.</p>
     <div class="row"><button class="btn" id="approve" type="button">Aprobar</button><button class="btn line" id="request" type="button">Cambiar algo</button></div>
+    <button class="alt" id="other" type="button" hidden>¿Preferís otro diseño?</button>
+  </div>
+
+  <div id="design" hidden>
+    <h2>Elegid otro diseño</h2>
+    <p>Lo montamos con los mismos datos y fotos. Podéis cambiar de diseño una vez antes de aprobarla, sin coste y sin gastar ronda de cambios.</p>
+    <div class="designs" id="designs"></div>
+    <a class="peek" id="peek" target="_blank" rel="noopener"></a>
+    <div class="row"><button class="btn" id="designGo" type="button" disabled>Cambiar de diseño</button><button class="btn line" data-back type="button">Volver</button></div>
   </div>
 
   <div id="confirmApprove" hidden>
@@ -91,6 +111,7 @@
 </section>
 
 <script src="js/guest-draft.js?v=1"></script>
+<script src="js/catalog.js?v=1"></script>
 <script src="guest/catalog/guest-style-v1.js?v=1"></script>
 <script src="guest/catalog/guest-catalog-owner-viewer-v2.js?v=3"></script>
 <script>
@@ -129,7 +150,7 @@ async function api(body) {
   if (!r.ok || !j?.ok) throw Error(j?.error || 'request_failed');
   return j;
 }
-function view(id) { ['ask', 'confirmApprove', 'changes', 'done'].forEach((x) => { $(x).hidden = x !== id; }); $('msg').textContent = ''; }
+function view(id) { ['ask', 'confirmApprove', 'changes', 'design', 'done'].forEach((x) => { $(x).hidden = x !== id; }); $('msg').textContent = ''; }
 function done(title, text) { view('done'); $('doneTitle').textContent = title; $('doneText').textContent = text; $('minimize').hidden = true; }
 function failure() {
   const s = $('state'); s.hidden = false;
@@ -171,6 +192,34 @@ async function respond(decision) {
   } finally { busy = false; }
 }
 $('approveYes').onclick = () => respond('approve');
+
+// Cambio de diseño: una vez, antes de aprobar. Se monta solo con los mismos datos y lo revisamos antes de mandarlo.
+let pick = null;
+function showDesigns(current) {
+  const list = (window.GUEST_CATALOG || []).filter((d) => d.id !== current);
+  if (!list.length) return;
+  $('designs').innerHTML = list.map((d) => `<label class="design"><input type="radio" name="design" value="${d.id}"><span><img src="${d.image}" alt="" loading="lazy" decoding="async"><b>${d.name}</b></span></label>`).join('');
+  $('other').hidden = false;
+  $('other').onclick = () => view('design');
+  $('designs').onchange = (e) => {
+    pick = list.find((d) => d.id === e.target.value) || null;
+    $('designGo').disabled = !pick;
+    $('designGo').textContent = pick ? `Cambiar a ${pick.name}` : 'Cambiar de diseño';
+    $('peek').textContent = pick ? `Ver ${pick.name} entera con nuestros datos de ejemplo` : '';
+    if (pick) $('peek').href = pick.full;
+  };
+}
+$('designGo').onclick = async () => {
+  if (busy || !pick) return;
+  busy = true; document.querySelectorAll('.sheet .btn').forEach((b) => { b.disabled = true; }); $('msg').textContent = '';
+  try {
+    await api({ action: 'review_design', token, templateId: pick.id });
+    done(`Cambiado a ${pick.name}.`, 'Lo estamos montando con vuestros datos y fotos. Lo revisamos y os llega por email para verlo y aprobarlo.');
+  } catch (e) {
+    $('msg').textContent = e?.message === 'design_change_used' ? 'Ya habéis cambiado de diseño una vez. Si queréis otro, escribidnos a info@weddlysmartdesign.com.' : e?.message === 'review_locked' ? 'Ahora mismo estamos con vuestra invitación. Os escribimos en cuanto esté.' : 'No hemos podido cambiarlo. Probad otra vez en un momento.';
+    document.querySelectorAll('.sheet .btn').forEach((b) => { b.disabled = false; }); $('designGo').disabled = !pick;
+  } finally { busy = false; }
+};
 $('send').onclick = () => respond('changes');
 
 (async () => {
@@ -183,6 +232,7 @@ $('send').onclick = () => respond('changes');
     if (!manifest || manifest.schemaVersion !== 'guest-catalog-owner-renderers-v2') throw Error('registry_unavailable');
     const order = loaded.order;
     changes = order.changes || null; showRounds();
+    if (order.designChange?.allowed) showDesigns(order.designChange.current);
     if (!order?.config?.template?.id) throw Error('missing_template');
     const cfg = order.config, id = cfg.template.id, spec = manifest.templates?.[id];
     if (!spec || spec.mode !== 'iframe' || !spec.src) throw Error('template_asset_not_ready');

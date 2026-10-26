@@ -32,7 +32,7 @@
       const st = q.status, paidDeposit = !['new', 'quoted'].includes(st), paidAll = ['paid', 'delivered'].includes(st);
       return `<ol class="qsteps">
         <li class="${paidDeposit ? 'done' : ''}"><b>Señal: ${euros(q.depositCents)}</b><span>La mitad, para empezar.</span></li>
-        <li class="${paidDeposit && st !== 'accepted' ? 'done' : ''}"><b>${q.withApp ? 'Cuestionario, diseño y revisión' : 'Diseñamos y lo revisáis'}</b><span>${q.rounds} rondas de cambios incluidas. Cada ronda extra: ${euros(q.extraCents)}.</span></li>
+        <li class="${paidDeposit && st !== 'accepted' ? 'done' : ''}"><b>${q.withApp ? 'Cuestionario, diseño y revisión' : 'Diseñamos y lo revisáis'}</b><span>${q.rounds} rondas de cambios incluidas, de datos y de diseño. Cada ronda extra: ${euros(q.extraCents)}. Lo que no esté en el presupuesto, os lo decimos antes de hacerlo.</span></li>
         <li class="${paidAll ? 'done' : ''}"><b>Resto: ${euros(q.restCents)}</b><span>Al aprobarla. Y os la entregamos con la app de invitados.</span></li>
       </ol>`;
     };

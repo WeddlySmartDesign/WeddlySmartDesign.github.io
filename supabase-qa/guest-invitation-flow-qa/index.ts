@@ -169,6 +169,27 @@ async function changeLink(order:any,part:number){return catalogOrigin()+'/guest/
 // Catalog: 3 included, 10 € each extra. Made-to-measure orders carry their own numbers (2 and 20 €).
 function changesInfo(o:any){const inc=o.included_changes??INCLUDED_CHANGES,cents=o.extra_change_cents??EXTRA_CHANGE_CENTS,used=Number(o.revision_count||0),extra=Number(o.extra_changes||0);return {included:inc,used,extra,left:Math.max(0,inc+extra-used),extraCents:cents,max:MAX_CHANGES,custom:!!o.custom_request_id}}
 // Calls between this function and guest-custom-qa are signed with the shared server secret.
+// Same data and photos on another catalog template; the paid license follows the design being made.
+async function moveDesign(c:any,order:any,spec:any,extra:Record<string,unknown>){
+  assertCatalogOrderMode(spec,order.mode==='test'?'test':'production');
+  const moved={...order,template_id:spec.id,template_version:spec.version},ts=now();
+  const submitted=!['draft','changes_requested'].includes(order.status);
+  const patch:any={template_id:spec.id,template_version:spec.version,style_overrides:null,updated_at:ts,...extra,
+    owner_notes:[order.owner_notes,`${ts.slice(0,10)}: diseño cambiado de ${order.template_id} a ${spec.id}`].filter(Boolean).join('\n')};
+  if(submitted){patch.resolved_config=checkInvitationConfig(buildConfig(order.questionnaire||{},order.files||[],'#',spec.id,spec.version),moved);patch.status='designing';patch.designing_at=order.designing_at||ts}
+  const {error}=await c.from('guest_invitation_orders').update(patch).eq('id',order.id);if(error)throw error;
+  if(order.license_id){
+    const {data:lic}=await c.from('licenses').select('metadata').eq('id',order.license_id).maybeSingle();
+    if(lic?.metadata?.guest_catalog_template_id){
+      const {error:le}=await c.from('licenses').update({metadata:{...lic.metadata,guest_catalog_template_id:spec.id,guest_catalog_template_version:spec.version,guest_catalog_template_changed_from:order.template_id},updated_at:ts}).eq('id',order.license_id);
+      if(le)console.error('license_design_pin',le);
+    }
+  }
+  return patch.status||order.status;
+}
+// Catalog couples may switch design once, free, from the review page (custom designs go through the owner).
+const FREE_DESIGN_CHANGES=1;
+const designChangeInfo=(o:any)=>({allowed:!o.custom_request_id&&o.status==='review_sent'&&Number(o.design_changes||0)<FREE_DESIGN_CHANGES,used:Number(o.design_changes||0),free:FREE_DESIGN_CHANGES,current:o.template_id});
 const internalSig=async(action:string,id:string)=>(await hmac('guest-internal-v1|'+action+'|'+id)).slice(0,40);
 const CUSTOM_FN=()=>String(Deno.env.get('SUPABASE_URL')||'').replace(/\/$/,'')+'/functions/v1/guest-custom-qa';
 async function stripe(path:string,init:RequestInit={}){
@@ -787,7 +808,17 @@ Deno.serve(async req=>{
       for(const sid of new Set([back,order.change_payment?.session].filter(Boolean)))order=await settleChangePayment(c,order,String(sid)).catch((e:any)=>{console.error('change_settle_failed',e?.message);return order});
       const files=await signedFiles(c,order,7200),config=checkInvitationRead(hydrateConfig(order.resolved_config||{},files),order,files);
       const pending=order.status==='changes_requested'?{questionnaireToken:await capability(order.id,'q'),part:lastChangePart(order)}:{};
-      return json({ok:true,order:{id:order.id,status:order.status,label:orderLabel(order),config:withStyle(config,order),revisionCount:order.revision_count||0,changes:changesInfo(order),...pending}});
+      return json({ok:true,order:{id:order.id,status:order.status,label:orderLabel(order),config:withStyle(config,order),revisionCount:order.revision_count||0,changes:changesInfo(order),designChange:designChangeInfo(order),...pending}});
+    }
+    if(action==='review_design'){
+      const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
+      if(!designChangeInfo(order).allowed)return json({ok:false,error:order.custom_request_id?'custom_design':order.status!=='review_sent'?'review_locked':'design_change_used'},409);
+      const spec=templateSpec(txt(b.templateId,80));
+      if(spec.id===order.template_id)return json({ok:false,error:'same_design'},400);
+      const from=order.template_id,ts=now();
+      const status=await moveDesign(c,order,spec,{design_changes:Number(order.design_changes||0)+1,submitted_at:ts});
+      await resend({to:['weddlysmartdesign@gmail.com'],subject:'Han elegido otro diseño · '+orderLabel(order),html:guestMail({owner:true,kicker:'Cambio de diseño',title:'Han elegido otro diseño.',preheader:'Ya está montado con sus datos. Míralo y envíaselo.',body:mP('<b>'+esc(orderLabel(order))+'</b> ha cambiado <b>'+esc(from)+'</b> por <b>'+esc(spec.id)+'</b> desde la página de revisión. Ya está montado con sus datos y fotos; míralo y envíaselo. No gasta ronda de cambios.')+mBtn(QA_PREVIEW+'/guest/panel-pruebas.html#/pedido/'+order.id,'Abrir el pedido')})},'guest-design-change/'+order.id+'/'+spec.id).catch((e:any)=>console.error('design_change_mail',e?.message));
+      return json({ok:true,status,templateId:spec.id});
     }
     if(action==='review_respond'){
       const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
@@ -1048,22 +1079,7 @@ Deno.serve(async req=>{
       if(['approved','delivered','cancelled'].includes(order.status))return json({ok:false,error:'invalid_status'},409);
       const spec=templateSpec(txt(b.templateId,80));
       if(spec.id===order.template_id)return json({ok:true,status:order.status,unchanged:true});
-      assertCatalogOrderMode(spec,order.mode==='test'?'test':'production');
-      const moved={...order,template_id:spec.id,template_version:spec.version},ts=now();
-      const submitted=!['draft','changes_requested'].includes(order.status);
-      const patch:any={template_id:spec.id,template_version:spec.version,style_overrides:null,updated_at:ts,
-        owner_notes:[order.owner_notes,`${ts.slice(0,10)}: diseño cambiado de ${order.template_id} a ${spec.id}`].filter(Boolean).join('\n')};
-      if(submitted){patch.resolved_config=checkInvitationConfig(buildConfig(order.questionnaire||{},order.files||[],'#',spec.id,spec.version),moved);patch.status='designing';patch.designing_at=order.designing_at||ts}
-      const {error}=await c.from('guest_invitation_orders').update(patch).eq('id',order.id);if(error)throw error;
-      // Keep the paid license pinned to the design that is actually being made.
-      if(order.license_id){
-        const {data:lic}=await c.from('licenses').select('metadata').eq('id',order.license_id).maybeSingle();
-        if(lic?.metadata?.guest_catalog_template_id){
-          const {error:le}=await c.from('licenses').update({metadata:{...lic.metadata,guest_catalog_template_id:spec.id,guest_catalog_template_version:spec.version,guest_catalog_template_changed_from:order.template_id},updated_at:ts}).eq('id',order.license_id);
-          if(le)console.error('license_design_pin',le);
-        }
-      }
-      return json({ok:true,status:patch.status||order.status,templateId:spec.id});
+      return json({ok:true,status:await moveDesign(c,order,spec,{}),templateId:spec.id});
     }
     if(action==='owner_style'){
       // Texts, fonts, sizes and colours chosen by the owner in her editor; same template, nothing rebuilt.
