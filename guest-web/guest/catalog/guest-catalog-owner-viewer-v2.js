@@ -54,8 +54,12 @@ async function show({order,config,host,registry,signal}){
  if(!iframe.isConnected)fail('preview_detached');
  let apply;try{apply=iframe.contentWindow?.[spec.applyApi]}catch{if(iframe.isConnected)iframe.remove();fail('iframe_cross_origin')}
  if(typeof apply!=='function'){iframe.remove();fail('iframe_adapter_missing:'+id)}
- try{apply(structuredClone(config));iframe.style.visibility='visible'}catch{iframe.remove();fail('iframe_apply_failed:'+id)}
- return {mode:'iframe',id,close(){if(iframe.isConnected)iframe.remove()}};
+ // Los ajustes de estilo del pedido no son parte del config del diseño: se aplican encima.
+ const {style,...designConfig}=structuredClone(config);
+ try{apply(designConfig);iframe.style.visibility='visible'}catch{iframe.remove();fail('iframe_apply_failed:'+id)}
+ const restyle=(s)=>{try{window.GUEST_STYLE_V1?.apply(iframe.contentDocument,s)}catch(e){console.warn('[GUEST style]',e)}};
+ if(style&&window.GUEST_STYLE_V1){restyle(style);setTimeout(()=>restyle(style),900)}
+ return {mode:'iframe',id,iframe,restyle,scan:()=>window.GUEST_STYLE_V1?.scan(iframe.contentDocument),close(){if(iframe.isConnected)iframe.remove()}};
 }
 window.GUEST_CATALOG_OWNER_VIEWER_V2=Object.freeze({version:'2.0.0',show});
 })();

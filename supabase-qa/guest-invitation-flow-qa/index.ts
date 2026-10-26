@@ -503,6 +503,33 @@ async function copyPublicFiles(c:any,order:any){
   }
   return next;
 }
+
+// Owner style tweaks (texts, fonts, sizes, colours) live outside the strict config and are merged only on output.
+const STYLE_FONTS=new Set(['pinyon','great-vibes','parisienne','alex-brush','allura','italianno','dancing','playfair','cormorant','eb-garamond','lora','baskerville','bodoni','cinzel','marcellus','montserrat','josefin','raleway','lato','jost','poppins','kalam','amatic','bangers']);
+const STYLE_ROLES=['names','titles','kickers','body','button'];
+function sanitizeStyle(raw:any){
+  if(!raw||typeof raw!=='object')return null;
+  const out:any={},hex=(v:any)=>typeof v==='string'&&/^#[0-9a-f]{6}$/i.test(v)?v.toLowerCase():null,line=(v:any)=>typeof v==='string'?v.replace(/[<>]/g,'').replace(/\s+/g,' ').trim().slice(0,80):'';
+  const texts:any={};
+  for(const [id,t] of Object.entries(raw.texts&&typeof raw.texts==='object'?raw.texts:{}).slice(0,20)){
+    if(!/^[a-z][a-z0-9-]{0,30}$/.test(id)||!t||typeof t!=='object')continue;
+    const e:any={},tt=t as any;if(line(tt.title))e.title=line(tt.title);if(line(tt.kicker))e.kicker=line(tt.kicker);if(tt.hideKicker===true)e.hideKicker=true;
+    if(Object.keys(e).length)texts[id]=e;
+  }
+  if(Object.keys(texts).length)out.texts=texts;
+  for(const k of ['coverTag','wait','button'])if(line(raw[k]))out[k]=line(raw[k]);
+  const fonts:any={},sizes:any={},colors:any={};
+  for(const r of STYLE_ROLES){
+    if(STYLE_FONTS.has(raw.fonts?.[r]))fonts[r]=raw.fonts[r];
+    const z=Math.round(Number(raw.sizes?.[r])*100)/100;if(z>=0.7&&z<=1.5&&z!==1)sizes[r]=z;
+    if(hex(raw.colors?.[r]))colors[r]=hex(raw.colors[r]);
+  }
+  if(hex(raw.colors?.buttonText))colors.buttonText=hex(raw.colors.buttonText);
+  if(Object.keys(fonts).length)out.fonts=fonts;if(Object.keys(sizes).length)out.sizes=sizes;if(Object.keys(colors).length)out.colors=colors;
+  if(['upper','none'].includes(raw.kickerCase))out.kickerCase=raw.kickerCase;
+  return Object.keys(out).length?out:null;
+}
+const withStyle=(config:any,order:any)=>order.style_overrides?{...config,style:order.style_overrides}:config;
 async function getOrder(c:any,id:string){const {data,error}=await c.from('guest_invitation_orders').select('*').eq('id',id).maybeSingle();if(error)throw error;return data||null}
 function orderLabel(o:any){const q=o.questionnaire||{};return [txt(q?.couple?.name1,30),txt(q?.couple?.name2,30)].filter(Boolean).join(' & ')||'Cuestionario sin completar'}
 async function internalSubmittedEmail(order:any){
@@ -712,7 +739,7 @@ Deno.serve(async req=>{
       if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);
       const files=await signedFiles(c,order,7200),config=checkInvitationRead(hydrateConfig(order.resolved_config||{},files),order,files);
       const pending=order.status==='changes_requested'?{questionnaireToken:await capability(order.id,'q'),part:lastChangePart(order)}:{};
-      return json({ok:true,order:{id:order.id,status:order.status,label:orderLabel(order),config,revisionCount:order.revision_count||0,...pending}});
+      return json({ok:true,order:{id:order.id,status:order.status,label:orderLabel(order),config:withStyle(config,order),revisionCount:order.revision_count||0,...pending}});
     }
     if(action==='review_respond'){
       const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
@@ -755,7 +782,7 @@ Deno.serve(async req=>{
       const order=await findByToken(c,String(b.token||''),'public_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
       if(order.status!=='delivered')return json({ok:false,error:'not_delivered'},409);
       const files=await signedFiles(c,order,86400),config=checkInvitationRead(hydrateConfig(order.resolved_config||{},files),order,files);
-      return json({ok:true,order:{id:order.id,mode:order.mode==='test'?'test':'production',label:orderLabel(order),config}});
+      return json({ok:true,order:{id:order.id,mode:order.mode==='test'?'test':'production',label:orderLabel(order),config:withStyle(config,order)}});
     }
 
     if(action==='active_for_member'){
@@ -913,6 +940,15 @@ Deno.serve(async req=>{
       const {error}=await c.from('guest_invitation_orders').update({questionnaire:q,resolved_config:config,status:'designing',designing_at:order.designing_at||ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
       const files=await signedFiles(c,{...order,resolved_config:config},7200);
       return json({ok:true,status:'designing',questionnaire:q,config:hydrateConfig(config,files)});
+    }
+    if(action==='owner_style'){
+      // Texts, fonts, sizes and colours chosen by the owner in her editor; same template, nothing rebuilt.
+      const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
+      if(!order.resolved_config||!Object.keys(order.resolved_config).length)return json({ok:false,error:'invalid_status'},409);
+      if(JSON.stringify(b.style||{}).length>12000)return json({ok:false,error:'style_too_large'},400);
+      const style=sanitizeStyle(b.style);
+      const {error}=await c.from('guest_invitation_orders').update({style_overrides:style,updated_at:now()}).eq('id',order.id);if(error)throw error;
+      return json({ok:true,style});
     }
     if(action==='owner_note'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);

@@ -240,9 +240,82 @@
     .tx-edit summary { cursor: pointer; font-size: .875rem; font-weight: 600; min-height: 32px; display: inline-flex; align-items: center; }
     .tx-edit textarea { width: 100%; margin-top: .4rem; padding: .6rem .7rem; border: 1px solid var(--line); border-radius: 8px; font: 400 1rem/1.45 var(--text); color: var(--ink); background: var(--white); resize: vertical; }
     .tx-go { display: flex; align-items: center; gap: .6rem; margin-top: .5rem; flex-wrap: wrap; }
+
+    /* Editor de estilo: la invitación en un móvil a tamaño real, y los ajustes debajo (o al lado). */
+    .studio { position: fixed; inset: 0; z-index: 40; display: grid; grid-template-rows: auto minmax(0, 1fr); background: var(--paper); }
+    .st-bar { display: flex; align-items: center; gap: .5rem; min-height: var(--top); padding: env(safe-area-inset-top, 0px) 10px 0 8px; background: var(--envelope); }
+    .st-bar .st-ttl { flex: 1; min-width: 0; }
+    .st-bar .st-ttl b { display: block; font: 400 1.3rem/1.05 var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .st-bar .st-ttl small { display: block; font: 700 .6875rem/1.3 var(--mono); color: var(--ink-soft); }
+    .st-bar .st-ttl small.dirty { color: var(--postmark); }
+    .st-body { display: grid; grid-template-rows: 42dvh minmax(0, 1fr); min-height: 0; }
+    .st-stage { display: grid; place-items: center; min-height: 0; padding: .6rem 0; background: var(--envelope-soft); }
+    .st-phone { --k: .5; width: calc(390px * var(--k) + 12px); height: calc(760px * var(--k) + 12px); padding: 6px; border-radius: calc(36px * var(--k) + 6px); background: var(--ink); box-shadow: 0 18px 36px -22px rgba(27, 38, 80, .7); }
+    .st-clip { width: 100%; height: 100%; overflow: hidden; border-radius: calc(36px * var(--k)); background: var(--white); }
+    .st-screen { width: 390px; height: 760px; transform: scale(var(--k)); transform-origin: 0 0; display: grid; place-items: center; color: var(--ink-soft); }
+    .st-screen iframe { width: 390px !important; height: 760px !important; }
+    .st-panel { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-height: 0; border-top: 1px solid var(--line); }
+    .st-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 6px 12px 0; background: var(--paper); }
+    .st-tab { min-height: 46px; border: 0; border-bottom: 2px solid transparent; background: none; font-weight: 600; font-size: .9375rem; color: var(--ink-soft); cursor: pointer; }
+    .st-tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--postmark); }
+    .st-pane { overflow-y: auto; overscroll-behavior: contain; padding: 1rem 16px 1.5rem; }
+    .st-hint { margin: 0 0 1rem; font-size: .875rem; color: var(--ink-soft); }
+    .st-group { padding: .9rem 0; border-top: 1px solid var(--line); }
+    .st-group:first-of-type { border-top: 0; padding-top: 0; }
+    .st-group > h4 { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin: 0 0 .6rem; font: 700 .75rem/1.2 var(--mono); color: var(--ink-soft); }
+    .st-field { display: grid; gap: .3rem; margin-top: .6rem; }
+    .st-field > span { font-size: .8125rem; font-weight: 700; }
+    .st-field input[type="text"] { width: 100%; min-height: 48px; padding: .65rem .8rem; border: 1.5px solid var(--line); border-radius: 10px; background: var(--white); color: var(--ink); font: 400 1rem/1.3 var(--text); }
+    .st-field input[type="text"]:focus { outline: none; border-color: var(--ink); }
+    .st-field input[type="text"]:not(:placeholder-shown) { border-color: var(--ink-soft); background: #fffdfb; }
+    .st-check { display: inline-flex; align-items: center; gap: .45rem; min-height: 40px; font-size: .875rem; cursor: pointer; }
+    .st-check input { width: 20px; height: 20px; accent-color: var(--ink); }
+    .st-reset { min-height: 32px; padding: 0 .55rem; border: 0; border-radius: 8px; background: var(--wait-soft); font: 700 .6875rem/1 var(--mono); color: var(--ink); cursor: pointer; }
+    .st-reset:active { transform: scale(.97); }
+    .st-font { display: flex; align-items: center; justify-content: space-between; gap: .8rem; width: 100%; min-height: 58px; padding: .5rem .9rem; border: 1.5px solid var(--line); border-radius: 12px; background: var(--white); cursor: pointer; text-align: left; }
+    .st-font[aria-expanded="true"] { border-color: var(--ink); }
+    .st-font em { font-style: normal; font-size: 1.35rem; line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .st-font small { flex: none; font: 700 .6875rem/1 var(--mono); color: var(--ink-soft); }
+    .st-fonts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem; margin-top: .55rem; }
+    .st-fonts h5 { grid-column: 1 / -1; margin: .5rem 0 0; font: 700 .6875rem/1 var(--mono); color: var(--ink-soft); }
+    .st-f { display: grid; gap: .15rem; min-height: 64px; padding: .5rem .65rem; border: 1.5px solid var(--line); border-radius: 10px; background: var(--white); text-align: left; cursor: pointer; }
+    .st-f:active { transform: scale(.97); }
+    .st-f[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+    .st-f em { font-style: normal; font-size: 1.3rem; line-height: 1.15; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .st-f small { font-size: .75rem; color: var(--ink-soft); }
+    .st-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1.5px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .st-seg button { min-height: 44px; border: 0; border-left: 1.5px solid var(--line); background: var(--white); font-weight: 600; font-size: .875rem; cursor: pointer; }
+    .st-seg button:first-child { border-left: 0; }
+    .st-seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+    .st-range { display: grid; grid-template-columns: minmax(0, 1fr) 3.6rem; gap: .8rem; align-items: center; }
+    .st-range input { width: 100%; height: 44px; accent-color: var(--ink); }
+    .st-range output { font: 700 .9375rem/1 var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+    .st-color { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: .7rem; align-items: center; }
+    .st-color input[type="color"] { width: 52px; height: 44px; padding: 0; border: 1.5px solid var(--line); border-radius: 10px; background: none; cursor: pointer; }
+    .st-color input[type="color"]::-webkit-color-swatch-wrapper { padding: 3px; }
+    .st-color input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 7px; }
+    .st-sw { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .st-sw button { width: 32px; height: 32px; border: 1.5px solid var(--line); border-radius: 50%; background: var(--c); cursor: pointer; }
+    .st-sw button[aria-pressed="true"] { outline: 2px solid var(--ink); outline-offset: 2px; }
+    .st-sw button:active { transform: scale(.94); }
+    .st-foot { display: flex; align-items: center; gap: .5rem; padding: .6rem 12px calc(.6rem + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: var(--white); }
+    .st-foot .link-btn { min-height: 44px; padding: 0 .5rem; font-size: .9375rem; }
+    .st-foot .link-btn[disabled] { opacity: .4; pointer-events: none; }
+    .st-foot .grow-gap { flex: 1; }
+    .st-leave { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: .7rem 12px; background: #fbe4e6; color: var(--postmark); font-weight: 600; font-size: .9375rem; }
+    .st-leave span { flex: 1 1 12rem; }
+    .st-open { margin-top: 1rem; }
+    .st-note { margin: 0 0 1rem; padding: .7rem .85rem; border-radius: 10px; background: #fbecd9; color: #8a4a0a; font-size: .875rem; }
+    @media (min-width: 900px) {
+      .st-body { grid-template-rows: none; grid-template-columns: minmax(0, 1fr) 440px; }
+      .st-stage { padding: 1.25rem; }
+      .st-panel { border-top: 0; border-left: 1px solid var(--line); }
+    }
+    @media (prefers-reduced-motion: reduce) { .st-f:active, .st-reset:active, .st-sw button:active { transform: none; } }
   </style>
   <script src="../js/catalog.js?v=41" defer></script>
-  <script src="catalog/guest-catalog-owner-viewer-v2.js" defer></script>
+  <script src="catalog/guest-style-v1.js?v=1" defer></script>
+  <script src="catalog/guest-catalog-owner-viewer-v2.js?v=3" defer></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -296,6 +369,25 @@
   <button class="tab" type="button" data-tab="sales"><svg aria-hidden="true"><use href="#i-chart"/></svg>Ventas</button>
 </nav>
 <div class="dock" id="dock" hidden><div class="dock-in" id="dockIn"></div></div>
+<div class="studio" id="studio" hidden role="dialog" aria-modal="true" aria-labelledby="stTitle">
+  <header class="st-bar"><button class="ib" id="stClose" type="button" aria-label="Cerrar el editor"><svg aria-hidden="true"><use href="#i-x"/></svg></button>
+    <div class="st-ttl"><b id="stTitle">Retocar</b><small id="stState">Sin cambios</small></div>
+    <button class="btn small" id="stSave" type="button" disabled>Guardar</button></header>
+  <div class="st-body">
+    <div class="st-stage" id="stStage"><div class="st-phone" id="stPhone"><div class="st-clip"><div class="st-screen" id="stScreen"><p>Montando la invitación…</p></div></div></div></div>
+    <div class="st-panel">
+      <div class="st-tabs" role="tablist" id="stTabs">
+        <button class="st-tab" role="tab" type="button" data-pane="texts" aria-selected="true">Textos</button>
+        <button class="st-tab" role="tab" type="button" data-pane="fonts" aria-selected="false">Letras</button>
+        <button class="st-tab" role="tab" type="button" data-pane="sizes" aria-selected="false">Tamaños</button>
+        <button class="st-tab" role="tab" type="button" data-pane="colors" aria-selected="false">Colores</button>
+      </div>
+      <div class="st-pane" id="stPane" role="tabpanel"></div>
+      <div class="st-leave" id="stLeave" hidden><span>Tienes cambios sin guardar.</span><button class="btn small" type="button" id="stLeaveSave">Guardar y salir</button><button class="btn small line" type="button" id="stLeaveGo">Salir sin guardar</button></div>
+      <div class="st-foot"><button class="link-btn" id="stUndo" type="button" disabled>Deshacer</button><span class="grow-gap"></span><button class="link-btn" id="stClear" type="button">Volver al diseño original</button></div>
+    </div>
+  </div>
+</div>
 <div class="full" id="full" hidden><div class="full-host" id="fullHost"></div><button class="ib" id="closeFull" type="button" aria-label="Cerrar"><svg aria-hidden="true"><use href="#i-x"/></svg></button></div>
 <div class="toast out" id="toast" role="status"></div>
 
@@ -474,6 +566,7 @@ async function openOrder(id) {
             ${a.btn ? `<div class="d-act"><button class="btn" data-act type="button">${esc(a.btn)}</button><p class="msg" role="alert"></p></div>` : ''}
             ${reqs.length && ['designing', 'review_ready'].includes(o.status) ? `<div class="ask"><b>Lo que pidieron cambiar${reqs.length > 1 ? ` (la última de ${reqs.length} veces)` : ''}</b>${esc(reqs[0].note)}</div>` : ''}</div>
           ${config?.template && ['designing', 'review_ready'].includes(o.status) ? '<div class="box texts" id="texts"><h3>Textos</h3><p>Revisando los textos…</p></div>' : ''}
+          ${config?.template && o.status !== 'cancelled' ? `<div class="box"><h3>Retocar el diseño</h3><p>${o.style_overrides ? `Tiene ${stCount(o.style_overrides)} ${stCount(o.style_overrides) === 1 ? 'retoque' : 'retoques'} tuyos. ` : ''}Títulos, tipos de letra, tamaños y colores, viéndolo en directo antes de guardar.</p><div class="st-open"><button class="btn line" type="button" id="openStudio"><svg width="18" height="18" aria-hidden="true"><use href="#i-pen"/></svg>Abrir el editor</button></div></div>` : ''}
           <div class="box"><h3>Cómo va</h3>${timeline(o)}</div>
           <div class="box"><h3>La pareja</h3><ul class="rows">
             ${email ? `<li><a href="mailto:${esc(email)}"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>Escribirles<small>${esc(email)}</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>` : ''}
@@ -502,11 +595,234 @@ async function openOrder(id) {
       document.querySelectorAll('[data-act]').forEach((b) => { b.onclick = () => a.run(o, b); });
     }
     if (config?.template) {
+      if (o.style_overrides) config = { ...config, style: o.style_overrides };
+      $('openStudio')?.addEventListener('click', () => openStudio(o, config));
       preview(config, o, $('screen'));
       $('grow').onclick = async () => { $('full').hidden = false; document.body.style.overflow = 'hidden'; await preview(config, o, $('fullHost')); };
     }
   } catch (e) { if (e.message !== 'manager_required') $('order').innerHTML = '<div class="calm"><b>No se ha podido abrir</b>Comprueba la conexión y toca actualizar arriba.</div>'; }
 }
+/* ---- Editor de estilo: títulos, letras, tamaños y colores de un pedido ----
+ * La invitación se monta una vez sin retoques para leer el diseño original y luego se le
+ * aplica el borrador en directo. Lo que se guarda es solo la diferencia con el diseño. */
+const ST_ROLES = [['names', 'Nombres de la pareja'], ['titles', 'Títulos de cada parte'], ['kickers', 'Encabezados pequeños'], ['body', 'Textos'], ['button', 'Botón de confirmar']];
+const ST_KIND_ORDER = ['Caligráfica', 'Clásica', 'Moderna', 'Divertida'];
+const st = { order: null, view: null, draft: {}, saved: '{}', undo: [], pane: 'texts', scan: null, orig: {}, sample: '', openFont: '', saving: false };
+const stJSON = (v) => JSON.stringify(v || {});
+const stClean = (v) => { if (Array.isArray(v) || v == null || typeof v !== 'object') return v; const o = {}; for (const [k, x] of Object.entries(v)) { const c = stClean(x); if (c === '' || c == null || c === false || (typeof c === 'object' && !Object.keys(c).length)) continue; o[k] = c; } return o; };
+const stGet = (path) => path.split('.').reduce((o, k) => (o ? o[k] : undefined), st.draft);
+function stSet(path, value, { record = true } = {}) {
+  if (record) stPush();
+  const keys = path.split('.'), last = keys.pop(); let node = st.draft;
+  for (const k of keys) node = node[k] = node[k] && typeof node[k] === 'object' ? node[k] : {};
+  node[last] = value;
+  st.draft = stClean(st.draft);
+  stLive();
+}
+let stTypingKey = '', stTypingTimer = null;
+function stPush(key = '') {
+  // Al escribir, una palabra entera es un solo paso de deshacer.
+  if (key && key === stTypingKey) { clearTimeout(stTypingTimer); stTypingTimer = setTimeout(() => { stTypingKey = ''; }, 900); return; }
+  stTypingKey = key; if (key) stTypingTimer = setTimeout(() => { stTypingKey = ''; }, 900);
+  st.undo.push(stJSON(st.draft)); if (st.undo.length > 80) st.undo.shift();
+}
+function stLive() {
+  st.view?.restyle(st.draft);
+  const dirty = stJSON(st.draft) !== st.saved, n = stCount(st.draft);
+  $('stState').textContent = dirty ? 'Sin guardar' : n ? `Guardado · ${n} ${n === 1 ? 'retoque' : 'retoques'}` : 'Como el diseño original';
+  $('stState').classList.toggle('dirty', dirty);
+  $('stSave').disabled = !dirty || st.saving; $('stUndo').disabled = !st.undo.length;
+  $('stClear').disabled = !Object.keys(st.draft).length;
+}
+function stCount(s) { let n = 0; const walk = (v) => { if (v && typeof v === 'object') Object.values(v).forEach(walk); else if (v) n++; }; walk(s); return n; }
+
+// Lo que trae el diseño: tipografía y color de cada papel, para enseñarlo como "original".
+function stReadOriginal(doc) {
+  const out = {}, win = doc.defaultView, toHex = (c) => { const m = String(c).match(/\d+(\.\d+)?/g); if (!m || (m[3] !== undefined && +m[3] === 0)) return ''; return '#' + m.slice(0, 3).map((x) => (+x).toString(16).padStart(2, '0')).join(''); };
+  for (const [r] of ST_ROLES) {
+    const el = doc.querySelector(`[data-wsd="${r}"]`); if (!el) continue;
+    const cs = win.getComputedStyle(el);
+    out[r] = { font: cs.fontFamily.split(',')[0].replace(/["']/g, '').trim(), color: toHex(cs.webkitTextFillColor && !/0\)$/.test(cs.webkitTextFillColor) ? cs.webkitTextFillColor : cs.color) };
+    if (r === 'button') { out.buttonText = { color: out.button.color }; out.button.color = toHex(cs.backgroundColor) || toHex(cs.borderColor); }
+  }
+  // Paleta del propio diseño para los colores rápidos.
+  const pal = new Set();
+  doc.querySelectorAll('[data-wsd],section,body,footer').forEach((el, i) => { if (i > 160) return; const cs = win.getComputedStyle(el); [cs.color, cs.backgroundColor, cs.borderTopColor].forEach((c) => { const h = toHex(c); if (h) pal.add(h); }); });
+  out.palette = [...pal].slice(0, 10);
+  return out;
+}
+
+async function openStudio(o, config) {
+  st.order = o; st.draft = structuredClone(o.style_overrides || {}); st.saved = stJSON(st.draft); st.undo = []; st.pane = 'texts'; st.openFont = ''; st.scan = null;
+  const c = o.questionnaire?.couple || {};
+  st.sample = c.name1 && c.name2 ? `${c.name1} & ${c.name2}` : 'Clara & Pablo';
+  $('stTitle').textContent = 'Retocar · ' + design(o.template_id).name;
+  $('stLeave').hidden = true; $('studio').hidden = false; document.body.style.overflow = 'hidden';
+  stFit(); stLoadFonts();
+  $('stPane').innerHTML = '<div class="skel"><i style="height:48px"></i><i style="height:48px"></i><i style="height:48px"></i></div>';
+  stLive();
+  try {
+    registry = registry || await fetch('GUEST_CATALOG_OWNER_RENDERERS_V2.json', { cache: 'no-store' }).then((r) => r.json());
+    const { style, ...plain } = config;
+    st.view = await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({ order: { template_id: o.template_id, template_version: String(config.template.version || o.template_version), mode: 'test' }, config: plain, host: $('stScreen'), registry });
+    // Los diseños terminan de pintarse con sus animaciones de entrada: leemos el original después.
+    await new Promise((r) => setTimeout(r, 700));
+    const doc = st.view.iframe.contentDocument;
+    // Diseños con sobre cerrado (Seda): lo abrimos para poder ver cada parte mientras se edita.
+    try { doc.querySelector('#openBtn,.open-btn')?.click(); } catch {}
+    st.scan = st.view.scan(); st.orig = stReadOriginal(doc);
+    stLive(); stRender();
+  } catch (e) { console.warn(e); $('stScreen').innerHTML = '<p>No se ha podido montar la invitación.</p>'; $('stPane').innerHTML = '<div class="calm"><b>No se ha podido abrir</b>Cierra y vuelve a intentarlo.</div>'; }
+}
+function stFit() {
+  const stage = $('stStage'); if (!stage || $('studio').hidden) return;
+  const r = stage.getBoundingClientRect(), pad = innerWidth >= 900 ? 40 : 20;
+  const k = Math.max(.3, Math.min((r.height - pad - 12) / 760, (r.width - pad - 12) / 390, 1));
+  $('stPhone').style.setProperty('--k', k.toFixed(3));
+}
+addEventListener('resize', stFit);
+function stLoadFonts() {
+  if (document.getElementById('stFonts')) return;
+  const F = window.GUEST_STYLE_V1?.FONTS || [];
+  const l = document.createElement('link'); l.id = 'stFonts'; l.rel = 'stylesheet';
+  l.href = 'https://fonts.googleapis.com/css2?' + F.map((f) => 'family=' + f.name.replace(/ /g, '+')).join('&') + '&display=swap';
+  document.head.append(l);
+}
+// Lleva la vista previa a la parte que se está tocando.
+function stReveal(sel) {
+  try {
+    const doc = st.view?.iframe?.contentDocument; if (!doc) return;
+    // La portada de algunos diseños se abre con un toque: si los nombres de arriba no se ven, vamos a los del final.
+    const all = [...doc.querySelectorAll(sel)], el = all.find((x) => x.checkVisibility ? x.checkVisibility({ opacityProperty: true, visibilityProperty: true }) : x.offsetParent) || all[all.length - 1]; if (!el) return;
+    const win = doc.defaultView, y = el.getBoundingClientRect().top + win.scrollY - 140;
+    (doc.scrollingElement || doc.documentElement).scrollTo({ top: Math.max(0, y), behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  } catch {}
+}
+
+function stRender() {
+  document.querySelectorAll('.st-tab').forEach((t) => t.setAttribute('aria-selected', String(t.dataset.pane === st.pane)));
+  const pane = $('stPane'), top = pane.scrollTop;
+  pane.innerHTML = ({ texts: stTexts, fonts: stFonts, sizes: stSizes, colors: stColors })[st.pane]();
+  pane.scrollTop = top;
+}
+const stInput = (path, label, placeholder, reveal) => `<label class="st-field"><span>${esc(label)}</span><input type="text" maxlength="80" data-path="${esc(path)}" data-reveal="${esc(reveal)}" value="${esc(stGet(path) || '')}" placeholder="${esc(placeholder || '')}"></label>`;
+function stTexts() {
+  const sc = st.scan || { sections: [] }, s = STATUS[st.order.status];
+  const warn = st.order.status === 'delivered' ? '<p class="st-note">Ya está entregada: al guardar, el cambio sale en su invitación al momento.</p>' : st.order.status === 'review_sent' ? '<p class="st-note">La pareja la está revisando: verá el cambio al volver a abrir su enlace.</p>' : '';
+  let h = warn + '<p class="st-hint">Escribe encima del texto que quieras cambiar. Si lo dejas vacío, vuelve el del diseño.</p>';
+  if (sc.coverTag || sc.wait || sc.button) {
+    h += '<div class="st-group"><h4>Portada y final</h4>';
+    if (sc.coverTag) h += stInput('coverTag', 'Frase sobre los nombres', sc.coverTag, '[data-wsd-key="coverTag"]');
+    if (sc.wait) h += stInput('wait', 'Despedida del final', sc.wait, '[data-wsd-key="wait"]');
+    if (sc.button) h += stInput('button', 'Botón de confirmar', sc.button, '[data-wsd="button"]');
+    h += '</div>';
+  }
+  for (const sec of sc.sections) {
+    const k = `[data-wsd-key="${sec.id}:title"]`;
+    h += `<div class="st-group"><h4>${esc(sec.label)}</h4>`;
+    if (sec.title) h += stInput(`texts.${sec.id}.title`, 'Título', sec.title, k);
+    if (sec.kicker) h += stInput(`texts.${sec.id}.kicker`, 'Encabezado pequeño', sec.kicker, k)
+      + `<label class="st-check"><input type="checkbox" data-hide="${esc(sec.id)}"${stGet(`texts.${sec.id}.hideKicker`) ? ' checked' : ''}> Quitar el encabezado pequeño</label>`;
+    h += '</div>';
+  }
+  return h;
+}
+function stFonts() {
+  const F = window.GUEST_STYLE_V1?.FONTS || [];
+  let h = '<p class="st-hint">Toca un tipo de letra para verlo en la invitación al momento.</p>';
+  for (const [r, label] of ST_ROLES) {
+    if (!st.orig[r]) continue;
+    const cur = F.find((f) => f.id === stGet('fonts.' + r)), open = st.openFont === r;
+    h += `<div class="st-group"><h4>${esc(label)}${cur ? `<button class="st-reset" type="button" data-unset="fonts.${r}">Original</button>` : ''}</h4>
+      <button class="st-font" type="button" data-font-open="${r}" aria-expanded="${open}"><em style="font-family:${cur ? esc(cur.family) : `'${esc(st.orig[r].font)}'`}">${esc(r === 'names' ? st.sample : r === 'button' ? 'Confirmar asistencia' : 'Nuestra historia')}</em><small>${esc(cur ? cur.name : 'Del diseño')}</small></button>`;
+    if (open) {
+      h += '<div class="st-fonts">';
+      for (const kind of ST_KIND_ORDER) {
+        h += `<h5>${kind}</h5>`;
+        for (const f of F.filter((x) => x.kind === kind)) h += `<button class="st-f" type="button" data-font="${r}:${f.id}" aria-pressed="${cur?.id === f.id}"><em style="font-family:${esc(f.family)}">${esc(r === 'names' ? st.sample : 'Aa Bb 123')}</em><small>${esc(f.name)}</small></button>`;
+      }
+      h += '</div>';
+    }
+    if (r === 'kickers') {
+      const kc = stGet('kickerCase') || '';
+      h += `<div class="st-field"><span>Encabezados en</span><div class="st-seg">${[['', 'Como el diseño'], ['upper', 'MAYÚSCULAS'], ['none', 'Normal']].map(([v, t]) => `<button type="button" data-case="${v}" aria-pressed="${kc === v}">${t}</button>`).join('')}</div></div>`;
+    }
+    h += '</div>';
+  }
+  return h;
+}
+function stSizes() {
+  let h = '<p class="st-hint">El tamaño se ajusta solo a cada móvil; aquí eliges si lo quieres más grande o más pequeño que en el diseño.</p>';
+  for (const [r, label] of ST_ROLES) {
+    if (!st.orig[r]) continue;
+    const v = Math.round((Number(stGet('sizes.' + r)) || 1) * 100);
+    h += `<div class="st-group"><h4>${esc(label)}${v !== 100 ? `<button class="st-reset" type="button" data-unset="sizes.${r}">Original</button>` : ''}</h4>
+      <div class="st-range"><input type="range" min="70" max="150" step="5" value="${v}" data-size="${r}" aria-label="Tamaño de ${esc(label.toLowerCase())}"><output>${v} %</output></div></div>`;
+  }
+  return h;
+}
+function stColors() {
+  const rows = [...ST_ROLES.filter(([r]) => r !== 'button'), ['button', 'Fondo del botón'], ['buttonText', 'Letra del botón']];
+  let h = '<p class="st-hint">Elige uno de los colores del propio diseño o cualquier otro.</p>';
+  for (const [r, label] of rows) {
+    if (!st.orig[r]) continue;
+    const cur = stGet('colors.' + r) || '', base = st.orig[r].color || '#1b2650';
+    h += `<div class="st-group"><h4>${esc(label)}${cur ? `<button class="st-reset" type="button" data-unset="colors.${r}">Original</button>` : ''}</h4>
+      <div class="st-color"><input type="color" value="${esc(cur || base)}" data-color="${r}" aria-label="Color de ${esc(label.toLowerCase())}">
+      <div class="st-sw">${[base, ...st.orig.palette.filter((x) => x !== base)].slice(0, 8).map((c, i) => `<button type="button" style="--c:${c}" data-swatch="${r}:${c}" aria-pressed="${(cur || base) === c}" aria-label="${i ? c : 'Color original'}"></button>`).join('')}</div></div></div>`;
+  }
+  return h;
+}
+const stRevealFor = (path) => path.startsWith('fonts.names') || path.startsWith('sizes.names') || path.startsWith('colors.names') ? '[data-wsd="names"]' : path.endsWith('button') || path.endsWith('buttonText') ? '[data-wsd="button"]' : path.endsWith('kickers') ? '[data-wsd="kickers"]' : path.endsWith('body') ? '[data-wsd="body"]' : '[data-wsd="titles"]';
+
+$('stTabs').addEventListener('click', (e) => { const t = e.target.closest('[data-pane]'); if (!t || !st.scan) return; st.pane = t.dataset.pane; $('stPane').scrollTop = 0; stRender(); });
+$('stPane').addEventListener('focusin', (e) => { const r = e.target.dataset?.reveal; if (r) stReveal(r); });
+$('stPane').addEventListener('input', (e) => {
+  const t = e.target;
+  if (t.dataset.path) { stPush('t:' + t.dataset.path); stSet(t.dataset.path, t.value, { record: false }); return; }
+  if (t.dataset.size) { const v = +t.value; t.nextElementSibling.textContent = v + ' %'; if (!t.dataset.armed) { stPush(); t.dataset.armed = '1'; } stSet('sizes.' + t.dataset.size, v === 100 ? '' : v / 100, { record: false }); return; }
+  if (t.dataset.color) { if (!t.dataset.armed) { stPush(); t.dataset.armed = '1'; } stSet('colors.' + t.dataset.color, t.value, { record: false }); }
+});
+$('stPane').addEventListener('change', (e) => {
+  const t = e.target;
+  if (t.dataset.hide) { stSet(`texts.${t.dataset.hide}.hideKicker`, t.checked); stReveal(`[data-wsd-key="${t.dataset.hide}:title"]`); }
+  if (t.dataset.size || t.dataset.color) { delete t.dataset.armed; stRender(); }
+});
+$('stPane').addEventListener('pointerdown', (e) => { const t = e.target.closest('[data-size],[data-color]'); if (t) stReveal(stRevealFor((t.dataset.size ? 'sizes.' + t.dataset.size : 'colors.' + t.dataset.color))); });
+$('stPane').addEventListener('click', (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.fontOpen) { st.openFont = st.openFont === b.dataset.fontOpen ? '' : b.dataset.fontOpen; stRender(); stReveal(stRevealFor('fonts.' + b.dataset.fontOpen)); return; }
+  if (b.dataset.font) { const [r, id] = b.dataset.font.split(':'); stSet('fonts.' + r, id); stRender(); return; }
+  if (b.dataset.case !== undefined) { stSet('kickerCase', b.dataset.case); stRender(); stReveal('[data-wsd="kickers"]'); return; }
+  if (b.dataset.swatch) { const [r, c] = b.dataset.swatch.split(':'); stSet('colors.' + r, c === st.orig[r]?.color ? '' : c); stRender(); stReveal(stRevealFor('colors.' + r)); return; }
+  if (b.dataset.unset) { stSet(b.dataset.unset, ''); stRender(); }
+});
+$('stUndo').onclick = () => { if (!st.undo.length) return; st.draft = JSON.parse(st.undo.pop()); stTypingKey = ''; stLive(); stRender(); };
+$('stClear').onclick = () => { stPush(); st.draft = {}; stLive(); stRender(); toast('Vuelve a estar como el diseño. Puedes deshacerlo.'); };
+async function stSave() {
+  st.saving = true; stLive(); $('stSave').textContent = 'Guardando…';
+  try {
+    const j = await flow({ action: 'owner_style', orderId: st.order.id, style: st.draft });
+    st.draft = j.style || {}; st.saved = stJSON(st.draft); st.order.style_overrides = j.style || null;
+    toast(st.order.status === 'delivered' ? 'Guardado. Ya se ve en su invitación.' : 'Guardado.');
+    return true;
+  } catch (e) { if (e.message !== 'manager_required') toast('No se ha podido guardar. Prueba otra vez.'); return false; }
+  finally { st.saving = false; $('stSave').textContent = 'Guardar'; stLive(); }
+}
+function stExit() {
+  $('studio').hidden = true; document.body.style.overflow = ''; st.view?.close(); st.view = null;
+  if (current && st.order && current.id === st.order.id) openOrder(current.id);
+}
+$('stSave').onclick = stSave;
+$('stClose').onclick = () => { if (stJSON(st.draft) !== st.saved) { $('stLeave').hidden = false; return; } stExit(); };
+$('stLeaveGo').onclick = stExit;
+$('stLeaveSave').onclick = async () => { if (await stSave()) stExit(); };
+document.addEventListener('keydown', (e) => {
+  if ($('studio').hidden) return;
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'z' && e.target.tagName !== 'INPUT') { e.preventDefault(); $('stUndo').click(); }
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') { e.preventDefault(); if (!$('stSave').disabled) stSave(); }
+});
+
 /* ---- Textos: qué han cambiado y posibles faltas ---- */
 const SECTION = { story: 'Historia', agenda: 'Programa', bus: 'Autobús', accommodation: 'Alojamiento', gift: 'Regalo', playlist: 'Canciones', gallery: 'Galería' };
 const LABELS = [
