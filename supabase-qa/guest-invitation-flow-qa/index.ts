@@ -665,7 +665,8 @@ async function deliverOrder(c:any,order:any,invitationUrlIn:any){
               +mBtn(inviteUrl,'Ver nuestra invitación')
               +mBtn(accessUrl,'Abrir la app de invitados',true)
               +mSteps([['Añadid a vuestros invitados','Uno a uno, por grupos o desde los contactos del móvil.'],['Enviad la invitación','Desde la app, por WhatsApp, a quien elijáis.'],['Las respuestas llegan solas','Asistencia, acompañantes, menús, alergias y transporte, todo reunido.'],['Organizad las mesas','Y sacad los listados para el catering cuando los necesitéis.']],'Con la app')
-              +mNote('<b>Guardad este email.</b> Es vuestro acceso a la invitación y a la app. Los dos podéis usarla, cada uno desde su móvil.')});
+              +mNote('<b>Guardad este email.</b> Es vuestro acceso a la app. Abridlo desde el móvil, en Safari o Chrome (no dentro de la app del correo), y añadidla a la pantalla de inicio. Para vuestra pareja: en la app, <b>Ajustes › Invitar a mi pareja</b>.')
+              +mP('¿Primera vez? <a href="'+catalogOrigin()+'/guia.html" style="color:#1b2650;font-weight:600">Guía de la app, paso a paso</a>.',true)});
       const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Vuestra invitación está lista para compartir',html:deliveryHtml},'guest-deliver-v3/'+order.id);
       if(!ok)return json({ok:false,error:'email_failed'},502);
       const {error}=await c.from('guest_invitation_orders').update({files,resolved_config:order.mode==='test'?order.resolved_config:config,delivery_url:inviteUrl||null,status:'delivered',delivered_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;

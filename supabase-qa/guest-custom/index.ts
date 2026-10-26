@@ -410,7 +410,8 @@ Deno.serve(async (req) => {
           + (invite ? mBtn(invite, 'Ver nuestra invitación') : '')
           + mBtn(a.url, 'Abrir la app de invitados', !!invite)
           + mSteps([['Añadid a vuestros invitados', 'Uno a uno, por grupos o desde los contactos del móvil.'], ['Enviad la invitación', 'Desde la app, por WhatsApp, a quien elijáis.'], ['Las respuestas llegan solas', 'Asistencia, acompañantes, menús, alergias y transporte, todo reunido.']], 'Con la app')
-          + mNote('<b>Guardad este email.</b> Es vuestro acceso a la app. Los dos podéis usarla, cada uno desde su móvil.') }), `guest-custom-deliver/${r.id}/${invite}`);
+          + mNote('<b>Guardad este email.</b> Es vuestro acceso a la app. Abridlo desde el móvil, en Safari o Chrome (no dentro de la app del correo), y añadidla a la pantalla de inicio. Para vuestra pareja: en la app, <b>Ajustes › Invitar a mi pareja</b>.')
+          + mP(`¿Primera vez? <a href="${APP_ORIGIN}/guia.html" style="color:#1b2650;font-weight:600">Guía de la app, paso a paso</a>.`, true) }), `guest-custom-deliver/${r.id}/${invite}`);
       const { data: q, error } = await c.from('guest_custom_requests').update({ status: 'delivered', license_id: a.licenseId, delivery_url: invite || r.delivery_url, delivered_at: r.delivered_at || ts, updated_at: ts }).eq('id', r.id).select('*').single();
       if (error) throw error;
       return json({ ok: true, emailed: ok, accessUrl: a.url, request: view(q) });

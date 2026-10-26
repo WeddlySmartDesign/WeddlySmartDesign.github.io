@@ -139,6 +139,36 @@ async function managerOk(c: any, req: Request) {
 }
 
 /* ---------- Tarea de cada hora ---------- */
+/* ---------- Borrado de datos (política de privacidad: hasta 90 días después de la boda + 30 de margen) ---------- */
+const KEEP_AFTER_WEDDING = 120 * D;
+const weddingAt = (date: any) => { const t = Date.parse(String(date || '').slice(0, 10) + 'T12:00:00Z'); return Number.isFinite(t) ? t : 0; };
+async function retention(c: any, now: number) {
+  const purged: string[] = [], soon: string[] = [];
+  const { data: orders } = await c.from('guest_invitation_orders').select('id,questionnaire,files,status').is('purged_at', null).limit(2000);
+  for (const o of orders || []) {
+    const w = weddingAt(o.questionnaire?.couple?.date); if (!w) continue;
+    const name = [o.questionnaire?.couple?.name1, o.questionnaire?.couple?.name2].filter(Boolean).join(' & ') || o.id.slice(0, 8);
+    if (now < w + KEEP_AFTER_WEDDING) { if (now >= w + KEEP_AFTER_WEDDING - 7 * D) soon.push(name); continue; }
+    const files = Array.isArray(o.files) ? o.files : [];
+    const priv = files.map((f: any) => f.path).filter(Boolean), pub = files.map((f: any) => f.publicPath).filter(Boolean);
+    if (priv.length) await c.storage.from('guest-invitation-uploads').remove(priv);
+    if (pub.length) await c.storage.from('guest-invitation-public').remove(pub);
+    const q = o.questionnaire || {};
+    const { error } = await c.from('guest_invitation_orders').update({ questionnaire: { couple: { name1: q.couple?.name1 || '', name2: q.couple?.name2 || '', date: q.couple?.date || '' } }, files: [], resolved_config: {}, revision_requests: [], style_overrides: null, purged_at: new Date(now).toISOString() }).eq('id', o.id);
+    if (error) console.error('purge_order', o.id, error); else purged.push(name);
+  }
+  const { data: customs } = await c.from('guest_custom_requests').select('id,name,wedding_date,files').is('purged_at', null).not('wedding_date', 'is', null).limit(2000);
+  for (const r of customs || []) {
+    const w = weddingAt(r.wedding_date); if (!w) continue;
+    if (now < w + KEEP_AFTER_WEDDING) { if (now >= w + KEEP_AFTER_WEDDING - 7 * D) soon.push(r.name + ' (a medida)'); continue; }
+    const paths = (r.files || []).map((f: any) => f.path).filter(Boolean);
+    if (paths.length) await c.storage.from('guest-custom-uploads').remove(paths);
+    const { error } = await c.from('guest_custom_requests').update({ files: [], idea: '', links: '', wishes: [], purged_at: new Date(now).toISOString() }).eq('id', r.id);
+    if (error) console.error('purge_custom', r.id, error); else purged.push(r.name + ' (a medida)');
+  }
+  return { purged, soon };
+}
+
 async function tick(c: any) {
   const now = Date.now(), sent: string[] = [];
   const { data: rows, error } = await c.from('guest_invitation_orders')
@@ -223,6 +253,8 @@ async function tick(c: any) {
   const d = new Date(now);
   if (d.getUTCHours() === MORNING_UTC) {
     open.sort((a, b) => a.d.due - b.d.due);
+    let ret = { purged: [] as string[], soon: [] as string[] };
+    try { ret = await retention(c, now); } catch (e) { console.error('retention_failed', e); }
     const stale = all.filter((o: any) => o.status === 'draft' && now - Date.parse(o.created_at) > 3 * D && Date.parse(o.created_at) >= AUTOMATION_SINCE);
     let body = '';
     if (open.length) body += mList(open.map(({ o, d }) => `<b>${esc(label(o))}</b>${o.mode === 'test' ? ' (prueba)' : ''}: ${esc(d.what.toLowerCase())}.<br><span style="font-size:15px;color:${d.due - now < 12 * H ? '#b3263a' : '#4a5480'}">Antes del ${esc(when(d.due))} · ${esc(left(d.due - now))}</span>`));
@@ -233,6 +265,8 @@ async function tick(c: any) {
     // Bodas que se acercan sin la invitación entregada.
     const soon = all.filter((o: any) => { const w = Date.parse((o.questionnaire?.couple?.date || '') + 'T12:00:00Z'); return o.mode === 'production' && o.status !== 'delivered' && w && w - now < 45 * D && w > now; });
     if (soon.length) body += mP('<b>Bodas en menos de 45 días sin la invitación entregada:</b>') + mList(soon.map((o: any) => `<b>${esc(label(o))}</b><br><span style="font-size:15px;color:#b3263a">Boda el ${esc(new Date(o.questionnaire.couple.date + 'T12:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }))}</span>`));
+    if (ret.soon.length) body += mP('<b>Dentro de 7 días se borran sus datos y fotos</b> (lo promete la política de privacidad, 120 días después de la boda). Si quieres guardar algo, hazlo antes:') + mList(ret.soon.map((x) => esc(x)));
+    if (ret.purged.length) body += mP('<b>Datos borrados hoy</b> (boda de hace más de 120 días; las facturas se conservan):') + mList(ret.purged.map((x) => esc(x)));
     const monday = new Date(d.toLocaleString('en-US', { timeZone: 'Europe/Madrid' })).getDay() === 1;
     if (monday) {
       const s = (await stats(c)).live;

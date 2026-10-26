@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf7f4">
+  <title>Guía de la app · GUEST by WeddlySmartDesign</title>
+  <meta name="description" content="Cómo abrir la app GUEST, compartirla con vuestra pareja, enviar la invitación y organizar a vuestros invitados, paso a paso.">
+  <link rel="icon" href="assets/brand/favicon.ico" sizes="any">
+  <link rel="icon" href="assets/brand/icon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <link rel="preload" href="assets/fonts/abril-fatface-zOL64pLDlL-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css?v=43">
+  <link rel="stylesheet" href="css/styles.css?v=44">
+  <style>
+    /* Guía de uso: un recorrido numerado, como los pasos de un sobre que se abre. Se lee en el móvil, con una mano. */
+    body { background: var(--paper); }
+    .g-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.25rem; padding-top: calc(1.25rem + env(safe-area-inset-top, 0px)); }
+    .g-top .back { font-size: .9375rem; font-weight: 600; color: var(--ink); text-decoration: none; }
+    .g-top .back:hover { text-decoration: underline; }
+
+    .g-hero { padding-block: 1.5rem 2.25rem; display: grid; gap: 1rem; }
+    .g-kicker { font: 700 .8125rem/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--postmark); }
+    .g-hero h1 { font: 400 clamp(2.4rem, 4.5vw + 1rem, 4.25rem)/1 var(--display); letter-spacing: -.01em; max-width: 13ch; }
+    .g-lead { max-width: 36rem; font-size: clamp(1.0625rem, .4vw + 1rem, 1.1875rem); line-height: 1.55; color: var(--ink-soft); }
+
+    .g-index { display: flex; gap: .5rem; overflow-x: auto; padding: .25rem 0 .75rem; margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter); scrollbar-width: none; }
+    .g-index::-webkit-scrollbar { display: none; }
+    .g-index a { flex: none; display: inline-flex; align-items: center; gap: .45rem; min-height: 44px; padding: 0 .95rem; border-radius: 999px; background: var(--white); box-shadow: inset 0 0 0 1.5px var(--line); color: var(--ink); font-size: .9375rem; font-weight: 600; text-decoration: none; transition: box-shadow 160ms ease; }
+    .g-index a:hover { box-shadow: inset 0 0 0 1.5px var(--ink); }
+    .g-index a span { font: 700 .75rem/1 var(--mono); color: var(--postmark); }
+
+    .g-step { display: grid; gap: 1.5rem; padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1.5px dashed var(--line); scroll-margin-top: 1rem; }
+    .g-num { font: 700 .875rem/1 var(--mono); color: var(--postmark); letter-spacing: .06em; }
+    .g-step h2 { margin-top: .5rem; font: 400 clamp(1.85rem, 2.6vw + 1rem, 2.75rem)/1.05 var(--display); max-width: 18ch; }
+    .g-step .g-intro { margin-top: .8rem; max-width: 36rem; font-size: 1.0625rem; line-height: 1.6; color: var(--ink-soft); }
+    .g-text { min-width: 0; }
+
+    .g-how { margin-top: 1.25rem; padding: 0; list-style: none; counter-reset: how; display: grid; gap: .1rem; max-width: 36rem; }
+    .g-how li { counter-increment: how; position: relative; padding: .8rem 0 .8rem 2.6rem; border-top: 1px solid var(--line); font-size: 1rem; line-height: 1.55; }
+    .g-how li:first-child { border-top: 0; }
+    .g-how li::before { content: counter(how); position: absolute; left: 0; top: .75rem; display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--ink); font: 700 .8125rem/1 var(--mono); }
+    .g-how b, .g-tips b { font-weight: 600; }
+    .ui { display: inline; padding: .05rem .4rem; border-radius: 4px; background: var(--envelope-soft); font-weight: 600; white-space: nowrap; }
+
+    .g-tips { margin-top: 1.25rem; max-width: 36rem; padding: 1rem 1.1rem; border-radius: 8px; background: var(--white); box-shadow: var(--shadow); font-size: .9688rem; line-height: 1.55; }
+    .g-tips p + p { margin-top: .6rem; }
+    .g-tips .tag { display: block; margin-bottom: .35rem; font: 700 .75rem/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--postmark); }
+
+    .g-two { display: grid; gap: .75rem; margin-top: 1.25rem; max-width: 36rem; }
+    .g-two section { padding: 1rem 1.1rem; border-radius: 8px; box-shadow: inset 0 0 0 1.5px var(--line); }
+    .g-two h3 { font: 700 .8125rem/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .g-two ol { margin: .5rem 0 0; padding-left: 1.2rem; font-size: .9688rem; line-height: 1.55; }
+
+    /* La captura real de la app, en un sello: el mismo lenguaje que la web */
+    .g-shot { margin: 0; justify-self: center; width: min(78vw, 300px); padding: 10px; background: var(--white); filter: drop-shadow(0 2px 2px rgba(27, 38, 80, .18)) drop-shadow(0 18px 24px rgba(27, 38, 80, .16)); rotate: 1.5deg; }
+    .g-step:nth-of-type(even) .g-shot { rotate: -1.5deg; }
+    .g-shot img, .g-shot video { display: block; width: 100%; height: auto; aspect-ratio: 720 / 1008; object-fit: cover; background: var(--envelope-soft); }
+    .g-shot figcaption { margin-top: .6rem; font: 700 .75rem/1.35 var(--mono); color: var(--ink-soft); text-align: center; }
+
+    .g-faq { max-width: 44rem; }
+    .g-faq details { border-top: 1px solid var(--line); }
+    .g-faq details:last-of-type { border-bottom: 1px solid var(--line); }
+    .g-faq summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 56px; padding: .9rem 0; font-size: 1.0625rem; font-weight: 600; cursor: pointer; list-style: none; }
+    .g-faq summary::-webkit-details-marker { display: none; }
+    .g-faq summary::after { content: '+'; flex: none; font: 400 1.5rem/1 var(--text); color: var(--postmark); transition: rotate 200ms var(--ease-out); }
+    .g-faq details[open] summary::after { rotate: 45deg; }
+    .g-faq details p { padding: 0 0 1.1rem; max-width: 38rem; font-size: 1rem; line-height: 1.6; color: var(--ink-soft); }
+
+    .g-help { display: grid; gap: 1rem; margin-block: clamp(2.5rem, 6vw, 4.5rem); padding: 1.5rem 1.25rem; border-radius: 8px; background: var(--envelope); }
+    .g-help h2 { font: 400 clamp(1.6rem, 2vw + 1rem, 2.25rem)/1.1 var(--display); }
+    .g-help p { max-width: 34rem; line-height: 1.55; color: var(--ink); }
+    .g-help .acts { display: flex; flex-wrap: wrap; gap: .75rem; }
+    .btn-wa svg { width: 20px; height: 20px; }
+
+    .g-foot { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; padding-block: 1.25rem calc(1.25rem + env(safe-area-inset-bottom, 0px)); border-top: 1.5px solid rgba(27, 38, 80, .12); font-size: .875rem; color: var(--ink-soft); }
+    .g-foot a { color: var(--ink-soft); }
+
+    @media (min-width: 860px) {
+      .g-step { grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); align-items: start; gap: clamp(2.5rem, 6vw, 6rem); }
+      .g-step:nth-of-type(even) .g-shot { order: -1; }
+      .g-step.no-shot { grid-template-columns: minmax(0, 1fr); }
+      .g-two { grid-template-columns: 1fr 1fr; max-width: none; }
+      .g-help { grid-template-columns: 1fr auto; align-items: center; padding: 2rem 2.25rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { .g-shot video { display: none; } }
+  </style>
+</head>
+<body>
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Zm0 1.8a7.2 7.2 0 1 1-3.7 13.4l-.3-.2-2.7.7.7-2.6-.2-.3A7.2 7.2 0 0 1 12 4.8Zm-3 3.4c-.2 0-.5 0-.7.3-.3.3-1 .9-1 2.2s1 2.6 1.1 2.8c.1.2 2 3.1 4.9 4.2 2.4.9 2.900.8 3.4.7.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4l-.4-.3-1.8-.9c-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6 6 0 0 1-3-2.6c-.2-.4.2-.4.6-1.2.1-.2 0-.3 0-.4l-.8-2c-.2-.5-.4-.4-.6-.4H9Z"/></symbol>
+</svg>
+
+<header class="wrap g-top">
+  <a class="logo" href="index.html" aria-label="GUEST by WeddlySmartDesign, inicio"><b>GUEST</b><span>by WeddlySmartDesign</span></a>
+  <a class="back" href="index.html">Volver a la web</a>
+</header>
+
+<main class="wrap">
+  <section class="g-hero">
+    <p class="g-kicker">Guía de la app</p>
+    <h1>Vuestra app GUEST, paso a paso.</h1>
+    <p class="g-lead">Todo lo que necesitáis para abrirla, compartirla con vuestra pareja, enviar la invitación y organizar a vuestros invitados. Sin instalar nada de la tienda.</p>
+    <nav class="g-index" aria-label="Pasos de la guía">
+      <a href="#recibis"><span>01</span>Qué recibís</a>
+      <a href="#abrir"><span>02</span>Abrir e instalar</a>
+      <a href="#pareja"><span>03</span>Vuestra pareja</a>
+      <a href="#invitados"><span>04</span>Invitados</a>
+      <a href="#enviar"><span>05</span>Enviar</a>
+      <a href="#respuestas"><span>06</span>Respuestas</a>
+      <a href="#mesas"><span>07</span>Mesas</a>
+      <a href="#listados"><span>08</span>Listados</a>
+      <a href="#eventos"><span>09</span>Preboda</a>
+      <a href="#dudas"><span>10</span>Dudas</a>
+    </nav>
+  </section>
+
+  <section class="g-step no-shot" id="recibis">
+    <div class="g-text">
+      <p class="g-num">01</p>
+      <h2>Qué recibís al aprobar la invitación</h2>
+      <p class="g-intro">Os llega un email con el asunto <b>«Vuestra invitación está lista para compartir»</b>. Guardadlo: es vuestra llave de todo.</p>
+      <ul class="g-how">
+        <li><b>«Ver nuestra invitación»</b>: la invitación definitiva, para que la veáis tal como la verán vuestros invitados.</li>
+        <li><b>«Abrir la app de invitados»</b>: vuestro acceso a GUEST. Con él añadís invitados, enviáis la invitación y recibís las respuestas.</li>
+        <li><b>La factura</b>: os llega en otro email, con un enlace para guardarla en PDF.</li>
+      </ul>
+      <div class="g-tips"><span class="tag">Importante</span><p>Enviad la invitación <b>siempre desde la app</b>. Así cada invitado recibe su propio enlace y su respuesta entra sola en vuestra lista, con su nombre.</p></div>
+    </div>
+  </section>
+
+  <section class="g-step" id="abrir">
+    <div class="g-text">
+      <p class="g-num">02</p>
+      <h2>Abrir la app y tenerla a mano</h2>
+      <p class="g-intro">GUEST se abre desde el navegador del móvil. Si la añadís a la pantalla de inicio, queda como una app más.</p>
+      <ol class="g-how">
+        <li>Abrid el email <b>desde el móvil</b> y pulsad <b>«Abrir la app de invitados»</b>.</li>
+        <li>Si se os abre dentro de Gmail, Outlook u otra app de correo, usad el menú de esa pantalla para <b>abrirlo en Safari o en Chrome</b>.</li>
+        <li>Pulsad <span class="ui">Abrir gestión de invitados</span> y ya estáis dentro.</li>
+      </ol>
+      <div class="g-two">
+        <section><h3>iPhone · Safari</h3><ol><li>Pulsad el botón de compartir, el cuadrado con la flecha.</li><li>Elegid <b>«Añadir a pantalla de inicio»</b>.</li></ol></section>
+        <section><h3>Android · Chrome</h3><ol><li>Pulsad el menú de los tres puntos.</li><li>Elegid <b>«Instalar aplicación»</b> o <b>«Añadir a pantalla de inicio»</b>.</li></ol></section>
+      </div>
+      <div class="g-tips"><p>También podéis hacerlo desde la propia app: <span class="ui">Ajustes</span> › <span class="ui">Instalar en este dispositivo</span>.</p></div>
+    </div>
+    <figure class="g-shot"><img src="assets/app/hoy.jpg" alt="Pantalla de inicio de la app GUEST con el resumen de la boda" width="720" height="1008" loading="lazy" decoding="async"><figcaption>Lo primero que veis: el resumen de vuestra boda</figcaption></figure>
+  </section>
+
+  <section class="g-step no-shot" id="pareja">
+    <div class="g-text">
+      <p class="g-num">03</p>
+      <h2>Compartirla con vuestra pareja</h2>
+      <p class="g-intro">Los dos podéis usar la misma boda, cada uno desde su móvil. Lo que cambia uno aparece en el otro.</p>
+      <ol class="g-how">
+        <li>Quien abrió la app primero entra en <span class="ui">Ajustes</span> › <span class="ui">GUEST para los dos</span>.</li>
+        <li>Pulsa <span class="ui">Invitar a mi pareja</span> y después <span class="ui">Copiar invitación segura</span>.</li>
+        <li>Se la manda a su pareja por WhatsApp. Ella o él la abre en su móvil y pulsa <span class="ui">Unirme a la gestión de invitados</span>.</li>
+      </ol>
+      <div class="g-tips"><p>La invitación para la pareja sirve <b>una sola vez y durante 7 días</b>. Si caduca, generad otra desde el mismo sitio.</p><p>No le reenviéis el email de entrega: ese enlace es el de la primera persona y, si lo abre otro móvil, el acceso se mueve a ese móvil.</p></div>
+    </div>
+  </section>
+
+  <section class="g-step" id="invitados">
+    <div class="g-text">
+      <p class="g-num">04</p>
+      <h2>Añadir a vuestros invitados</h2>
+      <p class="g-intro">Empezad por la lista: es la base de los envíos, las respuestas, las mesas y los listados.</p>
+      <ul class="g-how">
+        <li><b>Uno a uno</b>, con su teléfono, o eligiéndolos de los <b>contactos del móvil</b>.</li>
+        <li><b>De golpe</b>: pegad una lista copiada de Excel o subid un archivo CSV o TXT.</li>
+        <li><b>Por grupos y subgrupos</b>, por ejemplo «Familia de Clara» › «Tíos de Murcia». Luego podréis filtrar y enviar por grupos.</li>
+        <li><b>Por unidades</b>: una pareja o una familia recibe <b>un solo enlace</b> y responde por todos.</li>
+      </ul>
+    </div>
+    <figure class="g-shot"><img src="assets/app/lista.jpg" alt="Lista de invitados organizada por grupos en la app GUEST" width="720" height="1008" loading="lazy" decoding="async"><figcaption>Invitados por grupos y familias</figcaption></figure>
+  </section>
+
+  <section class="g-step" id="enviar">
+    <div class="g-text">
+      <p class="g-num">05</p>
+      <h2>Enviar la invitación</h2>
+      <p class="g-intro">Cada invitado, o cada familia, recibe un enlace personal a vuestra invitación.</p>
+      <ol class="g-how">
+        <li>Entrad en <span class="ui">Envíos y respuestas</span>.</li>
+        <li>Elegid a quién se la mandáis. Podéis cambiar el texto que acompaña al enlace.</li>
+        <li>Enviadla por <b>WhatsApp</b>, con el menú de compartir del móvil o copiando el enlace.</li>
+      </ol>
+      <div class="g-tips"><p>La app marca a quién se la habéis enviado y a quién no, para que no se os olvide nadie.</p><p><b>No reenviéis el enlace de una persona a otra</b>: su respuesta se apuntaría con el nombre equivocado. Mandad a cada uno el suyo.</p></div>
+    </div>
+    <figure class="g-shot"><img src="assets/app/envio.jpg" alt="Pantalla de envío de la invitación por WhatsApp en la app GUEST" width="720" height="1008" loading="lazy" decoding="async"><figcaption>El envío, con vuestro mensaje</figcaption></figure>
+  </section>
+
+  <section class="g-step" id="respuestas">
+    <div class="g-text">
+      <p class="g-num">06</p>
+      <h2>Las respuestas llegan solas</h2>
+      <p class="g-intro">Cuando un invitado confirma desde la invitación, su respuesta entra en vuestra lista al momento, con todo lo que le preguntasteis.</p>
+      <ul class="g-how">
+        <li><b>Quién viene y quién no</b>, con acompañantes y niños si los permitisteis.</li>
+        <li><b>Menús, alergias</b>, transporte, alojamiento y vuestras preguntas propias.</li>
+        <li>¿Alguien os responde por teléfono o en persona? <b>Apuntadlo vosotros</b> en su ficha.</li>
+        <li><b>Recordad a los que faltan</b> con un mensaje a todos los pendientes.</li>
+      </ul>
+    </div>
+    <figure class="g-shot"><img src="assets/app/respuestas.jpg" alt="Respuestas de los invitados con asistencia y menús en la app GUEST" width="720" height="1008" loading="lazy" decoding="async"><figcaption>Confirmados, pendientes y menús</figcaption></figure>
+  </section>
+
+  <section class="g-step" id="mesas">
+    <div class="g-text">
+      <p class="g-num">07</p>
+      <h2>Organizar las mesas</h2>
+      <p class="g-intro">Dibujad el salón y sentad a la gente, viendo en todo momento quién queda sin sitio.</p>
+      <ul class="g-how">
+        <li>Mesas <b>redondas, rectangulares o presidencial</b>, con su número de sillas.</li>
+        <li><b>Arrastrad y girad</b> las mesas en el plano, y añadid la pista o el escenario.</li>
+        <li><b>Seleccionad a varios</b> invitados a la vez y sentadlos juntos, o cread una mesa nueva con ellos.</li>
+        <li>Los que no vienen <b>no ocupan sitio</b>.</li>
+      </ul>
+    </div>
+    <figure class="g-shot"><video src="assets/app/mesas.mp4" poster="assets/app/mesas-poster.jpg" width="720" height="1008" muted loop playsinline preload="none" aria-label="Plano del salón con mesas que se arrastran en la app GUEST"><source src="assets/app/mesas.webm" type="video/webm"><source src="assets/app/mesas.mp4" type="video/mp4"></video><figcaption>El plano del salón</figcaption></figure>
+  </section>
+
+  <section class="g-step" id="listados">
+    <div class="g-text">
+      <p class="g-num">08</p>
+      <h2>Sacar los listados</h2>
+      <p class="g-intro">Cuando os los pidan, los tenéis en un momento y siempre al día.</p>
+      <ul class="g-how">
+        <li><b>Catering</b>: menús, alergias e intolerancias por mesa.</li>
+        <li><b>Mesas</b>, <b>transporte</b>, <b>alojamiento</b> y respuestas.</li>
+        <li>En <b>Excel</b> (CSV) o en <b>PDF</b> para imprimir o mandar. Cada copia lleva su número de revisión, para saber cuál es la última.</li>
+      </ul>
+    </div>
+    <figure class="g-shot"><img src="assets/app/listados.jpg" alt="Listados de catering, mesas y transporte en la app GUEST" width="720" height="1008" loading="lazy" decoding="async"><figcaption>Listados para el catering y el transporte</figcaption></figure>
+  </section>
+
+  <section class="g-step" id="eventos">
+    <div class="g-text">
+      <p class="g-num">09</p>
+      <h2>Preboda y otros eventos</h2>
+      <p class="g-intro">¿Hacéis preboda, cena de bienvenida o brunch? Cada evento tiene su propia lista y su propia invitación sencilla.</p>
+      <ul class="g-how">
+        <li>Ponedle nombre, fecha, hora y lugar, y una invitación con texto e imagen.</li>
+        <li>Añadid personas o grupos enteros <b>sin mezclarlos</b> con la boda.</li>
+        <li>Enviadla, recibid las respuestas aparte y mandad recordatorios.</li>
+      </ul>
+    </div>
+    <figure class="g-shot"><img src="assets/app/eventos.jpg" alt="Eventos de la boda como la preboda en la app GUEST" width="720" height="1008" loading="lazy" decoding="async"><figcaption>Cada evento, con su lista</figcaption></figure>
+  </section>
+
+  <section class="g-step no-shot" id="dudas">
+    <div class="g-text g-faq">
+      <p class="g-num">10</p>
+      <h2>Si algo no sale como esperabais</h2>
+      <details><summary>He cambiado de móvil o no me deja entrar</summary><p>Abrid otra vez el email de entrega en el móvil nuevo y pulsad «Abrir la app de invitados». El acceso pasa a ese móvil y todo lo que teníais sigue ahí. El móvil anterior deja de tener acceso. A vuestra pareja no le afecta.</p></details>
+      <details><summary>A mi pareja le dice que la invitación no es válida</summary><p>Ha caducado (dura 7 días) o ya se usó. Generad otra en Ajustes › GUEST para los dos › Invitar a mi pareja.</p></details>
+      <details><summary>Un invitado dice que no le abre la invitación</summary><p>Reenviadle su enlace desde Envíos y respuestas. Si sigue sin abrirle, que pruebe desde otro navegador o escribidnos y lo miramos.</p></details>
+      <details><summary>Ha cambiado la hora o el lugar después de aprobarla</summary><p>Escribidnos por WhatsApp o a info@weddlysmartdesign.com. Corregimos ese dato y el cambio aparece en el mismo enlace que ya tienen vuestros invitados. Vosotros solo tenéis que avisarles.</p></details>
+      <details><summary>¿Hasta cuándo funciona la invitación?</summary><p>Hasta 90 días después de la boda. Después borramos vuestros datos y fotos, como explicamos en la política de privacidad. Si queréis guardar los listados, descargadlos antes.</p></details>
+      <details><summary>¿Está en inglés para nuestros invitados de fuera?</summary><p>La app está en español y en inglés. La invitación va con los textos que pusisteis en el cuestionario.</p></details>
+    </div>
+  </section>
+
+  <section class="g-help" aria-labelledby="helpTitle">
+    <div><h2 id="helpTitle">¿Os atascáis en algo?</h2><p>Escribidnos y os ayudamos lo antes posible.</p></div>
+    <div class="acts">
+      <a class="btn btn-ink btn-wa" href="https://wa.me/34620843264" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg><span>WhatsApp</span></a>
+      <a class="btn btn-line" href="mailto:info@weddlysmartdesign.com">info@weddlysmartdesign.com</a>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap g-foot">
+  <span>© 2026 WeddlySmartDesign</span>
+  <a href="guest-legal.html#contratacion">Condiciones de compra</a>
+  <a href="guest-legal.html#privacidad">Privacidad</a>
+  <a href="https://www.instagram.com/weddlysmartdesign/" target="_blank" rel="noopener me">Instagram</a>
+  <a href="https://www.tiktok.com/@weddlysmartdesign" target="_blank" rel="noopener me">TikTok</a>
+</footer>
+<script>
+  // El vídeo del plano solo se reproduce cuando se ve, para no gastar datos.
+  (() => {
+    const v = document.querySelector('.g-shot video');
+    if (!v || !('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) v.play().catch(() => {}); else v.pause(); }, { threshold: .4 }).observe(v);
+  })();
+</script>
+</body>
+</html>
