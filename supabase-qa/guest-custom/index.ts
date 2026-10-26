@@ -282,6 +282,13 @@ Deno.serve(async (req) => {
     const action = txt(b.action, 40);
     if (action === 'tick') return json({ ok: true, ...(await tick(c)) });
 
+    if (action === 'draft_status') {
+      // Público: solo dice si la invitación a medida ya está pagada entera (para quitar la marca de borrador).
+      const id = txt(b.id, 40); if (!/^[0-9a-f-]{36}$/i.test(id)) return json({ ok: false, error: 'invalid_id' }, 400);
+      const { data } = await c.from('guest_custom_requests').select('status').eq('id', id).maybeSingle();
+      return json({ ok: true, final: ['paid', 'delivered'].includes(data?.status) });
+    }
+
     if (['quote_load', 'pay', 'pay_status'].includes(action)) {
       let r = await fromToken(c, txt(b.t, 200));
       if (!r) return json({ ok: false, error: 'invalid_token' }, 403);

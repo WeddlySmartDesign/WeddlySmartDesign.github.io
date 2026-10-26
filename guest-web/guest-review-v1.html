@@ -15,12 +15,12 @@
     html, body { margin: 0; min-height: 100%; background: var(--paper); color: var(--ink); font-family: var(--text); -webkit-font-smoothing: antialiased; }
     [hidden] { display: none !important; }
     #host { position: fixed; inset: 0; overflow: auto; }
-    #state { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 24px; background: var(--paper); }
+    #state { position: fixed; inset: 0; z-index: 2147483002; display: grid; place-items: center; padding: 24px; background: var(--paper); }
     #state div { max-width: 26rem; }
     #state h1 { margin: 0; font: 400 clamp(2rem, 6vw, 2.75rem)/1.05 var(--display); }
     #state p { margin: .8rem 0 0; line-height: 1.6; color: var(--ink-soft); }
 
-    .sheet { position: fixed; z-index: 35; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); width: min(calc(100vw - 24px), 30rem); translate: -50% 0; background: var(--white); border-radius: 14px; box-shadow: 0 1px 2px rgba(27, 38, 80, .15), 0 24px 48px -16px rgba(27, 38, 80, .55); padding: 1rem 1rem 1.05rem; max-height: calc(100dvh - 24px); overflow: auto; transition: translate 280ms var(--ease-out), opacity 200ms ease; }
+    .sheet { position: fixed; z-index: 2147483001; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); width: min(calc(100vw - 24px), 30rem); translate: -50% 0; background: var(--white); border-radius: 14px; box-shadow: 0 1px 2px rgba(27, 38, 80, .15), 0 24px 48px -16px rgba(27, 38, 80, .55); padding: 1rem 1rem 1.05rem; max-height: calc(100dvh - 24px); overflow: auto; transition: translate 280ms var(--ease-out), opacity 200ms ease; }
     @starting-style { .sheet { translate: -50% 16px; opacity: 0; } }
     .sheet h2 { margin: 0; font: 400 1.35rem/1.15 var(--display); }
     .sheet p { margin: .35rem 0 0; font-size: .9375rem; line-height: 1.5; color: var(--ink-soft); }
@@ -89,6 +89,7 @@
   <p class="msg" id="msg" role="alert"></p>
 </section>
 
+<script src="js/guest-draft.js?v=1"></script>
 <script src="guest/catalog/guest-style-v1.js?v=1"></script>
 <script src="guest/catalog/guest-catalog-owner-viewer-v2.js?v=3"></script>
 <script>
@@ -184,6 +185,8 @@ $('send').onclick = () => respond('changes');
     const cfg = order.config, id = cfg.template.id, spec = manifest.templates?.[id];
     if (!spec || spec.mode !== 'iframe' || !spec.src) throw Error('template_asset_not_ready');
     await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({ order: { template_id: id, template_version: String(cfg.template.version || ''), mode: 'test' }, config: cfg, host: $('host'), registry: manifest });
+    // Es la versión para revisar, no la de los invitados: siempre lleva la marca de borrador.
+    window.GUEST_DRAFT?.mark();
     $('state').hidden = true; $('sheet').hidden = false;
     if (order.status === 'changes_requested') {
       const part = PARTS[order.part] ? order.part : null;

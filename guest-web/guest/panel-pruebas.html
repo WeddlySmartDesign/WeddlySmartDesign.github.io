@@ -584,6 +584,10 @@ async function openOrder(id) {
               <p style="margin-top:.5rem">${ch.left > 0 ? `Les ${ch.left === 1 ? 'queda 1 ronda' : `quedan ${ch.left} rondas`}.` : `Ya no les quedan. Si piden otro cambio, la página les cobra ${esc(eur(ch.extraCents))} antes de abrirlo. No tienes que hacer nada.`}</p>
               ${['approved', 'delivered'].includes(o.status) ? '' : `<div class="st-open"><button class="btn line" type="button" id="giftRound">Regalarles una ronda</button>${gift ? '<button class="link-btn" type="button" id="giftUndo">Quitar la regalada</button>' : ''}<p class="msg" role="alert" id="giftMsg"></p></div>`}</div>`; })() : ''}
           <div class="box"><h3>Cómo va</h3>${timeline(o)}</div>
+          ${['review_ready', 'review_sent', 'changes_requested', 'approved', 'delivered'].includes(o.status) || (o.status === 'cancelled' && /\[revoked:/.test(o.owner_notes || '')) ? `<div class="box refund" id="revokeBox"><h3>${o.status === 'cancelled' ? 'Invitación desactivada' : 'Desactivar la invitación'}</h3><p>${o.status === 'cancelled' ? 'Su enlace no funciona y la app está apagada. Si fue un error o se ha resuelto, vuelve a activarla.' : 'Solo si hay fraude: una reclamación del pago al banco o un uso sin pagar. Su enlace deja de funcionar y se apaga la app. Se puede deshacer.'}</p>
+            ${o.status === 'cancelled' ? '<div class="st-open"><button class="btn line" type="button" id="revokeUndo">Volver a activarla</button></div>' : `<div class="refund-go"><button class="btn line" type="button" id="revokeAsk">Desactivar</button></div>
+            <div class="refund-confirm" hidden><p><b>¿Seguro?</b> Sus invitados dejarán de verla.</p><div class="btns"><button class="btn danger" type="button" id="revokeYes">Sí, desactivar</button><button class="btn line" type="button" id="revokeNo">No</button></div></div>`}
+            <p class="msg" id="revokeMsg" role="alert"></p></div>` : ''}
           <div class="box"><h3>La pareja</h3><ul class="rows">
             ${email ? `<li><a href="mailto:${esc(email)}"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>Escribirles<small>${esc(email)}</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>` : ''}
             <li><a href="catalog-questionnaire.html?t=${encodeURIComponent(o.questionnaireToken)}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-doc"/></svg><span>Ver su cuestionario<small>Lo que han rellenado</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>
@@ -614,6 +618,17 @@ async function openOrder(id) {
       try { await flow({ action: 'grant_change', orderId: o.id, ...(undo ? { undo: true } : {}) }); toast(undo ? 'Quitada.' : 'Ronda regalada. Ya pueden pedir el cambio sin pagar.'); openOrder(o.id); }
       catch (e) { if (e.message === 'manager_required') return; $('giftMsg').textContent = e.message === 'too_many_changes' ? 'Ya tiene el máximo de rondas.' : 'No ha salido. Prueba otra vez.'; }
     };
+    const revoke = (undo) => async () => {
+      try { await flow({ action: 'revoke', orderId: o.id, ...(undo ? { undo: true } : {}) }); toast(undo ? 'Activada otra vez.' : 'Desactivada. Su enlace ya no funciona.'); await refresh(); openOrder(o.id); }
+      catch (e) { if (e.message === 'manager_required') return; $('revokeMsg').textContent = 'No ha salido. Prueba otra vez.'; }
+    };
+    if ($('revokeAsk')) {
+      const box = $('revokeBox');
+      $('revokeAsk').onclick = () => { $('revokeAsk').parentElement.hidden = true; box.querySelector('.refund-confirm').hidden = false; };
+      $('revokeNo').onclick = () => { $('revokeAsk').parentElement.hidden = false; box.querySelector('.refund-confirm').hidden = true; };
+      $('revokeYes').onclick = revoke(false);
+    }
+    if ($('revokeUndo')) $('revokeUndo').onclick = revoke(true);
     if ($('giftRound')) $('giftRound').onclick = gift(false);
     if ($('giftUndo')) $('giftUndo').onclick = gift(true);
     if ($('dsGo')) $('dsGo').onclick = async () => {
@@ -1117,7 +1132,7 @@ async function openCustom(id) {
         <div class="acts"><button class="btn" type="button" id="qSend">${r.status === 'new' ? 'Enviar presupuesto' : 'Enviar el nuevo presupuesto'}</button>${r.status === 'new' ? '<button class="btn line" type="button" id="cDecline">No la hago</button>' : ''}<p class="msg" role="alert" id="cMsg"></p></div>`;
     } else if (r.status === 'accepted' || r.status === 'designing') {
       act = `<h3>${r.status === 'accepted' ? 'Han pagado la señal' : 'Diseñando'}</h3>
-        <p>Señal de ${esc(eur(Math.round(r.quoteCents / 2)))} cobrada${r.quoteDays ? `. Les dijiste la primera propuesta en unos ${r.quoteDays} días` : ''}. Manda las propuestas por email o WhatsApp como siempre.</p>
+        <p>Señal de ${esc(eur(Math.round(r.quoteCents / 2)))} cobrada${r.quoteDays ? `. Les dijiste la primera propuesta en unos ${r.quoteDays} días` : ''}. Mándales siempre el enlace de la propuesta, no capturas ni archivos: lleva la marca «Borrador» y se quita sola cuando pagan el resto.</p>
         ${(() => { const used = r.roundsUsed || 0, total = rounds + extra, leftR = total - used;
           return `<p style="margin-top:.8rem"><b>Propuestas mandadas: ${used}</b> · ${rounds} rondas incluidas${extra ? ` + ${extra} extra pagada${extra > 1 ? 's' : ''}` : ''}.</p>
           <div class="meter" aria-label="${used} de ${total} usadas">${Array.from({ length: Math.max(total, used) }, (_, i) => `<i class="${i < used ? 'on' : ''}${i >= rounds ? ' extra' : ''}"></i>`).join('')}</div>

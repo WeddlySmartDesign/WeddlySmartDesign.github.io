@@ -1036,6 +1036,19 @@ Deno.serve(async req=>{
       const {error}=await c.from('guest_invitation_orders').update({style_overrides:style,updated_at:now()}).eq('id',order.id);if(error)throw error;
       return json({ok:true,style});
     }
+    if(action==='revoke'){
+      // Fraud or chargeback after delivery: the guests' link stops working and the app access is switched off. undo brings both back.
+      const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
+      const ts=now(),undo=!!b.undo;
+      if(!undo&&!['approved','delivered','review_sent','review_ready','changes_requested'].includes(order.status))return json({ok:false,error:'invalid_status'},409);
+      if(undo&&(order.status!=='cancelled'||!/\[revoked:/.test(order.owner_notes||'')))return json({ok:false,error:'invalid_status'},409);
+      const back=undo?(String(order.owner_notes).match(/\[revoked:([a-z_]+)\]/)?.[1]||'delivered'):'';
+      const line=undo?'\n'+ts.slice(0,10)+' · Reactivada.':'\n'+ts.slice(0,10)+' · Desactivada'+(txt(b.reason,200)?': '+txt(b.reason,200):'')+' [revoked:'+order.status+']';
+      const notes=undo?String(order.owner_notes||'').replace(/ ?\[revoked:[a-z_]+\]/g,'')+line:txt((order.owner_notes||'')+line,5000);
+      const {error}=await c.from('guest_invitation_orders').update({status:undo?back:'cancelled',owner_notes:notes,updated_at:ts}).eq('id',order.id);if(error)throw error;
+      if(order.license_id)await c.from('licenses').update({status:undo?'active':'inactive',updated_at:ts}).eq('id',order.license_id).eq('status',undo?'inactive':'active');
+      return json({ok:true,status:undo?back:'cancelled'});
+    }
     if(action==='grant_change'){
       // Goodwill: the owner gives one more change round for free (or takes back one she gave).
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
