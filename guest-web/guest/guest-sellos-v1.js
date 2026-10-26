@@ -27,14 +27,14 @@ html[data-guest-theme="sellos"] :is(h1,h2,#coupleTitle){color:var(--s-ink)!impor
 .stat b,.stat strong{font-family:var(--s-display)!important;font-weight:400!important}
 html[data-guest-sellos-top]::before{content:"";position:fixed;z-index:2147483000;left:0;right:0;top:0;height:5px;pointer-events:none;
   background:repeating-linear-gradient(135deg,var(--s-postmark) 0 12px,var(--s-paper) 12px 20px,var(--s-ink) 20px 32px,var(--s-paper) 32px 40px)}
-/* Legibility floor: no text under 13px, body copy 14–15px, and 16px fields so iPhone never zooms on focus. */
+/* Legibility floor: no text under 14px (13px for spaced capitals), body copy 14–15px, and 16px fields so iPhone never zooms on focus. */
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 input,select,textarea{font-size:16px!important}
 .small,p.small,.lead,.status,.notice,.wsdrf-help,.wsdseg-sub,.planLaunchCopy,.weddingMeta,.weddingMeta span,label{font-size:14px!important;line-height:1.45!important}
 .btn,.metaBtn,#editWedding,button.filter,.back{font-size:15px!important}
 .nav button,#nav button{font-size:14px!important}
-.pill,.badge,.guest-report-tag,.planLaunchTag,.stat>div:not(.num){font-size:13px!important}
-.sectiontag,.eyebrow,.kicker{font-size:12px!important}
+.pill,.badge,.guest-report-tag,.planLaunchTag,.stat>div:not(.num){font-size:14px!important}
+.sectiontag,.eyebrow,.kicker{font-size:13px!important}
 `;
 function dress(d){
   try{
@@ -43,7 +43,7 @@ function dress(d){
     const s=d.createElement('style');s.id='guestSellosCss';s.textContent=CSS;d.head.appendChild(s);
   }catch{}
 }
-// Anything the rules above miss: lift text under 13px to 13px (not inside the seating room, whose labels scale with it).
+// Anything the rules above miss: lift text under 14px to 14px (not inside the seating room, whose labels scale with it).
 function floor(d){
   try{
     if(!d.body)return;
@@ -52,7 +52,8 @@ function floor(d){
       el.setAttribute('data-s-floor','');
       if(el.closest('svg,canvas,.floor,.plan,.seat,.roomViewport,.stage,.obj'))continue;
       if(![...el.childNodes].some(n=>n.nodeType===3&&n.textContent.trim()))continue;
-      if(parseFloat(win.getComputedStyle(el).fontSize)<13)el.style.setProperty('font-size','13px','important');
+      if(el.closest('.sectiontag,.eyebrow,.kicker'))continue;
+      if(parseFloat(win.getComputedStyle(el).fontSize)<14)el.style.setProperty('font-size','14px','important');
     }
   }catch{}
 }

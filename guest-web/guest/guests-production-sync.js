@@ -60,8 +60,8 @@
   }
   G.notice=t=>{if(!G.note)return;G.note.textContent=t;G.note.style.display='block'};G.clearNotice=()=>{if(G.note)G.note.style.display='none'};
   async function api(method,body){const r=await fetch(G.API,{method,headers:{'x-weddly-token':G.token,...(body?{'content-type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,cache:'no-store'}),x=await r.json().catch(()=>({}));return{r,x}}
-  function reloadCore(reason='sync'){G.f.src=G.APP+'&'+reason+'='+Date.now();G.f.style.display='block';G.boot.style.display='none';window.dispatchEvent(new Event('guests-prod-open'))}
-  function open(){G.f.src=G.APP;G.f.style.display='block';G.boot.style.display='none';window.dispatchEvent(new Event('guests-prod-open'))}
+  function reloadCore(reason='sync'){if(G.dormant)return;G.f.src=G.APP+'&'+reason+'='+Date.now();G.f.style.display='block';G.boot.style.display='none';window.dispatchEvent(new Event('guests-prod-open'))}
+  function open(){if(G.dormant)return;G.f.src=G.APP;G.f.style.display='block';G.boot.style.display='none';window.dispatchEvent(new Event('guests-prod-open'))}
   function cleanMeta(state){const raw=JSON.stringify(state||{});writeMeta({dirty:false,version:G.ver,lastHash:hash(raw),syncedAt:new Date().toISOString()})}
   function markDirty(raw=read()){
     if(!raw||raw===G.last)return;
@@ -122,7 +122,7 @@
   }
   let timer=0;function queue(){if(timer)return;timer=setTimeout(()=>{timer=0;push()},450)}
   function syncIdentityNow(){
-    if(G.identitySyncing)return false;const wanted=sharedIdentityKey();if(!wanted||wanted===G.identity)return false;
+    if(G.dormant||G.identitySyncing)return false;const wanted=sharedIdentityKey();if(!wanted||wanted===G.identity)return false;
     const state=mergeSharedIdentity(parse(read()));if(!state)return false;G.identitySyncing=true;writeRaw(state);markDirty(JSON.stringify(state));G.identity=identityOf(state);reloadCore('identity');queue();setTimeout(()=>{G.identitySyncing=false},150);return true;
   }
   async function push(){
@@ -144,9 +144,23 @@
     if(!G.token||G.pushing)return;if(syncIdentityNow())return;const raw=read();if(raw!==G.last){markDirty(raw);queue();return}
     try{const a=await api('GET');if(!a.r.ok||!a.x.ok)return;const v=+a.x.version||0;if(v>G.ver&&a.x.state){const state=mergeSharedIdentity(structuredClone(a.x.state));writeRaw(state);G.ver=v;G.last=JSON.stringify(state);G.identity=identityOf(state);cleanMeta(state);G.remote=true;reloadCore('remote');G.notice('Actualizado con los cambios de vuestra pareja');setTimeout(G.clearNotice,2500)}}catch{}
   }
-  Storage.prototype.setItem=function(k,v){const r=OUTER_SET.call(this,k,v);if(this===localStorage&&String(k)===G.KEY){markDirty(String(v));queue()}return r};
-  setInterval(()=>{if(syncIdentityNow())return;const raw=read();if(G.remote){G.remote=false;if(raw===G.last)return}if(raw!==G.last){markDirty(raw);queue()}},300);
-  addEventListener('storage',e=>{if(e.key==='weddly_pro_v7')syncIdentityNow();if(e.key===G.KEY&&e.newValue!==null){markDirty(e.newValue);queue()}});
+  // One live tab per device: a second tab (e.g. the email link opened again) shares localStorage, and its stale
+  // in-memory copy could overwrite fresh data. The newest tab wins; older ones go to sleep until the user picks them again.
+  const TAB=Math.random().toString(36).slice(2),ACTIVE='weddly_guests_active_tab_v1';G.dormant=false;
+  let bc=null;try{bc=new BroadcastChannel('guest-app-tab')}catch{}
+  function sleep(){
+    if(G.dormant)return;G.dormant=true;G.token='';
+    try{G.f.src='about:blank'}catch{}
+    G.f.style.display='none';G.boot.style.display='grid';
+    G.msg.textContent='GUEST está abierto en otra pestaña. Para no mezclar cambios, se usa solo en una a la vez.';
+    G.retry.textContent='Usar GUEST aquí';G.retry.href=location.pathname+location.search;G.retry.style.display='inline-block';
+  }
+  if(bc)bc.onmessage=e=>{if(e.data?.t==='open'&&e.data.id!==TAB)sleep()};
+  try{bc?.postMessage({t:'open',id:TAB})}catch{}
+  try{OUTER_SET.call(localStorage,ACTIVE,TAB+':'+Date.now())}catch{}
+  Storage.prototype.setItem=function(k,v){const r=OUTER_SET.call(this,k,v);if(!G.dormant&&this===localStorage&&String(k)===G.KEY){markDirty(String(v));queue()}return r};
+  setInterval(()=>{if(G.dormant)return;if(syncIdentityNow())return;const raw=read();if(G.remote){G.remote=false;if(raw===G.last)return}if(raw!==G.last){markDirty(raw);queue()}},300);
+  addEventListener('storage',e=>{if(e.key===ACTIVE&&e.newValue&&!e.newValue.startsWith(TAB+':'))sleep();if(G.dormant)return;if(e.key==='weddly_pro_v7')syncIdentityNow();if(e.key===G.KEY&&e.newValue!==null){markDirty(e.newValue);queue()}});
   setInterval(poll,5000);addEventListener('online',()=>{syncIdentityNow();queue();poll()});addEventListener('focus',poll);addEventListener('pageshow',poll);document.addEventListener('visibilitychange',()=>{if(!document.hidden)poll()});
   start();
 })();

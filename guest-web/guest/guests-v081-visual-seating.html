@@ -59,5 +59,5 @@ function renderSummary(){summary.innerHTML='';Object.entries(S.tables).forEach((
 $('roomBtn').onclick=roomSheet;$('addTableBtn').onclick=addTableSheet;$('addFeatureBtn').onclick=addFeatureSheet;$('minus').onclick=()=>setZoom(zoom-.1);$('plus').onclick=()=>setZoom(zoom+.1);$('fit').onclick=fit;$('goSummary').onclick=()=>$('summarySection').scrollIntoView({behavior:'smooth'});groupFilter.onchange=renderUnseated;$('clearSelected').onclick=()=>{selected.clear();renderUnseated()};$('seatSelected').onclick=()=>bulkAssign([...selected]);$('rotateLeft').onclick=()=>rotateSelected(-15);$('rotateRight').onclick=()=>rotateSelected(15);$('editSelected').onclick=editSelectedSheet;sheet.onclick=e=>{if(e.target===sheet)closeSheet()};floor.addEventListener('click',e=>{if(e.target===floor&&selectedObj){selectedObj=null;render()}});viewport.addEventListener('click',e=>{if(e.target===viewport&&selectedObj){selectedObj=null;render()}});
 const pair=Array.isArray(M.meta?.couple)&&M.meta.couple.length>=2?M.meta.couple:null;$('weddingLine').textContent='Boda principal'+(pair?' · '+pair[0]+' & '+pair[1]:'');render();setTimeout(fit,60);
 </script>
-<script src="guest-sellos-v1.js?v=6"></script></body>
+<script src="guest-sellos-v1.js?v=7"></script></body>
 </html>
