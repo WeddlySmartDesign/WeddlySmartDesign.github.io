@@ -14,7 +14,8 @@
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; background: var(--paper); color: var(--ink); font-family: var(--text); -webkit-font-smoothing: antialiased; }
     [hidden] { display: none !important; }
-    #host { position: fixed; inset: 0; overflow: auto; }
+    /* La franja de «Borrador» va encima; la invitación empieza justo debajo para no tapar nada. */
+    #host { position: fixed; inset: var(--draft-band, 0px) 0 0 0; overflow: auto; }
     #state { position: fixed; inset: 0; z-index: 2147483002; display: grid; place-items: center; padding: 24px; background: var(--paper); }
     #state div { max-width: 26rem; }
     #state h1 { margin: 0; font: 400 clamp(2rem, 6vw, 2.75rem)/1.05 var(--display); }
@@ -187,6 +188,7 @@ $('send').onclick = () => respond('changes');
     await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({ order: { template_id: id, template_version: String(cfg.template.version || ''), mode: 'test' }, config: cfg, host: $('host'), registry: manifest });
     // Es la versión para revisar, no la de los invitados: siempre lleva la marca de borrador.
     window.GUEST_DRAFT?.mark();
+    const band = document.querySelector('#guest-draft b'); if (band) document.documentElement.style.setProperty('--draft-band', band.offsetHeight + 'px');
     $('state').hidden = true; $('sheet').hidden = false;
     if (order.status === 'changes_requested') {
       const part = PARTS[order.part] ? order.part : null;
