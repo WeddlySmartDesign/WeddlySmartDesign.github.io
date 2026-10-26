@@ -117,7 +117,9 @@ function validatePaid(session:any){
  return edition
 }
 async function resend(payload:any){
- const key=env('RESEND_API_KEY'),from=env('WEDDLY_RESEND_FROM');if(!key||!from)return false;
+ const key=env('RESEND_API_KEY'),rawFrom=env('WEDDLY_RESEND_FROM'),fm=rawFrom.match(/<([^>]+)>/),addr=(fm?.[1]||(/^[^\s<>]+@[^\s<>]+$/.test(rawFrom)?rawFrom:'')).trim();
+ // Same sending address as ONE, but GUEST emails must show GUEST's own name.
+ const from=addr?'GUEST by WeddlySmartDesign <'+addr+'>':rawFrom;if(!key||!from)return false;
  const to=(payload.body?.to||[]).map((x:string)=>String(x).toLowerCase());if(!to.length||!to.every((x:string)=>QA_EMAILS.includes(x))){console.warn('qa_email_blocked');return false}
  payload.body.subject='[PRUEBA] '+payload.body.subject;
  const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key,...(payload.idempotencyKey?{'Idempotency-Key':payload.idempotencyKey}:{})},body:JSON.stringify({from,reply_to:'weddlysmartdesign@gmail.com',...payload.body})});
