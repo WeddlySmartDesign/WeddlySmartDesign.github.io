@@ -15,7 +15,7 @@
     html, body { margin: 0; min-height: 100%; background: var(--paper); color: var(--ink); font-family: var(--text); -webkit-font-smoothing: antialiased; }
     [hidden] { display: none !important; }
     /* La franja de «Borrador» va encima; la invitación empieza justo debajo para no tapar nada. */
-    #host { position: fixed; inset: var(--draft-band, 0px) 0 0 0; overflow: auto; }
+    #host { position: fixed; inset: var(--draft-band, 0px) 0 var(--dock, 0px) 0; overflow: auto; }
     #state { position: fixed; inset: 0; z-index: 2147483002; display: grid; place-items: center; padding: 24px; background: var(--paper); }
     #state div { max-width: 26rem; }
     #state h1 { margin: 0; font: 400 clamp(2rem, 6vw, 2.75rem)/1.05 var(--display); }
@@ -30,13 +30,21 @@
     .btn:active { transform: scale(.97); }
     .btn.line { background: transparent; color: var(--ink); }
     .btn[disabled] { opacity: .55; pointer-events: none; }
-    .min { position: absolute; top: .55rem; right: .55rem; width: 40px; height: 40px; display: grid; place-items: center; border: 0; border-radius: 8px; background: transparent; color: var(--ink-soft); cursor: pointer; }
-    .min:hover { background: var(--paper); }
-    .min svg { width: 18px; height: 18px; }
-    .sheet.is-min { width: auto; left: auto; right: 12px; translate: 0 0; padding: 0; }
+    /* Recoger: un botón con texto, visible, arriba del panel. Recogido, el panel queda como una barra fija abajo
+       y la invitación se acorta para que nada suyo (como «Descubrir») quede tapado. */
+    .min { display: flex; align-items: center; gap: .35rem; margin: -.35rem 0 .55rem auto; min-height: 40px; padding: 0 .6rem; border: 0; border-radius: 8px; background: var(--paper); color: var(--ink); font: 600 .875rem var(--text); cursor: pointer; transition: transform 140ms var(--ease-out); }
+    .min:active { transform: scale(.97); }
+    .min svg { width: 16px; height: 16px; }
+    .sheet.is-min { left: 0; right: 0; bottom: 0; width: auto; translate: 0 0; padding: .6rem 16px calc(.6rem + env(safe-area-inset-bottom, 0px)); border-radius: 14px 14px 0 0; box-shadow: 0 -1px 0 var(--line), 0 -12px 28px -18px rgba(27, 38, 80, .45); overflow: visible; }
     .sheet.is-min > :not(.pill) { display: none; }
-    .pill { display: none; min-height: 48px; padding: 0 1.1rem; border: 0; border-radius: 14px; background: var(--ink); color: var(--paper); font: 600 .9375rem var(--text); cursor: pointer; }
-    .sheet.is-min .pill { display: block; }
+    .pill { display: none; width: 100%; align-items: center; justify-content: space-between; gap: .8rem; border: 0; padding: 0; background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+    .pill span { font: 400 1.05rem/1.2 var(--display); }
+    .pill b { flex: none; display: inline-flex; align-items: center; min-height: 46px; padding: 0 1rem; border-radius: 8px; background: var(--ink); color: var(--paper); font: 600 .9375rem var(--text); transition: transform 140ms var(--ease-out); }
+    .pill:active b { transform: scale(.97); }
+    .sheet.is-min .pill { display: flex; }
+    /* En «Cambiar algo», el botón de enviar se queda siempre a la vista. */
+    #changes .row { position: sticky; bottom: -1.05rem; margin: .9rem -1rem -1.05rem; padding: .7rem 1rem calc(.8rem + env(safe-area-inset-bottom, 0px)); background: var(--white); box-shadow: 0 -1px 0 var(--line); }
+    #changes .upsell { margin-bottom: .2rem; }
 
     .parts { display: grid; gap: .5rem; margin-top: .9rem; }
     .part { position: relative; display: block; cursor: pointer; }
@@ -79,8 +87,8 @@
 <section id="state" role="status"><div><h1>Abriendo vuestra invitación</h1><p>Un momento: la estamos cargando completa, con su animación.</p></div></section>
 
 <section class="sheet" id="sheet" hidden aria-label="Revisión">
-  <button class="pill" id="restore" type="button">Aprobar o pedir un cambio</button>
-  <button class="min" id="minimize" type="button" aria-label="Recoger para ver la invitación entera"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="pill" id="restore" type="button"><span>¿Está como la imaginabais?</span><b>Aprobar o cambiar</b></button>
+  <button class="min" id="minimize" type="button">Seguir viendo la invitación<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 
   <div id="ask">
     <h2>¿Está como la imaginabais?</h2>
@@ -168,7 +176,7 @@ async function api(body) {
   return j;
 }
 function view(id) { ['ask', 'confirmApprove', 'changes', 'design', 'done'].forEach((x) => { $(x).hidden = x !== id; }); $('msg').textContent = ''; }
-function done(title, text) { view('done'); $('doneTitle').textContent = title; $('doneText').textContent = text; $('minimize').hidden = true; }
+function done(title, text) { dock(false); view('done'); $('doneTitle').textContent = title; $('doneText').textContent = text; $('minimize').hidden = true; }
 function failure() {
   const s = $('state'); s.hidden = false;
   s.querySelector('h1').textContent = 'No hemos podido abrir la invitación';
@@ -179,8 +187,15 @@ $('parts').innerHTML = PARTS.map(([t, d], i) => `<label class="part"><input type
 $('approve').onclick = () => view('confirmApprove');
 $('request').onclick = () => view('changes');
 document.querySelectorAll('[data-back]').forEach((b) => { b.onclick = () => view('ask'); });
-$('minimize').onclick = () => $('sheet').classList.add('is-min');
-$('restore').onclick = () => $('sheet').classList.remove('is-min');
+function dock(min) {
+  $('sheet').classList.toggle('is-min', min);
+  document.documentElement.style.setProperty('--dock', min ? $('sheet').offsetHeight + 'px' : '0px');
+}
+$('minimize').onclick = () => dock(true);
+$('restore').onclick = () => dock(false);
+addEventListener('resize', () => { if ($('sheet').classList.contains('is-min')) dock(true); });
+// Al elegir la parte, el botón de abrirla ya está a la vista (fijo abajo); lo enfocamos sin mover la página.
+$('parts').addEventListener('change', () => { $('msg').textContent = ''; $('send').focus({ preventScroll: true }); });
 
 async function respond(decision) {
   if (busy) return;
@@ -269,7 +284,7 @@ $('send').onclick = () => respond('changes');
     // Es la versión para revisar, no la de los invitados: siempre lleva la marca de borrador.
     window.GUEST_DRAFT?.mark();
     const band = document.querySelector('#guest-draft b'); if (band) document.documentElement.style.setProperty('--draft-band', band.offsetHeight + 'px');
-    $('state').hidden = true; $('sheet').hidden = false;
+    $('state').hidden = true; $('sheet').hidden = false; dock(true);
     if (order.status === 'changes_requested') {
       const part = PARTS[order.part] ? order.part : null;
       done(paid ? 'Pago recibido. Ya podéis hacer el cambio.' : 'Ya nos pedisteis un cambio.', `${part != null ? `Falta corregir «${PARTS[part][0]}». ` : ''}Cuando lo enviéis, os mandamos la versión nueva para revisar.`);

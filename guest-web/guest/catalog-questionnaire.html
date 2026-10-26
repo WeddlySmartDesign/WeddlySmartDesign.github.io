@@ -162,6 +162,8 @@
     .summary { display: grid; gap: 0; margin-top: 1.25rem; }
     .sum { display: grid; grid-template-columns: 1fr auto; gap: .25rem 1rem; padding: 1rem 0; border-top: 1.5px solid var(--line); }
     .sum h3 { font: 400 1.2rem/1.2 var(--display); }
+    .sum h3 em { margin-left: .45rem; padding: .15rem .45rem; border-radius: 4px; background: var(--postmark); color: #fff; font: 700 .6875rem/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; font-style: normal; vertical-align: middle; }
+    .sum.is-changed { border-left: 3px solid var(--postmark); padding-left: .85rem; }
     .sum button { grid-row: 1; grid-column: 2; align-self: start; background: none; border: 0; padding: 0; font: 600 .9375rem var(--text); color: var(--ink); text-decoration: underline; text-underline-offset: .25em; cursor: pointer; }
     .sum dl { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(7rem, 34%) 1fr; gap: .3rem .9rem; margin: .35rem 0 0; font-size: .9375rem; }
     .sum dt { color: var(--ink-soft); }
@@ -241,7 +243,7 @@
 
   <section class="q-banner" id="changesBanner" hidden>
     <strong>Cambiad lo que necesitéis.</strong>
-    <p id="changesText">Os hemos abierto la parte que queríais cambiar. Si veis algo más, cambiadlo también ahora: todo lo que enviéis juntos cuenta como una sola ronda.</p>
+    <p id="changesText">Os hemos abierto la parte que queríais cambiar. Cuando acabéis, pulsad «Ver el resumen»: ahí veréis lo que habéis cambiado y podréis revisar otra parte antes de enviarlo. Todo lo que enviéis junto cuenta como una sola ronda.</p>
   </section>
 
   <aside class="map" aria-label="Parte de la invitación que estáis rellenando">
@@ -500,8 +502,8 @@
 
       <!-- 5 · Comprobar -->
       <div class="step" data-step="5">
-        <h2>Comprobadlo con calma</h2>
-        <p class="lead">Esto es lo que usaremos para preparar vuestra invitación. Si algo no está bien, cambiadlo ahora: después ya la recibiréis montada.</p>
+        <h2 id="sumTitle">Comprobadlo con calma</h2>
+        <p class="lead" id="sumLead">Esto es lo que usaremos para preparar vuestra invitación. Si algo no está bien, cambiadlo ahora: después ya la recibiréis montada.</p>
         <div class="summary" id="summary"></div>
         <label class="confirm"><input id="reviewed" type="checkbox"><span>Lo hemos revisado y está todo bien escrito: nombres, fecha, horas, direcciones y enlaces.</span></label>
       </div>
@@ -859,7 +861,7 @@ function validate(i) {
 
 /* ---- Resumen final ---- */
 function dateText(d) { if (!d) return ''; const x = new Date(d + 'T12:00:00'); return isNaN(x) ? d : x.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }); }
-function renderSummary() {
+function summaryRows() {
   const q = collect(), L = q.locations, P = q.practical, rows = [];
   const yes = (b) => (b ? 'Sí' : 'No');
   const place = (o) => [o.time && o.name ? `${o.time} · ${o.name}` : o.name, o.address, o.mapsUrl ? 'Con botón «Cómo llegar»' : 'Sin enlace de mapa'].filter(Boolean).join('\n');
@@ -877,7 +879,19 @@ function renderSummary() {
   rows.push([3, 'Detalles prácticos', det.length ? det : [['', 'Ninguno']]]);
   const ask = [q.rsvp.menu && 'menú', q.rsvp.allergies && 'alergias', q.practical.bus.enabled && 'transporte', q.practical.accommodation.enabled && 'alojamiento', q.rsvp.children && 'niños', q.rsvp.plusOne && 'acompañante', ...q.rsvp.customQuestions].filter(Boolean);
   rows.push([4, 'Confirmación y final', [['Preguntamos', ask.length ? ask.join(', ') : 'Solo si vienen'], ['Galería', q.gallery.enabled ? files.filter((x) => x.slot.startsWith('gallery-')).length + ' fotos' : 'No'], ['Última frase', q.closing.mode === 'custom' ? q.closing.customLine : 'Gracias por formar parte de nuestra historia.']]]);
-  $('summary').innerHTML = rows.map(([s, title, items]) => `<section class="sum"><h3>${title}</h3><button type="button" data-go="${s}">Cambiar</button><dl>${items.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></section>`).join('');
+  return rows;
+}
+// Al pedir cambios guardamos cómo estaba todo al abrir, para marcar en el resumen solo lo que han tocado.
+let baseline = null;
+function renderSummary() {
+  const rows = summaryRows(), was = baseline ? Object.fromEntries(baseline.map(([s, , items]) => [s, JSON.stringify(items)])) : null;
+  const changed = (s, items) => was && was[s] !== JSON.stringify(items);
+  $('summary').innerHTML = rows.map(([s, title, items]) => `<section class="sum${changed(s, items) ? ' is-changed' : ''}"><h3>${title}${changed(s, items) ? ' <em>Cambiado</em>' : ''}</h3><button type="button" data-go="${s}">${changesMode ? 'Revisar' : 'Cambiar'}</button><dl>${items.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></section>`).join('');
+  if (changesMode) {
+    const n = rows.filter(([s, , items]) => changed(s, items)).length;
+    $('sumTitle').textContent = n ? 'Esto es lo que vais a enviar' : 'Aún no habéis cambiado nada';
+    $('sumLead').textContent = n ? 'Lo marcado como «Cambiado» es lo que habéis tocado. ¿Queréis revisar otra parte? Pulsad «Revisar» en ella; si no, enviadlo y contará como una sola ronda.' : 'Pulsad «Revisar» en la parte que queréis cambiar.';
+  }
 }
 
 /* ---- Navegación ---- */
@@ -907,6 +921,7 @@ function show(i) {
   renderPeek();
   $('back').style.visibility = step === 0 ? 'hidden' : 'visible';
   $('next').hidden = step === LAST;
+  $('next').textContent = changesMode ? 'Ver el resumen' : 'Seguir';
   $('submit').hidden = step !== LAST;
   $('submit').textContent = changesMode ? 'Enviar los cambios' : 'Enviar';
   if (step === LAST) renderSummary();
@@ -918,7 +933,7 @@ $('next').onclick = async () => {
   const e = validate(step);
   if (e.length) { setMsg(e.join(' ')); return; }
   await saveNow();
-  show(step + 1);
+  show(changesMode ? LAST : step + 1);
 };
 $('back').onclick = () => show(step - 1);
 $('form').addEventListener('click', (e) => { const g = e.target.closest('[data-go]'); if (g) { e.preventDefault(); show(Number(g.dataset.go)); scrollTo({ top: 0, behavior: 'smooth' }); } });
@@ -993,6 +1008,7 @@ async function boot() {
     $('form').hidden = false; $('nav').hidden = false;
     loaded = true;
     if (changesMode) {
+      baseline = summaryRows();
       $('intro').hidden = true; $('changesBanner').hidden = false;
       const s = Number(params.get('parte'));
       show(Number.isInteger(s) && s >= 0 && s < LAST ? s : 0);
