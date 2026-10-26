@@ -29,7 +29,9 @@ const names = (o: any) => [o.questionnaire?.couple?.name1, o.questionnaire?.coup
 const label = (o: any) => names(o) || o.buyer_email || 'Pedido sin nombres';
 const emailOf = (o: any) => String(o.questionnaire?.contact?.email || o.buyer_email || '').trim().toLowerCase();
 const isLive = (o: any) => String(o.checkout_session_id || '').startsWith('cs_live_');
-const canWriteCouple = (o: any) => isLive(o) || OWNER_EMAILS.includes(emailOf(o));
+// A medida: el pedido no tiene sesión de Stripe propia (se cobra en guest-custom); cuenta como real si su solicitud lo es.
+const liveCustom = new Set<string>();
+const canWriteCouple = (o: any) => isLive(o) || (!!o.custom_request_id && liveCustom.has(String(o.custom_request_id))) || OWNER_EMAILS.includes(emailOf(o));
 const when = (t: number) => new Date(t).toLocaleString('es-ES', { timeZone: 'Europe/Madrid', weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 const left = (ms: number) => { if (ms <= 0) return 'vencido'; const h = Math.floor(ms / H); return h >= 24 ? `quedan ${Math.floor(h / 24)} d ${h % 24} h` : `quedan ${h} h ${Math.floor((ms % H) / 60000)} min`; };
 const euros = (c: number) => (c / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
@@ -178,6 +180,8 @@ async function tick(c: any) {
     .neq('status', 'cancelled').order('created_at', { ascending: false }).limit(1000);
   if (error) throw error;
   const all = rows || [];
+  const { data: lc } = await c.from('guest_custom_requests').select('id').eq('mode', 'production').not('order_id', 'is', null).limit(2000);
+  liveCustom.clear(); (lc || []).forEach((x: any) => liveCustom.add(String(x.id)));
 
   // 1. Plazos de la propietaria.
   const open = all.map((o: any) => ({ o, d: deadline(o) })).filter((x: any) => x.d) as { o: any; d: any }[];
