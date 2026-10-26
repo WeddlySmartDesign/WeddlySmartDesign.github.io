@@ -6,6 +6,11 @@ function secretKey(){const x=Deno.env.get('SUPABASE_SECRET_KEYS');return x?JSON.
 function admin(){return createClient(Deno.env.get('SUPABASE_URL')!,secretKey(),{auth:{persistSession:false}})}
 async function sha256(v:string){const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v));return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('')}
 function norm(v:unknown){return String(v||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'')}
+// Catalog and custom couples open the app from the delivery email button, maybe on several devices
+// (mail app, Chrome, home screen). A stable token per license keeps every device signed in:
+// opening the link again must not sign out the others.
+function isCatalog(l:any){const m=l?.metadata||{};return Boolean(m.guest_catalog_template_id)||m.purchased_product==='guest'||m.edition==='custom'}
+async function stableMemberToken(licenseId:string){const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(secretKey()),{name:'HMAC',hash:'SHA-256'},false,['sign']);const s=await crypto.subtle.sign('HMAC',k,new TextEncoder().encode('guest-member-v1|'+licenseId));return Array.from(new Uint8Array(s)).map(x=>x.toString(16).padStart(2,'0')).join('')}
 function secret(){return crypto.randomUUID().replaceAll('-','')+crypto.randomUUID().replaceAll('-','')}
 // Paid catalog purchases (Stripe checkout writes product 'guest' plus the catalog design pin) also open the app;
 // activate() below still waits for the invitation to be delivered.
@@ -25,7 +30,7 @@ async function activate(db:any,raw:any){
   const {data:latestOrder,error:orderError}=await db.from('guest_invitation_orders').select('status').eq('license_id',l.id).order('created_at',{ascending:false}).limit(1).maybeSingle();
   if(orderError)throw orderError;
   if(latestOrder&&latestOrder.status!=='delivered')return json({ok:false,error:'invitation_not_delivered'},409);
-  const memberToken=secret(),memberHash=await sha256(memberToken),now=new Date().toISOString();
+  const memberToken=isCatalog(l)?await stableMemberToken(l.id):secret(),memberHash=await sha256(memberToken),now=new Date().toISOString();
   if(!l.wedding_id){
     const legacyToken=secret();
     const {data,error}=await db.rpc('activate_weddly_license',{p_purchase_hash:hash,p_member_hash:memberHash,p_access_hash:await sha256(legacyToken)});
