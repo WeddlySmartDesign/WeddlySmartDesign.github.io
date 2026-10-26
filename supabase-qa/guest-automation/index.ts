@@ -487,6 +487,8 @@ Deno.serve(async (req) => {
         ? c.from('guest_owner_events').update({ read_at: null }).eq('id', Number(b.id))
         : c.from('guest_owner_events').update({ read_at: new Date().toISOString() }).is('read_at', null);
       if (!b.unread && b.id != null) q = q.eq('id', Number(b.id));
+      // match: al abrir la ficha de un pedido o presupuesto, sus avisos quedan leídos.
+      else if (!b.unread && /^[0-9a-f-]{36}$/.test(String(b.match || ''))) q = q.like('url', '%/' + b.match);
       await q;
       const { count } = await c.from('guest_owner_events').select('id', { count: 'exact', head: true }).is('read_at', null);
       return json({ ok: true, unread: count || 0 });
