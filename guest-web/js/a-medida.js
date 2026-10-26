@@ -32,7 +32,7 @@
       const st = q.status, paidDeposit = !['new', 'quoted'].includes(st), paidAll = ['paid', 'delivered'].includes(st);
       return `<ol class="qsteps">
         <li class="${paidDeposit ? 'done' : ''}"><b>Señal: ${euros(q.depositCents)}</b><span>La mitad, para empezar.</span></li>
-        <li class="${paidDeposit && st !== 'accepted' ? 'done' : ''}"><b>Diseñamos y lo revisáis</b><span>${q.rounds} rondas de cambios incluidas. Cada ronda extra: ${euros(q.extraCents)}.</span></li>
+        <li class="${paidDeposit && st !== 'accepted' ? 'done' : ''}"><b>${q.withApp ? 'Cuestionario, diseño y revisión' : 'Diseñamos y lo revisáis'}</b><span>${q.rounds} rondas de cambios incluidas. Cada ronda extra: ${euros(q.extraCents)}.</span></li>
         <li class="${paidAll ? 'done' : ''}"><b>Resto: ${euros(q.restCents)}</b><span>Al aprobarla. Y os la entregamos con la app de invitados.</span></li>
       </ol>`;
     };
@@ -45,7 +45,7 @@
       if (paidNow) {
         html = `<span class="pm" aria-hidden="true">Pagado</span>
           <h2>${paidNow === 'extra' ? 'Ronda extra pagada.' : paidNow === 'final' ? 'Todo pagado. Gracias.' : 'Señal recibida. Empezamos.'}</h2>
-          <p>${paidNow === 'extra' ? 'Mandadnos todos los cambios juntos por email o WhatsApp y nos ponemos.' : paidNow === 'final' ? 'En breve os llega la invitación definitiva con el acceso a la app de invitados.' : 'Os escribimos con la primera propuesta' + (q.quoteDays ? ` en unos ${q.quoteDays} días.` : '.')} La factura os llega por email.</p>`
+          <p>${paidNow === 'extra' ? 'Mandadnos todos los cambios juntos por email o WhatsApp y nos ponemos.' : paidNow === 'final' ? 'En breve os llega la invitación definitiva con el acceso a la app de invitados.' : q.withApp ? 'Os acabamos de mandar por email el cuestionario. Rellenadlo cuando podáis: con él montamos la primera propuesta' + (q.quoteDays ? `, en unos ${q.quoteDays} días desde que lo enviéis.` : '.') : 'Os escribimos con la primera propuesta' + (q.quoteDays ? ` en unos ${q.quoteDays} días.` : '.')} La factura os llega por email.</p>`
           + steps(q);
       } else if (q.status === 'new') {
         html = `<h2>Estamos preparando vuestro presupuesto.</h2><p>Os lo mandamos por email en menos de 48 h.</p>`;
@@ -62,7 +62,7 @@
         else if (q.due) html += payBtn(q.due.part, q.due.cents, q.due.part === 'deposit' ? 'Aceptar y pagar' : 'Pagar el resto:')
           + (q.due.part === 'deposit' ? `<p style="font-size:.875rem">Al ser un diseño exclusivo, la señal cubre el trabajo desde el primer día y no se devuelve una vez empezado. <a href="guest-legal.html#medida" target="_blank" rel="noopener">Condiciones</a>.</p>` : '');
         else if (['paid', 'delivered'].includes(q.status)) html += `<p>Todo pagado. ¡Gracias!</p>`;
-        else html += `<p>Estamos con vuestro diseño. Os escribimos con cada propuesta.</p>`;
+        else html += q.withApp ? `<p>Tenéis el cuestionario en vuestro email. Cuando lo enviéis, os mandamos la propuesta para revisarla y aprobarla desde el enlace.</p>` : `<p>Estamos con vuestro diseño. Os escribimos con cada propuesta.</p>`;
       }
       box.innerHTML = html + `<div class="form-err" id="payErr" role="alert"></div>`;
       box.querySelectorAll('[data-pay]').forEach((b) => b.onclick = async () => {

@@ -124,15 +124,26 @@ async function applyPayment(c: any, r: any, sessionId: string) {
   if (ie) console.error('custom_invoice_failed', ie);
   const invBtn = inv ? mBtn(await invoiceUrl(inv.id), 'Ver la factura', true) : '';
   if (part === 'deposit') {
-    await toCouple(r, 'Empezamos vuestra invitación', guestMail({ kicker: 'Señal recibida', title: 'Empezamos vuestra invitación.', preheader: 'Os escribimos con la primera propuesta.',
-      body: mP(`Gracias, ${esc(first(r.name))}. Ya tenemos la señal de ${esc(euros(s.amount_total))} y nos ponemos con vuestro diseño.`)
-        + mSteps([['Os mandamos la primera propuesta', r.quote_days ? `En unos ${r.quote_days} días.` : 'Os escribimos en cuanto esté.'], ['La revisáis', `Tenéis ${ROUNDS} rondas de cambios incluidas. Cada ronda extra cuesta ${euros(EXTRA_CENTS)}.`], ['Pagáis el resto al aprobarla', 'Y os la entregamos con la app de invitados.']], 'Cómo sigue')
+    let qUrl = '';
+    try { const e = await ensureOrder(c, next); qUrl = e.questionnaireUrl; } catch (e) { console.error('custom_order_failed', r.id, e); }
+    await toCouple(r, 'Empezamos vuestra invitación', guestMail({ kicker: 'Señal recibida', title: 'Empezamos vuestra invitación.', preheader: 'Rellenad el cuestionario y nos ponemos con vuestro diseño.',
+      body: mP(`Gracias, ${esc(first(r.name))}. Ya tenemos la señal de ${esc(euros(s.amount_total))}. Para empezar necesitamos los datos de vuestra boda: nombres, fecha, lugares, vuestra historia y fotos.`)
+        + (qUrl ? mBtn(qUrl, 'Rellenar el cuestionario') : mP('En unas horas os mandamos el enlace del cuestionario.'))
+        + mSteps([['Rellenáis el cuestionario', 'Se guarda solo: podéis dejarlo y seguir cuando queráis.'], ['Os mandamos la primera propuesta', r.quote_days ? `En unos ${r.quote_days} días desde que tengamos vuestros datos.` : 'En cuanto esté lista.'], ['La revisáis', `Tenéis ${ROUNDS} rondas de cambios incluidas. Cada ronda extra cuesta ${euros(EXTRA_CENTS)}.`], ['Pagáis el resto al aprobarla', 'Y os llega sola, con la app de invitados.']], 'Cómo sigue')
         + invBtn }), `guest-custom-deposit/${r.id}`);
     await toOwner(`Señal pagada · ${r.name}`, 'Diseño a medida', 'Han pagado la señal.', mP(`<b>${esc(r.name)}</b> ha pagado ${esc(euros(s.amount_total))} de su ${esc(tierName(r).toLowerCase())}. Ya puedes empezar.`), `guest-custom-deposit-owner/${r.id}`);
   } else if (part === 'final') {
-    await toCouple(r, 'Pago completado', guestMail({ kicker: 'Pago completado', title: 'Todo pagado. Os la entregamos.', preheader: 'En breve os llega vuestra invitación.',
-      body: mP(`Gracias, ${esc(first(r.name))}. Ya tenemos el resto del pago. En breve os llega la invitación definitiva junto con el acceso a la app de invitados.`) + invBtn }), `guest-custom-final/${r.id}`);
-    await toOwner(`Pago final · ${r.name}`, 'Diseño a medida', 'Ya puedes entregar.', mP(`<b>${esc(r.name)}</b> ha pagado el resto (${esc(euros(s.amount_total))}).`), `guest-custom-final-owner/${r.id}`);
+    let delivered = false;
+    if (next.order_id) {
+      try {
+        const j = await callFlow('custom_deliver', String(next.order_id), { orderId: next.order_id });
+        await c.from('guest_custom_requests').update({ status: 'delivered', delivery_url: j.inviteUrl || null, delivered_at: ts, updated_at: ts }).eq('id', r.id);
+        delivered = true;
+      } catch (e) { console.error('custom_deliver_failed', r.id, e); }
+    }
+    await toCouple(r, 'Pago completado', guestMail({ kicker: 'Pago completado', title: delivered ? 'Todo pagado. Ya la tenéis.' : 'Todo pagado. Os la entregamos.', preheader: delivered ? 'Os acaba de llegar otro email con vuestra invitación y la app.' : 'En breve os llega vuestra invitación.',
+      body: mP(`Gracias, ${esc(first(r.name))}. Ya tenemos el resto del pago. ${delivered ? 'Os acaba de llegar otro email con la invitación definitiva y el acceso a la app de invitados.' : 'En breve os llega la invitación definitiva junto con el acceso a la app de invitados.'}`) + invBtn }), `guest-custom-final/${r.id}`);
+    await toOwner(`Pago final · ${r.name}`, 'Diseño a medida', delivered ? 'Entregada sola.' : 'Ya puedes entregar.', mP(`<b>${esc(r.name)}</b> ha pagado el resto (${esc(euros(s.amount_total))}).`) + (delivered ? mP('Les ha llegado la invitación definitiva con la app. No tienes que hacer nada.', true) : next.order_id ? mP('<b>La entrega automática ha fallado.</b> Abre su pedido en Pedidos y pulsa «Entregar».') : ''), `guest-custom-final-owner/${r.id}`);
   } else {
     await toCouple(r, 'Ronda extra pagada', guestMail({ kicker: 'Ronda extra', title: 'Recibido. Contadnos los cambios.', preheader: 'Ya podéis pedirnos la nueva ronda.',
       body: mP('Ya tenemos el pago de la ronda extra. Respondednos a este email o por WhatsApp con todos los cambios juntos y nos ponemos.') + invBtn }), `guest-custom-extra/${sessionId}`);
@@ -170,7 +181,7 @@ async function signed(c: any, r: any) {
   }
   return out;
 }
-const view = (r: any) => ({ id: r.id, createdAt: r.created_at, updatedAt: r.updated_at, test: r.mode === 'test', status: r.status, tier: r.tier, tierName: tierName(r), suggestedCents: TIERS[r.tier]?.cents || 12000, baseDesign: r.base_design, baseDesignName: DESIGN_NAMES[r.base_design] || null, wishes: r.wishes, idea: r.idea, links: r.links, weddingDate: r.wedding_date, urgency: r.urgency, urgencyLabel: URGENCY[r.urgency] || '', name: r.name, email: r.email, phone: r.phone, contactPref: r.contact_pref, quoteCents: r.quote_cents, quoteDays: r.quote_days, quoteNote: r.quote_note, quotedAt: r.quoted_at, depositPaidAt: r.deposit_paid_at, finalPaidAt: r.final_paid_at, extraRounds: r.extra_rounds, ownerNotes: r.owner_notes, quoteDueAt: r.status === 'new' ? new Date(Date.parse(r.created_at) + QUOTE_DUE).toISOString() : null, deliveryUrl: r.delivery_url, deliveredAt: r.delivered_at, hasAccess: !!r.license_id, fileCount: (r.files || []).length, roundsUsed: r.rounds_used || 0, refundedAt: r.refunded_at, refundNote: r.refund_note, depositCents: r.deposit_paid_at ? deposit(r) : 0, finalCents: r.final_paid_at ? rest(r) : 0 });
+const view = (r: any) => ({ id: r.id, createdAt: r.created_at, updatedAt: r.updated_at, test: r.mode === 'test', status: r.status, tier: r.tier, tierName: tierName(r), suggestedCents: TIERS[r.tier]?.cents || 12000, baseDesign: r.base_design, baseDesignName: DESIGN_NAMES[r.base_design] || null, wishes: r.wishes, idea: r.idea, links: r.links, weddingDate: r.wedding_date, urgency: r.urgency, urgencyLabel: URGENCY[r.urgency] || '', name: r.name, email: r.email, phone: r.phone, contactPref: r.contact_pref, quoteCents: r.quote_cents, quoteDays: r.quote_days, quoteNote: r.quote_note, quotedAt: r.quoted_at, depositPaidAt: r.deposit_paid_at, finalPaidAt: r.final_paid_at, extraRounds: r.extra_rounds, ownerNotes: r.owner_notes, quoteDueAt: r.status === 'new' ? new Date(Date.parse(r.created_at) + QUOTE_DUE).toISOString() : null, deliveryUrl: r.delivery_url, deliveredAt: r.delivered_at, hasAccess: !!r.license_id, fileCount: (r.files || []).length, roundsUsed: r.rounds_used || 0, orderId: r.order_id || null, refundedAt: r.refunded_at, refundNote: r.refund_note, depositCents: r.deposit_paid_at ? deposit(r) : 0, finalCents: r.final_paid_at ? rest(r) : 0 });
 
 /* ---------- Entrega con la app de invitados ---------- */
 function activationCode() { const a = crypto.randomUUID().replaceAll('-', '').toUpperCase(), b = crypto.randomUUID().replaceAll('-', '').toUpperCase(); return `WSD-GUEST-${a.slice(0, 8)}-${a.slice(8, 16)}-${b.slice(0, 8)}`; }
@@ -188,6 +199,36 @@ async function access(c: any, r: any) {
   return { licenseId: String(row.license_id), url: site() + '/guest/access.html#code=' + encodeURIComponent(String(row.activation_code)) };
 }
 
+// El a medida usa el mismo sistema que el catálogo: al pagar la señal se crea su pedido (cuestionario,
+// revisión con marca de agua y rondas, entrega con la app). Las llamadas a guest-invitation-flow-qa van firmadas.
+const FLOW_FN = () => txt(Deno.env.get('SUPABASE_URL')).replace(/\/$/, '') + '/functions/v1/guest-invitation-flow-qa';
+const internalSig = async (action: string, id: string) => (await hmacHex('guest-internal-v1|' + action + '|' + id)).slice(0, 40);
+async function callFlow(action: string, id: string, body: Record<string, unknown>) {
+  const r = await fetch(FLOW_FN(), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action, ...body, sig: await internalSig(action, id) }) });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || !j?.ok) throw Error('flow_' + (j?.error || r.status));
+  return j;
+}
+async function ensureOrder(c: any, r: any): Promise<{ r: any; questionnaireUrl: string }> {
+  const a = await access(c, r);
+  const j = await callFlow('custom_create', r.id, { requestId: r.id, email: r.email, licenseId: a.licenseId, templateId: r.base_design || 'veil-light', included: ROUNDS, extraCents: EXTRA_CENTS, tierName: tierName(r) });
+  if (r.order_id !== j.orderId || r.license_id !== a.licenseId) {
+    const { data } = await c.from('guest_custom_requests').update({ order_id: j.orderId, license_id: a.licenseId }).eq('id', r.id).select('*').single();
+    if (data) r = data;
+  }
+  return { r, questionnaireUrl: String(j.questionnaireUrl || '') };
+}
+// Al aprobar el diseño (desde la página de revisión o desde la app): pedir el 50 % restante.
+async function askFinal(c: any, r: any) {
+  const ts = new Date().toISOString();
+  const { data: q, error } = await c.from('guest_custom_requests').update({ status: 'final_sent', updated_at: ts, final_sent_at: ts, final_session: null }).eq('id', r.id).select('*').single();
+  if (error) throw error;
+  const ok = await toCouple(q, 'Último paso: el resto del pago', guestMail({ kicker: 'Diseño aprobado', title: 'Último paso.', preheader: `Pagad ${euros(rest(q))} y os la entregamos.`,
+    body: mP(`¡Qué bien que os encante, ${esc(first(q.name))}! Para entregaros la invitación definitiva con la app de invitados solo falta el resto del pago.`) + mBtn(await payUrl(q), `Pagar ${euros(rest(q))}`)
+      + mP('En cuanto lo paguéis, os llega sola la invitación definitiva, sin marca de agua, con el acceso a la app.', true) }), `guest-custom-final-ask/${q.id}`);
+  return { q, ok };
+}
+
 /* ---------- Tarea de cada hora ---------- */
 async function tick(c: any) {
   const now = Date.now(), done: string[] = [];
@@ -196,6 +237,10 @@ async function tick(c: any) {
   for (let r of data || []) {
     // 1. Pagos hechos sin volver a la página.
     if (r.deposit_session || r.final_session || r.extra_session) { const before = r.status + r.extra_rounds; r = await refresh(c, r); if (r.status + r.extra_rounds !== before) done.push('paid:' + r.id); }
+    // Señal pagada sin pedido (falló al crearlo): se reintenta y se les manda el cuestionario.
+    if (['accepted', 'designing'].includes(r.status) && !r.order_id) {
+      try { const e = await ensureOrder(c, r); r = e.r; if (e.questionnaireUrl) await toCouple(r, 'Vuestro cuestionario', guestMail({ kicker: 'Diseño a medida', title: 'Contadnos los datos de vuestra boda.', preheader: 'Con esto empezamos vuestro diseño.', body: mP('Para empezar vuestro diseño necesitamos los datos de la boda. Se guarda solo: podéis dejarlo y seguir cuando queráis.') + mBtn(e.questionnaireUrl, 'Rellenar el cuestionario') }), `guest-custom-questionnaire/${r.id}`); done.push('order:' + r.id); } catch (e) { console.error('custom_order_retry', r.id, e); }
+    }
     // 2. Plazo de 48 h para mandar el presupuesto.
     if (r.status === 'new') {
       const due = Date.parse(r.created_at) + QUOTE_DUE;
@@ -282,6 +327,17 @@ Deno.serve(async (req) => {
     const action = txt(b.action, 40);
     if (action === 'tick') return json({ ok: true, ...(await tick(c)) });
 
+    if (action === 'order_approved') {
+      const id = txt(b.requestId, 40);
+      if (!/^[0-9a-f-]{36}$/.test(id) || txt(b.sig, 60) !== await internalSig('order_approved', id)) return json({ ok: false, error: 'forbidden' }, 403);
+      const { data: r } = await c.from('guest_custom_requests').select('*').eq('id', id).maybeSingle();
+      if (!r) return json({ ok: false, error: 'not_found' }, 404);
+      if (['final_sent', 'paid', 'delivered'].includes(r.status)) return json({ ok: true, already: true });
+      if (!['accepted', 'designing'].includes(r.status)) return json({ ok: false, error: 'invalid_status' }, 409);
+      const { ok } = await askFinal(c, r);
+      await toOwner(`Diseño aprobado · ${r.name}`, 'Diseño a medida', 'Han aprobado su diseño.', mP(`<b>${esc(r.name)}</b> ha aprobado su invitación a medida. Les ha llegado el enlace para pagar el resto (${esc(euros(rest(r)))}); al pagarlo se les entrega sola.`), `guest-custom-approved-owner/${r.id}`);
+      return json({ ok: true, emailed: ok });
+    }
     if (action === 'draft_status') {
       // Público: solo dice si la invitación a medida ya está pagada entera (para quitar la marca de borrador).
       const id = txt(b.id, 40); if (!/^[0-9a-f-]{36}$/i.test(id)) return json({ ok: false, error: 'invalid_id' }, 400);
@@ -296,13 +352,13 @@ Deno.serve(async (req) => {
       else if (action !== 'pay') r = await refresh(c, r);
       if (action === 'pay') {
         const what = b.part === 'extra' ? { part: 'extra', cents: EXTRA_CENTS, label: 'Ronda de cambios extra' } : partOf(r);
-        if (!what || (b.part === 'extra' && !['accepted', 'designing'].includes(r.status))) return json({ ok: false, error: 'nothing_to_pay' }, 409);
+        if (!what || (b.part === 'extra' && (r.order_id || !['accepted', 'designing'].includes(r.status)))) return json({ ok: false, error: 'nothing_to_pay' }, 409);
         const s = await checkout(r, what.part, what.cents, what.label);
         await c.from('guest_custom_requests').update({ [{ deposit: 'deposit_session', final: 'final_session', extra: 'extra_session' }[what.part]!]: s.id }).eq('id', r.id);
         return json({ ok: true, url: s.url });
       }
       const due = partOf(r);
-      return json({ ok: true, request: { name: first(r.name), status: r.status, tierName: tierName(r), what: TIERS[r.tier]?.what, quoteCents: r.quote_cents, quoteDays: r.quote_days, quoteNote: r.quote_note, depositCents: deposit(r), restCents: rest(r), due: due ? { part: due.part, cents: due.cents, label: due.label } : null, rounds: ROUNDS, extraCents: EXTRA_CENTS, extraRounds: r.extra_rounds, canBuyExtra: ['accepted', 'designing'].includes(r.status) } });
+      return json({ ok: true, request: { name: first(r.name), status: r.status, tierName: tierName(r), what: TIERS[r.tier]?.what, quoteCents: r.quote_cents, quoteDays: r.quote_days, quoteNote: r.quote_note, depositCents: deposit(r), restCents: rest(r), due: due ? { part: due.part, cents: due.cents, label: due.label } : null, rounds: ROUNDS, extraCents: EXTRA_CENTS, extraRounds: r.extra_rounds, canBuyExtra: !r.order_id && ['accepted', 'designing'].includes(r.status), withApp: !!r.order_id } });
     }
 
     if (!(await managerOk(c, req))) return json({ ok: false, error: 'manager_required' }, 403);
@@ -346,11 +402,7 @@ Deno.serve(async (req) => {
 
     if (action === 'final') {
       if (!['accepted', 'designing'].includes(r.status)) return json({ ok: false, error: 'invalid_status' }, 409);
-      const ts = new Date().toISOString();
-      const { data: q, error } = await c.from('guest_custom_requests').update({ status: 'final_sent', updated_at: ts, final_sent_at: ts, final_session: null }).eq('id', r.id).select('*').single();
-      if (error) throw error;
-      const ok = await toCouple(q, 'Último paso: el resto del pago', guestMail({ kicker: 'Diseño aprobado', title: 'Último paso.', preheader: `Pagad ${euros(rest(q))} y os la entregamos.`,
-        body: mP(`¡Qué bien que os encante, ${esc(first(q.name))}! Para entregaros la invitación definitiva con la app de invitados solo falta el resto del pago.`) + mBtn(await payUrl(q), `Pagar ${euros(rest(q))}`) }), `guest-custom-final-ask/${q.id}`);
+      const { q, ok } = await askFinal(c, r);
       return json({ ok: true, emailed: ok, payUrl: await payUrl(q), request: view(q) });
     }
 
@@ -402,6 +454,14 @@ Deno.serve(async (req) => {
     }
     if (action === 'deliver') {
       if (!['paid', 'delivered'].includes(r.status)) return json({ ok: false, error: 'invalid_status' }, 409);
+      if (r.order_id) {
+        // Pedido del sistema del catálogo: se entrega igual que el catálogo (enlace final y app).
+        const j = await callFlow('custom_deliver', String(r.order_id), { orderId: r.order_id }).catch((e) => ({ ok: false, error: String(e?.message || e) }));
+        if (!j.ok) return json({ ok: false, error: 'deliver_failed', detail: j.error }, 409);
+        const ts = new Date().toISOString();
+        const { data: q } = await c.from('guest_custom_requests').update({ status: 'delivered', delivery_url: j.inviteUrl || r.delivery_url, delivered_at: r.delivered_at || ts, updated_at: ts }).eq('id', r.id).select('*').single();
+        return json({ ok: true, request: view(q || r) });
+      }
       let invite = '';
       if (b.url) { try { const u = new URL(txt(b.url, 600)); if (u.protocol !== 'https:' || u.username || u.password) throw 0; invite = u.toString(); } catch { return json({ ok: false, error: 'invalid_url' }, 400); } }
       const a = await access(c, r), ts = new Date().toISOString();

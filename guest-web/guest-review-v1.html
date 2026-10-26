@@ -159,6 +159,7 @@ async function respond(decision) {
     }
     const x = await api(body);
     if (x.status === 'delivered') { done('Aprobada. ¡Enhorabuena!', 'Os acabamos de mandar un email con el enlace para vuestros invitados y el acceso a la app de invitados.'); return; }
+    if (x.status === 'approved' && x.payRest) { done('Aprobada. ¡Ya casi está!', 'Os acabamos de mandar por email el enlace para pagar el 50 % restante. En cuanto lo paguéis, os llega la invitación sin marca de agua y el acceso a la app de invitados.'); return; }
     if (x.status === 'approved') { done('Aprobada. ¡Enhorabuena!', 'La preparamos para enviar y os escribimos con el enlace para vuestros invitados y el acceso a la app.'); return; }
     if (x.status !== 'changes_requested') throw Error('unexpected_response');
     if (x.questionnaireToken) { location.href = `guest/catalog-questionnaire.html?t=${encodeURIComponent(x.questionnaireToken)}&parte=${part}`; return; }

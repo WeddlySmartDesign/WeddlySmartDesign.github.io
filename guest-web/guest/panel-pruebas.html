@@ -437,6 +437,7 @@ const couple = (o) => o.label || o.buyerEmail || 'Sin nombres todavía';
 // no tiene plazo público y usamos 48 h como plazo interno. Mismas reglas que los avisos por email.
 const HOUR = 3600000;
 function due(o) {
+  if (o.customRequestId || o.custom_request_id) return null;
   const st = o.status, sub = Date.parse(o.submittedAt || o.submitted_at || ''), app = Date.parse(o.approvedAt || o.approved_at || '');
   if (['submitted', 'designing', 'review_ready'].includes(st) && sub) return { at: sub + 72 * HOUR, goal: sub + 48 * HOUR, what: 'Enviar' };
   if (st === 'approved' && app) return { at: app + 48 * HOUR, goal: app + 24 * HOUR, what: 'Entregar' };
@@ -478,14 +479,14 @@ function card(o, flat = false) {
   return `<button class="card${flat ? ' flat' : ''}" type="button" data-id="${esc(o.id)}">
     ${d.image ? `<img src="../${esc(d.image)}" alt="" loading="lazy">` : '<span class="ph"></span>'}
     <span><b>${esc(couple(o))}</b><small>${esc(d.name)}${o.weddingDate ? ' · boda el ' + esc(day(o.weddingDate)) : ''}</small>
-    <span class="pill ${s.who === 'you' ? 'you' : s.who === 'done' ? 'ok' : ''}">${esc(s.label)}${o.revisionCount ? ` · ${o.revisionCount} ${o.revisionCount === 1 ? 'cambio' : 'cambios'}` : ''}</span>
+    <span class="pill ${s.who === 'you' ? 'you' : s.who === 'done' ? 'ok' : ''}">${esc(o.customRequestId && o.status === 'approved' ? 'Esperando el resto' : s.label)}${o.customRequestId ? ' · a medida' : ''}${o.revisionCount ? ` · ${o.revisionCount} ${o.revisionCount === 1 ? 'cambio' : 'cambios'}` : ''}</span>
     ${(() => { const d = due(o); if (!d) return `<small>${esc(when)}${o.mode === 'test' ? ' · prueba' : ''}</small>`; const t = dueText(d); return `<small class="due ${t.level}">${esc(t.short)} · ${esc(t.long.toLowerCase())}</small>`; })()}</span>
     <svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></button>`;
 }
 document.addEventListener('click', (e) => { const c = e.target.closest('.card[data-id]'); if (c) location.hash = '#/pedido/' + c.dataset.id; });
 
 function renderInbox() {
-  const g = (k) => orders.filter((o) => STATUS[o.status]?.group === k).sort((a, b) => (due(a)?.at ?? Infinity) - (due(b)?.at ?? Infinity));
+  const g = (k) => orders.filter((o) => (o.customRequestId && o.status === 'approved' ? 'waiting' : STATUS[o.status]?.group) === k).sort((a, b) => (due(a)?.at ?? Infinity) - (due(b)?.at ?? Infinity));
   const send = g('send'), deliver = g('deliver'), waiting = g('waiting'), mine = send.length + deliver.length + customs.filter((r) => CSTATUS[r.status]?.who === 'you').length;
   const sec = (title, list, flat) => list.length ? `<section class="sec"><h3><b>${list.length}</b> ${title}</h3><div class="cards">${list.map((o) => card(o, flat)).join('')}</div></section>` : '';
   $('inbox').innerHTML = `
@@ -513,6 +514,7 @@ function next(o) {
   if (['submitted', 'designing', 'review_ready'].includes(s)) return { title: o.revision_count ? 'Ya la han corregido' : 'Mírala y envíasela', text: o.revision_count ? 'La invitación se ha vuelto a montar con lo que han cambiado. Si la ves bien, les mandamos la nueva versión.' : 'Está montada con lo que han escrito en el cuestionario. Si la ves bien, se la mandamos por email para que la revisen.', btn: 'Enviar a la pareja', run: sendReview };
   if (s === 'review_sent') return { title: 'Esperando a la pareja', text: 'Tienen el enlace para aprobarla o cambiar una parte. Te avisará la bandeja cuando la aprueben.' };
   if (s === 'changes_requested') return { title: 'La pareja está corrigiendo', text: 'Han abierto la parte que querían cambiar. Cuando la envíen, volverá a tu bandeja ya montada de nuevo.' };
+  if (s === 'approved' && o.custom_request_id) return { title: 'Aprobada: esperando el resto', text: 'Les ha llegado el enlace para pagar el 50 % restante. En cuanto paguen, se les entrega sola, sin marca de agua y con la app. No tienes que hacer nada.' };
   if (s === 'approved') return { title: 'Aprobada', text: 'Al entregar, les llega por email el enlace definitivo para sus invitados y el acceso a la app de invitados.', btn: 'Entregar', run: deliver };
   if (s === 'cancelled') return { title: 'Devuelto', text: 'Se les devolvió el importe. Tienen su factura de devolución en el email.' };
   if (s === 'delivered') return { title: 'Entregada', text: 'Ya tienen su invitación y el acceso a la app. No tienes que hacer nada más.' };
@@ -560,7 +562,7 @@ async function openOrder(id) {
     $('title').textContent = names;
     $('order').innerHTML = `
       <div class="o-head"><span class="pill ${s.who === 'you' ? 'you' : s.who === 'done' ? 'ok' : ''}">${esc(s.label)}</span><h2>${esc(names)}</h2>
-        <p>${esc(d.name)}${c.date ? ' · boda el ' + esc(day(c.date)) : ''}${o.mode === 'test' ? ' · prueba sin pago' : ''}</p>${(() => { const d = due(o); if (!d) return ''; const t = dueText(d); return `<p class="due ${t.level}">${esc(t.short)} · ${esc(t.long.toLowerCase())}</p>`; })()}</div>
+        <p>${esc(d.name)}${c.date ? ' · boda el ' + esc(day(c.date)) : ''}${o.custom_request_id ? ` · <a href="#/medida/${esc(o.custom_request_id)}">a medida</a>` : ''}${o.mode === 'test' ? ' · prueba sin pago' : ''}</p>${(() => { const d = due(o); if (!d) return ''; const t = dueText(d); return `<p class="due ${t.level}">${esc(t.short)} · ${esc(t.long.toLowerCase())}</p>`; })()}</div>
       <div class="o-grid">
         <div class="stage">
           <div class="phone"><div class="screen" id="screen"><p>${config?.template ? 'Montando la invitación…' : 'Se verá aquí cuando envíen el cuestionario.'}</p></div></div>
@@ -1130,6 +1132,12 @@ async function openCustom(id) {
           <label>Qué incluye (lo leen en el email)<textarea id="qNote" placeholder="Ej.: Espejo en verde salvia con vuestras iniciales en la portada. Tipografía más fina en los textos.">${esc(r.quoteNote || '')}</textarea></label>
         </div>
         <div class="acts"><button class="btn" type="button" id="qSend">${r.status === 'new' ? 'Enviar presupuesto' : 'Enviar el nuevo presupuesto'}</button>${r.status === 'new' ? '<button class="btn line" type="button" id="cDecline">No la hago</button>' : ''}<p class="msg" role="alert" id="cMsg"></p></div>`;
+    } else if ((r.status === 'accepted' || r.status === 'designing') && r.orderId) {
+      act = `<h3>${r.status === 'accepted' ? 'Han pagado la señal' : 'Diseñando'}</h3>
+        <p>Señal de ${esc(eur(Math.round(r.quoteCents / 2)))} cobrada${r.quoteDays ? `. Les dijiste la primera propuesta en unos ${r.quoteDays} días` : ''}. Les ha llegado su cuestionario. Funciona como un pedido del catálogo: cuando lo envíen, lo tienes en Pedidos ya montado; ajústalo con el editor de estilo o cámbiale el diseño y mándales la propuesta desde allí.</p>
+        <ul class="guide"><li>La propuesta lleva la marca «Borrador» hasta que paguen el resto.</li><li>Tienen ${rounds} rondas de cambios; la extra la pagan ellos (${esc(eur(customsCfg.extraCents))}) desde la propia propuesta.</li><li>Al aprobarla les llega el pago del 50 % restante y, al pagarlo, se entrega sola con la app.</li></ul>
+        <div class="acts"><a class="btn" href="#/pedido/${esc(r.orderId)}">Abrir su pedido</a>${r.status === 'accepted' ? '<button class="btn line" type="button" id="cStart">Ya he empezado</button>' : ''}
+          <button class="link-btn" type="button" id="cFinal">Cobrar ya el resto sin esperar a que lo aprueben</button><p class="msg" role="alert" id="cMsg"></p></div>`;
     } else if (r.status === 'accepted' || r.status === 'designing') {
       act = `<h3>${r.status === 'accepted' ? 'Han pagado la señal' : 'Diseñando'}</h3>
         <p>Señal de ${esc(eur(Math.round(r.quoteCents / 2)))} cobrada${r.quoteDays ? `. Les dijiste la primera propuesta en unos ${r.quoteDays} días` : ''}. Mándales siempre el enlace de la propuesta, no capturas ni archivos: lleva la marca «Borrador» y se quita sola cuando pagan el resto.</p>
@@ -1144,7 +1152,7 @@ async function openCustom(id) {
           <button class="btn line" type="button" id="cExtra">Piden otra ronda: cobrar ${esc(eur(customsCfg.extraCents))}</button>
           <p class="msg" role="alert" id="cMsg"></p></div>`;
     } else if (r.status === 'final_sent') {
-      act = `<h3>Esperando el pago final</h3><p>Tienen el enlace para pagar ${esc(eur(r.quoteCents - Math.round(r.quoteCents / 2)))}. Cuando paguen, te llega un email y la factura sale sola.</p>`;
+      act = `<h3>Esperando el pago final</h3><p>Tienen el enlace para pagar ${esc(eur(r.quoteCents - Math.round(r.quoteCents / 2)))}. Cuando paguen, te llega un email y la factura sale sola.${r.orderId ? ' La invitación se les entrega sola con la app.' : ''}</p>`;
     } else if (r.status === 'paid') {
       act = `<h3>Todo pagado: entrégala</h3><p>Pega el enlace de su invitación terminada. Al entregar, les llega por email junto con su acceso a la app de invitados, igual que en una compra normal.</p>
         <div class="q-form"><label>Enlace de la invitación (opcional)<input id="dUrl" type="url" inputmode="url" placeholder="https://…" value="${esc(r.deliveryUrl || '')}"></label></div>

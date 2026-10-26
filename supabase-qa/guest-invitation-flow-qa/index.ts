@@ -166,7 +166,11 @@ const catalogOrigin=()=>String(qaEnv('GUEST_CATALOG_PUBLIC_ORIGIN')||'').trim().
 function partFromNote(note:string){const m=String(note||'').match(/^Parte: (.+)$/m);const i=m?QUESTIONNAIRE_PARTS.indexOf(m[1].trim()):-1;return i}
 function lastChangePart(order:any){const r=Array.isArray(order.revision_requests)?order.revision_requests:[];return r.length?partFromNote(r[r.length-1]?.note):-1}
 async function changeLink(order:any,part:number){return catalogOrigin()+'/guest/catalog-questionnaire.html?t='+encodeURIComponent(await capability(order.id,'q'))+(part>=0?'&parte='+part:'')}
-function changesInfo(o:any){const used=Number(o.revision_count||0),extra=Number(o.extra_changes||0);return {included:INCLUDED_CHANGES,used,extra,left:Math.max(0,INCLUDED_CHANGES+extra-used),extraCents:EXTRA_CHANGE_CENTS,max:MAX_CHANGES}}
+// Catalog: 3 included, 10 € each extra. Made-to-measure orders carry their own numbers (2 and 20 €).
+function changesInfo(o:any){const inc=o.included_changes??INCLUDED_CHANGES,cents=o.extra_change_cents??EXTRA_CHANGE_CENTS,used=Number(o.revision_count||0),extra=Number(o.extra_changes||0);return {included:inc,used,extra,left:Math.max(0,inc+extra-used),extraCents:cents,max:MAX_CHANGES,custom:!!o.custom_request_id}}
+// Calls between this function and guest-custom-qa are signed with the shared server secret.
+const internalSig=async(action:string,id:string)=>(await hmac('guest-internal-v1|'+action+'|'+id)).slice(0,40);
+const CUSTOM_FN=()=>String(Deno.env.get('SUPABASE_URL')||'').replace(/\/$/,'')+'/functions/v1/guest-custom-qa';
 async function stripe(path:string,init:RequestInit={}){
   const key=txt(Deno.env.get('GUEST_STRIPE_TEST_SECRET_KEY'),300);
   if(!key.startsWith('sk_test_'))throw Error('stripe_key_missing');
@@ -793,6 +797,14 @@ Deno.serve(async req=>{
       if(decision==='approve'){
         checkInvitationConfig(order.resolved_config||{},order);
         const {error}=await c.from('guest_invitation_orders').update({status:'approved',approved_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
+        // Made-to-measure: approving asks for the second 50 %; paying it delivers (guest-custom-qa calls custom_deliver).
+        if(order.custom_request_id){
+          const rid=String(order.custom_request_id);
+          const r=await fetch(CUSTOM_FN(),{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({action:'order_approved',requestId:rid,sig:await internalSig('order_approved',rid)})}).catch(()=>null);
+          const j=await r?.json().catch(()=>({}));
+          if(!j?.ok)await resend({to:['weddlysmartdesign@gmail.com'],subject:'Aprobada, falta pedir el resto · '+orderLabel(order),html:guestMail({kicker:'Revisar',title:'No se ha pedido el resto solo.',preheader:'Entra en A medida y pulsa cobrar el resto.',body:mP('<b>'+esc(orderLabel(order))+'</b> ha aprobado su diseño a medida, pero no se ha podido mandar el enlace del resto del pago ('+esc(String(j?.error||'sin respuesta'))+').')+mBtn(QA_PREVIEW+'/guest/panel-pruebas.html#/medida','Abrir A medida')})},'guest-custom-approved-fail/'+order.id);
+          return json({ok:true,status:'approved',payRest:true});
+        }
         // Auto-delivery: paid catalog orders get the final link and app access right away.
         const auto=await autoDeliver(c,{...order,status:'approved',approved_at:ts});
         if(auto.ok){
@@ -825,13 +837,38 @@ Deno.serve(async req=>{
       p.set('mode','payment');p.set('locale','es');p.set('submit_type','pay');p.set('payment_method_types[0]','card');
       if(to)p.set('customer_email',to);
       p.set('success_url',back+'&paid={CHECKOUT_SESSION_ID}');p.set('cancel_url',back);
-      p.set('line_items[0][quantity]','1');p.set('line_items[0][price_data][currency]','eur');p.set('line_items[0][price_data][unit_amount]',String(EXTRA_CHANGE_CENTS));
+      p.set('line_items[0][quantity]','1');p.set('line_items[0][price_data][currency]','eur');p.set('line_items[0][price_data][unit_amount]',String(info.extraCents));
       p.set('line_items[0][price_data][product_data][name]','Ronda de cambios extra · invitación GUEST');
       p.set('metadata[product]','guest_change');p.set('metadata[guest_order]',order.id);p.set('metadata[part]','extra_change');p.set('metadata[note]',note.slice(0,480));
       p.set('payment_intent_data[metadata][guest_order]',order.id);p.set('payment_intent_data[metadata][part]','extra_change');
-      const s=await stripe('checkout/sessions',{method:'POST',headers:{'Idempotency-Key':'guest-change/'+order.id+'/'+info.used+'/'+info.extra+'/'+(await sha256(note)).slice(0,16)},body:p.toString()});
+      const s=await stripe('checkout/sessions',{method:'POST',headers:{'Idempotency-Key':'guest-change/'+order.id+'/'+info.used+'/'+info.extra+'/'+info.extraCents+'/'+(await sha256(note)).slice(0,16)},body:p.toString()});
       const {error}=await c.from('guest_invitation_orders').update({change_payment:{session:s.id,note,at:now()}}).eq('id',order.id);if(error)throw error;
       return json({ok:true,url:s.url});
+    }
+    if(action==='custom_create'){
+      // From guest-custom-qa when the deposit is paid: the made-to-measure couple gets a catalog order on the base design.
+      const rid=txt(b.requestId,40);if(!/^[0-9a-f-]{36}$/.test(rid)||txt(b.sig,60)!==await internalSig('custom_create',rid))return json({ok:false,error:'forbidden'},403);
+      const {data:had}=await c.from('guest_invitation_orders').select('id').eq('custom_request_id',rid).maybeSingle();
+      let id=had?.id;
+      if(!id){
+        const licenseId=txt(b.licenseId,40);if(!/^[0-9a-f-]{36}$/.test(licenseId))return json({ok:false,error:'invalid_license_id'},400);
+        const tpl=CATALOG_TEMPLATES[txt(b.templateId,60)]?txt(b.templateId,60):'veil-light';
+        const created=await createOrder(c,'production',txt(b.email,200),licenseId,null,tpl);id=created.id;
+        const {error}=await c.from('guest_invitation_orders').update({custom_request_id:rid,included_changes:Math.max(0,Math.min(10,Number(b.included)||2)),extra_change_cents:Math.max(0,Math.min(20000,Number(b.extraCents)||2000)),owner_notes:'Diseño a medida · '+txt(b.tierName,40)}).eq('id',id);if(error)throw error;
+      }
+      return json({ok:true,orderId:id,questionnaireUrl:catalogOrigin()+'/guest/catalog-questionnaire.html?t='+encodeURIComponent(await capability(id,'q'))});
+    }
+    if(action==='custom_deliver'){
+      // From guest-custom-qa when the second 50 % is paid: deliver like a catalog order (final link + app access).
+      const oid=txt(b.orderId,40);if(!/^[0-9a-f-]{36}$/.test(oid)||txt(b.sig,60)!==await internalSig('custom_deliver',oid))return json({ok:false,error:'forbidden'},403);
+      const order=await getOrder(c,oid);if(!order||!order.custom_request_id)return json({ok:false,error:'order_not_found'},404);
+      if(order.status==='delivered')return json({ok:true,status:'delivered',inviteUrl:order.delivery_url});
+      // The owner may have charged the rest before the couple pressed «Aprobar»: paying it counts as approving.
+      if(['review_ready','review_sent','changes_requested'].includes(order.status)){const ts=now();const {error}=await c.from('guest_invitation_orders').update({status:'approved',approved_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;order.status='approved';order.approved_at=ts}
+      // Still without a reviewed proposal (questionnaire not sent or not built yet): the owner delivers later from the panel.
+      if(order.status!=='approved')return json({ok:false,error:'not_ready',status:order.status},409);
+      const url=catalogOrigin()+'/guest/catalog-final.html?p='+encodeURIComponent(await capability(order.id,'p'));
+      return await deliverOrder(c,order,url);
     }
     if(action==='public_load'){
       const order=await findByToken(c,String(b.token||''),'public_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
@@ -942,8 +979,8 @@ Deno.serve(async req=>{
       return json({ok:true,status:'linked_test_guest_management',alreadyLinked:false});
     }
     if(action==='list'){
-      const {data:rows,error}=await c.from('guest_invitation_orders').select('id,mode,buyer_email,template_id,status,questionnaire,created_at,updated_at,submitted_at,designing_at,review_sent_at,approved_at,delivered_at,revision_count').order('updated_at',{ascending:false}).limit(200);if(error)throw error;
-      return json({ok:true,orders:(rows||[]).map((x:any)=>({id:x.id,mode:x.mode,buyerEmail:x.buyer_email,templateId:x.template_id,status:x.status,label:orderLabel(x),weddingDate:txt(x.questionnaire?.couple?.date,20),createdAt:x.created_at,updatedAt:x.updated_at,submittedAt:x.submitted_at,reviewSentAt:x.review_sent_at,approvedAt:x.approved_at,deliveredAt:x.delivered_at,revisionCount:x.revision_count||0}))});
+      const {data:rows,error}=await c.from('guest_invitation_orders').select('id,mode,buyer_email,template_id,status,questionnaire,created_at,updated_at,submitted_at,designing_at,review_sent_at,approved_at,delivered_at,revision_count,custom_request_id').order('updated_at',{ascending:false}).limit(200);if(error)throw error;
+      return json({ok:true,orders:(rows||[]).map((x:any)=>({id:x.id,mode:x.mode,buyerEmail:x.buyer_email,templateId:x.template_id,status:x.status,label:orderLabel(x),weddingDate:txt(x.questionnaire?.couple?.date,20),createdAt:x.created_at,updatedAt:x.updated_at,submittedAt:x.submitted_at,reviewSentAt:x.review_sent_at,approvedAt:x.approved_at,deliveredAt:x.delivered_at,customRequestId:x.custom_request_id||null,revisionCount:x.revision_count||0}))});
     }
     if(action==='detail'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);

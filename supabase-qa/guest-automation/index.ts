@@ -66,6 +66,8 @@ const crossed = (t: number, now: number) => t > now - 3 * H && t <= now;
 
 /* ---------- Plazos de la propietaria ---------- */
 function deadline(o: any) {
+  // A medida: sus plazos (días prometidos y pago final) los lleva guest-custom.
+  if (o.custom_request_id) return null;
   if (o.mode === 'test' && Date.now() - Date.parse(o.created_at) > 14 * D) return null;
   const sub = Date.parse(o.submitted_at || ''), app = Date.parse(o.approved_at || '');
   if (['submitted', 'designing', 'review_ready'].includes(o.status) && sub) return { kind: 'proposal', start: sub, due: sub + PROPOSAL_DUE, goal: sub + PROPOSAL_GOAL, what: o.revision_count ? 'Enviar la versión corregida' : 'Enviar la propuesta' };
@@ -172,7 +174,7 @@ async function retention(c: any, now: number) {
 async function tick(c: any) {
   const now = Date.now(), sent: string[] = [];
   const { data: rows, error } = await c.from('guest_invitation_orders')
-    .select('id,mode,status,buyer_email,template_id,checkout_session_id,questionnaire,created_at,updated_at,submitted_at,review_sent_at,approved_at,delivered_at,revision_count,revision_requests')
+    .select('id,mode,status,buyer_email,template_id,checkout_session_id,questionnaire,created_at,updated_at,submitted_at,review_sent_at,approved_at,delivered_at,revision_count,revision_requests,custom_request_id')
     .neq('status', 'cancelled').order('created_at', { ascending: false }).limit(1000);
   if (error) throw error;
   const all = rows || [];
