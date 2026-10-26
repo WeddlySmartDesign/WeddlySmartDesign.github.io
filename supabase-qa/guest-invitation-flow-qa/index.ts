@@ -13,6 +13,8 @@ const db=()=>createClient(Deno.env.get('SUPABASE_URL')!,secretKey(),{auth:{persi
 /* QA COPY of guest-invitation-flow v21 (live, untouched). Every catalog design is sellable here,
  * review/final links point to the branch preview, and emails only reach the owner's own addresses. */
 const AUTO_CORRECTIONS=false;
+// Change rounds a couple can ask for from the review page (the table allows up to 20).
+const MAX_CHANGES=20;
 const QA_PREVIEW='https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
 const QA_EMAILS=['weddlysmartdesign@gmail.com','pilarrodriguezbonilla@gmail.com','info@weddlysmartdesign.com'];
 const qaEnv=(n:string)=>n==='GUEST_CATALOG_PUBLIC_ORIGIN'?QA_PREVIEW+'/':(Deno.env.get(n)||'');
@@ -766,6 +768,7 @@ Deno.serve(async req=>{
         return json({ok:true,status:'approved'});
       }
       const note=txt(b.note,1500);if(!note)return json({ok:false,error:'changes_note_required'},400);
+      if(Number(order.revision_count||0)>=MAX_CHANGES)return json({ok:false,error:'too_many_changes'},409);
       // 'before' keeps the questionnaire as it was, so the owner app can show only what changed.
       const history=[...(Array.isArray(order.revision_requests)?order.revision_requests:[]),{at:ts,note,before:order.questionnaire||{}}];
       const {error}=await c.from('guest_invitation_orders').update({status:'changes_requested',revision_count:Number(order.revision_count||0)+1,revision_requests:history,updated_at:ts}).eq('id',order.id);if(error)throw error;
@@ -816,8 +819,9 @@ Deno.serve(async req=>{
         .select('id,source,source_order_id,status,metadata').eq('id',licenseId).maybeSingle();
       if(le)throw le;
       const checkoutId=String(license?.source_order_id||''),meta=license?.metadata||{};
+      // After delivery the license becomes a regular app license ('guests'); it is still this purchase.
       if(!license||license.source!=='stripe'||license.status!=='active'||
-         meta.product!=='guest'||!/^cs_(?:test|live)_[A-Za-z0-9]+$/.test(checkoutId)||
+         !(meta.product==='guest'||(meta.product==='guests'&&meta.purchased_product==='guest'))||!/^cs_(?:test|live)_[A-Za-z0-9]+$/.test(checkoutId)||
          meta.guest_catalog_template_id!==spec.id||
          String(meta.guest_catalog_template_version||'')!==String(spec.version))
         return json({ok:false,error:'paid_catalog_template_not_purchased'},409);
@@ -928,18 +932,49 @@ Deno.serve(async req=>{
       return await deliverOrder(c,order,b.invitationUrl);
     }
     if(action==='owner_fix'){
-      // The owner fixes one text (a typo) without bothering the couple; the invitation is rebuilt.
+      // The owner fixes one text (a typo, a new time) without bothering the couple; the invitation is rebuilt.
+      // Before sending it goes back to "designing"; once sent, approved or delivered it keeps its status
+      // and the couple sees the fix the next time they (or their guests) open the link.
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
-      if(!['submitted','designing','review_ready'].includes(order.status))return json({ok:false,error:'invalid_status'},409);
+      if(!['submitted','designing','review_ready','review_sent','approved','delivered'].includes(order.status))return json({ok:false,error:'invalid_status'},409);
       const path=String(b.path||'').split('.');if(!path.length||path.length>5||path.some(k=>!/^[A-Za-z0-9]{1,40}$/.test(k))||['confirmation','contact'].includes(path[0]))return json({ok:false,error:'invalid_path'},400);
       const q=sanitizeQuestionnaire(order.questionnaire||{});let node:any=q;
       for(const k of path.slice(0,-1)){if(!node||typeof node!=='object'||!(k in node))return json({ok:false,error:'invalid_path'},400);node=node[k]}
       const last=path[path.length-1];if(!node||typeof node!=='object'||typeof node[last]!=='string')return json({ok:false,error:'invalid_path'},400);
       node[last]=txt(b.value,Math.max(60,node[last].length*2,500));
-      const ts=now(),config=checkInvitationConfig(buildConfig(q,order.files||[],'#',order.template_id,order.template_version),order);
-      const {error}=await c.from('guest_invitation_orders').update({questionnaire:q,resolved_config:config,status:'designing',designing_at:order.designing_at||ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
-      const files=await signedFiles(c,{...order,resolved_config:config},7200);
-      return json({ok:true,status:'designing',questionnaire:q,config:hydrateConfig(config,files)});
+      const ts=now(),built=checkInvitationConfig(buildConfig(q,order.files||[],'#',order.template_id,order.template_version),order);
+      const early=['submitted','designing','review_ready'].includes(order.status),livePublic=order.status==='delivered'&&order.mode==='production';
+      // A delivered real order stores its config with the public photo URLs, like deliverOrder does.
+      const publicFiles=livePublic?(order.files||[]).map((x:any)=>({...x,url:x.publicUrl||''})):[];
+      const config=livePublic?checkInvitationConfig(hydrateConfig(built,publicFiles),order,publicFiles,'hydrated'):built;
+      const patch:any={questionnaire:q,resolved_config:config,updated_at:ts};
+      if(early)Object.assign(patch,{status:'designing',designing_at:order.designing_at||ts});
+      const {error}=await c.from('guest_invitation_orders').update(patch).eq('id',order.id);if(error)throw error;
+      const files=livePublic?publicFiles:await signedFiles(c,{...order,resolved_config:built},7200);
+      return json({ok:true,status:early?'designing':order.status,questionnaire:q,config:livePublic?config:hydrateConfig(built,files)});
+    }
+    if(action==='change_design'){
+      // The couple wants another design before it is approved: same data, same photos, new template.
+      const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
+      if(['approved','delivered','cancelled'].includes(order.status))return json({ok:false,error:'invalid_status'},409);
+      const spec=templateSpec(txt(b.templateId,80));
+      if(spec.id===order.template_id)return json({ok:true,status:order.status,unchanged:true});
+      assertCatalogOrderMode(spec,order.mode==='test'?'test':'production');
+      const moved={...order,template_id:spec.id,template_version:spec.version},ts=now();
+      const submitted=!['draft','changes_requested'].includes(order.status);
+      const patch:any={template_id:spec.id,template_version:spec.version,style_overrides:null,updated_at:ts,
+        owner_notes:[order.owner_notes,`${ts.slice(0,10)}: diseño cambiado de ${order.template_id} a ${spec.id}`].filter(Boolean).join('\n')};
+      if(submitted){patch.resolved_config=checkInvitationConfig(buildConfig(order.questionnaire||{},order.files||[],'#',spec.id,spec.version),moved);patch.status='designing';patch.designing_at=order.designing_at||ts}
+      const {error}=await c.from('guest_invitation_orders').update(patch).eq('id',order.id);if(error)throw error;
+      // Keep the paid license pinned to the design that is actually being made.
+      if(order.license_id){
+        const {data:lic}=await c.from('licenses').select('metadata').eq('id',order.license_id).maybeSingle();
+        if(lic?.metadata?.guest_catalog_template_id){
+          const {error:le}=await c.from('licenses').update({metadata:{...lic.metadata,guest_catalog_template_id:spec.id,guest_catalog_template_version:spec.version,guest_catalog_template_changed_from:order.template_id},updated_at:ts}).eq('id',order.license_id);
+          if(le)console.error('license_design_pin',le);
+        }
+      }
+      return json({ok:true,status:patch.status||order.status,templateId:spec.id});
     }
     if(action==='owner_style'){
       // Texts, fonts, sizes and colours chosen by the owner in her editor; same template, nothing rebuilt.
@@ -960,5 +995,5 @@ Deno.serve(async req=>{
       const {error}=await c.from('guest_invitation_orders').update({status:'designing',updated_at:now()}).eq('id',order.id);if(error)throw error;return json({ok:true,status:'designing'});
     }
     return json({ok:false,error:'invalid_action'},400);
-  }catch(e){const m=String((e as Error)?.message||'');console.error(e);if(['missing_signed_asset','missing_invitation_upload','missing_order_template_pin'].includes(m))return json({ok:false,error:m},409);if(['invalid_invitation_config','invitation_template_pin_mismatch','invalid_invitation_media','invalid_invitation_rsvp_route','untrusted_legacy_invitation'].includes(m))return json({ok:false,error:m},400);if(['questionnaire_too_large','invalid_file_type','file_too_large','invalid_upload','changes_note_required','missing_email','invalid_config','config_too_large','template_unavailable','missing_invitation_url','missing_management_license','missing_management_access'].includes(m))return json({ok:false,error:m},400);return json({ok:false,error:'server_error'},500)}
+  }catch(e){const m=String((e as Error)?.message||'');console.error(e);if(['missing_signed_asset','missing_invitation_upload','missing_order_template_pin'].includes(m))return json({ok:false,error:m},409);if(['invalid_invitation_config','invitation_template_pin_mismatch','invalid_invitation_media','invalid_invitation_rsvp_route','untrusted_legacy_invitation'].includes(m))return json({ok:false,error:m},400);if(m==='template_unavailable')return json({ok:false,error:m},400);if(['questionnaire_too_large','invalid_file_type','file_too_large','invalid_upload','changes_note_required','missing_email','invalid_config','config_too_large','template_unavailable','missing_invitation_url','missing_management_license','missing_management_access'].includes(m))return json({ok:false,error:m},400);return json({ok:false,error:'server_error'},500)}
 });

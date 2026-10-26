@@ -139,8 +139,8 @@ async function respond(decision) {
     if (x.status !== 'changes_requested') throw Error('unexpected_response');
     if (x.questionnaireToken) { location.href = `guest/catalog-questionnaire.html?t=${encodeURIComponent(x.questionnaireToken)}&parte=${part}`; return; }
     done('Recibido.', 'Os mandamos el enlace para hacer el cambio por email.');
-  } catch {
-    $('msg').textContent = 'No se ha podido enviar. Probad de nuevo en un momento.';
+  } catch (e) {
+    $('msg').textContent = e?.message === 'too_many_changes' ? 'Ya habéis hecho muchos cambios desde aquí. Escribidnos a info@weddlysmartdesign.com y lo vemos juntos.' : e?.message === 'review_locked' ? 'Esta versión ya no admite cambios. Recargad la página.' : 'No se ha podido enviar. Probad de nuevo en un momento.';
     document.querySelectorAll('.sheet .btn').forEach((b) => { b.disabled = false; });
   } finally { busy = false; }
 }

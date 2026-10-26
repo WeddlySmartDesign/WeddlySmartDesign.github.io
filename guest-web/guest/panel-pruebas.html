@@ -150,7 +150,8 @@
     .meter { display: flex; gap: .35rem; margin-top: .5rem; }
     .meter i { flex: 1; height: 8px; border-radius: 4px; background: var(--line); }
     .meter i.on { background: var(--ink); }
-    .meter i.extra { background: var(--postmark); }
+    .meter i.extra { background: #f1d3d7; }
+    .meter i.on.extra { background: var(--postmark); }
 
     /* Pedido */
     .order { padding: 1rem 16px calc(7.5rem + env(safe-area-inset-bottom, 0px)); max-width: 64rem; margin: 0 auto; }
@@ -305,6 +306,7 @@
     .st-leave { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: .7rem 12px; background: #fbe4e6; color: var(--postmark); font-weight: 600; font-size: .9375rem; }
     .st-leave span { flex: 1 1 12rem; }
     .st-open { margin-top: 1rem; }
+    .fix-sel { width: 100%; min-height: 52px; padding: .7rem .8rem; border: 1.5px solid var(--line); border-radius: 10px; background: var(--white); color: var(--ink); font: 400 1rem/1.3 var(--text); }
     .st-note { margin: 0 0 1rem; padding: .7rem .85rem; border-radius: 10px; background: #fbecd9; color: #8a4a0a; font-size: .875rem; }
     @media (min-width: 900px) {
       .st-body { grid-template-rows: none; grid-template-columns: minmax(0, 1fr) 440px; }
@@ -570,6 +572,12 @@ async function openOrder(id) {
             ${reqs.length && ['designing', 'review_ready'].includes(o.status) ? `<div class="ask"><b>Lo que pidieron cambiar${reqs.length > 1 ? ` (la última de ${reqs.length} veces)` : ''}</b>${esc(reqs[0].note)}</div>` : ''}</div>
           ${config?.template && ['designing', 'review_ready'].includes(o.status) ? '<div class="box texts" id="texts"><h3>Textos</h3><p>Revisando los textos…</p></div>' : ''}
           ${config?.template && o.status !== 'cancelled' ? `<div class="box"><h3>Retocar el diseño</h3><p>${o.style_overrides ? `Tiene ${stCount(o.style_overrides)} ${stCount(o.style_overrides) === 1 ? 'retoque' : 'retoques'} tuyos. ` : ''}Títulos, tipos de letra, tamaños y colores, viéndolo en directo antes de guardar.</p><div class="st-open"><button class="btn line" type="button" id="openStudio"><svg width="18" height="18" aria-hidden="true"><use href="#i-pen"/></svg>Abrir el editor</button></div></div>` : ''}
+          ${['submitted', 'designing', 'review_ready', 'review_sent', 'approved', 'delivered'].includes(o.status) && o.resolved_config && Object.keys(o.resolved_config).length ? `<div class="box" id="fixBox"><h3>Corregir un dato</h3><p>${o.status === 'delivered' ? 'Ya está entregada: el cambio sale al momento en el enlace que tienen sus invitados. Avísales tú si hace falta.' : ['review_sent', 'approved'].includes(o.status) ? 'Lo verán corregido la próxima vez que abran su enlace.' : 'Un cambio de hora, un lugar, una falta… La invitación se vuelve a montar sola.'}</p>
+            <div class="q-form"><label>Qué quieres cambiar<select id="fixPath" class="fix-sel"></select></label><label>Texto nuevo<textarea id="fixVal" rows="2" spellcheck="true" lang="es"></textarea></label></div>
+            <div class="st-open"><button class="btn line" type="button" id="fixGo">Guardar el cambio</button><p class="msg" role="alert" id="fixMsg"></p></div></div>` : ''}
+          ${!['approved', 'delivered', 'cancelled'].includes(o.status) ? `<div class="box"><h3>Cambiar de diseño</h3><p>Si te piden otro diseño antes de aprobarla, se monta el nuevo con los mismos datos y fotos.${o.status === 'review_sent' ? ' Después tendrás que volver a enviársela.' : ''}</p>
+            <div class="q-form"><label>Nuevo diseño<select id="dsSel" class="fix-sel">${(window.GUEST_CATALOG || []).filter((x) => x.id !== o.template_id).map((x) => `<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select></label></div>
+            <div class="st-open"><button class="btn line" type="button" id="dsGo">Cambiar a este diseño</button><p class="msg" role="alert" id="dsMsg"></p></div></div>` : ''}
           <div class="box"><h3>Cómo va</h3>${timeline(o)}</div>
           <div class="box"><h3>La pareja</h3><ul class="rows">
             ${email ? `<li><a href="mailto:${esc(email)}"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>Escribirles<small>${esc(email)}</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>` : ''}
@@ -586,6 +594,23 @@ async function openOrder(id) {
       </div>`;
     loadInvoices(o.id);
     if ($('texts')) renderTexts(o, $('texts'));
+    if ($('fixBox')) {
+      const all = flat(q), opts = Object.entries(all).filter(([p, v]) => typeof v === 'string' && label(p) && active(q, p) && !/(presetId|typographyVariant|\.mode)$/.test(p) && !/^(contact|confirmation)\./.test(p));
+      $('fixPath').innerHTML = opts.map(([p, v]) => `<option value="${esc(p)}">${esc(label(p))}${v ? ' · ' + esc(String(v).slice(0, 28)) + (String(v).length > 28 ? '…' : '') : ''}</option>`).join('');
+      const fill = () => { $('fixVal').value = all[$('fixPath').value] || ''; };
+      $('fixPath').onchange = fill; fill();
+      $('fixGo').onclick = async () => {
+        const b = $('fixGo'); b.disabled = true; b.textContent = 'Un momento…'; $('fixMsg').textContent = '';
+        try { await flow({ action: 'owner_fix', orderId: o.id, path: $('fixPath').value, value: $('fixVal').value.trim() }); toast(o.status === 'delivered' ? 'Corregido. Ya sale en su invitación.' : 'Corregido.'); openOrder(o.id); }
+        catch (e) { if (e.message === 'manager_required') return; $('fixMsg').textContent = ['invalid_invitation_config', 'invalid_invitation_media'].includes(e.message) ? 'Ese valor no encaja (revisa el formato: hora 18:30, enlaces con https://).' : 'No ha salido. Prueba otra vez.'; b.disabled = false; b.textContent = 'Guardar el cambio'; }
+      };
+    }
+    if ($('dsGo')) $('dsGo').onclick = async () => {
+      const b = $('dsGo'); if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = '¿Seguro? Pulsa otra vez'; return; }
+      b.disabled = true; b.textContent = 'Montando…'; $('dsMsg').textContent = '';
+      try { await flow({ action: 'change_design', orderId: o.id, templateId: $('dsSel').value }); toast('Diseño cambiado. Revísalo antes de enviarlo.'); await refresh(); openOrder(o.id); }
+      catch (e) { if (e.message === 'manager_required') return; $('dsMsg').textContent = 'No se ha podido montar con este diseño. Prueba con otro o dímelo.'; b.disabled = false; b.dataset.sure = ''; b.textContent = 'Cambiar a este diseño'; }
+    };
     if ($('refundAsk')) {
       $('refundAsk').onclick = () => { $('refundAsk').parentElement.hidden = true; $('refundAsk').closest('.box').querySelector('.refund-confirm').hidden = false; };
       $('refundNo').onclick = () => { $('refundAsk').parentElement.hidden = false; $('refundNo').closest('.refund-confirm').hidden = true; };
@@ -1019,7 +1044,8 @@ const CSTATUS = {
   final_sent: { label: 'Esperando el pago final', who: 'them' },
   paid: { label: 'Pagado: entregar', who: 'you' },
   delivered: { label: 'Entregada', who: 'done' },
-  declined: { label: 'Descartada', who: 'done' }
+  declined: { label: 'Descartada', who: 'done' },
+  refunded: { label: 'Devuelto', who: 'done' }
 };
 // Lo que entra en cada nivel, para presupuestar sin dudar.
 const SCOPE = {
@@ -1081,9 +1107,12 @@ async function openCustom(id) {
     } else if (r.status === 'accepted' || r.status === 'designing') {
       act = `<h3>${r.status === 'accepted' ? 'Han pagado la señal' : 'Diseñando'}</h3>
         <p>Señal de ${esc(eur(Math.round(r.quoteCents / 2)))} cobrada${r.quoteDays ? `. Les dijiste la primera propuesta en unos ${r.quoteDays} días` : ''}. Manda las propuestas por email o WhatsApp como siempre.</p>
-        <p style="margin-top:.8rem"><b>Rondas de cambios:</b> ${rounds} incluidas${extra ? ` + ${extra} extra pagada${extra > 1 ? 's' : ''}` : ''}.</p>
-        <div class="meter" aria-hidden="true">${Array.from({ length: rounds }, () => '<i class="on"></i>').join('')}${Array.from({ length: extra }, () => '<i class="extra"></i>').join('')}</div>
+        ${(() => { const used = r.roundsUsed || 0, total = rounds + extra, leftR = total - used;
+          return `<p style="margin-top:.8rem"><b>Propuestas mandadas: ${used}</b> · ${rounds} rondas incluidas${extra ? ` + ${extra} extra pagada${extra > 1 ? 's' : ''}` : ''}.</p>
+          <div class="meter" aria-label="${used} de ${total} usadas">${Array.from({ length: Math.max(total, used) }, (_, i) => `<i class="${i < used ? 'on' : ''}${i >= rounds ? ' extra' : ''}"></i>`).join('')}</div>
+          <p style="margin-top:.5rem">${leftR > 0 ? `Les ${leftR === 1 ? 'queda 1 ronda' : `quedan ${leftR} rondas`} de cambios.` : '<b>Ya no les quedan rondas.</b> Si piden más cambios, cóbrales una ronda extra antes de hacerlos.'}</p>`; })()}
         <div class="acts">
+          <button class="btn line" type="button" id="cRound">He mandado una propuesta</button>${r.roundsUsed ? '<button class="link-btn" type="button" id="cRoundUndo">Me he equivocado: quitar una</button>' : ''}
           ${r.status === 'accepted' ? '<button class="btn line" type="button" id="cStart">Ya he empezado</button>' : ''}
           <button class="btn" type="button" id="cFinal">Lo han aprobado: cobrar el resto (${esc(eur(r.quoteCents - Math.round(r.quoteCents / 2)))})</button>
           <button class="btn line" type="button" id="cExtra">Piden otra ronda: cobrar ${esc(eur(customsCfg.extraCents))}</button>
@@ -1104,6 +1133,13 @@ async function openCustom(id) {
         <p>${esc(r.tierName)}${r.weddingDate ? ' · boda el ' + esc(day(r.weddingDate)) : ''}${r.urgencyLabel ? ' · ' + esc(r.urgencyLabel.toLowerCase()) : ''}${r.test ? ' · prueba' : ''}</p></div>
       <div style="display:grid;gap:1rem;margin-top:1.25rem;max-width:44rem">
         <div class="box">${act}</div>
+        ${(r.depositCents || r.finalCents) && r.status !== 'refunded' ? `<div class="box refund"><h3>Devolver el dinero</h3>
+          <p>Han pagado ${esc(eur(r.depositCents + r.finalCents))}${r.finalCents ? ' (señal y resto)' : ' (la señal)'}. Según tus condiciones, la señal no se devuelve una vez empezado el diseño; úsalo si lo cancelas tú o si decides devolverla igualmente. Las rondas extra no se devuelven.</p>
+          ${r.refundNote ? `<p style="margin-top:.6rem"><b>Ya devuelto:</b> ${esc(r.refundNote)}</p>` : ''}
+          <div class="refund-go btns">${r.depositCents && r.finalCents ? `<button class="btn line small" type="button" data-refund="all">Devolver todo (${esc(eur(r.depositCents + r.finalCents))})</button><button class="btn line small" type="button" data-refund="final">Solo el resto (${esc(eur(r.finalCents))})</button>` : `<button class="btn line small" type="button" data-refund="deposit">Devolver la señal (${esc(eur(r.depositCents))})</button>`}</div>
+          <div class="refund-confirm" hidden><p><b>¿Seguro?</b> No se puede deshacer. Les llega un email con la factura de la devolución.</p><div class="btns"><button class="btn danger" type="button" id="cRefundYes">Sí, devolver</button><button class="btn line" type="button" id="cRefundNo">No</button></div></div>
+          <p class="msg" id="cRefundMsg" role="alert"></p></div>` : ''}
+        ${r.status === 'refunded' ? `<div class="box"><h3>Devuelto</h3><p>${esc(r.refundNote || 'Se les devolvió el importe.')}</p></div>` : ''}
         <div class="box brief"><h3>Lo que piden</h3><dl>
           ${base ? `<div><dt>DISEÑO DE PARTIDA</dt><dd class="base-row">${base.image ? `<img src="../${esc(base.image)}" alt="">` : ''}<span>${esc(base.name)}</span></dd></div>` : ''}
           ${r.wishes?.length ? `<div><dt>QUIEREN CAMBIAR</dt><dd class="tags">${r.wishes.map((w) => `<span>${esc(w)}</span>`).join('')}</dd></div>` : ''}
@@ -1136,6 +1172,16 @@ async function openCustom(id) {
     }
     if ($('cDecline')) $('cDecline').onclick = () => run($('cDecline'), () => custom({ action: 'update', id, status: 'declined' }), 'Descartada.');
     if ($('cReopen')) $('cReopen').onclick = () => run($('cReopen'), () => custom({ action: 'update', id, status: 'new' }), 'Recuperada.');
+    if ($('cRound')) $('cRound').onclick = () => run($('cRound'), () => custom({ action: 'round', id }), 'Apuntada la propuesta.');
+    if ($('cRoundUndo')) $('cRoundUndo').onclick = () => run($('cRoundUndo'), () => custom({ action: 'round', id, undo: true }), 'Quitada.');
+    let refundPart = '';
+    $('order').querySelectorAll('[data-refund]').forEach((b) => b.onclick = () => { refundPart = b.dataset.refund; b.parentElement.hidden = true; b.closest('.box').querySelector('.refund-confirm').hidden = false; });
+    if ($('cRefundNo')) $('cRefundNo').onclick = () => { const box = $('cRefundNo').closest('.box'); box.querySelector('.refund-go').hidden = false; box.querySelector('.refund-confirm').hidden = true; };
+    if ($('cRefundYes')) $('cRefundYes').onclick = async () => {
+      const b = $('cRefundYes'); b.disabled = true; b.textContent = 'Devolviendo…';
+      try { const j = await custom({ action: 'refund', id, part: refundPart }); toast(`Devueltos ${eur(j.refundedCents)}.`); await loadCustom(); openCustom(id); }
+      catch (e) { if (e.message === 'manager_required') return; $('cRefundMsg').textContent = e.message === 'nothing_to_refund' ? 'No queda nada por devolver.' : 'No ha salido. Prueba otra vez o hazlo desde Stripe.'; b.disabled = false; b.textContent = 'Sí, devolver'; }
+    };
     if ($('cStart')) $('cStart').onclick = () => run($('cStart'), () => custom({ action: 'update', id, status: 'designing' }), 'Apuntado.');
     if ($('cFinal')) $('cFinal').onclick = () => run($('cFinal'), () => custom({ action: 'final', id }), 'Les ha llegado el enlace del pago final.');
     if ($('cExtra')) $('cExtra').onclick = () => run($('cExtra'), () => custom({ action: 'extra', id }), 'Les ha llegado el enlace de la ronda extra.');

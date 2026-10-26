@@ -298,6 +298,9 @@ Deno.serve(async req=>{
     if(l?.metadata?.guest_order_email_sent_at)continue;
     try{const full=await retrieveSession(String(s.id));await provision(full);done++}catch(e){failed.push(String(s.id).slice(-8)+':'+String((e as Error)?.message||'error'))}
    }
+   // Si una compra pagada no consigue su pedido y su email, que lo sepa la propietaria (una vez al día).
+   if(failed.length)await resend({idempotencyKey:'guest-sweep-failed/'+new Date().toISOString().slice(0,10),body:{to:['weddlysmartdesign@gmail.com'],subject:'Revisar: '+failed.length+(failed.length===1?' compra pagada sin pedido':' compras pagadas sin pedido'),
+     html:guestMail({owner:true,kicker:'Revisar',title:'Hay pagos sin su cuestionario.',preheader:'Se reintenta cada hora.',body:mP('Stripe tiene '+failed.length+(failed.length===1?' pago':' pagos')+' de GUEST a los que no se les ha podido crear el pedido ni mandar el cuestionario. Se reintenta solo cada hora durante 3 días.')+mP('Referencias: '+failed.map(esc).join(', '))+mP('Si mañana sigue llegando este aviso, dímelo.',true)})}});
    return json({ok:true,checked:done,failed})
   }
   if(action==='submit_order'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await submitOrder(session,b.details||{}))}

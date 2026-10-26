@@ -60,7 +60,9 @@ const button = (href: string, text: string) => mBtn(href, text);
 // title y kicker van sin escapar; body ya escapado.
 const mail = (kicker: string, title: string, body: string, preheader = title) => guestMail({ kicker, title, body, preheader });
 const ownerMail = (kicker: string, title: string, body: string) => guestMail({ owner: true, kicker, title, preheader: title, body: body + button(APP_ORIGIN + '/guest/panel-pruebas.html', 'Abrir mis pedidos') });
-const crossed = (t: number, now: number) => t > now - H && t <= now;
+// Ventana de 3 h: si una pasada de la tarea falla, la siguiente aún manda el aviso. La clave de
+// idempotencia de Resend (24 h) evita que salga dos veces.
+const crossed = (t: number, now: number) => t > now - 3 * H && t <= now;
 
 /* ---------- Plazos de la propietaria ---------- */
 function deadline(o: any) {
@@ -140,7 +142,7 @@ async function managerOk(c: any, req: Request) {
 async function tick(c: any) {
   const now = Date.now(), sent: string[] = [];
   const { data: rows, error } = await c.from('guest_invitation_orders')
-    .select('id,mode,status,buyer_email,template_id,checkout_session_id,questionnaire,created_at,submitted_at,review_sent_at,approved_at,delivered_at,revision_count')
+    .select('id,mode,status,buyer_email,template_id,checkout_session_id,questionnaire,created_at,updated_at,submitted_at,review_sent_at,approved_at,delivered_at,revision_count,revision_requests')
     .neq('status', 'cancelled').order('created_at', { ascending: false }).limit(1000);
   if (error) throw error;
   const all = rows || [];
@@ -181,6 +183,19 @@ async function tick(c: any) {
         if (await send(to, title.replace(/\.$/, ''), mail('Recordatorio', title, mP(esc(text)) + button(link, 'Ver nuestra invitación')), `guest-remind/${o.id}/${id}/${o.review_sent_at}`)) sent.push('couple:' + o.id + ':' + id);
       }
     }
+    // Pidieron un cambio, se les abrió el cuestionario y no lo han enviado.
+    if (o.status === 'changes_requested') {
+      const reqs = Array.isArray(o.revision_requests) ? o.revision_requests : [], lastAt = Date.parse(reqs[reqs.length - 1]?.at || o.updated_at);
+      const m = String(reqs[reqs.length - 1]?.note || '').match(/^Parte: (.+)$/m), part = m ? ['La portada', 'Vuestra historia', 'Lugares y programa', 'Detalles prácticos', 'Confirmación y final'].indexOf(m[1].trim()) : -1;
+      for (const [t, id, title, text] of [
+        [lastAt + 2 * D, 'c2d', 'Vuestro cambio está a medias.', 'Abristeis la parte que queríais cambiar, pero aún no nos ha llegado. Cambiad lo que necesitéis y pulsad «Enviar los cambios»: os mandamos la versión nueva para revisar.'],
+        [lastAt + 6 * D, 'c6d', '¿Os ayudamos con el cambio?', 'Seguimos esperando vuestro cambio para terminar la invitación. Si os resulta más fácil, respondednos a este email con lo que queréis cambiar y lo hacemos nosotros.']
+      ] as [number, string, string, string][]) {
+        if (!crossed(t, now)) continue;
+        const link = APP_ORIGIN + '/guest/catalog-questionnaire.html?t=' + encodeURIComponent(await capability(o.id, 'q')) + (part >= 0 ? '&parte=' + part : '');
+        if (await send(to, title.replace(/\.$/, ''), mail('Recordatorio', title, mP(esc(text)) + button(link, 'Hacer el cambio')), `guest-remind/${o.id}/${id}/${lastAt}`)) sent.push('couple:' + o.id + ':' + id);
+      }
+    }
     // 3. Opinión a los 7 días de la entrega.
     if (o.status === 'delivered' && o.delivered_at && crossed(Date.parse(o.delivered_at) + 7 * D, now)) {
       const html = mail('Una cosa más', '¿Qué tal la están recibiendo vuestros invitados?', mP(`Esperamos que estéis disfrutando de vuestra invitación${names(o) ? ', ' + esc(names(o)) : ''}.`)
@@ -212,6 +227,12 @@ async function tick(c: any) {
     let body = '';
     if (open.length) body += mList(open.map(({ o, d }) => `<b>${esc(label(o))}</b>${o.mode === 'test' ? ' (prueba)' : ''}: ${esc(d.what.toLowerCase())}.<br><span style="font-size:15px;color:${d.due - now < 12 * H ? '#b3263a' : '#4a5480'}">Antes del ${esc(when(d.due))} · ${esc(left(d.due - now))}</span>`));
     if (stale.length) body += mP('<b>Sin rellenar el cuestionario desde hace más de 3 días</b> (ya les ha llegado un recordatorio):') + mList(stale.map((o: any) => `${esc(o.buyer_email || label(o))}<br><span style="font-size:15px;color:#4a5480">Compró el ${esc(when(Date.parse(o.created_at)))}</span>`));
+    // Pedidos parados en manos de la pareja: a partir de aquí conviene escribirles tú.
+    const stuck = all.filter((o: any) => Date.parse(o.created_at) >= AUTOMATION_SINCE && ((o.status === 'review_sent' && now - Date.parse(o.review_sent_at) > 10 * D) || (o.status === 'changes_requested' && now - Date.parse(o.updated_at) > 8 * D)));
+    if (stuck.length) body += mP('<b>Parados desde hace días</b> (ya les han llegado dos recordatorios; mejor un WhatsApp):') + mList(stuck.map((o: any) => `${esc(label(o))}<br><span style="font-size:15px;color:#4a5480">${o.status === 'review_sent' ? 'Sin aprobar su invitación' : 'Sin enviar su cambio'}</span>`));
+    // Bodas que se acercan sin la invitación entregada.
+    const soon = all.filter((o: any) => { const w = Date.parse((o.questionnaire?.couple?.date || '') + 'T12:00:00Z'); return o.mode === 'production' && o.status !== 'delivered' && w && w - now < 45 * D && w > now; });
+    if (soon.length) body += mP('<b>Bodas en menos de 45 días sin la invitación entregada:</b>') + mList(soon.map((o: any) => `<b>${esc(label(o))}</b><br><span style="font-size:15px;color:#b3263a">Boda el ${esc(new Date(o.questionnaire.couple.date + 'T12:00:00Z').toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }))}</span>`));
     const monday = new Date(d.toLocaleString('en-US', { timeZone: 'Europe/Madrid' })).getDay() === 1;
     if (monday) {
       const s = (await stats(c)).live;

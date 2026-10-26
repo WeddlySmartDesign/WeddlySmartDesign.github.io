@@ -25,7 +25,8 @@ const ROUNDS = 2, EXTRA_CENTS = 2000;
 const WISHES = ['Colores', 'Tipografía', 'Ilustración de portada', 'Apertura animada', 'Fotos', 'Secciones nuevas', 'Bilingüe', 'Otra cosa'];
 const H = 3600_000, D = 24 * H, QUOTE_DUE = 48 * H;
 // Solo avisa de lo que cruza la última hora: la tarea corre cada hora y no guarda estado.
-const crossed = (t: number, now: number) => t > now - H && t <= now;
+// Ventana de 3 h por si falla una pasada; la clave de idempotencia de Resend evita duplicados.
+const crossed = (t: number, now: number) => t > now - 3 * H && t <= now;
 const site = () => String(Deno.env.get('WEDDLY_SITE_ORIGIN') || 'https://weddlysmartdesign.github.io').replace(/\/$/, '');
 const URGENCY: Record<string, string> = { normal: 'Sin prisa', soon: 'En unas semanas', urgent: 'Lo antes posible' };
 
@@ -169,7 +170,7 @@ async function signed(c: any, r: any) {
   }
   return out;
 }
-const view = (r: any) => ({ id: r.id, createdAt: r.created_at, updatedAt: r.updated_at, test: r.mode === 'test', status: r.status, tier: r.tier, tierName: tierName(r), suggestedCents: TIERS[r.tier]?.cents || 12000, baseDesign: r.base_design, baseDesignName: DESIGN_NAMES[r.base_design] || null, wishes: r.wishes, idea: r.idea, links: r.links, weddingDate: r.wedding_date, urgency: r.urgency, urgencyLabel: URGENCY[r.urgency] || '', name: r.name, email: r.email, phone: r.phone, contactPref: r.contact_pref, quoteCents: r.quote_cents, quoteDays: r.quote_days, quoteNote: r.quote_note, quotedAt: r.quoted_at, depositPaidAt: r.deposit_paid_at, finalPaidAt: r.final_paid_at, extraRounds: r.extra_rounds, ownerNotes: r.owner_notes, quoteDueAt: r.status === 'new' ? new Date(Date.parse(r.created_at) + QUOTE_DUE).toISOString() : null, deliveryUrl: r.delivery_url, deliveredAt: r.delivered_at, hasAccess: !!r.license_id, fileCount: (r.files || []).length });
+const view = (r: any) => ({ id: r.id, createdAt: r.created_at, updatedAt: r.updated_at, test: r.mode === 'test', status: r.status, tier: r.tier, tierName: tierName(r), suggestedCents: TIERS[r.tier]?.cents || 12000, baseDesign: r.base_design, baseDesignName: DESIGN_NAMES[r.base_design] || null, wishes: r.wishes, idea: r.idea, links: r.links, weddingDate: r.wedding_date, urgency: r.urgency, urgencyLabel: URGENCY[r.urgency] || '', name: r.name, email: r.email, phone: r.phone, contactPref: r.contact_pref, quoteCents: r.quote_cents, quoteDays: r.quote_days, quoteNote: r.quote_note, quotedAt: r.quoted_at, depositPaidAt: r.deposit_paid_at, finalPaidAt: r.final_paid_at, extraRounds: r.extra_rounds, ownerNotes: r.owner_notes, quoteDueAt: r.status === 'new' ? new Date(Date.parse(r.created_at) + QUOTE_DUE).toISOString() : null, deliveryUrl: r.delivery_url, deliveredAt: r.delivered_at, hasAccess: !!r.license_id, fileCount: (r.files || []).length, roundsUsed: r.rounds_used || 0, refundedAt: r.refunded_at, refundNote: r.refund_note, depositCents: r.deposit_paid_at ? deposit(r) : 0, finalCents: r.final_paid_at ? rest(r) : 0 });
 
 /* ---------- Entrega con la app de invitados ---------- */
 function activationCode() { const a = crypto.randomUUID().replaceAll('-', '').toUpperCase(), b = crypto.randomUUID().replaceAll('-', '').toUpperCase(); return `WSD-GUEST-${a.slice(0, 8)}-${a.slice(8, 16)}-${b.slice(0, 8)}`; }
@@ -214,9 +215,21 @@ async function tick(c: any) {
       [3, 'q3d', 'Vuestro presupuesto sigue en pie.', `Os mandamos el precio cerrado de vuestra invitación a medida: ${euros(r.quote_cents)}, IVA incluido. Si os encaja, pagáis la mitad y empezamos. Si queréis ajustar algo antes, respondednos.`],
       [7, 'q7d', '¿Seguimos con vuestra invitación?', 'No queremos que se os pase. Si tenéis cualquier duda sobre el presupuesto o preferís hablarlo por WhatsApp, respondednos y lo vemos.']
     ], `Ver el presupuesto`, await payUrl(r));
-    if (r.status === 'final_sent') await remind(r.final_sent_at, [
-      [3, 'f3d', 'Vuestra invitación está lista para entregar.', `Solo falta el resto del pago (${euros(rest(r))}) para mandaros la invitación definitiva con la app de invitados.`]
-    ], `Pagar ${euros(rest(r))}`, await payUrl(r));
+    if (r.status === 'final_sent') {
+      await remind(r.final_sent_at, [
+        [3, 'f3d', 'Vuestra invitación está lista para entregar.', `Solo falta el resto del pago (${euros(rest(r))}) para mandaros la invitación definitiva con la app de invitados.`],
+        [7, 'f7d', '¿Os ayudamos con el último pago?', `Vuestra invitación está terminada y esperando. En cuanto paguéis el resto (${euros(rest(r))}) os la mandamos con la app. Si tenéis algún problema con el pago, respondednos.`]
+      ], `Pagar ${euros(rest(r))}`, await payUrl(r));
+      // Si a los 10 días siguen sin pagar, te toca hablar con ellos.
+      if (r.final_sent_at && crossed(Date.parse(r.final_sent_at) + 10 * D, now) && await toOwner(`Sin pagar el resto · ${r.name}`, 'Diseño a medida', 'Llevan 10 días sin pagar el resto.', mP(`<b>${esc(r.name)}</b> tiene el enlace del pago final (${esc(euros(rest(r)))}) desde hace 10 días. Ya les han llegado dos recordatorios: mejor escribirles por WhatsApp.`), `guest-custom-final-stuck/${r.id}`)) done.push('stuck:' + r.id);
+    }
+    // Plazo de la primera propuesta que les prometiste al presupuestar.
+    if (['accepted', 'designing'].includes(r.status) && !r.rounds_used && r.deposit_paid_at && r.quote_days) {
+      const due = Date.parse(r.deposit_paid_at) + r.quote_days * D;
+      for (const [t, tag, id] of [[due - D, 'Mañana toca la primera propuesta', '1d'], [due, 'Hoy toca la primera propuesta', 'due']] as [number, string, string][]) {
+        if (crossed(t, now) && await toOwner(`${tag} · ${r.name}`, 'Plazos', tag + '.', mP(`A <b>${esc(r.name)}</b> le dijiste que tendría la primera propuesta en unos ${r.quote_days} días desde la señal. Cuando se la mandes, pulsa «He mandado una propuesta» en su pedido.`), `guest-custom-proposal/${r.id}/${id}`)) done.push('proposal:' + r.id + ':' + id);
+      }
+    }
   }
   return { checked: (data || []).length, done };
 }
@@ -340,6 +353,45 @@ Deno.serve(async (req) => {
       const ok = await toCouple(r, 'Ronda de cambios extra', guestMail({ kicker: 'Cambios', title: 'Una ronda más.', preheader: `Las ${ROUNDS} rondas incluidas ya están usadas.`,
         body: mP(`Ya hemos hecho las ${ROUNDS} rondas de cambios incluidas. Para una ronda más, el precio es de <b>${esc(euros(EXTRA_CENTS))}</b>. Os aconsejamos juntar todos los cambios en ella.`) + mBtn((await payUrl(r)) + '&extra=1', `Pagar ${euros(EXTRA_CENTS)}`) }), `guest-custom-extra-ask/${r.id}/${n}`);
       return json({ ok: true, emailed: ok, payUrl: (await payUrl(r)) + '&extra=1' });
+    }
+    if (action === 'round') {
+      // Lleva la cuenta de las propuestas mandadas, para saber cuándo se acaban las rondas incluidas.
+      if (!['accepted', 'designing'].includes(r.status)) return json({ ok: false, error: 'invalid_status' }, 409);
+      const n = Math.max(0, Math.min(50, Number(r.rounds_used || 0) + (b.undo ? -1 : 1)));
+      const { data, error } = await c.from('guest_custom_requests').update({ rounds_used: n, status: 'designing', updated_at: new Date().toISOString() }).eq('id', r.id).select('*').single();
+      if (error) throw error;
+      return json({ ok: true, request: view(data) });
+    }
+    if (action === 'refund') {
+      // Devuelve lo pagado (la señal, el resto o todo) con su factura rectificativa. Las rondas extra no se devuelven.
+      const parts = b.part === 'deposit' ? ['deposit'] : b.part === 'final' ? ['final'] : ['deposit', 'final'];
+      const sessions = parts.map((p) => [p, p === 'deposit' ? (r.deposit_paid_at ? r.deposit_session : null) : (r.final_paid_at ? r.final_session : null)]).filter((x) => x[1]) as [string, string][];
+      if (!sessions.length || r.status === 'refunded') return json({ ok: false, error: 'nothing_to_refund' }, 409);
+      const ts = new Date().toISOString(), done: any[] = [];
+      for (const [part, sid] of sessions) {
+        const s = await stripe('checkout/sessions/' + encodeURIComponent(sid));
+        if (!s.payment_intent) continue;
+        const refund = await stripe('refunds', { method: 'POST', headers: { 'Idempotency-Key': `guest-custom-refund/${r.id}/${part}` }, body: new URLSearchParams({ payment_intent: s.payment_intent, 'metadata[custom_request]': r.id, 'metadata[part]': part }).toString() });
+        const { data: orig } = await c.from('guest_invoices').select('*').eq('custom_request_id', r.id).eq('stripe_ref', s.payment_intent).maybeSingle();
+        let rect: any = null;
+        if (orig) {
+          const { data, error } = await c.rpc('guest_issue_custom_rectificative', { p_request: r.id, p_original: orig.id, p_mode: orig.mode, p_email: orig.buyer_email, p_name: orig.buyer_name, p_concept: 'Devolución de ' + orig.concept.charAt(0).toLowerCase() + orig.concept.slice(1), p_total_cents: -Math.abs(Number(refund.amount || orig.total_cents)), p_stripe_ref: refund.id });
+          if (error) console.error('custom_rectificative_failed', error); else rect = data;
+        }
+        done.push({ part, cents: Number(refund.amount || 0), rect });
+      }
+      if (!done.length) return json({ ok: false, error: 'nothing_to_refund' }, 409);
+      const total = done.reduce((a, x) => a + x.cents, 0);
+      const all = parts.length === 2 || (!r.final_paid_at && parts[0] === 'deposit');
+      const patch: any = { refunded_at: ts, refund_note: [r.refund_note, `${ts.slice(0, 10)}: devuelto ${euros(total)} (${done.map((x) => x.part === 'deposit' ? 'señal' : 'resto').join(' y ')})`].filter(Boolean).join('\n'), updated_at: ts };
+      if (all) patch.status = 'refunded';
+      const { data: q, error } = await c.from('guest_custom_requests').update(patch).eq('id', r.id).select('*').single();
+      if (error) throw error;
+      if (all && r.license_id) await c.from('licenses').update({ status: 'inactive', updated_at: ts }).eq('id', r.license_id).eq('status', 'active');
+      const invBtns = (await Promise.all(done.filter((x) => x.rect).map(async (x) => mBtn(await invoiceUrl(x.rect.id), 'Ver la factura de la devolución', true)))).join('');
+      await toCouple(r, 'Devolución realizada', guestMail({ kicker: 'Devolución', title: 'Os hemos devuelto el importe.', preheader: `${euros(total)} a la misma tarjeta.`,
+        body: mP(`Hemos hecho la devolución de <b>${esc(euros(total))}</b> a la misma tarjeta con la que pagasteis. Según el banco, suele verse en 5 a 10 días.`) + invBtns }), `guest-custom-refund/${r.id}/${parts.join('-')}`);
+      return json({ ok: true, refundedCents: total, request: view(q) });
     }
     if (action === 'deliver') {
       if (!['paid', 'delivered'].includes(r.status)) return json({ ok: false, error: 'invalid_status' }, 409);
