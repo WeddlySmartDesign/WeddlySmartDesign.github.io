@@ -225,7 +225,9 @@
     .news .n-read { min-height: 40px; padding: 0 .9rem; border: 1.5px solid var(--ink); border-radius: 99px; background: none; font-weight: 600; font-size: .875rem; cursor: pointer; }
     .news .n-read:active { transform: scale(.97); }
     .news .n-open { display: inline-flex; align-items: center; min-height: 40px; font-weight: 600; font-size: .9375rem; text-decoration: underline; text-underline-offset: .25em; }
-    .news .n-done { font: 700 .75rem/1 var(--mono); color: var(--ink-soft); }
+    .news .n-read.is-done { border-color: transparent; background: var(--paper, #f6efe9); color: var(--ink-soft); }
+    .news .n-read.is-done::before { content: ''; width: .55em; height: .3em; margin: 0 .5em .2em 0; border: solid currentColor; border-width: 0 0 2px 2px; transform: rotate(-45deg); }
+    .news .n-read { display: inline-flex; align-items: center; }
     .news .new b::before { content: ''; display: inline-block; width: 8px; height: 8px; margin: 0 .45rem .1rem 0; border-radius: 50%; background: var(--postmark); }
     .funnel { display: grid; gap: .8rem; padding: 1rem; border-radius: 12px; background: var(--white); }
     .f-row { display: grid; gap: .3rem; }
@@ -1423,7 +1425,9 @@ async function renderNews() {
     const href = e.url && e.url.startsWith('/guest/panel-pruebas.html') ? e.url.replace('/guest/panel-pruebas.html', '') : '';
     const head = `<b>${e.test ? 'Prueba · ' : ''}${esc(e.title)}</b><time datetime="${esc(e.created_at)}">${esc(ago(e.created_at))}</time>${e.body ? `<small>${esc(e.body)}</small>` : ''}`;
     const open = href && href !== '#/' ? `<a class="n-open" href="${esc(href)}">Abrir</a>` : '';
-    const read = e.read_at ? '<span class="n-done">Leído</span>' : `<button class="n-read" type="button" data-read="${e.id}">Marcar como leído</button>`;
+    const read = e.read_at
+      ? `<button class="n-read is-done" type="button" data-unread="${e.id}" aria-label="Leído. Toca para dejarlo sin leer">Leído</button>`
+      : `<button class="n-read" type="button" data-read="${e.id}">Marcar como leído</button>`;
     return `<div class="n${e.read_at ? '' : ' new'}" data-id="${e.id}">${head}<div class="n-acts">${read}${open}</div></div>`;
   };
   const unread = () => j.events.filter((e) => !e.read_at).length;
@@ -1431,8 +1435,13 @@ async function renderNews() {
     $('newsList').innerHTML = j.events.length
       ? `${unread() > 1 ? '<p style="margin:0 0 .6rem;text-align:right"><button class="link-btn" type="button" id="readAll">Marcar todos como leídos</button></p>' : ''}<div class="news">${j.events.map(item).join('')}</div>`
       : '<div class="calm"><b>Sin avisos todavía</b>Aquí verás cada venta, cuestionario o presupuesto en cuanto llegue.</div>';
-    const mark = async (id) => { j.events.forEach((e) => { if (id == null || e.id === id) e.read_at = e.read_at || new Date().toISOString(); }); draw(); badge(unread()); try { const r = await auto({ action: 'owner_events_read', ...(id == null ? {} : { id }) }); badge(r.unread); } catch {} };
+    const mark = async (id, back = false) => {
+      j.events.forEach((e) => { if (id == null || e.id === id) e.read_at = back ? null : e.read_at || new Date().toISOString(); });
+      draw(); badge(unread());
+      try { const r = await auto({ action: 'owner_events_read', ...(id == null ? {} : { id }), ...(back ? { unread: true } : {}) }); badge(r.unread); } catch {}
+    };
     $('newsList').querySelectorAll('[data-read]').forEach((b) => b.onclick = () => mark(Number(b.dataset.read)));
+    $('newsList').querySelectorAll('[data-unread]').forEach((b) => b.onclick = () => mark(Number(b.dataset.unread), true));
     $('newsList').querySelectorAll('.n-open').forEach((a) => a.addEventListener('click', () => { const id = Number(a.closest('[data-id]').dataset.id); const e = j.events.find((x) => x.id === id); if (e && !e.read_at) mark(id); }));
     if ($('readAll')) $('readAll').onclick = () => mark(null);
   };

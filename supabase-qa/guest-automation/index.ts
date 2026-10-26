@@ -482,8 +482,11 @@ Deno.serve(async (req) => {
     }
     if (action === 'owner_events_read') {
       // Con id, marca solo ese aviso; sin id, todos los que quedan sin leer.
-      let q = c.from('guest_owner_events').update({ read_at: new Date().toISOString() }).is('read_at', null);
-      if (b.id != null) q = q.eq('id', Number(b.id));
+      // unread: true lo vuelve a dejar sin leer.
+      let q = b.unread && b.id != null
+        ? c.from('guest_owner_events').update({ read_at: null }).eq('id', Number(b.id))
+        : c.from('guest_owner_events').update({ read_at: new Date().toISOString() }).is('read_at', null);
+      if (!b.unread && b.id != null) q = q.eq('id', Number(b.id));
       await q;
       const { count } = await c.from('guest_owner_events').select('id', { count: 'exact', head: true }).is('read_at', null);
       return json({ ok: true, unread: count || 0 });
