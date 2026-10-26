@@ -48,14 +48,14 @@ export function guestMail(o: { preheader: string; kicker: string; title: string;
 <p style="margin:0 0 18px;font:400 15px/1.55 ${SANS};color:${SOFT}">Responded a este email o escribidnos por <a href="https://wa.me/34620843264" style="color:${INK};font-weight:700">WhatsApp al 620&nbsp;843&nbsp;264</a>.</p>`;
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light">
 <title>${mailEsc(o.title)}</title>
-<style>@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Courier+Prime:wght@400;700&family=Hanken+Grotesk:wght@400;700&display=swap');
+<style>@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Courier+Prime:wght@400;700&family=Hanken+Grotesk:wght@400;700&family=Caveat:wght@600&display=swap');
 body{margin:0!important;padding:0!important;width:100%!important;background:${PAPER}}a{color:${INK}}
 @media (max-width:480px){.card{padding:26px 20px!important}.title{font-size:28px!important}}</style></head>
 <body style="margin:0;padding:0;background:${PAPER}">
 <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:${PAPER}">${mailEsc(o.preheader)}&#8199;&#65279;&#847;&#8199;&#65279;&#847;&#8199;&#65279;&#847;</div>
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" bgcolor="${PAPER}" style="background:${PAPER}"><tr><td align="center" style="padding:20px 12px 32px">
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:560px">
-<tr><td style="padding:0 4px 14px"><span style="font:400 24px/1 ${SERIF};color:${INK}">GUEST</span> <span style="font:400 13px/1 ${MONO};color:${SOFT}">by WeddlySmartDesign</span></td></tr>
+<tr><td style="padding:0 4px 14px"><span style="font:400 24px/1 ${SERIF};color:${INK}">GUEST</span> <span style="font:600 19px/1 'Caveat','Segoe Print','Bradley Hand',cursive;color:${SOFT}">by WeddlySmartDesign</span></td></tr>
 <tr><td bgcolor="#ffffff" style="background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid ${LINE}">
 ${stripe()}
 <div class="card" style="padding:32px 28px 12px">

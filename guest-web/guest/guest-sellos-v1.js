@@ -1,10 +1,10 @@
 (()=>{
 'use strict';
 // GUEST brand layer: the app wears the same identity as the web and the emails
-// (Abril Fatface, Courier Prime, Hanken Grotesk; navy ink, envelope pink, postmark red).
+// (Abril Fatface, Courier Prime, Hanken Grotesk, Caveat for «by WeddlySmartDesign»; navy ink, envelope pink, postmark red).
 // Loaded last on each top-level page; it also dresses every same-origin iframe inside.
 if(window.__guestSellosV1)return;window.__guestSellosV1=true;
-const FONTS='/css/fonts.css';
+const FONTS='/css/fonts.css?v=44';
 const CSS=`
 :root{
   --s-ink:#1b2650;--s-ink-soft:#4a5480;--s-paper:#fbf7f4;--s-envelope:#f0c4bc;--s-envelope-soft:#f6dcd6;
@@ -19,7 +19,7 @@ h3{font-family:var(--s-text)!important;font-weight:700!important;letter-spacing:
 .sectiontag,.kicker,.eyebrow{font-family:var(--s-mono)!important;font-weight:400!important;letter-spacing:.12em!important;color:var(--s-postmark)!important;text-transform:uppercase}
 .brand{gap:2px!important;flex-direction:column!important;align-items:flex-start!important}
 .brand b,.brand>span:first-child{font:400 24px/1 var(--s-display)!important;letter-spacing:.02em!important;text-transform:none!important;color:var(--s-ink)!important}
-.brand b+span,.brand>span+span{font:400 12px/1.1 var(--s-mono)!important;letter-spacing:0!important;color:var(--s-ink-soft)!important;margin-top:3px!important}
+.brand b+span,.brand>span+span{font:600 19px/1 'Caveat','Segoe Print',cursive!important;letter-spacing:0!important;text-transform:none!important;color:var(--s-ink-soft)!important;margin-top:2px!important}
 .btn,.metaBtn,#editWedding{border-radius:999px!important;font-weight:600!important;letter-spacing:.005em}
 .nav button,#nav button{font-weight:600!important}
 html[data-guest-theme="sellos"] :is(h1,h2,#coupleTitle){color:var(--s-ink)!important}

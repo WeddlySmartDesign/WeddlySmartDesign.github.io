@@ -1192,7 +1192,7 @@ Deno.serve(async req=>{
       let accessUrl='';
       if(order.license_id){const {data:d}=await c.from('license_delivery_codes').select('activation_code').eq('license_id',order.license_id).maybeSingle();if(d?.activation_code)accessUrl=APP_ORIGIN+'/guest/access.html?code='+encodeURIComponent(String(d.activation_code))}
       if(!accessUrl)return json({ok:false,error:'missing_management_access'},409);
-      const ok=await resend({to:[to],subject:'Vuestra invitación y vuestro acceso a la app',html:deliveryMail(order.delivery_url,accessUrl,await dataChangeUrl(order.id))},'guest-redeliver/'+order.id+'/'+to+'/'+now().slice(0,13));
+      const ok=await resend({to:[to],subject:'Vuestra invitación y vuestro acceso a la app',html:deliveryMail(order.delivery_url,accessUrl,await dataChangeUrl(order.id))},'guest-redeliver/'+order.id+'/'+to+'/'+now().slice(0,16));
       if(!ok)return json({ok:false,error:'email_failed'},502);
       return json({ok:true,to});
     }

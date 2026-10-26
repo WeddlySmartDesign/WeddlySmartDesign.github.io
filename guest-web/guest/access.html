@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex,nofollow,noarchive">
 <link rel="manifest" href="guest.webmanifest">
 <link rel="icon" href="guest-icon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/css/fonts.css">
+<link rel="stylesheet" href="/css/fonts.css?v=44">
 <title>GUEST by WeddlySmartDesign · Acceso</title>
 <style>
 :root{--paper:#fbf7f4;--white:#fff;--envelope:#f0c4bc;--envelope-soft:#f6dcd6;--line:#e3d6d1;--ink:#1b2650;--ink-soft:#4a5480;--postmark:#b3263a;
@@ -18,7 +18,7 @@ body::before{content:"";position:fixed;left:0;right:0;top:0;height:6px;backgroun
 .shell{min-height:100dvh;max-width:520px;margin:auto;padding:calc(40px + env(safe-area-inset-top)) 20px calc(40px + env(safe-area-inset-bottom))}
 .brand{display:inline-grid;line-height:1;color:var(--ink)}
 .brand b{font:400 2.1rem/1 var(--display);letter-spacing:.02em}
-.brand span{margin-top:.35rem;font:400 .82rem/1 var(--mono);color:var(--ink-soft)}
+.brand span{margin-top:.25rem;font:600 1.3rem/1 'Caveat','Segoe Print',cursive;color:var(--ink-soft)}
 .card{position:relative;margin-top:44px;background:var(--white);border:1px solid var(--line);border-radius:6px;padding:30px 22px 24px;box-shadow:0 1px 2px rgba(27,38,80,.08),0 18px 36px -20px rgba(27,38,80,.45)}
 .card::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;border-radius:6px 6px 0 0;background:var(--envelope-soft);border-bottom:1px dashed var(--envelope)}
 .kicker{margin:6px 0 10px;font:400 .78rem/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--postmark)}
@@ -29,19 +29,19 @@ label{display:block;font:400 .8rem/1 var(--mono);letter-spacing:.06em;color:var(
 input{width:100%;min-height:54px;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font:400 1.05rem/1 var(--mono);text-transform:uppercase;letter-spacing:.06em}
 input::placeholder{color:#9aa0bd}
 input:focus{outline:3px solid rgba(27,38,80,.22);border-color:var(--ink)}
-.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;border:0;border-radius:999px;padding:14px 20px;background:var(--ink);color:#f4efe9;font:600 1rem/1.1 var(--text);cursor:pointer;transition:transform 160ms var(--ease),background 160ms ease}
+.btn{text-decoration:none;display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;border:0;border-radius:999px;padding:14px 20px;background:var(--ink);color:#f4efe9;font:600 1rem/1.1 var(--text);cursor:pointer;transition:transform 160ms var(--ease),background 160ms ease}
 .btn:active{transform:scale(.97)}
 .btn:disabled{opacity:.5}
 .btn:focus-visible{outline:3px solid rgba(179,38,58,.35);outline-offset:3px}
-.msg{min-height:22px;margin-top:14px;font-size:.92rem;line-height:1.45;color:var(--ink-soft)}
-.msg.err{color:var(--postmark)}
+.msg{margin:0 0 16px;font-size:.92rem;line-height:1.45;color:var(--ink-soft)}
+.msg:empty{display:none}.msg.err{color:var(--postmark)}
 .note{border-top:1px dashed var(--line);margin-top:18px;padding-top:16px;font-size:.85rem;line-height:1.5;color:var(--ink-soft)}
 a{color:var(--ink);font-weight:600;text-underline-offset:3px}
 @media (prefers-reduced-motion:reduce){.btn{transition:none}}
 </style>
 </head>
 <body>
-<main class="shell"><div class="brand"><b>GUEST</b><span>by WeddlySmartDesign</span></div><section class="card"><p class="kicker">Vuestra app de invitados</p><h1 id="title">Abrir vuestra gestión de invitados</h1><p id="lead" class="lead">Con vuestra invitación tenéis incluida una app para organizar invitados, enviar la invitación, recibir respuestas, preparar mesas y sacar listados.</p><div id="codeBox"><div class="field"><label for="code">Código de acceso</label><input id="code" autocomplete="one-time-code" maxlength="80" spellcheck="false" placeholder="WSD-XXXX-XXXX-XXXX"></div><button id="activate" class="btn" type="button">Abrir gestión de invitados</button></div><div id="inviteBox" style="display:none"><button id="join" class="btn" type="button">Unirme a la gestión de invitados</button></div><div id="testerBox" style="display:none"><button id="testerBtn" class="btn" type="button">Abrir acceso de prueba</button></div><div id="msg" class="msg" aria-live="polite"></div><div class="note">El acceso queda guardado en este dispositivo. ¿Algún problema? Escribidnos a <a href="mailto:info@weddlysmartdesign.com">info@weddlysmartdesign.com</a></div></section></main>
+<main class="shell"><div class="brand"><b>GUEST</b><span>by WeddlySmartDesign</span></div><section class="card"><p class="kicker">Vuestra app de invitados</p><h1 id="title">Abriendo vuestra app…</h1><p id="lead" class="lead">Un momento, estamos preparando vuestra gestión de invitados.</p><div id="msg" class="msg" aria-live="polite"></div><div id="openBox" style="display:none"><button id="retry" class="btn" type="button">Volver a intentarlo</button></div><div id="mailBox" style="display:none"><a class="btn" href="mailto:info@weddlysmartdesign.com?subject=Acceso%20a%20la%20app%20GUEST">Pedir el enlace de nuevo</a></div><div id="inviteBox" style="display:none"><button id="join" class="btn" type="button">Unirme a la gestión de invitados</button></div><div id="testerBox" style="display:none"><button id="testerBtn" class="btn" type="button">Abrir acceso de prueba</button></div><div class="note">Al abrirla una vez, queda guardada en este móvil. Añadidla a la pantalla de inicio para tenerla a mano. ¿Algún problema? Escribidnos a <a href="mailto:info@weddlysmartdesign.com">info@weddlysmartdesign.com</a></div></section></main>
 <script>
 (()=>{
 'use strict';
@@ -53,9 +53,11 @@ function remember(t){localStorage.setItem(TOKEN,t)}
 async function post(body,token=''){const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json',...(token?{'x-weddly-member':token}:{})},body:JSON.stringify(body),cache:'no-store'}),j=await r.json().catch(()=>({}));return{r,j}}
 async function current(){let t='';try{t=localStorage.getItem(TOKEN)||''}catch{}if(t.length<40)return false;try{const {r,j}=await post({action:'status'},t);return r.ok&&j?.ok}catch{return false}}
 function done(t){remember(t);history.replaceState(null,'',location.pathname);show('Acceso listo. Abriendo vuestra gestión de invitados…');setTimeout(()=>location.replace('index.html'),180)}
-async function activateCode(code,button){if(!code){show('Introduce un código de acceso válido.',true);return}button.disabled=true;show('Activando…');try{const {r,j}=await post({action:'activate',activationCode:code});if(r.status===201&&j?.memberToken)return done(j.memberToken);if(j?.error==='already_activated')show('Este código ya se ha utilizado para crear un GUEST.',true);else if(j?.error==='license_expired'||j?.error==='license_inactive')show('Este acceso ya no está activo.',true);else if(j?.error==='invitation_not_delivered')show('La app se abre cuando vuestra invitación está entregada.',true);else show('No encontramos una compra válida con ese código.',true)}catch{show('No se ha podido completar el acceso. Inténtalo de nuevo.',true)}finally{button.disabled=false}}
-async function boot(){if(await current()){location.replace('index.html');return}if(invite){$('title').textContent='Compartid la misma gestión de invitados';$('lead').textContent='Te han invitado como segunda persona autorizada a la gestión de invitados. Los cambios se mantendrán sincronizados en ambos dispositivos.';$('codeBox').style.display='none';$('inviteBox').style.display='block';return}if(tester){$('title').textContent='Acceso de prueba a la gestión de invitados';$('lead').textContent='Este acceso es temporal y está preparado para validar la gestión de invitados incluida.';$('codeBox').style.display='none';$('testerBox').style.display='block';return}if(prefill){$('code').value=prefill;show('Abriendo con vuestro código…');setTimeout(()=>$('activate').click(),80)}}
-$('activate').onclick=()=>activateCode($('code').value.trim(),$('activate'));$('code').addEventListener('keydown',e=>{if(e.key==='Enter')$('activate').click()});
+function fail(t){$('title').textContent='No hemos podido abrirla';$('lead').textContent='';show(t,true);$('openBox').style.display='block'}
+async function activateCode(code,button){if(!code)return noLink();button.disabled=true;try{const {r,j}=await post({action:'activate',activationCode:code});if(r.status===201&&j?.memberToken)return done(j.memberToken);if(j?.error==='license_expired'||j?.error==='license_inactive')fail('Este acceso ya no está activo. Escribidnos y lo revisamos.');else if(j?.error==='invitation_not_delivered')fail('La app se abre cuando vuestra invitación está entregada. Os llegará en el mismo email.');else fail('Este enlace no es válido. Abrid el botón «Abrir la app de invitados» del email de entrega.')}catch{fail('No hay conexión ahora mismo. Comprobadla y volved a intentarlo.')}finally{button.disabled=false}}
+async function boot(){if(await current()){location.replace('index.html');return}if(invite){$('title').textContent='Compartid la misma gestión de invitados';$('lead').textContent='Te han invitado como segunda persona autorizada a la gestión de invitados. Los cambios se mantendrán sincronizados en ambos dispositivos.';$('inviteBox').style.display='block';return}if(tester){$('title').textContent='Acceso de prueba a la gestión de invitados';$('lead').textContent='Este acceso es temporal y está preparado para validar la gestión de invitados incluida.';$('testerBox').style.display='block';return}if(prefill){activateCode(prefill,$('retry'));return}noLink()}
+function noLink(){$('title').textContent='Abrid la app desde vuestro email';$('lead').textContent='Se abre con el botón «Abrir la app de invitados» del email en el que os entregamos la invitación. Abridlo desde este móvil.';$('mailBox').style.display='block'}
+$('retry').onclick=()=>{$('title').textContent='Abriendo vuestra app…';show('');activateCode(prefill,$('retry'))};
 $('join').onclick=async()=>{const b=$('join');b.disabled=true;show('Conectando…');try{const {r,j}=await post({action:'join',inviteCode:invite});if(r.status===201&&j?.memberToken)return done(j.memberToken);show('Esta invitación no es válida o ya se ha utilizado.',true)}catch{show('No se ha podido completar el acceso. Inténtalo de nuevo.',true)}finally{b.disabled=false}};
 $('testerBtn').onclick=()=>activateCode(tester,$('testerBtn'));if('serviceWorker'in navigator)navigator.serviceWorker.register('guest-sw.js').catch(()=>{});boot();
 })();

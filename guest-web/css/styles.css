@@ -107,7 +107,7 @@ p { margin: 0; }
 .header.is-solid { box-shadow: 0 10px 24px -20px rgba(27, 38, 80, .6); }
 .logo { display: inline-grid; text-decoration: none; color: var(--ink); line-height: 1; }
 .logo b { font: 400 1.6rem/1 var(--display); letter-spacing: .02em; }
-.logo span { margin-top: .2rem; font: 400 .78rem/1 var(--mono); }
+.logo span { margin-top: .15rem; font: 600 1.12rem/1 'Caveat', 'Segoe Print', cursive; text-transform: none; letter-spacing: 0; }
 .nav { display: none; gap: 1.6rem; margin-left: auto; }
 .nav a { font-size: .9375rem; font-weight: 500; text-decoration: none; color: var(--ink-soft); transition: color 200ms ease; }
 .nav a:hover { color: var(--ink); }

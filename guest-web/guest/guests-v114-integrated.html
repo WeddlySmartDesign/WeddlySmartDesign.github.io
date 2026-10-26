@@ -103,5 +103,5 @@ function downloadTransport(){csvDownload('weddly-transporte.csv',[['Nombre','Mes
 $('#nav').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b)go(b.dataset.go)});$('#sheet').addEventListener('click',e=>{if(e.target===$('#sheet'))closeSheet()});$('#planBack').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();closePlan()},{capture:true});$('#fileInput').addEventListener('change',async e=>{const f=e.target.files?.[0];if(!f)return;importText(await f.text());e.target.value=''});window.addEventListener('pageshow',()=>render());ensureMeta();render();
 })();
 </script>
-<script src="guest-sellos-v1.js?v=1"></script></body>
+<script src="guest-sellos-v1.js?v=2"></script></body>
 </html>
