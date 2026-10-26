@@ -152,6 +152,7 @@
     .photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .photo b { display: block; font-weight: 600; }
     .photo small { display: block; font-size: .875rem; color: var(--ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .photo small.photo-warn { white-space: normal; margin-top: .3rem; color: var(--postmark, #b3263a); font-weight: 600; line-height: 1.4; }
     .photo-actions { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: .35rem; }
     .photo-actions label, .photo-actions button { font: 600 .9375rem var(--text); color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: .25em; text-decoration-thickness: 1px; }
     .photo-actions input { position: absolute; width: 1px; height: 1px; opacity: 0; }
@@ -667,9 +668,15 @@ $('moments').addEventListener('change', (e) => { if (e.target.classList.contains
 /* ---- Fotos ---- */
 // Las fotos se reducen y se pasan a JPG antes de subirlas: así la invitación carga rápido
 // en el móvil de cada invitado y se ve en cualquier teléfono (HEIC no se ve en Android).
+// Una captura de pantalla del móvil es mucho más alargada que una foto (unos 9:20 frente a 3:4 o 9:16).
+// No la bloqueamos: solo avisamos, por si se ha elegido sin querer.
+const looksLikeScreenshot = (file, w, h) => /screenshot|captura|screen[_ -]?shot/i.test(file.name || '') || (w && h && Math.max(w, h) / Math.min(w, h) >= 1.95);
+const screenshotSlots = new Set();
+let lastShot = false;
 async function shrink(file, max = 2200) {
   let img;
-  try { img = await createImageBitmap(file, { imageOrientation: 'from-image' }); }
+  lastShot = looksLikeScreenshot(file);
+  try { img = await createImageBitmap(file, { imageOrientation: 'from-image' }); lastShot = looksLikeScreenshot(file, img.width, img.height); }
   catch {
     if (/^image\/(jpeg|png|webp)$/.test(file.type) && file.size <= 15728640) return file;
     throw Error('unreadable');
@@ -687,6 +694,7 @@ function renderPhoto(box) {
   const slot = box.dataset.slot, f = fileFor(slot), id = 'file-' + slot;
   box.innerHTML = `<span class="photo-thumb">${f?.url ? `<img src="${esc(f.url)}" alt="">` : '<svg aria-hidden="true"><use href="#i-img"/></svg>'}</span>
     <span><b>${SLOT_LABEL[slot]}</b><small>${f ? esc(f.name || 'Foto subida') : 'Desde el móvil o el ordenador'}</small>
+    ${f && screenshotSlots.has(slot) ? '<small class="photo-warn" role="status">Parece una captura de pantalla. Si no es la foto que queríais, pulsad «Cambiar».</small>' : ''}
     <span class="photo-actions"><label for="${id}">${f ? 'Cambiar' : 'Elegir foto'}</label><input id="${id}" type="file" accept="image/*">${f ? '<button type="button" data-remove>Quitar</button>' : ''}</span></span>`;
   box.querySelector('input').onchange = (e) => upload(slot, e.target.files[0], box);
   box.querySelector('[data-remove]')?.addEventListener('click', () => removeFile(slot, box));
@@ -697,6 +705,7 @@ async function upload(slot, file, box) {
   box.classList.add('is-busy'); setMsg();
   try {
     const ready = await shrink(file);
+    if (lastShot) screenshotSlots.add(slot); else screenshotSlots.delete(slot);
     if (DEMO) { files = files.filter((x) => x.slot !== slot); files.push({ slot, name: ready.name, url: URL.createObjectURL(ready) }); return; }
     const fd = new FormData();
     fd.append('action', 'upload'); fd.append('token', TOKEN); fd.append('slot', slot); fd.append('file', ready, ready.name);
@@ -710,7 +719,7 @@ async function upload(slot, file, box) {
   } finally { box.classList.remove('is-busy'); renderPhoto(box); }
 }
 async function removeFile(slot, box) {
-  try { await api({ action: 'remove_file', token: TOKEN, slot }); files = files.filter((x) => x.slot !== slot); renderPhoto(box); }
+  try { await api({ action: 'remove_file', token: TOKEN, slot }); files = files.filter((x) => x.slot !== slot); screenshotSlots.delete(slot); renderPhoto(box); }
   catch { setMsg('No hemos podido quitar la foto. Probad de nuevo.'); }
 }
 
