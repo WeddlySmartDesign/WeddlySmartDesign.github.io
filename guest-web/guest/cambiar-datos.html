@@ -55,7 +55,7 @@
 (() => {
 'use strict';
 // QA: al pasar a real, guest-invitation-flow.
-const FLOW = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow-qa';
+const FLOW = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1|guest-stripe-pago-2026-10-24\.)/.test(location.hostname)?'guest-invitation-flow-qa':'guest-order-flow');
 const token = new URLSearchParams(location.search).get('t') || '';
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));

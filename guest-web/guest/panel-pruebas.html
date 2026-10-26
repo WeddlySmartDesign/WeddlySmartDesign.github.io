@@ -397,9 +397,9 @@
 (() => {
 'use strict';
 const OWNER = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-owner-manager';
-const FLOW = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow-qa';
+const FLOW = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1|guest-stripe-pago-2026-10-24\.)/.test(location.hostname)?'guest-invitation-flow-qa':'guest-order-flow');
 const AUTO = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-automation';
-const CUSTOM = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-custom-qa';
+const CUSTOM = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1|guest-stripe-pago-2026-10-24\.)/.test(location.hostname)?'guest-custom-qa':'guest-order-custom');
 const KEY = 'weddly_owner_manager_token_v1';
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));

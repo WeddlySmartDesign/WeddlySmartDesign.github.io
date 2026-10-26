@@ -31,7 +31,11 @@ const emailOf = (o: any) => String(o.questionnaire?.contact?.email || o.buyer_em
 const isLive = (o: any) => String(o.checkout_session_id || '').startsWith('cs_live_');
 // A medida: el pedido no tiene sesión de Stripe propia (se cobra en guest-custom); cuenta como real si su solicitud lo es.
 const liveCustom = new Set<string>();
-const canWriteCouple = (o: any) => isLive(o) || (!!o.custom_request_id && liveCustom.has(String(o.custom_request_id))) || OWNER_EMAILS.includes(emailOf(o));
+const isReal = (o: any) => isLive(o) || (!!o.custom_request_id && liveCustom.has(String(o.custom_request_id)));
+const canWriteCouple = (o: any) => isReal(o) || OWNER_EMAILS.includes(emailOf(o));
+// Las compras reales viven en la web publicada y en guest-order-flow; las de prueba, en la vista previa y en guest-invitation-flow-qa.
+const LIVE_ORIGIN = String(Deno.env.get('GUEST_LIVE_ORIGIN') || 'https://guest.weddlysmartdesign.com').replace(/\/$/, '');
+const siteOf = (o: any) => isReal(o) ? LIVE_ORIGIN : APP_ORIGIN;
 const when = (t: number) => new Date(t).toLocaleString('es-ES', { timeZone: 'Europe/Madrid', weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 const left = (ms: number) => { if (ms <= 0) return 'vencido'; const h = Math.floor(ms / H); return h >= 24 ? `quedan ${Math.floor(h / 24)} d ${h % 24} h` : `quedan ${h} h ${Math.floor((ms % H) / 60000)} min`; };
 const euros = (c: number) => (c / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
@@ -67,10 +71,9 @@ const ownerMail = (kicker: string, title: string, body: string) => guestMail({ o
 const crossed = (t: number, now: number) => t > now - 3 * H && t <= now;
 const AUTO_APPROVE_DAYS = 30;
 const dayEs = (t: number) => new Date(t).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', timeZone: 'Europe/Madrid' });
-// QA: guest-invitation-flow-qa. Al pasar a real, guest-invitation-flow.
-const FLOW_URL = () => String(Deno.env.get('SUPABASE_URL') || '').replace(/\/$/, '') + '/functions/v1/guest-invitation-flow-qa';
-async function flowCall(body: any) {
-  const r = await fetch(FLOW_URL(), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
+const FLOW_URL = (o: any) => String(Deno.env.get('SUPABASE_URL') || '').replace(/\/$/, '') + '/functions/v1/' + (isReal(o) ? 'guest-order-flow' : 'guest-invitation-flow-qa');
+async function flowCall(o: any, body: any) {
+  const r = await fetch(FLOW_URL(o), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
   return await r?.json().catch(() => null);
 }
 const internalSig = async (action: string, id: string) => (await hmacHex('guest-internal-v1|' + action + '|' + id)).slice(0, 40);
@@ -95,7 +98,7 @@ function deadline(o: any) {
 /* ---------- Facturas ---------- */
 function stripeKey(sessionId: string) {
   const live = sessionId.startsWith('cs_live_');
-  return String(Deno.env.get(live ? 'STRIPE_SECRET_KEY' : 'GUEST_STRIPE_TEST_SECRET_KEY') || '').trim();
+  return String(Deno.env.get(live ? 'GUEST_STRIPE_LIVE_SECRET_KEY' : 'GUEST_STRIPE_TEST_SECRET_KEY') || '').trim();
 }
 async function stripe(path: string, sessionId: string, init: RequestInit = {}) {
   const key = stripeKey(sessionId);
@@ -205,7 +208,7 @@ async function tick(c: any) {
   const open = all.map((o: any) => ({ o, d: deadline(o) })).filter((x: any) => x.d) as { o: any; d: any }[];
   // Tras las primeras ventas, una propuesta que lleva 48 h sin que la mires sale sola (guest-invitation-flow decide si toca).
   for (const { o, d } of open) if (d.kind === 'proposal' && o.checkout_session_id && now - d.start >= 48 * H) {
-    const j = await flowCall({ action: 'auto_send', orderId: o.id, sig: await internalSig('auto_send', o.id) });
+    const j = await flowCall(o, { action: 'auto_send', orderId: o.id, sig: await internalSig('auto_send', o.id) });
     if (j?.ok && j.sent) sent.push('auto-send:' + o.id);
   }
   for (const { o, d } of away ? [] : open) {
@@ -234,7 +237,7 @@ async function tick(c: any) {
         ...later
       ] as [number, string, string, string][]) {
         if (!crossed(t, now)) continue;
-        const link = APP_ORIGIN + '/guest/catalog-questionnaire.html?t=' + encodeURIComponent(await capability(o.id, 'q'));
+        const link = siteOf(o) + '/guest/catalog-questionnaire.html?t=' + encodeURIComponent(await capability(o.id, 'q'));
         if (await send(to, title.replace(/\.$/, ''), mail('Recordatorio', title, mP(esc(text)) + button(link, 'Contadnos vuestra boda')), `guest-remind/${o.id}/${id}`)) sent.push('couple:' + o.id + ':' + id);
       }
     }
@@ -246,12 +249,12 @@ async function tick(c: any) {
         [Date.parse(o.review_sent_at) + 25 * D, 'r25d', 'En 5 días damos vuestra invitación por aprobada.', `Como no nos habéis dicho nada, el ${dayEs(Date.parse(o.review_sent_at) + AUTO_APPROVE_DAYS * D)} la daremos por aprobada y os la entregaremos con la app. Si queréis cambiar algo, aún estáis a tiempo.`]
       ] as [number, string, string, string][]) {
         if (!crossed(t, now)) continue;
-        const link = APP_ORIGIN + '/guest-review-v1.html?t=' + encodeURIComponent(await capability(o.id, 'r'));
+        const link = siteOf(o) + '/guest-review-v1.html?t=' + encodeURIComponent(await capability(o.id, 'r'));
         if (await send(to, title.replace(/\.$/, ''), mail('Recordatorio', title, mP(esc(text)) + button(link, 'Ver nuestra invitación')), `guest-remind/${o.id}/${id}/${o.review_sent_at}`)) sent.push('couple:' + o.id + ':' + id);
       }
       // 30 días sin respuesta: se aprueba como si pulsaran «Aprobar» (el catálogo se entrega solo; a medida pide el resto).
       if (now - Date.parse(o.review_sent_at) >= AUTO_APPROVE_DAYS * D) {
-        const j = await flowCall({ action: 'review_respond', token: await capability(o.id, 'r'), decision: 'approve' });
+        const j = await flowCall(o, { action: 'review_respond', token: await capability(o.id, 'r'), decision: 'approve' });
         if (j?.ok) { sent.push('auto-approve:' + o.id); await send(OWNER, `Aprobada sola (30 días) · ${label(o)}`, ownerMail('Aprobada sola', 'Pasaron 30 días sin respuesta.', mP(`<b>${esc(label(o))}</b> no contestó a su propuesta en 30 días, así que se ha dado por aprobada${o.custom_request_id ? ' y les ha llegado el pago del resto' : ' y se ha entregado'}.`)), `guest-auto-approve/${o.id}`); }
         else console.error('auto_approve_failed', o.id, j?.error);
       }
@@ -265,7 +268,7 @@ async function tick(c: any) {
         [lastAt + 6 * D, 'c6d', '¿Os ayudamos con el cambio?', 'Seguimos esperando vuestro cambio para terminar la invitación. Si os resulta más fácil, respondednos a este email con lo que queréis cambiar y lo hacemos nosotros.']
       ] as [number, string, string, string][]) {
         if (!crossed(t, now)) continue;
-        const link = APP_ORIGIN + '/guest/catalog-questionnaire.html?t=' + encodeURIComponent(await capability(o.id, 'q')) + (part >= 0 ? '&parte=' + part : '');
+        const link = siteOf(o) + '/guest/catalog-questionnaire.html?t=' + encodeURIComponent(await capability(o.id, 'q')) + (part >= 0 ? '&parte=' + part : '');
         if (await send(to, title.replace(/\.$/, ''), mail('Recordatorio', title, mP(esc(text)) + button(link, 'Hacer el cambio')), `guest-remind/${o.id}/${id}/${lastAt}`)) sent.push('couple:' + o.id + ':' + id);
       }
     }

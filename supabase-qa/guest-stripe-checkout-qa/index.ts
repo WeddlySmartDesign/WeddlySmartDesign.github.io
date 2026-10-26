@@ -6,17 +6,20 @@ const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,
 /* QA COPY — Stripe TEST only. Derived from guest-stripe-checkout v26 (live, untouched).
  * Reads only the GUEST_STRIPE_TEST_* secrets, refuses any live key or livemode object,
  * sells only the QA catalog below and emails only the owner's own addresses. */
-const QA_PREVIEW='https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
+// Same source serves the live slug: its entry file sets globalThis.__GUEST_LIVE before importing this one.
+const LIVE=(globalThis as any).__GUEST_LIVE===true;
+const QA_PREVIEW=LIVE?String(Deno.env.get('GUEST_LIVE_ORIGIN')||'https://guest.weddlysmartdesign.com').replace(/\/$/,''):'https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
 const QA_ENV:Record<string,string>={
  GUEST_CATALOG_SALE_OPTIONS:JSON.stringify(Object.fromEntries(Object.entries({'design-09':'Azahar','design-11':'Cristal','design-07':'Espejo','veil-light':'Seda','design-12':'Abanico','design-05':'Gala','design-06':'Invernadero','design-08':'Melodía','design-10':'Cuento','botanica':'Botánica','design-16':'Rumbo','design-04':'Brisa','design-13':'Viñeta','design-14':'Ellas','design-15':'Ellos'}).map(([id,displayName])=>[id,{version:id==='veil-light'?'5.3.3':id==='botanica'?'14.7':'1.0.0',status:'commercially-frozen',edition:'signature',amountCents:5990,displayName}]))),
  WEDDLY_SITE_ORIGIN:QA_PREVIEW,GUEST_CATALOG_PUBLIC_ORIGIN:QA_PREVIEW,
  STRIPE_WEBHOOK_SECRET:'',WEDDLY_STRIPE_AUTOMATIC_TAX:''
 };
-const QA_SECRET_NAMES:Record<string,string>={STRIPE_SECRET_KEY:'GUEST_STRIPE_TEST_SECRET_KEY',STRIPE_PUBLISHABLE_KEY:'GUEST_STRIPE_TEST_PUBLISHABLE_KEY'};
+const QA_SECRET_NAMES:Record<string,string>=LIVE?{STRIPE_SECRET_KEY:'GUEST_STRIPE_LIVE_SECRET_KEY',STRIPE_PUBLISHABLE_KEY:'GUEST_STRIPE_LIVE_PUBLISHABLE_KEY'}:{STRIPE_SECRET_KEY:'GUEST_STRIPE_TEST_SECRET_KEY',STRIPE_PUBLISHABLE_KEY:'GUEST_STRIPE_TEST_PUBLISHABLE_KEY'};
 const QA_EMAILS=['weddlysmartdesign@gmail.com','pilarrodriguezbonilla@gmail.com','info@weddlysmartdesign.com'];
 const env=(n:string)=>Object.prototype.hasOwnProperty.call(QA_ENV,n)?QA_ENV[n]:(Deno.env.get(QA_SECRET_NAMES[n]||n)||'').trim();
 function assertTestKeys(){
- if(!/^sk_test_[A-Za-z0-9_]+$/.test(env('STRIPE_SECRET_KEY'))||!/^pk_test_[A-Za-z0-9_]+$/.test(env('STRIPE_PUBLISHABLE_KEY')))throw new Error('stripe_not_configured');
+ const m=LIVE?'live':'test';
+ if(!new RegExp('^(sk|rk)_'+m+'_[A-Za-z0-9_]+$').test(env('STRIPE_SECRET_KEY'))||!new RegExp('^pk_'+m+'_[A-Za-z0-9_]+$').test(env('STRIPE_PUBLISHABLE_KEY')))throw new Error('stripe_not_configured');
 }
 const admin=()=>{const secrets=Deno.env.get('SUPABASE_SECRET_KEYS');const key=secrets?JSON.parse(secrets).default:Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');return createClient(Deno.env.get('SUPABASE_URL')!,key!,{auth:{persistSession:false}})};
 async function sha256(v:string){const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v));return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('')}
@@ -73,7 +76,7 @@ function normalizeCode(v:string){return String(v||'').trim().toUpperCase().repla
 async function stripeRequest(path:string,init:RequestInit={}){assertTestKeys();
  const secret=env('STRIPE_SECRET_KEY');if(!secret)throw new Error('stripe_not_configured');
  const r=await fetch('https://api.stripe.com/v1'+path,{...init,headers:{Authorization:'Bearer '+secret,...(init.headers||{})}});
- const x=await r.json().catch(()=>({}));if(r.ok&&x.livemode!==false)throw new Error('stripe_not_configured');if(!r.ok){console.warn('stripe_error',r.status,x);if(r.status===404)throw new Error('session_not_found');if(r.status===401||r.status===403)throw new Error('stripe_not_configured');if(r.status===429)throw new Error('stripe_temporarily_unavailable');throw new Error('stripe_request_failed')}return x
+ const x=await r.json().catch(()=>({}));if(r.ok&&x.livemode!==LIVE)throw new Error('stripe_not_configured');if(!r.ok){console.warn('stripe_error',r.status,x);if(r.status===404)throw new Error('session_not_found');if(r.status===401||r.status===403)throw new Error('stripe_not_configured');if(r.status===429)throw new Error('stripe_temporarily_unavailable');throw new Error('stripe_request_failed')}return x
 }
 async function createSession(edition:string,consent:boolean,attempt:any,requestedTemplateId:any){
  if(!consent)throw new Error('consent_required');
@@ -120,8 +123,9 @@ async function resend(payload:any){
  const key=env('RESEND_API_KEY'),rawFrom=env('WEDDLY_RESEND_FROM'),fm=rawFrom.match(/<([^>]+)>/),addr=(fm?.[1]||(/^[^\s<>]+@[^\s<>]+$/.test(rawFrom)?rawFrom:'')).trim();
  // Same sending address as ONE, but GUEST emails must show GUEST's own name.
  const from=addr?'GUEST by WeddlySmartDesign <'+addr+'>':rawFrom;if(!key||!from)return false;
- const to=(payload.body?.to||[]).map((x:string)=>String(x).toLowerCase());if(!to.length||!to.every((x:string)=>QA_EMAILS.includes(x))){console.warn('qa_email_blocked');return false}
- payload.body.subject='[PRUEBA] '+payload.body.subject;
+ const to=(payload.body?.to||[]).map((x:string)=>String(x).toLowerCase());if(!to.length)return false;
+ if(!LIVE){if(!to.every((x:string)=>QA_EMAILS.includes(x))){console.warn('qa_email_blocked');return false}
+ payload.body.subject='[PRUEBA] '+payload.body.subject}
  const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key,...(payload.idempotencyKey?{'Idempotency-Key':payload.idempotencyKey}:{})},body:JSON.stringify({from,reply_to:'weddlysmartdesign@gmail.com',...payload.body})});
  if(!r.ok){console.warn('resend_failed',r.status,await r.text());return false}return true
 }
@@ -153,7 +157,7 @@ async function paidCatalogQuestionnaire(licenseId:string,metadata:any){
  const key=secrets?String(JSON.parse(secrets).default||''):String(Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')||'');
  if(!key)throw new Error('catalog_manager_unavailable');
  const token='v1.'+payload+'.'+await hmacHex(key,'wsd-owner-manager-v1|'+payload);
- const response=await fetch(env('SUPABASE_URL')+'/functions/v1/guest-invitation-flow-qa',{
+ const response=await fetch(env('SUPABASE_URL')+'/functions/v1/'+(LIVE?'guest-order-flow':'guest-invitation-flow-qa'),{
    method:'POST',headers:{'content-type':'application/json','x-weddly-manager':token},
    body:JSON.stringify({action:'create_paid',licenseId,templateId}),
    signal:AbortSignal.timeout(15000)});
@@ -231,6 +235,7 @@ async function submitOrder(session:any,raw:any){
 
 
 async function guestWebhookSecret(){
+ if(LIVE)return env('GUEST_STRIPE_LIVE_WEBHOOK_SECRET');
  const direct=env('GUEST_STRIPE_WEBHOOK_SECRET');if(direct)return direct;
  const url=env('SUPABASE_URL'),key=env('SUPABASE_SERVICE_ROLE_KEY');
  if(!url||!key)return '';

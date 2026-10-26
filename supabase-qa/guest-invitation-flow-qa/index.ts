@@ -15,16 +15,19 @@ const db=()=>createClient(Deno.env.get('SUPABASE_URL')!,secretKey(),{auth:{persi
 // Owner decision 2026-10-26: she checks proposals and corrections herself for the first sales; after
 // AUTO_AFTER_SALES paid orders, corrections go out on their own and a proposal unattended for 48 h too.
 const AUTO_AFTER_SALES=10;
-async function autoMode(c:any){const {count}=await c.from('guest_invitation_orders').select('id',{count:'exact',head:true}).not('checkout_session_id','is',null).eq('mode','production').neq('status','cancelled');return Number(count||0)>=AUTO_AFTER_SALES}
+async function autoMode(c:any){const {count}=await c.from('guest_invitation_orders').select('id',{count:'exact',head:true}).like('checkout_session_id','cs_live_%').eq('mode','production').neq('status','cancelled');return Number(count||0)>=AUTO_AFTER_SALES}
 // Change rounds: 3 included; from the 4th each round costs 10 € and is paid before it opens.
 // The table caps revision_count at 20, so that is the hard ceiling even with paid rounds.
 const INCLUDED_CHANGES=3,EXTRA_CHANGE_CENTS=1000,MAX_CHANGES=20;
-const QA_PREVIEW='https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
+// One source, two deployments: guest-invitation-flow-qa (test) and guest-order-flow (real). The real one
+// sets __GUEST_LIVE before importing this file: real web origin, real Stripe key, emails to the couples.
+const LIVE=(globalThis as any).__GUEST_LIVE===true;
+const QA_PREVIEW=LIVE?String(Deno.env.get('GUEST_LIVE_ORIGIN')||'https://guest.weddlysmartdesign.com').replace(/\/$/,''):'https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
 const QA_EMAILS=['weddlysmartdesign@gmail.com','pilarrodriguezbonilla@gmail.com','info@weddlysmartdesign.com'];
 const qaEnv=(n:string)=>n==='GUEST_CATALOG_PUBLIC_ORIGIN'?QA_PREVIEW+'/':(Deno.env.get(n)||'');
 // The GUEST app for catalog couples lives next to the web (guest-web/guest/), not on the frozen github.io site.
 const APP_ORIGIN=QA_PREVIEW;
-const site=()=>String(Deno.env.get('WEDDLY_SITE_ORIGIN')||'https://weddlysmartdesign.github.io').replace(/\/$/,'');
+const site=()=>LIVE?QA_PREVIEW:String(Deno.env.get('WEDDLY_SITE_ORIGIN')||'https://weddlysmartdesign.github.io').replace(/\/$/,'');
 const now=()=>new Date().toISOString();
 const txt=(v:any,max=500)=>String(v??'').trim().slice(0,max);
 const CATALOG_TEMPLATES:any={
@@ -132,8 +135,11 @@ async function resend(body:any,idempotencyKey?:string){
   const from=addr?('GUEST by WeddlySmartDesign <'+addr+'>'):rawFrom;
   if(!key||!from)return false;
   const to=(Array.isArray(body?.to)?body.to:[]).map((x:string)=>String(x).toLowerCase());
-  if(!to.length||!to.every((x:string)=>QA_EMAILS.includes(x))){console.warn('qa_email_blocked');return true}
-  body={...body,subject:'[PRUEBA] '+String(body?.subject||'')};
+  if(!to.length)return true;
+  if(!LIVE){
+    if(!to.every((x:string)=>QA_EMAILS.includes(x))){console.warn('qa_email_blocked');return true}
+    body={...body,subject:'[PRUEBA] '+String(body?.subject||'')};
+  }
   const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key,...(idempotencyKey?{'Idempotency-Key':idempotencyKey}:{})},body:JSON.stringify({from,reply_to:'weddlysmartdesign@gmail.com',...body})});
   if(!r.ok){console.warn('resend_failed',r.status,await r.text());return false}return true
 }
@@ -205,10 +211,10 @@ async function designMail(order:any,from:string,spec:any,how:string){
   await resend({to:['weddlysmartdesign@gmail.com'],subject:'Han elegido otro diseño · '+orderLabel(order),html:guestMail({owner:true,kicker:'Cambio de diseño',title:'Han elegido otro diseño.',preheader:'Ya está montado con sus datos. Míralo y envíaselo.',body:mP('<b>'+esc(orderLabel(order))+'</b> ha cambiado <b>'+esc(from)+'</b> por <b>'+esc(spec.id)+'</b> desde la página de revisión. Ya está montado con sus datos y fotos; míralo y envíaselo. '+how)+mBtn(QA_PREVIEW+'/guest/panel-pruebas.html#/pedido/'+order.id,'Abrir el pedido')})},'guest-design-change/'+order.id+'/'+Number(order.design_changes||0)).catch((e:any)=>console.error('design_change_mail',e?.message));
 }
 const internalSig=async(action:string,id:string)=>(await hmac('guest-internal-v1|'+action+'|'+id)).slice(0,40);
-const CUSTOM_FN=()=>String(Deno.env.get('SUPABASE_URL')||'').replace(/\/$/,'')+'/functions/v1/guest-custom-qa';
+const CUSTOM_FN=()=>String(Deno.env.get('SUPABASE_URL')||'').replace(/\/$/,'')+'/functions/v1/'+(LIVE?'guest-order-custom':'guest-custom-qa');
 async function stripe(path:string,init:RequestInit={}){
-  const key=txt(Deno.env.get('GUEST_STRIPE_TEST_SECRET_KEY'),300);
-  if(!key.startsWith('sk_test_'))throw Error('stripe_key_missing');
+  const key=txt(Deno.env.get(LIVE?'GUEST_STRIPE_LIVE_SECRET_KEY':'GUEST_STRIPE_TEST_SECRET_KEY'),300);
+  if(!key.startsWith(LIVE?'sk_live_':'sk_test_')&&!(LIVE&&key.startsWith('rk_live_')))throw Error('stripe_key_missing');
   const r=await fetch('https://api.stripe.com/v1/'+path,{...init,headers:{Authorization:'Bearer '+key,'Content-Type':'application/x-www-form-urlencoded',...(init.headers||{})}});
   const j=await r.json();if(!r.ok)throw Error('stripe_'+(j?.error?.code||r.status));return j;
 }

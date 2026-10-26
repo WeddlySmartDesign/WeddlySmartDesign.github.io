@@ -10,8 +10,9 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { guestMail, mBtn, mP, mSteps, mNote, mList, DESIGN_NAMES } from './guest-mail.ts';
 
-const QA = true;
-const APP_ORIGIN = 'https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
+// The live slug imports this file after setting globalThis.__GUEST_LIVE (see live.ts).
+const QA = (globalThis as any).__GUEST_LIVE !== true;
+const APP_ORIGIN = QA ? 'https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev' : String(Deno.env.get('GUEST_LIVE_ORIGIN') || 'https://guest.weddlysmartdesign.com').replace(/\/$/, '');
 const OWNER = ['weddlysmartdesign@gmail.com'];
 const OWNER_EMAILS = ['weddlysmartdesign@gmail.com', 'pilarrodriguezbonilla@gmail.com', 'info@weddlysmartdesign.com'];
 // Condiciones del diseño a medida (guest-legal.html, apartado 5).
@@ -87,10 +88,10 @@ const toOwner = (subject: string, kicker: string, title: string, body: string, k
   send(OWNER, subject, guestMail({ owner: true, kicker, title, preheader: title, body: body + mBtn(APP_ORIGIN + '/guest/panel-pruebas.html#/medida', 'Abrir mis pedidos') }), key);
 
 /* ---------- Stripe ---------- */
-function stripeKey() { return txt(Deno.env.get(QA ? 'GUEST_STRIPE_TEST_SECRET_KEY' : 'STRIPE_SECRET_KEY')); }
+function stripeKey() { return txt(Deno.env.get(QA ? 'GUEST_STRIPE_TEST_SECRET_KEY' : 'GUEST_STRIPE_LIVE_SECRET_KEY')); }
 async function stripe(path: string, init: RequestInit = {}) {
   const key = stripeKey();
-  if (!key || (QA && !key.startsWith('sk_test_'))) throw Error('stripe_key_missing');
+  if (!key || (QA ? !key.startsWith('sk_test_') : !/^(sk|rk)_live_/.test(key))) throw Error('stripe_key_missing');
   const r = await fetch('https://api.stripe.com/v1/' + path, { ...init, headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/x-www-form-urlencoded', ...(init.headers || {}) } });
   const j = await r.json();
   if (!r.ok) throw Error('stripe_' + (j?.error?.code || r.status));
@@ -222,7 +223,7 @@ async function access(c: any, r: any) {
 
 // El a medida usa el mismo sistema que el catálogo: al pagar la señal se crea su pedido (cuestionario,
 // revisión con marca de agua y rondas, entrega con la app). Las llamadas a guest-invitation-flow-qa van firmadas.
-const FLOW_FN = () => txt(Deno.env.get('SUPABASE_URL')).replace(/\/$/, '') + '/functions/v1/guest-invitation-flow-qa';
+const FLOW_FN = () => txt(Deno.env.get('SUPABASE_URL')).replace(/\/$/, '') + '/functions/v1/' + (QA ? 'guest-invitation-flow-qa' : 'guest-order-flow');
 const internalSig = async (action: string, id: string) => (await hmacHex('guest-internal-v1|' + action + '|' + id)).slice(0, 40);
 async function callFlow(action: string, id: string, body: Record<string, unknown>) {
   const r = await fetch(FLOW_FN(), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action, ...body, sig: await internalSig(action, id) }) });

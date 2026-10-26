@@ -2,7 +2,7 @@
 'use strict';
 if(window.__GuestCatalogDeliveryRuntime)return;
 
-const FLOW='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow-qa';
+const FLOW='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1|guest-stripe-pago-2026-10-24\.)/.test(location.hostname)?'guest-invitation-flow-qa':'guest-order-flow');
 // RSVP lives in the already-published GUEST management app, not at a new static CDN origin.
 const RSVP_ORIGIN='https://weddlysmartdesign.github.io';
 

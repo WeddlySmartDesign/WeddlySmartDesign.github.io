@@ -3,7 +3,7 @@
 (() => {
   'use strict';
   // QA: al pasar a real, guest-invitation-flow.
-  const API = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow-qa';
+  const API = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1|guest-stripe-pago-2026-10-24\.)/.test(location.hostname)?'guest-invitation-flow-qa':'guest-order-flow');
   const show = (until) => {
     const back = new Date(until + 'T12:00:00'), next = new Date(back.getTime() + 864e5);
     const f = (d) => d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' });

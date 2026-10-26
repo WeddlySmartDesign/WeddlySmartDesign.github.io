@@ -533,7 +533,7 @@
 <script>
 (() => {
 'use strict';
-const API = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow-qa';
+const API = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1|guest-stripe-pago-2026-10-24\.)/.test(location.hostname)?'guest-invitation-flow-qa':'guest-order-flow');
 const params = new URLSearchParams(location.search);
 // ?demo (o ?demo=design-XX) abre el cuestionario sin pedido: nada se guarda ni se envía.
 const DEMO = params.has('demo');
