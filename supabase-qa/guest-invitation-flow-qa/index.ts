@@ -13,8 +13,9 @@ const db=()=>createClient(Deno.env.get('SUPABASE_URL')!,secretKey(),{auth:{persi
 /* QA COPY of guest-invitation-flow v21 (live, untouched). Every catalog design is sellable here,
  * review/final links point to the branch preview, and emails only reach the owner's own addresses. */
 const AUTO_CORRECTIONS=false;
-// Change rounds a couple can ask for from the review page (the table allows up to 20).
-const MAX_CHANGES=20;
+// Change rounds: 3 included; from the 4th each round costs 10 € and is paid before it opens.
+// The table caps revision_count at 20, so that is the hard ceiling even with paid rounds.
+const INCLUDED_CHANGES=3,EXTRA_CHANGE_CENTS=1000,MAX_CHANGES=20;
 const QA_PREVIEW='https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
 const QA_EMAILS=['weddlysmartdesign@gmail.com','pilarrodriguezbonilla@gmail.com','info@weddlysmartdesign.com'];
 const qaEnv=(n:string)=>n==='GUEST_CATALOG_PUBLIC_ORIGIN'?QA_PREVIEW+'/':(Deno.env.get(n)||'');
@@ -165,6 +166,44 @@ const catalogOrigin=()=>String(qaEnv('GUEST_CATALOG_PUBLIC_ORIGIN')||'').trim().
 function partFromNote(note:string){const m=String(note||'').match(/^Parte: (.+)$/m);const i=m?QUESTIONNAIRE_PARTS.indexOf(m[1].trim()):-1;return i}
 function lastChangePart(order:any){const r=Array.isArray(order.revision_requests)?order.revision_requests:[];return r.length?partFromNote(r[r.length-1]?.note):-1}
 async function changeLink(order:any,part:number){return catalogOrigin()+'/guest/catalog-questionnaire.html?t='+encodeURIComponent(await capability(order.id,'q'))+(part>=0?'&parte='+part:'')}
+function changesInfo(o:any){const used=Number(o.revision_count||0),extra=Number(o.extra_changes||0);return {included:INCLUDED_CHANGES,used,extra,left:Math.max(0,INCLUDED_CHANGES+extra-used),extraCents:EXTRA_CHANGE_CENTS,max:MAX_CHANGES}}
+async function stripe(path:string,init:RequestInit={}){
+  const key=txt(Deno.env.get('GUEST_STRIPE_TEST_SECRET_KEY'),300);
+  if(!key.startsWith('sk_test_'))throw Error('stripe_key_missing');
+  const r=await fetch('https://api.stripe.com/v1/'+path,{...init,headers:{Authorization:'Bearer '+key,'Content-Type':'application/x-www-form-urlencoded',...(init.headers||{})}});
+  const j=await r.json();if(!r.ok)throw Error('stripe_'+(j?.error?.code||r.status));return j;
+}
+async function invoiceLink(id:string){return catalogOrigin()+'/guest/factura.html?f='+encodeURIComponent(id+'.'+(await hmac('guest-invoice-v1|'+id)).slice(0,32))}
+// Opens a change round: status, history and the emails with the link to the questionnaire.
+async function requestChange(c:any,order:any,note:string,paidCents=0){
+  const ts=now();
+  // 'before' keeps the questionnaire as it was, so the owner app can show only what changed.
+  const history=[...(Array.isArray(order.revision_requests)?order.revision_requests:[]),{at:ts,note,before:order.questionnaire||{},...(paidCents?{paidCents}:{})}];
+  const {data:next,error}=await c.from('guest_invitation_orders').update({status:'changes_requested',revision_count:Number(order.revision_count||0)+1,revision_requests:history,updated_at:ts}).eq('id',order.id).eq('revision_count',Number(order.revision_count||0)).select('id').maybeSingle();if(error)throw error;
+  if(!next)return;
+  const to=emailOf(order.questionnaire,order.buyer_email),part=partFromNote(note);
+  if(to&&order.mode!=='test')await resend({to:[to],subject:'Vuestro enlace para hacer el cambio',html:guestMail({kicker:'Cambio pedido',title:part>=0?'Cambiad «'+QUESTIONNAIRE_PARTS[part]+'» cuando queráis.':'Cambiad lo que queráis.',preheader:'El enlace abre esa parte del cuestionario con vuestros datos.',
+    body:mP('Este enlace abre esa parte de vuestro cuestionario con todo lo que ya pusisteis. Cambiad lo que necesitéis y pulsad <b>«Enviar los cambios»</b>.')
+      +mBtn(await changeLink(order,part),'Hacer el cambio')
+      +mNote('Cuando lo enviéis, os mandamos la versión corregida para revisar <b>en un máximo de 72 h</b>.')
+      +mP('Si ya lo habéis hecho, podéis ignorar este email.',true)})},'guest-changes-link/'+order.id+'/'+String(order.revision_count||0));
+  if(order.mode!=='test')await resend({to:['weddlysmartdesign@gmail.com'],subject:(paidCents?'Ronda extra pagada · ':'Cambios solicitados · ')+orderLabel(order),html:'<p><b>'+esc(orderLabel(order))+'</b>'+(paidCents?' · ronda extra pagada ('+(paidCents/100).toFixed(2).replace('.',',')+' €)':'')+'</p><p>'+esc(note).replaceAll('\n','<br>')+'</p>'},'guest-review-changes/'+order.id+'/'+String(order.revision_count||0));
+}
+// Applies a paid extra round once: counter, invoice, and the change it was paid for.
+async function settleChangePayment(c:any,order:any,sessionId:string){
+  if(!/^cs_(test|live)_[A-Za-z0-9]+$/.test(sessionId)||(order.paid_change_sessions||[]).includes(sessionId))return order;
+  const s=await stripe('checkout/sessions/'+encodeURIComponent(sessionId));
+  if(s.metadata?.guest_order!==order.id||s.metadata?.part!=='extra_change'||s.payment_status!=='paid')return order;
+  const ts=now(),note=txt(order.change_payment?.session===sessionId?order.change_payment.note:s.metadata?.note,1500)||'Ronda extra';
+  const {data:next,error}=await c.from('guest_invitation_orders').update({extra_changes:Number(order.extra_changes||0)+1,paid_change_sessions:[...(order.paid_change_sessions||[]),sessionId],change_payment:null,updated_at:ts}).eq('id',order.id).not('paid_change_sessions','cs','{'+sessionId+'}').select('*').maybeSingle();
+  if(error)throw error;if(!next)return order;
+  const to=emailOf(order.questionnaire,order.buyer_email);
+  const {data:inv,error:ie}=await c.rpc('guest_issue_order_extra_invoice',{p_order:order.id,p_mode:s.livemode?'production':'test',p_email:to||s.customer_details?.email||'',p_name:s.customer_details?.name||namesOf(order.questionnaire)||'',p_concept:'Ronda de cambios extra · invitación digital personalizada',p_total_cents:s.amount_total,p_stripe_ref:s.payment_intent||sessionId});
+  if(ie)console.error('extra_invoice_failed',ie);
+  if(inv&&to&&order.mode!=='test')await resend({to:[to],subject:'Factura '+inv.number+' · ronda de cambios extra',html:guestMail({kicker:'Pago recibido',title:'Recibido. Ya podéis hacer el cambio.',preheader:'Aquí tenéis la factura de la ronda extra.',body:mP('Gracias. Ya tenemos el pago de la ronda de cambios extra. Os llega en otro email el enlace para hacer el cambio.')+mBtn(await invoiceLink(inv.id),'Ver la factura')})},'guest-extra-change-invoice/'+inv.id);
+  if(['review_ready','review_sent'].includes(next.status))await requestChange(c,next,note,s.amount_total);
+  return (await c.from('guest_invitation_orders').select('*').eq('id',order.id).single()).data||next;
+}
 function namesOf(q:any){return [txt(q?.couple?.name1,40),txt(q?.couple?.name2,40)].filter(Boolean).join(' & ')}
 
 function sortedMoments(a:any[]){
@@ -737,11 +776,13 @@ Deno.serve(async req=>{
       return json({ok:true,submittedAt:ts});
     }
     if(action==='review_load'){
-      const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
+      let order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
       if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);
+      const back=txt(b.paid,200);
+      for(const sid of new Set([back,order.change_payment?.session].filter(Boolean)))order=await settleChangePayment(c,order,String(sid)).catch((e:any)=>{console.error('change_settle_failed',e?.message);return order});
       const files=await signedFiles(c,order,7200),config=checkInvitationRead(hydrateConfig(order.resolved_config||{},files),order,files);
       const pending=order.status==='changes_requested'?{questionnaireToken:await capability(order.id,'q'),part:lastChangePart(order)}:{};
-      return json({ok:true,order:{id:order.id,status:order.status,label:orderLabel(order),config:withStyle(config,order),revisionCount:order.revision_count||0,...pending}});
+      return json({ok:true,order:{id:order.id,status:order.status,label:orderLabel(order),config:withStyle(config,order),revisionCount:order.revision_count||0,changes:changesInfo(order),...pending}});
     }
     if(action==='review_respond'){
       const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
@@ -769,17 +810,27 @@ Deno.serve(async req=>{
       }
       const note=txt(b.note,1500);if(!note)return json({ok:false,error:'changes_note_required'},400);
       if(Number(order.revision_count||0)>=MAX_CHANGES)return json({ok:false,error:'too_many_changes'},409);
-      // 'before' keeps the questionnaire as it was, so the owner app can show only what changed.
-      const history=[...(Array.isArray(order.revision_requests)?order.revision_requests:[]),{at:ts,note,before:order.questionnaire||{}}];
-      const {error}=await c.from('guest_invitation_orders').update({status:'changes_requested',revision_count:Number(order.revision_count||0)+1,revision_requests:history,updated_at:ts}).eq('id',order.id);if(error)throw error;
-       const to=emailOf(order.questionnaire,order.buyer_email),part=partFromNote(note);
-       if(to&&order.mode!=='test')await resend({to:[to],subject:'Vuestro enlace para hacer el cambio',html:guestMail({kicker:'Cambio pedido',title:part>=0?'Cambiad «'+QUESTIONNAIRE_PARTS[part]+'» cuando queráis.':'Cambiad lo que queráis.',preheader:'El enlace abre esa parte del cuestionario con vuestros datos.',
-         body:mP('Este enlace abre esa parte de vuestro cuestionario con todo lo que ya pusisteis. Cambiad lo que necesitéis y pulsad <b>«Enviar los cambios»</b>.')
-           +mBtn(await changeLink(order,part),'Hacer el cambio')
-           +mNote('Cuando lo enviéis, os mandamos la versión corregida para revisar <b>en un máximo de 72 h</b>.')
-           +mP('Si ya lo habéis hecho, podéis ignorar este email.',true)})},'guest-changes-link/'+order.id+'/'+String(order.revision_count||0));
-       if(order.mode!=='test')await resend({to:['weddlysmartdesign@gmail.com'],subject:'Cambios solicitados · '+orderLabel(order),html:'<p><b>'+esc(orderLabel(order))+'</b></p><p>'+esc(note).replaceAll('\n','<br>')+'</p>'},'guest-review-changes/'+order.id+'/'+String(order.revision_count||0));
+      if(changesInfo(order).left<=0)return json({ok:false,error:'change_payment_required',changes:changesInfo(order)},402);
+      await requestChange(c,order,note);
       return json({ok:true,status:'changes_requested',questionnaireToken:await capability(order.id,'q')});
+    }
+    if(action==='change_checkout'){
+      const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
+      if(!['review_ready','review_sent'].includes(order.status))return json({ok:false,error:'review_locked'},409);
+      const note=txt(b.note,1500);if(!note)return json({ok:false,error:'changes_note_required'},400);
+      const info=changesInfo(order);if(info.left>0)return json({ok:false,error:'change_included'},409);
+      if(info.used>=MAX_CHANGES)return json({ok:false,error:'too_many_changes'},409);
+      const back=catalogOrigin()+'/guest-review-v1.html?t='+encodeURIComponent(String(b.token)),p=new URLSearchParams(),to=emailOf(order.questionnaire,order.buyer_email);
+      p.set('mode','payment');p.set('locale','es');p.set('submit_type','pay');p.set('payment_method_types[0]','card');
+      if(to)p.set('customer_email',to);
+      p.set('success_url',back+'&paid={CHECKOUT_SESSION_ID}');p.set('cancel_url',back);
+      p.set('line_items[0][quantity]','1');p.set('line_items[0][price_data][currency]','eur');p.set('line_items[0][price_data][unit_amount]',String(EXTRA_CHANGE_CENTS));
+      p.set('line_items[0][price_data][product_data][name]','Ronda de cambios extra · invitación GUEST');
+      p.set('metadata[product]','guest_change');p.set('metadata[guest_order]',order.id);p.set('metadata[part]','extra_change');p.set('metadata[note]',note.slice(0,480));
+      p.set('payment_intent_data[metadata][guest_order]',order.id);p.set('payment_intent_data[metadata][part]','extra_change');
+      const s=await stripe('checkout/sessions',{method:'POST',headers:{'Idempotency-Key':'guest-change/'+order.id+'/'+info.used+'/'+info.extra+'/'+(await sha256(note)).slice(0,16)},body:p.toString()});
+      const {error}=await c.from('guest_invitation_orders').update({change_payment:{session:s.id,note,at:now()}}).eq('id',order.id);if(error)throw error;
+      return json({ok:true,url:s.url});
     }
     if(action==='public_load'){
       const order=await findByToken(c,String(b.token||''),'public_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
@@ -896,7 +947,7 @@ Deno.serve(async req=>{
     if(action==='detail'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
       const files=await signedFiles(c,order,7200),config=hydrateConfig(order.resolved_config||{},files);
-      return json({ok:true,order:{...order,files,hydratedConfig:config,questionnaireToken:await capability(order.id,'q'),reviewToken:await capability(order.id,'r'),publicToken:await capability(order.id,'p')}});
+      return json({ok:true,order:{...order,changes:changesInfo(order),files,hydratedConfig:config,questionnaireToken:await capability(order.id,'q'),reviewToken:await capability(order.id,'r'),publicToken:await capability(order.id,'p')}});
     }
     if(action==='start_design'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
@@ -985,6 +1036,14 @@ Deno.serve(async req=>{
       const {error}=await c.from('guest_invitation_orders').update({style_overrides:style,updated_at:now()}).eq('id',order.id);if(error)throw error;
       return json({ok:true,style});
     }
+    if(action==='grant_change'){
+      // Goodwill: the owner gives one more change round for free (or takes back one she gave).
+      const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
+      const extra=Math.max(0,Number(order.extra_changes||0)+(b.undo?-1:1));
+      if(INCLUDED_CHANGES+extra>MAX_CHANGES)return json({ok:false,error:'too_many_changes'},409);
+      const {error}=await c.from('guest_invitation_orders').update({extra_changes:extra,updated_at:now()}).eq('id',order.id);if(error)throw error;
+      return json({ok:true,changes:changesInfo({...order,extra_changes:extra})});
+    }
     if(action==='owner_note'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
       const {error}=await c.from('guest_invitation_orders').update({owner_notes:txt(b.note,5000),updated_at:now()}).eq('id',order.id);if(error)throw error;return json({ok:true});
@@ -995,5 +1054,5 @@ Deno.serve(async req=>{
       const {error}=await c.from('guest_invitation_orders').update({status:'designing',updated_at:now()}).eq('id',order.id);if(error)throw error;return json({ok:true,status:'designing'});
     }
     return json({ok:false,error:'invalid_action'},400);
-  }catch(e){const m=String((e as Error)?.message||'');console.error(e);if(['missing_signed_asset','missing_invitation_upload','missing_order_template_pin'].includes(m))return json({ok:false,error:m},409);if(['invalid_invitation_config','invitation_template_pin_mismatch','invalid_invitation_media','invalid_invitation_rsvp_route','untrusted_legacy_invitation'].includes(m))return json({ok:false,error:m},400);if(m==='template_unavailable')return json({ok:false,error:m},400);if(['questionnaire_too_large','invalid_file_type','file_too_large','invalid_upload','changes_note_required','missing_email','invalid_config','config_too_large','template_unavailable','missing_invitation_url','missing_management_license','missing_management_access'].includes(m))return json({ok:false,error:m},400);return json({ok:false,error:'server_error'},500)}
+  }catch(e){const m=String((e as Error)?.message||'');console.error(e);if(m==='stripe_key_missing'||m.startsWith('stripe_'))return json({ok:false,error:'payments_unavailable'},503);if(['missing_signed_asset','missing_invitation_upload','missing_order_template_pin'].includes(m))return json({ok:false,error:m},409);if(['invalid_invitation_config','invitation_template_pin_mismatch','invalid_invitation_media','invalid_invitation_rsvp_route','untrusted_legacy_invitation'].includes(m))return json({ok:false,error:m},400);if(m==='template_unavailable')return json({ok:false,error:m},400);if(['questionnaire_too_large','invalid_file_type','file_too_large','invalid_upload','changes_note_required','missing_email','invalid_config','config_too_large','template_unavailable','missing_invitation_url','missing_management_license','missing_management_access'].includes(m))return json({ok:false,error:m},400);return json({ok:false,error:'server_error'},500)}
 });

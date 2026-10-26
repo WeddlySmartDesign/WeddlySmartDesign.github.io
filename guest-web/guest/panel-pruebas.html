@@ -578,6 +578,11 @@ async function openOrder(id) {
           ${!['approved', 'delivered', 'cancelled'].includes(o.status) ? `<div class="box"><h3>Cambiar de diseño</h3><p>Si te piden otro diseño antes de aprobarla, se monta el nuevo con los mismos datos y fotos.${o.status === 'review_sent' ? ' Después tendrás que volver a enviársela.' : ''}</p>
             <div class="q-form"><label>Nuevo diseño<select id="dsSel" class="fix-sel">${(window.GUEST_CATALOG || []).filter((x) => x.id !== o.template_id).map((x) => `<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select></label></div>
             <div class="st-open"><button class="btn line" type="button" id="dsGo">Cambiar a este diseño</button><p class="msg" role="alert" id="dsMsg"></p></div></div>` : ''}
+          ${o.changes && !['draft', 'cancelled'].includes(o.status) ? (() => { const ch = o.changes, total = ch.included + ch.extra, paidN = (o.paid_change_sessions || []).length, gift = Math.max(0, ch.extra - paidN);
+            return `<div class="box" id="roundsBox"><h3>Rondas de cambios</h3><p><b>Usadas: ${ch.used}</b> · ${ch.included} incluidas${paidN ? ` + ${paidN} pagada${paidN > 1 ? 's' : ''}` : ''}${gift ? ` + ${gift} regalada${gift > 1 ? 's' : ''}` : ''}.</p>
+              <div class="meter" aria-label="${ch.used} de ${total} usadas">${Array.from({ length: Math.max(total, ch.used) }, (_, i) => `<i class="${i < ch.used ? 'on' : ''}${i >= ch.included ? ' extra' : ''}"></i>`).join('')}</div>
+              <p style="margin-top:.5rem">${ch.left > 0 ? `Les ${ch.left === 1 ? 'queda 1 ronda' : `quedan ${ch.left} rondas`}.` : `Ya no les quedan. Si piden otro cambio, la página les cobra ${esc(eur(ch.extraCents))} antes de abrirlo. No tienes que hacer nada.`}</p>
+              ${['approved', 'delivered'].includes(o.status) ? '' : `<div class="st-open"><button class="btn line" type="button" id="giftRound">Regalarles una ronda</button>${gift ? '<button class="link-btn" type="button" id="giftUndo">Quitar la regalada</button>' : ''}<p class="msg" role="alert" id="giftMsg"></p></div>`}</div>`; })() : ''}
           <div class="box"><h3>Cómo va</h3>${timeline(o)}</div>
           <div class="box"><h3>La pareja</h3><ul class="rows">
             ${email ? `<li><a href="mailto:${esc(email)}"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>Escribirles<small>${esc(email)}</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>` : ''}
@@ -605,6 +610,12 @@ async function openOrder(id) {
         catch (e) { if (e.message === 'manager_required') return; $('fixMsg').textContent = ['invalid_invitation_config', 'invalid_invitation_media'].includes(e.message) ? 'Ese valor no encaja (revisa el formato: hora 18:30, enlaces con https://).' : 'No ha salido. Prueba otra vez.'; b.disabled = false; b.textContent = 'Guardar el cambio'; }
       };
     }
+    const gift = (undo) => async () => {
+      try { await flow({ action: 'grant_change', orderId: o.id, ...(undo ? { undo: true } : {}) }); toast(undo ? 'Quitada.' : 'Ronda regalada. Ya pueden pedir el cambio sin pagar.'); openOrder(o.id); }
+      catch (e) { if (e.message === 'manager_required') return; $('giftMsg').textContent = e.message === 'too_many_changes' ? 'Ya tiene el máximo de rondas.' : 'No ha salido. Prueba otra vez.'; }
+    };
+    if ($('giftRound')) $('giftRound').onclick = gift(false);
+    if ($('giftUndo')) $('giftUndo').onclick = gift(true);
     if ($('dsGo')) $('dsGo').onclick = async () => {
       const b = $('dsGo'); if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = '¿Seguro? Pulsa otra vez'; return; }
       b.disabled = true; b.textContent = 'Montando…'; $('dsMsg').textContent = '';

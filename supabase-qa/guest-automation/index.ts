@@ -97,7 +97,7 @@ async function issueInvoice(c: any, o: any) {
 /* ---------- Estadísticas ---------- */
 async function stats(c: any) {
   const [{ data: inv, error: ie }, { data: ord, error: oe }] = await Promise.all([
-    c.from('guest_invoices').select('kind,mode,issued_at,total_cents,order_id,custom_request_id').limit(5000),
+    c.from('guest_invoices').select('kind,mode,issued_at,total_cents,order_id,custom_request_id,extra_for_order').limit(5000),
     c.from('guest_invitation_orders').select('id,template_id,status,checkout_session_id,created_at').not('checkout_session_id', 'is', null).limit(5000)
   ]);
   if (ie) throw ie; if (oe) throw oe;
@@ -111,7 +111,7 @@ async function stats(c: any) {
     const firstCustom = new Map<string, any>();
     [...rows].sort((a: any, b: any) => Date.parse(a.issued_at) - Date.parse(b.issued_at)).forEach((x: any) => { if (x.kind === 'invoice' && x.custom_request_id && !firstCustom.has(x.custom_request_id)) firstCustom.set(x.custom_request_id, x); });
     // Un diseño a medida se factura en dos o más pagos: cuenta como una venta, el día de la señal.
-    const isSale = (x: any) => x.kind === 'invoice' && (!x.custom_request_id || firstCustom.get(x.custom_request_id) === x);
+    const isSale = (x: any) => x.kind === 'invoice' && !x.extra_for_order && (!x.custom_request_id || firstCustom.get(x.custom_request_id) === x);
     const sum = (from: number, to = Infinity) => {
       const r = rows.filter((x: any) => { const t = Date.parse(x.issued_at); return t >= from && t < to; });
       return { sales: r.filter(isSale).length, refunds: r.filter((x: any) => x.kind === 'rectificative').length, cents: r.reduce((a: number, x: any) => a + x.total_cents, 0) };
@@ -271,7 +271,8 @@ Deno.serve(async (req) => {
     if (action === 'stats') return json({ ok: true, ...(await stats(c)) });
 
     if (action === 'invoices') {
-      const { data } = await c.from('guest_invoices').select('id,number,kind,total_cents,issued_at').eq('order_id', String(b.orderId || '')).order('issued_at');
+      const oid = String(b.orderId || ''); if (!/^[0-9a-f-]{36}$/.test(oid)) return json({ ok: false, error: 'invalid_order' }, 400);
+      const { data } = await c.from('guest_invoices').select('id,number,kind,total_cents,issued_at').or(`order_id.eq.${oid},extra_for_order.eq.${oid}`).order('issued_at');
       return json({ ok: true, invoices: await Promise.all((data || []).map(async (x: any) => ({ number: x.number, kind: x.kind, totalCents: x.total_cents, issuedAt: x.issued_at, url: await invoiceUrl(x.id) }))) });
     }
 

@@ -49,6 +49,9 @@
     label.note small { font-weight: 400; color: var(--ink-soft); }
     textarea { width: 100%; min-height: 84px; padding: .75rem .85rem; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); font: 400 1rem/1.5 var(--text); resize: vertical; }
     textarea:focus { outline: none; border-color: var(--ink); background: var(--white); }
+    .rounds { display: flex; align-items: baseline; gap: .6rem; margin-top: .8rem; padding: .65rem .85rem; border-radius: 8px; background: var(--envelope-soft); font-size: .9375rem; line-height: 1.45; }
+    .rounds b { font: 400 1.35rem/1 var(--display); flex: none; }
+    .rounds.pay b { color: var(--postmark); }
     .msg { margin-top: .7rem; font-size: .9375rem; color: var(--postmark); }
     .msg:empty { display: none; }
   </style>
@@ -75,7 +78,8 @@
 
   <div id="changes" hidden>
     <h2>¿Qué parte queréis cambiar?</h2>
-    <p>La abrimos para que la corrijáis vosotros mismos. Podéis cambiar cualquier dato, texto o foto.</p>
+    <p>La abrimos para que la corrijáis vosotros mismos. Desde ahí podéis cambiar cualquier dato, texto o foto, de esa parte y de las demás.</p>
+    <p class="rounds" id="rounds" hidden></p>
     <div class="parts" id="parts"></div>
     <label class="note">Algo que debamos saber <small>Opcional. Por ejemplo: «La foto de la galería se ve oscura».</small><textarea id="note" maxlength="600"></textarea></label>
     <div class="row"><button class="btn" id="send" type="button">Abrir esa parte</button><button class="btn line" data-back type="button">Volver</button></div>
@@ -91,7 +95,9 @@
 (() => {
 'use strict';
 const FLOW = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow-qa';
-const token = new URLSearchParams(location.search).get('t') || '';
+const params = new URLSearchParams(location.search);
+const token = params.get('t') || '', paid = /^cs_[A-Za-z0-9_]+$/.test(params.get('paid') || '') ? params.get('paid') : '';
+if (paid) history.replaceState(null, '', location.pathname + '?t=' + encodeURIComponent(token));
 const $ = (id) => document.getElementById(id);
 // Mismo orden y nombres que las partes del cuestionario.
 const PARTS = [
@@ -101,7 +107,19 @@ const PARTS = [
   ['Detalles prácticos', 'Autobús, alojamiento, regalo y canciones'],
   ['Confirmación y final', 'Preguntas, galería y última frase']
 ];
-let busy = false;
+let busy = false, changes = null;
+const euros = (c) => (c / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR', minimumFractionDigits: c % 100 ? 2 : 0 });
+const mustPay = () => !!changes && changes.left <= 0;
+// Las 3 rondas incluidas y el precio de la siguiente se ven antes de pedir el cambio.
+function showRounds() {
+  const el = $('rounds');
+  if (!changes) { el.hidden = true; return; }
+  el.hidden = false; el.classList.toggle('pay', mustPay());
+  el.innerHTML = mustPay()
+    ? `<b>${euros(changes.extraCents)}</b><span>Ya habéis usado las ${changes.included} rondas de cambios incluidas. Esta ronda extra se paga antes de abrirla; juntad en ella todo lo que queráis cambiar.</span>`
+    : `<b>${changes.left}</b><span>${changes.left === 1 ? 'ronda de cambios os queda' : 'rondas de cambios os quedan'} de las ${changes.included} incluidas. Juntad en cada una todo lo que queráis cambiar. A partir de ahí, cada ronda cuesta ${euros(changes.extraCents)}.</span>`;
+  $('send').textContent = mustPay() ? `Pagar ${euros(changes.extraCents)} y abrir` : 'Abrir esa parte';
+}
 
 async function api(body) {
   const r = await fetch(FLOW, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), cache: 'no-store' });
@@ -133,6 +151,10 @@ async function respond(decision) {
     const extra = $('note').value.trim();
     const body = { action: 'review_respond', token, decision };
     if (decision === 'changes') body.note = 'Parte: ' + PARTS[part][0] + (extra ? '\n' + extra : '');
+    if (decision === 'changes' && mustPay()) {
+      const pay = await api({ action: 'change_checkout', token, note: body.note });
+      location.href = pay.url; return;
+    }
     const x = await api(body);
     if (x.status === 'delivered') { done('Aprobada. ¡Enhorabuena!', 'Os acabamos de mandar un email con el enlace para vuestros invitados y el acceso a la app de invitados.'); return; }
     if (x.status === 'approved') { done('Aprobada. ¡Enhorabuena!', 'La preparamos para enviar y os escribimos con el enlace para vuestros invitados y el acceso a la app.'); return; }
@@ -140,7 +162,8 @@ async function respond(decision) {
     if (x.questionnaireToken) { location.href = `guest/catalog-questionnaire.html?t=${encodeURIComponent(x.questionnaireToken)}&parte=${part}`; return; }
     done('Recibido.', 'Os mandamos el enlace para hacer el cambio por email.');
   } catch (e) {
-    $('msg').textContent = e?.message === 'too_many_changes' ? 'Ya habéis hecho muchos cambios desde aquí. Escribidnos a info@weddlysmartdesign.com y lo vemos juntos.' : e?.message === 'review_locked' ? 'Esta versión ya no admite cambios. Recargad la página.' : 'No se ha podido enviar. Probad de nuevo en un momento.';
+    if (e?.message === 'change_payment_required' && changes) { changes.left = 0; showRounds(); $('msg').textContent = `Ya habéis usado las rondas incluidas. Pulsad «Pagar ${euros(changes.extraCents)} y abrir» para hacer este cambio.`; document.querySelectorAll('.sheet .btn').forEach((b) => { b.disabled = false; }); return; }
+    $('msg').textContent = e?.message === 'payments_unavailable' ? 'Ahora mismo no podemos cobrar la ronda extra. Probad en un rato o escribidnos a info@weddlysmartdesign.com.' : e?.message === 'too_many_changes' ? 'Ya habéis hecho muchos cambios desde aquí. Escribidnos a info@weddlysmartdesign.com y lo vemos juntos.' : e?.message === 'review_locked' ? 'Esta versión ya no admite cambios. Recargad la página.' : 'No se ha podido enviar. Probad de nuevo en un momento.';
     document.querySelectorAll('.sheet .btn').forEach((b) => { b.disabled = false; });
   } finally { busy = false; }
 }
@@ -151,11 +174,12 @@ $('send').onclick = () => respond('changes');
   if (token.length < 32 || token.length > 200) { failure(); return; }
   try {
     const [loaded, manifest] = await Promise.all([
-      api({ action: 'review_load', token }),
+      api({ action: 'review_load', token, ...(paid ? { paid } : {}) }),
       fetch('guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null))
     ]);
     if (!manifest || manifest.schemaVersion !== 'guest-catalog-owner-renderers-v2') throw Error('registry_unavailable');
     const order = loaded.order;
+    changes = order.changes || null; showRounds();
     if (!order?.config?.template?.id) throw Error('missing_template');
     const cfg = order.config, id = cfg.template.id, spec = manifest.templates?.[id];
     if (!spec || spec.mode !== 'iframe' || !spec.src) throw Error('template_asset_not_ready');
@@ -163,7 +187,7 @@ $('send').onclick = () => respond('changes');
     $('state').hidden = true; $('sheet').hidden = false;
     if (order.status === 'changes_requested') {
       const part = PARTS[order.part] ? order.part : null;
-      done('Ya nos pedisteis un cambio.', `${part != null ? `Falta corregir «${PARTS[part][0]}». ` : ''}Cuando lo enviéis, os mandamos la versión nueva para revisar.`);
+      done(paid ? 'Pago recibido. Ya podéis hacer el cambio.' : 'Ya nos pedisteis un cambio.', `${part != null ? `Falta corregir «${PARTS[part][0]}». ` : ''}Cuando lo enviéis, os mandamos la versión nueva para revisar.`);
       if (order.questionnaireToken) {
         const a = document.createElement('a');
         a.className = 'btn'; a.textContent = 'Hacer el cambio';
@@ -171,6 +195,7 @@ $('send').onclick = () => respond('changes');
         const row = document.createElement('div'); row.className = 'row'; row.append(a); $('done').append(row);
       }
     }
+    else if (paid && ['review_ready', 'review_sent'].includes(order.status)) done('Estamos confirmando el pago.', 'En unos minutos os llega un email con el enlace para hacer el cambio. Si no llega, escribidnos a info@weddlysmartdesign.com.');
     else if (!['review_ready', 'review_sent'].includes(order.status)) done('Esta revisión ya está cerrada.', 'Si necesitáis algo, responded a nuestro email.');
   } catch (e) { console.warn('[GUEST review]', String(e?.message || 'review_failed')); failure(); }
 })();
