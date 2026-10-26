@@ -872,8 +872,18 @@ function renderSummary() {
 }
 
 /* ---- Navegación ---- */
+// Al volver al enlace, seguimos en la parte donde lo dejaron (en este dispositivo; si no, en la primera sin completar).
+const STEP_KEY = 'gq-step:' + TOKEN.slice(-16);
+function resumeStep(q) {
+  try { const v = Number(localStorage.getItem(STEP_KEY)); if (Number.isInteger(v) && v > 0) return Math.min(LAST, v); } catch {}
+  if (!q.couple?.name1) return 0;
+  const warned = emailWarned;
+  for (let i = 0; i < LAST; i++) if (validate(i).length) { emailWarned = warned; return i; }
+  emailWarned = warned; return LAST;
+}
 function show(i) {
   step = Math.max(0, Math.min(LAST, i));
+  if (loaded && !changesMode && !DEMO) { try { localStorage.setItem(STEP_KEY, String(step)); } catch {} }
   $$('.step').forEach((x) => x.classList.toggle('is-on', Number(x.dataset.step) === step));
   const part = PARTS[step];
   $('mapStep').textContent = step === LAST ? 'Último paso' : `Parte ${step + 1} de ${LAST}`;
@@ -977,7 +987,14 @@ async function boot() {
       $('intro').hidden = true; $('changesBanner').hidden = false;
       const s = Number(params.get('parte'));
       show(Number.isInteger(s) && s >= 0 && s < LAST ? s : 0);
-    } else show(0);
+    } else {
+      const r = resumeStep(order.questionnaire || {});
+      if (r > 0) {
+        $('intro').querySelector('h1').textContent = 'Seguimos donde lo dejasteis.';
+        $('intro').querySelector('p').textContent = `Todo lo que escribisteis está guardado. Os llevamos a ${r === LAST ? 'la revisión final' : 'la parte ' + (r + 1)}; podéis volver atrás cuando queráis para revisar o cambiar algo.`;
+      }
+      show(r);
+    }
   } catch (e) {
     fatal('No hemos podido abrir vuestro cuestionario. Comprobad que el enlace está completo o escribidnos y os ayudamos.');
   }
