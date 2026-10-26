@@ -22,6 +22,8 @@ const INCLUDED_CHANGES=3,EXTRA_CHANGE_CENTS=1000,MAX_CHANGES=20;
 const QA_PREVIEW='https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
 const QA_EMAILS=['weddlysmartdesign@gmail.com','pilarrodriguezbonilla@gmail.com','info@weddlysmartdesign.com'];
 const qaEnv=(n:string)=>n==='GUEST_CATALOG_PUBLIC_ORIGIN'?QA_PREVIEW+'/':(Deno.env.get(n)||'');
+// The GUEST app for catalog couples lives next to the web (guest-web/guest/), not on the frozen github.io site.
+const APP_ORIGIN=QA_PREVIEW;
 const site=()=>String(Deno.env.get('WEDDLY_SITE_ORIGIN')||'https://weddlysmartdesign.github.io').replace(/\/$/,'');
 const now=()=>new Date().toISOString();
 const txt=(v:any,max=500)=>String(v??'').trim().slice(0,max);
@@ -712,7 +714,7 @@ async function deliverOrder(c:any,order:any,invitationUrlIn:any){
       let accessUrl='';
       if(order.license_id){
         const {data:d}=await c.from('license_delivery_codes').select('activation_code').eq('license_id',order.license_id).maybeSingle();
-        if(d?.activation_code)accessUrl=site()+'/guest/access.html#code='+encodeURIComponent(String(d.activation_code));
+        if(d?.activation_code)accessUrl=APP_ORIGIN+'/guest/access.html#code='+encodeURIComponent(String(d.activation_code));
       }
       if(order.mode==='production'&&!order.license_id)return json({ok:false,error:'missing_management_license'},409);
       if(order.mode==='production'&&!accessUrl)return json({ok:false,error:'missing_management_access'},409);
@@ -1188,7 +1190,7 @@ Deno.serve(async req=>{
       if(order.status!=='delivered'||!order.delivery_url)return json({ok:false,error:'not_delivered'},409);
       const to=txt(b.email,200)||emailOf(order.questionnaire,order.buyer_email);if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to))return json({ok:false,error:'missing_email'},400);
       let accessUrl='';
-      if(order.license_id){const {data:d}=await c.from('license_delivery_codes').select('activation_code').eq('license_id',order.license_id).maybeSingle();if(d?.activation_code)accessUrl=site()+'/guest/access.html#code='+encodeURIComponent(String(d.activation_code))}
+      if(order.license_id){const {data:d}=await c.from('license_delivery_codes').select('activation_code').eq('license_id',order.license_id).maybeSingle();if(d?.activation_code)accessUrl=APP_ORIGIN+'/guest/access.html#code='+encodeURIComponent(String(d.activation_code))}
       if(!accessUrl)return json({ok:false,error:'missing_management_access'},409);
       const ok=await resend({to:[to],subject:'Vuestra invitación y vuestro acceso a la app',html:deliveryMail(order.delivery_url,accessUrl,await dataChangeUrl(order.id))},'guest-redeliver/'+order.id+'/'+to+'/'+now().slice(0,13));
       if(!ok)return json({ok:false,error:'email_failed'},502);
