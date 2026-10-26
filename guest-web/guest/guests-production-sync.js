@@ -14,6 +14,9 @@
   const readMeta=()=>{try{const x=JSON.parse(localStorage.getItem(G.META)||'null');return x&&typeof x==='object'?x:{}}catch{return{}}};
   const writeMeta=x=>{try{localStorage.setItem(G.META,JSON.stringify(x));return 1}catch{return 0}};
   const has=x=>!!(x&&(Object.keys(x.guests||{}).length||Object.keys(x.tables||{}).length||x.activity||x.sent||x.prepared||Object.keys(x.meta||{}).length));
+  const nGuests=x=>Object.keys(x?.guests||{}).length;
+  // A copy with no guests never replaces one that has them: that only happens when a stale screen saves late.
+  const wipes=(next,prev)=>!!prev&&nGuests(next)===0&&nGuests(prev)>0;
   const clone=v=>v===MISSING?MISSING:(v===undefined?undefined:structuredClone(v));
   const obj=v=>v!==MISSING&&v&&typeof v==='object'&&!Array.isArray(v);
   const eq=(a,b)=>{if(a===MISSING||b===MISSING)return a===b;try{return JSON.stringify(a)===JSON.stringify(b)}catch{return a===b}};
@@ -60,8 +63,8 @@
   }
   G.notice=t=>{if(!G.note)return;G.note.textContent=t;G.note.style.display='block'};G.clearNotice=()=>{if(G.note)G.note.style.display='none'};
   async function api(method,body){const r=await fetch(G.API,{method,headers:{'x-weddly-token':G.token,...(body?{'content-type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,cache:'no-store'}),x=await r.json().catch(()=>({}));return{r,x}}
-  function reloadCore(reason='sync'){if(G.dormant)return;G.f.src=G.APP+'&'+reason+'='+Date.now();G.f.style.display='block';G.boot.style.display='none';window.dispatchEvent(new Event('guests-prod-open'))}
-  function open(){if(G.dormant)return;G.f.src=G.APP;G.f.style.display='block';G.boot.style.display='none';window.dispatchEvent(new Event('guests-prod-open'))}
+  function reloadCore(reason='sync'){if(G.dormant)return;G.adopting=Date.now();G.f.src=G.APP+'&'+reason+'='+Date.now();G.f.style.display='block';G.boot.style.display='none';window.dispatchEvent(new Event('guests-prod-open'))}
+  function open(){if(G.dormant)return;G.adopting=Date.now();G.f.src=G.APP;G.f.style.display='block';G.boot.style.display='none';window.dispatchEvent(new Event('guests-prod-open'))}
   function cleanMeta(state){const raw=JSON.stringify(state||{});writeMeta({dirty:false,version:G.ver,lastHash:hash(raw),syncedAt:new Date().toISOString()})}
   function markDirty(raw=read()){
     if(!raw||raw===G.last)return;
@@ -87,7 +90,8 @@
   async function reconcileDirty(local,server,serverVersion){
     const m=readMeta(),conflicts=[],base=m.base&&typeof m.base==='object'?m.base:null;
     let merged;
-    if(base)merged=merge3(base,local,server,'',conflicts);
+    if(wipes(local,server))merged=structuredClone(server);
+    else if(base)merged=merge3(base,local,server,'',conflicts);
     else if(Number(m.baseVersion||0)===Number(serverVersion||0))merged=structuredClone(local);
     else merged=mergeWithoutBase(local,server,conflicts);
     rememberConflict(server,conflicts);
@@ -126,11 +130,11 @@
     const state=mergeSharedIdentity(parse(read()));if(!state)return false;G.identitySyncing=true;writeRaw(state);markDirty(JSON.stringify(state));G.identity=identityOf(state);reloadCore('identity');queue();setTimeout(()=>{G.identitySyncing=false},150);return true;
   }
   async function push(){
-    if(G.pushing||!G.token)return;let state=mergeSharedIdentity(parse(read()));if(!state)return;const raw=JSON.stringify(state);if(raw===G.last){cleanMeta(state);return}markDirty(raw);writeRaw(state);G.pushing=true;G.notice('Guardando…');
+    if(G.pushing||!G.token)return;let state=mergeSharedIdentity(parse(read()));if(!state)return;if(wipes(state,parse(G.last))){writeRaw(parse(G.last));cleanMeta(parse(G.last));reloadCore('restore');return}const raw=JSON.stringify(state);if(raw===G.last){cleanMeta(state);return}markDirty(raw);writeRaw(state);G.pushing=true;G.notice('Guardando…');
     try{
       let a=await api('PUT',{version:G.ver,state});
       if(a.r.status===409&&a.x.server?.state){
-        const server=mergeSharedIdentity(structuredClone(a.x.server.state)),m=readMeta(),conflicts=[],base=m.base&&typeof m.base==='object'?m.base:(parse(G.last)||server),merged=merge3(base,state,server,'',conflicts);
+        const server=mergeSharedIdentity(structuredClone(a.x.server.state)),m=readMeta(),conflicts=[],base=m.base&&typeof m.base==='object'?m.base:(parse(G.last)||server),merged=wipes(state,server)?structuredClone(server):merge3(base,state,server,'',conflicts);
         rememberConflict(server,conflicts);writeRaw(merged);G.ver=+a.x.server.version||G.ver;
         const p=await putMerged(merged,G.ver,server,conflicts);if(!p.r.ok||!p.x.ok)throw 0;
         const finalState=p.merged||merged;G.ver=+p.x.version||G.ver+1;writeRaw(finalState);G.last=JSON.stringify(finalState);G.identity=identityOf(finalState);cleanMeta(finalState);G.remote=true;reloadCore('merge');
@@ -158,8 +162,10 @@
   if(bc)bc.onmessage=e=>{if(e.data?.t==='open'&&e.data.id!==TAB)sleep()};
   try{bc?.postMessage({t:'open',id:TAB})}catch{}
   try{OUTER_SET.call(localStorage,ACTIVE,TAB+':'+Date.now())}catch{}
-  Storage.prototype.setItem=function(k,v){const r=OUTER_SET.call(this,k,v);if(!G.dormant&&this===localStorage&&String(k)===G.KEY){markDirty(String(v));queue()}return r};
-  setInterval(()=>{if(G.dormant)return;if(syncIdentityNow())return;const raw=read();if(G.remote){G.remote=false;if(raw===G.last)return}if(raw!==G.last){markDirty(raw);queue()}},300);
+  const adopting=()=>G.adopting&&Date.now()-G.adopting<4000&&G.last;
+  G.f.addEventListener('load',()=>{const t=G.adopting;setTimeout(()=>{if(G.adopting===t)G.adopting=0},1500)});
+  Storage.prototype.setItem=function(k,v){const r=OUTER_SET.call(this,k,v);if(!G.dormant&&this===localStorage&&String(k)===G.KEY&&adopting()&&String(v)!==G.last){OUTER_SET.call(this,k,G.last);return r}if(!G.dormant&&this===localStorage&&String(k)===G.KEY){markDirty(String(v));queue()}return r};
+  setInterval(()=>{if(G.dormant)return;if(adopting()){if(read()!==G.last)OUTER_SET.call(localStorage,G.KEY,G.last);return}if(syncIdentityNow())return;const raw=read();if(G.remote){G.remote=false;if(raw===G.last)return}if(raw!==G.last){markDirty(raw);queue()}},300);
   addEventListener('storage',e=>{if(e.key===ACTIVE&&e.newValue&&!e.newValue.startsWith(TAB+':'))sleep();if(G.dormant)return;if(e.key==='weddly_pro_v7')syncIdentityNow();if(e.key===G.KEY&&e.newValue!==null){markDirty(e.newValue);queue()}});
   setInterval(poll,5000);addEventListener('online',()=>{syncIdentityNow();queue();poll()});addEventListener('focus',poll);addEventListener('pageshow',poll);document.addEventListener('visibilitychange',()=>{if(!document.hidden)poll()});
   start();
