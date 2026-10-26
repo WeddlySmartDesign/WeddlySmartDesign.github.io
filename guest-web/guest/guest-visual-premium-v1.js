@@ -3,6 +3,7 @@
 if(window.__guestVisualPremiumV1)return;window.__guestVisualPremiumV1=true;
 const G=window.__GuestsProd;if(!G?.f)return;
 const THEMES={
+ sellos:{bg:'#F7EFEB',paper:'#FBF7F4',olive:'#1B2650',line:'#E3D6D1',soft:'#F6DCD6',muted:'#4A5480'},
  nordic:{bg:'#F2EFE9',paper:'#FBF8F3',olive:'#525C43',line:'#E4DED2',soft:'#EEE8DF',muted:'#736F63'},
  blush:{bg:'#F5EEEC',paper:'#FFF9F7',olive:'#825F5D',line:'#E9DAD6',soft:'#F5E9E7',muted:'#796461'},
  sand:{bg:'#F1EAE1',paper:'#FCF8F2',olive:'#725A45',line:'#DED3C5',soft:'#F2E9DE',muted:'#756857'},
@@ -10,7 +11,7 @@ const THEMES={
  editorial:{bg:'#F0ECE8',paper:'#FBF8F5',olive:'#443833',line:'#DED6D0',soft:'#EFE8E4',muted:'#655A52'}
 };
 function applyPalette(d){
- const key=localStorage.getItem('weddly_personal_theme_v51')||localStorage.getItem('weddly_personal_theme_v20')||'nordic',p=THEMES[key]||THEMES.nordic;
+ const key=localStorage.getItem('weddly_personal_theme_v51')||localStorage.getItem('weddly_personal_theme_v20')||'sellos',p=THEMES[key]||THEMES.sellos;
  for(const [name,value] of Object.entries(p))d.documentElement.style.setProperty('--guest-'+name,value);
  d.documentElement.dataset.guestTheme=key;
 }

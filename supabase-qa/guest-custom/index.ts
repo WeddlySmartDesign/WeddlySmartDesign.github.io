@@ -217,7 +217,7 @@ async function access(c: any, r: any) {
   if (error) throw error;
   const row = data?.[0];
   if (!row?.license_id || !row?.activation_code) throw Error('license_provision_failed');
-  return { licenseId: String(row.license_id), url: APP_ORIGIN + '/guest/access.html#code=' + encodeURIComponent(String(row.activation_code)) };
+  return { licenseId: String(row.license_id), url: APP_ORIGIN + '/guest/access.html?code=' + encodeURIComponent(String(row.activation_code)) };
 }
 
 // El a medida usa el mismo sistema que el catálogo: al pagar la señal se crea su pedido (cuestionario,

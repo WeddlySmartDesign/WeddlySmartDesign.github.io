@@ -4,6 +4,7 @@
   const RSVP_URL='guests-rsvp-operations-v2.html?v=140-mobile-ux';
   const SUITE=false;
   const THEMES={
+    sellos:{bg:'#F7EFEB',paper:'#FBF7F4',line:'#E3D6D1',soft:'#F6DCD6',accent:'#B3263A',dark:'#1B2650',ink:'#1B2650'},
     nordic:{bg:'#F2EFE9',paper:'#FBF8F3',line:'#E4DED2',soft:'#EEF0E9',accent:'#6E7A5C',dark:'#525C43',ink:'#2C2A26'},
     blush:{bg:'#F5EEEC',paper:'#FFF9F7',line:'#E9DAD6',soft:'#F5E9E7',accent:'#B48683',dark:'#825F5D',ink:'#2C2A26'},
     sand:{bg:'#F1EAE1',paper:'#FCF8F2',line:'#DED3C5',soft:'#F2E9DE',accent:'#9B7F62',dark:'#725A45',ink:'#302B26'},
@@ -11,7 +12,7 @@
     editorial:{bg:'#F0ECE8',paper:'#FBF8F5',line:'#DED6D0',soft:'#EFE8E4',accent:'#6B5B52',dark:'#443833',ink:'#2A2421'}
   };
   let hashApplied=false;
-  const themeName=()=>{try{const x=localStorage.getItem('weddly_personal_theme_v51')||localStorage.getItem('weddly_personal_theme_v20')||'nordic';return THEMES[x]?x:'nordic'}catch{return'nordic'}};
+  const themeName=()=>{try{const x=localStorage.getItem('weddly_personal_theme_v51')||localStorage.getItem('weddly_personal_theme_v20')||'sellos';return THEMES[x]?x:'sellos'}catch{return'sellos'}};
   function docs(){const out=[];try{let d=G.f.contentDocument;for(let i=0;i<8&&d;i++){out.push(d);const f=d.querySelector('iframe');if(!f||!f.contentDocument)break;d=f.contentDocument}}catch{}return out}
   const appDoc=()=>docs().find(d=>d.getElementById('invitados')&&d.getElementById('mesas')&&d.getElementById('nav'))||null;
   function suiteOpen(view,url=''){if(!SUITE)return false;try{window.parent.postMessage({type:'wsd-suite-open',view,url},location.origin);return true}catch{return false}}
