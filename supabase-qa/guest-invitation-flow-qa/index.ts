@@ -1006,7 +1006,10 @@ Deno.serve(async req=>{
         renderer:spec.renderer,
         publicToken:token,
         shareBaseUrl:txt(order.delivery_url,1200),
-        label:orderLabel(order)
+        label:orderLabel(order),
+        // The app copies names and date from the invitation so the couple never types them twice.
+        couple:{name1:txt(order.questionnaire?.couple?.name1,60),name2:txt(order.questionnaire?.couple?.name2,60),
+          date:/^\d{4}-\d{2}-\d{2}$/.test(String(order.questionnaire?.couple?.date||''))?String(order.questionnaire.couple.date):''}
       }});
     }
     const ctx=await managerContext(c,req);if(!ctx)return json({ok:false,error:'manager_required'},403);

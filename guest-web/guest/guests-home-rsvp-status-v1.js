@@ -14,7 +14,18 @@
   function questionsFor(sub){const f=(remote?.forms||[]).find(x=>String(x?.id||'')===String(sub?.form_id||''));const qs=Array.isArray(f?.config?.customQuestions)?f.config.customQuestions:[];return new Map(qs.filter(q=>q?.id).map(q=>[String(q.id),q]))}
   function customAnswers(sub){const x=sub?.payload?.custom_answers;return x&&typeof x==='object'&&!Array.isArray(x)?x:{}}
   function customChange(now,prev){const a=customAnswers(now),b=customAnswers(prev),ids=[...new Set([...Object.keys(a),...Object.keys(b)])];const id=ids.find(k=>JSON.stringify(a[k])!==JSON.stringify(b[k]));if(!id)return'';const q=questionsFor(now).get(String(id)),label=String(q?.label||'Pregunta personalizada').trim();const v=a[id];const val=v===true?'Sí':v===false?'No':String(v??'').trim();return val?label+' · '+val:label+' · respuesta eliminada'}
-  function changeLabel(now,prev){if(!prev){const base=now.attend?'Ha respondido · Asiste':'Ha respondido · No asiste',extra=customChange(now,null);return extra?base+' · '+extra:base}if(!!now.attend!==!!prev.attend)return now.attend?'Ahora asiste':'Ahora no asiste';if(now.attend&&String(now.meal||'')!==String(prev.meal||''))return now.meal?'Ha cambiado su menú · '+now.meal:'Ha cambiado su menú';const pn=plusName(now),pp=plusName(prev);if(pn!==pp)return pn?'Ha añadido acompañante · '+pn:'Ha eliminado acompañante';if(!!now.transport!==!!prev.transport)return now.transport?'Ahora necesita transporte':'Ya no necesita transporte';if(!!now.accommodation!==!!prev.accommodation)return now.accommodation?'Ahora necesita alojamiento':'Ya no necesita alojamiento';if(String(now.allergy||'')!==String(prev.allergy||''))return'Ha actualizado alergias o intolerancias';const extra=customChange(now,prev);if(extra)return'Ha actualizado · '+extra;return'Ha actualizado su respuesta'}
+  function changeLabel(now,prev){
+    if(!prev){const parts=[now.attend?'Ha respondido · Asiste':'Ha respondido · No asiste'];const pn=plusName(now);if(now.attend&&pn)parts.push('con '+pn);const extra=customChange(now,null);if(extra)parts.push(extra);return parts.join(' · ')}
+    if(!!now.attend!==!!prev.attend)return now.attend?'Ahora asiste':'Ahora no asiste';
+    const parts=[];
+    if(now.attend&&String(now.meal||'')!==String(prev.meal||''))parts.push(now.meal?'Menú: '+now.meal:'Ha quitado el menú');
+    const pn=plusName(now),pp=plusName(prev);if(pn!==pp)parts.push(pn?'Acompañante: '+pn:'Sin acompañante');
+    if(!!now.transport!==!!prev.transport)parts.push(now.transport?'Necesita transporte':'Ya no necesita transporte');
+    if(!!now.accommodation!==!!prev.accommodation)parts.push(now.accommodation?'Necesita alojamiento':'Ya no necesita alojamiento');
+    if(String(now.allergy||'')!==String(prev.allergy||''))parts.push(now.allergy?'Alergias: '+now.allergy:'Sin alergias');
+    const extra=customChange(now,prev);if(extra)parts.push(extra);
+    return parts.length?'Ha cambiado · '+parts.join(' · '):'Ha actualizado su respuesta'}
+  function dayLabel(day){const p=String(day).split('-').map(Number);if(p.length!==3)return'';const d=new Date(p[0],p[1]-1,p[2]),t=new Date();t.setHours(0,0,0,0);const diff=Math.round((t-d)/86400000);if(diff===0)return'Hoy';if(diff===1)return'Ayer';try{return d.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'short'})}catch{return day}}
   function formatWhen(ts){try{return new Date(ts).toLocaleString(document.documentElement.lang==='en'?'en-GB':'es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}catch{return''}}
   
   const groupExpanded=new Set();
@@ -137,10 +148,10 @@
         const visible=(!many||expanded)?g.items:g.items.slice(0,0);
         const yes=g.items.filter(x=>x.attend===true).length;
         const no=g.items.filter(x=>x.attend===false).length;
-        const title=g.type==='rsvp'?'respuestas de la boda':'respuestas de '+g.eventName;
+        const one=g.items.length===1,title=g.type==='rsvp'?(one?'respuesta de la boda':'respuestas de la boda'):(one?'respuesta de ':'respuestas de ')+g.eventName;
         const row=d.createElement('div');row.className='row';row.style.cssText='display:block;padding:13px 0;border-bottom:1px solid #eee7de';
         const label=d.createElement('div');label.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap';
-        label.innerHTML='<div><b>'+g.items.length+' '+esc(title)+'</b><div class="small">'+yes+' sí · '+no+' no · '+esc(g.day)+'</div></div>';
+        label.innerHTML='<div><b>'+g.items.length+' '+esc(title)+'</b><div class="small">'+yes+' sí · '+no+' no · '+esc(dayLabel(g.day))+'</div></div>';
         if(many){
           const btn=d.createElement('button');btn.type='button';btn.className='btn line';btn.style.cssText='min-height:44px;padding:8px 12px';
           btn.textContent=expanded?'Ocultar detalles':'Ver '+g.items.length+' respuestas';

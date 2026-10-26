@@ -53,6 +53,26 @@ async function buildRecipientUrl(ctx){
   }
   return base.href;
 }
+// Names and date come from the invitation: fill them in once so the couple never types them twice.
+function seedFromInvitation(inv){
+  const c=inv?.couple||{};if(!c.name1||!c.name2)return false;
+  let changed=false;
+  try{
+    const DATA='weddly_pro_v7',x=JSON.parse(localStorage.getItem(DATA)||'{}')||{},s=x.settings||{};
+    if(!s.partner1&&!s.partner2){s.partner1=c.name1;s.partner2=c.name2;changed=true}
+    if(!s.weddingDate&&c.date){s.weddingDate=c.date;changed=true}
+    if(changed){x.settings=s;localStorage.setItem(DATA,JSON.stringify(x))}
+    const KEY='weddly_guests_qa_v67',S=JSON.parse(localStorage.getItem(KEY)||'null');
+    if(S&&typeof S==='object'){S.meta=S.meta||{};let ch=false;
+      if(!(Array.isArray(S.meta.couple)&&S.meta.couple[0]&&S.meta.couple[1])){S.meta.couple=[c.name1,c.name2];ch=true}
+      if(!S.meta.weddingDate&&c.date){S.meta.weddingDate=c.date;ch=true}
+      if(ch){localStorage.setItem(KEY,JSON.stringify(S));changed=true}}
+  }catch{}
+  return changed;
+}
+if(window===window.top&&/\/guest\/(?:index(?:\.html)?)?$/.test(location.pathname)){
+  setTimeout(async()=>{const inv=await fetchActive(true);if(seedFromInvitation(inv)){try{const f=document.getElementById('app');f?.contentWindow?.location.reload()}catch{}}},1500);
+}
 window.__GuestCatalogBridge={
   version:'catalog-bridge-v1',
   fetchActive,

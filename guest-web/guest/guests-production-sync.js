@@ -4,7 +4,7 @@
   G.KEY='weddly_guests_qa_v67';
   G.META='weddly_guests_sync_meta_v2';
   G.API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-state';
-  G.APP='guests-v114-integrated.html?v=122-v129-core';
+  G.APP='guests-v114-integrated.html?v=123-sellos';
   G.f=document.getElementById('app');G.boot=document.getElementById('boot');G.msg=document.getElementById('msg');G.retry=document.getElementById('retry');G.note=document.getElementById('notice');
   G.token='';G.ver=0;G.last='';G.pushing=false;G.remote=false;G.identity='';G.identitySyncing=false;
   const MISSING=Symbol('missing'),OUTER_SET=Storage.prototype.setItem;
