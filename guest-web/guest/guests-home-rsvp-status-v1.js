@@ -29,7 +29,7 @@
   function formatWhen(ts){try{return new Date(ts).toLocaleString(document.documentElement.lang==='en'?'en-GB':'es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}catch{return''}}
   
   const groupExpanded=new Set();
-  let activityExpanded=false;
+  let activityExpanded=false,olderExpanded=false;
   function recentReadAt(S){return Number(S?.meta?.todayRecentChangesReadAt||0)||0}
   function readIds(S){const x=S?.meta?.hoyReadNotificationIdsV1;return x&&typeof x==='object'&&!Array.isArray(x)?x:{}}
   function idText(x){return String(x||'').replace(/[^a-zA-Z0-9_\-.:]/g,'_').slice(0,180)}
@@ -64,13 +64,14 @@
   }
   function activityEntries(S){
     const cutoff=Date.now()-7*86400000;
-    const device=localStorage.getItem('weddly_guests_device_id_v1')||'';
+    const device=localStorage.getItem('weddly_guests_device_id_v1')||'',read=readIds(S);
     return (S?.meta?.todaySeatChanges||[]).filter(x=>Number(x?.ts)>cutoff).map(x=>{
       const from=String(x.from||''),to=String(x.to||'');
       const actor=x.byDevice?(x.byDevice===device?'Este dispositivo':'El otro dispositivo'):'La pareja';
       const label=from&&to?'De '+from+' a '+to:to?'Asignado a '+to:from?'Ahora sin mesa':'Mesa actualizada';
-      return {id:String(x.id||x.name)+'_'+x.ts,name:String(x.name||'Invitado'),label:label+' · '+actor,ts:Number(x.ts)}
-    }).sort((x,y)=>y.ts-x.ts)
+      const id='seat:'+idText(String(x.id||x.name)+'_'+x.ts);
+      return {id,name:String(x.name||'Invitado'),label:label+' · '+actor,ts:Number(x.ts)}
+    }).filter(x=>!read[x.id]).sort((x,y)=>y.ts-x.ts)
   }
   function groupEntries(xs){
     const m=new Map();
@@ -132,7 +133,7 @@
     const all=entries(S),unread=all.filter(x=>!x.read),activity=activityEntries(S),groups=groupEntries(unread);
     const old=hoy.querySelector('#wsdRecentChanges');
     if(!unread.length&&!activity.length){old?.remove();return}
-    const signature=JSON.stringify([unread.map(x=>x.id),activity.map(x=>x.id),[...groupExpanded],activityExpanded]);
+    const signature=JSON.stringify([unread.map(x=>x.id),activity.map(x=>x.id),[...groupExpanded],activityExpanded,olderExpanded]);
     if(old?.dataset.wsdRecentKey===signature)return;
     old?.remove();
     const section=d.createElement('section');section.id='wsdRecentChanges';section.dataset.wsdRecentKey=signature;
@@ -143,33 +144,47 @@
       const info=d.createElement('p');info.className='small';info.textContent='Respuestas recibidas, incluidas las rectificaciones. Los totales de asistentes usan la última respuesta de cada persona; leer los avisos no resuelve tareas.';
       section.appendChild(info);
       const cards=d.createElement('div');cards.className='card';cards.style.padding='10px 14px';
-      groups.forEach((g,i)=>{
-        const many=g.items.length>5,expanded=groupExpanded.has(g.key);
-        const visible=(!many||expanded)?g.items:g.items.slice(0,0);
+      // Long bursts stay readable: each group shows its 3 latest notices and the days beyond the 3 latest stay folded.
+      const shownGroups=olderExpanded?groups:groups.slice(0,3);
+      shownGroups.forEach((g,i)=>{
+        const expanded=groupExpanded.has(g.key),visible=expanded?g.items:g.items.slice(0,3),hidden=g.items.length-visible.length;
         const yes=g.items.filter(x=>x.attend===true).length;
         const no=g.items.filter(x=>x.attend===false).length;
+        const changes=g.items.filter(x=>/^(Ha cambiado|Ahora|Ha actualizado)/.test(x.label)).length;
         const one=g.items.length===1,title=g.type==='rsvp'?(one?'respuesta de la boda':'respuestas de la boda'):(one?'respuesta de ':'respuestas de ')+g.eventName;
-        const row=d.createElement('div');row.className='row';row.style.cssText='display:block;padding:13px 0;border-bottom:1px solid #eee7de';
+        const row=d.createElement('div');row.className='row';row.style.cssText='display:block;padding:13px 0;'+(i<shownGroups.length-1?'border-bottom:1px solid #eee7de':'');
         const label=d.createElement('div');label.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap';
-        label.innerHTML='<div><b>'+g.items.length+' '+esc(title)+'</b><div class="small">'+yes+' sí · '+no+' no · '+esc(dayLabel(g.day))+'</div></div>';
-        if(many){
-          const btn=d.createElement('button');btn.type='button';btn.className='btn line';btn.style.cssText='min-height:44px;padding:8px 12px';
-          btn.textContent=expanded?'Ocultar detalles':'Ver '+g.items.length+' respuestas';
-          btn.onclick=()=>{expanded?groupExpanded.delete(g.key):groupExpanded.add(g.key);renderRecent(d,state())};
-          label.appendChild(btn)
+        label.innerHTML='<div><b>'+g.items.length+' '+esc(title)+'</b><div class="small">'+esc(dayLabel(g.day))+' · '+yes+' sí · '+no+' no'+(changes?' · '+changes+(changes===1?' cambio':' cambios'):'')+'</div></div>';
+        if(g.items.length>1){
+          const all=d.createElement('button');all.type='button';all.className='btn line';all.style.cssText='min-height:44px;padding:8px 12px';
+          all.textContent='Marcar leídas';all.onclick=()=>markRecentRead(g.items);label.appendChild(all)
         }
         row.appendChild(label);
         visible.forEach(x=>{
-          const person=d.createElement('div');person.className='row';person.style.cssText='display:flex;justify-content:space-between;gap:10px;padding:9px 0';
-          person.innerHTML='<div><b>'+esc(x.name)+'</b><div class="small">'+esc(x.label)+'</div></div><div class="small">'+esc(formatWhen(x.ts))+'</div>';
-          row.appendChild(person)
+          const person=d.createElement('div');person.className='row';person.style.cssText='display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0';
+          person.innerHTML='<div style="min-width:0"><b>'+esc(x.name)+'</b><div class="small">'+esc(x.label)+'</div><div class="small" style="opacity:.75">'+esc(formatWhen(x.ts))+'</div></div>';
+          const ok=d.createElement('button');ok.type='button';ok.className='btn soft';ok.style.cssText='min-height:44px;padding:8px 14px;flex:none';
+          ok.textContent='Leído';ok.setAttribute('aria-label','Marcar como leído: '+x.name);ok.onclick=()=>markRecentRead([x]);
+          person.appendChild(ok);row.appendChild(person)
         });
+        if(hidden>0||expanded&&g.items.length>3){
+          const btn=d.createElement('button');btn.type='button';btn.className='btn line';btn.style.cssText='min-height:44px;width:100%;margin-top:4px';
+          btn.textContent=expanded?'Mostrar menos':'Ver '+hidden+(hidden===1?' aviso más':' avisos más');
+          btn.onclick=()=>{expanded?groupExpanded.delete(g.key):groupExpanded.add(g.key);renderRecent(d,state())};
+          row.appendChild(btn)
+        }
         cards.appendChild(row)
       });
+      if(groups.length>3){
+        const older=d.createElement('button');older.type='button';older.className='btn line';older.style.cssText='min-height:44px;width:100%;margin-top:6px';
+        const rest=groups.slice(3).reduce((n,g)=>n+g.items.length,0);
+        older.textContent=olderExpanded?'Ocultar días anteriores':'Ver días anteriores ('+rest+(rest===1?' aviso)':' avisos)');
+        older.onclick=()=>{olderExpanded=!olderExpanded;renderRecent(d,state())};cards.appendChild(older)
+      }
       section.appendChild(cards);
       const done=d.createElement('button');done.type='button';done.id='wsdMarkRecentRead';done.className='btn line';
       done.style.cssText='width:100%;min-height:44px;margin-top:9px';
-      done.textContent='Marcar novedades como leídas';
+      done.textContent=unread.length>1?'Marcar las '+unread.length+' novedades como leídas':'Marcar novedad como leída';
       done.onclick=()=>markRecentRead(unread);
       section.appendChild(done)
     }else{
@@ -181,13 +196,20 @@
       const list=d.createElement('div');list.className='card';list.style.padding='7px 14px';
       (activityExpanded?activity:activity.slice(0,3)).forEach(x=>{
         const row=d.createElement('div');row.className='row';row.style.cssText='display:flex;justify-content:space-between;gap:9px';
-        row.innerHTML='<div><b>'+esc(x.name)+'</b><div class="small">'+esc(x.label)+'</div></div><div class="small">'+esc(formatWhen(x.ts))+'</div>';
+        row.style.alignItems='center';
+        row.innerHTML='<div style="min-width:0"><b>'+esc(x.name)+'</b><div class="small">'+esc(x.label)+'</div><div class="small" style="opacity:.75">'+esc(formatWhen(x.ts))+'</div></div>';
+        const ok=d.createElement('button');ok.type='button';ok.className='btn soft';ok.style.cssText='min-height:44px;padding:8px 14px;flex:none';
+        ok.textContent='Visto';ok.setAttribute('aria-label','Marcar como visto: '+x.name);ok.onclick=()=>markRecentRead([x]);row.appendChild(ok);
         list.appendChild(row)
       });
       activityBox.appendChild(list);
       if(activity.length>3){
         const more=d.createElement('button');more.type='button';more.className='btn line';more.style.cssText='min-height:44px;margin-top:9px;width:100%';more.textContent=activityExpanded?'Mostrar menos actividad':'Ver toda la actividad ('+activity.length+')';
         more.onclick=()=>{activityExpanded=!activityExpanded;renderRecent(d,state())};activityBox.appendChild(more)
+      }
+      if(activity.length>1){
+        const seen=d.createElement('button');seen.type='button';seen.className='btn line';seen.style.cssText='min-height:44px;margin-top:9px;width:100%';
+        seen.textContent='Marcar toda la actividad como vista';seen.onclick=()=>markRecentRead(activity);activityBox.appendChild(seen)
       }
       section.appendChild(activityBox)
     }
