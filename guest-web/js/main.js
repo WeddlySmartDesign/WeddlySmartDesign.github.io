@@ -293,6 +293,7 @@
   /* ---------- La app, función a función ---------- */
   // Capturas reales de GUEST con datos de ejemplo, recortadas sin barras del sistema ni del navegador.
   const APP_SHOTS = 'assets/app/';
+  const V = '?v=2';
   const features = [
     {
       scene: 'mesas', tab: 'Plano del salón',
@@ -312,10 +313,10 @@
       scene: 'dos', tab: 'Dos móviles',
       title: 'Para los dos, desde el móvil',
       text: 'Cada uno entra desde su propio móvil y los dos veis la misma boda: lo que cambia uno, le aparece al otro. Y cada uno la ve con el tema que más le gusta.',
-      points: ['Un acceso para cada uno', 'Cinco temas: Nordic, Blush, Arena, Slate y Editorial', 'Sin descargar nada, en español o en inglés'],
+      points: ['Un acceso para cada uno', 'Seis temas: Sellos, Nordic, Blush, Arena, Slate y Editorial', 'Sin descargar nada, en español o en inglés'],
       pair: {
-        phones: [{ src: 'hoy-nordic.jpg', name: 'Clara', theme: 'Nordic' }, { src: 'hoy-blush.jpg', name: 'Mateo', theme: 'Blush' }],
-        alt: 'La misma boda en dos móviles: Clara la ve con el tema Nordic y Mateo con el tema Blush.'
+        phones: [{ src: 'hoy-sellos.jpg', name: 'Clara', theme: 'Sellos' }, { src: 'hoy-nordic.jpg', name: 'Mateo', theme: 'Nordic' }],
+        alt: 'La misma boda en dos móviles: Clara la ve con el tema Sellos y Mateo con el tema Nordic.'
       }
     },
     {
@@ -323,14 +324,14 @@
       title: 'Una confirmación a vuestra medida',
       text: 'Elegís qué os contesta cada invitado al confirmar y añadís vuestras propias preguntas: el brunch, una actividad o la canción que no puede faltar.',
       points: ['Menús, alergias e intolerancias', 'Niños, acompañante, transporte y alojamiento', 'Cada respuesta llega ordenada a la app'],
-      shot: { src: 'preguntas.jpg', alt: 'Preguntas de la boda en GUEST: alergias, niños y acompañante activados, y el botón para añadir preguntas personalizadas.' }
+      shot: { src: 'preguntas.jpg', alt: 'Qué preguntamos al confirmar: menú y alergias activados, y transporte, alojamiento y niños para activar si los necesitáis.' }
     },
     {
       scene: 'respuestas', tab: 'Avisos',
       title: 'Cada cambio, avisado',
-      text: 'Un panel os cuenta todo lo que pasa: quién confirma, quién cambia de menú y qué falta por hacer, sin revisar la lista entera.',
-      points: ['Los cambios recientes, con fecha y hora', 'Lo que necesita vuestra atención, primero', 'Menús pendientes y mesas que se pasan de plazas'],
-      shot: { src: 'respuestas.jpg', alt: 'Cambios recientes en GUEST: tres invitados han confirmado y han elegido su canción.' }
+      text: 'Un panel os cuenta todo lo que pasa: quién confirma, quién cambia de menú y qué falta por hacer. Aunque lleguen diez respuestas de golpe, las veis agrupadas por día, no en una lista sin fin.',
+      points: ['Agrupadas por día, con fecha y hora', 'Lo que necesita vuestra atención, primero', 'Leídas una a una o todas de una vez'],
+      shot: { src: 'respuestas.jpg', alt: 'Novedades en GUEST: catorce respuestas de hoy agrupadas, cada una con su botón Leído.' }
     },
     {
       scene: 'lista', tab: 'Grupos y subgrupos',
@@ -363,7 +364,7 @@
     }
   ];
 
-  const shotImg = (src, alt) => `<img src="${APP_SHOTS}${src}" alt="${alt}" width="720" height="1008" loading="lazy" decoding="async">`;
+  const shotImg = (src, alt) => `<img src="${APP_SHOTS}${src}${V}" alt="${alt}" width="720" height="1008" loading="lazy" decoding="async">`;
 
   // Toda la pantalla es el botón de ampliar; el chip de la esquina solo lo anuncia.
   const zoomButton = (index, kind, label) => `<button class="phone-zoom" type="button" data-zoom="${index}" data-kind="${kind}" aria-label="Ampliar: ${label}"><span class="zoom-chip" aria-hidden="true"><svg><use href="#i-zoom"/></svg></span></button>`;
@@ -371,7 +372,7 @@
   function featureMedia(feature, index) {
     if (feature.video) {
       const { src, poster, label } = feature.video;
-      return `<div class="feature-phone"><div class="phone-screen is-video"><video data-autoplay muted loop playsinline preload="none" poster="${APP_SHOTS}${poster}" aria-label="${label}"><source src="${APP_SHOTS}${src}.webm" type="video/webm"><source src="${APP_SHOTS}${src}.mp4" type="video/mp4"></video>${zoomButton(index, 'video', feature.title)}</div></div>`;
+      return `<div class="feature-phone"><div class="phone-screen is-video"><video data-autoplay muted loop playsinline preload="none" poster="${APP_SHOTS}${poster}${V}" aria-label="${label}"><source src="${APP_SHOTS}${src}.webm${V}" type="video/webm"><source src="${APP_SHOTS}${src}.mp4${V}" type="video/mp4"></video>${zoomButton(index, 'video', feature.title)}</div></div>`;
     }
     // Dos móviles con la misma boda: uno para cada novio, cada uno con su tema.
     if (feature.pair) {
@@ -396,7 +397,7 @@
     const media = (feature, kind) => {
       if (kind === 'video') {
         const { src, poster, label } = feature.video;
-        return `<video ${reduceMotion ? 'controls' : 'autoplay'} muted loop playsinline poster="${APP_SHOTS}${poster}" aria-label="${label}"><source src="${APP_SHOTS}${src}.webm" type="video/webm"><source src="${APP_SHOTS}${src}.mp4" type="video/mp4"></video>`;
+        return `<video ${reduceMotion ? 'controls' : 'autoplay'} muted loop playsinline poster="${APP_SHOTS}${poster}${V}" aria-label="${label}"><source src="${APP_SHOTS}${src}.webm${V}" type="video/webm"><source src="${APP_SHOTS}${src}.mp4${V}" type="video/mp4"></video>`;
       }
       if (kind === 'sheet') return `<img class="is-sheet" src="${APP_SHOTS}${feature.sheet.src}" alt="${feature.sheet.alt}" width="640" height="578">`;
       const shot = feature.shot || { src: feature.pair.phones[1].src, alt: feature.pair.alt };
