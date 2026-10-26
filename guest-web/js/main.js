@@ -114,7 +114,7 @@
       <div class="end-card">
         <p class="mono">Nuevos diseños en camino</p>
         <h3>¿No encontráis ninguna que os encante?</h3>
-        <p>Adaptamos uno a vuestros colores y letras, con la misma app incluida.</p>
+        <p>Transformamos uno con vuestra ilustración, vuestra paleta y detalles propios, con la misma app incluida.</p>
         <hr>
         <a class="btn btn-line btn-sm" href="#a-medida">Ver diseño a medida</a>
       </div>
