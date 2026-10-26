@@ -787,6 +787,23 @@ body:has(#app:not([hidden])){overflow:hidden}
 .trial-history-empty{border:1px dashed var(--line);border-radius:14px;padding:15px;color:var(--muted);font-size:13px;line-height:1.5}
 @media(max-width:540px){.trial-entry-grid{grid-template-columns:minmax(0,1fr)}.trial-history h4{font-size:25px}}
 
+
+/* Separate commercial reporting for ONE and GUEST. Test payments do not inflate revenue. */
+.one-products-label{margin-top:13px;margin-bottom:8px}
+.guest-dashboard{margin-top:17px;padding-top:15px;border-top:1px solid var(--line)}
+.guest-dashboard-note{font-size:12px;color:var(--muted);line-height:1.45;margin:7px 0 11px}
+.guest-sales-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.guest-sales-grid .metric{min-height:112px;padding:13px;border-radius:15px}
+.guest-sales-grid .metric strong{font-size:30px}
+.guest-sales-grid .metric small{font-size:10px}
+.guest-sales-grid .metric span{font-size:10px}
+@media(max-width:440px){
+ .guest-sales-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .guest-sales-grid .metric:last-child{grid-column:1/-1;min-height:88px}
+ .guest-sales-grid .metric{min-height:100px}
+ .guest-dashboard-note{font-size:11px}
+}
+
 </style>
 </head>
 <body>
@@ -823,7 +840,7 @@ body:has(#app:not([hidden])){overflow:hidden}
   <main class="shell dashboard-main">
     <section class="dashboard-hero">
       <div>
-        <div class="eyebrow">ONE · rendimiento comercial</div>
+        <div class="eyebrow">WeddlySmartDesign · rendimiento comercial</div>
         <h1>Qué entra. Qué avanza. Qué compra.</h1>
       </div>
       <div class="range-row" id="ranges">
@@ -838,13 +855,24 @@ body:has(#app:not([hidden])){overflow:hidden}
       </div>
     </section>
 
-    <section class="metric-grid" aria-label="Resumen">
+    <div class="eyebrow one-products-label">ONE · ventas y comportamiento</div>
+    <section class="metric-grid" aria-label="ONE · resumen">
       <article class="metric compact-metric"><small>Visitas</small><strong id="mVisits">0</strong><span>Cargas</span></article>
       <article class="metric compact-metric"><small>Comprar</small><strong id="mBuy">0</strong><span id="mBuyRate">—</span></article>
       <article class="metric compact-metric"><small>Pago</small><strong id="mCheckout">0</strong><span id="mCheckoutRate">—</span></article>
       <article class="metric compact-metric primary"><small>Compras</small><strong id="mPurchases">0</strong><span id="mPurchaseRate">—</span></article>
       <article class="metric compact-metric"><small>Conversión</small><strong id="mConversion">—</strong><span>Visita → compra</span></article>
       <article class="metric compact-metric"><small>Ingresos</small><strong id="mRevenue">0 €</strong><span>Stripe</span></article>
+    </section>
+
+    <section class="guest-dashboard" aria-label="GUEST · ventas y pruebas">
+      <div class="eyebrow">GUEST · resultados independientes</div>
+      <p class="guest-dashboard-note">Ventas reales de GUEST, sin ediciones. Las pruebas internas y los pagos reembolsados no cuentan como ventas.</p>
+      <div class="guest-sales-grid">
+        <article class="metric"><small>Compras GUEST</small><strong id="mGuestPurchases">0</strong><span>Ventas comerciales</span></article>
+        <article class="metric"><small>Ingresos GUEST</small><strong id="mGuestRevenue">0 €</strong><span>Ventas comerciales</span></article>
+        <article class="metric"><small>Pruebas internas</small><strong id="mGuestTests">0</strong><span id="mGuestTestsDetail">Excluidas de ventas</span></article>
+      </div>
     </section>
 
     <section class="compact-funnel" aria-label="Embudo">
@@ -1417,6 +1445,14 @@ function render(data){
   $('mPurchases').textContent=t.purchases??0;
   $('mConversion').textContent=pct(t.conversion_pct);
   $('mRevenue').textContent=money(t.revenue_cents);
+  const guestSales=s.guest_totals||{}, guestTests=s.guest_test_totals||{};
+  $('mGuestPurchases').textContent=guestSales.purchases??0;
+  $('mGuestRevenue').textContent=money(guestSales.revenue_cents);
+  $('mGuestTests').textContent=guestTests.tests??0;
+  $('mGuestTestsDetail').textContent=Number(guestTests.refunded||0)>0
+    ? Number(guestTests.refunded)+' reembolsada(s) · no son ventas'
+    : 'Excluidas de ventas';
+
   $('mBuyRate').textContent=t.buy_rate_pct==null?'Sin base suficiente':pct(t.buy_rate_pct)+' de las visitas';
   $('mCheckoutRate').textContent=t.checkout_start_rate_pct==null?'Sin base suficiente':pct(t.checkout_start_rate_pct)+' de quienes pulsan comprar';
   $('mPurchaseRate').textContent=t.checkout_to_purchase_pct==null?'Sin base suficiente':pct(t.checkout_to_purchase_pct)+' de quienes inician el pago';
