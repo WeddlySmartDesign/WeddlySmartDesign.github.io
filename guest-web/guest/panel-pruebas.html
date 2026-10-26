@@ -217,10 +217,15 @@
     .push-box .state i { width: 9px; height: 9px; border-radius: 50%; background: var(--ink-soft); }
     .push-box .state.on i { background: var(--ok); }
     .news { display: grid; gap: .5rem; }
-    .news a, .news div.n { display: grid; grid-template-columns: 1fr auto; gap: .2rem .75rem; padding: .85rem 1rem; border-radius: 12px; background: var(--white); text-decoration: none; box-shadow: 0 1px 2px rgba(27, 38, 80, .08); }
+    .news div.n { display: grid; grid-template-columns: 1fr auto; gap: .2rem .75rem; padding: .85rem 1rem; border-radius: 12px; background: var(--white); text-decoration: none; box-shadow: 0 1px 2px rgba(27, 38, 80, .08); }
     .news b { font-weight: 600; line-height: 1.35; }
     .news time { font: 700 .75rem/1.5 var(--mono); color: var(--ink-soft); white-space: nowrap; }
     .news small { grid-column: 1 / -1; color: var(--ink-soft); font-size: .875rem; }
+    .news .n-acts { grid-column: 1 / -1; display: flex; align-items: center; gap: 1rem; margin-top: .35rem; }
+    .news .n-read { min-height: 40px; padding: 0 .9rem; border: 1.5px solid var(--ink); border-radius: 99px; background: none; font-weight: 600; font-size: .875rem; cursor: pointer; }
+    .news .n-read:active { transform: scale(.97); }
+    .news .n-open { display: inline-flex; align-items: center; min-height: 40px; font-weight: 600; font-size: .9375rem; text-decoration: underline; text-underline-offset: .25em; }
+    .news .n-done { font: 700 .75rem/1 var(--mono); color: var(--ink-soft); }
     .news .new b::before { content: ''; display: inline-block; width: 8px; height: 8px; margin: 0 .45rem .1rem 0; border-radius: 50%; background: var(--postmark); }
     .funnel { display: grid; gap: .8rem; padding: 1rem; border-radius: 12px; background: var(--white); }
     .f-row { display: grid; gap: .3rem; }
@@ -1413,9 +1418,25 @@ async function renderNews() {
   pushBox();
   const j = await loadUnread();
   if (!j) { $('newsList').innerHTML = '<div class="calm"><b>No se han podido cargar</b>Toca actualizar arriba.</div>'; return; }
-  $('newsList').innerHTML = j.events.length ? `<div class="news">${j.events.map((e) => { const inner = `<b>${e.test ? 'Prueba · ' : ''}${esc(e.title)}</b><time datetime="${esc(e.created_at)}">${esc(ago(e.created_at))}</time>${e.body ? `<small>${esc(e.body)}</small>` : ''}`; const href = e.url && e.url.startsWith('/guest/panel-pruebas.html') ? e.url.replace('/guest/panel-pruebas.html', '') || '#/' : ''; return href && href !== '#/' ? `<a class="${e.read_at ? '' : 'new'}" href="${esc(href)}">${inner}</a>` : `<div class="n ${e.read_at ? '' : 'new'}">${inner}</div>`; }).join('')}</div>`
-    : '<div class="calm"><b>Sin avisos todavía</b>Aquí verás cada venta, cuestionario o presupuesto en cuanto llegue.</div>';
-  if (j.unread) { await auto({ action: 'owner_events_read' }).catch(() => {}); $('bellDot').hidden = true; try { navigator.clearAppBadge?.(); } catch {} }
+  const badge = (n) => { $('bellDot').hidden = !n; $('bellDot').textContent = n > 9 ? '9+' : n; try { n ? navigator.setAppBadge?.(n) : navigator.clearAppBadge?.(); } catch {} };
+  const item = (e) => {
+    const href = e.url && e.url.startsWith('/guest/panel-pruebas.html') ? e.url.replace('/guest/panel-pruebas.html', '') : '';
+    const head = `<b>${e.test ? 'Prueba · ' : ''}${esc(e.title)}</b><time datetime="${esc(e.created_at)}">${esc(ago(e.created_at))}</time>${e.body ? `<small>${esc(e.body)}</small>` : ''}`;
+    const open = href && href !== '#/' ? `<a class="n-open" href="${esc(href)}">Abrir</a>` : '';
+    const read = e.read_at ? '<span class="n-done">Leído</span>' : `<button class="n-read" type="button" data-read="${e.id}">Marcar como leído</button>`;
+    return `<div class="n${e.read_at ? '' : ' new'}" data-id="${e.id}">${head}<div class="n-acts">${read}${open}</div></div>`;
+  };
+  const unread = () => j.events.filter((e) => !e.read_at).length;
+  const draw = () => {
+    $('newsList').innerHTML = j.events.length
+      ? `${unread() > 1 ? '<p style="margin:0 0 .6rem;text-align:right"><button class="link-btn" type="button" id="readAll">Marcar todos como leídos</button></p>' : ''}<div class="news">${j.events.map(item).join('')}</div>`
+      : '<div class="calm"><b>Sin avisos todavía</b>Aquí verás cada venta, cuestionario o presupuesto en cuanto llegue.</div>';
+    const mark = async (id) => { j.events.forEach((e) => { if (id == null || e.id === id) e.read_at = e.read_at || new Date().toISOString(); }); draw(); badge(unread()); try { const r = await auto({ action: 'owner_events_read', ...(id == null ? {} : { id }) }); badge(r.unread); } catch {} };
+    $('newsList').querySelectorAll('[data-read]').forEach((b) => b.onclick = () => mark(Number(b.dataset.read)));
+    $('newsList').querySelectorAll('.n-open').forEach((a) => a.addEventListener('click', () => { const id = Number(a.closest('[data-id]').dataset.id); const e = j.events.find((x) => x.id === id); if (e && !e.read_at) mark(id); }));
+    if ($('readAll')) $('readAll').onclick = () => mark(null);
+  };
+  draw();
 }
 
 async function renderMoney() {

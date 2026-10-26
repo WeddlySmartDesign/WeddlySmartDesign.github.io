@@ -478,7 +478,14 @@ Deno.serve(async (req) => {
       const { count: devices } = await c.from('guest_owner_push_subs').select('endpoint', { count: 'exact', head: true });
       return json({ ok: true, events: data || [], unread: count || 0, devices: devices || 0 });
     }
-    if (action === 'owner_events_read') { await c.from('guest_owner_events').update({ read_at: new Date().toISOString() }).is('read_at', null); return json({ ok: true }); }
+    if (action === 'owner_events_read') {
+      // Con id, marca solo ese aviso; sin id, todos los que quedan sin leer.
+      let q = c.from('guest_owner_events').update({ read_at: new Date().toISOString() }).is('read_at', null);
+      if (b.id != null) q = q.eq('id', Number(b.id));
+      await q;
+      const { count } = await c.from('guest_owner_events').select('id', { count: 'exact', head: true }).is('read_at', null);
+      return json({ ok: true, unread: count || 0 });
+    }
 
     if (action === 'stats') return json({ ok: true, ...(await stats(c)) });
 
