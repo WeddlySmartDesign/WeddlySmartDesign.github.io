@@ -65,6 +65,8 @@
     .design i { position: absolute; top: .55rem; left: .55rem; padding: .15rem .4rem; border-radius: 4px; background: var(--ink); color: var(--paper); font: 600 .6875rem/1.3 var(--text); font-style: normal; }
     .peek { display: inline-block; margin-top: .6rem; font-size: .9375rem; color: var(--ink); }
     .peek:empty { display: none; }
+    .upsell { margin-top: .9rem !important; padding-top: .8rem; border-top: 1px solid var(--line); font-size: .875rem !important; }
+    .upsell a { color: var(--ink); font-weight: 600; }
     .msg { margin-top: .7rem; font-size: .9375rem; color: var(--postmark); }
     .msg:empty { display: none; }
   </style>
@@ -105,6 +107,7 @@
     <div class="parts" id="parts"></div>
     <label class="note">Algo que debamos saber <small>Opcional. Por ejemplo: «La foto de la galería se ve oscura».</small><textarea id="note" maxlength="600"></textarea></label>
     <div class="row"><button class="btn" id="send" type="button">Abrir esa parte</button><button class="btn line" data-back type="button">Volver</button></div>
+    <p class="upsell" id="upsell" hidden>¿Queréis otros colores, otras letras o cambiar la ilustración? Eso ya es diseño a medida. <a id="upsellLink" href="a-medida.html">Pasar a a medida</a>: os descontamos lo ya pagado y seguís con vuestros datos y la app.</p>
   </div>
 
   <div id="done" hidden><h2 id="doneTitle"></h2><p id="doneText"></p></div>
@@ -245,6 +248,7 @@ $('send').onclick = () => respond('changes');
     const order = loaded.order;
     changes = order.changes || null; showRounds();
     if (order.designChange?.allowed) showDesigns(order.designChange);
+    if (changes && !changes.custom && order.status === 'review_sent') { $('upsell').hidden = false; $('upsellLink').href = `a-medida.html?nivel=adapt&diseno=${encodeURIComponent(order.config?.template?.id || '')}&pedido=${encodeURIComponent(token)}`; }
     if (!order?.config?.template?.id) throw Error('missing_template');
     const cfg = order.config, id = cfg.template.id, spec = manifest.templates?.[id];
     if (!spec || spec.mode !== 'iframe' || !spec.src) throw Error('template_asset_not_ready');

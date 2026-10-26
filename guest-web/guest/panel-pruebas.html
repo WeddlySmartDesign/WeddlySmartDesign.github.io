@@ -485,18 +485,40 @@ function card(o, flat = false) {
 }
 document.addEventListener('click', (e) => { const c = e.target.closest('.card[data-id]'); if (c) location.hash = '#/pedido/' + c.dataset.id; });
 
+// Modo vacaciones: guarda la fecha de vuelta; guest-automation para los avisos y la web muestra el plazo nuevo.
+async function loadVacation() {
+  try {
+    const { settings } = await flow({ action: 'settings_get' }), v = settings?.vacation || {}, on = v.until && Date.parse(v.until + 'T23:59:59') > Date.now();
+    if (!$('vacUntil')) return;
+    $('vacUntil').value = on ? v.until : '';
+    $('vacOff').hidden = !on;
+    if (on) $('vacText').innerHTML = `<b>Estás de vacaciones hasta el ${esc(day(v.until))}.</b> La web avisa del nuevo plazo y tus avisos de plazo están parados.`;
+  } catch {}
+  const save = async (until) => {
+    $('vacMsg').textContent = '';
+    try { await flow({ action: 'settings_set', vacation: { until } }); toast(until ? 'Guardado. Buenas vacaciones.' : 'Hola de nuevo. Los avisos vuelven a funcionar.'); loadVacation(); }
+    catch (e) { if (e.message !== 'manager_required') $('vacMsg').textContent = 'No se ha podido guardar.'; }
+  };
+  $('vacGo').onclick = () => { const v = $('vacUntil').value; if (!v) { $('vacMsg').textContent = 'Elige la fecha de vuelta.'; return; } save(v); };
+  $('vacOff').onclick = () => save('');
+}
 function renderInbox() {
   const g = (k) => orders.filter((o) => (o.customRequestId && o.status === 'approved' ? 'waiting' : STATUS[o.status]?.group) === k).sort((a, b) => (due(a)?.at ?? Infinity) - (due(b)?.at ?? Infinity));
-  const send = g('send'), deliver = g('deliver'), waiting = g('waiting'), mine = send.length + deliver.length + customs.filter((r) => CSTATUS[r.status]?.who === 'you').length;
+  const send = g('send'), deliver = g('deliver'), waiting = g('waiting'), fixes = orders.filter((o) => o.dataChangePending), mine = send.length + deliver.length + fixes.length + customs.filter((r) => CSTATUS[r.status]?.who === 'you').length;
   const sec = (title, list, flat) => list.length ? `<section class="sec"><h3><b>${list.length}</b> ${title}</h3><div class="cards">${list.map((o) => card(o, flat)).join('')}</div></section>` : '';
   $('inbox').innerHTML = `
     <div class="hello"><strong>${mine ? (mine === 1 ? 'Tienes 1 pendiente.' : `Tienes ${mine} pendientes.`) : 'Todo al día.'}</strong>
     <span>${mine ? 'Ábrela, mira la invitación y pulsa el botón.' : 'Cuando una pareja envíe su cuestionario o apruebe su invitación, aparecerá aquí.'}</span></div>
     ${sec(send.length === 1 ? 'para enviar a revisar' : 'para enviar a revisar', send)}
     ${sec(deliver.length === 1 ? 'aprobada para entregar' : 'aprobadas para entregar', deliver)}
+    ${sec(fixes.length === 1 ? 'pide actualizar un dato' : 'piden actualizar un dato', fixes)}
     ${!mine ? '<div class="calm"><b>Nada pendiente</b>Las parejas están rellenando o revisando. No tienes que hacer nada.</div>' : ''}
     ${(() => { const l = customs.filter((r) => CSTATUS[r.status]?.who === 'you'); return l.length ? `<section class="sec"><h3><b>${l.length}</b> a medida</h3><div class="cards">${l.map(ccard).join('')}</div></section>` : ''; })()}
-    ${sec('esperando a la pareja', waiting, true)}`;
+    ${sec('esperando a la pareja', waiting, true)}
+    <section class="sec" id="vacBox"><h3>Vacaciones</h3><div class="box"><p id="vacText">Si no vas a estar, pon hasta cuándo. La web y los emails avisan del nuevo plazo y se paran tus avisos de plazo. Las propuestas ya enviadas siguen su curso.</p>
+      <div class="q-form"><label>Fuera hasta el<input id="vacUntil" type="date"></label></div>
+      <div class="st-open"><button class="btn line" type="button" id="vacGo">Guardar</button><button class="link-btn" type="button" id="vacOff" hidden>Ya he vuelto</button><p class="msg" role="alert" id="vacMsg"></p></div></div></section>`;
+  loadVacation();
   $('dot').hidden = !mine; $('dot').textContent = mine;
 }
 function renderAll() {
@@ -563,6 +585,9 @@ async function openOrder(id) {
     $('order').innerHTML = `
       <div class="o-head"><span class="pill ${s.who === 'you' ? 'you' : s.who === 'done' ? 'ok' : ''}">${esc(s.label)}</span><h2>${esc(names)}</h2>
         <p>${esc(d.name)}${c.date ? ' · boda el ' + esc(day(c.date)) : ''}${o.custom_request_id ? ` · <a href="#/medida/${esc(o.custom_request_id)}">a medida</a>` : ''}${o.mode === 'test' ? ' · prueba sin pago' : ''}</p>${(() => { const d = due(o); if (!d) return ''; const t = dueText(d); return `<p class="due ${t.level}">${esc(t.short)} · ${esc(t.long.toLowerCase())}</p>`; })()}</div>
+      ${o.data_change_request?.status === 'pending' ? `<div class="box" style="margin-top:1rem;box-shadow:inset 0 0 0 2px var(--ink)"><h3>Piden actualizar un dato</h3><p>Ya tienen su invitación. Si lo aplicas, sus invitados ven el dato nuevo en el mismo enlace y a ellos les llega un email.</p>
+        <ul class="guide">${(o.data_change_request.changes || []).map((x) => `<li>${esc(x.label)}: <s>${esc(x.before || '—')}</s> → <b>${esc(x.after || '—')}</b></li>`).join('')}${o.data_change_request.note ? `<li>Nota: ${esc(o.data_change_request.note)}</li>` : ''}</ul>
+        <div class="acts"><button class="btn" type="button" id="dcYes">Aplicar el cambio</button><button class="link-btn" type="button" id="dcNo">No lo aplico: se lo explico</button><p class="msg" role="alert" id="dcMsg"></p></div></div>` : ''}
       <div class="o-grid">
         <div class="stage">
           <div class="phone"><div class="screen" id="screen"><p>${config?.template ? 'Montando la invitación…' : 'Se verá aquí cuando envíen el cuestionario.'}</p></div></div>
@@ -573,7 +598,7 @@ async function openOrder(id) {
             ${a.btn ? `<div class="d-act"><button class="btn" data-act type="button">${esc(a.btn)}</button><p class="msg" role="alert"></p></div>` : ''}
             ${reqs.length && ['designing', 'review_ready'].includes(o.status) ? `<div class="ask"><b>Lo que pidieron cambiar${reqs.length > 1 ? ` (la última de ${reqs.length} veces)` : ''}</b>${esc(reqs[0].note)}</div>` : ''}</div>
           ${config?.template && ['designing', 'review_ready'].includes(o.status) ? '<div class="box texts" id="texts"><h3>Textos</h3><p>Revisando los textos…</p></div>' : ''}
-          ${config?.template && o.status !== 'cancelled' ? `<div class="box"><h3>Retocar el diseño</h3><p>${o.style_overrides ? `Tiene ${stCount(o.style_overrides)} ${stCount(o.style_overrides) === 1 ? 'retoque' : 'retoques'} tuyos. ` : ''}Títulos, tipos de letra, tamaños y colores, viéndolo en directo antes de guardar.</p><div class="st-open"><button class="btn line" type="button" id="openStudio"><svg width="18" height="18" aria-hidden="true"><use href="#i-pen"/></svg>Abrir el editor</button></div></div>` : ''}
+          ${config?.template && o.status !== 'cancelled' ? `<div class="box"><h3>Retocar el diseño</h3><p>${o.style_overrides ? `Tiene ${stCount(o.style_overrides)} ${stCount(o.style_overrides) === 1 ? 'retoque' : 'retoques'} tuyos. ` : ''}Títulos, tipos de letra, tamaños y colores, viéndolo en directo antes de guardar.${o.custom_request_id ? '' : ' En el catálogo: si algo no se lee bien en el móvil, ajústalo gratis; si piden otra letra u otro color por gusto, eso es a medida (en su revisión tienen el botón «Pasar a a medida»).'}</p><div class="st-open"><button class="btn line" type="button" id="openStudio"><svg width="18" height="18" aria-hidden="true"><use href="#i-pen"/></svg>Abrir el editor</button></div></div>` : ''}
           ${['submitted', 'designing', 'review_ready', 'review_sent', 'approved', 'delivered'].includes(o.status) && o.resolved_config && Object.keys(o.resolved_config).length ? `<div class="box" id="fixBox"><h3>Corregir un dato</h3><p>${o.status === 'delivered' ? 'Ya está entregada: el cambio sale al momento en el enlace que tienen sus invitados. Avísales tú si hace falta.' : ['review_sent', 'approved'].includes(o.status) ? 'Lo verán corregido la próxima vez que abran su enlace.' : 'Un cambio de hora, un lugar, una falta… La invitación se vuelve a montar sola.'}</p>
             <div class="q-form"><label>Qué quieres cambiar<select id="fixPath" class="fix-sel"></select></label><label>Texto nuevo<textarea id="fixVal" rows="2" spellcheck="true" lang="es"></textarea></label></div>
             <div class="st-open"><button class="btn line" type="button" id="fixGo">Guardar el cambio</button><p class="msg" role="alert" id="fixMsg"></p></div></div>` : ''}
@@ -594,8 +619,8 @@ async function openOrder(id) {
             ${email ? `<li><a href="mailto:${esc(email)}"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>Escribirles<small>${esc(email)}</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>` : ''}
             <li><a href="catalog-questionnaire.html?t=${encodeURIComponent(o.questionnaireToken)}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-doc"/></svg><span>Ver su cuestionario<small>Lo que han rellenado</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li>
             ${['review_sent', 'changes_requested', 'approved'].includes(o.status) ? `<li><button type="button" data-copy="${esc(reviewUrl)}"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Copiar su enlace de revisión<small>Por si no les llega el email</small></span></button></li>` : ''}
-            ${o.status === 'delivered' ? `<li><a href="${esc(finalUrl)}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Abrir la invitación final<small>La que comparten con sus invitados</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li><li><button type="button" data-copy="${esc(finalUrl)}"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Copiar el enlace final</span></button></li>` : ''}
-          </ul></div>
+            ${o.status === 'delivered' ? `<li><a href="${esc(finalUrl)}" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Abrir la invitación final<small>La que comparten con sus invitados</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a></li><li><button type="button" data-copy="${esc(finalUrl)}"><svg aria-hidden="true"><use href="#i-link"/></svg><span>Copiar el enlace final</span></button></li><li><button type="button" id="redeliver"><svg aria-hidden="true"><use href="#i-mail"/></svg><span>Reenviarles la entrega<small>Invitación y acceso a la app, por si lo han perdido</small></span></button></li>` : ''}
+          </ul>${o.status === 'delivered' ? `<div class="q-form" id="redeliverForm" hidden><label>Enviar a<input id="rdEmail" type="email" inputmode="email" value="${esc(email || '')}"></label><div class="st-open"><button class="btn line" type="button" id="rdGo">Enviar</button><p class="msg" role="alert" id="rdMsg"></p></div></div>` : ''}</div>
           <div class="box"><h3>Facturas</h3><ul class="rows" id="invoices"><li><span style="padding:.8rem 0;color:var(--ink-soft)">Cargando…</span></li></ul></div>
           ${o.checkout_session_id && !['delivered', 'cancelled'].includes(o.status) ? `<div class="box refund"><h3>Devolver el dinero</h3><p>${o.status === 'approved' ? 'Ya la han aprobado: según tus condiciones, la devolución completa era hasta antes de aprobar.' : 'Prometes devolver el 100 % antes de aprobar. Se devuelve a su tarjeta, se anula el pedido y les llega la factura de devolución.'}</p>
             <div class="refund-go"><button class="btn line" type="button" id="refundAsk"><svg width="18" height="18" aria-hidden="true"><use href="#i-undo"/></svg>Devolver ${esc(eur(5990))}</button></div>
@@ -633,6 +658,20 @@ async function openOrder(id) {
     if ($('revokeUndo')) $('revokeUndo').onclick = revoke(true);
     if ($('giftRound')) $('giftRound').onclick = gift(false);
     if ($('giftUndo')) $('giftUndo').onclick = gift(true);
+    const dc = async (decline) => {
+      $('dcMsg').textContent = '';
+      try { await flow({ action: 'data_change_apply', orderId: o.id, decline: !!decline }); toast(decline ? 'Les hemos escrito para hablarlo. Escríbeles tú por WhatsApp o email.' : 'Actualizada. Les ha llegado el email.'); await refresh(); openOrder(o.id); }
+      catch (e) { if (e.message !== 'manager_required') $('dcMsg').textContent = 'No se ha podido aplicar. Si alguna hora no encaja, corrígela en «Corregir un dato».'; }
+    };
+    if ($('dcYes')) $('dcYes').onclick = () => dc(false);
+    if ($('dcNo')) $('dcNo').onclick = () => dc(true);
+    if ($('redeliver')) $('redeliver').onclick = () => { $('redeliverForm').hidden = false; $('rdEmail').focus(); };
+    if ($('rdGo')) $('rdGo').onclick = async () => {
+      const b = $('rdGo'); b.disabled = true; $('rdMsg').textContent = '';
+      try { const j = await flow({ action: 'resend_delivery', orderId: o.id, email: $('rdEmail').value.trim() }); toast('Enviado a ' + j.to + '.'); $('redeliverForm').hidden = true; }
+      catch (e) { if (e.message === 'manager_required') return; $('rdMsg').textContent = e.message === 'missing_email' ? 'Revisa el email.' : 'No se ha podido enviar. Prueba en un rato.'; }
+      finally { b.disabled = false; }
+    };
     if ($('dsGo')) $('dsGo').onclick = async () => {
       const b = $('dsGo'); if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = '¿Seguro? Pulsa otra vez'; return; }
       b.disabled = true; b.textContent = 'Montando…'; $('dsMsg').textContent = '';
@@ -1083,6 +1122,14 @@ const SCOPE = {
   unsure: ['Lee la idea y decide el nivel que encaja.', 'Si cabe en adaptar un diseño, presupuesta 120 €; si piden portada propia, 180 €; si es todo nuevo, 250 € o más.']
 };
 let customs = [], customsCfg = { rounds: 2, extraCents: 2000 };
+// Algo que no estaba en el presupuesto: importe y concepto; les llega el enlace de pago con su factura.
+function chargeBox(r) {
+  const ex = r.extras || [], pending = ex.some((x) => !x.paidAt && !x.cancelledAt);
+  return `<div class="box" style="margin-top:1rem"><h3>Cobrar un extra</h3><p>Si piden algo que no estaba en el presupuesto, ponle precio aquí. Les llega el enlace de pago y, al pagar, su factura. Hazlo solo cuando lo hayan pagado.</p>
+    ${ex.length ? `<ul class="guide">${ex.map((x, i) => `<li>${esc(x.concept)} · ${esc(eur(x.cents))} · ${x.paidAt ? '<b>pagado</b>' : x.cancelledAt ? 'anulado' : `esperando el pago <button class="link-btn" type="button" data-xcancel="${i}">Anular</button>`}</li>`).join('')}</ul>` : ''}
+    ${pending ? '' : `<div class="q-form"><div class="two-in"><label>Qué es<input id="xWhat" type="text" maxlength="120" placeholder="Ej.: versión en inglés"></label><label>Precio (€)<input id="xAmt" type="number" inputmode="decimal" min="5" step="1"></label></div></div>
+    <div class="acts"><button class="btn line" type="button" id="xGo">Mandarles el enlace de pago</button></div>`}</div>`;
+}
 const custom = (b) => call(CUSTOM, b);
 async function loadCustom() {
   try { const j = await custom({ action: 'list' }); customs = j.requests || []; customsCfg = { rounds: j.rounds, extraCents: j.extraCents }; }
@@ -1118,7 +1165,8 @@ async function openCustom(id) {
     $('title').textContent = r.name;
     const phone = String(r.phone || '').replace(/\D/g, ''), wa = phone ? (phone.length === 9 ? '34' + phone : phone) : '';
     const rounds = customsCfg.rounds, extra = r.extraRounds || 0;
-    let act = '';
+    let act = r.creditCents ? `<p class="deadline"><b>Viene del catálogo</b>Ya pagó ${esc(eur(r.creditCents))}: se descuentan solos de la señal y el resto.${r.orderId ? ` <a href="#/pedido/${esc(r.orderId)}">Ver su pedido</a>` : ''}</p>` : '';
+    if (r.status === 'quoted' && r.quoteExpiresAt) act += `<p class="deadline"><b>Vale hasta el ${esc(day(r.quoteExpiresAt))}</b>Si no lo aceptan, caduca solo y les avisamos 5 días antes.</p>`;
     if (r.status === 'new' || r.status === 'quoted') {
       const start = r.quoteCents || r.suggestedCents;
       const dl = r.quoteDueAt ? (() => { const t = dueText({ at: Date.parse(r.quoteDueAt), what: 'Mandar el presupuesto' }); return `<p class="deadline ${t.level}"><b>${esc(t.short)}</b>${esc(t.long)}</p>`; })() : '';
@@ -1137,7 +1185,7 @@ async function openCustom(id) {
         <p>Señal de ${esc(eur(Math.round(r.quoteCents / 2)))} cobrada${r.quoteDays ? `. Les dijiste la primera propuesta en unos ${r.quoteDays} días` : ''}. Les ha llegado su cuestionario. Funciona como un pedido del catálogo: cuando lo envíen, lo tienes en Pedidos ya montado; ajústalo con el editor de estilo o cámbiale el diseño y mándales la propuesta desde allí.</p>
         <ul class="guide"><li>La propuesta lleva la marca «Borrador» hasta que paguen el resto.</li><li>Tienen ${rounds} rondas de cambios; la extra la pagan ellos (${esc(eur(customsCfg.extraCents))}) desde la propia propuesta.</li><li>Al aprobarla les llega el pago del 50 % restante y, al pagarlo, se entrega sola con la app.</li></ul>
         <div class="acts"><a class="btn" href="#/pedido/${esc(r.orderId)}">Abrir su pedido</a>${r.status === 'accepted' ? '<button class="btn line" type="button" id="cStart">Ya he empezado</button>' : ''}
-          <button class="link-btn" type="button" id="cFinal">Cobrar ya el resto sin esperar a que lo aprueben</button><p class="msg" role="alert" id="cMsg"></p></div>`;
+          <button class="link-btn" type="button" id="cFinal">Cobrar ya el resto sin esperar a que lo aprueben</button><p class="msg" role="alert" id="cMsg"></p></div>` + chargeBox(r);
     } else if (r.status === 'accepted' || r.status === 'designing') {
       act = `<h3>${r.status === 'accepted' ? 'Han pagado la señal' : 'Diseñando'}</h3>
         <p>Señal de ${esc(eur(Math.round(r.quoteCents / 2)))} cobrada${r.quoteDays ? `. Les dijiste la primera propuesta en unos ${r.quoteDays} días` : ''}. Mándales siempre el enlace de la propuesta, no capturas ni archivos: lleva la marca «Borrador» y se quita sola cuando pagan el resto.</p>
@@ -1152,7 +1200,7 @@ async function openCustom(id) {
           <button class="btn line" type="button" id="cExtra">Piden otra ronda: cobrar ${esc(eur(customsCfg.extraCents))}</button>
           <p class="msg" role="alert" id="cMsg"></p></div>`;
     } else if (r.status === 'final_sent') {
-      act = `<h3>Esperando el pago final</h3><p>Tienen el enlace para pagar ${esc(eur(r.quoteCents - Math.round(r.quoteCents / 2)))}. Cuando paguen, te llega un email y la factura sale sola.${r.orderId ? ' La invitación se les entrega sola con la app.' : ''}</p>`;
+      act = chargeBox(r) + `<h3>Esperando el pago final</h3><p>Tienen el enlace para pagar ${esc(eur(r.quoteCents - Math.round(r.quoteCents / 2)))}. Cuando paguen, te llega un email y la factura sale sola.${r.orderId ? ' La invitación se les entrega sola con la app.' : ''}</p>`;
     } else if (r.status === 'paid') {
       act = `<h3>Todo pagado: entrégala</h3><p>Pega el enlace de su invitación terminada. Al entregar, les llega por email junto con su acceso a la app de invitados, igual que en una compra normal.</p>
         <div class="q-form"><label>Enlace de la invitación (opcional)<input id="dUrl" type="url" inputmode="url" placeholder="https://…" value="${esc(r.deliveryUrl || '')}"></label></div>
@@ -1199,13 +1247,15 @@ async function openCustom(id) {
       catch (e) { if (e.message === 'manager_required') return; $('cMsg').textContent = { invalid_amount: 'Revisa el precio.', invalid_status: 'Ya ha cambiado: actualiza arriba.', invalid_url: 'Revisa el enlace: tiene que empezar por https://' }[e.message] || 'No ha salido. Prueba otra vez.'; b.disabled = false; b.textContent = old; }
     };
     if ($('qSend')) {
-      const amt = $('qAmt'), split = () => { const c = Math.round(Number(amt.value) * 100) || 0, dep = Math.round(c / 2); $('qSplit').innerHTML = c ? `Pagan <b>${esc(eur(dep))}</b> al aceptar y <b>${esc(eur(c - dep))}</b> al aprobar. IVA incluido.` : 'Escribe el precio.'; $('order').querySelectorAll('[data-amt]').forEach((x) => x.setAttribute('aria-pressed', String(+x.dataset.amt === c))); };
+      const amt = $('qAmt'), split = () => { const c = Math.round(Number(amt.value) * 100) || 0, cr = r.creditCents || 0, owe = Math.max(0, c - cr), dep = Math.round(owe / 2); $('qSplit').innerHTML = c ? `${cr ? `Ya pagaron ${esc(eur(cr))} en el catálogo y se descuentan solos. ` : ''}Pagan <b>${esc(eur(dep))}</b> al aceptar y <b>${esc(eur(owe - dep))}</b> al aprobar. IVA incluido. El presupuesto vale 30 días.` : 'Escribe el precio.'; $('order').querySelectorAll('[data-amt]').forEach((x) => x.setAttribute('aria-pressed', String(+x.dataset.amt === c))); };
       $('order').querySelectorAll('[data-amt]').forEach((x) => x.onclick = () => { amt.value = x.dataset.amt / 100; split(); });
       amt.oninput = split; split();
       $('qSend').onclick = () => run($('qSend'), () => custom({ action: 'quote', id, cents: Math.round(Number(amt.value) * 100), days: Number($('qDays').value), note: $('qNote').value }), 'Presupuesto enviado por email.');
     }
     if ($('cDecline')) $('cDecline').onclick = () => run($('cDecline'), () => custom({ action: 'update', id, status: 'declined' }), 'Descartada.');
     if ($('cReopen')) $('cReopen').onclick = () => run($('cReopen'), () => custom({ action: 'update', id, status: 'new' }), 'Recuperada.');
+    if ($('xGo')) $('xGo').onclick = () => run($('xGo'), () => custom({ action: 'charge', id, cents: Math.round(Number($('xAmt').value) * 100), concept: $('xWhat').value.trim() }), 'Les ha llegado el enlace para pagar el extra.');
+    document.querySelectorAll('[data-xcancel]').forEach((b) => { b.onclick = () => run(b, () => custom({ action: 'charge', id, cancel: Number(b.dataset.xcancel) }), 'Extra anulado.'); });
     if ($('cRound')) $('cRound').onclick = () => run($('cRound'), () => custom({ action: 'round', id }), 'Apuntada la propuesta.');
     if ($('cRoundUndo')) $('cRoundUndo').onclick = () => run($('cRoundUndo'), () => custom({ action: 'round', id, undo: true }), 'Quitada.');
     let refundPart = '';

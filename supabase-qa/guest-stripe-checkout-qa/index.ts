@@ -81,7 +81,7 @@ async function createSession(edition:string,consent:boolean,attempt:any,requeste
  const option=catalogSaleOption(requestedTemplateId,edition);
  const amount=option.amountCents,base=origin(),p=new URLSearchParams();
  p.set('ui_mode','embedded_page');p.set('mode','payment');p.set('locale','es');p.set('submit_type','pay');
- p.set('billing_address_collection','auto');p.set('customer_creation','always');p.set('redirect_on_completion','always');
+ p.set('billing_address_collection','auto');p.set('customer_creation','always');p.set('tax_id_collection[enabled]','true');p.set('redirect_on_completion','always');
  p.set('return_url',base+'/gracias.html?session_id={CHECKOUT_SESSION_ID}');
  p.set('client_reference_id','guest_'+crypto.randomUUID());
  p.set('line_items[0][quantity]','1');p.set('line_items[0][price_data][currency]','eur');

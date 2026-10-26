@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <title>Actualizar un dato · GUEST by WeddlySmartDesign</title>
+  <link rel="icon" href="../assets/brand/favicon.ico" sizes="any">
+  <link rel="stylesheet" href="../css/fonts.css?v=43">
+  <style>
+    /* Tras la entrega: la pareja pide actualizar fecha, horario o lugar. La propietaria lo aplica con un toque. */
+    :root { --paper: #fbf7f4; --envelope-soft: #f6dcd6; --ink: #1b2650; --ink-soft: #4a5480; --postmark: #b3263a; --line: #e3d6d1; --white: #fff; --display: 'Abril Fatface', Georgia, serif; --mono: 'Courier Prime', 'Courier New', monospace; --text: 'Hanken Grotesk', system-ui, sans-serif; --ease-out: cubic-bezier(.23, 1, .32, 1); }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--text); -webkit-font-smoothing: antialiased; }
+    [hidden] { display: none !important; }
+    main { width: min(100% - 32px, 34rem); margin: 0 auto; padding: calc(28px + env(safe-area-inset-top, 0px)) 0 calc(40px + env(safe-area-inset-bottom, 0px)); }
+    .kicker { margin: 0 0 .6rem; font: 700 .75rem/1.3 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--postmark); }
+    h1 { margin: 0; font: 400 clamp(2rem, 8vw, 2.6rem)/1.05 var(--display); }
+    .lead { margin: .8rem 0 0; font-size: 1.0625rem; line-height: 1.6; color: var(--ink-soft); }
+    form { display: grid; gap: 1rem; margin-top: 1.6rem; }
+    label { display: grid; gap: .35rem; font-weight: 600; font-size: .9375rem; }
+    label small { font-weight: 400; color: var(--ink-soft); }
+    input, textarea { width: 100%; min-height: 50px; padding: .7rem .85rem; border: 1.5px solid var(--line); border-radius: 8px; background: var(--white); color: var(--ink); font: 400 1rem/1.45 var(--text); }
+    textarea { min-height: 96px; resize: vertical; }
+    input:focus, textarea:focus { outline: none; border-color: var(--ink); }
+    input.changed { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+    .group { display: grid; gap: .9rem; padding: 1rem; border-radius: 10px; background: var(--white); box-shadow: inset 0 0 0 1px var(--line); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 1.25rem; border: 1.5px solid var(--ink); border-radius: 8px; background: var(--ink); color: var(--paper); font: 600 1.0625rem/1 var(--text); cursor: pointer; transition: transform 140ms var(--ease-out), opacity 160ms ease; }
+    .btn:active { transform: scale(.97); }
+    .btn[aria-busy="true"] { opacity: .6; pointer-events: none; }
+    .note { margin: 0; font-size: .875rem; line-height: 1.5; color: var(--ink-soft); }
+    .msg { margin: 0; color: var(--postmark); font-size: .9375rem; }
+    .msg:empty { display: none; }
+    .state { margin-top: 1.6rem; padding: 1.1rem; border-radius: 10px; background: var(--envelope-soft); line-height: 1.55; }
+    .state b { display: block; font: 400 1.3rem/1.2 var(--display); margin-bottom: .3rem; }
+  </style>
+</head>
+<body>
+<main>
+  <p class="kicker">Vuestra invitación</p>
+  <h1 id="title">Actualizar un dato</h1>
+  <p class="lead" id="lead">Cargando…</p>
+
+  <form id="form" hidden novalidate>
+    <div class="group" id="fields"></div>
+    <label>Algo más que debamos saber <small>Opcional. Por ejemplo: «Cambia el sitio del cóctel».</small><textarea id="note" maxlength="800"></textarea></label>
+    <p class="note">Lo revisamos y lo actualizamos sin coste. Vuestros invitados verán el dato nuevo en el mismo enlace: no hace falta volver a enviarla. Solo se cambian datos; el diseño queda como lo aprobasteis.</p>
+    <p class="msg" id="msg" role="alert"></p>
+    <button class="btn" id="send" type="submit">Pedir el cambio</button>
+  </form>
+  <div class="state" id="state" hidden></div>
+</main>
+<script>
+(() => {
+'use strict';
+// QA: al pasar a real, guest-invitation-flow.
+const FLOW = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow-qa';
+const token = new URLSearchParams(location.search).get('t') || '';
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+async function api(body) {
+  const r = await fetch(FLOW, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), cache: 'no-store' });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || !j?.ok) throw Error(j?.error || 'request_failed');
+  return j;
+}
+function state(title, text) { $('form').hidden = true; $('state').hidden = false; $('state').innerHTML = `<b>${esc(title)}</b>${esc(text)}`; }
+let fields = [];
+(async () => {
+  try {
+    const j = await api({ action: 'data_change_load', token });
+    fields = j.fields;
+    $('title').textContent = j.label ? `Actualizar la invitación de ${j.label}` : 'Actualizar un dato';
+    $('lead').textContent = 'Cambiad solo lo que haya cambiado. Lo que no toquéis se queda como está.';
+    if (j.pending) state('Ya nos pedisteis un cambio.', 'Lo estamos revisando. Os escribimos en cuanto esté actualizada.');
+    $('fields').innerHTML = fields.map((f, i) => `<label>${esc(f.label)}<input data-i="${i}" type="${f.path === 'couple.date' ? 'date' : f.path.endsWith('.time') || f.path === 'couple.coverTime' ? 'time' : 'text'}" maxlength="200" value="${esc(f.value)}"></label>`).join('');
+    $('fields').addEventListener('input', (e) => { const f = fields[e.target.dataset.i]; if (f) e.target.classList.toggle('changed', e.target.value !== f.value); });
+    if (!j.pending) $('form').hidden = false;
+  } catch (e) {
+    $('lead').textContent = '';
+    state(e.message === 'not_delivered' ? 'Aún no está entregada.' : 'Este enlace no funciona.', e.message === 'not_delivered' ? 'Mientras la revisáis, los cambios se piden desde la página de revisión.' : 'Abridlo desde el email de entrega o escribidnos a info@weddlysmartdesign.com.');
+  }
+})();
+$('form').onsubmit = async (e) => {
+  e.preventDefault();
+  const changes = [...$('fields').querySelectorAll('input')].map((x) => ({ path: fields[x.dataset.i].path, value: x.value.trim() })).filter((x, i) => x.value !== fields[i].value);
+  const note = $('note').value.trim();
+  if (!changes.length && !note) { $('msg').textContent = 'Cambiad algún dato o contadnos qué ha cambiado.'; return; }
+  $('send').setAttribute('aria-busy', 'true'); $('msg').textContent = '';
+  try { await api({ action: 'data_change_request', token, changes, note }); state('Recibido.', 'Lo revisamos y os escribimos en cuanto vuestra invitación esté actualizada. Normalmente, en menos de 48 h.'); }
+  catch (e2) { $('msg').textContent = e2.message === 'invalid_date' ? 'Revisad la fecha.' : 'No se ha podido enviar. Probad otra vez en un momento.'; }
+  finally { $('send').removeAttribute('aria-busy'); }
+};
+})();
+</script>
+</body>
+</html>

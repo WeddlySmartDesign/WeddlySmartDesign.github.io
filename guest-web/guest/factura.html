@@ -103,7 +103,7 @@ function fail() { $('state').innerHTML = '<h1>No hemos podido abrir la factura</
     $('date').textContent = day(i.issuedAt);
     $('issuer').innerHTML = '';
     [s.name, 'NIF ' + s.nif, s.address, s.email].forEach((t) => { const l = document.createElement('span'); l.textContent = t; $('issuer').append(l, document.createElement('br')); });
-    [i.buyerName, i.buyerEmail].filter(Boolean).forEach((t) => { const l = document.createElement('span'); l.textContent = t; $('buyer').append(l, document.createElement('br')); });
+    [i.buyerName, i.buyerTaxId ? 'NIF ' + i.buyerTaxId : '', i.buyerEmail].filter(Boolean).forEach((t) => { const l = document.createElement('span'); l.textContent = t; $('buyer').append(l, document.createElement('br')); });
     if (rect && i.rectifies) { $('ref').hidden = false; $('ref').textContent = `Rectifica la factura ${i.rectifies.number} del ${day(i.rectifies.issued_at)} por devolución del importe.`; }
     $('concept').textContent = i.concept;
     $('line').textContent = eur(i.totalCents);

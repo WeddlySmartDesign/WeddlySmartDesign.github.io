@@ -44,8 +44,8 @@
       let html = '';
       if (paidNow) {
         html = `<span class="pm" aria-hidden="true">Pagado</span>
-          <h2>${paidNow === 'extra' ? 'Ronda extra pagada.' : paidNow === 'final' ? 'Todo pagado. Gracias.' : 'Señal recibida. Empezamos.'}</h2>
-          <p>${paidNow === 'extra' ? 'Mandadnos todos los cambios juntos por email o WhatsApp y nos ponemos.' : paidNow === 'final' ? 'En breve os llega la invitación definitiva con el acceso a la app de invitados.' : q.withApp ? 'Os acabamos de mandar por email el cuestionario. Rellenadlo cuando podáis: con él montamos la primera propuesta' + (q.quoteDays ? `, en unos ${q.quoteDays} días desde que lo enviéis.` : '.') : 'Os escribimos con la primera propuesta' + (q.quoteDays ? ` en unos ${q.quoteDays} días.` : '.')} La factura os llega por email.</p>`
+          <h2>${paidNow === 'charge' ? 'Extra pagado.' : paidNow === 'extra' ? 'Ronda extra pagada.' : paidNow === 'final' ? 'Todo pagado. Gracias.' : 'Señal recibida. Empezamos.'}</h2>
+          <p>${paidNow === 'charge' ? 'Nos ponemos con ello y os mandamos la nueva propuesta para revisarla.' : paidNow === 'extra' ? 'Mandadnos todos los cambios juntos por email o WhatsApp y nos ponemos.' : paidNow === 'final' ? 'En breve os llega la invitación definitiva con el acceso a la app de invitados.' : q.withApp ? 'Os acabamos de mandar por email el cuestionario. Rellenadlo cuando podáis: con él montamos la primera propuesta' + (q.quoteDays ? `, en unos ${q.quoteDays} días desde que lo enviéis.` : '.') : 'Os escribimos con la primera propuesta' + (q.quoteDays ? ` en unos ${q.quoteDays} días.` : '.')} La factura os llega por email.</p>`
           + steps(q);
       } else if (q.status === 'new') {
         html = `<h2>Estamos preparando vuestro presupuesto.</h2><p>Os lo mandamos por email en menos de 48 h.</p>`;
@@ -55,10 +55,13 @@
         const extra = wantsExtra && q.canBuyExtra;
         html = `<p class="kicker">${esc(q.tierName)}</p>
           <p class="big">${euros(q.quoteCents)}<small>Precio cerrado, IVA incluido, con la app de invitados.</small></p>
+          ${q.creditCents ? `<p>Ya pagasteis <b>${euros(q.creditCents)}</b> por la invitación del catálogo: están descontados de los pagos de abajo. Seguís con vuestros datos, fotos y la misma app.</p>` : ''}
+          ${q.expiresAt ? `<p style="font-size:.875rem">Este presupuesto vale hasta el ${esc(new Date(q.expiresAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' }))}.</p>` : ''}
           ${q.what ? `<p>${esc(q.what)}</p>` : ''}
           ${q.quoteNote ? `<div class="qnote">${esc(q.quoteNote)}</div>` : ''}
           ${steps(q)}`;
         if (extra) html += `<p>Ya hemos hecho las ${q.rounds} rondas incluidas. Una ronda más cuesta ${euros(q.extraCents)}; os aconsejamos juntar en ella todos los cambios.</p>` + payBtn('extra', q.extraCents, 'Pagar ronda extra:');
+        else if (q.due && q.due.part === 'charge') html += `<div class="qnote">Fuera del presupuesto: <b>${esc(q.due.label)}</b></div>` + payBtn('charge', q.due.cents, 'Pagar el extra:')
         else if (q.due) html += payBtn(q.due.part, q.due.cents, q.due.part === 'deposit' ? 'Aceptar y pagar' : 'Pagar el resto:')
           + (q.due.part === 'deposit' ? `<p style="font-size:.875rem">Al ser un diseño exclusivo, la señal cubre el trabajo desde el primer día y no se devuelve una vez empezado. <a href="guest-legal.html#medida" target="_blank" rel="noopener">Condiciones</a>.</p>` : '');
         else if (['paid', 'delivered'].includes(q.status)) html += `<p>Todo pagado. ¡Gracias!</p>`;
@@ -71,7 +74,7 @@
         catch (e) {
           b.removeAttribute('aria-busy');
           const err = $('payErr'); err.classList.add('on');
-          err.textContent = e.code === 'nothing_to_pay' ? 'Este pago ya está hecho. Recargad la página.' : 'No hemos podido abrir el pago. Probad otra vez o escribidnos por WhatsApp al 620 843 264.';
+          err.textContent = e.code === 'nothing_to_pay' ? 'Este pago ya está hecho. Recargad la página.' : e.code === 'quote_expired' ? 'Este presupuesto ha caducado. Escribidnos y os mandamos uno nuevo.' : 'No hemos podido abrir el pago. Probad otra vez o escribidnos por WhatsApp al 620 843 264.';
         }
       });
     };
@@ -83,7 +86,8 @@
         let paidNow = null;
         if (s) {
           // Volvemos de Stripe: el estado ya refleja el pago si se ha completado.
-          paidNow = wantsExtra ? 'extra' : ['accepted', 'designing'].includes(q.status) ? 'deposit' : ['paid', 'delivered'].includes(q.status) ? 'final' : null;
+          const k = params.get('k');
+          paidNow = k === 'charge' ? 'charge' : wantsExtra || k === 'extra' ? 'extra' : ['accepted', 'designing'].includes(q.status) ? 'deposit' : ['paid', 'delivered'].includes(q.status) ? 'final' : null;
           history.replaceState(null, '', location.pathname + '?p=' + encodeURIComponent(t));
         }
         render(q, paidNow);
@@ -108,6 +112,12 @@
   // Nivel desde la web (?nivel=adapt) o el diseño de partida (?diseno=design-07).
   const pre = params.get('nivel'); if (pre) { const r = form.querySelector(`input[name=tier][value="${CSS.escape(pre)}"]`); if (r) r.checked = true; }
   const preD = params.get('diseno'); if (preD) { const r = form.querySelector(`input[name=base_design][value="${CSS.escape(preD)}"]`); if (r) { r.checked = true; r.closest('.base').scrollIntoView({ inline: 'center', block: 'nearest' }); } }
+  // Vienen de su invitación del catálogo (botón «Pasar a a medida» de la revisión): se descuenta lo pagado.
+  const pedido = /^gif1_r_[0-9a-f-]{36}_[0-9a-f]{40}$/.test(params.get('pedido') || '') ? params.get('pedido') : '';
+  if (pedido) {
+    const r = form.querySelector('input[name=tier][value="adapt"]'); if (r && !form.tier.value) r.checked = true;
+    $('introText').textContent = 'Contadnos qué queréis cambiar de vuestro diseño. Os descontamos los 59,90 € que ya pagasteis y seguís con vuestros datos, fotos y la misma app. Os mandamos un precio cerrado en menos de 48 h.';
+  }
   // Si quieren un diseño nuevo, el diseño de partida sobra.
   const syncBase = () => { $('baseSet').hidden = form.tier.value === 'new'; };
   form.querySelectorAll('input[name=tier]').forEach((r) => r.addEventListener('change', () => { syncBase(); bad('tier', false); }));
@@ -168,6 +178,7 @@
     fd.set('contact_pref', form.contact_pref.value);
     fd.set('consent', 'true');
     fd.set('website', form.website.value);
+    if (pedido) fd.set('pedido', pedido);
     files.forEach((f) => fd.append('files', f, f.name));
     const btn = $('submit'); btn.setAttribute('aria-busy', 'true'); btn.firstElementChild.textContent = 'Enviando…';
     try {
@@ -181,7 +192,7 @@
       $('done').hidden = false;
       $('sheet').scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (e2) {
-      err.textContent = e2.message === 'validation_failed' ? 'Revisad los campos marcados en rojo.' : 'No se ha podido enviar. Revisad la conexión y probad otra vez, o escribidnos por WhatsApp al 620 843 264.';
+      err.textContent = e2.message === 'validation_failed' && pedido && !form.querySelector('.is-bad') ? 'Vuestra invitación ya está aprobada o ya es a medida. Escribidnos y lo vemos.' : e2.message === 'validation_failed' ? 'Revisad los campos marcados en rojo.' : 'No se ha podido enviar. Revisad la conexión y probad otra vez, o escribidnos por WhatsApp al 620 843 264.';
       err.classList.add('on');
     } finally {
       btn.removeAttribute('aria-busy'); btn.firstElementChild.textContent = 'Pedir presupuesto';

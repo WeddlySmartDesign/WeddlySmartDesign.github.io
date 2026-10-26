@@ -39,8 +39,17 @@ const esc = (s: unknown) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&
 const euros = (c: number) => (c / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
 const day = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 const first = (name: string) => txt(name, 80).split(/\s+/)[0] || '';
-const deposit = (r: any) => Math.round(Number(r.quote_cents || 0) / 2);
-const rest = (r: any) => Number(r.quote_cents || 0) - deposit(r);
+// Lo que falta por pagar: el presupuesto menos lo ya pagado en el catálogo (si vienen de una compra del catálogo).
+const owed = (r: any) => Math.max(0, Number(r.quote_cents || 0) - Number(r.credit_cents || 0));
+const deposit = (r: any) => Math.round(owed(r) / 2);
+const rest = (r: any) => owed(r) - deposit(r);
+const QUOTE_DAYS_VALID = 30, CATALOG_PRICE_CENTS = 5990;
+// Enlace de revisión del catálogo (mismo formato que guest-invitation-flow): sirve para pasar ese pedido a a medida.
+async function reviewOrderId(t: string) {
+  const m = String(t || '').match(/^gif1_r_([0-9a-f-]{36})_([0-9a-f]{40})$/);
+  if (!m) return null;
+  return (await hmacHex('guest-invitation-flow-v1|r|' + m[1])).slice(0, 40) === m[2] ? m[1] : null;
+}
 const tierName = (r: any) => TIERS[r.tier]?.name || 'A medida';
 
 async function hmacHex(v: string) {
@@ -87,23 +96,27 @@ async function stripe(path: string, init: RequestInit = {}) {
   if (!r.ok) throw Error('stripe_' + (j?.error?.code || r.status));
   return j;
 }
-function partOf(r: any): { part: string; cents: number; label: string } | null {
+function partOf(r: any): { part: string; cents: number; label: string; idx?: number } | null {
+  // Un extra fuera de presupuesto pendiente va primero.
+  const ex = (Array.isArray(r.extras) ? r.extras : []).findIndex((x: any) => !x.paid_at && !x.cancelled_at);
+  if (ex >= 0 && ['accepted', 'designing', 'final_sent'].includes(r.status)) return { part: 'charge', cents: Number(r.extras[ex].cents), label: txt(r.extras[ex].concept, 120) || 'Extra', idx: ex };
   if (r.status === 'quoted') return { part: 'deposit', cents: deposit(r), label: 'Señal del 50 %' };
   if (r.status === 'final_sent') return { part: 'final', cents: rest(r), label: 'Resto del 50 %' };
   return null;
 }
-async function checkout(r: any, part: string, cents: number, label: string) {
+async function checkout(r: any, part: string, cents: number, label: string, idx = -1) {
   const t = await coupleToken(r.id), p = new URLSearchParams();
   p.set('mode', 'payment'); p.set('locale', 'es'); p.set('submit_type', 'pay');
-  p.set('customer_email', r.email);
-  p.set('success_url', APP_ORIGIN + '/a-medida.html?p=' + encodeURIComponent(t) + '&s={CHECKOUT_SESSION_ID}');
+  p.set('customer_email', r.email); p.set('tax_id_collection[enabled]', 'true');
+  p.set('success_url', APP_ORIGIN + '/a-medida.html?p=' + encodeURIComponent(t) + '&k=' + part + '&s={CHECKOUT_SESSION_ID}');
   p.set('cancel_url', APP_ORIGIN + '/a-medida.html?p=' + encodeURIComponent(t));
   p.set('line_items[0][quantity]', '1'); p.set('line_items[0][price_data][currency]', 'eur');
   p.set('line_items[0][price_data][unit_amount]', String(cents));
   p.set('line_items[0][price_data][product_data][name]', `Invitación a medida · ${tierName(r)} · ${label}`);
   p.set('metadata[product]', 'guest_custom'); p.set('metadata[custom_request]', r.id); p.set('metadata[part]', part);
   p.set('payment_intent_data[metadata][custom_request]', r.id); p.set('payment_intent_data[metadata][part]', part);
-  return await stripe('checkout/sessions', { method: 'POST', headers: { 'Idempotency-Key': `guest-custom/${r.id}/${part}/${r.updated_at}/${r.extra_rounds}` }, body: p.toString() });
+  if (idx >= 0) p.set('metadata[idx]', String(idx));
+  return await stripe('checkout/sessions', { method: 'POST', headers: { 'Idempotency-Key': `guest-custom/${r.id}/${part}/${r.updated_at}/${r.extra_rounds}/${idx}` }, body: p.toString() });
 }
 // Aplica un pago confirmado por Stripe una sola vez: estado, factura y avisos.
 async function applyPayment(c: any, r: any, sessionId: string) {
@@ -116,19 +129,23 @@ async function applyPayment(c: any, r: any, sessionId: string) {
   if (part === 'deposit') Object.assign(patch, { status: 'accepted', deposit_session: sessionId, deposit_paid_at: ts });
   if (part === 'final') Object.assign(patch, { status: 'paid', final_session: sessionId, final_paid_at: ts });
   if (part === 'extra') Object.assign(patch, { extra_rounds: Number(r.extra_rounds || 0) + 1, extra_session: null });
+  const idx = Number(s.metadata?.idx ?? -1), extra = part === 'charge' ? (r.extras || [])[idx] : null;
+  if (part === 'charge') { if (!extra) return r; patch.extras = (r.extras || []).map((x: any, i: number) => i === idx ? { ...x, paid_at: ts, session: sessionId } : x); }
   const { data: next, error } = await c.from('guest_custom_requests').update(patch).eq('id', r.id).not('paid_sessions', 'cs', `{${sessionId}}`).select('*').maybeSingle();
   if (error) throw error;
   if (!next) return r;
-  const label = part === 'deposit' ? 'señal del 50 %' : part === 'final' ? 'resto del 50 %' : 'ronda de cambios extra';
+  const label = part === 'deposit' ? 'señal del 50 %' : part === 'final' ? 'resto del 50 %' : part === 'charge' ? txt(extra?.concept, 120).toLowerCase() : 'ronda de cambios extra';
   const { data: inv, error: ie } = await c.rpc('guest_issue_custom_invoice', { p_request: r.id, p_mode: s.livemode ? 'production' : 'test', p_email: r.email, p_name: s.customer_details?.name || r.name, p_concept: `Invitación digital a medida (${tierName(r).toLowerCase()}) · ${label}`, p_total_cents: s.amount_total, p_stripe_ref: s.payment_intent || sessionId });
   if (ie) console.error('custom_invoice_failed', ie);
+  const taxId = txt(s.customer_details?.tax_ids?.[0]?.value, 30);
+  if (taxId && inv?.id && !inv.buyer_tax_id) await c.from('guest_invoices').update({ buyer_tax_id: taxId }).eq('id', inv.id);
   const invBtn = inv ? mBtn(await invoiceUrl(inv.id), 'Ver la factura', true) : '';
   if (part === 'deposit') {
     let qUrl = '';
     try { const e = await ensureOrder(c, next); qUrl = e.questionnaireUrl; } catch (e) { console.error('custom_order_failed', r.id, e); }
     await toCouple(r, 'Empezamos vuestra invitación', guestMail({ kicker: 'Señal recibida', title: 'Empezamos vuestra invitación.', preheader: 'Rellenad el cuestionario y nos ponemos con vuestro diseño.',
-      body: mP(`Gracias, ${esc(first(r.name))}. Ya tenemos la señal de ${esc(euros(s.amount_total))}. Para empezar necesitamos los datos de vuestra boda: nombres, fecha, lugares, vuestra historia y fotos.`)
-        + (qUrl ? mBtn(qUrl, 'Rellenar el cuestionario') : mP('En unas horas os mandamos el enlace del cuestionario.'))
+      body: mP(`Gracias, ${esc(first(r.name))}. Ya tenemos la señal de ${esc(euros(s.amount_total))}.${r.from_order_id ? '' : ' Para empezar necesitamos los datos de vuestra boda: nombres, fecha, lugares, vuestra historia y fotos.'}`)
+        + (qUrl ? mBtn(qUrl, 'Rellenar el cuestionario') : r.from_order_id ? mP('Ya tenemos vuestros datos y fotos del cuestionario, así que no tenéis que rellenar nada más: nos ponemos con vuestro diseño.') : mP('En unas horas os mandamos el enlace del cuestionario.'))
         + mSteps([['Rellenáis el cuestionario', 'Se guarda solo: podéis dejarlo y seguir cuando queráis.'], ['Os mandamos la primera propuesta', r.quote_days ? `En unos ${r.quote_days} días desde que tengamos vuestros datos.` : 'En cuanto esté lista.'], ['La revisáis', `Tenéis ${ROUNDS} rondas de cambios incluidas. Cada ronda extra cuesta ${euros(EXTRA_CENTS)}.`], ['Pagáis el resto al aprobarla', 'Y os llega sola, con la app de invitados.']], 'Cómo sigue')
         + invBtn }), `guest-custom-deposit/${r.id}`);
     await toOwner(`Señal pagada · ${r.name}`, 'Diseño a medida', 'Han pagado la señal.', mP(`<b>${esc(r.name)}</b> ha pagado ${esc(euros(s.amount_total))} de su ${esc(tierName(r).toLowerCase())}. Ya puedes empezar.`), `guest-custom-deposit-owner/${r.id}`);
@@ -144,6 +161,10 @@ async function applyPayment(c: any, r: any, sessionId: string) {
     await toCouple(r, 'Pago completado', guestMail({ kicker: 'Pago completado', title: delivered ? 'Todo pagado. Ya la tenéis.' : 'Todo pagado. Os la entregamos.', preheader: delivered ? 'Os acaba de llegar otro email con vuestra invitación y la app.' : 'En breve os llega vuestra invitación.',
       body: mP(`Gracias, ${esc(first(r.name))}. Ya tenemos el resto del pago. ${delivered ? 'Os acaba de llegar otro email con la invitación definitiva y el acceso a la app de invitados.' : 'En breve os llega la invitación definitiva junto con el acceso a la app de invitados.'}`) + invBtn }), `guest-custom-final/${r.id}`);
     await toOwner(`Pago final · ${r.name}`, 'Diseño a medida', delivered ? 'Entregada sola.' : 'Ya puedes entregar.', mP(`<b>${esc(r.name)}</b> ha pagado el resto (${esc(euros(s.amount_total))}).`) + (delivered ? mP('Les ha llegado la invitación definitiva con la app. No tienes que hacer nada.', true) : next.order_id ? mP('<b>La entrega automática ha fallado.</b> Abre su pedido en Pedidos y pulsa «Entregar».') : ''), `guest-custom-final-owner/${r.id}`);
+  } else if (part === 'charge') {
+    await toCouple(r, 'Pago recibido', guestMail({ kicker: 'Pago recibido', title: 'Recibido. Nos ponemos con ello.', preheader: txt(extra?.concept, 120),
+      body: mP(`Gracias, ${esc(first(r.name))}. Ya tenemos el pago de <b>${esc(txt(extra?.concept, 120))}</b> (${esc(euros(s.amount_total))}). Os mandamos la nueva propuesta para revisarla.`) + invBtn }), `guest-custom-charge/${sessionId}`);
+    await toOwner(`Extra pagado · ${r.name}`, 'Diseño a medida', 'Han pagado el extra.', mP(`<b>${esc(r.name)}</b> ha pagado ${esc(euros(s.amount_total))} por «${esc(txt(extra?.concept, 120))}». Ya puedes hacerlo.`), `guest-custom-charge-owner/${sessionId}`);
   } else {
     await toCouple(r, 'Ronda extra pagada', guestMail({ kicker: 'Ronda extra', title: 'Recibido. Contadnos los cambios.', preheader: 'Ya podéis pedirnos la nueva ronda.',
       body: mP('Ya tenemos el pago de la ronda extra. Respondednos a este email o por WhatsApp con todos los cambios juntos y nos ponemos.') + invBtn }), `guest-custom-extra/${sessionId}`);
@@ -153,7 +174,7 @@ async function applyPayment(c: any, r: any, sessionId: string) {
 }
 // Comprueba en Stripe los pagos pendientes de esta solicitud (por si cerraron la página antes de volver).
 async function refresh(c: any, r: any) {
-  for (const sid of [r.status === 'quoted' ? r.deposit_session : null, r.status === 'final_sent' ? r.final_session : null, r.extra_session]) {
+  for (const sid of [r.status === 'quoted' ? r.deposit_session : null, r.status === 'final_sent' ? r.final_session : null, r.extra_session, ...(Array.isArray(r.extras) ? r.extras : []).filter((x: any) => !x.paid_at && x.session).map((x: any) => x.session)]) {
     if (sid) { try { r = await applyPayment(c, r, sid); } catch (e) { console.warn('refresh', String(e)); } }
   }
   return r;
@@ -181,7 +202,7 @@ async function signed(c: any, r: any) {
   }
   return out;
 }
-const view = (r: any) => ({ id: r.id, createdAt: r.created_at, updatedAt: r.updated_at, test: r.mode === 'test', status: r.status, tier: r.tier, tierName: tierName(r), suggestedCents: TIERS[r.tier]?.cents || 12000, baseDesign: r.base_design, baseDesignName: DESIGN_NAMES[r.base_design] || null, wishes: r.wishes, idea: r.idea, links: r.links, weddingDate: r.wedding_date, urgency: r.urgency, urgencyLabel: URGENCY[r.urgency] || '', name: r.name, email: r.email, phone: r.phone, contactPref: r.contact_pref, quoteCents: r.quote_cents, quoteDays: r.quote_days, quoteNote: r.quote_note, quotedAt: r.quoted_at, depositPaidAt: r.deposit_paid_at, finalPaidAt: r.final_paid_at, extraRounds: r.extra_rounds, ownerNotes: r.owner_notes, quoteDueAt: r.status === 'new' ? new Date(Date.parse(r.created_at) + QUOTE_DUE).toISOString() : null, deliveryUrl: r.delivery_url, deliveredAt: r.delivered_at, hasAccess: !!r.license_id, fileCount: (r.files || []).length, roundsUsed: r.rounds_used || 0, orderId: r.order_id || null, refundedAt: r.refunded_at, refundNote: r.refund_note, depositCents: r.deposit_paid_at ? deposit(r) : 0, finalCents: r.final_paid_at ? rest(r) : 0 });
+const view = (r: any) => ({ id: r.id, createdAt: r.created_at, updatedAt: r.updated_at, test: r.mode === 'test', status: r.status, tier: r.tier, tierName: tierName(r), suggestedCents: TIERS[r.tier]?.cents || 12000, baseDesign: r.base_design, baseDesignName: DESIGN_NAMES[r.base_design] || null, wishes: r.wishes, idea: r.idea, links: r.links, weddingDate: r.wedding_date, urgency: r.urgency, urgencyLabel: URGENCY[r.urgency] || '', name: r.name, email: r.email, phone: r.phone, contactPref: r.contact_pref, quoteCents: r.quote_cents, quoteDays: r.quote_days, quoteNote: r.quote_note, quotedAt: r.quoted_at, depositPaidAt: r.deposit_paid_at, finalPaidAt: r.final_paid_at, extraRounds: r.extra_rounds, ownerNotes: r.owner_notes, quoteDueAt: r.status === 'new' ? new Date(Date.parse(r.created_at) + QUOTE_DUE).toISOString() : null, deliveryUrl: r.delivery_url, deliveredAt: r.delivered_at, hasAccess: !!r.license_id, fileCount: (r.files || []).length, roundsUsed: r.rounds_used || 0, orderId: r.order_id || null, fromOrderId: r.from_order_id || null, creditCents: Number(r.credit_cents || 0), quoteExpiresAt: r.quote_expires_at, extras: Array.isArray(r.extras) ? r.extras.map((x: any) => ({ cents: x.cents, concept: x.concept, at: x.at, paidAt: x.paid_at || null, cancelledAt: x.cancelled_at || null })) : [], owedCents: owed(r), refundedAt: r.refunded_at, refundNote: r.refund_note, depositCents: r.deposit_paid_at ? deposit(r) : 0, finalCents: r.final_paid_at ? rest(r) : 0 });
 
 /* ---------- Entrega con la app de invitados ---------- */
 function activationCode() { const a = crypto.randomUUID().replaceAll('-', '').toUpperCase(), b = crypto.randomUUID().replaceAll('-', '').toUpperCase(); return `WSD-GUEST-${a.slice(0, 8)}-${a.slice(8, 16)}-${b.slice(0, 8)}`; }
@@ -210,6 +231,15 @@ async function callFlow(action: string, id: string, body: Record<string, unknown
   return j;
 }
 async function ensureOrder(c: any, r: any): Promise<{ r: any; questionnaireUrl: string }> {
+  if (r.from_order_id) {
+    // Pasan del catálogo: se queda su pedido (con sus datos, fotos y acceso a la app) y pasa a ser a medida.
+    const j = await callFlow('custom_create', r.id, { requestId: r.id, existingOrderId: r.from_order_id, included: ROUNDS, extraCents: EXTRA_CENTS, tierName: tierName(r) });
+    if (r.order_id !== j.orderId || r.license_id !== (j.licenseId || null)) {
+      const { data } = await c.from('guest_custom_requests').update({ order_id: j.orderId, license_id: j.licenseId || null }).eq('id', r.id).select('*').single();
+      if (data) r = data;
+    }
+    return { r, questionnaireUrl: String(j.questionnaireUrl || '') };
+  }
   const a = await access(c, r);
   const j = await callFlow('custom_create', r.id, { requestId: r.id, email: r.email, licenseId: a.licenseId, templateId: r.base_design || 'veil-light', included: ROUNDS, extraCents: EXTRA_CENTS, tierName: tierName(r) });
   if (r.order_id !== j.orderId || r.license_id !== a.licenseId) {
@@ -217,6 +247,12 @@ async function ensureOrder(c: any, r: any): Promise<{ r: any; questionnaireUrl: 
     if (data) r = data;
   }
   return { r, questionnaireUrl: String(j.questionnaireUrl || '') };
+}
+// Presupuesto sin aceptar a los 30 días: deja de estar activo (la pareja puede pedir uno nuevo).
+async function expireQuote(c: any, r: any) {
+  const ts = new Date().toISOString();
+  const { data } = await c.from('guest_custom_requests').update({ status: 'declined', deposit_session: null, updated_at: ts, owner_notes: [r.owner_notes, `${ts.slice(0, 10)}: presupuesto caducado (${QUOTE_DAYS_VALID} días sin aceptar)`].filter(Boolean).join('\n') }).eq('id', r.id).eq('status', 'quoted').select('*').maybeSingle();
+  return data || r;
 }
 // Al aprobar el diseño (desde la página de revisión o desde la app): pedir el 50 % restante.
 async function askFinal(c: any, r: any) {
@@ -260,6 +296,12 @@ async function tick(c: any) {
       [3, 'q3d', 'Vuestro presupuesto sigue en pie.', `Os mandamos el precio cerrado de vuestra invitación a medida: ${euros(r.quote_cents)}, IVA incluido. Si os encaja, pagáis la mitad y empezamos. Si queréis ajustar algo antes, respondednos.`],
       [7, 'q7d', '¿Seguimos con vuestra invitación?', 'No queremos que se os pase. Si tenéis cualquier duda sobre el presupuesto o preferís hablarlo por WhatsApp, respondednos y lo vemos.']
     ], `Ver el presupuesto`, await payUrl(r));
+    // El presupuesto vale 30 días: aviso 5 días antes y, al vencer, deja de estar activo.
+    if (r.status === 'quoted' && r.quote_expires_at) {
+      const exp = Date.parse(r.quote_expires_at);
+      if (crossed(exp - 5 * D, now) && await toCouple(r, 'Vuestro presupuesto caduca en 5 días', guestMail({ kicker: 'Recordatorio', title: 'Vuestro presupuesto caduca en 5 días.', preheader: 'Después tendríamos que volver a calcularlo.', body: mP(`El precio cerrado de vuestra invitación a medida vale hasta el ${esc(new Date(exp).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', timeZone: 'Europe/Madrid' }))}. Si os encaja, pagáis la señal y empezamos; si no, no tenéis que hacer nada.`) + mBtn(await payUrl(r), 'Ver el presupuesto') }), `guest-custom-expiring/${r.id}/${r.quote_expires_at}`)) done.push('expiring:' + r.id);
+      if (exp <= now) { r = await expireQuote(c, r); done.push('expired:' + r.id); continue; }
+    }
     if (r.status === 'final_sent') {
       await remind(r.final_sent_at, [
         [3, 'f3d', 'Vuestra invitación está lista para entregar.', `Solo falta el resto del pago (${euros(rest(r))}) para mandaros la invitación definitiva con la app de invitados.`],
@@ -269,7 +311,9 @@ async function tick(c: any) {
       if (r.final_sent_at && crossed(Date.parse(r.final_sent_at) + 10 * D, now) && await toOwner(`Sin pagar el resto · ${r.name}`, 'Diseño a medida', 'Llevan 10 días sin pagar el resto.', mP(`<b>${esc(r.name)}</b> tiene el enlace del pago final (${esc(euros(rest(r)))}) desde hace 10 días. Ya les han llegado dos recordatorios: mejor escribirles por WhatsApp.`), `guest-custom-final-stuck/${r.id}`)) done.push('stuck:' + r.id);
     }
     // Plazo de la primera propuesta que les prometiste al presupuestar.
-    if (['accepted', 'designing'].includes(r.status) && !r.rounds_used && r.deposit_paid_at && r.quote_days) {
+    let proposalSent = false;
+    if (r.order_id) { const { data: o } = await c.from('guest_invitation_orders').select('status').eq('id', r.order_id).maybeSingle(); proposalSent = !['draft', 'submitted', 'designing', 'review_ready'].includes(o?.status); }
+    if (['accepted', 'designing'].includes(r.status) && !r.rounds_used && !proposalSent && r.deposit_paid_at && r.quote_days) {
       const due = Date.parse(r.deposit_paid_at) + r.quote_days * D;
       for (const [t, tag, id] of [[due - D, 'Mañana toca la primera propuesta', '1d'], [due, 'Hoy toca la primera propuesta', 'due']] as [number, string, string][]) {
         if (crossed(t, now) && await toOwner(`${tag} · ${r.name}`, 'Plazos', tag + '.', mP(`A <b>${esc(r.name)}</b> le dijiste que tendría la primera propuesta en unos ${r.quote_days} días desde la señal. Cuando se la mandes, pulsa «He mandado una propuesta» en su pedido.`), `guest-custom-proposal/${r.id}/${id}`)) done.push('proposal:' + r.id + ':' + id);
@@ -301,6 +345,14 @@ Deno.serve(async (req) => {
       const files = fd.getAll('files').filter((f) => f instanceof File && f.size > 0) as File[];
       if (files.length > 3) errors.push('files');
       for (const f of files) if (f.size > 10485760 || !['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'].includes(f.type)) errors.push('files');
+      // Vienen de una invitación del catálogo sin aprobar: se descuenta lo pagado y siguen con el mismo pedido.
+      let from: any = null;
+      const fromId = await reviewOrderId(txt(fd.get('pedido'), 200));
+      if (fromId) {
+        const { data: o } = await c.from('guest_invitation_orders').select('id,status,template_id,checkout_session_id,custom_request_id,buyer_email').eq('id', fromId).maybeSingle();
+        if (o && !o.custom_request_id && o.checkout_session_id && ['draft', 'submitted', 'designing', 'review_ready', 'review_sent', 'changes_requested'].includes(o.status)) from = o;
+        else errors.push('pedido');
+      }
       if (errors.length) return json({ ok: false, error: 'validation_failed', fields: [...new Set(errors)] }, 400);
       const id = crypto.randomUUID(), stored: any[] = [];
       for (const [i, f] of files.entries()) {
@@ -310,7 +362,7 @@ Deno.serve(async (req) => {
         if (error) throw error;
         stored.push({ path, name: txt(f.name, 160), size: f.size });
       }
-      const row = { id, mode: QA ? 'test' : 'production', tier, base_design: DESIGN_NAMES[base] ? base : null, wishes: String(fd.get('wishes') || '').split('|').map((x) => txt(x, 40)).filter((x) => WISHES.includes(x)), idea, links: txt(fd.get('links'), 1200), files: stored, wedding_date: date || null, urgency: URGENCY[txt(fd.get('urgency'), 10)] ? txt(fd.get('urgency'), 10) : 'normal', name, email, phone, contact_pref: fd.get('contact_pref') === 'email' ? 'email' : 'whatsapp' };
+      const row = { id, mode: QA ? 'test' : 'production', tier, from_order_id: from?.id || null, credit_cents: from ? CATALOG_PRICE_CENTS : 0, base_design: DESIGN_NAMES[base] ? base : (from && DESIGN_NAMES[from.template_id] ? from.template_id : null), wishes: String(fd.get('wishes') || '').split('|').map((x) => txt(x, 40)).filter((x) => WISHES.includes(x)), idea, links: txt(fd.get('links'), 1200), files: stored, wedding_date: date || null, urgency: URGENCY[txt(fd.get('urgency'), 10)] ? txt(fd.get('urgency'), 10) : 'normal', name, email, phone, contact_pref: fd.get('contact_pref') === 'email' ? 'email' : 'whatsapp' };
       const { data: r, error } = await c.from('guest_custom_requests').insert(row).select('*').single();
       if (error) throw error;
       await toCouple(r, 'Hemos recibido vuestra idea', guestMail({ kicker: 'Diseño a medida', title: 'Recibido. Os contestamos en 48 h.', preheader: 'Os mandamos un precio cerrado antes de empezar.',
@@ -318,7 +370,7 @@ Deno.serve(async (req) => {
           + mSteps([['Os mandamos el presupuesto', 'Con un precio cerrado y el plazo, en menos de 48 h.'], ['Pagáis la mitad para empezar', 'Con un enlace de pago seguro.'], ['Diseñamos y lo revisáis', `${ROUNDS} rondas de cambios incluidas.`], ['Pagáis el resto al aprobarla', 'Y os la entregamos con la app de invitados.']], 'Cómo sigue')
           + mP('Si se nos ocurre alguna duda, os escribimos ' + (row.contact_pref === 'email' ? 'por email.' : 'por WhatsApp.'), true) }), `guest-custom-received/${id}`);
       await toOwner(`Nueva solicitud a medida · ${name}`, 'Diseño a medida', `${tierName(r)} para ${first(name)}.`,
-        mList([`<b>Nivel:</b> ${esc(tierName(r))} · desde ${esc(euros(TIERS[tier].cents))}`, ...(r.base_design ? [`<b>Diseño base:</b> ${esc(DESIGN_NAMES[r.base_design])}`] : []), ...(r.wishes.length ? [`<b>Quieren cambiar:</b> ${esc(r.wishes.join(', '))}`] : []), `<b>La idea:</b> ${esc(idea).replaceAll('\n', '<br>')}`, ...(r.wedding_date ? [`<b>Boda:</b> ${esc(day(r.wedding_date))} · ${esc(URGENCY[r.urgency])}`] : []), `<b>Contacto:</b> ${esc(email)}${phone ? ' · ' + esc(phone) : ''}`, ...(stored.length ? [`${stored.length} ${stored.length === 1 ? 'foto' : 'fotos'} de inspiración en la app`] : [])]),
+        mList([...(from ? [`<b>Viene del catálogo:</b> ya pagó ${esc(euros(CATALOG_PRICE_CENTS))}, que se descuentan solos del presupuesto. Su pedido sigue siendo el mismo.`] : []), `<b>Nivel:</b> ${esc(tierName(r))} · desde ${esc(euros(TIERS[tier].cents))}`, ...(r.base_design ? [`<b>Diseño base:</b> ${esc(DESIGN_NAMES[r.base_design])}`] : []), ...(r.wishes.length ? [`<b>Quieren cambiar:</b> ${esc(r.wishes.join(', '))}`] : []), `<b>La idea:</b> ${esc(idea).replaceAll('\n', '<br>')}`, ...(r.wedding_date ? [`<b>Boda:</b> ${esc(day(r.wedding_date))} · ${esc(URGENCY[r.urgency])}`] : []), `<b>Contacto:</b> ${esc(email)}${phone ? ' · ' + esc(phone) : ''}`, ...(stored.length ? [`${stored.length} ${stored.length === 1 ? 'foto' : 'fotos'} de inspiración en la app`] : [])]),
         `guest-custom-new/${id}`);
       return json({ ok: true });
     }
@@ -348,17 +400,20 @@ Deno.serve(async (req) => {
     if (['quote_load', 'pay', 'pay_status'].includes(action)) {
       let r = await fromToken(c, txt(b.t, 200));
       if (!r) return json({ ok: false, error: 'invalid_token' }, 403);
+      if (r.status === 'quoted' && r.quote_expires_at && Date.parse(r.quote_expires_at) < Date.now() && action !== 'pay_status') r = await expireQuote(c, r);
       if (action === 'pay_status' && b.s) r = await applyPayment(c, r, txt(b.s, 300));
       else if (action !== 'pay') r = await refresh(c, r);
       if (action === 'pay') {
         const what = b.part === 'extra' ? { part: 'extra', cents: EXTRA_CENTS, label: 'Ronda de cambios extra' } : partOf(r);
         if (!what || (b.part === 'extra' && (r.order_id || !['accepted', 'designing'].includes(r.status)))) return json({ ok: false, error: 'nothing_to_pay' }, 409);
-        const s = await checkout(r, what.part, what.cents, what.label);
-        await c.from('guest_custom_requests').update({ [{ deposit: 'deposit_session', final: 'final_session', extra: 'extra_session' }[what.part]!]: s.id }).eq('id', r.id);
+        if (what.part === 'deposit' && r.quote_expires_at && Date.parse(r.quote_expires_at) < Date.now()) return json({ ok: false, error: 'quote_expired' }, 409);
+        const s = await checkout(r, what.part, what.cents, what.label, what.idx ?? -1);
+        if (what.part === 'charge') await c.from('guest_custom_requests').update({ extras: r.extras.map((x: any, i: number) => i === what.idx ? { ...x, session: s.id } : x) }).eq('id', r.id);
+        else await c.from('guest_custom_requests').update({ [{ deposit: 'deposit_session', final: 'final_session', extra: 'extra_session' }[what.part]!]: s.id }).eq('id', r.id);
         return json({ ok: true, url: s.url });
       }
       const due = partOf(r);
-      return json({ ok: true, request: { name: first(r.name), status: r.status, tierName: tierName(r), what: TIERS[r.tier]?.what, quoteCents: r.quote_cents, quoteDays: r.quote_days, quoteNote: r.quote_note, depositCents: deposit(r), restCents: rest(r), due: due ? { part: due.part, cents: due.cents, label: due.label } : null, rounds: ROUNDS, extraCents: EXTRA_CENTS, extraRounds: r.extra_rounds, canBuyExtra: !r.order_id && ['accepted', 'designing'].includes(r.status), withApp: !!r.order_id } });
+      return json({ ok: true, request: { name: first(r.name), status: r.status, tierName: tierName(r), what: TIERS[r.tier]?.what, quoteCents: r.quote_cents, quoteDays: r.quote_days, quoteNote: r.quote_note, depositCents: deposit(r), restCents: rest(r), creditCents: Number(r.credit_cents || 0), expiresAt: r.status === 'quoted' ? r.quote_expires_at : null, due: due ? { part: due.part, cents: due.cents, label: due.label } : null, rounds: ROUNDS, extraCents: EXTRA_CENTS, extraRounds: r.extra_rounds, canBuyExtra: !r.order_id && ['accepted', 'designing'].includes(r.status), withApp: !!r.order_id } });
     }
 
     if (!(await managerOk(c, req))) return json({ ok: false, error: 'manager_required' }, 403);
@@ -387,16 +442,16 @@ Deno.serve(async (req) => {
     if (action === 'quote') {
       if (!['new', 'quoted'].includes(r.status)) return json({ ok: false, error: 'invalid_status' }, 409);
       const cents = Math.round(Number(b.cents)), days = Math.round(Number(b.days || 0));
-      if (!Number.isInteger(cents) || cents < 5000 || cents > 500000) return json({ ok: false, error: 'invalid_amount' }, 400);
+      if (!Number.isInteger(cents) || cents < 5000 || cents > 500000 || cents < Number(r.credit_cents || 0) + 1000) return json({ ok: false, error: 'invalid_amount' }, 400);
       const ts = new Date().toISOString();
-      const { data: q, error } = await c.from('guest_custom_requests').update({ status: 'quoted', quote_cents: cents, quote_days: days > 0 && days < 120 ? days : null, quote_note: txt(b.note, 1200), quoted_at: ts, updated_at: ts, deposit_session: null }).eq('id', r.id).select('*').single();
+      const { data: q, error } = await c.from('guest_custom_requests').update({ status: 'quoted', quote_expires_at: new Date(Date.now() + QUOTE_DAYS_VALID * 86400000).toISOString(), quote_cents: cents, quote_days: days > 0 && days < 120 ? days : null, quote_note: txt(b.note, 1200), quoted_at: ts, updated_at: ts, deposit_session: null }).eq('id', r.id).select('*').single();
       if (error) throw error;
       const ok = await toCouple(q, 'Vuestro presupuesto', guestMail({ kicker: 'Presupuesto', title: `${euros(cents)}, todo incluido.`, preheader: `Precio cerrado, IVA incluido. Pagáis la mitad para empezar.`,
         body: mP(`${esc(first(q.name))}, aquí tenéis el precio cerrado de vuestra invitación a medida: <b>${esc(tierName(q).toLowerCase())}</b>, con la app de invitados incluida.`)
           + (q.quote_note ? mNote(esc(q.quote_note).replaceAll('\n', '<br>')) : '')
           + mSteps([['Pagáis la señal: ' + euros(deposit(q)), 'La mitad, para empezar.'], ['Diseñamos', q.quote_days ? `Primera propuesta en unos ${q.quote_days} días.` : 'Os mandamos la primera propuesta.'], ['Revisáis', `${ROUNDS} rondas de cambios incluidas. Cada ronda extra: ${euros(EXTRA_CENTS)}.`], ['Pagáis el resto: ' + euros(rest(q)), 'Al aprobarla. Y os la entregamos.']], 'Cómo funciona')
           + mBtn(await payUrl(q), `Aceptar y pagar ${euros(deposit(q))}`)
-          + mP('IVA incluido. Al ser un diseño exclusivo, la señal cubre el trabajo desde el primer día y no se devuelve una vez empezado.', true) }), `guest-custom-quote/${q.id}/${ts}`);
+          + mP(`IVA incluido.${q.credit_cents ? ` Ya os hemos descontado los ${euros(q.credit_cents)} que pagasteis por la invitación del catálogo.` : ''} El presupuesto vale ${QUOTE_DAYS_VALID} días. Al ser un diseño exclusivo, la señal cubre el trabajo desde el primer día y no se devuelve una vez empezado.`, true) }), `guest-custom-quote/${q.id}/${ts}`);
       return json({ ok: true, emailed: ok, payUrl: await payUrl(q), request: view(q) });
     }
 
@@ -412,6 +467,27 @@ Deno.serve(async (req) => {
       const ok = await toCouple(r, 'Ronda de cambios extra', guestMail({ kicker: 'Cambios', title: 'Una ronda más.', preheader: `Las ${ROUNDS} rondas incluidas ya están usadas.`,
         body: mP(`Ya hemos hecho las ${ROUNDS} rondas de cambios incluidas. Para una ronda más, el precio es de <b>${esc(euros(EXTRA_CENTS))}</b>. Os aconsejamos juntar todos los cambios en ella.`) + mBtn((await payUrl(r)) + '&extra=1', `Pagar ${euros(EXTRA_CENTS)}`) }), `guest-custom-extra-ask/${r.id}/${n}`);
       return json({ ok: true, emailed: ok, payUrl: (await payUrl(r)) + '&extra=1' });
+    }
+    if (action === 'charge') {
+      // Algo fuera de lo presupuestado: importe y concepto; les llega el enlace de pago y, al pagar, su factura.
+      if (!['accepted', 'designing', 'final_sent'].includes(r.status)) return json({ ok: false, error: 'invalid_status' }, 409);
+      const ex = Array.isArray(r.extras) ? r.extras : [];
+      if (b.cancel != null) {
+        const i = Number(b.cancel); if (!ex[i] || ex[i].paid_at) return json({ ok: false, error: 'invalid_extra' }, 400);
+        const { data, error } = await c.from('guest_custom_requests').update({ extras: ex.map((x: any, j: number) => j === i ? { ...x, cancelled_at: new Date().toISOString() } : x), updated_at: new Date().toISOString() }).eq('id', r.id).select('*').single();
+        if (error) throw error; return json({ ok: true, request: view(data) });
+      }
+      const cents = Math.round(Number(b.cents)), concept = txt(b.concept, 120);
+      if (!Number.isInteger(cents) || cents < 500 || cents > 300000) return json({ ok: false, error: 'invalid_amount' }, 400);
+      if (concept.length < 3) return json({ ok: false, error: 'invalid_concept' }, 400);
+      if (ex.some((x: any) => !x.paid_at && !x.cancelled_at)) return json({ ok: false, error: 'extra_pending' }, 409);
+      const ts = new Date().toISOString();
+      const { data: q, error } = await c.from('guest_custom_requests').update({ extras: [...ex, { cents, concept, at: ts }], updated_at: ts }).eq('id', r.id).select('*').single();
+      if (error) throw error;
+      const ok = await toCouple(q, 'Presupuesto de un extra', guestMail({ kicker: 'Extra', title: `${euros(cents)}: ${concept}.`, preheader: 'Lo que nos habéis pedido queda fuera del presupuesto inicial.',
+        body: mP(`${esc(first(q.name))}, lo que nos habéis pedido no estaba en el presupuesto inicial. Este es su precio cerrado, IVA incluido:`) + mNote(`<b>${esc(concept)}</b> · ${esc(euros(cents))}`)
+          + mBtn(await payUrl(q), `Pagar ${euros(cents)}`) + mP('En cuanto lo paguéis, nos ponemos con ello. Si preferís no hacerlo, no tenéis que hacer nada: seguimos con lo acordado.', true) }), `guest-custom-charge-ask/${q.id}/${ts}`);
+      return json({ ok: true, emailed: ok, payUrl: await payUrl(q), request: view(q) });
     }
     if (action === 'round') {
       // Lleva la cuenta de las propuestas mandadas, para saber cuándo se acaban las rondas incluidas.

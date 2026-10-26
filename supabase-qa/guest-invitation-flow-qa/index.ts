@@ -1,5 +1,5 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { guestMail, mBtn, mP, mSteps, mNote, DESIGN_NAMES } from './guest-mail.ts';
+import { guestMail, mBtn, mP, mSteps, mNote, mList, DESIGN_NAMES } from './guest-mail.ts';
 
 const cors={
   'Access-Control-Allow-Origin':'*',
@@ -12,7 +12,10 @@ const secretKey=()=>{const x=Deno.env.get('SUPABASE_SECRET_KEYS');return x?JSON.
 const db=()=>createClient(Deno.env.get('SUPABASE_URL')!,secretKey(),{auth:{persistSession:false}});
 /* QA COPY of guest-invitation-flow v21 (live, untouched). Every catalog design is sellable here,
  * review/final links point to the branch preview, and emails only reach the owner's own addresses. */
-const AUTO_CORRECTIONS=false;
+// Owner decision 2026-10-26: she checks proposals and corrections herself for the first sales; after
+// AUTO_AFTER_SALES paid orders, corrections go out on their own and a proposal unattended for 48 h too.
+const AUTO_AFTER_SALES=10;
+async function autoMode(c:any){const {count}=await c.from('guest_invitation_orders').select('id',{count:'exact',head:true}).not('checkout_session_id','is',null).eq('mode','production').neq('status','cancelled');return Number(count||0)>=AUTO_AFTER_SALES}
 // Change rounds: 3 included; from the 4th each round costs 10 € and is paid before it opens.
 // The table caps revision_count at 20, so that is the hard ceiling even with paid rounds.
 const INCLUDED_CHANGES=3,EXTRA_CHANGE_CENTS=1000,MAX_CHANGES=20;
@@ -656,6 +659,25 @@ async function sendReview(c:any,order:any,reviewUrlIn:any){
       return json({ok:true,status:'review_sent',reviewUrl,reviewToken:token,localTest});
 }
 // Final delivery (invitation link + app access). Used by the owner button and automatically on approval.
+// After delivery the couple can ask for a data update (date, time, place) from their delivery email.
+const dataChangeUrl=async(id:string)=>catalogOrigin()+'/guest/cambiar-datos.html?t='+encodeURIComponent(await capability(id,'d'));
+async function orderFromCap(c:any,t:string,purpose:string){
+  const m=String(t||'').match(new RegExp('^gif1_'+purpose+'_([0-9a-f-]{36})_([0-9a-f]{40})$'));if(!m)return null;
+  if(!safeEq((await hmac('guest-invitation-flow-v1|'+purpose+'|'+m[1])).slice(0,40),m[2]))return null;
+  return await getOrder(c,m[1]);
+}
+// Fields a couple may ask to update after delivery: what really changes when a wedding moves.
+const DATA_FIELDS:[string,string][]=[['couple.date','Fecha de la boda'],['couple.coverTime','Hora en la portada'],['couple.coverPlace','Lugar en la portada'],['locations.shared.name','Lugar'],['locations.shared.time','Hora'],['locations.shared.address','Dirección'],['locations.ceremony.name','Lugar de la ceremonia'],['locations.ceremony.time','Hora de la ceremonia'],['locations.ceremony.address','Dirección de la ceremonia'],['locations.celebration.name','Lugar de la celebración'],['locations.celebration.time','Hora de la celebración'],['locations.celebration.address','Dirección de la celebración']];
+const getPath=(q:any,p:string)=>p.split('.').reduce((n:any,k)=>n&&typeof n==='object'?n[k]:undefined,q);
+// The delivery email: invitation link + app access. Also used to send it again from the owner app.
+function deliveryMail(inviteUrl:string,accessUrl:string,changeUrl=''){return guestMail({kicker:'Entrega',title:'Lista para compartir.',preheader:'Vuestra invitación definitiva y el acceso a la app de invitados.',
+            body:mP('Vuestra invitación está terminada. Aquí tenéis las dos cosas que necesitáis:')
+              +mBtn(inviteUrl,'Ver nuestra invitación')
+              +mBtn(accessUrl,'Abrir la app de invitados',true)
+              +mSteps([['Añadid a vuestros invitados','Uno a uno, por grupos o desde los contactos del móvil.'],['Enviad la invitación','Desde la app, por WhatsApp, a quien elijáis.'],['Las respuestas llegan solas','Asistencia, acompañantes, menús, alergias y transporte, todo reunido.'],['Organizad las mesas','Y sacad los listados para el catering cuando los necesitéis.']],'Con la app')
+              +mNote('<b>Guardad este email.</b> Es vuestro acceso a la app. Abridlo desde el móvil, en Safari o Chrome (no dentro de la app del correo), y añadidla a la pantalla de inicio. Para vuestra pareja: en la app, <b>Ajustes › Invitar a mi pareja</b>.')
+              +mP('¿Primera vez? <a href="'+catalogOrigin()+'/guia.html" style="color:#1b2650;font-weight:600">Guía de la app, paso a paso</a>.',true)
+              +(changeUrl?mP('¿Cambia la fecha, un horario o un lugar? <a href="'+changeUrl+'" style="color:#1b2650;font-weight:600">Pedidnos que lo actualicemos</a>, sin coste.',true):'')})}
 async function deliverOrder(c:any,order:any,invitationUrlIn:any){
       if(order.status!=='approved')return json({ok:false,error:'approval_required'},409);
       const email=emailOf(order.questionnaire,order.buyer_email);if(!email)return json({ok:false,error:'missing_email'},400);
@@ -696,13 +718,7 @@ async function deliverOrder(c:any,order:any,invitationUrlIn:any){
       if(order.mode==='production'&&!accessUrl)return json({ok:false,error:'missing_management_access'},409);
       const deliveryHtml=localTest
         ? emailBox('ENTREGA DE PRUEBA','Lista para compartir.','La entrega final de prueba está completada.',emailPanel('<div style="font-size:14px;line-height:1.6">La entrega final de esta prueba está disponible en el archivo final del entorno de validación.</div>',true))
-        : guestMail({kicker:'Entrega',title:'Lista para compartir.',preheader:'Vuestra invitación definitiva y el acceso a la app de invitados.',
-            body:mP('Vuestra invitación está terminada. Aquí tenéis las dos cosas que necesitáis:')
-              +mBtn(inviteUrl,'Ver nuestra invitación')
-              +mBtn(accessUrl,'Abrir la app de invitados',true)
-              +mSteps([['Añadid a vuestros invitados','Uno a uno, por grupos o desde los contactos del móvil.'],['Enviad la invitación','Desde la app, por WhatsApp, a quien elijáis.'],['Las respuestas llegan solas','Asistencia, acompañantes, menús, alergias y transporte, todo reunido.'],['Organizad las mesas','Y sacad los listados para el catering cuando los necesitéis.']],'Con la app')
-              +mNote('<b>Guardad este email.</b> Es vuestro acceso a la app. Abridlo desde el móvil, en Safari o Chrome (no dentro de la app del correo), y añadidla a la pantalla de inicio. Para vuestra pareja: en la app, <b>Ajustes › Invitar a mi pareja</b>.')
-              +mP('¿Primera vez? <a href="'+catalogOrigin()+'/guia.html" style="color:#1b2650;font-weight:600">Guía de la app, paso a paso</a>.',true)});
+        : deliveryMail(inviteUrl,accessUrl,await dataChangeUrl(order.id));
       const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Vuestra invitación está lista para compartir',html:deliveryHtml},'guest-deliver-v3/'+order.id);
       if(!ok)return json({ok:false,error:'email_failed'},502);
       const {error}=await c.from('guest_invitation_orders').update({files,resolved_config:order.mode==='test'?order.resolved_config:config,delivery_url:inviteUrl||null,status:'delivered',delivered_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
@@ -781,9 +797,8 @@ Deno.serve(async req=>{
       const config=checkInvitationConfig(buildConfig(questionnaire,order.files||[],'#',order.template_id,order.template_version),order),ts=now(),email=emailOf(questionnaire,order.buyer_email);
       const {error}=await c.from('guest_invitation_orders').update({questionnaire,resolved_config:config,buyer_email:email,status:'submitted',submitted_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
       const fresh={...order,questionnaire,resolved_config:config,buyer_email:email,status:'submitted',submitted_at:ts};
-      // Corrections could go out on their own, but the owner wants to check every one first
-      // (spelling, the change asked vs. the text written), so this stays off.
-      if(AUTO_CORRECTIONS&&order.status==='changes_requested'&&order.mode==='production'&&order.checkout_session_id){
+      // Corrections go out on their own once the owner has checked the first sales (autoMode).
+      if(order.status==='changes_requested'&&order.mode==='production'&&order.checkout_session_id&&await autoMode(c)){
         const {error:e2}=await c.from('guest_invitation_orders').update({status:'review_ready',updated_at:ts}).eq('id',order.id);
         if(!e2){
           const r=await sendReview(c,{...fresh,status:'review_ready'},''),j=await r.json().catch(()=>({}));
@@ -820,6 +835,38 @@ Deno.serve(async req=>{
       const files=await signedFiles(c,order,7200),config=checkInvitationRead(hydrateConfig(order.resolved_config||{},files),order,files);
       const pending=order.status==='changes_requested'?{questionnaireToken:await capability(order.id,'q'),part:lastChangePart(order)}:{};
       return json({ok:true,order:{id:order.id,status:order.status,label:orderLabel(order),config:withStyle(config,order),revisionCount:order.revision_count||0,changes:changesInfo(order),designChange:designChangeInfo(order),...pending}});
+    }
+    if(action==='auto_send'){
+      // From guest-automation: a proposal nobody looked at in 48 h goes out on its own, once autoMode is on.
+      const oid=txt(b.orderId,40);if(!/^[0-9a-f-]{36}$/.test(oid)||txt(b.sig,60)!==await internalSig('auto_send',oid))return json({ok:false,error:'forbidden'},403);
+      const order=await getOrder(c,oid);if(!order||order.custom_request_id||!order.checkout_session_id||order.mode!=='production')return json({ok:true,sent:false,reason:'not_eligible'});
+      if(!['submitted','designing','review_ready'].includes(order.status)||Date.now()-Date.parse(order.submitted_at||order.updated_at)<48*3600_000)return json({ok:true,sent:false,reason:'not_due'});
+      if(!(await autoMode(c)))return json({ok:true,sent:false,reason:'manual_phase'});
+      const ts=now();await c.from('guest_invitation_orders').update({status:'review_ready',updated_at:ts}).eq('id',order.id);
+      const r=await sendReview(c,{...order,status:'review_ready'},''),j=await r.json().catch(()=>({}));
+      if(!j?.ok){await c.from('guest_invitation_orders').update({status:order.status,updated_at:now()}).eq('id',order.id);return json({ok:false,error:j?.error||'send_failed'},502)}
+      await resend({to:['weddlysmartdesign@gmail.com'],subject:'Propuesta enviada sola · '+orderLabel(order),html:guestMail({owner:true,kicker:'Enviada sola',title:'Su propuesta ha salido sola.',preheader:'Llevaba 48 h sin que la miraras.',body:mP('<b>'+esc(orderLabel(order))+'</b> llevaba 48 h esperando, así que se le ha enviado la propuesta tal como se montó con su cuestionario. Si ves algo, aún puedes corregirlo antes de que la aprueben.')+mBtn(QA_PREVIEW+'/guest/panel-pruebas.html#/pedido/'+order.id,'Abrir el pedido')})},'guest-auto-send/'+order.id+'/'+String(order.revision_count||0));
+      return json({ok:true,sent:true});
+    }
+    if(action==='site_status'){
+      // Public: the web shows the vacation notice and the adjusted timeline.
+      const {data}=await c.from('guest_settings').select('value').eq('key','vacation').maybeSingle();
+      const until=txt(data?.value?.until,10),on=/^\d{4}-\d{2}-\d{2}$/.test(until)&&Date.parse(until+'T23:59:59+01:00')>Date.now();
+      return json({ok:true,vacation:on?{until,note:txt(data?.value?.note,200)}:null});
+    }
+    if(action==='data_change_load'||action==='data_change_request'){
+      const order=await orderFromCap(c,String(b.token||''),'d');if(!order)return json({ok:false,error:'invalid_token'},403);
+      if(order.status!=='delivered')return json({ok:false,error:'not_delivered'},409);
+      const q=order.questionnaire||{},fields=DATA_FIELDS.filter(([p])=>typeof getPath(q,p)==='string'&&(getPath(q,p)||p.startsWith('couple.'))).map(([p,l])=>({path:p,label:l,value:String(getPath(q,p)||'')}));
+      if(action==='data_change_load')return json({ok:true,label:orderLabel(order),fields,pending:order.data_change_request?.status==='pending'?order.data_change_request:null});
+      const asked=Array.isArray(b.changes)?b.changes:[],changes:any[]=[];
+      for(const x of asked.slice(0,12)){const f=fields.find((y)=>y.path===x?.path);const v=txt(x?.value,200);if(f&&v!==f.value)changes.push({path:f.path,label:f.label,before:f.value,after:v})}
+      const note=txt(b.note,800);if(!changes.length&&!note)return json({ok:false,error:'nothing_changed'},400);
+      if(changes.some((x)=>x.path==='couple.date'&&!/^\d{4}-\d{2}-\d{2}$/.test(x.after)))return json({ok:false,error:'invalid_date'},400);
+      const ts=now(),req={at:ts,status:'pending',changes,note};
+      const {error}=await c.from('guest_invitation_orders').update({data_change_request:req,updated_at:ts}).eq('id',order.id);if(error)throw error;
+      await resend({to:['weddlysmartdesign@gmail.com'],subject:'Piden actualizar un dato · '+orderLabel(order),html:guestMail({owner:true,kicker:'Cambio de datos',title:'Piden actualizar su invitación.',preheader:'Míralo y aplícalo con un toque.',body:mP('<b>'+esc(orderLabel(order))+'</b> ya tiene su invitación y pide:')+(changes.length?mList(changes.map((x)=>esc(x.label)+': <s>'+esc(x.before||'—')+'</s> → <b>'+esc(x.after||'—')+'</b>')):'')+(note?mNote(esc(note).replaceAll('\n','<br>')):'')+mBtn(QA_PREVIEW+'/guest/panel-pruebas.html#/pedido/'+order.id,'Revisar y aplicar')})},'guest-data-change/'+order.id+'/'+ts);
+      return json({ok:true});
     }
     if(action==='review_design'){
       const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
@@ -887,7 +934,7 @@ Deno.serve(async req=>{
       if(info.used>=MAX_CHANGES)return json({ok:false,error:'too_many_changes'},409);
       const back=catalogOrigin()+'/guest-review-v1.html?t='+encodeURIComponent(String(b.token)),p=new URLSearchParams(),to=emailOf(order.questionnaire,order.buyer_email);
       p.set('mode','payment');p.set('locale','es');p.set('submit_type','pay');p.set('payment_method_types[0]','card');
-      if(to)p.set('customer_email',to);
+      if(to)p.set('customer_email',to);p.set('tax_id_collection[enabled]','true');
       p.set('success_url',back+'&paid={CHECKOUT_SESSION_ID}');p.set('cancel_url',back);
       p.set('line_items[0][quantity]','1');p.set('line_items[0][price_data][currency]','eur');p.set('line_items[0][price_data][unit_amount]',String(info.extraCents));
       p.set('line_items[0][price_data][product_data][name]','Ronda de cambios extra · invitación GUEST');
@@ -902,13 +949,25 @@ Deno.serve(async req=>{
       const rid=txt(b.requestId,40);if(!/^[0-9a-f-]{36}$/.test(rid)||txt(b.sig,60)!==await internalSig('custom_create',rid))return json({ok:false,error:'forbidden'},403);
       const {data:had}=await c.from('guest_invitation_orders').select('id').eq('custom_request_id',rid).maybeSingle();
       let id=had?.id;
+      const existing=txt(b.existingOrderId,40);
+      if(!id&&existing){
+        // Catalog order moving to made-to-measure: same data, photos and app; fresh custom rounds on top of the ones used.
+        const o=await getOrder(c,existing);
+        if(!o||o.custom_request_id||['approved','delivered','cancelled'].includes(o.status))return json({ok:false,error:'order_not_movable'},409);
+        const ts=now(),patch:any={custom_request_id:rid,included_changes:Number(o.revision_count||0)+Math.max(0,Math.min(10,Number(b.included)||2)),extra_change_cents:Math.max(0,Math.min(20000,Number(b.extraCents)||2000)),updated_at:ts,
+          owner_notes:[o.owner_notes,`${ts.slice(0,10)}: pasa a diseño a medida · ${txt(b.tierName,40)}`].filter(Boolean).join('\n')};
+        if(o.status!=='draft'){patch.status='designing';patch.designing_at=o.designing_at||ts}
+        const {error}=await c.from('guest_invitation_orders').update(patch).eq('id',o.id);if(error)throw error;
+        return json({ok:true,orderId:o.id,licenseId:o.license_id||null,questionnaireUrl:o.status==='draft'?catalogOrigin()+'/guest/catalog-questionnaire.html?t='+encodeURIComponent(await capability(o.id,'q')):''});
+      }
       if(!id){
         const licenseId=txt(b.licenseId,40);if(!/^[0-9a-f-]{36}$/.test(licenseId))return json({ok:false,error:'invalid_license_id'},400);
         const tpl=CATALOG_TEMPLATES[txt(b.templateId,60)]?txt(b.templateId,60):'veil-light';
         const created=await createOrder(c,'production',txt(b.email,200),licenseId,null,tpl);id=created.id;
         const {error}=await c.from('guest_invitation_orders').update({custom_request_id:rid,included_changes:Math.max(0,Math.min(10,Number(b.included)||2)),extra_change_cents:Math.max(0,Math.min(20000,Number(b.extraCents)||2000)),owner_notes:'Diseño a medida · '+txt(b.tierName,40)}).eq('id',id);if(error)throw error;
       }
-      return json({ok:true,orderId:id,questionnaireUrl:catalogOrigin()+'/guest/catalog-questionnaire.html?t='+encodeURIComponent(await capability(id,'q'))});
+      const cur=await getOrder(c,id);
+      return json({ok:true,orderId:id,licenseId:cur?.license_id||null,questionnaireUrl:cur&&cur.status!=='draft'?'':catalogOrigin()+'/guest/catalog-questionnaire.html?t='+encodeURIComponent(await capability(id,'q'))});
     }
     if(action==='custom_deliver'){
       // From guest-custom-qa when the second 50 % is paid: deliver like a catalog order (final link + app access).
@@ -1031,8 +1090,8 @@ Deno.serve(async req=>{
       return json({ok:true,status:'linked_test_guest_management',alreadyLinked:false});
     }
     if(action==='list'){
-      const {data:rows,error}=await c.from('guest_invitation_orders').select('id,mode,buyer_email,template_id,status,questionnaire,created_at,updated_at,submitted_at,designing_at,review_sent_at,approved_at,delivered_at,revision_count,custom_request_id').order('updated_at',{ascending:false}).limit(200);if(error)throw error;
-      return json({ok:true,orders:(rows||[]).map((x:any)=>({id:x.id,mode:x.mode,buyerEmail:x.buyer_email,templateId:x.template_id,status:x.status,label:orderLabel(x),weddingDate:txt(x.questionnaire?.couple?.date,20),createdAt:x.created_at,updatedAt:x.updated_at,submittedAt:x.submitted_at,reviewSentAt:x.review_sent_at,approvedAt:x.approved_at,deliveredAt:x.delivered_at,customRequestId:x.custom_request_id||null,revisionCount:x.revision_count||0}))});
+      const {data:rows,error}=await c.from('guest_invitation_orders').select('id,mode,buyer_email,template_id,status,questionnaire,created_at,updated_at,submitted_at,designing_at,review_sent_at,approved_at,delivered_at,revision_count,custom_request_id,data_change_request').order('updated_at',{ascending:false}).limit(200);if(error)throw error;
+      return json({ok:true,orders:(rows||[]).map((x:any)=>({id:x.id,mode:x.mode,buyerEmail:x.buyer_email,templateId:x.template_id,status:x.status,label:orderLabel(x),weddingDate:txt(x.questionnaire?.couple?.date,20),createdAt:x.created_at,updatedAt:x.updated_at,submittedAt:x.submitted_at,reviewSentAt:x.review_sent_at,approvedAt:x.approved_at,deliveredAt:x.delivered_at,customRequestId:x.custom_request_id||null,dataChangePending:x.data_change_request?.status==='pending',revisionCount:x.revision_count||0}))});
     }
     if(action==='detail'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
@@ -1093,6 +1152,47 @@ Deno.serve(async req=>{
       const {error}=await c.from('guest_invitation_orders').update(patch).eq('id',order.id);if(error)throw error;
       const files=livePublic?publicFiles:await signedFiles(c,{...order,resolved_config:built},7200);
       return json({ok:true,status:early?'designing':order.status,questionnaire:q,config:livePublic?config:hydrateConfig(built,files)});
+    }
+    if(action==='settings_get'){
+      const {data}=await c.from('guest_settings').select('key,value');
+      return json({ok:true,settings:Object.fromEntries((data||[]).map((x:any)=>[x.key,x.value]))});
+    }
+    if(action==='settings_set'){
+      // Vacation mode: { until: 'YYYY-MM-DD' | '', note? }.
+      const until=txt(b.vacation?.until,10);if(until&&!/^\d{4}-\d{2}-\d{2}$/.test(until))return json({ok:false,error:'invalid_date'},400);
+      const {error}=await c.from('guest_settings').upsert({key:'vacation',value:until?{until,note:txt(b.vacation?.note,200)}:{},updated_at:now()});if(error)throw error;
+      return json({ok:true});
+    }
+    if(action==='data_change_apply'){
+      // The owner applies (or turns down) what the couple asked after delivery; the live invitation updates at once.
+      const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
+      const req=order.data_change_request;if(!req||req.status!=='pending')return json({ok:false,error:'nothing_pending'},409);
+      const ts=now(),to=emailOf(order.questionnaire,order.buyer_email);
+      if(b.decline){
+        await c.from('guest_invitation_orders').update({data_change_request:{...req,status:'declined',doneAt:ts},updated_at:ts}).eq('id',order.id);
+        if(to&&order.mode!=='test')await resend({to:[to],subject:'Sobre el cambio que nos pedisteis',html:guestMail({kicker:'Cambio de datos',title:'Lo hablamos.',preheader:'Os escribimos sobre el cambio.',body:mP(esc(txt(b.reason,600)||'Hemos visto vuestro mensaje y os escribimos para verlo juntos.'))})},'guest-data-change-no/'+order.id+'/'+req.at);
+        return json({ok:true,status:'declined'});
+      }
+      const q=sanitizeQuestionnaire(order.questionnaire||{});
+      for(const x of req.changes||[]){const ks=String(x.path).split('.');let n:any=q;for(const k of ks.slice(0,-1)){if(!n||typeof n!=='object')break;n=n[k]}if(n&&typeof n==='object'&&typeof n[ks[ks.length-1]]==='string')n[ks[ks.length-1]]=txt(x.after,200)}
+      const built=checkInvitationConfig(buildConfig(q,order.files||[],'#',order.template_id,order.template_version),order),livePublic=order.mode==='production';
+      const publicFiles=livePublic?(order.files||[]).map((x:any)=>({...x,url:x.publicUrl||''})):[];
+      const config=livePublic?checkInvitationConfig(hydrateConfig(built,publicFiles),order,publicFiles,'hydrated'):built;
+      const {error}=await c.from('guest_invitation_orders').update({questionnaire:q,resolved_config:config,data_change_request:{...req,status:'done',doneAt:ts},updated_at:ts}).eq('id',order.id);if(error)throw error;
+      if(to&&order.mode!=='test')await resend({to:[to],subject:'Vuestra invitación está actualizada',html:guestMail({kicker:'Actualizada',title:'Hecho. Ya está actualizada.',preheader:'Vuestros invitados ven el dato nuevo en el mismo enlace.',body:mP('Hemos actualizado vuestra invitación. Vuestros invitados verán el cambio en el mismo enlace que ya tienen; no hace falta volver a enviarla.')+((req.changes||[]).length?mList(req.changes.map((x:any)=>esc(x.label)+': <b>'+esc(x.after||'—')+'</b>')):'')+(order.delivery_url?mBtn(order.delivery_url,'Ver nuestra invitación'):'')})},'guest-data-change-done/'+order.id+'/'+req.at);
+      return json({ok:true,status:'done'});
+    }
+    if(action==='resend_delivery'){
+      // Couple lost the delivery email (or gave another address): same links, sent again.
+      const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
+      if(order.status!=='delivered'||!order.delivery_url)return json({ok:false,error:'not_delivered'},409);
+      const to=txt(b.email,200)||emailOf(order.questionnaire,order.buyer_email);if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to))return json({ok:false,error:'missing_email'},400);
+      let accessUrl='';
+      if(order.license_id){const {data:d}=await c.from('license_delivery_codes').select('activation_code').eq('license_id',order.license_id).maybeSingle();if(d?.activation_code)accessUrl=site()+'/guest/access.html#code='+encodeURIComponent(String(d.activation_code))}
+      if(!accessUrl)return json({ok:false,error:'missing_management_access'},409);
+      const ok=await resend({to:[to],subject:'Vuestra invitación y vuestro acceso a la app',html:deliveryMail(order.delivery_url,accessUrl,await dataChangeUrl(order.id))},'guest-redeliver/'+order.id+'/'+to+'/'+now().slice(0,13));
+      if(!ok)return json({ok:false,error:'email_failed'},502);
+      return json({ok:true,to});
     }
     if(action==='change_design'){
       // The couple wants another design before it is approved: same data, same photos, new template.

@@ -65,6 +65,21 @@ const ownerMail = (kicker: string, title: string, body: string) => guestMail({ o
 // Ventana de 3 h: si una pasada de la tarea falla, la siguiente aún manda el aviso. La clave de
 // idempotencia de Resend (24 h) evita que salga dos veces.
 const crossed = (t: number, now: number) => t > now - 3 * H && t <= now;
+const AUTO_APPROVE_DAYS = 30;
+const dayEs = (t: number) => new Date(t).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', timeZone: 'Europe/Madrid' });
+// QA: guest-invitation-flow-qa. Al pasar a real, guest-invitation-flow.
+const FLOW_URL = () => String(Deno.env.get('SUPABASE_URL') || '').replace(/\/$/, '') + '/functions/v1/guest-invitation-flow-qa';
+async function flowCall(body: any) {
+  const r = await fetch(FLOW_URL(), { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }).catch(() => null);
+  return await r?.json().catch(() => null);
+}
+const internalSig = async (action: string, id: string) => (await hmacHex('guest-internal-v1|' + action + '|' + id)).slice(0, 40);
+// Modo vacaciones (guest_settings.vacation = { until: 'YYYY-MM-DD' }): los avisos de plazo se paran hasta esa fecha.
+async function vacation(c: any) {
+  const { data } = await c.from('guest_settings').select('value').eq('key', 'vacation').maybeSingle();
+  const until = Date.parse(String(data?.value?.until || '') + 'T23:59:59+01:00');
+  return until && until > Date.now() ? { until } : null;
+}
 
 /* ---------- Plazos de la propietaria ---------- */
 function deadline(o: any) {
@@ -91,10 +106,12 @@ async function stripe(path: string, sessionId: string, init: RequestInit = {}) {
   return j;
 }
 async function issueInvoice(c: any, o: any) {
-  let total = PRICE_CENTS, name = names(o) || null, ref = o.checkout_session_id;
-  try { const s = await stripe('checkout/sessions/' + encodeURIComponent(o.checkout_session_id), o.checkout_session_id); if (Number.isInteger(s.amount_total)) total = s.amount_total; name = s.customer_details?.name || name; ref = s.payment_intent || ref; } catch (e) { console.warn('invoice_session_lookup', String(e)); }
+  let total = PRICE_CENTS, name = names(o) || null, ref = o.checkout_session_id, taxId = '';
+  try { const s = await stripe('checkout/sessions/' + encodeURIComponent(o.checkout_session_id), o.checkout_session_id); if (Number.isInteger(s.amount_total)) total = s.amount_total; name = s.customer_details?.name || name; ref = s.payment_intent || ref; taxId = String(s.customer_details?.tax_ids?.[0]?.value || '').slice(0, 30); } catch (e) { console.warn('invoice_session_lookup', String(e)); }
   const { data, error } = await c.rpc('guest_issue_invoice', { p_order: o.id, p_kind: 'invoice', p_mode: isLive(o) ? 'production' : 'test', p_email: emailOf(o), p_name: name, p_concept: 'Invitación digital personalizada · diseño ' + (DESIGNS[o.template_id] || o.template_id) + ', con app de gestión de invitados', p_total_cents: total, p_stripe_ref: ref, p_rectifies: null });
   if (error) throw error;
+  // NIF opcional que piden en el pago (no forma parte de la huella de la factura).
+  if (taxId && data?.id && !data.buyer_tax_id) { await c.from('guest_invoices').update({ buyer_tax_id: taxId }).eq('id', data.id); data.buyer_tax_id = taxId; }
   return data;
 }
 
@@ -183,9 +200,15 @@ async function tick(c: any) {
   const { data: lc } = await c.from('guest_custom_requests').select('id').eq('mode', 'production').not('order_id', 'is', null).limit(2000);
   liveCustom.clear(); (lc || []).forEach((x: any) => liveCustom.add(String(x.id)));
 
-  // 1. Plazos de la propietaria.
+  // 1. Plazos de la propietaria (parados en vacaciones).
+  const away = await vacation(c);
   const open = all.map((o: any) => ({ o, d: deadline(o) })).filter((x: any) => x.d) as { o: any; d: any }[];
-  for (const { o, d } of open) {
+  // Tras las primeras ventas, una propuesta que lleva 48 h sin que la mires sale sola (guest-invitation-flow decide si toca).
+  for (const { o, d } of open) if (d.kind === 'proposal' && o.checkout_session_id && now - d.start >= 48 * H) {
+    const j = await flowCall({ action: 'auto_send', orderId: o.id, sig: await internalSig('auto_send', o.id) });
+    if (j?.ok && j.sent) sent.push('auto-send:' + o.id);
+  }
+  for (const { o, d } of away ? [] : open) {
     for (const [t, tag, id] of [[d.goal, d.kind === 'proposal' ? 'Quedan 24 h' : 'Lleva 24 h aprobada', 'goal'], [d.due - 6 * H, 'Quedan 6 h', '6h'], [d.due, 'Plazo vencido', 'due']] as [number, string, string][]) {
       if (!crossed(t, now)) continue;
       const ok = await send(OWNER, `${tag} · ${d.what.toLowerCase()} a ${label(o)}${o.mode === 'test' ? ' (prueba)' : ''}`,
@@ -200,9 +223,15 @@ async function tick(c: any) {
     if (!canWriteCouple(o) || Date.parse(o.created_at) < AUTOMATION_SINCE) continue;
     const to = [emailOf(o)];
     if (o.status === 'draft') {
+      // A los 2, 5, 15 y 30 días, y luego uno al mes durante un año: el cuestionario no caduca, ya han pagado.
+      const born = Date.parse(o.created_at), later: [number, string, string, string][] = [];
+      for (let m = 2; m <= 12; m++) later.push([born + 30 * m * D, 'q' + m + 'm', 'Vuestra invitación sigue esperándoos.', 'Cuando tengáis un rato, contadnos vuestra boda y nos ponemos con ella. Si aún os falta algún dato, rellenad lo que sepáis: se guarda solo y lo terminamos cuando lo tengáis.']);
       for (const [t, id, title, text] of [
-        [Date.parse(o.created_at) + 2 * D, 'q2d', 'Vuestra invitación os espera.', 'Para empezar a prepararla solo nos falta que nos contéis vuestra boda. Son unos minutos, se guarda solo y podéis dejarlo a medias.'],
-        [Date.parse(o.created_at) + 5 * D, 'q5d', '¿Os ayudamos con el cuestionario?', 'Aún no tenemos los datos de vuestra boda. Si algo no está claro o preferís contárnoslo por WhatsApp, respondednos y lo vemos juntos.']
+        [born + 2 * D, 'q2d', 'Vuestra invitación os espera.', 'Para empezar a prepararla solo nos falta que nos contéis vuestra boda. Son unos minutos, se guarda solo y podéis dejarlo a medias.'],
+        [born + 5 * D, 'q5d', '¿Os ayudamos con el cuestionario?', 'Aún no tenemos los datos de vuestra boda. Si algo no está claro o preferís contárnoslo por WhatsApp, respondednos y lo vemos juntos.'],
+        [born + 15 * D, 'q15d', 'Aún no tenemos vuestros datos.', 'Vuestra invitación está pagada y esperando. Contadnos vuestra boda cuando podáis; si preferís hacerlo por WhatsApp, respondednos y os ayudamos.'],
+        [born + 30 * D, 'q30d', 'Un mes esperando vuestra boda.', 'Aún no nos ha llegado el cuestionario. No caduca, pero cuanto antes lo tengamos, antes podréis enviar la invitación a vuestros invitados.'],
+        ...later
       ] as [number, string, string, string][]) {
         if (!crossed(t, now)) continue;
         const link = APP_ORIGIN + '/guest/catalog-questionnaire.html?t=' + encodeURIComponent(await capability(o.id, 'q'));
@@ -212,11 +241,19 @@ async function tick(c: any) {
     if (o.status === 'review_sent' && o.review_sent_at) {
       for (const [t, id, title, text] of [
         [Date.parse(o.review_sent_at) + 3 * D, 'r3d', 'Vuestra invitación sigue esperando vuestro sí.', 'Ya está lista. Echadle un vistazo desde el móvil: si os encanta, la aprobáis; si queréis cambiar algo, lo podéis hacer vosotros mismos desde allí.'],
-        [Date.parse(o.review_sent_at) + 7 * D, 'r7d', '¿Qué os ha parecido vuestra invitación?', 'No queremos que se os pase: en cuanto la aprobéis os la entregamos con la app para enviarla a vuestros invitados.']
+        [Date.parse(o.review_sent_at) + 7 * D, 'r7d', '¿Qué os ha parecido vuestra invitación?', 'No queremos que se os pase: en cuanto la aprobéis os la entregamos con la app para enviarla a vuestros invitados.'],
+        [Date.parse(o.review_sent_at) + 14 * D, 'r14d', 'Vuestra invitación lleva dos semanas esperando.', `Si no nos decís nada, el ${dayEs(Date.parse(o.review_sent_at) + AUTO_APPROVE_DAYS * D)} la daremos por aprobada y os la entregaremos tal cual, con la app. Si queréis cambiar algo, hacedlo antes desde el enlace.`],
+        [Date.parse(o.review_sent_at) + 25 * D, 'r25d', 'En 5 días damos vuestra invitación por aprobada.', `Como no nos habéis dicho nada, el ${dayEs(Date.parse(o.review_sent_at) + AUTO_APPROVE_DAYS * D)} la daremos por aprobada y os la entregaremos con la app. Si queréis cambiar algo, aún estáis a tiempo.`]
       ] as [number, string, string, string][]) {
         if (!crossed(t, now)) continue;
         const link = APP_ORIGIN + '/guest-review-v1.html?t=' + encodeURIComponent(await capability(o.id, 'r'));
         if (await send(to, title.replace(/\.$/, ''), mail('Recordatorio', title, mP(esc(text)) + button(link, 'Ver nuestra invitación')), `guest-remind/${o.id}/${id}/${o.review_sent_at}`)) sent.push('couple:' + o.id + ':' + id);
+      }
+      // 30 días sin respuesta: se aprueba como si pulsaran «Aprobar» (el catálogo se entrega solo; a medida pide el resto).
+      if (now - Date.parse(o.review_sent_at) >= AUTO_APPROVE_DAYS * D) {
+        const j = await flowCall({ action: 'review_respond', token: await capability(o.id, 'r'), decision: 'approve' });
+        if (j?.ok) { sent.push('auto-approve:' + o.id); await send(OWNER, `Aprobada sola (30 días) · ${label(o)}`, ownerMail('Aprobada sola', 'Pasaron 30 días sin respuesta.', mP(`<b>${esc(label(o))}</b> no contestó a su propuesta en 30 días, así que se ha dado por aprobada${o.custom_request_id ? ' y les ha llegado el pago del resto' : ' y se ha entregado'}.`)), `guest-auto-approve/${o.id}`); }
+        else console.error('auto_approve_failed', o.id, j?.error);
       }
     }
     // Pidieron un cambio, se les abrió el cuestionario y no lo han enviado.
@@ -275,6 +312,7 @@ async function tick(c: any) {
     if (ret.purged.length) body += mP('<b>Datos borrados hoy</b> (boda de hace más de 120 días; las facturas se conservan):') + mList(ret.purged.map((x) => esc(x)));
     const monday = new Date(d.toLocaleString('en-US', { timeZone: 'Europe/Madrid' })).getDay() === 1;
     if (monday) {
+      try { if (await backup(c, d)) sent.push('backup'); } catch (e) { console.error('backup_failed', e); }
       const s = (await stats(c)).live;
       body += mNote(`<b>La semana pasada:</b> ${s.lastWeek.sales} ${s.lastWeek.sales === 1 ? 'venta' : 'ventas'} · ${esc(euros(s.lastWeek.cents))}${s.lastWeek.refunds ? ` · ${s.lastWeek.refunds} ${s.lastWeek.refunds === 1 ? 'devolución' : 'devoluciones'}` : ''}<br><b>Este mes:</b> ${s.month.sales} ${s.month.sales === 1 ? 'venta' : 'ventas'} · ${esc(euros(s.month.cents))}${s.designs.length ? `<br><b>El más vendido:</b> ${esc(s.designs[0][0])}` : ''}`);
     }
@@ -284,6 +322,26 @@ async function tick(c: any) {
     }
   }
   return { open: open.length, sent };
+}
+
+/* ---------- Copia de seguridad semanal ---------- */
+// El plan gratis no guarda copias: cada lunes, pedidos, solicitudes a medida y facturas en CSV a tu email.
+const csv = (rows: any[]) => { if (!rows.length) return ''; const cols = Object.keys(rows[0]); const q = (v: any) => { const t = v == null ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v); return /[",\n;]/.test(t) ? '"' + t.replaceAll('"', '""') + '"' : t; }; return [cols.join(','), ...rows.map((r) => cols.map((k) => q(r[k])).join(','))].join('\n'); };
+const b64 = (t: string) => { const bytes = new TextEncoder().encode('\ufeff' + t); let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000)); return btoa(bin); };
+async function backup(c: any, d: Date) {
+  const [o, r, i] = await Promise.all([
+    c.from('guest_invitation_orders').select('id,mode,status,template_id,buyer_email,questionnaire,style_overrides,revision_count,extra_changes,design_changes,custom_request_id,checkout_session_id,license_id,delivery_url,created_at,submitted_at,review_sent_at,approved_at,delivered_at,purged_at').order('created_at').limit(5000),
+    c.from('guest_custom_requests').select('id,mode,status,tier,base_design,name,email,phone,idea,wedding_date,quote_cents,credit_cents,extras,deposit_paid_at,final_paid_at,order_id,from_order_id,created_at,delivered_at,refunded_at').order('created_at').limit(5000),
+    c.from('guest_invoices').select('*').order('created_at').limit(10000)
+  ]);
+  const day = d.toISOString().slice(0, 10), apiKey = String(Deno.env.get('RESEND_API_KEY') || '').trim(), raw = String(Deno.env.get('WEDDLY_RESEND_FROM') || '').trim();
+  const m = raw.match(/<([^>]+)>/), addr = (m?.[1] || (/^[^\s<>]+@[^\s<>]+$/.test(raw) ? raw : '')).trim();
+  if (!apiKey || !addr) return false;
+  const attachments = [['pedidos', o.data], ['a-medida', r.data], ['facturas', i.data]].map(([n, rows]: any) => ({ filename: `guest-${n}-${day}.csv`, content: b64(csv(rows || [])) }));
+  const res = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + apiKey, 'Idempotency-Key': 'guest-backup/' + day },
+    body: JSON.stringify({ from: 'GUEST by WeddlySmartDesign <' + addr + '>', to: OWNER, subject: 'Copia de seguridad semanal · ' + day, html: ownerMail('Copia de seguridad', 'Tu copia de la semana.', mP(`Adjuntos: ${(o.data || []).length} pedidos, ${(r.data || []).length} solicitudes a medida y ${(i.data || []).length} facturas, en CSV (se abren con Excel). Guarda este email: si algún día falla el sistema, con esto se recupera todo.`)), attachments }) });
+  if (!res.ok) console.warn('backup_mail_failed', res.status, await res.text());
+  return res.ok;
 }
 
 /* ---------- Entrada ---------- */
@@ -303,7 +361,7 @@ Deno.serve(async (req) => {
       if (!inv) return json({ ok: false, error: 'not_found' }, 404);
       let rectifies = null;
       if (inv.rectifies) { const { data: r } = await c.from('guest_invoices').select('number,issued_at').eq('id', inv.rectifies).maybeSingle(); rectifies = r; }
-      return json({ ok: true, issuer: ISSUER, invoice: { number: inv.number, kind: inv.kind, test: inv.mode === 'test', issuedAt: inv.issued_at, buyerName: inv.buyer_name, buyerEmail: inv.buyer_email, concept: inv.concept, totalCents: inv.total_cents, baseCents: inv.base_cents, vatCents: inv.vat_cents, vatRate: Number(inv.vat_rate), hash: inv.hash, rectifies } });
+      return json({ ok: true, issuer: ISSUER, invoice: { number: inv.number, kind: inv.kind, test: inv.mode === 'test', issuedAt: inv.issued_at, buyerTaxId: inv.buyer_tax_id || null, buyerName: inv.buyer_name, buyerEmail: inv.buyer_email, concept: inv.concept, totalCents: inv.total_cents, baseCents: inv.base_cents, vatCents: inv.vat_cents, vatRate: Number(inv.vat_rate), hash: inv.hash, rectifies } });
     }
 
     if (!(await managerOk(c, req))) return json({ ok: false, error: 'manager_required' }, 403);
