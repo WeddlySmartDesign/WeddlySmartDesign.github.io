@@ -7,7 +7,8 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const OWNER = ['weddlysmartdesign@gmail.com'];
-const APP = 'https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev/guest/panel-pruebas.html';
+// El panel de la web publicada (o de la copia de lanzamiento mientras se prueba) sirve para pedidos reales y de prueba.
+const APP = String(Deno.env.get('GUEST_LIVE_ORIGIN') || 'https://guest.weddlysmartdesign.com').replace(/\/$/, '') + '/guest/panel-pruebas.html';
 const H = 3600_000;
 const PROPOSAL_DUE = 72 * H, PROPOSAL_GOAL = 48 * H, DELIVERY_DUE = 48 * H;
 const DIGEST_UTC_HOUR = 7; // 08:00–09:00 en Madrid según la época del año

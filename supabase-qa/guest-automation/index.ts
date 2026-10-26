@@ -48,7 +48,7 @@ async function hmacHex(v: string) {
 // Mismos enlaces que genera guest-invitation-flow.
 const capability = async (id: string, purpose: string) => 'gif1_' + purpose + '_' + id + '_' + (await hmacHex('guest-invitation-flow-v1|' + purpose + '|' + id)).slice(0, 40);
 const invoiceToken = async (id: string) => id + '.' + (await hmacHex('guest-invoice-v1|' + id)).slice(0, 32);
-const invoiceUrl = async (id: string) => APP_ORIGIN + '/guest/factura.html?f=' + encodeURIComponent(await invoiceToken(id));
+const invoiceUrl = async (id: string) => LIVE_ORIGIN + '/guest/factura.html?f=' + encodeURIComponent(await invoiceToken(id));
 
 async function send(to: string[], subject: string, html: string, key: string, from = 'GUEST by WeddlySmartDesign') {
   const apiKey = String(Deno.env.get('RESEND_API_KEY') || '').trim(), raw = String(Deno.env.get('WEDDLY_RESEND_FROM') || '').trim();
@@ -65,7 +65,7 @@ async function send(to: string[], subject: string, html: string, key: string, fr
 const button = (href: string, text: string) => mBtn(href, text);
 // title y kicker van sin escapar; body ya escapado.
 const mail = (kicker: string, title: string, body: string, preheader = title) => guestMail({ kicker, title, body, preheader });
-const ownerMail = (kicker: string, title: string, body: string) => guestMail({ owner: true, kicker, title, preheader: title, body: body + button(APP_ORIGIN + '/guest/panel-pruebas.html', 'Abrir mis pedidos') });
+const ownerMail = (kicker: string, title: string, body: string) => guestMail({ owner: true, kicker, title, preheader: title, body: body + button(LIVE_ORIGIN + '/guest/panel-pruebas.html', 'Abrir mis pedidos') });
 // Ventana de 3 h: si una pasada de la tarea falla, la siguiente aún manda el aviso. La clave de
 // idempotencia de Resend (24 h) evita que salga dos veces.
 const crossed = (t: number, now: number) => t > now - 3 * H && t <= now;
