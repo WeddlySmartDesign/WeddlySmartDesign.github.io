@@ -189,7 +189,16 @@ async function moveDesign(c:any,order:any,spec:any,extra:Record<string,unknown>)
 }
 // Catalog couples may switch design once, free, from the review page (custom designs go through the owner).
 const FREE_DESIGN_CHANGES=1;
-const designChangeInfo=(o:any)=>({allowed:!o.custom_request_id&&o.status==='review_sent'&&Number(o.design_changes||0)<FREE_DESIGN_CHANGES,used:Number(o.design_changes||0),free:FREE_DESIGN_CHANGES,current:o.template_id});
+// After the free one, changing again (also back to the first design) costs a change round, paid if none are left.
+const designChangeInfo=(o:any)=>{const used=Number(o.design_changes||0),free=used<FREE_DESIGN_CHANGES;return {allowed:!o.custom_request_id&&o.status==='review_sent'&&Number(o.revision_count||0)<MAX_CHANGES,used,free,freeTotal:FREE_DESIGN_CHANGES,current:o.template_id,original:o.original_template_id||o.template_id}};
+// A design change that uses a round: counted like any other change, with the same snapshot for the owner app.
+async function designRound(c:any,order:any,spec:any,paidCents=0){
+  const ts=now(),history=[...(Array.isArray(order.revision_requests)?order.revision_requests:[]),{at:ts,note:'Cambio de diseño: '+order.template_id+' → '+spec.id,before:order.questionnaire||{},design:true,...(paidCents?{paidCents}:{})}];
+  return await moveDesign(c,order,spec,{design_changes:Number(order.design_changes||0)+1,submitted_at:ts,revision_count:Number(order.revision_count||0)+1,revision_requests:history});
+}
+async function designMail(order:any,from:string,spec:any,how:string){
+  await resend({to:['weddlysmartdesign@gmail.com'],subject:'Han elegido otro diseño · '+orderLabel(order),html:guestMail({owner:true,kicker:'Cambio de diseño',title:'Han elegido otro diseño.',preheader:'Ya está montado con sus datos. Míralo y envíaselo.',body:mP('<b>'+esc(orderLabel(order))+'</b> ha cambiado <b>'+esc(from)+'</b> por <b>'+esc(spec.id)+'</b> desde la página de revisión. Ya está montado con sus datos y fotos; míralo y envíaselo. '+how)+mBtn(QA_PREVIEW+'/guest/panel-pruebas.html#/pedido/'+order.id,'Abrir el pedido')})},'guest-design-change/'+order.id+'/'+Number(order.design_changes||0)).catch((e:any)=>console.error('design_change_mail',e?.message));
+}
 const internalSig=async(action:string,id:string)=>(await hmac('guest-internal-v1|'+action+'|'+id)).slice(0,40);
 const CUSTOM_FN=()=>String(Deno.env.get('SUPABASE_URL')||'').replace(/\/$/,'')+'/functions/v1/guest-custom-qa';
 async function stripe(path:string,init:RequestInit={}){
@@ -226,7 +235,9 @@ async function settleChangePayment(c:any,order:any,sessionId:string){
   const {data:inv,error:ie}=await c.rpc('guest_issue_order_extra_invoice',{p_order:order.id,p_mode:s.livemode?'production':'test',p_email:to||s.customer_details?.email||'',p_name:s.customer_details?.name||namesOf(order.questionnaire)||'',p_concept:'Ronda de cambios extra · invitación digital personalizada',p_total_cents:s.amount_total,p_stripe_ref:s.payment_intent||sessionId});
   if(ie)console.error('extra_invoice_failed',ie);
   if(inv&&to&&order.mode!=='test')await resend({to:[to],subject:'Factura '+inv.number+' · ronda de cambios extra',html:guestMail({kicker:'Pago recibido',title:'Recibido. Ya podéis hacer el cambio.',preheader:'Aquí tenéis la factura de la ronda extra.',body:mP('Gracias. Ya tenemos el pago de la ronda de cambios extra. Os llega en otro email el enlace para hacer el cambio.')+mBtn(await invoiceLink(inv.id),'Ver la factura')})},'guest-extra-change-invoice/'+inv.id);
-  if(['review_ready','review_sent'].includes(next.status))await requestChange(c,next,note,s.amount_total);
+  const tplPaid=txt(order.change_payment?.session===sessionId?order.change_payment.templateId:s.metadata?.template,80);
+  if(tplPaid&&next.status==='review_sent'&&tplPaid!==next.template_id){const spec=templateSpec(tplPaid),from=next.template_id;await designRound(c,next,spec,s.amount_total);await designMail(next,from,spec,'Han pagado la ronda extra para este cambio.')}
+  else if(['review_ready','review_sent'].includes(next.status))await requestChange(c,next,note,s.amount_total);
   return (await c.from('guest_invitation_orders').select('*').eq('id',order.id).single()).data||next;
 }
 function namesOf(q:any){return [txt(q?.couple?.name1,40),txt(q?.couple?.name2,40)].filter(Boolean).join(' & ')}
@@ -803,7 +814,7 @@ Deno.serve(async req=>{
     }
     if(action==='review_load'){
       let order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
-      if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status))return json({ok:false,error:'review_not_ready'},409);
+      if(!['review_ready','review_sent','changes_requested','approved','delivered'].includes(order.status)&&!(['submitted','designing'].includes(order.status)&&Number(order.design_changes||0)>0))return json({ok:false,error:'review_not_ready'},409);
       const back=txt(b.paid,200);
       for(const sid of new Set([back,order.change_payment?.session].filter(Boolean)))order=await settleChangePayment(c,order,String(sid)).catch((e:any)=>{console.error('change_settle_failed',e?.message);return order});
       const files=await signedFiles(c,order,7200),config=checkInvitationRead(hydrateConfig(order.resolved_config||{},files),order,files);
@@ -812,13 +823,20 @@ Deno.serve(async req=>{
     }
     if(action==='review_design'){
       const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
-      if(!designChangeInfo(order).allowed)return json({ok:false,error:order.custom_request_id?'custom_design':order.status!=='review_sent'?'review_locked':'design_change_used'},409);
+      const d=designChangeInfo(order);
+      if(!d.allowed)return json({ok:false,error:order.custom_request_id?'custom_design':order.status!=='review_sent'?'review_locked':'too_many_changes'},409);
       const spec=templateSpec(txt(b.templateId,80));
       if(spec.id===order.template_id)return json({ok:false,error:'same_design'},400);
-      const from=order.template_id,ts=now();
-      const status=await moveDesign(c,order,spec,{design_changes:Number(order.design_changes||0)+1,submitted_at:ts});
-      await resend({to:['weddlysmartdesign@gmail.com'],subject:'Han elegido otro diseño · '+orderLabel(order),html:guestMail({owner:true,kicker:'Cambio de diseño',title:'Han elegido otro diseño.',preheader:'Ya está montado con sus datos. Míralo y envíaselo.',body:mP('<b>'+esc(orderLabel(order))+'</b> ha cambiado <b>'+esc(from)+'</b> por <b>'+esc(spec.id)+'</b> desde la página de revisión. Ya está montado con sus datos y fotos; míralo y envíaselo. No gasta ronda de cambios.')+mBtn(QA_PREVIEW+'/guest/panel-pruebas.html#/pedido/'+order.id,'Abrir el pedido')})},'guest-design-change/'+order.id+'/'+spec.id).catch((e:any)=>console.error('design_change_mail',e?.message));
-      return json({ok:true,status,templateId:spec.id});
+      const from=order.template_id;
+      if(d.free){
+        const status=await moveDesign(c,order,spec,{design_changes:Number(order.design_changes||0)+1,submitted_at:now(),original_template_id:order.original_template_id||order.template_id});
+        await designMail(order,from,spec,'Era su cambio de diseño gratis: no gasta ronda.');
+        return json({ok:true,status,templateId:spec.id,free:true});
+      }
+      if(changesInfo(order).left<=0)return json({ok:false,error:'change_payment_required'},402);
+      const status=await designRound(c,order,spec);
+      await designMail(order,from,spec,'Ya habían usado el cambio gratis: gasta una ronda de cambios.');
+      return json({ok:true,status,templateId:spec.id,free:false});
     }
     if(action==='review_respond'){
       const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
@@ -862,6 +880,9 @@ Deno.serve(async req=>{
       const order=await findByToken(c,String(b.token||''),'review_token_hash');if(!order)return json({ok:false,error:'invalid_token'},403);
       if(!['review_ready','review_sent'].includes(order.status))return json({ok:false,error:'review_locked'},409);
       const note=txt(b.note,1500);if(!note)return json({ok:false,error:'changes_note_required'},400);
+      // A paid design change (after the free one) carries the chosen design and applies it once paid.
+      const tplWanted=txt(b.templateId,80),tpl=tplWanted?templateSpec(tplWanted):null;
+      if(tpl&&(!designChangeInfo(order).allowed||designChangeInfo(order).free||tpl.id===order.template_id))return json({ok:false,error:'invalid_design_change'},409);
       const info=changesInfo(order);if(info.left>0)return json({ok:false,error:'change_included'},409);
       if(info.used>=MAX_CHANGES)return json({ok:false,error:'too_many_changes'},409);
       const back=catalogOrigin()+'/guest-review-v1.html?t='+encodeURIComponent(String(b.token)),p=new URLSearchParams(),to=emailOf(order.questionnaire,order.buyer_email);
@@ -870,10 +891,10 @@ Deno.serve(async req=>{
       p.set('success_url',back+'&paid={CHECKOUT_SESSION_ID}');p.set('cancel_url',back);
       p.set('line_items[0][quantity]','1');p.set('line_items[0][price_data][currency]','eur');p.set('line_items[0][price_data][unit_amount]',String(info.extraCents));
       p.set('line_items[0][price_data][product_data][name]','Ronda de cambios extra · invitación GUEST');
-      p.set('metadata[product]','guest_change');p.set('metadata[guest_order]',order.id);p.set('metadata[part]','extra_change');p.set('metadata[note]',note.slice(0,480));
+      p.set('metadata[product]','guest_change');p.set('metadata[guest_order]',order.id);p.set('metadata[part]','extra_change');p.set('metadata[note]',note.slice(0,480));if(tpl)p.set('metadata[template]',tpl.id);
       p.set('payment_intent_data[metadata][guest_order]',order.id);p.set('payment_intent_data[metadata][part]','extra_change');
-      const s=await stripe('checkout/sessions',{method:'POST',headers:{'Idempotency-Key':'guest-change/'+order.id+'/'+info.used+'/'+info.extra+'/'+info.extraCents+'/'+(await sha256(note)).slice(0,16)},body:p.toString()});
-      const {error}=await c.from('guest_invitation_orders').update({change_payment:{session:s.id,note,at:now()}}).eq('id',order.id);if(error)throw error;
+      const s=await stripe('checkout/sessions',{method:'POST',headers:{'Idempotency-Key':'guest-change/'+order.id+'/'+info.used+'/'+info.extra+'/'+info.extraCents+'/'+(await sha256(note+'|'+(tpl?.id||''))).slice(0,16)},body:p.toString()});
+      const {error}=await c.from('guest_invitation_orders').update({change_payment:{session:s.id,note,at:now(),...(tpl?{templateId:tpl.id}:{})}}).eq('id',order.id);if(error)throw error;
       return json({ok:true,url:s.url});
     }
     if(action==='custom_create'){

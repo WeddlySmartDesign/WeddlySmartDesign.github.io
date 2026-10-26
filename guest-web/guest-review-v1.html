@@ -62,6 +62,7 @@
     .design b { font-weight: 600; font-size: .875rem; text-align: center; }
     .design input:checked + span { border-color: var(--ink); background: var(--white); box-shadow: inset 0 0 0 1px var(--ink); }
     .design input:focus-visible + span { outline: 2px solid var(--postmark); outline-offset: 2px; }
+    .design i { position: absolute; top: .55rem; left: .55rem; padding: .15rem .4rem; border-radius: 4px; background: var(--ink); color: var(--paper); font: 600 .6875rem/1.3 var(--text); font-style: normal; }
     .peek { display: inline-block; margin-top: .6rem; font-size: .9375rem; color: var(--ink); }
     .peek:empty { display: none; }
     .msg { margin-top: .7rem; font-size: .9375rem; color: var(--postmark); }
@@ -85,7 +86,7 @@
 
   <div id="design" hidden>
     <h2>Elegid otro diseño</h2>
-    <p>Lo montamos con los mismos datos y fotos. Podéis cambiar de diseño una vez antes de aprobarla, sin coste y sin gastar ronda de cambios.</p>
+    <p id="designText">Lo montamos con los mismos datos y fotos. Podéis cambiar de diseño una vez antes de aprobarla, sin coste y sin gastar ronda de cambios.</p>
     <div class="designs" id="designs"></div>
     <a class="peek" id="peek" target="_blank" rel="noopener"></a>
     <div class="row"><button class="btn" id="designGo" type="button" disabled>Cambiar de diseño</button><button class="btn line" data-back type="button">Volver</button></div>
@@ -193,18 +194,25 @@ async function respond(decision) {
 }
 $('approveYes').onclick = () => respond('approve');
 
-// Cambio de diseño: una vez, antes de aprobar. Se monta solo con los mismos datos y lo revisamos antes de mandarlo.
-let pick = null;
-function showDesigns(current) {
-  const list = (window.GUEST_CATALOG || []).filter((d) => d.id !== current);
+// Cambio de diseño: el primero es gratis; después (también para volver al primero) gasta una ronda, o se paga si no quedan.
+let pick = null, dc = null;
+const payDesign = () => !!dc && !dc.free && mustPay();
+function showDesigns(info) {
+  dc = info;
+  const list = (window.GUEST_CATALOG || []).filter((d) => d.id !== info.current);
   if (!list.length) return;
-  $('designs').innerHTML = list.map((d) => `<label class="design"><input type="radio" name="design" value="${d.id}"><span><img src="${d.image}" alt="" loading="lazy" decoding="async"><b>${d.name}</b></span></label>`).join('');
+  const first = (window.GUEST_CATALOG || []).find((d) => d.id === info.original && d.id !== info.current);
+  if (!info.free) {
+    $('designText').textContent = `Ya usasteis el cambio de diseño gratis. Cambiar otra vez${first ? `, también volver a ${first.name},` : ''} cuenta como una ronda de cambios` + (mustPay() ? ` y, como ya no os quedan, cuesta ${euros(changes.extraCents)}.` : ` (os ${changes.left === 1 ? 'queda 1' : `quedan ${changes.left}`}).`);
+    $('other').textContent = '¿Preferís otro diseño o volver al primero?';
+  }
+  $('designs').innerHTML = list.map((d) => `<label class="design"><input type="radio" name="design" value="${d.id}"><span><img src="${d.image}" alt="" loading="lazy" decoding="async"><b>${d.name}</b></span>${first && d.id === first.id ? '<i>El primero</i>' : ''}</label>`).join('');
   $('other').hidden = false;
   $('other').onclick = () => view('design');
   $('designs').onchange = (e) => {
     pick = list.find((d) => d.id === e.target.value) || null;
     $('designGo').disabled = !pick;
-    $('designGo').textContent = pick ? `Cambiar a ${pick.name}` : 'Cambiar de diseño';
+    $('designGo').textContent = !pick ? 'Cambiar de diseño' : payDesign() ? `Pagar ${euros(changes.extraCents)}` : `Cambiar a ${pick.name}`;
     $('peek').textContent = pick ? `Ver ${pick.name} entera con nuestros datos de ejemplo` : '';
     if (pick) $('peek').href = pick.full;
   };
@@ -213,10 +221,14 @@ $('designGo').onclick = async () => {
   if (busy || !pick) return;
   busy = true; document.querySelectorAll('.sheet .btn').forEach((b) => { b.disabled = true; }); $('msg').textContent = '';
   try {
+    if (payDesign()) {
+      const pay = await api({ action: 'change_checkout', token, note: 'Cambio de diseño a ' + pick.name, templateId: pick.id });
+      location.href = pay.url; return;
+    }
     await api({ action: 'review_design', token, templateId: pick.id });
     done(`Cambiado a ${pick.name}.`, 'Lo estamos montando con vuestros datos y fotos. Lo revisamos y os llega por email para verlo y aprobarlo.');
   } catch (e) {
-    $('msg').textContent = e?.message === 'design_change_used' ? 'Ya habéis cambiado de diseño una vez. Si queréis otro, escribidnos a info@weddlysmartdesign.com.' : e?.message === 'review_locked' ? 'Ahora mismo estamos con vuestra invitación. Os escribimos en cuanto esté.' : 'No hemos podido cambiarlo. Probad otra vez en un momento.';
+    $('msg').textContent = e?.message === 'change_payment_required' ? `Ya no os quedan rondas. Pulsad «Pagar ${euros(changes?.extraCents || 1000)}» para hacer este cambio.` : e?.message === 'too_many_changes' ? 'Ya habéis hecho muchos cambios desde aquí. Escribidnos a info@weddlysmartdesign.com.' : e?.message === 'review_locked' ? 'Ahora mismo estamos con vuestra invitación. Os escribimos en cuanto esté.' : 'No hemos podido cambiarlo. Probad otra vez en un momento.';
     document.querySelectorAll('.sheet .btn').forEach((b) => { b.disabled = false; }); $('designGo').disabled = !pick;
   } finally { busy = false; }
 };
@@ -232,7 +244,7 @@ $('send').onclick = () => respond('changes');
     if (!manifest || manifest.schemaVersion !== 'guest-catalog-owner-renderers-v2') throw Error('registry_unavailable');
     const order = loaded.order;
     changes = order.changes || null; showRounds();
-    if (order.designChange?.allowed) showDesigns(order.designChange.current);
+    if (order.designChange?.allowed) showDesigns(order.designChange);
     if (!order?.config?.template?.id) throw Error('missing_template');
     const cfg = order.config, id = cfg.template.id, spec = manifest.templates?.[id];
     if (!spec || spec.mode !== 'iframe' || !spec.src) throw Error('template_asset_not_ready');
@@ -251,6 +263,7 @@ $('send').onclick = () => respond('changes');
         const row = document.createElement('div'); row.className = 'row'; row.append(a); $('done').append(row);
       }
     }
+    else if (['submitted', 'designing'].includes(order.status)) done(paid ? 'Pago recibido. Cambiamos el diseño.' : 'Estamos con vuestra invitación.', 'La montamos con vuestros datos y fotos, la revisamos y os llega por email para verla y aprobarla.');
     else if (paid && ['review_ready', 'review_sent'].includes(order.status)) done('Estamos confirmando el pago.', 'En unos minutos os llega un email con el enlace para hacer el cambio. Si no llega, escribidnos a info@weddlysmartdesign.com.');
     else if (!['review_ready', 'review_sent'].includes(order.status)) done('Esta revisión ya está cerrada.', 'Si necesitáis algo, responded a nuestro email.');
   } catch (e) { console.warn('[GUEST review]', String(e?.message || 'review_failed')); failure(); }
