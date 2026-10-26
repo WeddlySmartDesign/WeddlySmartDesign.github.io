@@ -389,7 +389,6 @@ Deno.serve(async (req) => {
       const { data: o } = await c.from('guest_invitation_orders').select('*').eq('id', String(b.orderId || '')).maybeSingle();
       if (!o) return json({ ok: false, error: 'order_not_found' }, 404);
       if (o.status === 'cancelled') return json({ ok: false, error: 'already_refunded' }, 409);
-      if (o.status === 'delivered') return json({ ok: false, error: 'already_delivered' }, 409);
       if (!o.checkout_session_id) return json({ ok: false, error: 'not_paid_online' }, 409);
       const s = await stripe('checkout/sessions/' + encodeURIComponent(o.checkout_session_id), o.checkout_session_id);
       if (!s.payment_intent) return json({ ok: false, error: 'no_payment' }, 409);
