@@ -2,11 +2,14 @@
 // - Cada hora (pg_cron, cuerpo vacío): avisos de plazos, recordatorios a las parejas, facturas de
 //   las compras nuevas, petición de opinión tras la entrega, resumen de la mañana y de los lunes.
 // - action 'invoice' (público, con token firmado): datos de una factura para guest/factura.html.
-// - action 'stats' | 'refund' | 'invoices' | 'invoice_book' (con la sesión de propietaria): para la app de pedidos.
+// - action 'stats' | 'refund' | 'invoices' | 'invoice_book' | 'metrics' | 'push_*' | 'owner_events' (con la sesión de propietaria): para la app de pedidos.
+// - action 'hit' (público): contadores de la web. 'push_dispatch' (público, lo llama la base de datos): envía los avisos pendientes.
 // Es sin estado: cada aviso sale cuando su momento cruza la última hora, y la clave de
 // idempotencia de Resend evita duplicados. Las facturas sí se guardan (guest_invoices).
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { guestMail, mBtn, mP, mNote, mList, DESIGN_NAMES } from './guest-mail.ts';
+import { ownerPing } from './owner-ping.ts';
+import webpush from 'npm:web-push@3.6.7';
 
 const APP_ORIGIN = 'https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
 const OWNER = ['weddlysmartdesign@gmail.com'];
@@ -60,6 +63,7 @@ async function send(to: string[], subject: string, html: string, key: string, fr
     body: JSON.stringify({ from: from + ' <' + addr + '>', to, reply_to: ISSUER.email, subject, html })
   });
   if (!r.ok) console.warn('resend_failed', r.status, await r.text());
+  else if (to.includes(OWNER[0]) && !/^Copia de seguridad/.test(subject)) await ownerPing(subject, { dedupe: key, test: /\(prueba\)/.test(subject), url: '/guest/panel-pruebas.html' });
   return r.ok;
 }
 const button = (href: string, text: string) => mBtn(href, text);
@@ -347,6 +351,87 @@ async function backup(c: any, d: Date) {
   return res.ok;
 }
 
+/* ---------- Avisos al móvil (Web Push) ---------- */
+// Las claves VAPID las crea la propia función la primera vez y se guardan en guest_owner_settings:
+// nadie tiene que copiar ninguna clave.
+async function vapid(c: any) {
+  const read = async () => (await c.from('guest_owner_settings').select('value').eq('key', 'vapid').maybeSingle()).data?.value;
+  let v = await read();
+  if (!v?.publicKey) {
+    const k = webpush.generateVAPIDKeys();
+    await c.from('guest_owner_settings').upsert({ key: 'vapid', value: k }, { onConflict: 'key', ignoreDuplicates: true });
+    v = await read();
+  }
+  return v as { publicKey: string; privateKey: string };
+}
+
+async function pushDispatch(c: any) {
+  const { data: pending } = await c.from('guest_owner_events').select('id,title,body,url,test').is('sent_at', null).gte('created_at', new Date(Date.now() - D).toISOString()).order('id').limit(20);
+  if (!pending?.length) return { sent: 0 };
+  // Se marcan antes de enviar para que dos llamadas a la vez no repitan el aviso.
+  const { data: claimed } = await c.from('guest_owner_events').update({ sent_at: new Date().toISOString() }).in('id', pending.map((e: any) => e.id)).is('sent_at', null).select('id');
+  const mine = pending.filter((e: any) => (claimed || []).some((x: any) => x.id === e.id));
+  const { data: subs } = await c.from('guest_owner_push_subs').select('endpoint,p256dh,auth,fails');
+  if (!mine.length || !subs?.length) return { sent: 0, devices: subs?.length || 0 };
+  const v = await vapid(c);
+  webpush.setVapidDetails('mailto:' + ISSUER.email, v.publicKey, v.privateKey);
+  let sent = 0;
+  for (const sub of subs) {
+    let ok = false, gone = false;
+    for (const e of mine) {
+      const payload = JSON.stringify({ title: (e.test ? 'Prueba · ' : '') + e.title, body: e.body || 'Toca para verlo en tus pedidos.', url: e.url || '/guest/panel-pruebas.html', tag: 'guest-' + e.id });
+      try { await webpush.sendNotification({ endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } }, payload, { TTL: 86400, urgency: 'high' }); ok = true; sent++; }
+      catch (err: any) { if (err?.statusCode === 404 || err?.statusCode === 410) { gone = true; break; } console.warn('push_failed', err?.statusCode, String(err?.body || err).slice(0, 200)); }
+    }
+    if (gone) await c.from('guest_owner_push_subs').delete().eq('endpoint', sub.endpoint);
+    else await c.from('guest_owner_push_subs').update(ok ? { last_ok_at: new Date().toISOString(), fails: 0 } : { fails: (sub.fails || 0) + 1 }).eq('endpoint', sub.endpoint);
+  }
+  return { sent };
+}
+
+/* ---------- Métricas ---------- */
+// Visitas y clics de la web (contadores por día, sin datos personales) junto a compras y presupuestos.
+const WEB_EVENTS = new Set(['visit', 'page', 'design', 'want', 'checkout', 'quote_open', 'whatsapp']);
+async function metrics(c: any, daysIn: number, test: boolean) {
+  const days = [7, 30, 90, 365].includes(daysIn) ? daysIn : 30;
+  const madridDay = (t: number) => new Date(t).toLocaleDateString('sv-SE', { timeZone: 'Europe/Madrid' });
+  const today = madridDay(Date.now()), since = madridDay(Date.now() - (days - 1) * D);
+  const sinceIso = new Date(Date.now() - days * D).toISOString();
+  const [{ data: web }, { data: ord }, { data: cus }] = await Promise.all([
+    c.from('guest_web_daily').select('day,event,k,n').gte('day', since).limit(20000),
+    c.from('guest_invitation_orders').select('template_id,status,checkout_session_id,created_at').not('checkout_session_id', 'is', null).gte('created_at', sinceIso).limit(5000),
+    c.from('guest_custom_requests').select('status,mode,created_at,quote_cents,deposit_paid_at').gte('created_at', sinceIso).limit(5000)
+  ]);
+  const sum = (ev: string) => (web || []).filter((r: any) => r.event === ev).reduce((a: number, r: any) => a + r.n, 0);
+  const byK = (ev: string) => { const m: Record<string, number> = {}; (web || []).filter((r: any) => r.event === ev).forEach((r: any) => { m[r.k] = (m[r.k] || 0) + r.n; }); return Object.entries(m).sort((a, b) => b[1] - a[1]); };
+  const orders = (ord || []).filter((o: any) => String(o.checkout_session_id).startsWith(test ? 'cs_test_' : 'cs_live_'));
+  const bought = orders.filter((o: any) => o.status !== 'cancelled' && o.status !== 'pending');
+  const refunded = orders.filter((o: any) => o.status === 'cancelled').length;
+  const custom = (cus || []).filter((r: any) => (r.mode === 'test') === test);
+  const quoted = custom.filter((r: any) => !['new', 'declined'].includes(r.status)).length;
+  const accepted = custom.filter((r: any) => r.deposit_paid_at || ['accepted', 'paid', 'designing', 'final_sent', 'delivered'].includes(r.status)).length;
+  // Serie diaria para la gráfica: visitas y ventas por día.
+  const series: { day: string; visits: number; sales: number }[] = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = madridDay(Date.now() - i * D);
+    series.push({ day: d, visits: (web || []).filter((r: any) => r.event === 'visit' && r.day === d).reduce((a: number, r: any) => a + r.n, 0), sales: bought.filter((o: any) => madridDay(Date.parse(o.created_at)) === d).length });
+  }
+  const sold: Record<string, number> = {}; bought.forEach((o: any) => { sold[o.template_id] = (sold[o.template_id] || 0) + 1; });
+  const name = (id: string) => DESIGNS[id] || id || 'Sin diseño';
+  const designIds = new Set([...byK('design').map(([k]) => k), ...byK('want').map(([k]) => k), ...Object.keys(sold)].filter(Boolean));
+  const designs = [...designIds].map((id) => ({ name: name(id), opened: byK('design').find(([k]) => k === id)?.[1] || 0, wanted: byK('want').find(([k]) => k === id)?.[1] || 0, sold: sold[id] || 0 }))
+    .sort((a, b) => b.sold - a.sold || b.wanted - a.wanted || b.opened - a.opened).slice(0, 15);
+  const checkout = sum('checkout');
+  return {
+    days, since, today, webSince: (await c.from('guest_web_daily').select('day').order('day').limit(1)).data?.[0]?.day || null,
+    funnel: { visits: sum('visit'), opened: sum('design'), wanted: sum('want'), checkout, bought: bought.length },
+    unfinished: Math.max(0, checkout - bought.length), refunded,
+    sources: byK('visit'), pages: byK('page').slice(0, 8), whatsapp: sum('whatsapp'),
+    quotes: { opened: sum('quote_open'), requested: custom.length, quoted, accepted },
+    designs, series
+  };
+}
+
 /* ---------- Entrada ---------- */
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
@@ -356,6 +441,14 @@ Deno.serve(async (req) => {
   const action = String(b.action || 'tick');
   try {
     if (action === 'tick') return json({ ok: true, ...(await tick(c)) });
+    if (action === 'hit') {
+      // Contador de la web: sin respuesta útil a propósito, y nunca falla hacia fuera.
+      const ev = String(b.event || '');
+      if (WEB_EVENTS.has(ev)) await c.rpc('guest_web_hit', { p_event: ev, p_k: String(b.k || '').slice(0, 60) });
+      return new Response(null, { status: 204, headers: cors });
+    }
+    if (action === 'push_dispatch') return json({ ok: true, ...(await pushDispatch(c)) });
+    if (action === 'push_key') return json({ ok: true, publicKey: (await vapid(c)).publicKey });
 
     if (action === 'invoice') {
       const [id, sig] = String(b.token || '').split('.');
@@ -368,6 +461,24 @@ Deno.serve(async (req) => {
     }
 
     if (!(await managerOk(c, req))) return json({ ok: false, error: 'manager_required' }, 403);
+
+    if (action === 'metrics') return json({ ok: true, ...(await metrics(c, Number(b.days) || 30, !!b.test)) });
+    if (action === 'push_subscribe') {
+      const s = b.subscription || {};
+      if (!/^https:\/\//.test(String(s.endpoint || '')) || !s.keys?.p256dh || !s.keys?.auth) return json({ ok: false, error: 'invalid_subscription' }, 400);
+      await c.from('guest_owner_push_subs').upsert({ endpoint: String(s.endpoint), p256dh: String(s.keys.p256dh), auth: String(s.keys.auth), device: String(b.device || '').slice(0, 80) || null, fails: 0 }, { onConflict: 'endpoint' });
+      await ownerPing('Avisos activados en este móvil', { body: 'Desde ahora te avisaremos aquí de cada venta, cuestionario, cambio o presupuesto.' });
+      return json({ ok: true });
+    }
+    if (action === 'push_unsubscribe') { await c.from('guest_owner_push_subs').delete().eq('endpoint', String(b.endpoint || '')); return json({ ok: true }); }
+    if (action === 'push_test') { await ownerPing('Aviso de prueba', { body: 'Si lees esto, los avisos funcionan en este móvil.' }); return json({ ok: true }); }
+    if (action === 'owner_events') {
+      const { data } = await c.from('guest_owner_events').select('id,created_at,title,body,url,test,read_at').order('created_at', { ascending: false }).limit(40);
+      const { count } = await c.from('guest_owner_events').select('id', { count: 'exact', head: true }).is('read_at', null);
+      const { count: devices } = await c.from('guest_owner_push_subs').select('endpoint', { count: 'exact', head: true });
+      return json({ ok: true, events: data || [], unread: count || 0, devices: devices || 0 });
+    }
+    if (action === 'owner_events_read') { await c.from('guest_owner_events').update({ read_at: new Date().toISOString() }).is('read_at', null); return json({ ok: true }); }
 
     if (action === 'stats') return json({ ok: true, ...(await stats(c)) });
 

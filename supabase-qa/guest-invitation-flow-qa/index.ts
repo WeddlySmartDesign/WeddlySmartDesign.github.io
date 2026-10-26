@@ -1,5 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { guestMail, mBtn, mP, mSteps, mNote, mList, DESIGN_NAMES } from './guest-mail.ts';
+import { ownerPing } from './owner-ping.ts';
 
 const cors={
   'Access-Control-Allow-Origin':'*',
@@ -141,7 +142,9 @@ async function resend(body:any,idempotencyKey?:string){
     body={...body,subject:'[PRUEBA] '+String(body?.subject||'')};
   }
   const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key,...(idempotencyKey?{'Idempotency-Key':idempotencyKey}:{})},body:JSON.stringify({from,reply_to:'weddlysmartdesign@gmail.com',...body})});
-  if(!r.ok){console.warn('resend_failed',r.status,await r.text());return false}return true
+  if(!r.ok){console.warn('resend_failed',r.status,await r.text());return false}
+  if(to.includes('weddlysmartdesign@gmail.com'))await ownerPing(String(body?.subject||'').replace(/^\[PRUEBA\] /,''),{dedupe:idempotencyKey||undefined,test:!LIVE,url:'/guest/panel-pruebas.html'});
+  return true
 }
 function emailOf(q:any,fallback=''){return txt(q?.contact?.email||fallback,200).toLowerCase()}
 function coupleGreeting(q:any){

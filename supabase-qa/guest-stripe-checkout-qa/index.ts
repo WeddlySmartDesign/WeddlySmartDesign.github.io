@@ -1,5 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { guestMail, mBtn, mP, mSteps, DESIGN_NAMES } from './guest-mail.ts';
+import { ownerPing } from './owner-ping.ts';
 
 const cors={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'content-type,stripe-signature','Access-Control-Allow-Methods':'POST,OPTIONS','Cache-Control':'no-store'};
 const json=(body:unknown,status=200)=>new Response(JSON.stringify(body),{status,headers:{...cors,'Content-Type':'application/json'}});
@@ -127,7 +128,9 @@ async function resend(payload:any){
  if(!LIVE){if(!to.every((x:string)=>QA_EMAILS.includes(x))){console.warn('qa_email_blocked');return false}
  payload.body.subject='[PRUEBA] '+payload.body.subject}
  const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key,...(payload.idempotencyKey?{'Idempotency-Key':payload.idempotencyKey}:{})},body:JSON.stringify({from,reply_to:'weddlysmartdesign@gmail.com',...payload.body})});
- if(!r.ok){console.warn('resend_failed',r.status,await r.text());return false}return true
+ if(!r.ok){console.warn('resend_failed',r.status,await r.text());return false}
+ if(to.includes('weddlysmartdesign@gmail.com'))await ownerPing(String(payload.body?.subject||'').replace(/^\[PRUEBA\] /,''),{dedupe:payload.idempotencyKey||undefined,test:!LIVE,url:'/guest/panel-pruebas.html'});
+ return true
 }
 function esc(s:any){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]||c))}
 async function startEmail(to:string,sessionId:string,edition:string){

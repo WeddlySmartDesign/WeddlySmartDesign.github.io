@@ -9,6 +9,7 @@
 // COPIA DE PRUEBA: Stripe solo en modo test y emails a las parejas solo si son de la propietaria.
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { guestMail, mBtn, mP, mSteps, mNote, mList, DESIGN_NAMES } from './guest-mail.ts';
+import { ownerPing } from './owner-ping.ts';
 
 // The live slug imports this file after setting globalThis.__GUEST_LIVE (see live.ts).
 const QA = (globalThis as any).__GUEST_LIVE !== true;
@@ -81,6 +82,7 @@ async function send(to: string[], subject: string, html: string, key: string) {
     body: JSON.stringify({ from: 'GUEST by WeddlySmartDesign <' + addr + '>', to: list, reply_to: 'info@weddlysmartdesign.com', subject: (QA ? '[PRUEBA] ' : '') + subject, html })
   });
   if (!r.ok) console.warn('resend_failed', r.status, await r.text());
+  else if (list.includes(OWNER[0])) await ownerPing(subject, { dedupe: key, test: QA, url: '/guest/panel-pruebas.html#/medida' });
   return r.ok;
 }
 const toCouple = (r: any, subject: string, html: string, key: string) => send([r.email], subject, html, key);

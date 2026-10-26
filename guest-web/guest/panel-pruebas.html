@@ -207,6 +207,42 @@
     .full-host iframe { width: 100%; height: 100%; }
     .full .ib { position: absolute; top: calc(10px + env(safe-area-inset-top, 0px)); right: 10px; z-index: 2; background: rgba(27, 38, 80, .72); color: var(--paper); border-radius: 50%; }
 
+
+    /* Avisos y métricas */
+    .ib.bell { position: relative; }
+    .ib .badge { position: absolute; top: 5px; right: 4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--postmark); color: var(--white); font: 700 .6875rem/18px var(--text); text-align: center; }
+    .push-box .st-open { margin-top: .9rem; }
+    #news .sec { margin-top: 2rem; }
+    .push-box .state { display: inline-flex; align-items: center; gap: .45rem; margin-top: .6rem; font-weight: 600; font-size: .9375rem; }
+    .push-box .state i { width: 9px; height: 9px; border-radius: 50%; background: var(--ink-soft); }
+    .push-box .state.on i { background: var(--ok); }
+    .news { display: grid; gap: .5rem; }
+    .news a, .news div.n { display: grid; grid-template-columns: 1fr auto; gap: .2rem .75rem; padding: .85rem 1rem; border-radius: 12px; background: var(--white); text-decoration: none; box-shadow: 0 1px 2px rgba(27, 38, 80, .08); }
+    .news b { font-weight: 600; line-height: 1.35; }
+    .news time { font: 700 .75rem/1.5 var(--mono); color: var(--ink-soft); white-space: nowrap; }
+    .news small { grid-column: 1 / -1; color: var(--ink-soft); font-size: .875rem; }
+    .news .new b::before { content: ''; display: inline-block; width: 8px; height: 8px; margin: 0 .45rem .1rem 0; border-radius: 50%; background: var(--postmark); }
+    .funnel { display: grid; gap: .8rem; padding: 1rem; border-radius: 12px; background: var(--white); }
+    .f-row { display: grid; gap: .3rem; }
+    .f-row header { display: flex; justify-content: space-between; gap: .75rem; font-size: .9375rem; }
+    .f-row header b { font-variant-numeric: tabular-nums; }
+    .f-row header em { font-style: normal; color: var(--ink-soft); font-size: .8125rem; margin-left: .35rem; }
+    .f-row i { display: block; height: 10px; width: var(--w); min-width: 4px; border-radius: 0 5px 5px 0; background: var(--ink); }
+    .f-row.last i { background: var(--postmark); }
+    .days { padding: 1rem 1rem .75rem; border-radius: 12px; background: var(--white); }
+    .days-plot { display: flex; align-items: flex-end; gap: 2px; height: 120px; border-bottom: 1px solid var(--line); }
+    .days-plot button { flex: 1; display: flex; align-items: flex-end; height: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
+    .days-plot button span { display: block; width: 100%; height: var(--h); min-height: 2px; border-radius: 4px 4px 0 0; background: var(--ink); opacity: .85; }
+    .days-plot button.sale span { background: var(--postmark); opacity: 1; }
+    .days-plot button[aria-pressed="true"] span { opacity: 1; outline: 2px solid var(--envelope); }
+    .days-axis { display: flex; justify-content: space-between; margin-top: .35rem; font: 700 .6875rem/1 var(--mono); color: var(--ink-soft); }
+    .days-read { min-height: 1.5em; margin: .6rem 0 0; font-size: .875rem; color: var(--ink-soft); }
+    .days-read b { color: var(--ink); }
+    .tbl { width: 100%; border-collapse: collapse; font-size: .9375rem; }
+    .tbl th { padding: .55rem .4rem; text-align: right; font: 700 .6875rem/1.2 var(--mono); color: var(--ink-soft); }
+    .tbl th:first-child, .tbl td:first-child { text-align: left; padding-left: 0; }
+    .tbl td { padding: .55rem .4rem; border-top: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; }
+    .tbl-box { padding: .6rem 1rem .4rem; border-radius: 12px; background: var(--white); overflow-x: auto; }
     .toast { position: fixed; z-index: 60; left: 50%; bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px)); translate: -50% 0; max-width: calc(100vw - 32px); padding: .75rem 1rem; border-radius: 10px; background: var(--ink); color: var(--paper); font-weight: 600; font-size: .9375rem; box-shadow: 0 12px 30px -12px rgba(27, 38, 80, .7); transition: opacity 200ms ease, translate 260ms var(--ease-out); }
     .toast.out { opacity: 0; translate: -50% 10px; pointer-events: none; }
     .skel { display: grid; gap: .6rem; }
@@ -331,6 +367,7 @@
   <symbol id="i-mail" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7 8 6 8-6"/></g></symbol>
   <symbol id="i-link" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></g></symbol>
   <symbol id="i-doc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3.5h8l4 4v13H6z"/><path d="M14 3.5v4h4M9 12h6M9 15.5h6"/></g></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></g></symbol>
   <symbol id="i-chart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 20h16"/><path d="M7 16v-5M12 16V7M17 16v-8"/></g></symbol>
   <symbol id="i-receipt" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 11.5h6M9 15h3"/></g></symbol>
   <symbol id="i-undo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></g></symbol>
@@ -342,6 +379,7 @@
 <header class="bar">
   <button class="ib back" id="back" type="button" aria-label="Volver" hidden><svg aria-hidden="true"><use href="#i-back"/></svg></button>
   <h1 id="title">Pedidos</h1>
+  <button class="ib bell" id="bell" type="button" aria-label="Avisos" hidden><svg aria-hidden="true"><use href="#i-bell"/></svg><span class="badge" id="bellDot" hidden></span></button>
   <button class="ib" id="refresh" type="button" aria-label="Actualizar" hidden><svg aria-hidden="true"><use href="#i-refresh"/></svg></button>
 </header>
 
@@ -361,6 +399,7 @@
   <p style="margin-top:2rem;text-align:center"><button class="btn line" id="logout" type="button"><svg width="18" height="18" aria-hidden="true"><use href="#i-out"/></svg>Salir de este móvil</button></p>
 </main>
 <main id="sales" class="view" hidden></main>
+<main id="news" class="view" hidden></main>
 <main id="custom" class="view" hidden></main>
 <main id="order" class="order" hidden></main>
 
@@ -368,7 +407,7 @@
   <button class="tab" type="button" data-tab="inbox" aria-current="page"><svg aria-hidden="true"><use href="#i-inbox"/></svg>Para ti<span class="dot" id="dot" hidden></span></button>
   <button class="tab" type="button" data-tab="all"><svg aria-hidden="true"><use href="#i-list"/></svg>Todos</button>
   <button class="tab" type="button" data-tab="custom"><svg aria-hidden="true"><use href="#i-pen"/></svg>A medida<span class="dot" id="cdot" hidden></span></button>
-  <button class="tab" type="button" data-tab="sales"><svg aria-hidden="true"><use href="#i-chart"/></svg>Ventas</button>
+  <button class="tab" type="button" data-tab="sales"><svg aria-hidden="true"><use href="#i-chart"/></svg>Métricas</button>
 </nav>
 <div class="dock" id="dock" hidden><div class="dock-in" id="dockIn"></div></div>
 <div class="studio" id="studio" hidden role="dialog" aria-modal="true" aria-labelledby="stTitle">
@@ -454,7 +493,7 @@ async function copy(text, done = 'Enlace copiado') { try { await navigator.clipb
 
 /* ---- Entrar ---- */
 function showLogin(text = '') {
-  ['inbox', 'all', 'order', 'tabs', 'dock', 'refresh', 'back'].forEach((x) => { $(x).hidden = true; });
+  ['inbox', 'all', 'order', 'tabs', 'dock', 'refresh', 'back', 'bell', 'news', 'sales', 'custom'].forEach((x) => { $(x).hidden = true; });
   $('title').textContent = 'Pedidos'; $('login').hidden = false; $('loginMsg').textContent = text; $('master').focus();
 }
 $('enter').onclick = async () => {
@@ -507,6 +546,7 @@ function renderInbox() {
   const send = g('send'), deliver = g('deliver'), waiting = g('waiting'), fixes = orders.filter((o) => o.dataChangePending), mine = send.length + deliver.length + fixes.length + customs.filter((r) => CSTATUS[r.status]?.who === 'you').length;
   const sec = (title, list, flat) => list.length ? `<section class="sec"><h3><b>${list.length}</b> ${title}</h3><div class="cards">${list.map((o) => card(o, flat)).join('')}</div></section>` : '';
   $('inbox').innerHTML = `
+    <div id="pushNudge"></div>
     <div class="hello"><strong>${mine ? (mine === 1 ? 'Tienes 1 pendiente.' : `Tienes ${mine} pendientes.`) : 'Todo al día.'}</strong>
     <span>${mine ? 'Ábrela, mira la invitación y pulsa el botón.' : 'Cuando una pareja envíe su cuestionario o apruebe su invitación, aparecerá aquí.'}</span></div>
     ${sec(send.length === 1 ? 'para enviar a revisar' : 'para enviar a revisar', send)}
@@ -519,6 +559,7 @@ function renderInbox() {
       <div class="q-form"><label>Fuera hasta el<input id="vacUntil" type="date"></label></div>
       <div class="st-open"><button class="btn line" type="button" id="vacGo">Guardar</button><button class="link-btn" type="button" id="vacOff" hidden>Ya he vuelto</button><p class="msg" role="alert" id="vacMsg"></p></div></div></section>`;
   loadVacation();
+  pushSub().then((sub) => { if (!sub && PUSH_OK && $('pushNudge')) $('pushNudge').innerHTML = '<a class="card" href="#/avisos" style="grid-template-columns:1fr auto;margin-bottom:1rem"><span><b>Activa los avisos en este móvil</b><small>Para enterarte de cada venta aunque no mires el email.</small></span><svg class="chev" aria-hidden="true"><use href="#i-chev"/></svg></a>'; }).catch(() => {});
   $('dot').hidden = !mine; $('dot').textContent = mine;
 }
 function renderAll() {
@@ -1275,15 +1316,117 @@ async function openCustom(id) {
 
 /* ---- Ventas ---- */
 let showTest = false;
+let metricDays = 30;
+const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
+const SOURCES = { instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook', whatsapp: 'WhatsApp', pinterest: 'Pinterest', buscador: 'Google y otros buscadores', qr: 'Códigos QR', directo: 'Directo o sin dato', otras: 'Otras webs' };
+const PAGES = { inicio: 'Inicio', pagar: 'Pago', 'a-medida': 'A medida', gracias: 'Gracias', guia: 'Guía de la app', 'guest-legal': 'Legal' };
 async function renderSales() {
-  $('sales').innerHTML = '<div class="skel"><i></i><i></i></div>';
+  $('sales').innerHTML = `<div class="chips" role="group" aria-label="Periodo">${[[7, '7 días'], [30, '30 días'], [90, '3 meses'], [365, '1 año']].map(([d, t]) => `<button class="chip" type="button" data-days="${d}" aria-pressed="${d === metricDays}">${t}</button>`).join('')}</div>
+    <div id="metrics"><div class="skel"><i></i><i></i></div></div><div id="money"><div class="skel"><i></i></div></div>`;
+  $('sales').querySelectorAll('[data-days]').forEach((b) => b.onclick = () => { metricDays = Number(b.dataset.days); renderSales(); });
+  renderMetrics(); renderMoney();
+}
+async function renderMetrics() {
+  try {
+    const m = await auto({ action: 'metrics', days: metricDays, test: showTest });
+    const f = m.funnel, top = Math.max(1, f.visits, f.opened);
+    const row = (label, n, of, last) => `<div class="f-row${last ? ' last' : ''}"><header><span>${label}</span><b>${n}${of != null && f.visits ? `<em>${pct(n, f.visits)} %</em>` : ''}</b></header><i style="--w:${(n / top) * 100}%"></i></div>`;
+    const maxV = Math.max(1, ...m.series.map((d) => d.visits));
+    const dayName = (d) => new Date(d + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
+    const tbl = (head, rows) => `<div class="tbl-box"><table class="tbl"><thead><tr>${head.map((h) => `<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
+    const fresh = m.webSince && m.webSince > m.since;
+    $('metrics').innerHTML = `
+      <div class="hello"><strong>${f.visits === 1 ? '1 visita' : `${f.visits} visitas`}</strong><span>${f.bought === 1 ? '1 compra' : `${f.bought} compras`}${f.visits ? ` · ${pct(f.bought, f.visits)} % de las visitas compra` : ''}${showTest ? ' · compras de prueba' : ''}</span></div>
+      ${fresh || !m.webSince ? `<p class="hint" style="margin-top:0">Las visitas se cuentan desde el ${m.webSince ? esc(day(m.webSince)) : 'día que se publique este cambio'}. Lo de antes no se puede recuperar.</p>` : ''}
+      <section class="sec"><h3>De la visita a la compra</h3><div class="funnel">
+        ${row('Han entrado en la web', f.visits, 1)}
+        ${row('Han abierto una invitación', f.opened, 1)}
+        ${row('Han pulsado «La quiero»', f.wanted, 1)}
+        ${row('Han empezado a pagar', f.checkout, 1)}
+        ${row('Han comprado', f.bought, 1, true)}
+      </div></section>
+      <div class="tiles" style="margin-top:.75rem">
+        <div class="tile"><span>Pagos sin terminar</span><b>${m.unfinished}</b><small>Empezaron a pagar y no compraron</small></div>
+        <div class="tile"><span>A medida</span><b>${m.quotes.requested}</b><small>${m.quotes.requested === 1 ? 'solicitud' : 'solicitudes'} · ${m.quotes.accepted} ${m.quotes.accepted === 1 ? 'aceptada' : 'aceptadas'}${m.quotes.opened ? ` · ${m.quotes.opened} vieron el formulario` : ''}</small></div>
+        <div class="tile"><span>WhatsApp</span><b>${m.whatsapp}</b><small>Veces que os escribieron desde la web</small></div>
+        ${m.refunded ? `<div class="tile"><span>Devoluciones</span><b>${m.refunded}</b><small>en este periodo</small></div>` : ''}
+      </div>
+      <section class="sec"><h3>Visitas por día</h3><div class="days">
+        <div class="days-plot" role="img" aria-label="Visitas por día: máximo ${maxV} en un día">${m.series.map((d, i) => `<button type="button" data-i="${i}" class="${d.sales ? 'sale' : ''}" aria-label="${esc(dayName(d.day))}: ${d.visits} visitas${d.sales ? `, ${d.sales} ${d.sales === 1 ? 'compra' : 'compras'}` : ''}"><span style="--h:${(d.visits / maxV) * 100}%"></span></button>`).join('')}</div>
+        <div class="days-axis"><span>${esc(dayName(m.series[0].day))}</span><span>hoy</span></div>
+        <p class="days-read" id="daysRead">Toca una barra para ver el día. En rojo, los días con compra.</p>
+      </div></section>
+      <section class="sec"><h3>De dónde llegan</h3>${m.sources.length ? tbl(['Origen', 'Visitas', '%'], m.sources.map(([k, n]) => `<tr><td>${esc(SOURCES[k] || k)}</td><td>${n}</td><td>${pct(n, f.visits)} %</td></tr>`)) : '<div class="calm">Aún no hay visitas en este periodo.</div>'}
+        <p class="hint">Si en el QR de la feria pones la dirección con <b>?utm_source=qr</b> al final, aquí verás cuánta gente llega por él.</p></section>
+      <section class="sec"><h3>Diseños</h3>${m.designs.length ? tbl(['Diseño', 'Abierto', 'La quiero', 'Vendido'], m.designs.map((d) => `<tr><td>${esc(d.name)}</td><td>${d.opened}</td><td>${d.wanted}</td><td>${d.sold}</td></tr>`)) : '<div class="calm">Aún no hay datos en este periodo.</div>'}</section>
+      ${m.pages.length ? `<section class="sec"><h3>Páginas más vistas</h3>${tbl(['Página', 'Vistas'], m.pages.map(([k, n]) => `<tr><td>${esc(PAGES[k] || k)}</td><td>${n}</td></tr>`))}</section>` : ''}`;
+    $('metrics').querySelectorAll('.days-plot button').forEach((b) => b.onclick = () => {
+      const d = m.series[Number(b.dataset.i)];
+      $('metrics').querySelectorAll('.days-plot button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      $('daysRead').innerHTML = `<b>${esc(dayName(d.day))}</b>: ${d.visits} ${d.visits === 1 ? 'visita' : 'visitas'}${d.sales ? ` y ${d.sales} ${d.sales === 1 ? 'compra' : 'compras'}` : ''}.`;
+    });
+  } catch (e) { if (e.message !== 'manager_required') $('metrics').innerHTML = '<div class="calm"><b>No se han podido cargar</b>Toca actualizar arriba.</div>'; }
+}
+
+/* ---- Avisos ---- */
+const PUSH_OK = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+const IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const STANDALONE = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const SW_SCOPE = './panel-pruebas.html';
+const u8 = (b64) => { const s = atob((b64 + '='.repeat((4 - (b64.length % 4)) % 4)).replace(/-/g, '+').replace(/_/g, '/')); return Uint8Array.from(s, (c) => c.charCodeAt(0)); };
+async function pushSub() { if (!PUSH_OK) return null; const reg = await navigator.serviceWorker.getRegistration(SW_SCOPE); return reg ? reg.pushManager.getSubscription() : null; }
+async function pushOn() {
+  if (await Notification.requestPermission() !== 'granted') throw Error('denied');
+  const reg = await navigator.serviceWorker.register('pedidos-sw.js', { scope: SW_SCOPE });
+  // Se espera a que esté activo sin usar serviceWorker.ready, que podría devolver el de la app de las parejas.
+  if (!reg.active) await new Promise((res) => { const w = reg.installing || reg.waiting; if (!w) return res(); w.addEventListener('statechange', () => w.state === 'activated' && res()); });
+  const { publicKey } = await auto({ action: 'push_key' });
+  const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: u8(publicKey) });
+  await auto({ action: 'push_subscribe', subscription: sub.toJSON(), device: IOS ? 'iPhone' : /Android/.test(navigator.userAgent) ? 'Android' : 'Ordenador' });
+}
+async function pushOff() { const sub = await pushSub(); if (!sub) return; await auto({ action: 'push_unsubscribe', endpoint: sub.endpoint }).catch(() => {}); await sub.unsubscribe(); }
+async function loadUnread() {
+  try {
+    const j = await auto({ action: 'owner_events' });
+    $('bellDot').hidden = !j.unread; $('bellDot').textContent = j.unread > 9 ? '9+' : j.unread;
+    try { j.unread ? navigator.setAppBadge?.(j.unread) : navigator.clearAppBadge?.(); } catch {}
+    return j;
+  } catch { return null; }
+}
+async function pushBox() {
+  const host = $('pushBox'); if (!host) return;
+  const sub = await pushSub().catch(() => null);
+  let text, acts;
+  if (!PUSH_OK && IOS && !STANDALONE) { text = 'En iPhone, los avisos solo llegan si abres tus pedidos desde la pantalla de inicio. En Safari, toca Compartir → «Añadir a pantalla de inicio», abre Pedidos desde el icono y vuelve aquí.'; acts = ''; }
+  else if (!PUSH_OK) { text = 'Este navegador no permite avisos. Prueba desde Chrome en Android o desde el icono de Pedidos en tu iPhone.'; acts = ''; }
+  else if (sub) { text = 'Te llegará un aviso en este móvil con cada venta, cuestionario, petición de cambios, presupuesto y plazo, igual que los emails.'; acts = '<button class="btn line small" type="button" id="pushTest">Mandar un aviso de prueba</button><button class="link-btn" type="button" id="pushOff">Quitar los avisos de este móvil</button>'; }
+  else if (Notification.permission === 'denied') { text = 'Bloqueaste los avisos para esta página. Actívalos en los ajustes del navegador (Notificaciones) y vuelve aquí.'; acts = ''; }
+  else { text = 'Recibe un aviso en el móvil con cada venta, cuestionario, petición de cambios, presupuesto y plazo. Así no se te pasa nada aunque no mires el email.'; acts = '<button class="btn" type="button" id="pushOn">Activar avisos en este móvil</button>'; }
+  host.innerHTML = `<h3>Avisos en este móvil</h3><p>${text}</p><span class="state${sub ? ' on' : ''}"><i></i>${sub ? 'Activados' : 'Desactivados'}</span>${acts ? `<div class="st-open">${acts}<p class="msg" role="alert" id="pushMsg"></p></div>` : ''}`;
+  const run = async (id, fn, ok) => { const b = $(id); if (!b) return; b.onclick = async () => { b.disabled = true; $('pushMsg').textContent = ''; try { await fn(); if (ok) toast(ok); await pushBox(); } catch (e) { $('pushMsg').textContent = e.message === 'denied' ? 'No has dado permiso. Puedes cambiarlo en los ajustes del navegador.' : 'No se ha podido. Prueba otra vez.'; } finally { b.disabled = false; } }; };
+  run('pushOn', pushOn, 'Avisos activados');
+  run('pushOff', pushOff, 'Avisos quitados de este móvil');
+  run('pushTest', () => auto({ action: 'push_test' }), 'Enviado. Te llegará en unos segundos.');
+}
+async function renderNews() {
+  $('news').innerHTML = '<div class="box push-box" id="pushBox"></div><section class="sec"><h3>Últimos avisos</h3><div id="newsList"><div class="skel"><i></i><i></i></div></div></section>';
+  pushBox();
+  const j = await loadUnread();
+  if (!j) { $('newsList').innerHTML = '<div class="calm"><b>No se han podido cargar</b>Toca actualizar arriba.</div>'; return; }
+  $('newsList').innerHTML = j.events.length ? `<div class="news">${j.events.map((e) => { const inner = `<b>${e.test ? 'Prueba · ' : ''}${esc(e.title)}</b><time datetime="${esc(e.created_at)}">${esc(ago(e.created_at))}</time>${e.body ? `<small>${esc(e.body)}</small>` : ''}`; const href = e.url && e.url.startsWith('/guest/panel-pruebas.html') ? e.url.replace('/guest/panel-pruebas.html', '') || '#/' : ''; return href && href !== '#/' ? `<a class="${e.read_at ? '' : 'new'}" href="${esc(href)}">${inner}</a>` : `<div class="n ${e.read_at ? '' : 'new'}">${inner}</div>`; }).join('')}</div>`
+    : '<div class="calm"><b>Sin avisos todavía</b>Aquí verás cada venta, cuestionario o presupuesto en cuanto llegue.</div>';
+  if (j.unread) { await auto({ action: 'owner_events_read' }).catch(() => {}); $('bellDot').hidden = true; try { navigator.clearAppBadge?.(); } catch {} }
+}
+
+async function renderMoney() {
+  $('money').innerHTML = '<div class="skel"><i></i><i></i></div>';
   try {
     const st = await auto({ action: 'stats' });
     const s = showTest ? st.test : st.live, diff = s.week.cents - s.lastWeek.cents;
     const tile = (t, x, sub) => `<div class="tile"><span>${t}</span><b>${esc(eur(x.cents))}</b><small>${x.sales} ${x.sales === 1 ? 'venta' : 'ventas'}${x.refunds ? ` · ${x.refunds} ${x.refunds === 1 ? 'devolución' : 'devoluciones'}` : ''}${sub ? ' · ' + sub : ''}</small></div>`;
     const max = Math.max(1, ...s.designs.map((d) => d[1]));
-    $('sales').innerHTML = `
-      <div class="hello"><strong>${esc(eur(s.month.cents))}</strong><span>este mes, IVA incluido${showTest ? ' · compras de prueba' : ''}</span></div>
+    $('money').innerHTML = `
+      <section class="sec"><h3>Ventas</h3><div class="hello" style="margin:0 0 .8rem"><strong>${esc(eur(s.month.cents))}</strong><span>este mes, IVA incluido${showTest ? ' · compras de prueba' : ''}</span></div></section>
       <div class="tiles">${tile('Esta semana', s.week, s.lastWeek.cents || s.week.cents ? (diff >= 0 ? '+' : '−') + esc(eur(Math.abs(diff))) + ' que la anterior' : '')}${tile('Semana pasada', s.lastWeek)}${tile('Desde el principio', s.total)}</div>
       <section class="sec"><h3>Diseños más vendidos</h3>${s.designs.length ? `<div class="bars">${s.designs.map(([n, c]) => `<div class="bar-row"><span>${esc(n)}</span><i style="--w:${(c / max) * 100}%"></i><b>${c}</b></div>`).join('')}</div>` : '<div class="calm">Aún no hay ventas.</div>'}</section>
       <section class="sec" id="book"><h3>Facturas</h3><div class="box"><div class="skel"><i></i></div></div></section>
@@ -1291,7 +1434,7 @@ async function renderSales() {
       <p style="text-align:center"><button class="link-btn" type="button" id="toggleTest">${showTest ? 'Ver ventas reales' : 'Ver compras de prueba'}</button></p>`;
     $('toggleTest').onclick = () => { showTest = !showTest; renderSales(); };
     renderBook();
-  } catch (e) { if (e.message !== 'manager_required') $('sales').innerHTML = '<div class="calm"><b>No se han podido cargar</b>Toca actualizar arriba.</div>'; }
+  } catch (e) { if (e.message !== 'manager_required') $('money').innerHTML = '<div class="calm"><b>No se han podido cargar</b>Toca actualizar arriba.</div>'; }
 }
 
 /* ---- Libro de facturas ---- */
@@ -1337,10 +1480,10 @@ function downloadBook(list) {
 
 /* ---- Navegación ---- */
 function showView(v) {
-  ['inbox', 'all', 'sales', 'custom', 'order'].forEach((x) => { $(x).hidden = x !== v; });
-  $('tabs').hidden = v === 'order'; $('dock').hidden = true; $('refresh').hidden = false; $('back').hidden = v !== 'order';
+  ['inbox', 'all', 'sales', 'custom', 'order', 'news'].forEach((x) => { $(x).hidden = x !== v; });
+  $('tabs').hidden = v === 'order' || v === 'news'; $('dock').hidden = true; $('refresh').hidden = false; $('bell').hidden = v === 'news'; $('back').hidden = v !== 'order' && v !== 'news';
   document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-current', t.dataset.tab === v ? 'page' : 'false'));
-  if (v !== 'order') { $('title').textContent = v === 'all' ? 'Todos los pedidos' : v === 'sales' ? 'Ventas' : v === 'custom' ? 'A medida' : 'Pedidos'; current = null; }
+  if (v !== 'order') { $('title').textContent = v === 'all' ? 'Todos los pedidos' : v === 'sales' ? 'Métricas' : v === 'news' ? 'Avisos' : v === 'custom' ? 'A medida' : 'Pedidos'; current = null; }
   scrollTo({ top: 0 });
 }
 function route() {
@@ -1351,6 +1494,7 @@ function route() {
   if (h === '#/medida') { showView('custom'); renderCustom(); return; }
   if (h === '#/todos') { showView('all'); renderAll(); return; }
   if (h === '#/ventas') { showView('sales'); renderSales(); return; }
+  if (h === '#/avisos') { showView('news'); renderNews(); return; }
   showView('inbox'); renderInbox();
 }
 document.querySelectorAll('.tab').forEach((t) => t.onclick = () => { location.hash = { all: '#/todos', sales: '#/ventas', custom: '#/medida' }[t.dataset.tab] || '#/'; });
@@ -1360,12 +1504,13 @@ addEventListener('hashchange', route);
 async function refresh() {
   book = null;
   const r = $('refresh'); r.classList.add('spin');
-  loadCustom();
+  loadCustom(); loadUnread();
   try { const j = await flow({ action: 'list' }); orders = j.orders || []; }
   catch (e) { if (e.message !== 'manager_required') toast('Sin conexión. Prueba otra vez.'); throw e; }
   finally { r.classList.remove('spin'); }
 }
 $('refresh').onclick = async () => { try { await refresh(); route(); } catch {} };
+$('bell').onclick = () => { location.hash = '#/avisos'; };
 document.addEventListener('visibilitychange', async () => { if (document.visibilityState === 'visible' && store.get() && !current) { try { await refresh(); route(); } catch {} } });
 
 addEventListener('DOMContentLoaded', async () => {
