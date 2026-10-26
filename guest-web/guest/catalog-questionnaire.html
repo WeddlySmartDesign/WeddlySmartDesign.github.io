@@ -64,6 +64,26 @@
       .map-where { margin-top: .15rem; font-size: .8125rem; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     }
 
+    /* Así queda esta parte en el diseño elegido (capturas del ejemplo de la web) */
+    .peek { margin: 0; padding: 1.15rem 1.15rem 1.2rem; background: var(--paper); border-radius: 10px 10px 0 0; border-bottom: 1.5px solid var(--line); }
+    .peek[hidden] { display: none; }
+    .peek-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+    .peek-head b { font: 700 .8125rem/1.2 var(--mono); color: var(--postmark); }
+    .peek-head span { font-size: .8125rem; color: var(--ink-soft); }
+    .peek-strip { display: flex; gap: .9rem; margin: .85rem -1.15rem 0; padding: 0 1.15rem .4rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; align-items: flex-start; }
+    .peek-strip::-webkit-scrollbar { display: none; }
+    .peek-shot { flex: none; scroll-snap-align: start; display: grid; gap: .5rem; padding: 0; border: 0; background: none; color: inherit; text-align: left; cursor: zoom-in; align-content: start; transition: transform 160ms var(--ease-out); }
+    .peek-shot:active { transform: scale(.98); }
+    .peek-frame { display: block; width: min(60vw, 220px); max-height: 340px; overflow: hidden; border-radius: 16px; border: 4px solid var(--ink); background: var(--ink); box-shadow: 0 14px 26px -16px rgba(27, 38, 80, .7); }
+    .peek-frame img { display: block; width: 100%; height: auto; }
+    .peek-shot small { font: 700 .75rem/1 var(--mono); color: var(--ink-soft); letter-spacing: .02em; }
+    .peek-note { margin-top: .7rem; font-size: .875rem; line-height: 1.45; color: var(--ink-soft); max-width: 46ch; }
+    .peek-zoom { position: fixed; inset: 0; margin: 0 auto; padding: 0; border: 0; background: transparent; width: min(440px, 100vw); max-width: none; height: 100dvh; max-height: none; overflow: hidden; }
+    .peek-zoom::backdrop { background: rgba(20, 26, 52, .82); }
+    .peek-zoom-in { height: 100%; overflow-y: auto; overscroll-behavior: contain; }
+    .peek-zoom img { position: relative; z-index: 0; display: block; width: 100%; height: auto; }
+    .peek-zoom button { position: absolute; top: max(12px, env(safe-area-inset-top)); right: 12px; z-index: 2; min-height: 44px; padding: 0 1.1rem; border: 0; border-radius: 999px; background: var(--white); color: var(--ink); font: 600 .9375rem/1 var(--sans, inherit); box-shadow: var(--shadow); }
+    @media (min-width: 900px) { .peek { padding-inline: 1.6rem; } .peek-strip { margin-inline: -1.6rem; padding-inline: 1.6rem; } }
     /* Paso */
     .card { background: var(--white); border-radius: 10px; box-shadow: 0 1px 2px rgba(27, 38, 80, .08), 0 26px 48px -30px rgba(27, 38, 80, .45); }
     .step { display: none; padding: 1.4rem 1.15rem .5rem; }
@@ -94,6 +114,9 @@
     .toggle { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center; padding: .9rem 0; border-top: 1px solid var(--line); cursor: pointer; }
     .toggle:first-child { border-top: 0; padding-top: 0; }
     .toggle b { font-weight: 600; }
+    .toggle.is-linked { cursor: default; }
+    .toggle.is-linked .switch:disabled { opacity: 1; cursor: default; }
+    .toggle small button { padding: 0; border: 0; background: none; font: inherit; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
     .toggle small { display: block; margin-top: .15rem; font-size: .875rem; color: var(--ink-soft); }
     .switch { appearance: none; width: 48px; height: 28px; margin: 0; border-radius: 99px; background: #d7d0d4; position: relative; cursor: pointer; transition: background-color 200ms ease; flex: none; }
     .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--white); box-shadow: 0 1px 3px rgba(27, 38, 80, .3); transition: transform 220ms var(--ease-out); }
@@ -241,6 +264,11 @@
     <div class="loading" id="loading" aria-label="Cargando"><i></i><i></i><i></i></div>
 
     <form id="form" novalidate hidden>
+      <figure class="peek" id="peek" hidden>
+        <div class="peek-head"><b>Así queda en vuestro diseño</b><span id="peekName"></span></div>
+        <div class="peek-strip" id="peekStrip"></div>
+        <figcaption class="peek-note">Es el ejemplo de la web. Aquí irán vuestros nombres, textos y fotos, con la misma forma. Tocad la imagen para verla entera.</figcaption>
+      </figure>
       <!-- 0 · Portada -->
       <div class="step" data-step="0">
         <h2>Vuestros nombres y la fecha</h2>
@@ -436,8 +464,10 @@
           <div>
             <label class="toggle"><span><b>Menú</b><small>Cada invitado elige su menú.</small></span><input class="switch" id="rsvpMenu" type="checkbox" checked></label>
             <label class="toggle"><span><b>Alergias o intolerancias</b></span><input class="switch" id="rsvpAllergies" type="checkbox" checked></label>
-            <label class="toggle"><span><b>Acompañante</b><small>Pueden indicar si vienen con alguien.</small></span><input class="switch" id="rsvpPlus" type="checkbox" checked></label>
+            <label class="toggle is-linked"><span><b>Transporte</b><small id="rsvpBusNote"></small></span><input class="switch" id="rsvpBus" type="checkbox" disabled></label>
+            <label class="toggle is-linked"><span><b>Alojamiento</b><small id="rsvpAccNote"></small></span><input class="switch" id="rsvpAcc" type="checkbox" disabled></label>
             <label class="toggle"><span><b>Niños</b><small>Cuántos niños vienen.</small></span><input class="switch" id="rsvpChildren" type="checkbox"></label>
+            <label class="toggle"><span><b>Acompañante</b><small>Pueden indicar si vienen con alguien.</small></span><input class="switch" id="rsvpPlus" type="checkbox" checked></label>
           </div>
           <div class="row">
             <div class="moments" id="customQs"></div>
@@ -493,6 +523,7 @@
     </div>
   </section>
 </main>
+<dialog class="peek-zoom" id="peekZoom" aria-label="Parte de la invitación"><button type="button" id="peekClose">Cerrar</button><div class="peek-zoom-in"><img id="peekBig" alt=""></div></dialog>
 
 <script>
 (() => {
@@ -558,6 +589,29 @@ async function api(body) {
   return j;
 }
 
+
+/* ---- Capturas de la parte que se rellena, del diseño elegido ---- */
+const PEEK_LABEL = { cover: 'Portada', story: 'Vuestra historia', locations: 'Lugares', agenda: 'Programa', practical: 'Detalles', gallery: 'Galería', closing: 'Final y confirmación', rsvp: 'Confirmación' };
+const PEEK_STEPS = [['cover'], ['story'], ['locations', 'agenda'], ['practical'], ['gallery', 'closing']];
+// Seda y Botánica ordenan el final de otra forma.
+const PEEK_OVERRIDE = { '02': { 4: ['gallery', 'rsvp'] }, '07': { 4: ['gallery'] } };
+let peekFolder = '', peekDesign = '';
+function renderPeek() {
+  const box = $('peek'), keys = peekFolder && step < LAST ? (PEEK_OVERRIDE[peekFolder]?.[step] || PEEK_STEPS[step]) : null;
+  box.hidden = !keys;
+  if (!keys) return;
+  $('peekName').textContent = peekDesign;
+  $('peekStrip').innerHTML = keys.map((k) => `<button type="button" class="peek-shot" data-src="partes/${peekFolder}-${k}.jpg"><span class="peek-frame"><img src="partes/${peekFolder}-${k}.jpg" alt="${esc(PEEK_LABEL[k])} del diseño ${esc(peekDesign)}" loading="lazy" decoding="async"></span>${keys.length > 1 ? `<small>${esc(PEEK_LABEL[k])}</small>` : ''}</button>`).join('');
+  $('peekStrip').scrollLeft = 0;
+}
+$('peekStrip').addEventListener('click', (e) => {
+  const b = e.target.closest('.peek-shot'); if (!b) return;
+  $('peekBig').src = b.dataset.src; $('peekBig').alt = b.querySelector('img').alt;
+  const d = $('peekZoom'); d.showModal(); d.querySelector('.peek-zoom-in').scrollTop = 0;
+});
+$('peekClose').onclick = () => $('peekZoom').close();
+$('peekZoom').addEventListener('click', (e) => { if (e.target === $('peekZoom')) $('peekZoom').close(); });
+
 /* ---- Diseño elegido: colores del mapa, sin enseñar nombres de muestra ---- */
 function applyDesign(id) {
   templateId = id;
@@ -566,6 +620,8 @@ function applyDesign(id) {
     const cover = '../' + design.image, close = cover.replace('cover-', 'close-');
     $$('.band').forEach((b) => b.style.setProperty('--art', `url("${b.dataset.part === '5' ? close : cover}")`));
     $('mapDesign').textContent = 'Diseño ' + design.name;
+    peekFolder = (String(design.full || '').match(/invitaciones\/(\d\d)\//) || [])[1] || '';
+    peekDesign = design.name;
   }
   $('typeGroup').classList.toggle('is-hidden', id !== 'veil-light');
 }
@@ -669,6 +725,10 @@ function sync() {
   $('agendaBody').hidden = !chk('agendaEnabled');
   $('busBody').hidden = !chk('busEnabled');
   $('accBody').hidden = !chk('accEnabled');
+  // Transporte y alojamiento se preguntan al confirmar solo si los ofrecéis en Detalles prácticos.
+  $('rsvpBus').checked = chk('busEnabled'); $('rsvpAcc').checked = chk('accEnabled');
+  $('rsvpBusNote').innerHTML = chk('busEnabled') ? 'Quién va en autobús, porque lo ofrecéis.' : 'Se pregunta si ofrecéis autobús. <button type="button" data-go="3">Añadirlo</button>';
+  $('rsvpAccNote').innerHTML = chk('accEnabled') ? 'Quién necesita alojamiento, porque lo ofrecéis.' : 'Se pregunta si ofrecéis alojamiento. <button type="button" data-go="3">Añadirlo</button>';
   $('giftBody').hidden = !chk('giftEnabled');
   $$('[data-gift]').forEach((x) => { x.hidden = x.dataset.gift !== val('giftMode'); });
   $('playlistBody').hidden = !chk('playlistEnabled');
@@ -804,11 +864,10 @@ function renderSummary() {
   if (P.gift.enabled) det.push(['Regalo', $('giftMode').selectedOptions[0].textContent]);
   if (P.playlist.enabled) det.push(['Canciones', 'Con enlace']);
   rows.push([3, 'Detalles prácticos', det.length ? det : [['', 'Ninguno']]]);
-  const ask = [q.rsvp.menu && 'menú', q.rsvp.allergies && 'alergias', q.rsvp.plusOne && 'acompañante', q.rsvp.children && 'niños', ...q.rsvp.customQuestions].filter(Boolean);
+  const ask = [q.rsvp.menu && 'menú', q.rsvp.allergies && 'alergias', q.practical.bus.enabled && 'transporte', q.practical.accommodation.enabled && 'alojamiento', q.rsvp.children && 'niños', q.rsvp.plusOne && 'acompañante', ...q.rsvp.customQuestions].filter(Boolean);
   rows.push([4, 'Confirmación y final', [['Preguntamos', ask.length ? ask.join(', ') : 'Solo si vienen'], ['Galería', q.gallery.enabled ? files.filter((x) => x.slot.startsWith('gallery-')).length + ' fotos' : 'No'], ['Última frase', q.closing.mode === 'custom' ? q.closing.customLine : 'Gracias por formar parte de nuestra historia.']]]);
   $('summary').innerHTML = rows.map(([s, title, items]) => `<section class="sum"><h3>${title}</h3><button type="button" data-go="${s}">Cambiar</button><dl>${items.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></section>`).join('');
 }
-$('summary').addEventListener('click', (e) => { const b = e.target.closest('[data-go]'); if (b) show(Number(b.dataset.go)); });
 
 /* ---- Navegación ---- */
 function show(i) {
@@ -824,6 +883,7 @@ function show(i) {
     b.classList.toggle('is-done', step === LAST || BANDS.slice(0, step).flat().includes(n));
   });
   $('progress').style.transform = `scaleX(${(step + 1) / (LAST + 1)})`;
+  renderPeek();
   $('back').style.visibility = step === 0 ? 'hidden' : 'visible';
   $('next').hidden = step === LAST;
   $('submit').hidden = step !== LAST;
@@ -840,6 +900,7 @@ $('next').onclick = async () => {
   show(step + 1);
 };
 $('back').onclick = () => show(step - 1);
+$('form').addEventListener('click', (e) => { const g = e.target.closest('[data-go]'); if (g) { e.preventDefault(); show(Number(g.dataset.go)); scrollTo({ top: 0, behavior: 'smooth' }); } });
 $('submit').onclick = async () => {
   for (let i = 0; i < LAST; i++) { const e = validate(i); if (e.length) { show(i); setMsg(e.join(' ')); return; } }
   if (!chk('reviewed')) { setMsg('Marcad la casilla para confirmar que lo habéis revisado.'); return; }

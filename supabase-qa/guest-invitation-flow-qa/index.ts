@@ -601,6 +601,15 @@ async function deliverOrder(c:any,order:any,invitationUrlIn:any){
       const ok=order.mode==='test'?true:await resend({to:[email],subject:localTest?'Entrega de prueba completada':'Vuestra invitación está lista para compartir',html:deliveryHtml},'guest-deliver-v3/'+order.id);
       if(!ok)return json({ok:false,error:'email_failed'},502);
       const {error}=await c.from('guest_invitation_orders').update({files,resolved_config:order.mode==='test'?order.resolved_config:config,delivery_url:inviteUrl||null,status:'delivered',delivered_at:ts,updated_at:ts}).eq('id',order.id);if(error)throw error;
+      // The app side (RSVP form, personalization, entitlement) only opens for product 'guests':
+      // once delivered, a paid catalog license becomes a regular GUEST app license.
+      if(order.license_id&&order.mode==='production'){
+        const {data:lic}=await c.from('licenses').select('metadata').eq('id',order.license_id).maybeSingle();
+        if(lic&&lic.metadata?.product==='guest'){
+          const {error:le}=await c.from('licenses').update({metadata:{...lic.metadata,product:'guests',purchased_product:'guest',app_opened_at:ts},updated_at:ts}).eq('id',order.license_id);
+          if(le)console.error('license_product_upgrade',le);
+        }
+      }
       return json({ok:true,status:'delivered',inviteUrl,accessUrl,publicToken:token,localTest});
 }
 // Delivers a just-approved paid catalog order without the owner. Returns {ok,inviteUrl} or {tried,error}.
