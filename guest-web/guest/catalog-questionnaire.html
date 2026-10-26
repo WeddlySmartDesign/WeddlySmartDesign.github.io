@@ -208,6 +208,11 @@
     <p>Vamos parte por parte, en el mismo orden en que vuestros invitados recorrerán la invitación. Se guarda solo: podéis dejarlo y seguir cuando queráis desde el mismo enlace.</p>
   </section>
 
+  <section class="q-banner" id="demoBanner" hidden>
+    <strong>Modo prueba.</strong>
+    <p>Así lo ven las parejas. Podéis rellenarlo entero y subir fotos: no se guarda ni se envía nada.</p>
+  </section>
+
   <section class="q-banner" id="changesBanner" hidden>
     <strong>Cambiad lo que necesitéis.</strong>
     <p id="changesText">Os hemos abierto la parte que queríais cambiar. Cuando terminéis, enviadla y os mandamos la nueva versión de vuestra invitación.</p>
@@ -494,7 +499,9 @@
 'use strict';
 const API = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-invitation-flow-qa';
 const params = new URLSearchParams(location.search);
-const TOKEN = params.get('t') || location.hash.replace(/^#t=/, '') || '';
+// ?demo (o ?demo=design-XX) abre el cuestionario sin pedido: nada se guarda ni se envía.
+const DEMO = params.has('demo');
+const TOKEN = DEMO ? 'demo' : params.get('t') || location.hash.replace(/^#t=/, '') || '';
 const $ = (id) => document.getElementById(id);
 const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 
@@ -540,6 +547,11 @@ function setSave(state) {
 }
 
 async function api(body) {
+  if (DEMO) {
+    await new Promise((ok) => setTimeout(ok, 250));
+    if (body.action === 'load') return { ok: true, order: { status: params.get('cambios') !== null ? 'changes_requested' : 'draft', templateId: params.get('demo') || 'design-09', questionnaire: {}, files: [] } };
+    return { ok: true };
+  }
   const r = await fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), cache: 'no-store' });
   const j = await r.json().catch(() => ({}));
   if (!r.ok || !j?.ok) { const e = new Error(j?.error || 'request_failed'); e.data = j; throw e; }
@@ -627,6 +639,7 @@ async function upload(slot, file, box) {
   box.classList.add('is-busy'); setMsg();
   try {
     const ready = await shrink(file);
+    if (DEMO) { files = files.filter((x) => x.slot !== slot); files.push({ slot, name: ready.name, url: URL.createObjectURL(ready) }); return; }
     const fd = new FormData();
     fd.append('action', 'upload'); fd.append('token', TOKEN); fd.append('slot', slot); fd.append('file', ready, ready.name);
     const r = await fetch(API, { method: 'POST', body: fd });
@@ -894,6 +907,7 @@ async function boot() {
       return;
     }
     changesMode = order.status === 'changes_requested';
+    if (DEMO) $('demoBanner').hidden = false;
     $('form').hidden = false; $('nav').hidden = false;
     loaded = true;
     if (changesMode) {
