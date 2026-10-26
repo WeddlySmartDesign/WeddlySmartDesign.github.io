@@ -82,12 +82,12 @@ async function send(to: string[], subject: string, html: string, key: string) {
     body: JSON.stringify({ from: 'GUEST by WeddlySmartDesign <' + addr + '>', to: list, reply_to: 'info@weddlysmartdesign.com', subject: (QA ? '[PRUEBA] ' : '') + subject, html })
   });
   if (!r.ok) console.warn('resend_failed', r.status, await r.text());
-  else if (list.includes(OWNER[0])) await ownerPing(subject, { dedupe: key, test: QA, url: '/guest/panel-pruebas.html#/medida' });
+  else if (list.includes(OWNER[0])) await ownerPing(subject, { dedupe: key, test: QA, url: '/guest/panel-pruebas.html#/medida', html });
   return r.ok;
 }
 const toCouple = (r: any, subject: string, html: string, key: string) => send([r.email], subject, html, key);
-const toOwner = (subject: string, kicker: string, title: string, body: string, key: string) =>
-  send(OWNER, subject, guestMail({ owner: true, kicker, title, preheader: title, body: body + mBtn(APP_ORIGIN + '/guest/panel-pruebas.html#/medida', 'Abrir mis pedidos') }), key);
+const toOwner = (subject: string, kicker: string, title: string, body: string, key: string, id = '') =>
+  send(OWNER, subject, guestMail({ owner: true, kicker, title, preheader: title, body: body + mBtn(APP_ORIGIN + '/guest/panel-pruebas.html#/medida' + (id ? '/' + id : ''), id ? 'Abrir su pedido' : 'Abrir mis pedidos') }), key);
 
 /* ---------- Stripe ---------- */
 function stripeKey() { return txt(Deno.env.get(QA ? 'GUEST_STRIPE_TEST_SECRET_KEY' : 'GUEST_STRIPE_LIVE_SECRET_KEY')); }
@@ -167,11 +167,11 @@ async function applyPayment(c: any, r: any, sessionId: string) {
   } else if (part === 'charge') {
     await toCouple(r, 'Pago recibido', guestMail({ kicker: 'Pago recibido', title: 'Recibido. Nos ponemos con ello.', preheader: txt(extra?.concept, 120),
       body: mP(`Gracias, ${esc(first(r.name))}. Ya tenemos el pago de <b>${esc(txt(extra?.concept, 120))}</b> (${esc(euros(s.amount_total))}). Os mandamos la nueva propuesta para revisarla.`) + invBtn }), `guest-custom-charge/${sessionId}`);
-    await toOwner(`Extra pagado · ${r.name}`, 'Diseño a medida', 'Han pagado el extra.', mP(`<b>${esc(r.name)}</b> ha pagado ${esc(euros(s.amount_total))} por «${esc(txt(extra?.concept, 120))}». Ya puedes hacerlo.`), `guest-custom-charge-owner/${sessionId}`);
+    await toOwner(`Extra pagado · ${r.name}`, 'Diseño a medida', 'Han pagado el extra.', mP(`<b>${esc(r.name)}</b> ha pagado ${esc(euros(s.amount_total))} por «${esc(txt(extra?.concept, 120))}». Ya puedes hacerlo.`), `guest-custom-charge-owner/${sessionId}`, r.id);
   } else {
     await toCouple(r, 'Ronda extra pagada', guestMail({ kicker: 'Ronda extra', title: 'Recibido. Contadnos los cambios.', preheader: 'Ya podéis pedirnos la nueva ronda.',
       body: mP('Ya tenemos el pago de la ronda extra. Respondednos a este email o por WhatsApp con todos los cambios juntos y nos ponemos.') + invBtn }), `guest-custom-extra/${sessionId}`);
-    await toOwner(`Ronda extra pagada · ${r.name}`, 'Diseño a medida', 'Han pagado una ronda extra.', mP(`<b>${esc(r.name)}</b> ha pagado ${esc(euros(s.amount_total))}.`), `guest-custom-extra-owner/${sessionId}`);
+    await toOwner(`Ronda extra pagada · ${r.name}`, 'Diseño a medida', 'Han pagado una ronda extra.', mP(`<b>${esc(r.name)}</b> ha pagado ${esc(euros(s.amount_total))}.`), `guest-custom-extra-owner/${sessionId}`, r.id);
   }
   return next;
 }

@@ -143,7 +143,7 @@ async function resend(body:any,idempotencyKey?:string){
   }
   const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key,...(idempotencyKey?{'Idempotency-Key':idempotencyKey}:{})},body:JSON.stringify({from,reply_to:'weddlysmartdesign@gmail.com',...body})});
   if(!r.ok){console.warn('resend_failed',r.status,await r.text());return false}
-  if(to.includes('weddlysmartdesign@gmail.com'))await ownerPing(String(body?.subject||'').replace(/^\[PRUEBA\] /,''),{dedupe:idempotencyKey||undefined,test:!LIVE,url:'/guest/panel-pruebas.html'});
+  if(to.includes('weddlysmartdesign@gmail.com'))await ownerPing(String(body?.subject||'').replace(/^\[PRUEBA\] /,''),{dedupe:idempotencyKey||undefined,test:!LIVE,url:'/guest/panel-pruebas.html',html:String(body?.html||'')});
   return true
 }
 function emailOf(q:any,fallback=''){return txt(q?.contact?.email||fallback,200).toLowerCase()}

@@ -8,7 +8,7 @@
 // idempotencia de Resend evita duplicados. Las facturas sí se guardan (guest_invoices).
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { guestMail, mBtn, mP, mNote, mList, DESIGN_NAMES } from './guest-mail.ts';
-import { ownerPing } from './owner-ping.ts';
+import { ownerPing, panelLink } from './owner-ping.ts';
 import webpush from 'npm:web-push@3.6.7';
 
 const APP_ORIGIN = 'https://guest-stripe-pago-2026-10-24.guest-invitaciones.pages.dev';
@@ -63,7 +63,7 @@ async function send(to: string[], subject: string, html: string, key: string, fr
     body: JSON.stringify({ from: from + ' <' + addr + '>', to, reply_to: ISSUER.email, subject, html })
   });
   if (!r.ok) console.warn('resend_failed', r.status, await r.text());
-  else if (to.includes(OWNER[0]) && !/^Copia de seguridad/.test(subject)) await ownerPing(subject, { dedupe: key, test: /\(prueba\)/.test(subject), url: '/guest/panel-pruebas.html' });
+  else if (to.includes(OWNER[0]) && !/^Copia de seguridad/.test(subject)) await ownerPing(subject, { dedupe: key, test: /\(prueba\)/.test(subject), url: '/guest/panel-pruebas.html', html });
   return r.ok;
 }
 const button = (href: string, text: string) => mBtn(href, text);
@@ -473,7 +473,9 @@ Deno.serve(async (req) => {
     if (action === 'push_unsubscribe') { await c.from('guest_owner_push_subs').delete().eq('endpoint', String(b.endpoint || '')); return json({ ok: true }); }
     if (action === 'push_test') { await ownerPing('Aviso de prueba', { body: 'Si lees esto, los avisos funcionan en este móvil.' }); return json({ ok: true }); }
     if (action === 'owner_events') {
-      const { data } = await c.from('guest_owner_events').select('id,created_at,title,body,url,test,read_at').order('created_at', { ascending: false }).limit(40);
+      const { data } = await c.from('guest_owner_events').select('id,created_at,title,body,url,test,read_at,dedupe').order('created_at', { ascending: false }).limit(40);
+      // Los avisos antiguos se guardaron sin ficha concreta: se saca de su clave.
+      for (const e of data || []) { if (!/#\/(pedido|medida)\//.test(e.url || '') && e.url) e.url = panelLink(e.dedupe, '', e.url); delete e.dedupe; }
       const { count } = await c.from('guest_owner_events').select('id', { count: 'exact', head: true }).is('read_at', null);
       const { count: devices } = await c.from('guest_owner_push_subs').select('endpoint', { count: 'exact', head: true });
       return json({ ok: true, events: data || [], unread: count || 0, devices: devices || 0 });

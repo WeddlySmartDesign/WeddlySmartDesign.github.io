@@ -129,7 +129,7 @@ async function resend(payload:any){
  payload.body.subject='[PRUEBA] '+payload.body.subject}
  const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key,...(payload.idempotencyKey?{'Idempotency-Key':payload.idempotencyKey}:{})},body:JSON.stringify({from,reply_to:'weddlysmartdesign@gmail.com',...payload.body})});
  if(!r.ok){console.warn('resend_failed',r.status,await r.text());return false}
- if(to.includes('weddlysmartdesign@gmail.com'))await ownerPing(String(payload.body?.subject||'').replace(/^\[PRUEBA\] /,''),{dedupe:payload.idempotencyKey||undefined,test:!LIVE,url:'/guest/panel-pruebas.html'});
+ if(to.includes('weddlysmartdesign@gmail.com'))await ownerPing(String(payload.body?.subject||'').replace(/^\[PRUEBA\] /,''),{dedupe:payload.idempotencyKey||undefined,test:!LIVE,url:'/guest/panel-pruebas.html',html:String(payload.body?.html||'')});
  return true
 }
 function esc(s:any){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]||c))}
