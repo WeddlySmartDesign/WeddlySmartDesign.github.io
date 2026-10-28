@@ -12,6 +12,8 @@
 
   const page = (location.pathname.replace(/^\/|\.html$/g, '') || 'inicio').toLowerCase();
   const params = new URLSearchParams(location.search);
+  // Enlace propio de cada colaborador (?c=nombre): cuenta sus visitas como origen propio.
+  const colab = (params.get('c') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
 
   // Una visita = llegar desde fuera (otra web, una app o escribiendo la dirección).
   let from = '';
@@ -20,7 +22,8 @@
     const utm = (params.get('utm_source') || '').toLowerCase();
     const src = utm || from;
     const source =
-      /qr|feria/.test(utm) ? 'qr'
+      colab ? `colab-${colab}`
+      : /qr|feria/.test(utm) ? 'qr'
       : /instagram/.test(src) ? 'instagram'
       : /tiktok/.test(src) ? 'tiktok'
       : /facebook|fb\./.test(src) ? 'facebook'
