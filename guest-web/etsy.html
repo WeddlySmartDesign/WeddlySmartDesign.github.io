@@ -21,7 +21,7 @@
     .etsy-main h1 { font: 400 clamp(2.3rem, 3.4vw + 1.1rem, 3.5rem)/1.02 var(--display); letter-spacing: -.01em; }
     .etsy-main > p { font-size: 1.0625rem; line-height: 1.55; color: var(--ink-soft); }
     .card { display: grid; gap: 1.1rem; padding: 1.4rem 1.25rem; background: var(--paper); border-radius: 8px; box-shadow: var(--shadow); }
-    .step { font: 700 .8125rem/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--postmark); }
+    .etsy-step { font: 700 .8125rem/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--postmark); }
     .field { display: grid; gap: .4rem; }
     .field label { font-weight: 600; font-size: 1rem; color: var(--ink); }
     .field small { font-size: .875rem; line-height: 1.45; color: var(--ink-soft); }
@@ -49,7 +49,7 @@
     <p>En un minuto activáis vuestra invitación. Después os llega el cuestionario para contarnos vuestros datos, igual que si la hubierais comprado en nuestra web.</p>
 
     <form class="card" id="claim" novalidate>
-      <span class="step">Paso 1 de 2</span>
+      <span class="etsy-step">Paso 1 de 2</span>
       <div class="field">
         <label for="order">Número de pedido de Etsy</label>
         <input id="order" name="order" inputmode="numeric" autocomplete="off" placeholder="Por ejemplo, 3456789012" required>
@@ -64,7 +64,7 @@
     </form>
 
     <section class="card" id="done" hidden aria-live="polite">
-      <span class="step">Paso 2 de 2</span>
+      <span class="etsy-step">Paso 2 de 2</span>
       <div class="code"><b id="code"></b><button class="btn btn-line btn-sm" id="copy" type="button">Copiar</button></div>
       <div class="field">
         <label for="design">El diseño que habéis comprado</label>
@@ -72,7 +72,7 @@
       </div>
       <ol>
         <li>Pulsad <strong>Activar mi invitación</strong>.</li>
-        <li>En el pago, pulsad <strong>«Añadir código»</strong> y pegad vuestro código. El total queda en <strong>0 €</strong>.</li>
+        <li>En el pago, pulsad <strong>«Añadir código»</strong> y pegad vuestro código. El total queda en <strong>0&nbsp;€</strong>.</li>
         <li>Al terminar os llevamos al cuestionario y os llega también por correo.</li>
       </ol>
       <a class="btn btn-ink btn-block" id="activate" href="pagar.html">Activar mi invitación</a>
