@@ -88,6 +88,7 @@ async function createSession(edition:string,consent:boolean,attempt:any,requeste
  p.set('billing_address_collection','auto');p.set('customer_creation','always');p.set('tax_id_collection[enabled]','true');p.set('redirect_on_completion','always');
  p.set('return_url',base+'/gracias.html?session_id={CHECKOUT_SESSION_ID}');
  p.set('client_reference_id','guest_'+crypto.randomUUID());
+ p.set('allow_promotion_codes','true'); // códigos de profesionales y de regalo
  p.set('line_items[0][quantity]','1');p.set('line_items[0][price_data][currency]','eur');
  p.set('line_items[0][price_data][unit_amount]',String(amount));
  p.set('line_items[0][price_data][product_data][name]','Invitación '+option.displayName+' by WeddlySmartDesign');
@@ -109,16 +110,46 @@ async function retrieveSession(id:string){
  if(!/^cs_(test_|live_)?[A-Za-z0-9_]+$/.test(id))throw new Error('invalid_session');
  return await stripeRequest('/checkout/sessions/'+encodeURIComponent(id)+'?expand[]=line_items.data.price.product')
 }
+// Pagada, o a 0 € con un código de regalo: Stripe la da por completa sin cobro.
+const isPaid=(s:any)=>s?.status==='complete'&&(s?.payment_status==='paid'||s?.payment_status==='no_payment_required');
 function validatePaid(session:any){
  const edition=editionOf(session?.metadata?.edition);
  if(String(session?.metadata?.product||'')!=='guest')throw new Error('invalid_checkout_session');
- if(session?.status!=='complete'||session?.payment_status!=='paid')throw new Error('not_paid');
+ if(!isPaid(session))throw new Error('not_paid');
  const catalogPin=String(session.metadata?.guest_catalog_template_id||'');
  const pinnedCents=Number(session.metadata?.amount_cents);
  const subtotal=Number(session.amount_subtotal??session.amount_total);
  const expected= catalogPin?(Number.isInteger(pinnedCents)&&pinnedCents>=1000&&pinnedCents<=200000?pinnedCents:0):amountFor(edition);
- if(!expected||subtotal!==expected||Number(session.amount_total||0)<subtotal||String(session.currency||'').toLowerCase()!=='eur')throw new Error('invalid_checkout_session');
+ const total=Number(session.amount_total??-1),discount=Number(session.total_details?.amount_discount||0);
+ if(!expected||subtotal!==expected||total<0||total+discount!==subtotal||String(session.currency||'').toLowerCase()!=='eur')throw new Error('invalid_checkout_session');
  return edition
+}
+// Código usado en la compra (profesional o regalo): queda en el pedido para saber de quién viene.
+async function promoOf(session:any){
+ const id=session?.discounts?.[0]?.promotion_code;if(typeof id!=='string'||!id)return {};
+ const discount=Number(session.total_details?.amount_discount||0);
+ try{const pc=await stripeRequest('/promotion_codes/'+encodeURIComponent(id));return {guest_promo_code:String(pc.code||''),guest_promo_partner:String(pc.metadata?.partner||''),guest_promo_kind:String(pc.metadata?.kind||''),amount_discount:discount}}
+ catch{return {guest_promo_code_id:id,amount_discount:discount}}
+}
+// Crea en Stripe los códigos pendientes de guest_partner_codes (solo los de este modo). Idempotente.
+// Versión fija: en las más nuevas el cupón va en promotion[coupon]; así no cambia con la cuenta.
+const STRIPE_PROMO_VERSION='2024-06-20';
+const PROMO_COUPONS:Record<string,{pct:number,name:string}>={gift:{pct:100,name:'GUEST · Invitación de regalo'},partner:{pct:10,name:'GUEST · Recomendación de profesional'}};
+async function promoSync(){
+ const db=admin(),mode=LIVE?'live':'test';
+ const {data:rows,error}=await db.from('guest_partner_codes').select('*').eq('mode',mode).is('stripe_promo_id',null).limit(50);if(error)throw error;
+ const done:string[]=[];
+ for(const r of rows||[]){
+  const kind=r.kind==='gift'?'gift':'partner',cp=PROMO_COUPONS[kind],coupon='guest-'+kind+'-'+cp.pct;
+  try{await stripeRequest('/coupons/'+coupon)}catch{
+   const q=new URLSearchParams({id:coupon,percent_off:String(cp.pct),duration:'once',name:cp.name});
+   await stripeRequest('/coupons',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Stripe-Version':STRIPE_PROMO_VERSION},body:q.toString()})}
+  const q=new URLSearchParams({coupon,code:String(r.code).toUpperCase(),'metadata[partner]':String(r.partner_slug||''),'metadata[kind]':kind});
+  if(Number.isInteger(r.max_redemptions)&&r.max_redemptions>0)q.set('max_redemptions',String(r.max_redemptions));
+  const pc=await stripeRequest('/promotion_codes',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded','Stripe-Version':STRIPE_PROMO_VERSION,'Idempotency-Key':'guest-promo/'+mode+'/'+r.code},body:q.toString()});
+  await db.from('guest_partner_codes').update({stripe_promo_id:pc.id,synced_at:new Date().toISOString()}).eq('id',r.id);done.push(String(r.code));
+ }
+ return done
 }
 async function resend(payload:any){
  const key=env('RESEND_API_KEY'),rawFrom=env('WEDDLY_RESEND_FROM'),fm=rawFrom.match(/<([^>]+)>/),addr=(fm?.[1]||(/^[^\s<>]+@[^\s<>]+$/.test(rawFrom)?rawFrom:'')).trim();
@@ -205,7 +236,7 @@ async function provision(session:any){
  if((templateId||templateVersion)&&(!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(templateId)||
     !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,30}$/.test(templateVersion)))
   throw new Error('invalid_checkout_session');
- const metadata={product:'guest',edition,access_kind:'paid',payment_provider:'stripe',stripe_session_id:sessionId,stripe_payment_intent:typeof session.payment_intent==='string'?session.payment_intent:null,amount_total:Number(session.amount_total||amountFor(edition)),currency:'eur',pricing:templateId?'individual-design':'launch',guest_personalization_status:'awaiting_details',purchased_at:created,
+ const metadata={product:'guest',edition,access_kind:'paid',payment_provider:'stripe',stripe_session_id:sessionId,stripe_payment_intent:typeof session.payment_intent==='string'?session.payment_intent:null,amount_total:Number(session.amount_total??amountFor(edition)),...(await promoOf(session)),currency:'eur',pricing:templateId?'individual-design':'launch',guest_personalization_status:'awaiting_details',purchased_at:created,
    ...(templateId?{guest_catalog_template_id:templateId,guest_catalog_template_version:templateVersion}:{})};
  const {data,error}=await db.rpc('provision_weddly_license',{p_source:'stripe',p_source_order_id:sessionId,p_buyer_email:buyer,p_product_ref:'guest_'+edition,p_metadata:metadata,p_activation_code:code,p_purchase_hash:hash});if(error)throw error;
  const row=data?.[0];if(!row?.license_id)throw new Error('license_provision_failed');
@@ -262,7 +293,7 @@ async function verifyWebhook(raw:string,header:string){
 async function handleWebhook(raw:string,header:string){
  if(!await verifyWebhook(raw,header))return json({ok:false,error:'invalid_signature'},400);
  const evt=JSON.parse(raw||'{}'),type=String(evt.type||''),obj=evt.data?.object||{};
- if((type==='checkout.session.completed'&&obj.payment_status==='paid')||type==='checkout.session.async_payment_succeeded'){
+ if((type==='checkout.session.completed'&&isPaid(obj))||type==='checkout.session.async_payment_succeeded'){
    const session=await retrieveSession(String(obj.id||''));
    const p=await provision(session);
    return json({received:true,provisioned:!!p})
@@ -293,7 +324,7 @@ Deno.serve(async req=>{
   }
   if(action==='create'){const edition=editionOf(b.edition),session=await createSession(edition,b.startPersonalizationConsent===true,b.checkoutAttemptId,b.catalogTemplateId);return json({ok:true,clientSecret:session.client_secret,sessionId:session.id,edition})}
   if(action==='status'){
-   const session=await retrieveSession(String(b.sessionId||'')),paid=session.status==='complete'&&session.payment_status==='paid';let p=null;if(paid)p=await provision(session);
+   const session=await retrieveSession(String(b.sessionId||'')),paid=isPaid(session);let p=null;if(paid)p=await provision(session);
    return json({ok:true,status:session.status,paymentStatus:session.payment_status,paid,provisioned:!!p,edition:editionOf(session.metadata?.edition),amountTotal:session.amount_total||null,currency:session.currency||'eur',email:p?.buyerEmail||session.customer_details?.email||null,orderSubmittedAt:p?.metadata?.guest_order_submitted_at||null,catalogTemplateId:p?.metadata?.guest_catalog_template_id||null,catalogTemplateVersion:p?.metadata?.guest_catalog_template_version||null,catalogQuestionnaireUrl:p?.catalogQuestionnaireUrl||null})
   }
   if(action==='sweep'){
@@ -303,7 +334,7 @@ Deno.serve(async req=>{
    const list=await stripeRequest('/checkout/sessions?limit=100&status=complete&created[gte]='+since);
    let done=0;const failed:string[]=[];
    for(const s of (list?.data||[])){
-    if(s?.metadata?.product!=='guest'||s?.payment_status!=='paid')continue;
+    if(s?.metadata?.product!=='guest'||!isPaid(s))continue;
     const {data:l}=await admin().from('licenses').select('metadata').eq('source','stripe').eq('source_order_id',String(s.id)).maybeSingle();
     if(l?.metadata?.guest_order_email_sent_at)continue;
     try{const full=await retrieveSession(String(s.id));await provision(full);done++}catch(e){failed.push(String(s.id).slice(-8)+':'+String((e as Error)?.message||'error'))}
@@ -313,6 +344,7 @@ Deno.serve(async req=>{
      html:guestMail({owner:true,kicker:'Revisar',title:'Hay pagos sin su cuestionario.',preheader:'Se reintenta cada hora.',body:mP('Stripe tiene '+failed.length+(failed.length===1?' pago':' pagos')+' de GUEST a los que no se les ha podido crear el pedido ni mandar el cuestionario. Se reintenta solo cada hora durante 3 días.')+mP('Referencias: '+failed.map(esc).join(', '))+mP('Si mañana sigue llegando este aviso, dímelo.',true)})}});
    return json({ok:true,checked:done,failed})
   }
+  if(action==='promo_sync')return json({ok:true,created:await promoSync()});
   if(action==='submit_order'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await submitOrder(session,b.details||{}))}
   return json({ok:false,error:'invalid_action'},400)
  }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','catalog_template_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','catalog_template_not_for_sale','catalog_uses_common_questionnaire','catalog_host_invalid'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable','catalog_host_not_configured'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
