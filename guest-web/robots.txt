@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /guest/
+Disallow: /pagar.html
+Disallow: /gracias.html
+
+Sitemap: https://guest.weddlysmartdesign.com/sitemap.xml
