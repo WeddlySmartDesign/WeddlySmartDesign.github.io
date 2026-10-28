@@ -133,6 +133,29 @@ async function promoOf(session:any){
 }
 // Crea en Stripe los códigos pendientes de guest_partner_codes (solo los de este modo). Idempotente.
 // Versión fija: en las más nuevas el cupón va en promotion[coupon]; así no cambia con la cuenta.
+// Etsy: el comprador escribe su número de pedido y recibe al momento un código de regalo de un solo uso.
+// No depende de nadie. Un pedido = un código (si vuelve, recibe el mismo). La propietaria comprueba
+// el número en Etsy antes de preparar la propuesta; por eso le llega un aviso con cada uno.
+const ETSY_DAILY_MAX=15;
+async function etsyClaim(rawOrder:unknown,rawEmail:unknown){
+ const order=String(rawOrder||'').replace(/[\s#.-]/g,'');
+ if(!/^\d{9,12}$/.test(order))throw new Error('etsy_order_invalid');
+ const email=String(rawEmail||'').trim().toLowerCase().slice(0,160);
+ if(!/^[^\s@<>]+@[^\s@<>]+\.[a-z]{2,}$/.test(email))throw new Error('etsy_email_invalid');
+ const db=admin(),mode=LIVE?'live':'test',name='Etsy #'+order;
+ const {data:had}=await db.from('guest_partner_codes').select('code,stripe_promo_id').eq('mode',mode).eq('partner_slug','etsy').eq('partner_name',name).maybeSingle();
+ if(had){if(!had.stripe_promo_id)await promoSync();return {code:String(had.code),again:true}}
+ const {count}=await db.from('guest_partner_codes').select('id',{count:'exact',head:true}).eq('mode',mode).eq('partner_slug','etsy').gte('created_at',new Date(Date.now()-86400000).toISOString());
+ if((count||0)>=ETSY_DAILY_MAX)throw new Error('etsy_busy');
+ const abc='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',rnd=crypto.getRandomValues(new Uint8Array(6));
+ const code='ETSY'+Array.from(rnd,x=>abc[x%abc.length]).join('');
+ const {error}=await db.from('guest_partner_codes').insert({mode,kind:'gift',code,partner_slug:'etsy',partner_name:name,max_redemptions:1});
+ if(error)throw error;
+ await promoSync();
+ const html=guestMail({owner:true,kicker:'Etsy',title:'Pedido de Etsy n.º '+esc(order),preheader:'Compruébalo en Etsy antes de preparar la propuesta.',body:mP('Alguien ha escrito este número de pedido de Etsy y ya tiene su código para activar la invitación ('+esc(code)+'). Su correo: '+esc(email)+'.')+mP('Comprueba en Etsy, en Pedidos, que el pedido n.º '+esc(order)+' existe y está pagado. Si no existe, no prepares la propuesta y avísame.')});
+ await resend({idempotencyKey:'guest-etsy/'+mode+'/'+order,body:{to:['weddlysmartdesign@gmail.com'],subject:'Etsy: pedido n.º '+order+' · compruébalo',html}});
+ return {code,again:false}
+}
 const STRIPE_PROMO_VERSION='2024-06-20';
 const PROMO_COUPONS:Record<string,{pct:number,name:string}>={gift:{pct:100,name:'GUEST · Invitación de regalo'},partner:{pct:10,name:'GUEST · Recomendación de profesional'}};
 async function promoSync(){
@@ -345,7 +368,8 @@ Deno.serve(async req=>{
    return json({ok:true,checked:done,failed})
   }
   if(action==='promo_sync')return json({ok:true,created:await promoSync()});
+  if(action==='etsy_claim')return json({ok:true,...(await etsyClaim(b.order,b.email))});
   if(action==='submit_order'){const session=await retrieveSession(String(b.sessionId||''));validatePaid(session);return json(await submitOrder(session,b.details||{}))}
   return json({ok:false,error:'invalid_action'},400)
- }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','catalog_template_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','catalog_template_not_for_sale','catalog_uses_common_questionnaire','catalog_host_invalid'].includes(m))return json({ok:false,error:m},400);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable','catalog_host_not_configured'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
+ }catch(e){const m=String((e as Error)?.message||'');console.warn(e);if(['consent_required','catalog_template_required','invalid_checkout_attempt','invalid_session','invalid_checkout_session','not_paid','missing_order_fields','invalid_design','catalog_template_not_for_sale','catalog_uses_common_questionnaire','catalog_host_invalid','etsy_order_invalid','etsy_email_invalid'].includes(m))return json({ok:false,error:m},400);if(m==='etsy_busy')return json({ok:false,error:m},429);if(m==='session_not_found')return json({ok:false,error:m},404);if(m==='stripe_request_failed')return json({ok:false,error:m},502);if(['stripe_not_configured','webhook_not_configured','stripe_temporarily_unavailable','catalog_host_not_configured'].includes(m))return json({ok:false,error:m},503);return json({ok:false,error:'server_error'},500)}
 });
