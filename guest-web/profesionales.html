@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#f0c4bc">
+  <link rel="icon" href="assets/brand/favicon.ico" sizes="any">
+  <link rel="icon" href="assets/brand/icon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:site_name" content="GUEST by WeddlySmartDesign">
+  <meta property="og:title" content="GUEST para profesionales de boda">
+  <meta property="og:description" content="La invitación que confirma por vosotros: menús, alergias y mesas en listados con su revisión.">
+  <meta property="og:url" content="https://guest.weddlysmartdesign.com/profesionales.html">
+  <meta property="og:image" content="https://guest.weddlysmartdesign.com/assets/brand/og.jpg">
+  <title>GUEST para profesionales de boda · GUEST by WeddlySmartDesign</title>
+  <meta name="description" content="Para wedding planners, fincas y fotógrafos: una invitación de boda animada donde cada invitado confirma con su menú y sus alergias, y listados de mesas y catering en PDF o Excel con su revisión.">
+  <link rel="preload" href="assets/fonts/abril-fatface-zOL64pLDlL-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/hanken-grotesk-ieVn2YZDLW-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css?v=44">
+  <link rel="stylesheet" href="css/styles.css?v=45">
+  <style>
+    /* Página para profesionales: mismo sobre, mismos sellos; aquí lo que se enseña es lo que les llega a ellos. */
+    .kicker { font: 700 .8125rem/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--postmark); }
+    .pro-hero .hero-grid { padding-bottom: 3.5rem; align-items: center; }
+    .pro-hero h1 { max-width: 15ch; }
+
+    /* La invitación de verdad, dentro de un móvil: se abre por su portada y se recorre entera */
+    .live { justify-self: center; display: grid; justify-items: center; gap: .9rem; width: 100%; }
+    .live-phone { --w: min(300px, 74vw); width: var(--w); padding: 9px; border-radius: 38px; background: #0c1230; box-shadow: 0 34px 60px -30px rgba(27, 38, 80, .75); }
+    .live-screen { position: relative; width: 100%; aspect-ratio: 390 / 780; border-radius: 30px; overflow: hidden; background: var(--line); }
+    .live-screen img, .live-screen iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; object-fit: cover; object-position: top; }
+    .live-screen iframe { width: 390px; height: 780px; transform-origin: 0 0; scale: var(--k, .7); }
+    .live-start {
+      position: absolute; inset: auto 12px 14px; z-index: 2;
+      min-height: 48px; border: 0; border-radius: 99px; cursor: pointer;
+      background: var(--ink); color: var(--paper); font: 600 .9375rem/1 var(--text);
+      box-shadow: 0 12px 24px -12px rgba(0, 0, 0, .6);
+      transition: scale 160ms var(--ease-out);
+    }
+    .live-start:active { scale: .97; }
+    .live-cap { font-size: .875rem; color: var(--ink-soft); text-align: center; }
+
+    /* Lo que os llega a vosotros */
+    .gets { background: var(--paper); }
+    .gets-list { list-style: none; margin: 3rem 0 0; padding: 0; display: grid; gap: 4rem; }
+    .get { display: grid; gap: 1.75rem; align-items: center; }
+    .get-text { display: grid; gap: .8rem; max-width: 34rem; }
+    .get-text h3 { font: 400 clamp(1.75rem, 1.6vw + 1rem, 2.4rem)/1.08 var(--display); }
+    .get-text p { color: var(--ink-soft); }
+    .get-points { list-style: none; margin: .4rem 0 0; padding: 0; display: grid; gap: .5rem; }
+    .get-points li { display: flex; gap: .6rem; font-size: 1rem; line-height: 1.45; }
+    .get-points svg { width: 18px; height: 18px; flex: none; margin-top: .2rem; color: var(--postmark); }
+    .get-visual { position: relative; display: grid; justify-items: center; min-width: 0; }
+    .sheet { width: min(100%, 520px); margin: 0; background: var(--white); border-radius: 4px; rotate: -1.5deg; box-shadow: 0 1px 0 rgba(27, 38, 80, .06), 0 28px 46px -24px rgba(27, 38, 80, .55); }
+    .sheet img { width: 100%; height: auto; border-radius: 4px; }
+    .phone-sm { width: min(260px, 64vw); padding: 8px; border-radius: 30px; background: #0c1230; box-shadow: 0 28px 46px -26px rgba(27, 38, 80, .7); }
+    .phone-sm .scr { aspect-ratio: 5 / 7; border-radius: 23px; overflow: hidden; background: #fbf6f3; }
+    .phone-sm img, .phone-sm video { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+    .get-visual .phone-sm + .phone-sm { position: absolute; right: 2%; bottom: -8%; width: min(170px, 40vw); rotate: 4deg; }
+    .who { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .3rem; }
+    .who span { padding: .3rem .7rem; border-radius: 99px; font-size: .8125rem; font-weight: 600; background: var(--envelope-soft); }
+
+    /* Lo que se llevan las parejas */
+    .couples { background: var(--ink); color: var(--on-ink); }
+    .couples .head p { color: var(--on-ink-soft); }
+    .couples-grid { display: grid; gap: 2.5rem; margin-top: 2.5rem; }
+    .couples-list { list-style: none; margin: 0; padding: 0; display: grid; }
+    .couples-list li { display: grid; grid-template-columns: 2.4rem minmax(0, 1fr); gap: .9rem; padding-block: 1rem; border-top: 1px dashed rgba(244, 239, 233, .22); }
+    .couples-list li:first-child { border-top: 0; }
+    .couples-list .n { font: 700 .875rem/1.6 var(--mono); color: var(--envelope); }
+    .couples-list strong { display: block; font: 400 1.3rem/1.15 var(--display); color: var(--on-ink); }
+    .couples-list p { margin-top: .25rem; font-size: 1rem; color: var(--on-ink-soft); }
+    .stamps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-content: start; max-width: 460px; }
+    .stamps .stamp { padding: 7px; }
+    .stamps .stamp-art { aspect-ratio: 390 / 600; }
+    .stamps figure { margin: 0; display: grid; gap: .45rem; }
+    .stamps figcaption { font: 700 .75rem/1 var(--mono); color: var(--on-ink-soft); text-align: center; }
+    .stamps figure:nth-child(2) { translate: 0 18px; }
+    .price-line { margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: baseline; gap: .4rem 1rem; padding-top: 1.4rem; border-top: 1px solid rgba(244, 239, 233, .18); }
+    .price-line strong { font: 400 2.4rem/1 var(--display); color: var(--on-ink); }
+    .price-line span { color: var(--on-ink-soft); font-size: .9375rem; }
+
+    /* Recomendadla */
+    .partner { background: var(--envelope); }
+    .partner-card { position: relative; margin-top: 2.5rem; padding: clamp(1.5rem, 4vw, 2.75rem); background: var(--paper); border-radius: 4px; box-shadow: 0 30px 50px -30px rgba(27, 38, 80, .55); }
+    .partner-card::before {
+      content: ""; position: absolute; inset: 0; border-radius: 4px; pointer-events: none; padding: 7px;
+      background: repeating-linear-gradient(-45deg, var(--postmark) 0 11px, transparent 11px 18px, var(--ink) 18px 29px, transparent 29px 36px);
+      -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+      mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); opacity: .9;
+    }
+    .partner-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.6rem; counter-reset: s; }
+    .partner-steps li { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 1rem; align-items: start; }
+    .partner-steps .mark { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; color: var(--postmark); border: 1.5px solid currentColor; box-shadow: inset 0 0 0 3px var(--paper), inset 0 0 0 4.5px currentColor; rotate: -8deg; font: 700 1rem/1 var(--mono); }
+    .partner-steps strong { display: block; font: 400 1.35rem/1.15 var(--display); }
+    .partner-steps p { margin-top: .3rem; color: var(--ink-soft); }
+    .partner-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+
+    @media (min-width: 760px) {
+      .nav { display: flex; }
+      .header-cta { display: inline-flex; margin-left: 0; }
+      .pro-hero .hero-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 3rem; padding-top: 3.5rem; padding-bottom: 5rem; }
+      .get { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4rem; }
+      .get:nth-child(even) .get-visual { order: -1; }
+      .couples-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 4rem; }
+      .partner-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+      .partner-steps li { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 759.98px) {
+      .pro-hero .hero-grid { gap: 2.25rem; }
+      .pro-hero .hero-copy { display: grid; }
+      .get-visual { padding-bottom: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#os-llega">Ir al contenido</a>
+
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13m-5-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4.5 12.5 9.5 17.5 19.5 6.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Zm0 1.8a7.2 7.2 0 1 1-3.7 13.4l-.3-.2-2.7.7.7-2.6-.2-.3A7.2 7.2 0 0 1 12 4.8Zm-3 3.4c-.2 0-.5 0-.7.3-.3.3-1 .9-1 2.2s1 2.6 1.1 2.8c.1.2 2 3.1 4.9 4.2 2.4.9 2.900.8 3.4.7.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4l-.4-.3-1.8-.9c-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6 6 0 0 1-3-2.6c-.2-.4.2-.4.6-1.2.1-.2 0-.3 0-.4l-.8-2c-.2-.5-.4-.4-.6-.4H9Z"/></symbol>
+</svg>
+
+<header class="header" id="header">
+  <a class="logo" href="./" aria-label="GUEST by WeddlySmartDesign, inicio"><b>GUEST</b><span>by WeddlySmartDesign</span></a>
+  <nav class="nav" aria-label="Secciones">
+    <a href="#os-llega">Lo que os llega</a>
+    <a href="#parejas">Para las parejas</a>
+    <a href="#colaborar">Colaborar</a>
+  </nav>
+  <a class="btn btn-ink btn-sm header-cta" href="#colaborar">Colaborar</a>
+</header>
+
+<main id="top">
+  <section class="hero pro-hero" aria-labelledby="hero-title">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="kicker">Para wedding planners, fincas y fotógrafos</p>
+        <h1 id="hero-title">Los invitados confirman en la invitación. A vosotros os llega el listado bueno.</h1>
+        <p class="hero-lead">GUEST es una invitación de boda animada que la pareja envía por WhatsApp. Cada invitado confirma dentro de ella con su menú y sus alergias, y todo acaba en el plano de mesas y en listados en PDF o Excel, cada uno con su número de revisión.</p>
+        <div class="hero-actions">
+          <a class="btn btn-ink" href="#os-llega">Ver los listados <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn-line" href="#colaborar">Recomendarla</a>
+        </div>
+      </div>
+
+      <figure class="live" aria-label="Invitación de muestra Azahar">
+        <div class="live-phone">
+          <div class="live-screen" id="liveScreen">
+            <img src="assets/cover-15.jpg" alt="Portada de la invitación Azahar: una verja que se abre a un huerto de limoneros" id="livePoster">
+            <button class="live-start" type="button" id="liveStart">Abrir la invitación</button>
+          </div>
+        </div>
+        <figcaption class="live-cap">Una invitación real, con datos de ejemplo. Se abre y se recorre como la verá cada invitado.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section gets" id="os-llega" aria-labelledby="gets-title">
+    <div class="wrap">
+      <div class="head">
+        <h2 id="gets-title">Lo que os llega a vosotros.</h2>
+        <p>Menos mensajes sueltos y menos Excel a última hora. La pareja lo lleva todo en su app y os pasa lo que necesitáis, ordenado y con fecha.</p>
+      </div>
+
+      <ol class="gets-list">
+        <li class="get">
+          <div class="get-text">
+            <h3>Listados con su revisión</h3>
+            <p>Mesas, menús y alergias, transporte o alojamiento, en PDF o en Excel. Cada copia lleva su número de revisión y su fecha, así que si la pareja cambia algo a última hora se sabe cuál es la que vale.</p>
+            <ul class="get-points">
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Para el catering, la finca y el transporte</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Revisión, número de copia y fecha en cada uno</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>La app avisa a la pareja si un listado se ha quedado antiguo</li>
+            </ul>
+            <div class="who" aria-label="A quién le sirve"><span>Fincas</span><span>Catering</span><span>Wedding planners</span></div>
+          </div>
+          <div class="get-visual">
+            <figure class="sheet"><img src="assets/app/pdf.jpg?v=2" alt="Listado de mesas en PDF de GUEST: referencia, revisión 1, copia 001 y fecha, con cada invitado, su mesa y su respuesta." width="640" height="570" loading="lazy" decoding="async"></figure>
+          </div>
+        </li>
+
+        <li class="get">
+          <div class="get-text">
+            <h3>El plano del salón, tal como es</h3>
+            <p>La pareja dibuja vuestro salón con sus mesas redondas, rectangulares o presidencial, la pista o el escenario, y sienta a cada invitado. Puede sentar a una familia entera de una vez y solo le ofrece las mesas donde caben.</p>
+            <ul class="get-points">
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Las plazas libres de cada mesa, a la vista</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>El listado de mesas sale del plano, sin pasarlo a mano</li>
+            </ul>
+            <div class="who" aria-label="A quién le sirve"><span>Fincas</span><span>Wedding planners</span></div>
+          </div>
+          <div class="get-visual">
+            <div class="phone-sm"><div class="scr"><video muted loop playsinline autoplay preload="metadata" poster="assets/app/mesas-poster.jpg?v=2" aria-label="Plano del salón en GUEST: las mesas se arrastran y se giran."><source src="assets/app/mesas.webm?v=2" type="video/webm"><source src="assets/app/mesas.mp4?v=2" type="video/mp4"></video></div></div>
+          </div>
+        </li>
+
+        <li class="get">
+          <div class="get-text">
+            <h3>Menús y alergias, preguntados una vez</h3>
+            <p>Al confirmar, cada invitado elige su menú, avisa de sus alergias y contesta lo que la pareja quiera preguntar: niños, acompañante, autobús o alojamiento. Nadie tiene que ir persiguiendo a nadie por WhatsApp.</p>
+            <ul class="get-points">
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Las respuestas llegan ordenadas a la app de la pareja</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>Recordatorio a quien no ha contestado</li>
+              <li><svg aria-hidden="true"><use href="#i-check"/></svg>La preboda o el brunch, con su propia invitación y su lista</li>
+            </ul>
+            <div class="who" aria-label="A quién le sirve"><span>Catering</span><span>Wedding planners</span></div>
+          </div>
+          <div class="get-visual">
+            <div class="phone-sm"><div class="scr"><img src="assets/app/preguntas.jpg?v=2" alt="Qué se pregunta al confirmar en GUEST: menú y alergias activados, y transporte, alojamiento y niños para activar." loading="lazy" decoding="async"></div></div>
+            <div class="phone-sm"><div class="scr"><img src="assets/app/respuestas.jpg?v=2" alt="Panel de novedades de GUEST con las respuestas del día agrupadas." loading="lazy" decoding="async"></div></div>
+          </div>
+        </li>
+
+        <li class="get">
+          <div class="get-text">
+            <h3>Las fotos de la preboda, a la vista de todos</h3>
+            <p>Cada invitación lleva su galería con las fotos que elija la pareja. Las de la preboda acaban en el móvil de cada invitado, dentro de la invitación que abren y vuelven a abrir hasta el día de la boda.</p>
+            <div class="who" aria-label="A quién le sirve"><span>Fotógrafos</span></div>
+          </div>
+          <div class="get-visual">
+            <div class="phone-sm"><div class="scr"><img src="assets/cover-04.jpg" alt="Portada de la invitación Cristal: una bola de nieve con la pareja dentro." loading="lazy" decoding="async"></div></div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section couples" id="parejas" aria-labelledby="couples-title">
+    <div class="wrap">
+      <div class="head">
+        <h2 id="couples-title">Y lo que se llevan las parejas.</h2>
+        <p>Una invitación que no parece de plantilla y una app que les quita trabajo. Sin diseñar nada ellos.</p>
+      </div>
+      <div class="couples-grid">
+        <ol class="couples-list">
+          <li><span class="n">01</span><div><strong>Una apertura y un cierre propios</strong><p>Cada diseño se abre con su propia animación: una verja que da a un huerto de limoneros, una bola de nieve, un abanico que se despliega. Entre medias, su historia, los lugares, el programa y la confirmación.</p></div></li>
+          <li><span class="n">02</span><div><strong>Nada que diseñar</strong><p>Rellenan un cuestionario sencillo y nosotros la montamos. Propuesta en 48–72 horas y tres rondas de cambios.</p></div></li>
+          <li><span class="n">03</span><div><strong>Para los dos, desde el móvil</strong><p>Cada uno entra desde su teléfono y ven la misma boda. Envían por WhatsApp a cada familia y ven quién ha contestado.</p></div></li>
+          <li><span class="n">04</span><div><strong>Sin riesgo</strong><p>Si la propuesta no les convence, les devolvemos el dinero antes de aprobarla.</p></div></li>
+        </ol>
+        <div>
+          <div class="stamps" aria-label="Algunos diseños">
+            <figure><span class="stamp"><span class="stamp-art"><img src="assets/cover-15.jpg" alt="" loading="lazy" decoding="async"></span></span><figcaption>Azahar</figcaption></figure>
+            <figure><span class="stamp"><span class="stamp-art"><img src="assets/cover-04.jpg" alt="" loading="lazy" decoding="async"></span></span><figcaption>Cristal</figcaption></figure>
+            <figure><span class="stamp"><span class="stamp-art"><img src="assets/cover-03.jpg" alt="" loading="lazy" decoding="async"></span></span><figcaption>Abanico</figcaption></figure>
+          </div>
+          <p class="price-line"><strong>59,90 €</strong><span>IVA incluido · pago único, invitación y app</span></p>
+          <p style="margin-top:1.2rem"><a class="btn btn-paper btn-sm" href="./#disenos" style="background:var(--paper);color:var(--ink)">Ver todos los diseños <svg aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section partner" id="colaborar" aria-labelledby="partner-title">
+    <div class="wrap">
+      <div class="head">
+        <h2 id="partner-title">Recomendadla a vuestras parejas.</h2>
+        <p>Si os parece útil para vuestras bodas, colaboramos. Sin exclusividad, sin mínimos y sin papeleo.</p>
+      </div>
+      <div class="partner-card">
+        <ol class="partner-steps">
+          <li><span class="mark">01</span><div><strong>Vuestro enlace</strong><p>Os damos un enlace propio y una ficha con imágenes para enseñarla en una visita o mandarla por WhatsApp.</p></div></li>
+          <li><span class="mark">02</span><div><strong>La pareja la elige</strong><p>Nosotros nos ocupamos de todo: el cuestionario, la propuesta, los cambios y la entrega con su app.</p></div></li>
+          <li><span class="mark">03</span><div><strong>Vuestra comisión</strong><p>Una comisión fija por cada pareja que la contrate desde vuestro enlace, liquidada cada mes por Bizum o transferencia.</p></div></li>
+        </ol>
+        <div class="partner-actions">
+          <a class="btn btn-ink" id="partnerWa" href="https://wa.me/34620843264?text=Hola%2C%20me%20interesa%20colaborar%20con%20GUEST." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Hablar por WhatsApp</a>
+          <a class="btn btn-line" id="partnerMail" href="mailto:info@weddlysmartdesign.com?subject=Colaborar%20con%20GUEST">Escribir un email</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <a class="logo" href="./"><b>GUEST</b><span>by WeddlySmartDesign</span></a>
+    <ul class="footer-links">
+      <li><a href="https://wa.me/34620843264" target="_blank" rel="noopener">WhatsApp&nbsp;·&nbsp;620 843 264</a></li>
+      <li><a href="mailto:info@weddlysmartdesign.com">info@weddlysmartdesign.com</a></li>
+      <li><a href="https://www.instagram.com/weddlysmartdesign/" target="_blank" rel="noopener me"><svg class="footer-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.4" cy="6.6" r="1.25" fill="currentColor"/></svg>Instagram&nbsp;·&nbsp;@weddlysmartdesign</a></li>
+      <li><a href="https://www.tiktok.com/@weddlysmartdesign" target="_blank" rel="noopener me"><svg class="footer-ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.6 5.8a4.3 4.3 0 0 1-1-2.8h-3.1v12.4a2.6 2.6 0 1 1-2.6-2.6c.3 0 .5 0 .8.1V9.7a5.8 5.8 0 1 0 5 5.7V9.1a7.3 7.3 0 0 0 4.3 1.4V7.4a4.3 4.3 0 0 1-3.4-1.6z"/></svg>TikTok&nbsp;·&nbsp;@weddlysmartdesign</a></li>
+    </ul>
+    <nav class="footer-legal" aria-label="Información legal">
+      <a href="guest-legal.html#aviso">Aviso legal</a>
+      <a href="guest-legal.html#privacidad">Privacidad</a>
+      <a href="guest-legal.html#cookies">Cookies</a>
+    </nav>
+    <p class="footer-copy">© 2026 WeddlySmartDesign · Invitaciones de boda digitales</p>
+  </div>
+</footer>
+
+<script>
+  (() => {
+    // La invitación se carga solo al pedirla: la página pesa poco y se abre siempre por su portada.
+    const screen = document.getElementById('liveScreen');
+    const start = document.getElementById('liveStart');
+    const fit = (frame) => frame.style.setProperty('--k', screen.clientWidth / 390);
+    start.addEventListener('click', () => {
+      const frame = document.createElement('iframe');
+      frame.title = 'Invitación de muestra Azahar';
+      frame.allow = 'autoplay; fullscreen';
+      frame.src = 'invitaciones/15/index.html?v=41';
+      fit(frame);
+      screen.append(frame);
+      frame.addEventListener('load', () => { start.remove(); document.getElementById('livePoster').remove(); }, { once: true });
+      window.addEventListener('resize', () => fit(frame));
+    });
+    // El enlace de cada colaborador (?c=) viaja en el mensaje para saber quién escribe.
+    const c = new URLSearchParams(location.search).get('c');
+    if (c) {
+      const ref = ` (ref. ${c.replace(/[^a-z0-9-]/gi, '').slice(0, 40)})`;
+      const wa = document.getElementById('partnerWa');
+      wa.href = wa.href.replace('GUEST.', encodeURIComponent('GUEST' + ref + '.'));
+      const mail = document.getElementById('partnerMail');
+      mail.href += encodeURIComponent(ref);
+    }
+    const header = document.getElementById('header');
+    addEventListener('scroll', () => header.classList.toggle('is-solid', scrollY > 8), { passive: true });
+  })();
+</script>
+<script src="js/metrics.js?v=2" defer></script>
+</body>
+</html>
