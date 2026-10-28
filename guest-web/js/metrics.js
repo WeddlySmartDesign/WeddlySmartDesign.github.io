@@ -1,7 +1,12 @@
-/* Estadísticas propias de la web: solo contadores por día (sin cookies, sin guardar nada en el
- * navegador y sin identificar a nadie). Solo cuentan en la web publicada. */
+/* Estadísticas propias de la web: solo contadores por día (sin cookies, sin guardar nada del
+ * visitante y sin identificar a nadie). Solo cuentan en la web publicada. */
 (() => {
   if (location.hostname !== 'guest.weddlysmartdesign.com') return;
+  // La propietaria no cuenta: su móvil queda marcado al abrir su panel de pedidos (o con ?yo=1).
+  try {
+    if (new URLSearchParams(location.search).get('yo') === '1') localStorage.setItem('guest-owner-device', '1');
+    if (localStorage.getItem('guest-owner-device') === '1') return;
+  } catch {}
   const API = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-automation';
   const hit = (event, k = '') => {
     const body = JSON.stringify({ action: 'hit', event, k });

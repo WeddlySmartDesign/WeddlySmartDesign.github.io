@@ -450,6 +450,8 @@ const CUSTOM = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(loca
 const KEY = 'weddly_owner_manager_token_v1';
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+// Este dispositivo es de la propietaria: sus visitas a la web no cuentan en las estadísticas (js/metrics.js).
+try { localStorage.setItem('guest-owner-device', '1'); } catch {}
 const store = { get: () => { try { return localStorage.getItem(KEY) || ''; } catch { return ''; } }, set: (v) => { try { localStorage.setItem(KEY, v); } catch {} }, clear: () => { try { localStorage.removeItem(KEY); } catch {} } };
 
 // Cada estado en palabras, a quién le toca y en qué grupo de la bandeja va.
