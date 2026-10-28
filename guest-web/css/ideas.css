@@ -1,0 +1,67 @@
+/* Ideas para vuestra boda: artículos para leer con calma, en el mismo mundo de sobres y sellos de la web. */
+:root{--envelope:#f0c4bc;--envelope-deep:#e7aea4;--paper:#fbf7f4;--white:#fff;--ink:#1b2650;--ink-soft:#4a5480;--on-ink:#fbf7f4;--on-ink-soft:#c9cde0;--postmark:#b3263a;--line:#e3d6d1;color-scheme:light}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scrollbar-color:var(--ink-soft) var(--envelope)}
+body{margin:0;background:var(--envelope);color:var(--ink);font:400 1.0625rem/1.7 'Hanken Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif}
+::selection{background:var(--ink);color:var(--paper)}
+a{color:var(--ink);text-decoration-thickness:1.5px;text-underline-offset:.22em}
+a:hover{color:var(--postmark)}
+:focus-visible{outline:2.5px solid var(--postmark);outline-offset:3px;border-radius:4px}
+.wrap{max-width:44rem;margin:0 auto;padding-block:1.25rem 3.5rem;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:2.25rem}
+.brand{display:grid;line-height:1;text-decoration:none;color:var(--ink)}
+.brand b{font:400 1.6rem/1 'Abril Fatface',Georgia,serif}
+.brand span{font:600 1.1rem/1.1 'Caveat','Segoe Print',cursive}
+.pill{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;padding:0 1.1rem;border:1.5px solid var(--ink);border-radius:99px;color:var(--ink);font-weight:600;font-size:.9375rem;text-decoration:none;transition:background-color .2s cubic-bezier(.16,1,.3,1),color .2s cubic-bezier(.16,1,.3,1)}
+.pill:hover{background:var(--ink);color:var(--paper)}
+.sheet{background:var(--paper);border-radius:6px;padding:1.75rem 1.25rem 2rem;box-shadow:0 1px 2px rgba(27,38,80,.08),0 22px 44px -26px rgba(27,38,80,.5);position:relative}
+.sheet::before{content:"";position:absolute;inset:0 0 auto;height:6px;border-radius:6px 6px 0 0;background:repeating-linear-gradient(-45deg,var(--postmark) 0 10px,var(--paper) 10px 20px,var(--ink) 20px 30px,var(--paper) 30px 40px)}
+h1{margin:.5rem 0 1rem;font:400 clamp(2.3rem,8.6vw,3.6rem)/1.02 'Abril Fatface',Georgia,serif;letter-spacing:-.01em;text-wrap:balance}
+.lede{margin:0 0 1.25rem;font-size:1.1875rem;line-height:1.6;color:var(--ink-soft);text-wrap:pretty}
+.meta{margin:0 0 1.75rem;font:400 .875rem/1.4 'Courier Prime','Courier New',monospace;color:var(--ink-soft)}
+h2{margin:2.6rem 0 .8rem;font:400 clamp(1.6rem,5.6vw,2.05rem)/1.12 'Abril Fatface',Georgia,serif;text-wrap:balance}
+h3{margin:1.8rem 0 .4rem;font-size:1.0625rem;font-weight:700}
+p,li{color:var(--ink-soft);text-wrap:pretty}
+p{margin:0 0 1rem}
+strong{color:var(--ink);font-weight:700}
+ul,ol{padding-left:1.25rem;margin:0 0 1.1rem}
+li{margin-bottom:.45rem}
+li::marker{color:var(--postmark)}
+.toc{margin:0 0 .5rem;padding:1rem 1.1rem;border:1.5px dashed rgba(27,38,80,.32);border-radius:10px}
+.toc p{margin:0 0 .4rem;font:700 .9375rem/1.3 'Hanken Grotesk',sans-serif;color:var(--ink)}
+.toc ol{margin:0}
+.toc a{text-decoration:none;font-weight:600}
+.toc a:hover{text-decoration:underline}
+figure{margin:1.75rem 0;display:grid;justify-items:center;gap:.7rem}
+.stamp{padding:10px;background:var(--white);box-shadow:0 2px 3px rgba(27,38,80,.12),0 16px 30px -18px rgba(27,38,80,.55);-webkit-mask:radial-gradient(circle 5px at 5px 5px,#0000 98%,#000) -5px -5px/14px 14px;mask:radial-gradient(circle 5px at 5px 5px,#0000 98%,#000) -5px -5px/14px 14px;transform:rotate(-1.5deg)}
+.stamp img{display:block;width:min(19rem,72vw);height:auto;aspect-ratio:3/4;object-fit:cover}
+.stamp.wide img{width:min(26rem,82vw);aspect-ratio:auto}
+figcaption{font:400 .875rem/1.45 'Courier Prime','Courier New',monospace;color:var(--ink-soft);text-align:center;max-width:30rem}
+.note{margin:1.5rem 0;padding:1.1rem 1.2rem;background:var(--white);border-radius:10px;box-shadow:0 1px 2px rgba(27,38,80,.08)}
+.note p:last-child{margin:0}
+table{width:100%;border-collapse:collapse;margin:1rem 0 1.4rem;font-size:.9688rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:.7rem .6rem;border-bottom:1.5px solid var(--line);vertical-align:top;color:var(--ink-soft)}
+th{color:var(--ink);font-weight:700}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.cta{margin-top:2.5rem;background:var(--ink);color:var(--on-ink);border-radius:6px;padding:2rem 1.25rem;box-shadow:0 26px 50px -28px rgba(27,38,80,.8)}
+.cta h2{margin:0 0 .75rem;color:var(--on-ink)}
+.cta p{color:var(--on-ink-soft)}
+.cta .price{margin:1.25rem 0 1.5rem;display:grid;gap:.15rem}
+.cta .price small{font:400 .8125rem/1.3 'Courier Prime','Courier New',monospace;color:var(--envelope);letter-spacing:.06em;text-transform:uppercase}
+.cta .price b{font:400 2.6rem/1 'Abril Fatface',Georgia,serif;color:var(--on-ink)}
+.cta .price span{font-size:.9375rem;color:var(--on-ink-soft)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:52px;padding:0 1.5rem;border-radius:99px;background:var(--envelope);color:var(--ink);font-weight:700;text-decoration:none;transition:transform .25s cubic-bezier(.16,1,.3,1),background-color .25s cubic-bezier(.16,1,.3,1)}
+.btn:hover{background:var(--paper);color:var(--ink);transform:translateY(-2px)}
+.btn svg{width:18px;height:18px}
+.sign{margin:1.25rem 0 0;font:600 1.35rem/1 'Caveat','Segoe Print',cursive;color:var(--envelope)}
+.more{margin-top:2rem}
+.more h2{margin-top:0;font-size:1.5rem}
+.more ul{list-style:none;padding:0;display:grid;gap:.6rem}
+.more a{display:block;padding:.95rem 1.1rem;background:var(--paper);border-radius:10px;text-decoration:none;font-weight:600;box-shadow:0 1px 2px rgba(27,38,80,.08);transition:transform .25s cubic-bezier(.16,1,.3,1)}
+.more a:hover{transform:translateX(4px);color:var(--ink)}
+.more a span{display:block;font-weight:400;font-size:.9375rem;color:var(--ink-soft);margin-top:.2rem}
+.foot{margin-top:2.5rem;font-size:.875rem;color:var(--ink-soft);display:flex;flex-wrap:wrap;gap:.4rem 1rem}
+.foot a{color:var(--ink-soft)}
+@media (min-width:760px){.sheet{padding:2.75rem 3rem 3rem}.cta{padding:2.5rem 3rem}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.sheet .more a{background:var(--white)}
