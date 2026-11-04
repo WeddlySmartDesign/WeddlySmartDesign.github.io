@@ -27,10 +27,14 @@
   <link rel="preload" href="assets/fonts/hanken-grotesk-ieVn2YZDLW-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/fonts.css?v=44">
   <link rel="stylesheet" href="css/styles.css?v=47">
+  <link rel="stylesheet" href="css/quiz.css?v=3">
   <!-- Estadísticas de visitas sin cookies: Cloudflare Web Analytics las añade al publicar -->
   <script src="js/config.js?v=48" defer></script>
   <script src="js/catalog.js?v=41" defer></script>
   <script src="js/main.js?v=45" defer></script>
+  <script src="js/quiz.js?v=3" defer></script>
+  <script src="assets/vendor/qrcode.js" defer></script>
+  <script src="js/quiz-gen.js?v=1" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#disenos">Ir a los diseños</a>
@@ -302,6 +306,7 @@
     </div>
   </section>
 
+  <!-- 7b · QUIZ -->
   <!-- 8 · CIERRE -->
   <section class="closing" aria-labelledby="closing-title">
     <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
@@ -319,7 +324,7 @@
     <div class="wrap freebies-grid">
       <div class="freebies-copy">
         <h2 id="freebies-title">Un regalo para vuestra boda.</h2>
-        <p>Material gratis, sin registrarse, para compartir con familia y amigos. Empezamos con stickers animados para WhatsApp; pronto, más.</p>
+        <p>Material gratis, sin registrarse, para compartir con familia y amigos. Stickers animados para WhatsApp y un quiz para vuestros invitados. Pronto, más.</p>
         <a class="btn btn-paper" href="stickers.html">Ver los stickers gratis <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
       </div>
       <a class="freebies-row" href="stickers.html" tabindex="-1" aria-hidden="true">
@@ -328,6 +333,59 @@
         <img src="assets/stickers/C07.webp" width="512" height="512" alt="" loading="lazy" decoding="async">
         <img src="assets/stickers/D06.webp" width="512" height="512" alt="" loading="lazy" decoding="async">
       </a>
+    </div>
+  </section>
+
+  <section class="quiz" id="invitado" aria-labelledby="quiz-title">
+    <div class="quiz-wrap">
+      <div class="quiz-head">
+        <p class="eyebrow">Para pasar el rato</p>
+        <h2 id="quiz-title">¿Qué tipo de invitado eres?</h2>
+        <p>Cinco preguntas, menos de un minuto. Sin registros y sin guardar nada.</p>
+        <form class="quiz-gen" id="quiz-gen" novalidate>
+          <h3>¿Os casáis? Llevadlo a vuestra boda</h3>
+          <p>Ponéis vuestros nombres y la fecha, y os damos un enlace y un QR para que vuestros invitados jueguen desde el móvil. Es gratis.</p>
+          <label>Vuestros nombres<input name="n" type="text" maxlength="44" placeholder="Clara y Mateo" autocomplete="off"></label>
+          <label>Fecha de la boda<input name="f" type="date"></label>
+          <button class="quiz-btn" type="submit">Crear enlace y QR</button>
+          <div class="quiz-gen-out" hidden>
+            <canvas class="quiz-qr" width="300" height="300" role="img" aria-label="Código QR del quiz"></canvas>
+            <input class="quiz-link" type="text" readonly aria-label="Enlace del quiz">
+            <div class="quiz-actions">
+              <button class="quiz-btn quiz-btn--line quiz-copy" type="button">Copiar enlace</button>
+              <button class="quiz-btn quiz-btn--line quiz-qrdl" type="button">Descargar QR</button>
+              <a class="quiz-btn quiz-btn--line quiz-try" target="_blank" rel="noopener">Probarlo</a>
+            </div>
+            <p class="quiz-hint" role="status"></p>
+          </div>
+        </form>
+      </div>
+      <div class="quiz-card-shell" id="quiz">
+        <div class="quiz-stage" aria-live="polite">
+          <div class="quiz-intro">
+            <p>Descubre qué personaje serías en una boda y compártelo con quien te invite a la siguiente.</p>
+            <button class="quiz-btn quiz-start" type="button">Empezar</button>
+          </div>
+          <div class="quiz-play" hidden>
+            <div class="quiz-top"><span class="quiz-prog"></span><span class="quiz-bar" aria-hidden="true"><i></i></span></div>
+            <h3 class="quiz-q" tabindex="-1"></h3>
+            <div class="quiz-opts"></div>
+            <button class="quiz-back" type="button" hidden>Volver a la anterior</button>
+          </div>
+          <div class="quiz-result" hidden>
+            <div class="quiz-card"><canvas class="quiz-canvas" width="1080" height="1350" role="img" aria-label="Tu tarjeta de invitado"></canvas></div>
+                        <h3 class="quiz-rtitle quiz-rname" tabindex="-1"></h3>
+            <p class="quiz-rline"></p>
+            <p class="quiz-rquote" hidden></p>
+            <div class="quiz-actions">
+              <button class="quiz-btn quiz-dl" type="button">Descargar tarjeta</button>
+              <button class="quiz-btn quiz-btn--line quiz-share" type="button">Compartir</button>
+              <button class="quiz-btn quiz-btn--line quiz-again" type="button">Repetir</button>
+            </div>
+            <p class="quiz-hint" role="status"></p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </main>
