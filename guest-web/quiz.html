@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>¿Qué tipo de invitado eres?</title>
+  <meta name="description" content="Cinco preguntas, menos de un minuto. Descubre qué tipo de invitado eres en esta boda.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f0c4bc">
+  <link rel="stylesheet" href="css/fonts.css?v=44">
+  <link rel="stylesheet" href="css/styles.css?v=45">
+  <link rel="stylesheet" href="css/quiz.css?v=2">
+  <link rel="stylesheet" href="css/quiz-page.css?v=1">
+</head>
+<body class="qp-body">
+<main class="qp">
+  <section class="qp-cover" id="cover" aria-labelledby="qp-names">
+    <div class="qp-stamp">
+      <p class="qp-eyebrow">Un juego para los invitados</p>
+      <h1 class="qp-names" id="qp-names">¡Hoy hay boda!</h1>
+      <p class="qp-date" id="qp-date" hidden></p>
+      <hr class="qp-rule">
+      <p class="qp-title">¿Qué tipo de invitado eres?</p>
+      <p class="qp-sub">5 preguntas · menos de un minuto</p>
+      <button class="quiz-btn qp-go" type="button">Jugar</button>
+      <ul class="qp-cast" aria-hidden="true">
+        <li><img src="assets/quiz/javi.webp" alt="" width="120" height="140"></li>
+        <li><img src="assets/quiz/lola.webp" alt="" width="120" height="140"></li>
+        <li><img src="assets/quiz/dani.webp" alt="" width="120" height="140"></li>
+        <li><img src="assets/quiz/marta.webp" alt="" width="120" height="140"></li>
+        <li><img src="assets/quiz/nuria.webp" alt="" width="120" height="140"></li>
+        <li><img src="assets/quiz/hugo.webp" alt="" width="120" height="140"></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="qp-game" id="game" hidden>
+    <div class="quiz-card-shell" id="quiz" data-standalone="1">
+      <div class="quiz-stage" aria-live="polite">
+        <div class="quiz-intro" hidden></div>
+        <div class="quiz-play" hidden>
+          <div class="quiz-top"><span class="quiz-prog"></span><span class="quiz-bar" aria-hidden="true"><i></i></span></div>
+          <h2 class="quiz-q" tabindex="-1"></h2>
+          <div class="quiz-opts"></div>
+          <button class="quiz-back" type="button" hidden>Volver a la anterior</button>
+        </div>
+        <div class="quiz-result" hidden>
+          <div class="quiz-card"><canvas class="quiz-canvas" width="1080" height="1350" role="img" aria-label="Tu tarjeta de invitado"></canvas></div>
+          <h2 class="quiz-rtitle quiz-rname" tabindex="-1"></h2>
+          <p class="quiz-rline"></p>
+          <p class="quiz-rquote" hidden></p>
+          <div class="quiz-actions">
+            <button class="quiz-btn quiz-dl" type="button">Descargar tarjeta</button>
+            <button class="quiz-btn quiz-btn--line quiz-share" type="button">Compartir</button>
+            <button class="quiz-btn quiz-btn--line quiz-again" type="button">Repetir</button>
+          </div>
+          <p class="quiz-hint" role="status"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<script src="js/quiz.js?v=2"></script>
+<script>
+(() => {
+  const q = new URLSearchParams(location.search);
+  const n = (q.get('n') || '').slice(0, 44).trim(), f = (q.get('f') || '').slice(0, 32).trim();
+  if (n) { document.getElementById('qp-names').textContent = n; document.title = n + ' · ¿Qué tipo de invitado eres?'; }
+  const d = document.getElementById('qp-date'); if (f) { d.textContent = f; d.hidden = false; }
+  const cover = document.getElementById('cover'), game = document.getElementById('game');
+  document.querySelector('.qp-go').addEventListener('click', () => {
+    cover.hidden = true; game.hidden = false; window.scrollTo(0, 0);
+    document.getElementById('quiz').dispatchEvent(new Event('quiz:start'));
+  });
+})();
+</script>
+</body>
+</html>

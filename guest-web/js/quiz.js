@@ -40,6 +40,9 @@
       ['Me voy a la hora prevista, con el taxi ya pedido', 'javi'] ] }
   ];
 
+  const standalone = root.dataset.standalone === '1';
+  const qs = new URLSearchParams(location.search);
+  const couple = { n: (qs.get('n') || '').slice(0, 44).trim(), f: (qs.get('f') || '').slice(0, 32).trim() };
   const $ = (s) => root.querySelector(s);
   const stage = $('.quiz-stage'), intro = $('.quiz-intro'), play = $('.quiz-play'), out = $('.quiz-result');
   const qEl = $('.quiz-q'), opts = $('.quiz-opts'), prog = $('.quiz-prog'), bar = $('.quiz-bar i'), back = $('.quiz-back');
@@ -54,7 +57,7 @@
     g.fillText(line, x, y); return y + lh;
   };
   async function drawCard(r) {
-    const [m] = await Promise.all([loadImg(r.img), document.fonts ? Promise.all(['96px "Abril Fatface"', '600 36px "Hanken Grotesk"', '34px "Courier Prime"', '700 46px Caveat'].map((f) => document.fonts.load(f))) : 0]);
+    const [m] = await Promise.all([loadImg(r.img), document.fonts ? Promise.all(['96px "Abril Fatface"', '600 36px "Hanken Grotesk"', '34px "Courier Prime"'].map((f) => document.fonts.load(f))) : 0]);
     const W = 1080, H = 1350, g = cv.getContext('2d');
     cv.width = W; cv.height = H;
     g.fillStyle = C.env; g.fillRect(0, 0, W, H);
@@ -74,8 +77,8 @@
     let y = 925; const nm = r.name; if (g.measureText(nm).width > 820) g.font = '400 80px "Abril Fatface"'; g.fillText(nm, W / 2, y);
     g.fillStyle = C.soft; g.font = '500 36px "Hanken Grotesk"'; y = wrap(g, r.line, W / 2, y + 70, 760, 50);
     g.fillStyle = C.ink; g.font = '400 34px "Courier Prime"'; wrap(g, r.quote, W / 2, y + 22, 780, 46);
-    g.fillStyle = C.ink; g.font = '400 40px "Abril Fatface"'; g.fillText('GUEST', W / 2 - 120, 1228);
-    g.font = '700 46px Caveat'; g.textAlign = 'left'; g.fillText('by WeddlySmartDesign', W / 2 - 52, 1228); g.textAlign = 'center';
+    if (couple.n) { g.fillStyle = C.ink; g.font = '400 50px "Abril Fatface"'; g.fillText(couple.n, W / 2, couple.f ? 1190 : 1215, 800); }
+    if (couple.f) { g.fillStyle = C.soft; g.font = '400 28px "Courier Prime"'; g.fillText(couple.f.toUpperCase(), W / 2, 1232); }
     g.save(); g.translate(850, 250); g.rotate(-0.26); g.strokeStyle = C.red; g.fillStyle = C.red; g.globalAlpha = .85;
     g.lineWidth = 5; g.beginPath(); g.arc(0, 0, 78, 0, 7); g.stroke(); g.lineWidth = 2; g.beginPath(); g.arc(0, 0, 66, 0, 7); g.stroke();
     g.font = '400 22px "Courier Prime"'; g.letterSpacing = '3px'; g.fillText('INVITADO', 0, 8); g.restore();
@@ -127,13 +130,14 @@
     out.dataset.type = key;
     show(out);
     $('.quiz-rtitle').focus({ preventScroll: true });
-    root.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+    if (!standalone) root.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
   }
 
   function start() { i = 0; picks = []; renderQ(); show(play); qEl.focus({ preventScroll: true }); }
 
-  $('.quiz-start').addEventListener('click', () => swap(start));
-  $('.quiz-again').addEventListener('click', () => swap(() => { show(intro); $('.quiz-start').focus({ preventScroll: true }); }));
+  if ($('.quiz-start')) $('.quiz-start').addEventListener('click', () => swap(start));
+  $('.quiz-again').addEventListener('click', () => swap(standalone ? start : () => { show(intro); $('.quiz-start').focus({ preventScroll: true }); }));
+  root.addEventListener('quiz:start', start);
   back.addEventListener('click', () => { if (i > 0) swap(() => { i--; renderQ(); qEl.focus({ preventScroll: true }); }); });
 
   $('.quiz-dl').addEventListener('click', () => {
@@ -146,10 +150,10 @@
     const blob = await new Promise((ok) => cv.toBlob(ok, 'image/png'));
     const file = blob && new File([blob], 'invitado-guest.png', { type: 'image/png' });
     if (file && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], text }); } catch (e) {} return; }
-    const url = location.origin + location.pathname + '#invitado';
+    const url = standalone ? location.href : '';
     try {
-      if (navigator.share) { await navigator.share({ title: '¿Qué tipo de invitado eres?', text, url }); return; }
-      await navigator.clipboard.writeText(`${text} ${url}`);
+      if (navigator.share) { await navigator.share(url ? { title: '¿Qué tipo de invitado eres?', text, url } : { title: '¿Qué tipo de invitado eres?', text }); return; }
+      await navigator.clipboard.writeText(`${text} ${url}`.trim());
       hint.textContent = 'Copiado. Pégalo donde quieras.';
     } catch (e) { if (e && e.name !== 'AbortError') hint.textContent = 'No se ha podido compartir desde aquí.'; }
   });
