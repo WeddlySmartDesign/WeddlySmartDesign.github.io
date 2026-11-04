@@ -71,11 +71,11 @@
     const hh = 560, ww = m.width * hh / m.height; g.shadowColor = 'rgba(27,38,80,.25)'; g.shadowBlur = 30; g.shadowOffsetY = 16;
     g.drawImage(m, W / 2 - ww / 2, 230, ww, hh); g.shadowColor = 'transparent';
     g.fillStyle = C.ink; g.font = '400 100px "Abril Fatface"';
-    let y = 945; const nm = r.name; if (g.measureText(nm).width > 820) g.font = '400 80px "Abril Fatface"'; g.fillText(nm, W / 2, y);
+    let y = 925; const nm = r.name; if (g.measureText(nm).width > 820) g.font = '400 80px "Abril Fatface"'; g.fillText(nm, W / 2, y);
     g.fillStyle = C.soft; g.font = '500 36px "Hanken Grotesk"'; y = wrap(g, r.line, W / 2, y + 70, 760, 50);
     g.fillStyle = C.ink; g.font = '400 34px "Courier Prime"'; wrap(g, r.quote, W / 2, y + 22, 780, 46);
-    g.fillStyle = C.ink; g.font = '400 40px "Abril Fatface"'; g.fillText('GUEST', W / 2 - 120, 1190);
-    g.font = '700 46px Caveat'; g.textAlign = 'left'; g.fillText('by WeddlySmartDesign', W / 2 - 52, 1190); g.textAlign = 'center';
+    g.fillStyle = C.ink; g.font = '400 40px "Abril Fatface"'; g.fillText('GUEST', W / 2 - 120, 1228);
+    g.font = '700 46px Caveat'; g.textAlign = 'left'; g.fillText('by WeddlySmartDesign', W / 2 - 52, 1228); g.textAlign = 'center';
     g.save(); g.translate(850, 250); g.rotate(-0.26); g.strokeStyle = C.red; g.fillStyle = C.red; g.globalAlpha = .85;
     g.lineWidth = 5; g.beginPath(); g.arc(0, 0, 78, 0, 7); g.stroke(); g.lineWidth = 2; g.beginPath(); g.arc(0, 0, 66, 0, 7); g.stroke();
     g.font = '400 22px "Courier Prime"'; g.letterSpacing = '3px'; g.fillText('INVITADO', 0, 8); g.restore();
