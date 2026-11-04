@@ -325,13 +325,13 @@
             <button class="quiz-back" type="button" hidden>Volver a la anterior</button>
           </div>
           <div class="quiz-result" hidden>
-            <div class="quiz-card"><img alt="" width="300" height="300" decoding="async"></div>
-            <p class="eyebrow">En una boda eres</p>
-            <h3 class="quiz-rtitle quiz-rname" tabindex="-1"></h3>
+            <div class="quiz-card"><canvas class="quiz-canvas" width="1080" height="1350" role="img" aria-label="Tu tarjeta de invitado"></canvas></div>
+                        <h3 class="quiz-rtitle quiz-rname" tabindex="-1"></h3>
             <p class="quiz-rline"></p>
-            <p class="quiz-rquote"></p>
+            <p class="quiz-rquote" hidden></p>
             <div class="quiz-actions">
-              <button class="quiz-btn quiz-share" type="button">Compartir</button>
+              <button class="quiz-btn quiz-dl" type="button">Descargar tarjeta</button>
+              <button class="quiz-btn quiz-btn--line quiz-share" type="button">Compartir</button>
               <button class="quiz-btn quiz-btn--line quiz-again" type="button">Repetir</button>
             </div>
             <p class="quiz-hint" role="status"></p>

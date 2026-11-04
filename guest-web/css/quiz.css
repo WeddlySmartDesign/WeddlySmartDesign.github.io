@@ -27,8 +27,8 @@
 .quiz-opt[aria-pressed="true"] { border-color: var(--postmark); }
 .quiz-back { margin-top: 1rem; background: none; border: 0; color: var(--ink-soft); font: 500 .9375rem var(--text); text-decoration: underline; text-underline-offset: .2em; cursor: pointer; padding: .5rem 0; min-height: 44px; }
 .quiz-result { display: grid; gap: 1.1rem; justify-items: center; text-align: center; }
-.quiz-card { width: min(100%, 300px); aspect-ratio: 1; display: grid; place-items: center; }
-.quiz-card img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 14px 18px rgba(27,38,80,.22)); animation: quizPop 460ms var(--ease-out); }
+.quiz-card { display: grid; place-items: center; }
+.quiz-card canvas { width: 100%; height: 100%; border-radius: 6px; box-shadow: var(--shadow); animation: quizPop 460ms var(--ease-out); }
 @keyframes quizPop { from { opacity: 0; transform: translateY(10px) scale(.94); } }
 .quiz-result .eyebrow { font: 400 .8125rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--postmark); }
 .quiz-rtitle { font: 400 clamp(1.9rem, 5vw, 2.6rem)/1.05 var(--display); outline: none; }
@@ -38,7 +38,10 @@
 .quiz-hint { min-height: 1.4em; font-size: .875rem; color: var(--ink-soft); }
 .quiz-cta { font-size: .9375rem; color: var(--ink-soft); }
 @media (min-width: 860px) { .quiz-wrap { grid-template-columns: 5fr 7fr; align-items: center; gap: 4rem; } }
-@media (prefers-reduced-motion: reduce) { .quiz-stage, .quiz-bar i, .quiz-btn, .quiz-opt { transition: none; } .quiz-card img { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .quiz-stage, .quiz-bar i, .quiz-btn, .quiz-opt { transition: none; } .quiz-card canvas { animation: none; } }
 .quiz-card-shell, .quiz-result, .quiz-intro { grid-template-columns: minmax(0, 1fr); }
-.quiz-card { width: min(100%, 240px); }
-@media (min-width: 600px) { .quiz-card { width: min(100%, 290px); } }
+.quiz-card { width: min(100%, 320px); aspect-ratio: 4 / 5; }
+.quiz-canvas { width: 100%; height: 100%; border-radius: 6px; box-shadow: var(--shadow); }
+.quiz-rtitle, .quiz-rline { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+.quiz-rtitle, .quiz-rline { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
