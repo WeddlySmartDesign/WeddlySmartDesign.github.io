@@ -913,3 +913,19 @@ body.viewer-open { overflow: hidden; }
   .steps .step:not(.is-in) .step-visual > .stamp, .steps .step:not(.is-in) .step-text, .steps .step:not(.is-in) .step-postmark { opacity: 1; translate: none; }
   .steps .step.is-in .step-postmark { animation: none; }
 }
+
+/* ---------- Gratis: stickers de boda ---------- */
+.freebies { background: var(--ink); color: var(--on-ink); padding-block: var(--section); }
+.freebies-grid { display: grid; gap: 2rem; align-items: center; }
+.freebies-copy { display: grid; justify-items: start; gap: 1.1rem; }
+.freebies h2 { font: 400 clamp(2.2rem, 3.4vw + 1rem, 3.6rem)/1 var(--display); max-width: 12ch; }
+.freebies-copy p { max-width: 30rem; color: var(--on-ink-soft); }
+.freebies-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .25rem; }
+.freebies-row img { width: 100%; height: auto; aspect-ratio: 1; filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .3)); transition: rotate .35s var(--ease-out), translate .35s var(--ease-out); }
+.freebies-row img:nth-child(1) { rotate: -4deg; }
+.freebies-row img:nth-child(2) { rotate: 3deg; translate: 0 10%; }
+.freebies-row img:nth-child(3) { rotate: -2deg; }
+.freebies-row img:nth-child(4) { rotate: 5deg; translate: 0 8%; }
+@media (hover: hover) and (pointer: fine) { .freebies-row:hover img { rotate: 0deg; translate: 0 -4px; } }
+@media (max-width: 759.98px) { .freebies-row { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 26rem; } .freebies-row img:nth-child(n) { translate: 0 0; } }
+@media (min-width: 760px) { .freebies-grid { grid-template-columns: .9fr 1.1fr; gap: 3rem; } }
