@@ -4,40 +4,42 @@
   if (!root) return;
 
   const TYPES = {
-    javi:    { name: 'El puntual', img: 'javi',    line: 'Llega el primero, con la invitación guardada y el sitio ya localizado.', quote: '«¿Empezamos ya? Son y diez…»' },
-    marta:   { name: 'La organizada', img: 'marta', line: 'Lo tiene todo apuntado: qué mesa le toca, quién va al lado y dónde está el cargador.', quote: '«Tranquilos, yo ya lo tengo.»' },
-    dani:    { name: 'El alma de la fiesta', img: 'dani', line: 'Brinda con quien pase y convierte cualquier corrillo en una fiesta.', quote: '«¡Una ronda para toda la mesa!»' },
-    nuria:   { name: 'La reina de la pista', img: 'nuria', line: 'Cuando suena la primera canción, ya está bailando. Y no para.', quote: '«Una más y me voy. Mentira.»' },
-    hugo:    { name: 'El del discurso', img: 'hugo', line: 'Nadie se lo ha pedido, pero lleva unas palabras preparadas desde hace semanas.', quote: '«Si me permitís unas palabras…»' },
-    lola:    { name: 'La romántica', img: 'lola', line: 'Llora en la ceremonia, abraza a todo el mundo y manda besos desde el otro lado del salón.', quote: '«¡Qué bonito todo, de verdad!»' }
+    javi:   { name: 'El puntual', img: 'javi', line: 'Llega el primero, con la invitación guardada y el sitio ya localizado.', quote: '«¿Empezamos ya? Son y diez…»' },
+    dani:   { name: 'El alma de la fiesta', img: 'dani', line: 'Brinda con quien pase y convierte cualquier corrillo en una fiesta.', quote: '«¡Una ronda para toda la mesa!»' },
+    nuria:  { name: 'La reina de la pista', img: 'nuria', line: 'Cuando suena la primera canción, ya está bailando. Y no para.', quote: '«Una más y me voy. Mentira.»' },
+    lola:   { name: 'La que llora con todo', img: 'lola', line: 'Llora en la ceremonia, en los discursos y con el vals. Y abraza a todo el mundo después.', quote: '«¡Qué bonito todo, de verdad!»' },
+    hugo:   { name: 'El del discurso', img: 'hugo', line: 'Nadie se lo ha pedido, pero lleva unas palabras preparadas desde hace semanas.', quote: '«Si me permitís unas palabras…»' },
+    oscar:  { name: 'El cazacanapés', img: 'oscar', line: 'Conoce la ruta de las bandejas mejor que el camarero. Nunca llega al banquete con hambre.', quote: '«Esto lo cojo, que luego no vuelven.»' },
+    marta:  { name: 'La fotógrafa improvisada', img: 'marta', line: 'Tiene 300 fotos del brindis y ninguna de ella. Siempre sabe dónde está la mejor luz.', quote: '«¡Un segundo, que no he salido!»' },
+    carmen: { name: 'La última en irse', img: 'carmen', line: 'Apaga las luces de la pista y todavía pide una canción más.', quote: '«Si nadie se va, yo tampoco.»' }
   };
 
   const QUESTIONS = [
     { q: 'Te llega la invitación al móvil. ¿Qué haces?', a: [
       ['La abro enseguida y confirmo antes de que se me pase', 'javi'],
-      ['Se la enseño al grupo ahora mismo', 'lola'],
-      ['Miro quién más va y en qué mesa me pondrán', 'marta'],
+      ['Se la enseño al grupo ahora mismo, con mil emojis', 'lola'],
+      ['Miro qué van a servir de comer', 'oscar'],
       ['Ya estoy pensando en qué me pongo para bailar', 'nuria'] ] },
     { q: 'Llegas al banquete. ¿Dónde te encuentran?', a: [
       ['En mi sitio, con la servilleta ya puesta', 'javi'],
       ['Con una copa, saludando mesa por mesa', 'dani'],
-      ['Revisando que a todos les llegue lo que pidieron', 'marta'],
-      ['Ensayando mentalmente unas palabras para los novios', 'hugo'] ] },
+      ['Siguiendo la bandeja de canapés a una distancia prudente', 'oscar'],
+      ['Buscando el mejor ángulo para la foto de grupo', 'marta'] ] },
     { q: 'Suena la canción que no falla. ¿Y tú?', a: [
       ['Soy la primera en pisar la pista', 'nuria'],
       ['Arrastro a toda la mesa conmigo', 'dani'],
       ['La bailo emocionada mirando a los novios', 'lola'],
-      ['Aplaudo desde mi silla, que alguien tiene que grabarlo', 'marta'] ] },
+      ['La grabo entera para que no se pierda', 'marta'] ] },
     { q: 'Se abre el micrófono. ¿Qué pasa?', a: [
       ['Me levanto: tenía algo preparado', 'hugo'],
       ['Grito «¡que vivan los novios!» desde mi mesa', 'dani'],
       ['Se me saltan las lágrimas antes de que hablen', 'lola'],
-      ['Compruebo la hora: el postre no puede esperar', 'javi'] ] },
+      ['Aprovecho para ir a por otro canapé', 'oscar'] ] },
     { q: 'Ya es de madrugada. ¿Cómo te despides?', a: [
-      ['Soy de las últimas: la pista no se cierra sola', 'nuria'],
-      ['Hasta que no abrazo a los novios, no me voy', 'lola'],
-      ['Me despido de todos… y repito la ronda', 'dani'],
-      ['Me voy a la hora prevista, con el taxi ya pedido', 'javi'] ] }
+      ['Soy de las últimas: la pista no se cierra sola', 'carmen'],
+      ['Me voy a la hora prevista, con el taxi ya pedido', 'javi'],
+      ['Ensayo un último brindis improvisado', 'hugo'],
+      ['Me hago una última foto con todos antes de irme', 'marta'] ] }
   ];
 
   const standalone = root.dataset.standalone === '1';
@@ -46,6 +48,8 @@
   const $ = (s) => root.querySelector(s);
   const stage = $('.quiz-stage'), intro = $('.quiz-intro'), play = $('.quiz-play'), out = $('.quiz-result');
   const qEl = $('.quiz-q'), opts = $('.quiz-opts'), prog = $('.quiz-prog'), bar = $('.quiz-bar i'), back = $('.quiz-back');
+  const AV = ['javi', 'lola', 'oscar', 'dani', 'carmen'];
+  const av = document.createElement('img'); av.className = 'quiz-av'; av.alt = ''; av.width = 56; av.height = 56;
   let i = 0, picks = [], current = null;
   const cv = $('.quiz-canvas');
   const C = { ink: '#1b2650', soft: '#4a5480', env: '#f0c4bc', envSoft: '#f6dcd6', red: '#b3263a' };
@@ -70,21 +74,22 @@
     g.textAlign = 'center'; g.textBaseline = 'alphabetic';
     g.fillStyle = C.red; g.font = '400 30px "Courier Prime"'; g.letterSpacing = '8px';
     g.fillText('EN UNA BODA ERES', W / 2, 200); g.letterSpacing = '0px';
-    g.fillStyle = C.envSoft; g.beginPath(); g.arc(W / 2, 500, 280, 0, 7); g.fill();
-    const hh = 560, ww = m.width * hh / m.height; g.shadowColor = 'rgba(27,38,80,.25)'; g.shadowBlur = 30; g.shadowOffsetY = 16;
-    g.drawImage(m, W / 2 - ww / 2, 230, ww, hh); g.shadowColor = 'transparent';
+    g.fillStyle = C.envSoft; g.beginPath(); g.arc(W / 2, 470, 262, 0, 7); g.fill();
+    const hh = 520, ww = m.width * hh / m.height; g.shadowColor = 'rgba(27,38,80,.25)'; g.shadowBlur = 30; g.shadowOffsetY = 16;
+    g.drawImage(m, W / 2 - ww / 2, 215, ww, hh); g.shadowColor = 'transparent';
     g.fillStyle = C.ink; g.font = '400 100px "Abril Fatface"';
-    let y = 925; const nm = r.name; if (g.measureText(nm).width > 820) g.font = '400 80px "Abril Fatface"'; g.fillText(nm, W / 2, y);
-    g.fillStyle = C.soft; g.font = '500 36px "Hanken Grotesk"'; y = wrap(g, r.line, W / 2, y + 70, 760, 50);
-    g.fillStyle = C.ink; g.font = '400 34px "Courier Prime"'; wrap(g, r.quote, W / 2, y + 22, 780, 46);
-    if (couple.n) { g.fillStyle = C.ink; g.font = '400 50px "Abril Fatface"'; g.fillText(couple.n, W / 2, couple.f ? 1190 : 1215, 800); }
-    if (couple.f) { g.fillStyle = C.soft; g.font = '400 28px "Courier Prime"'; g.fillText(couple.f.toUpperCase(), W / 2, 1232); }
+    let y = 845; const nm = r.name; if (g.measureText(nm).width > 820) g.font = '400 80px "Abril Fatface"'; g.fillText(nm, W / 2, y);
+    g.fillStyle = C.soft; g.font = '500 33px "Hanken Grotesk"'; y = wrap(g, r.line, W / 2, y + 62, 780, 44);
+    g.fillStyle = C.ink; g.font = '400 30px "Courier Prime"'; wrap(g, r.quote, W / 2, y + 14, 780, 40);
+    if (couple.n) { g.fillStyle = C.ink; g.font = '400 50px "Abril Fatface"'; g.fillText(couple.n, W / 2, couple.f ? 1200 : 1225, 800); }
+    if (couple.f) { g.fillStyle = C.soft; g.font = '400 28px "Courier Prime"'; g.fillText(couple.f.toUpperCase(), W / 2, 1238); }
     g.save(); g.translate(850, 250); g.rotate(-0.26); g.strokeStyle = C.red; g.fillStyle = C.red; g.globalAlpha = .85;
     g.lineWidth = 5; g.beginPath(); g.arc(0, 0, 78, 0, 7); g.stroke(); g.lineWidth = 2; g.beginPath(); g.arc(0, 0, 66, 0, 7); g.stroke();
     g.font = '400 22px "Courier Prime"'; g.letterSpacing = '3px'; g.fillText('INVITADO', 0, 8); g.restore();
   }
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  root.querySelector('.quiz-top').after(av);
   const show = (el) => { [intro, play, out].forEach((x) => { x.hidden = x !== el; }); };
   const swap = (fn) => {
     if (reduce) return fn();
@@ -98,6 +103,7 @@
     bar.style.width = `${(i / QUESTIONS.length) * 100}%`;
     back.hidden = i === 0;
     qEl.textContent = q;
+    av.src = `assets/quiz/${AV[i % AV.length]}.webp`;
     opts.replaceChildren(...a.map(([label, t]) => {
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'quiz-opt'; b.textContent = label; b.dataset.t = t;

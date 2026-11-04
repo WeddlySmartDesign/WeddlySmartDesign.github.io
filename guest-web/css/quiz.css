@@ -58,3 +58,11 @@
 .quiz-link { font: 400 .8125rem var(--mono); color: var(--ink-soft); }
 .quiz-gen-out .quiz-actions { justify-content: flex-start; }
 .quiz-gen p { max-width: none; }
+
+.quiz-av { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; object-position: 50% 12%; background: var(--envelope-soft); margin-bottom: .8rem; box-shadow: 0 0 0 3px var(--white), 0 0 0 4.5px var(--envelope); animation: quizPop 360ms var(--ease-out); }
+.quiz-card { position: relative; perspective: 900px; }
+.quiz-card canvas { animation: quizReveal 700ms var(--ease-out) both; transform-origin: 50% 60%; }
+.quiz-card::after { content: ""; position: absolute; inset: 0; border-radius: 6px; pointer-events: none; background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.55) 50%, transparent 62%); background-size: 260% 100%; background-position: 130% 0; animation: quizGloss 1100ms 350ms var(--ease-out) both; mix-blend-mode: soft-light; }
+@keyframes quizReveal { from { opacity: 0; transform: rotateY(-24deg) translateY(14px) scale(.9); } 60% { transform: rotateY(4deg) scale(1.01); } }
+@keyframes quizGloss { to { background-position: -30% 0; } }
+@media (prefers-reduced-motion: reduce) { .quiz-card canvas, .quiz-card::after, .quiz-av { animation: none; } .quiz-card::after { display: none; } }

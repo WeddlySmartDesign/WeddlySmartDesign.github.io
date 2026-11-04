@@ -19,9 +19,9 @@
 .qp-sub { color: var(--ink-soft); font-size: .9375rem; margin-top: .5rem; }
 .qp-go { margin-top: 1.5rem; padding-inline: 2.6rem; font-size: 1.0625rem; }
 .qp-cast { list-style: none; margin: 1.6rem -.5rem 0; padding: 0 0 1.6rem; display: flex; justify-content: center; align-items: flex-end; position: relative; z-index: 1; }
-.qp-cast li { flex: 0 1 17%; margin-inline: -1.2%; animation: qpBob 3.4s ease-in-out infinite; }
-.qp-cast li:nth-child(even) { animation-delay: -1.7s; margin-bottom: -6px; }
-.qp-cast li:nth-child(3n) { animation-delay: -.9s; }
+.qp-cast li { flex: 0 1 13%; margin-inline: -.6%; animation: qpRise 700ms calc(300ms + var(--i) * 70ms) var(--ease-out) both, qpBob 3.4s calc(1.2s + var(--i) * 140ms) ease-in-out infinite; }
+@keyframes qpRise { from { opacity: 0; transform: translateY(26px); } }
+.qp-cast li:nth-child(even) { margin-bottom: -6px; }
 .qp-cast img { width: 100%; height: auto; filter: drop-shadow(0 8px 8px rgba(27,38,80,.25)); }
 @keyframes qpBob { 50% { transform: translateY(-5px); } }
 @media (prefers-reduced-motion: reduce) { .qp-cast li, .qp-stamp { animation: none; } }
