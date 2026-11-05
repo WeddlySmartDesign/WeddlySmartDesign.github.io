@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="css/fonts.css?v=44">
   <link rel="stylesheet" href="css/styles.css?v=45">
   <link rel="stylesheet" href="css/quiz.css?v=3">
+  <link rel="stylesheet" href="css/ultima-hora.css?v=1">
   <!-- Estadísticas de visitas sin cookies: Cloudflare Web Analytics las añade al publicar -->
   <script src="js/config.js?v=48" defer></script>
   <script src="js/catalog.js?v=41" defer></script>
@@ -303,6 +304,38 @@
         <details><summary>¿Hay que instalar una app de la tienda?</summary><p>No. Se abre desde el navegador y podéis añadirla a la pantalla de inicio del móvil. En la <a href="guia.html">guía de la app</a> os lo contamos paso a paso.</p></details>
         <details><summary>¿Hay cuotas o pagos extra?</summary><p>No. Es un pago único de 59,90 € con IVA incluido, sin cuotas. Es nuestro precio de lanzamiento. Lo único opcional: si gastáis las 3 rondas de cambios incluidas y queréis otra, cuesta 10 €.</p></details>
       </div>
+    </div>
+  </section>
+
+  <!-- 7c · ¡ÚLTIMA HORA! -->
+  <section class="quiz uh-teaser" id="ultima-hora" aria-labelledby="uh-teaser-title">
+    <div class="quiz-wrap">
+      <div class="quiz-head">
+        <p class="eyebrow">Otro juego, también gratis</p>
+        <h2 id="uh-teaser-title">¡Última hora! La portada de vuestra boda</h2>
+        <p>Cada invitado escribe un titular y se lleva una portada de periódico para guardar o compartir. Sin registros y sin guardar nada.</p>
+        <form class="quiz-gen" id="uh-gen" data-page="ultima-hora.html" data-file="qr-ultima-hora.png" novalidate>
+          <h3>¿Os casáis? Ponedlo en vuestra mesa</h3>
+          <p>Vuestros nombres y la fecha, y un enlace y un QR para que vuestros invitados hagan su portada desde el móvil.</p>
+          <label>Vuestros nombres<input name="n" type="text" maxlength="44" placeholder="Clara y Mateo" autocomplete="off"></label>
+          <label>Fecha de la boda<input name="f" type="date"></label>
+          <button class="quiz-btn" type="submit">Crear enlace y QR</button>
+          <div class="quiz-gen-out" hidden>
+            <canvas class="quiz-qr" width="300" height="300" role="img" aria-label="Código QR de la portada"></canvas>
+            <input class="quiz-link" type="text" readonly aria-label="Enlace de la portada">
+            <div class="quiz-actions">
+              <button class="quiz-btn quiz-btn--line quiz-copy" type="button">Copiar enlace</button>
+              <button class="quiz-btn quiz-btn--line quiz-qrdl" type="button">Descargar QR</button>
+              <a class="quiz-btn quiz-btn--line quiz-try" target="_blank" rel="noopener">Probarlo</a>
+            </div>
+            <p class="quiz-hint" role="status"></p>
+          </div>
+        </form>
+      </div>
+      <a class="uh-teaser-card" href="ultima-hora.html" aria-label="Probar ¡Última hora!">
+        <img src="assets/ultima-hora-muestra.jpg" alt="Portada de periódico de boda con el titular «Los novios dicen sí y media sala busca pañuelos»" width="540" height="675" loading="lazy">
+        <span class="quiz-btn">Hacer mi portada</span>
+      </a>
     </div>
   </section>
 

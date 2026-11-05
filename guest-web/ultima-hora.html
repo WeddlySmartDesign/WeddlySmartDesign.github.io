@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>¡Última hora! Portada de la boda</title>
+  <meta name="description" content="Escribe el titular y llévate una portada de periódico de la boda para guardar o compartir. Gratis, sin registro.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f0c4bc">
+  <link rel="stylesheet" href="css/fonts.css?v=44">
+  <link rel="stylesheet" href="css/styles.css?v=45">
+  <link rel="stylesheet" href="css/quiz.css?v=3">
+  <link rel="stylesheet" href="css/ultima-hora.css?v=1">
+</head>
+<body class="uh-body">
+<main class="uh">
+  <header class="uh-head">
+    <p class="uh-eyebrow" id="uh-eyebrow">Un juego para los invitados</p>
+    <h1 class="uh-title">¡Última hora!</h1>
+    <p class="uh-sub" id="uh-sub">Escribe el titular de la boda y llévate la portada.</p>
+  </header>
+
+  <div class="uh-grid">
+    <figure class="uh-paper">
+      <canvas id="uh-canvas" width="1080" height="1350" role="img" aria-label="Vista previa de tu portada"></canvas>
+    </figure>
+
+    <form class="uh-form" id="uh-form" novalidate autocomplete="off">
+      <label class="uh-field">
+        <span class="uh-label">El titular</span>
+        <textarea name="h" rows="3" maxlength="110" placeholder="Los novios dicen «sí» y media sala busca pañuelos" required></textarea>
+        <span class="uh-count" aria-hidden="true"></span>
+      </label>
+      <div class="uh-ideas" role="group" aria-label="Ideas de titular">
+        <p class="uh-label">¿Sin ideas? Toca una</p>
+        <div class="uh-chips"></div>
+      </div>
+      <label class="uh-field">
+        <span class="uh-label">Subtitular <i>(opcional)</i></span>
+        <input name="s" type="text" maxlength="120" placeholder="Si lo dejas vacío, lo escribimos nosotros">
+      </label>
+      <div class="uh-row">
+        <label class="uh-field"><span class="uh-label">Los novios</span><input name="n" type="text" maxlength="44" placeholder="Clara y Mateo"></label>
+        <label class="uh-field"><span class="uh-label">Fecha</span><input name="f" type="text" maxlength="32" placeholder="14 de junio de 2027"></label>
+      </div>
+      <div class="uh-actions">
+        <button class="quiz-btn uh-dl" type="button">Descargar portada</button>
+        <button class="quiz-btn quiz-btn--line uh-share" type="button">Compartir</button>
+        <button class="quiz-btn quiz-btn--line uh-photo" type="button">Otra foto</button>
+      </div>
+      <p class="quiz-hint" id="uh-hint" role="status"></p>
+    </form>
+  </div>
+</main>
+<script src="js/ultima-hora.js?v=1"></script>
+</body>
+</html>
