@@ -230,3 +230,10 @@ button { font: inherit; color: inherit; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
   .intro-pile img { opacity: 1; translate: 0 0; scale: 1; }
 }
+
+/* Añadir a WhatsApp (paquete .wastickers) */
+.zip-wa { margin-left: .5rem; background: var(--wa); color: var(--white); border-color: var(--wa); }
+.zip-wa:hover { background: #18914a; border-color: #18914a; }
+.wa-steps { text-align: left; margin: .75rem 0 1rem; padding-left: 1.2rem; display: grid; gap: .6rem; line-height: 1.45; }
+.wa-steps a { color: inherit; text-decoration: underline; }
+@media (max-width: 640px) { .zip-wa { margin-left: 0; } }

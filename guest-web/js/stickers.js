@@ -234,4 +234,44 @@
     });
   });
 
+  /* ---------- Añadir a WhatsApp: paquete .wastickers (ZIP con title.txt, author.txt, cover.png y los WebP animados) ---------- */
+  var waDlg = document.getElementById('waDlg'), waC = null;
+  function packName(c) { return 'Stickers de boda - ' + COLS[c] + '.wastickers'; }
+  document.querySelectorAll('[data-wa]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      waC = btn.dataset.wa;
+      track('wa-abrir-' + waC);
+      document.getElementById('waCol').textContent = 'Colección «' + COLS[waC] + '»';
+      if (typeof waDlg.showModal === 'function') waDlg.showModal(); else waDlg.setAttribute('open', '');
+    });
+  });
+  document.getElementById('waClose').addEventListener('click', function () { waDlg.close(); });
+  waDlg.addEventListener('click', function (e) { if (e.target === waDlg) waDlg.close(); });
+  document.getElementById('waStore').addEventListener('click', function () { track('wa-app'); });
+  document.getElementById('waGo').addEventListener('click', function () {
+    var go = this, label = go.querySelector('span'), text = label.textContent, c = waC;
+    if (!c || go.getAttribute('aria-busy') === 'true') return;
+    track('wa-descargar-' + c);
+    go.setAttribute('aria-busy', 'true'); label.textContent = 'Preparando…';
+    var enc = new TextEncoder();
+    var set = LIST.filter(function (s) { return s.c === c; });
+    Promise.all([fetch(DIR + 'cover-' + c + '.png').then(function (r) { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })].concat(set.map(function (s) {
+      return fetch(anim(s)).then(function (r) { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); });
+    }))).then(function (bufs) {
+      var files = [
+        { name: 'author.txt', data: enc.encode('WeddlySmartDesign') },
+        { name: 'title.txt', data: enc.encode('Boda - ' + COLS[c]) },
+        { name: 'cover.png', data: new Uint8Array(bufs[0]) }
+      ];
+      set.forEach(function (s, i) { files.push({ name: s.id + '.webp', data: new Uint8Array(bufs[i + 1]) }); });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([zip(files)], { type: 'application/octet-stream' }));
+      a.download = packName(c);
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+      label.textContent = 'Descargado. Ábrelo con Sticker Maker';
+    }).catch(function () { label.textContent = 'No se pudo. Reintentar'; })
+      .then(function () { go.removeAttribute('aria-busy'); setTimeout(function () { label.textContent = text; }, 6000); });
+  });
+
 })();
