@@ -17,6 +17,8 @@
   function still(s) { return DIR + s.id + '-s.webp'; }
   function anim(s) { return DIR + s.id + '.webp'; }
   function fileName(s) { return 'sticker-boda-' + s.f + '.webp'; }
+  function video(s) { return DIR + 'mp4/' + s.id + '.mp4'; }
+  function videoName(s) { return 'sticker-boda-' + s.f + '.mp4'; }
   function alt(s) { return s.a + ': «' + s.t + '»'; }
 
   /* ---------- Planchas ---------- */
@@ -127,9 +129,9 @@
     vImg.alt = alt(s);
     vTitle.textContent = s.t;
     vCol.textContent = COLS[s.c];
-    vDown.href = anim(s);
+    vDown.href = video(s);
     track('ver-' + s.id);
-    vDown.setAttribute('download', fileName(s));
+    vDown.setAttribute('download', videoName(s));
   }
 
   function open(i) {
@@ -162,19 +164,19 @@
   /* Enviar: solo si el móvil sabe compartir archivos. Si no, el visor ofrece Descargar. */
   if (canShareFiles) {
     try {
-      var probe = new File([new Blob(['x'], { type: 'image/webp' })], 'a.webp', { type: 'image/webp' });
+      var probe = new File([new Blob(['x'], { type: 'video/mp4' })], 'a.mp4', { type: 'video/mp4' });
       if (navigator.canShare({ files: [probe] })) vShare.hidden = false;
     } catch (err) { /* sin soporte */ }
   }
-  if (vShare.hidden) vHint.textContent = 'Descárgalo y arrástralo a tu conversación de WhatsApp.';
+  if (vShare.hidden) vHint.textContent = 'Descarga el vídeo y mándalo por WhatsApp. Para tenerlos como stickers, usa «Añadir a WhatsApp» en cada colección.';
 
   vDown.addEventListener('click', function () { track('bajar-' + LIST[cur].id); });
   vShare.addEventListener('click', function () {
     var s = LIST[cur];
     track('enviar-' + s.id);
     vShare.setAttribute('aria-busy', 'true');
-    fetch(anim(s)).then(function (r) { return r.blob(); }).then(function (blob) {
-      var file = new File([blob], fileName(s), { type: 'image/webp' });
+    fetch(video(s)).then(function (r) { return r.blob(); }).then(function (blob) {
+      var file = new File([blob], videoName(s), { type: 'video/mp4' });
       return navigator.share({ files: [file] });
     }).catch(function () { /* cancelado por la persona */ }).then(function () { vShare.removeAttribute('aria-busy'); });
   });
