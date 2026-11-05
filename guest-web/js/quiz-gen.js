@@ -1,7 +1,7 @@
 /* Generador de enlace y QR del quiz. Todo en el navegador: no se guarda nada. */
 (() => {
-  const f = document.getElementById('quiz-gen');
-  if (!f || typeof qrcode === 'undefined') return;
+  if (typeof qrcode === 'undefined') return;
+  document.querySelectorAll('form.quiz-gen').forEach((f) => {
   const out = f.querySelector('.quiz-gen-out'), cv = f.querySelector('.quiz-qr'), link = f.querySelector('.quiz-link');
   const hint = f.querySelector('.quiz-hint'); let url = '';
   const draw = (c, size) => {
@@ -13,7 +13,7 @@
   };
   f.addEventListener('submit', (e) => {
     e.preventDefault();
-    const names = f.n.value.trim(); const u = new URL('quiz.html', location.href);
+    const names = f.n.value.trim(); const u = new URL(f.dataset.page || 'quiz.html', location.href);
     if (names) u.searchParams.set('n', names);
     if (f.f.value) { const d = new Date(f.f.value + 'T12:00:00'); if (!isNaN(d)) u.searchParams.set('f', d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })); }
     url = u.toString(); link.value = url; f.querySelector('.quiz-try').href = url;
@@ -24,6 +24,7 @@
   });
   f.querySelector('.quiz-qrdl').addEventListener('click', () => {
     const c = document.createElement('canvas'); draw(c, 1200);
-    c.toBlob((b) => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'qr-quiz-invitados.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); });
+    c.toBlob((b) => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = f.dataset.file || 'qr-quiz-invitados.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); });
+  });
   });
 })();
