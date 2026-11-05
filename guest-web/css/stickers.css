@@ -237,3 +237,5 @@ button { font: inherit; color: inherit; }
 .wa-steps { text-align: left; margin: .75rem 0 1rem; padding-left: 1.2rem; display: grid; gap: .6rem; line-height: 1.45; }
 .wa-steps a { color: inherit; text-decoration: underline; }
 @media (max-width: 640px) { .zip-wa { margin-left: 0; } }
+.gif-tip { margin: .5rem 0 0; font-size: .9rem; color: var(--ink-2, inherit); opacity: .85; }
+.wa-alt { width: 100%; margin-top: .6rem; }

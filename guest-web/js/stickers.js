@@ -247,6 +247,11 @@
       if (typeof waDlg.showModal === 'function') waDlg.showModal(); else waDlg.setAttribute('open', '');
     });
   });
+  document.getElementById('waVideo').addEventListener('click', function () {
+    track('wa-video-' + waC);
+    waDlg.close();
+    for (var i = 0; i < LIST.length; i++) { if (LIST[i].c === waC) { open(i); break; } }
+  });
   document.getElementById('waClose').addEventListener('click', function () { waDlg.close(); });
   waDlg.addEventListener('click', function (e) { if (e.target === waDlg) waDlg.close(); });
   document.getElementById('waStore').addEventListener('click', function () { track('wa-app'); });
