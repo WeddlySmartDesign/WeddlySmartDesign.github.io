@@ -360,6 +360,7 @@
     @media (prefers-reduced-motion: reduce) { .st-f:active, .st-reset:active, .st-sw button:active { transform: none; } }
   </style>
   <script src="../js/catalog.js?v=41" defer></script>
+  <script src="../js/stickers-data.js?v=1" defer></script>
   <script src="catalog/guest-style-v1.js?v=1" defer></script>
   <script src="catalog/guest-catalog-owner-viewer-v2.js?v=3" defer></script>
 </head>
@@ -1329,7 +1330,32 @@ let showTest = false;
 let metricDays = 30;
 const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
 const SOURCES = { instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook', whatsapp: 'WhatsApp', pinterest: 'Pinterest', buscador: 'Google y otros buscadores', qr: 'Códigos QR', directo: 'Directo o sin dato', otras: 'Otras webs' };
-const PAGES = { inicio: 'Inicio', pagar: 'Pago', 'a-medida': 'A medida', gracias: 'Gracias', guia: 'Guía de la app', 'guest-legal': 'Legal' };
+const PAGES = { inicio: 'Inicio', pagar: 'Pago', 'a-medida': 'A medida', gracias: 'Gracias', guia: 'Guía de la app', 'guest-legal': 'Legal', stickers: 'Stickers (gratis)', quiz: 'Quiz (gratis)', 'quiz-crear': 'Quiz: crear enlace', 'ultima-hora': '¡Última hora! (gratis)', 'ultima-hora-crear': '¡Última hora!: crear enlace', profesionales: 'Profesionales', etsy: 'Etsy' };
+/* Material gratis: stickers, quiz y «¡Última hora!». Las claves llegan como acción-detalle (se envían con window.guestHit en cada página). */
+function freeSection(m) {
+  const F = Object.fromEntries((m.free || []).map(([k, n]) => [k, n])), P = Object.fromEntries(m.pages || []);
+  const sum = (re) => Object.entries(F).filter(([k]) => re.test(k)).reduce((a, [, n]) => a + n, 0);
+  const stk = (window.STICKERS || []).reduce((o, s) => (o[s.id] = s.t, o), {});
+  const top = Object.entries(F).filter(([k]) => /^stk-bajar-/.test(k)).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const types = Object.entries(F).filter(([k]) => /^quiz-fin-/.test(k)).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const refs = Object.entries(F).filter(([k]) => /^ref-/.test(k)).sort((a, b) => b[1] - a[1]);
+  const none = !(m.free || []).length && !P.stickers && !P.quiz && !P['ultima-hora'];
+  if (none) return '<section class="sec"><h3>Material gratis</h3><div class="calm">Aún no hay datos de stickers, quiz ni «¡Última hora!» en este periodo.</div></section>';
+  const tile = (t, n, s) => `<div class="tile"><span>${t}</span><b>${n}</b><small>${s}</small></div>`;
+  return `<section class="sec"><h3>Material gratis</h3><div class="tiles">
+      ${tile('Stickers', P.stickers || 0, `visitas · ${sum(/^stk-bajar-/)} descargas · ${sum(/^stk-enviar-/)} enviados · ${sum(/^stk-zip-/)} ZIP`)}
+      ${tile('Quiz', P.quiz || 0, `visitas · ${F['quiz-inicio'] || 0} empiezan · ${sum(/^quiz-fin-/)} terminan · ${(F['quiz-bajar'] || 0) + (F['quiz-compartir'] || 0)} guardan o comparten`)}
+      ${tile('¡Última hora!', P['ultima-hora'] || 0, `visitas · ${F['uh-bajar'] || 0} descargas · ${F['uh-compartir'] || 0} compartidos`)}
+      ${tile('Enlaces y QR creados', sum(/-crear$/), `${sum(/-copiar$/)} copiados · ${sum(/-qr$/)} QR descargados`)}
+    </div>
+    ${top.length ? `<h4 class="hint">Stickers más descargados</h4>${tblSimple(['Sticker', 'Descargas'], top.map(([k, n]) => [stk[k.slice(10).toUpperCase()] || k.slice(10).toUpperCase(), n]))}` : ''}
+    ${types.length ? `<h4 class="hint">Resultado del quiz</h4>${tblSimple(['Tipo', 'Veces'], types.map(([k, n]) => [k.slice(9), n]))}` : ''}
+    ${refs.length ? `<h4 class="hint">Enlaces con ?ref= (bio, reel, QR)</h4>${tblSimple(['Origen', 'Visitas'], refs.map(([k, n]) => [k.slice(4), n]))}` : ''}
+  </section>`;
+}
+function tblSimple(head, rows) {
+  return `<div class="tbl-box"><table class="tbl"><thead><tr>${head.map((h) => `<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((c) => `<td>${esc(String(c))}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
 async function renderSales() {
   $('sales').innerHTML = `<div class="chips" role="group" aria-label="Periodo">${[[7, '7 días'], [30, '30 días'], [90, '3 meses'], [365, '1 año']].map(([d, t]) => `<button class="chip" type="button" data-days="${d}" aria-pressed="${d === metricDays}">${t}</button>`).join('')}</div>
     <div id="metrics"><div class="skel"><i></i><i></i></div></div><div id="money"><div class="skel"><i></i></div></div>`;
@@ -1369,6 +1395,7 @@ async function renderMetrics() {
       <section class="sec"><h3>De dónde llegan</h3>${m.sources.length ? tbl(['Origen', 'Visitas', '%'], m.sources.map(([k, n]) => `<tr><td>${esc(SOURCES[k] || k)}</td><td>${n}</td><td>${pct(n, f.visits)} %</td></tr>`)) : '<div class="calm">Aún no hay visitas en este periodo.</div>'}
         <p class="hint">Si en el QR de la feria pones la dirección con <b>?utm_source=qr</b> al final, aquí verás cuánta gente llega por él.</p></section>
       <section class="sec"><h3>Diseños</h3>${m.designs.length ? tbl(['Diseño', 'Abierto', 'La quiero', 'Vendido'], m.designs.map((d) => `<tr><td>${esc(d.name)}</td><td>${d.opened}</td><td>${d.wanted}</td><td>${d.sold}</td></tr>`)) : '<div class="calm">Aún no hay datos en este periodo.</div>'}</section>
+      ${freeSection(m)}
       ${m.pages.length ? `<section class="sec"><h3>Páginas más vistas</h3>${tbl(['Página', 'Vistas'], m.pages.map(([k, n]) => `<tr><td>${esc(PAGES[k] || k)}</td><td>${n}</td></tr>`))}</section>` : ''}`;
     $('metrics').querySelectorAll('.days-plot button').forEach((b) => b.onclick = () => {
       const d = m.series[Number(b.dataset.i)];

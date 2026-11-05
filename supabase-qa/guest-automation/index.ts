@@ -391,7 +391,7 @@ async function pushDispatch(c: any) {
 
 /* ---------- Métricas ---------- */
 // Visitas y clics de la web (contadores por día, sin datos personales) junto a compras y presupuestos.
-const WEB_EVENTS = new Set(['visit', 'page', 'design', 'want', 'checkout', 'quote_open', 'whatsapp']);
+const WEB_EVENTS = new Set(['visit', 'page', 'design', 'want', 'checkout', 'quote_open', 'whatsapp', 'free']);
 async function metrics(c: any, daysIn: number, test: boolean) {
   const days = [7, 30, 90, 365].includes(daysIn) ? daysIn : 30;
   const madridDay = (t: number) => new Date(t).toLocaleDateString('sv-SE', { timeZone: 'Europe/Madrid' });
@@ -426,7 +426,7 @@ async function metrics(c: any, daysIn: number, test: boolean) {
     days, since, today, webSince: (await c.from('guest_web_daily').select('day').order('day').limit(1)).data?.[0]?.day || null,
     funnel: { visits: sum('visit'), opened: sum('design'), wanted: sum('want'), checkout, bought: bought.length },
     unfinished: Math.max(0, checkout - bought.length), refunded,
-    sources: byK('visit'), pages: byK('page').slice(0, 8), whatsapp: sum('whatsapp'),
+    sources: byK('visit'), pages: byK('page').slice(0, 14), free: byK('free'), whatsapp: sum('whatsapp'),
     quotes: { opened: sum('quote_open'), requested: custom.length, quoted, accepted },
     designs, series
   };
