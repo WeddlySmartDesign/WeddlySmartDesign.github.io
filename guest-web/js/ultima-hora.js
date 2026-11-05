@@ -2,8 +2,7 @@
 (() => {
   const W = 1080, H = 1350;
   const C = { paper: '#f3eadb', paper2: '#e9dcc6', ink: '#1b2650', soft: '#4a5480', red: '#b3263a', blush: '#f0c4bc', deep: '#131b3b' };
-  const CAST = ['javi', 'lola', 'oscar', 'dani', 'carmen', 'marta', 'nuria', 'hugo'];
-  const IDEAS = [
+    const IDEAS = [
     'Los novios dicen «sí» y media sala busca pañuelos',
     'La tía Carmen ya baila y aún no han servido el aperitivo',
     'Hallan la barra libre: los invitados no se hacen responsables',
@@ -37,8 +36,7 @@
   }
 
   let variant = Math.floor(Math.random() * 9);
-  const imgs = {};
-  const load = (k) => imgs[k] || (imgs[k] = new Promise((ok) => { const m = new Image(); m.onload = () => ok(m); m.onerror = () => ok(null); m.src = `assets/quiz/${k}.webp`; }));
+  let photo = null;
   const fontsReady = () => document.fonts ? Promise.all(['110px "Abril Fatface"', '600 30px "Hanken Grotesk"', '400 26px "Courier Prime"', '400 30px "Caveat"'].map((x) => document.fonts.load(x).catch(() => 0))) : Promise.resolve();
 
   // Líneas por palabras; las palabras más largas que la caja se parten en seco.
@@ -60,7 +58,7 @@
   }
 
   async function draw() {
-    const [, a, b, c] = await Promise.all([fontsReady(), ...[0, 1, 2].map((i) => load(CAST[(variant + i * 3) % CAST.length]))]);
+    await fontsReady();
     const head = f.h.value.trim() || IDEAS[0];
     const names = f.n.value.trim(), date = f.f.value.trim();
     const sub = f.s.value.trim() || SUBS[variant % SUBS.length];
@@ -113,29 +111,43 @@
     g.fillStyle = C.red; g.fillRect(X, y - 14, 84, 4);
     g.fillStyle = C.soft; g.font = '600 29px "Hanken Grotesk"'; y = para(sub, X, y + 26, CW, subLH) + 6;
 
-    // foto + texto
-    const py = y + 6, ph = footerTop - py - 30, pw = 500;
-    g.save(); g.beginPath(); g.rect(X, py, pw, ph); g.clip();
-    g.fillStyle = C.ink; g.fillRect(X, py, pw, ph);
-    g.fillStyle = 'rgba(240,196,188,.22)';
-    for (let yy = py + 10; yy < py + ph; yy += 18) for (let xx = X + ((yy - py) / 18 % 2 ? 9 : 0); xx < X + pw; xx += 18) { const k = 1 + 3.2 * (yy - py) / ph; g.beginPath(); g.arc(xx, yy, k, 0, 7); g.fill(); }
-    const place = (m, cx, hgt) => { if (!m) return; const w = m.width * hgt / m.height; g.save(); g.shadowColor = 'rgba(0,0,0,.4)'; g.shadowBlur = 24; g.shadowOffsetY = 8; g.drawImage(m, cx - w / 2, py + ph - hgt + 8, w, hgt); g.restore(); };
-    place(a, X + pw * .22, Math.min(ph * .8, 330)); place(c, X + pw * .78, Math.min(ph * .8, 340)); place(b, X + pw * .5, Math.min(ph * .96, 400));
-    g.restore();
+    // foto (o recuadro con cita) + texto
+    const py = y + 6, ph = footerTop - py - 30, pw = 500, quote = QUOTES[variant % QUOTES.length];
+    if (photo) {
+      const o = document.createElement('canvas'); o.width = pw; o.height = ph; const og = o.getContext('2d');
+      const k = Math.max(pw / photo.width, ph / photo.height), dw = photo.width * k, dh = photo.height * k;
+      og.drawImage(photo, (pw - dw) / 2, (ph - dh) * .35, dw, dh); // encuadre algo alto: respeta las caras
+      const d = og.getImageData(0, 0, pw, ph), px = d.data;
+      const lo = [27, 38, 80], hi = [243, 234, 219];
+      for (let i = 0; i < px.length; i += 4) {
+        let l = (.299 * px[i] + .587 * px[i + 1] + .114 * px[i + 2]) / 255;
+        l = Math.min(1, Math.max(0, (l - .5) * 1.18 + .52));
+        px[i] = lo[0] + (hi[0] - lo[0]) * l; px[i + 1] = lo[1] + (hi[1] - lo[1]) * l; px[i + 2] = lo[2] + (hi[2] - lo[2]) * l; px[i + 3] = 255;
+      }
+      og.putImageData(d, 0, 0); g.drawImage(o, X, py);
+    } else {
+      g.fillStyle = C.ink; g.fillRect(X, py, pw, ph);
+      g.fillStyle = 'rgba(240,196,188,.16)';
+      for (let yy = py + 10; yy < py + ph; yy += 18) for (let xx = X + ((yy - py) / 18 % 2 ? 9 : 0); xx < X + pw; xx += 18) { g.beginPath(); g.arc(xx, yy, 1 + 3 * (yy - py) / ph, 0, 7); g.fill(); }
+      g.fillStyle = C.red; g.font = '400 150px "Abril Fatface"'; g.textAlign = 'left'; g.fillText('«', X + 30, py + 140);
+      g.fillStyle = C.paper; let qs = 50; const inner = pw - 80;
+      for (; qs >= 30; qs -= 2) { g.font = `400 ${qs}px "Abril Fatface"`; if (lines(quote.replace(/[«»]/g, ''), inner).length * qs * 1.15 <= ph - 190) break; }
+      para(quote.replace(/[«»]/g, ''), X + 40, py + 190, inner, qs * 1.15);
+      g.fillStyle = C.blush; g.font = '400 21px "Courier Prime"'; spaced('— UN INVITADO', X + 40, py + ph - 28, 3, 'left');
+    }
     g.strokeStyle = C.ink; g.lineWidth = 3; g.strokeRect(X, py, pw, ph);
     g.fillStyle = C.soft; g.font = '400 21px "Courier Prime"'; g.textAlign = 'left';
-    const capY = py + ph + 26; g.fillText(CAPS[variant % CAPS.length], X, capY, pw);
+    if (photo) g.fillText(CAPS[variant % CAPS.length], X, py + ph + 26, pw);
 
     // columna de texto
     const tx = X + pw + 36, tw = R - tx;
     g.fillStyle = C.ink;
     const body = (names ? `${names} ya son noticia. ` : '') + BODY[variant % BODY.length];
-    const room = ph - 120; let fs = 27, lh = 36, ls;
+    const room = photo ? ph - 120 : ph - 20; let fs = 27, lh = 36, ls;
     for (; fs >= 20; fs--) { g.font = `400 ${fs}px "Courier Prime"`; lh = Math.round(fs * 1.34); ls = lines(body, tw); if (ls.length * lh <= room) break; }
     const maxL = Math.max(1, Math.floor(room / lh)); const ty = py + 28;
     ls.slice(0, maxL).forEach((l, i) => { const cut = i === maxL - 1 && ls.length > maxL; g.fillText(cut ? l.replace(/[ ,;:.]*\S*$/, '') + '…' : l, tx, ty + i * lh); });
-    g.fillStyle = C.red; g.fillRect(tx, py + ph - 78, 56, 3);
-    g.fillStyle = C.ink; g.font = '400 30px "Abril Fatface"'; para(QUOTES[variant % QUOTES.length], tx, py + ph - 38, tw, 36);
+    if (photo) { g.fillStyle = C.red; g.fillRect(tx, py + ph - 78, 56, 3); g.fillStyle = C.ink; g.font = '400 30px "Abril Fatface"'; para(quote, tx, py + ph - 38, tw, 36); }
 
     // pie
     g.fillStyle = C.ink; g.fillRect(X, footerTop + 6, CW, 1); g.fillRect(X, footerTop + 12, CW, 3);
@@ -155,6 +167,15 @@
   f.addEventListener('input', upd); f.addEventListener('submit', (e) => e.preventDefault());
   f.querySelector('.uh-chips').append(...IDEAS.map((t) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'uh-chip'; b.textContent = t; b.addEventListener('click', () => { f.h.value = t; upd(); }); return b; }));
   f.querySelector('.uh-photo').addEventListener('click', () => { variant++; redraw(); });
+  const file = f.querySelector('.uh-file'), clear = f.querySelector('.uh-clear');
+  file.addEventListener('change', () => {
+    const fl = file.files && file.files[0]; if (!fl) return;
+    const url = URL.createObjectURL(fl), im = new Image();
+    im.onload = () => { photo = im; clear.hidden = false; redraw(); };
+    im.onerror = () => { hint.textContent = 'No he podido abrir esa foto. Prueba con otra.'; URL.revokeObjectURL(url); };
+    im.src = url;
+  });
+  clear.addEventListener('click', () => { photo = null; file.value = ''; clear.hidden = true; redraw(); });
   upd();
 
   const blob = () => new Promise((ok) => cv.toBlob(ok, 'image/png'));

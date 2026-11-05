@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="css/fonts.css?v=44">
   <link rel="stylesheet" href="css/styles.css?v=45">
   <link rel="stylesheet" href="css/quiz.css?v=3">
-  <link rel="stylesheet" href="css/ultima-hora.css?v=1">
+  <link rel="stylesheet" href="css/ultima-hora.css?v=2">
 </head>
 <body class="uh-body">
 <main class="uh">
@@ -39,6 +39,14 @@
         <span class="uh-label">Subtitular <i>(opcional)</i></span>
         <input name="s" type="text" maxlength="120" placeholder="Si lo dejas vacío, lo escribimos nosotros">
       </label>
+      <div class="uh-field">
+        <span class="uh-label">Tu foto <i>(opcional)</i></span>
+        <div class="uh-photo-row">
+          <label class="quiz-btn quiz-btn--line uh-pick">Elegir foto<input class="uh-file" type="file" accept="image/*" hidden></label>
+          <button class="uh-clear" type="button" hidden>Quitar foto</button>
+        </div>
+        <span class="uh-note">Se queda en tu móvil: no se sube a ningún sitio.</span>
+      </div>
       <div class="uh-row">
         <label class="uh-field"><span class="uh-label">Los novios</span><input name="n" type="text" maxlength="44" placeholder="Clara y Mateo"></label>
         <label class="uh-field"><span class="uh-label">Fecha</span><input name="f" type="text" maxlength="32" placeholder="14 de junio de 2027"></label>
@@ -46,12 +54,12 @@
       <div class="uh-actions">
         <button class="quiz-btn uh-dl" type="button">Descargar portada</button>
         <button class="quiz-btn quiz-btn--line uh-share" type="button">Compartir</button>
-        <button class="quiz-btn quiz-btn--line uh-photo" type="button">Otra foto</button>
+        <button class="quiz-btn quiz-btn--line uh-photo" type="button">Otro texto</button>
       </div>
       <p class="quiz-hint" id="uh-hint" role="status"></p>
     </form>
   </div>
 </main>
-<script src="js/ultima-hora.js?v=1"></script>
+<script src="js/ultima-hora.js?v=2"></script>
 </body>
 </html>

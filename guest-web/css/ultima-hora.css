@@ -38,3 +38,8 @@
 @media (hover: hover) { .uh-teaser-card:hover img { transform: rotate(0deg) translateY(-4px); } }
 @media (prefers-reduced-motion: reduce) { .uh-teaser-card img { transition: none; } }
 .uh-teaser { background: var(--paper); }
+
+.uh-photo-row { display: flex; align-items: center; gap: .8rem; flex-wrap: wrap; }
+.uh-pick { display: inline-flex; align-items: center; cursor: pointer; }
+.uh-clear { background: none; border: 0; color: var(--ink-soft); font: 500 .9375rem var(--text); text-decoration: underline; text-underline-offset: .2em; cursor: pointer; min-height: 44px; padding: 0 .4rem; }
+.uh-note { font-size: .8125rem; color: var(--ink-soft); }
