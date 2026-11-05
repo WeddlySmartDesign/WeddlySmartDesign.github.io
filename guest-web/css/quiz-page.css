@@ -25,3 +25,11 @@
 .qp-cast img { width: 100%; height: auto; filter: drop-shadow(0 8px 8px rgba(27,38,80,.25)); }
 @keyframes qpBob { 50% { transform: translateY(-5px); } }
 @media (prefers-reduced-motion: reduce) { .qp-cast li, .qp-stamp { animation: none; } }
+/* Página para crear el enlace y el QR */
+.qp-make .qp-makecard { width: min(100%, 560px); min-height: 0; display: grid; gap: 1rem; align-content: start; padding: clamp(1.5rem, 5vw, 2.5rem); }
+.qp-make .eyebrow { font: 400 .8125rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--postmark); }
+.qp-make h1 { font: 400 clamp(2rem, 7vw, 3rem)/1.04 var(--display); }
+.qp-make .mk-lede { color: var(--ink-soft); }
+.qp-make .quiz-gen { margin-top: .5rem; max-width: none; }
+.qp-make .quiz-gen h3, .qp-make .quiz-gen > p { display: none; }
+.mk-back { font-size: .9375rem; } .mk-back a { color: var(--ink-soft); }

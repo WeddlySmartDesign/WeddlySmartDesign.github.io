@@ -8,7 +8,7 @@
   var LIST = window.STICKERS || [];
   var DIR = 'assets/stickers/';
   var COLS = { A: 'Invitados', B: 'Novios organizando', C: 'Pequeñas victorias', D: 'Objetos con vida' };
-  var PILE = ['A09', 'C07', 'D02', 'A07', 'B09'];
+  var PILE = ['A09', 'C07', 'D02', 'A07', 'C01'];
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var conn = navigator.connection || {};
   var lowData = !!conn.saveData || /(^|-)2g$/.test(conn.effectiveType || '');
