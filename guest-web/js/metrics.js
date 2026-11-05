@@ -1,6 +1,8 @@
 /* Estadísticas propias de la web: solo contadores por día (sin cookies, sin guardar nada del
  * visitante y sin identificar a nadie). Solo cuentan en la web publicada. */
 (() => {
+  // Los scripts de cada página cuentan acciones con window.guestHit('free', 'clave'); sin efecto si no se mide.
+  window.guestHit = window.guestHit || (() => {});
   if (location.hostname !== 'guest.weddlysmartdesign.com') return;
   // La propietaria no cuenta: su móvil queda marcado al abrir su panel de pedidos (o con ?yo=1).
   try {
@@ -39,6 +41,10 @@
       : 'otras';
     hit('visit', source);
   }
+  // Origen concreto del enlace (bio, reel, qr...): ?ref=bio-instagram o utm_campaign/utm_medium.
+  const ref = (params.get('ref') || params.get('utm_campaign') || params.get('utm_medium') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 30);
+  if (ref && from !== location.hostname) hit('free', 'ref-' + ref);
+  window.guestHit = hit;
   hit('page', page);
   if (page === 'pagar') hit('checkout', params.get('d') || '');
   if (page === 'a-medida') hit('quote_open');

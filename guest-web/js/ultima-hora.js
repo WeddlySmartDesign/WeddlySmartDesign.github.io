@@ -189,11 +189,14 @@
   upd();
 
   const blob = () => new Promise((ok) => cv.toBlob(ok, 'image/png'));
+  const track = (k) => { try { window.guestHit && window.guestHit('free', k); } catch (e) {} };
   f.querySelector('.uh-dl').addEventListener('click', async () => {
+    track('uh-bajar');
     await draw(true); const b = await blob(); redraw(); const a = document.createElement('a');
     a.href = URL.createObjectURL(b); a.download = 'ultima-hora.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   });
   f.querySelector('.uh-share').addEventListener('click', async () => {
+    track('uh-compartir');
     await draw(true); const b = await blob(); redraw(); const file = b && new File([b], 'ultima-hora.png', { type: 'image/png' });
     const text = f.h.value.trim() + ' · ¡Última hora!';
     if (file && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], text }); } catch (e) {} return; }

@@ -134,12 +134,14 @@
     $('.quiz-rline').textContent = r.line;
     $('.quiz-rquote').textContent = r.quote;
     out.dataset.type = key;
+    track('quiz-fin-' + key);
     show(out);
     $('.quiz-rtitle').focus({ preventScroll: true });
     if (!standalone) root.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
   }
 
-  function start() { i = 0; picks = []; renderQ(); show(play); qEl.focus({ preventScroll: true }); }
+  const track = (k) => { try { window.guestHit && window.guestHit('free', k); } catch (e) {} };
+  function start() { track('quiz-inicio'); i = 0; picks = []; renderQ(); show(play); qEl.focus({ preventScroll: true }); }
 
   if ($('.quiz-start')) $('.quiz-start').addEventListener('click', () => swap(start));
   $('.quiz-again').addEventListener('click', () => swap(standalone ? start : () => { show(intro); $('.quiz-start').focus({ preventScroll: true }); }));
@@ -147,10 +149,12 @@
   back.addEventListener('click', () => { if (i > 0) swap(() => { i--; renderQ(); qEl.focus({ preventScroll: true }); }); });
 
   $('.quiz-dl').addEventListener('click', () => {
+    track('quiz-bajar');
     cv.toBlob((b) => { const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'invitado-guest.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); }, 'image/png');
   });
   const share = $('.quiz-share'), hint = $('.quiz-hint');
   share.addEventListener('click', async () => {
+    track('quiz-compartir');
     const r = TYPES[out.dataset.type];
     const text = `Soy «${r.name}» en una boda. ¿Y tú? ${r.quote}`;
     const blob = await new Promise((ok) => cv.toBlob(ok, 'image/png'));

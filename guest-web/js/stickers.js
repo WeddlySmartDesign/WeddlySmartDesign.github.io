@@ -117,6 +117,7 @@
   var vShare = document.getElementById('vShare');
   var vHint = document.getElementById('vHint');
   var cur = -1;
+  function track(k) { try { window.guestHit && window.guestHit('free', 'stk-' + k); } catch (err) { /* sin medición */ } }
   var canShareFiles = !!(navigator.canShare && window.File);
 
   function show(i) {
@@ -127,6 +128,7 @@
     vTitle.textContent = s.t;
     vCol.textContent = COLS[s.c];
     vDown.href = anim(s);
+    track('ver-' + s.id);
     vDown.setAttribute('download', fileName(s));
   }
 
@@ -166,8 +168,10 @@
   }
   if (vShare.hidden) vHint.textContent = 'Descárgalo y arrástralo a tu conversación de WhatsApp.';
 
+  vDown.addEventListener('click', function () { track('bajar-' + LIST[cur].id); });
   vShare.addEventListener('click', function () {
     var s = LIST[cur];
+    track('enviar-' + s.id);
     vShare.setAttribute('aria-busy', 'true');
     fetch(anim(s)).then(function (r) { return r.blob(); }).then(function (blob) {
       var file = new File([blob], fileName(s), { type: 'image/webp' });
@@ -209,6 +213,7 @@
   document.querySelectorAll('[data-zip]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       if (btn.getAttribute('aria-busy') === 'true') return;
+      track('zip-' + btn.dataset.zip);
       var c = btn.dataset.zip, label = btn.querySelector('span'), text = label.textContent;
       var set = LIST.filter(function (s) { return s.c === c; });
       btn.setAttribute('aria-busy', 'true');
