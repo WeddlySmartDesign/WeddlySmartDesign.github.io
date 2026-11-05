@@ -20,7 +20,7 @@
     'Ocurrió poco después del aperitivo. Desde entonces la pista no se ha vaciado y los tacones piden clemencia.',
     'La noticia corrió por las mesas en minutos. Ya se comenta con el tercer plato y se espera el discurso de los padrinos.'
   ];
-  const QUOTES = ['«Yo solo he venido por el aperitivo»', '«Me han dicho que no llore y llevo tres»', '«Esto no lo cuento, pero lo cuento»'];
+  const QUOTES = ['«Yo solo he venido por el aperitivo»', '«Juro que esta vez no lloro»', '«Esto no lo cuento, pero lo cuento»'];
   const CAPS = ['Los más afectados, minutos después de conocerse la noticia.', 'Varios invitados, tras recibir la noticia en directo.', 'Imagen de última hora: el momento exacto.'];
 
   const f = document.getElementById('uh-form'), cv = document.getElementById('uh-canvas');
@@ -57,7 +57,7 @@
     for (let i = 0; i < 2600; i++) { g.fillStyle = r() > .5 ? 'rgba(27,38,80,.05)' : 'rgba(179,38,58,.04)'; g.fillRect(r() * W, r() * H, 1 + r() * 2.2, 1 + r() * 2.2); }
   }
 
-  async function draw() {
+  async function draw(exp) {
     await fontsReady();
     const head = f.h.value.trim() || IDEAS[0];
     const names = f.n.value.trim(), date = f.f.value.trim();
@@ -113,7 +113,17 @@
 
     // foto (o recuadro con cita) + texto
     const py = y + 6, ph = footerTop - py - 30, pw = 500, quote = QUOTES[variant % QUOTES.length];
-    if (photo) {
+    const hole = !photo && !exp; // vista previa sin foto: marco que invita a subirla
+    if (hole) {
+      g.fillStyle = C.paper2; g.fillRect(X, py, pw, ph);
+      g.strokeStyle = C.soft; g.lineWidth = 2; g.setLineDash([12, 10]); g.strokeRect(X + 22, py + 22, pw - 44, ph - 44); g.setLineDash([]);
+      g.strokeStyle = C.red; g.lineWidth = 5; const m = 22, L = 34;
+      [[X + m, py + m, 1, 1], [X + pw - m, py + m, -1, 1], [X + m, py + ph - m, 1, -1], [X + pw - m, py + ph - m, -1, -1]].forEach(([x, y, a, b]) => { g.beginPath(); g.moveTo(x, y + b * L); g.lineTo(x, y); g.lineTo(x + a * L, y); g.stroke(); });
+      const cx = X + pw / 2, cy = py + ph / 2 - 34; g.strokeStyle = C.ink; g.lineWidth = 4; g.lineJoin = 'round';
+      g.strokeRect(cx - 44, cy - 22, 88, 60); g.strokeRect(cx - 18, cy - 34, 36, 12); g.beginPath(); g.arc(cx, cy + 8, 17, 0, 7); g.stroke();
+      g.fillStyle = C.ink; g.textAlign = 'center'; g.font = '400 40px "Abril Fatface"'; g.fillText('Subid vuestra foto', cx, cy + 96);
+      g.fillStyle = C.soft; g.font = '400 21px "Courier Prime"'; g.fillText('Aquí sale en tono imprenta', cx, cy + 130); g.textAlign = 'left';
+    } else if (photo) {
       const o = document.createElement('canvas'); o.width = pw; o.height = ph; const og = o.getContext('2d');
       const k = Math.max(pw / photo.width, ph / photo.height), dw = photo.width * k, dh = photo.height * k;
       og.drawImage(photo, (pw - dw) / 2, (ph - dh) * .35, dw, dh); // encuadre algo alto: respeta las caras
@@ -137,17 +147,17 @@
     }
     g.strokeStyle = C.ink; g.lineWidth = 3; g.strokeRect(X, py, pw, ph);
     g.fillStyle = C.soft; g.font = '400 21px "Courier Prime"'; g.textAlign = 'left';
-    if (photo) g.fillText(CAPS[variant % CAPS.length], X, py + ph + 26, pw);
+    if (photo || hole) g.fillText(CAPS[variant % CAPS.length], X, py + ph + 26, pw);
 
     // columna de texto
     const tx = X + pw + 36, tw = R - tx;
     g.fillStyle = C.ink;
     const body = (names ? `${names} ya son noticia. ` : '') + BODY[variant % BODY.length];
-    const room = photo ? ph - 120 : ph - 20; let fs = 27, lh = 36, ls;
+    const room = (photo || hole) ? ph - 120 : ph - 20; let fs = 27, lh = 36, ls;
     for (; fs >= 20; fs--) { g.font = `400 ${fs}px "Courier Prime"`; lh = Math.round(fs * 1.34); ls = lines(body, tw); if (ls.length * lh <= room) break; }
     const maxL = Math.max(1, Math.floor(room / lh)); const ty = py + 28;
     ls.slice(0, maxL).forEach((l, i) => { const cut = i === maxL - 1 && ls.length > maxL; g.fillText(cut ? l.replace(/[ ,;:.]*\S*$/, '') + '…' : l, tx, ty + i * lh); });
-    if (photo) { g.fillStyle = C.red; g.fillRect(tx, py + ph - 78, 56, 3); g.fillStyle = C.ink; g.font = '400 30px "Abril Fatface"'; para(quote, tx, py + ph - 38, tw, 36); }
+    if (photo || hole) { g.fillStyle = C.red; g.fillRect(tx, py + ph - 78, 56, 3); g.fillStyle = C.ink; g.font = '400 30px "Abril Fatface"'; para(quote, tx, py + ph - 38, tw, 36); }
 
     // pie
     g.fillStyle = C.ink; g.fillRect(X, footerTop + 6, CW, 1); g.fillRect(X, footerTop + 12, CW, 3);
@@ -161,7 +171,7 @@
     g.font = '400 30px "Abril Fatface"'; g.textAlign = 'center'; g.fillText('EXTRA', 0, 10); g.restore();
   }
 
-  let raf = 0; const redraw = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); };
+  let raf = 0; const redraw = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => draw()); };
   const count = f.querySelector('.uh-count');
   const upd = () => { count.textContent = f.h.value.length + '/110'; redraw(); };
   f.addEventListener('input', upd); f.addEventListener('submit', (e) => e.preventDefault());
@@ -180,11 +190,11 @@
 
   const blob = () => new Promise((ok) => cv.toBlob(ok, 'image/png'));
   f.querySelector('.uh-dl').addEventListener('click', async () => {
-    await draw(); const b = await blob(); const a = document.createElement('a');
+    await draw(true); const b = await blob(); redraw(); const a = document.createElement('a');
     a.href = URL.createObjectURL(b); a.download = 'ultima-hora.png'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   });
   f.querySelector('.uh-share').addEventListener('click', async () => {
-    await draw(); const b = await blob(); const file = b && new File([b], 'ultima-hora.png', { type: 'image/png' });
+    await draw(true); const b = await blob(); redraw(); const file = b && new File([b], 'ultima-hora.png', { type: 'image/png' });
     const text = f.h.value.trim() + ' · ¡Última hora!';
     if (file && navigator.canShare && navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], text }); } catch (e) {} return; }
     try { if (navigator.share) { await navigator.share({ title: '¡Última hora!', text, url: location.href }); return; } await navigator.clipboard.writeText(`${text} ${location.href}`); hint.textContent = 'Copiado. Pégalo donde quieras.'; }
