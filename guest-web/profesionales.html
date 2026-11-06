@@ -98,6 +98,21 @@
     .partner-steps .mark { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; color: var(--postmark); border: 1.5px solid currentColor; box-shadow: inset 0 0 0 3px var(--paper), inset 0 0 0 4.5px currentColor; rotate: -8deg; font: 700 1rem/1 var(--mono); }
     .partner-steps strong { display: block; font: 400 1.35rem/1.15 var(--display); }
     .partner-steps p { margin-top: .3rem; color: var(--ink-soft); }
+    .partner-claim { display: grid; gap: 1rem; margin-top: 2rem; max-width: 34rem; }
+    .partner-claim[hidden], .partner-claim [hidden] { display: none; }
+    .claim-form { display: grid; gap: .6rem; }
+    .claim-form label { font: 700 .8125rem/1 var(--mono); color: var(--ink-soft); }
+    .claim-form input { min-height: 52px; padding: 0 1rem; font: 400 1.0625rem var(--text); color: var(--ink); background: var(--white); border: 1.5px solid var(--line); border-radius: 6px; }
+    .claim-msg { font-size: .9688rem; line-height: 1.5; color: var(--postmark); }
+    .claim-msg:empty { display: none; }
+    .claim-done { display: grid; gap: .9rem; }
+    .claim-done h3 { font: 400 1.5rem/1.15 var(--display); }
+    .claim-done p { font-size: 1rem; line-height: 1.55; color: var(--ink-soft); }
+    .claim-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .5rem; align-items: end; }
+    .claim-row label { grid-column: 1 / -1; font: 700 .8125rem/1 var(--mono); color: var(--ink-soft); }
+    .claim-row input { min-width: 0; min-height: 48px; padding: 0 .8rem; font: 400 .9375rem var(--mono); color: var(--ink); background: var(--white); border: 1.5px solid var(--line); border-radius: 6px; }
+    .claim-row button { min-height: 48px; padding: 0 1rem; font: 700 .9375rem var(--text); color: var(--paper); background: var(--ink); border: 0; border-radius: 6px; cursor: pointer; }
+    .partner-alt { margin-top: 1.6rem; font-size: .9688rem; color: var(--ink-soft); }
     .partner-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
 
     @media (min-width: 760px) {
@@ -269,6 +284,22 @@
           <li><span class="mark">02</span><div><strong>Un código para vuestras parejas</strong><p>Con vuestro código propio, las parejas que vengan de vuestra parte tienen un 10 % de descuento. Nosotros nos ocupamos de todo lo demás.</p></div></li>
           <li><span class="mark">03</span><div><strong>Un 15 % para vosotros</strong><p>Por cada pareja que compre con vuestro código, el 15 % de la venta, liquidado cada mes por Bizum o transferencia.</p></div></li>
         </ol>
+        <div class="partner-claim" id="claim" hidden>
+          <button class="btn btn-ink" id="claimOpen" type="button">Quiero recomendar GUEST</button>
+          <form class="claim-form" id="claimForm" hidden>
+            <label for="claimName">Nombre de vuestro negocio</label>
+            <input id="claimName" name="name" required minlength="2" maxlength="80" autocomplete="organization">
+            <button class="btn btn-ink" type="submit" id="claimSend">Crear mi panel</button>
+            <p class="claim-msg" id="claimMsg" role="status"></p>
+          </form>
+          <div class="claim-done" id="claimDone" hidden>
+            <h3>Ya está. Este es vuestro panel privado.</h3>
+            <p>Ahí veréis cada venta que llegue por vosotros y lo que os corresponde. <strong>Guardad este enlace: es solo vuestro.</strong></p>
+            <a class="btn btn-ink" id="claimPanel" href="#">Abrir mi panel</a>
+            <div class="claim-row"><label for="claimLink">Enlace para vuestras parejas</label><input id="claimLink" readonly><button type="button" data-copy="claimLink">Copiar</button></div>
+            <div class="claim-row" id="claimCodeRow" hidden><label for="claimCode">Código con 10 % para ellas</label><input id="claimCode" readonly><button type="button" data-copy="claimCode">Copiar</button></div>
+          </div>
+        </div>
         <div class="partner-actions">
           <a class="btn btn-ink" id="partnerWa" href="https://wa.me/34620843264?text=Hola%2C%20me%20interesa%20colaborar%20con%20GUEST." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Hablar por WhatsApp</a>
           <a class="btn btn-line" id="partnerMail" href="mailto:info@weddlysmartdesign.com?subject=Colaborar%20con%20GUEST">Escribir un email</a>
@@ -322,6 +353,39 @@
       const mail = document.getElementById('partnerMail');
       mail.href += encodeURIComponent(ref);
     }
+    // «Quiero recomendar GUEST»: solo si se llega desde un enlace de la campaña (?c=), que ya identifica a quien lo abre.
+    (() => {
+      const API = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-partners';
+      const ref = (new URLSearchParams(location.search).get('c') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 60);
+      const $ = (id) => document.getElementById(id);
+      const box = $('claim'); if (!box || !ref) return;
+      box.hidden = false; $('partnerWa').classList.replace('btn-ink', 'btn-line');
+      const saved = (() => { try { return JSON.parse(localStorage.getItem('guest-colab-panel') || 'null'); } catch { return null; } })();
+      const show = (pt) => {
+        $('claimOpen').hidden = true; $('claimForm').hidden = true; $('claimDone').hidden = false;
+        $('claimPanel').href = pt.panel; $('claimLink').value = pt.link;
+        if (pt.codes && pt.codes.partner) { $('claimCode').value = pt.codes.partner; $('claimCodeRow').hidden = false; }
+      };
+      if (saved && saved.ref === ref) { show(saved); return; }
+      $('claimName').value = ref.replace(/^dm-/, '').split('-').filter(Boolean).map((w) => w[0].toUpperCase() + w.slice(1)).join(' ');
+      $('claimOpen').addEventListener('click', () => { $('claimOpen').hidden = true; $('claimForm').hidden = false; $('claimName').focus(); });
+      $('claimForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msg = $('claimMsg'), btn = $('claimSend'); msg.textContent = ''; btn.disabled = true;
+        try {
+          const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'claim', ref, name: $('claimName').value }) });
+          const d = await r.json().catch(() => ({}));
+          if (d.ok) { try { localStorage.setItem('guest-colab-panel', JSON.stringify({ ref, ...d.partner })); } catch {} show(d.partner); return; }
+          msg.textContent = d.error === 'already_claimed' ? 'Ya os habíais apuntado. Escribidnos por WhatsApp o email y os mandamos de nuevo vuestro enlace.' : 'No se ha podido crear ahora. Escribidnos por WhatsApp o email y os lo preparamos enseguida.';
+        } catch { msg.textContent = 'No se ha podido crear ahora. Escribidnos por WhatsApp o email y os lo preparamos enseguida.'; }
+        btn.disabled = false;
+      });
+      document.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', () => {
+        const i = $(b.dataset.copy), done = () => { b.textContent = 'Copiado'; setTimeout(() => { b.textContent = 'Copiar'; }, 1600); };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(i.value).then(done, () => { i.select(); document.execCommand('copy'); done(); });
+        else { i.select(); document.execCommand('copy'); done(); }
+      }));
+    })();
     const header = document.getElementById('header');
     addEventListener('scroll', () => header.classList.toggle('is-solid', scrollY > 8), { passive: true });
   })();

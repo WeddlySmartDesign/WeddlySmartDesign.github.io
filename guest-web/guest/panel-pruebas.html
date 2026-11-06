@@ -114,7 +114,7 @@
     .chip { flex: none; min-height: 38px; padding: 0 .9rem; border: 1.5px solid var(--line); border-radius: 99px; background: var(--white); font-weight: 600; font-size: .9375rem; cursor: pointer; }
     .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 
-    .tabs { position: fixed; z-index: 25; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr); padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--white) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
+    .tabs { position: fixed; z-index: 25; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(5, 1fr); padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px)); background: color-mix(in srgb, var(--white) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
     .tab { display: grid; justify-items: center; gap: 2px; min-height: 52px; padding-top: 6px; border: 0; background: none; font-size: .8125rem; font-weight: 600; color: var(--ink-soft); cursor: pointer; position: relative; }
     .tab svg { width: 24px; height: 24px; }
     .tab[aria-current="page"] { color: var(--ink); }
@@ -168,6 +168,22 @@
     .grow svg { width: 18px; height: 18px; }
     .grow:active { background: rgba(27, 38, 80, .06); }
 
+    .cb-form { display: grid; gap: .5rem; margin-top: .9rem; }
+    .cb-form label, .cb-fix { font: 700 .8125rem/1 var(--mono); color: var(--ink-soft); }
+    .cb-form input[type="text"], .cb-form input[type="email"] { width: 100%; min-height: 52px; padding: .8rem .9rem; border: 1.5px solid var(--line); border-radius: 10px; background: var(--white); color: var(--ink); font: 400 1.0625rem var(--text); }
+    .cb-form .chips { margin: .3rem -16px .3rem; }
+    .cb-list { display: grid; gap: .6rem; }
+    .cb { display: grid; gap: .55rem; }
+    .cb.off { opacity: .55; }
+    .cb h4 { margin: 0; font-weight: 700; font-size: 1.125rem; line-height: 1.3; }
+    .cb-sub { color: var(--ink-soft); font-size: .9375rem; line-height: 1.45; }
+    .cb-money { display: flex; flex-wrap: wrap; gap: .3rem 1rem; font: 700 .875rem/1.4 var(--mono); }
+    .cb-money .owed { color: var(--postmark); }
+    .cb-acts { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .2rem; }
+    .cb-acts .btn { flex: 1 1 9rem; }
+    .cb-more { margin-top: .2rem; display: flex; gap: 1rem; }
+    .cb-new { margin-top: .75rem; border: 2px solid var(--ink); }
+    .cb-msg { white-space: pre-wrap; margin: .6rem 0 .8rem; padding: .8rem; border-radius: 10px; background: var(--envelope-soft); color: var(--ink); font-size: .9375rem; line-height: 1.5; overflow-wrap: anywhere; }
     .box { padding: 1.1rem; border-radius: 12px; background: var(--white); box-shadow: 0 1px 2px rgba(27, 38, 80, .08), 0 14px 30px -24px rgba(27, 38, 80, .5); }
     .box h3 { margin: 0 0 .35rem; font: 400 1.35rem/1.15 var(--display); }
     .box p { margin: 0; color: var(--ink-soft); font-size: .9375rem; }
@@ -381,6 +397,7 @@
   <symbol id="i-receipt" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 11.5h6M9 15h3"/></g></symbol>
   <symbol id="i-undo" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></g></symbol>
  <symbol id="i-pen" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1-4.5L15.5 5a2.1 2.1 0 0 1 3 3L8 18.5z"/><path d="M13.5 7l3 3"/></g></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M15.5 5.2a3 3 0 0 1 0 5.6M17 14.3c2 .5 3.5 2.2 3.5 4.7"/></g></symbol>
   <symbol id="i-wa" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4.5 19.5l1.2-3.6A7.8 7.8 0 1 1 8.4 18.4z"/><path d="M9.2 8.8c.3 2.4 2.6 4.7 5 5l1-1.3-1.8-.9-.8.8c-.9-.4-1.6-1.1-2-2l.8-.8-.9-1.8z"/></g></symbol>
   <symbol id="i-out" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v16h-6"/><path d="M10 8l-4 4 4 4M6 12h10"/></g></symbol>
 </svg>
@@ -410,6 +427,7 @@
 <main id="sales" class="view" hidden></main>
 <main id="news" class="view" hidden></main>
 <main id="custom" class="view" hidden></main>
+<main id="colabs" class="view" hidden></main>
 <main id="order" class="order" hidden></main>
 
 <nav class="tabs" id="tabs" hidden>
@@ -417,6 +435,7 @@
   <button class="tab" type="button" data-tab="all"><svg aria-hidden="true"><use href="#i-list"/></svg>Todos</button>
   <button class="tab" type="button" data-tab="custom"><svg aria-hidden="true"><use href="#i-pen"/></svg>A medida<span class="dot" id="cdot" hidden></span></button>
   <button class="tab" type="button" data-tab="sales"><svg aria-hidden="true"><use href="#i-chart"/></svg>Métricas</button>
+  <button class="tab" type="button" data-tab="colabs"><svg aria-hidden="true"><use href="#i-users"/></svg>Colabs</button>
 </nav>
 <div class="dock" id="dock" hidden><div class="dock-in" id="dockIn"></div></div>
 <div class="studio" id="studio" hidden role="dialog" aria-modal="true" aria-labelledby="stTitle">
@@ -448,6 +467,7 @@ const OWNER = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-owne
 const FLOW = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1)$|^(?!guest-lanzamiento\.).*\.pages\.dev$/.test(location.hostname)?'guest-invitation-flow-qa':'guest-order-flow');
 const AUTO = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-automation';
 const CUSTOM = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/'+(/^(localhost|127\.0\.0\.1)$|^(?!guest-lanzamiento\.).*\.pages\.dev$/.test(location.hostname)?'guest-custom-qa':'guest-order-custom');
+const PARTNERS = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-partners';
 const KEY = 'weddly_owner_manager_token_v1';
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -504,7 +524,7 @@ async function copy(text, done = 'Enlace copiado') { try { await navigator.clipb
 
 /* ---- Entrar ---- */
 function showLogin(text = '') {
-  ['inbox', 'all', 'order', 'tabs', 'dock', 'refresh', 'back', 'bell', 'news', 'sales', 'custom'].forEach((x) => { $(x).hidden = true; });
+  ['inbox', 'all', 'order', 'tabs', 'dock', 'refresh', 'back', 'bell', 'news', 'sales', 'custom', 'colabs'].forEach((x) => { $(x).hidden = true; });
   $('title').textContent = 'Pedidos'; $('login').hidden = false; $('loginMsg').textContent = text; $('master').focus();
 }
 $('enter').onclick = async () => {
@@ -1571,12 +1591,69 @@ function downloadBook(list) {
   document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
 }
 
+
+/* ---- Colaboradores ---- */
+const eur2 = (c) => (c / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
+const termsText = (t) => (t.kind === 'fixed' ? `${eur2(t.cents)} por venta` : `${t.pct} % de cada venta`);
+function colabMessage(p) {
+  const code = p.codes && p.codes.partner;
+  return [`Hola ${p.name}, ¡gracias por querer recomendar GUEST! Este es vuestro panel privado, donde veis cada venta que llega por vosotros y lo que os corresponde (${termsText(p.terms)}):`, p.panel, '',
+    ...(code ? [`Vuestro código para las parejas, con un 10 % de descuento: ${code}`] : []), `Vuestro enlace para compartir: ${p.link}`, '', 'Guardad el enlace del panel: es solo vuestro.'].join('\n');
+}
+let cbMode = 'pct', cbPaying = null;
+async function renderColabs() {
+  const host = $('colabs');
+  host.innerHTML = '<div class="skel"><i></i><i></i></div>';
+  let list = [];
+  try { list = (await call(PARTNERS, { action: 'list' })).partners || []; }
+  catch (e) { if (e.message !== 'manager_required') host.innerHTML = '<p class="msg">No se ha podido cargar. Pulsa el botón de actualizar.</p>'; return; }
+  const due = list.reduce((a, p) => a + (p.totals.confirmed || 0), 0);
+  host.innerHTML = `<div class="box"><h3>Dar de alta a un colaborador</h3><p>Solo el nombre. Se crean su código, su enlace y su panel, y te sale el mensaje listo para pegar.</p>
+    <form class="cb-form" id="cbForm"><label for="cbName">Nombre</label><input id="cbName" type="text" required minlength="2" maxlength="80" autocomplete="off">
+      <label for="cbEmail">Email (si lo tiene; si no, déjalo vacío)</label><input id="cbEmail" type="email" autocomplete="off">
+      <div class="chips" role="group" aria-label="Comisión"><button class="chip" type="button" data-mode="pct" aria-pressed="${cbMode === 'pct'}">15 % de cada venta</button><button class="chip" type="button" data-mode="fixed" aria-pressed="${cbMode === 'fixed'}">10 € por venta</button></div>
+      <button class="btn wide" type="submit" id="cbSend">Crear colaborador</button><p class="msg" id="cbErr" role="alert"></p></form></div>
+    <div id="cbNew"></div>
+    <section class="sec" style="margin-top:1.75rem"><h3>Colaboradores <b>${list.length}</b>${due ? ` · <b>${eur2(due)}</b> pendiente de pago` : ''}</h3><div class="cb-list">${list.length ? list.map((p) => `<div class="box cb${p.active ? '' : ' off'}" data-slug="${esc(p.slug)}">
+      <h4>${esc(p.name)}${p.test ? ' (prueba)' : ''}${p.active ? '' : ' · pausado'}</h4><div class="cb-sub">${esc(termsText(p.terms))} · ${p.sales} ${p.sales === 1 ? 'venta' : 'ventas'}${p.gifts ? ` · ${p.gifts} ${p.gifts === 1 ? 'regalo estrenado' : 'regalos estrenados'}` : ''}${p.email ? ' · ' + esc(p.email) : ''}</div>
+      <div class="cb-money"><span>Por confirmar ${eur2(p.totals.processing)}</span><span class="${p.totals.confirmed ? 'owed' : ''}">Pendiente ${eur2(p.totals.confirmed)}</span><span>Pagado ${eur2(p.totals.paid)}</span></div>
+      <div class="cb-acts"><button class="btn small line" type="button" data-act="msg">Copiar mensaje</button>${p.totals.confirmed ? `<button class="btn small" type="button" data-act="pay">Marcar pagado · ${eur2(p.totals.confirmed)}</button>` : ''}</div>
+      <div class="cb-more"><button class="link-btn" type="button" data-act="rotate">Enlace nuevo</button><button class="link-btn" type="button" data-act="toggle">${p.active ? 'Pausar' : 'Reactivar'}</button></div></div>`).join('') : '<div class="box"><p>Aún no hay colaboradores. Da de alta al primero arriba.</p></div>'}</div></section>`;
+  host.querySelectorAll('[data-mode]').forEach((b) => b.onclick = () => { cbMode = b.dataset.mode; host.querySelectorAll('[data-mode]').forEach((x) => x.setAttribute('aria-pressed', x.dataset.mode === cbMode)); });
+  $('cbForm').onsubmit = async (e) => {
+    e.preventDefault(); const btn = $('cbSend'); btn.disabled = true; $('cbErr').textContent = '';
+    try {
+      const j = await call(PARTNERS, { action: 'create', name: $('cbName').value, email: $('cbEmail').value, ...(cbMode === 'fixed' ? { fixed_cents: 1000 } : { pct: 15 }) });
+      const p = j.partner, text = colabMessage(p);
+      await renderColabs();
+      $('cbNew').innerHTML = `<div class="box cb-new"><h3>${esc(p.name)} ya tiene su panel</h3><p>Copia este mensaje y pégalo en su chat o en un email.</p><div class="cb-msg">${esc(text)}</div><button class="btn wide" id="cbCopyNew" type="button">Copiar mensaje</button></div>`;
+      $('cbCopyNew').onclick = () => copy(text, 'Mensaje copiado');
+      $('cbNew').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) { $('cbErr').textContent = err.data?.error === 'already_exists' ? 'Ya existe un colaborador con ese nombre.' : 'No se ha podido crear. Prueba otra vez.'; btn.disabled = false; }
+  };
+  host.querySelectorAll('[data-act]').forEach((b) => b.onclick = async () => {
+    const slug = b.closest('[data-slug]').dataset.slug, p = list.find((x) => x.slug === slug);
+    try {
+      if (b.dataset.act === 'msg') return copy(colabMessage(p), 'Mensaje copiado');
+      if (b.dataset.act === 'pay') {
+        if (cbPaying !== slug) { cbPaying = slug; b.textContent = `¿Ya lo has pagado? Toca otra vez`; setTimeout(() => { if (cbPaying === slug) { cbPaying = null; b.textContent = `Marcar pagado · ${eur2(p.totals.confirmed)}`; } }, 5000); return; }
+        cbPaying = null; const j = await call(PARTNERS, { action: 'mark_paid', slug }); toast(`Anotado: ${eur2(j.cents)} pagados`); return renderColabs();
+      }
+      if (b.dataset.act === 'rotate') {
+        if (cbPaying !== 'r' + slug) { cbPaying = 'r' + slug; b.textContent = 'Toca otra vez: el enlace antiguo dejará de valer'; setTimeout(() => { cbPaying = null; b.textContent = 'Enlace nuevo'; }, 5000); return; }
+        cbPaying = null; const j = await call(PARTNERS, { action: 'rotate', slug }); await copy(colabMessage({ ...p, panel: j.panel }), 'Mensaje con el enlace nuevo copiado'); return renderColabs();
+      }
+      if (b.dataset.act === 'toggle') { await call(PARTNERS, { action: 'update', slug, active: !p.active }); return renderColabs(); }
+    } catch (err) { if (err.message !== 'manager_required') toast('No se ha podido. Prueba otra vez.'); }
+  });
+}
+
 /* ---- Navegación ---- */
 function showView(v) {
-  ['inbox', 'all', 'sales', 'custom', 'order', 'news'].forEach((x) => { $(x).hidden = x !== v; });
+  ['inbox', 'all', 'sales', 'custom', 'colabs', 'order', 'news'].forEach((x) => { $(x).hidden = x !== v; });
   $('tabs').hidden = v === 'order' || v === 'news'; $('dock').hidden = true; $('refresh').hidden = false; $('bell').hidden = v === 'news'; $('back').hidden = v !== 'order' && v !== 'news';
   document.querySelectorAll('.tab').forEach((t) => t.setAttribute('aria-current', t.dataset.tab === v ? 'page' : 'false'));
-  if (v !== 'order') { $('title').textContent = v === 'all' ? 'Todos los pedidos' : v === 'sales' ? 'Métricas' : v === 'news' ? 'Avisos' : v === 'custom' ? 'A medida' : 'Pedidos'; current = null; }
+  if (v !== 'order') { $('title').textContent = v === 'all' ? 'Todos los pedidos' : v === 'sales' ? 'Métricas' : v === 'news' ? 'Avisos' : v === 'custom' ? 'A medida' : v === 'colabs' ? 'Colaboradores' : 'Pedidos'; current = null; }
   scrollTo({ top: 0 });
 }
 function route() {
@@ -1587,10 +1664,11 @@ function route() {
   if (h === '#/medida') { showView('custom'); renderCustom(); return; }
   if (h === '#/todos') { showView('all'); renderAll(); return; }
   if (h === '#/ventas') { showView('sales'); renderSales(); return; }
+  if (h === '#/colaboradores') { showView('colabs'); renderColabs(); return; }
   if (h === '#/avisos') { showView('news'); renderNews(); return; }
   showView('inbox'); renderInbox();
 }
-document.querySelectorAll('.tab').forEach((t) => t.onclick = () => { location.hash = { all: '#/todos', sales: '#/ventas', custom: '#/medida' }[t.dataset.tab] || '#/'; });
+document.querySelectorAll('.tab').forEach((t) => t.onclick = () => { location.hash = { all: '#/todos', sales: '#/ventas', custom: '#/medida', colabs: '#/colaboradores' }[t.dataset.tab] || '#/'; });
 $('back').onclick = () => (history.length > 1 ? history.back() : (location.hash = '#/'));
 addEventListener('hashchange', route);
 
