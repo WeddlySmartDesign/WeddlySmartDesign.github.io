@@ -192,6 +192,21 @@ Deno.serve(async (req) => {
 
     if (!(await managerOk(c, req))) return json({ ok: false, error: 'manager_required' }, 403);
 
+    // Pedidos de prueba que la propietaria oculta de sus listas (no se borra nada).
+    if (action === 'hidden_get') {
+      const { data } = await c.from('guest_owner_settings').select('value').eq('key', 'hidden-items').maybeSingle();
+      return json({ ok: true, ids: Array.isArray(data?.value?.ids) ? data.value.ids : [] });
+    }
+    if (action === 'hidden_set') {
+      const id = String(b.id || '');
+      if (!/^[0-9a-f-]{36}$/.test(id)) return json({ ok: false, error: 'invalid_id' }, 400);
+      const { data } = await c.from('guest_owner_settings').select('value').eq('key', 'hidden-items').maybeSingle();
+      const set = new Set<string>(Array.isArray(data?.value?.ids) ? data.value.ids : []);
+      if (b.hidden) set.add(id); else set.delete(id);
+      const { error } = await c.from('guest_owner_settings').upsert({ key: 'hidden-items', value: { ids: [...set] } }, { onConflict: 'key' });
+      return error ? json({ ok: false, error: 'save_failed' }, 500) : json({ ok: true });
+    }
+
     if (action === 'list') {
       const { data: ps } = await c.from('guest_partners').select('*').order('created_at', { ascending: false });
       const out = [];
