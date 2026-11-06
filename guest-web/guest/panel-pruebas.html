@@ -487,8 +487,8 @@ const STATUS = {
   delivered: { label: 'Entregada', who: 'done', group: 'done' },
   cancelled: { label: 'Devuelto', who: 'done', group: 'done' }
 };
-const FILTERS = [['all', 'Todos'], ['you', 'Te toca'], ['them', 'Esperando'], ['done', 'Terminados']];
-let orders = [], filter = 'all', current = null, registry = null, toastTimer = null;
+const FILTERS = [['all', 'Todos'], ['you', 'Te toca'], ['them', 'Esperando'], ['done', 'Terminados'], ['hidden', 'Ocultos']];
+let orders = [], rawOrders = [], hidden = new Set(), filter = 'all', current = null, registry = null, toastTimer = null;
 
 /* ---- Utilidades ---- */
 async function call(url, body) {
@@ -572,6 +572,17 @@ async function loadVacation() {
   $('vacGo').onclick = () => { const v = $('vacUntil').value; if (!v) { $('vacMsg').textContent = 'Elige la fecha de vuelta.'; return; } save(v); };
   $('vacOff').onclick = () => save('');
 }
+/* ---- Ocultar pedidos de prueba (no se borra nada: solo deja de salir en las listas) ---- */
+async function loadHidden() { try { hidden = new Set((await call(PARTNERS, { action: 'hidden_get' })).ids || []); } catch (e) { if (e.message === 'manager_required') throw e; } }
+function applyHidden() { orders = rawOrders.filter((o) => !hidden.has(o.id)); customs = rawCustoms.filter((r) => !hidden.has(r.id)); }
+async function setHidden(id, on) { await call(PARTNERS, { action: 'hidden_set', id, hidden: on }); if (on) hidden.add(id); else hidden.delete(id); applyHidden(); }
+function hideBox(id) {
+  const on = hidden.has(id), box = document.createElement('div');
+  box.className = 'box'; box.style.marginTop = '1rem';
+  box.innerHTML = `<h3>${on ? 'Oculto de tus listas' : 'Ocultar de mis listas'}</h3><p>${on ? 'No sale en «Para ti», «Todos» ni en los avisos. Lo ves en Todos, filtro «Ocultos».' : 'Para pedidos de prueba. No se borra nada: solo deja de salir en tus listas y de contarse como pendiente.'}</p><div class="st-open"><button class="btn line" type="button" id="hideBtn">${on ? 'Volver a mostrarlo' : 'Ocultar'}</button></div>`;
+  $('order').append(box);
+  $('hideBtn').onclick = async () => { try { await setHidden(id, !on); toast(on ? 'Vuelve a salir en tus listas.' : 'Ocultado.'); location.hash = '#/todos'; renderAll(); } catch (e) { if (e.message !== 'manager_required') toast('No ha salido. Prueba otra vez.'); } };
+}
 function renderInbox() {
   const g = (k) => orders.filter((o) => (o.customRequestId && o.status === 'approved' ? 'waiting' : STATUS[o.status]?.group) === k).sort((a, b) => (due(a)?.at ?? Infinity) - (due(b)?.at ?? Infinity));
   const send = g('send'), deliver = g('deliver'), waiting = g('waiting'), fixes = orders.filter((o) => o.dataChangePending), mine = send.length + deliver.length + fixes.length + customs.filter((r) => CSTATUS[r.status]?.who === 'you').length;
@@ -596,6 +607,11 @@ function renderInbox() {
 function renderAll() {
   $('chips').innerHTML = FILTERS.map(([k, t]) => `<button class="chip" type="button" data-f="${k}" aria-pressed="${filter === k}">${t}</button>`).join('');
   const q = $('q').value.trim().toLowerCase();
+  if (filter === 'hidden') {
+    const ho = rawOrders.filter((o) => hidden.has(o.id) && (!q || `${o.label} ${o.buyerEmail}`.toLowerCase().includes(q))), hc = rawCustoms.filter((r) => hidden.has(r.id));
+    $('allList').innerHTML = ho.length || hc.length ? ho.map((o) => card(o)).join('') + hc.map(ccard).join('') : '<div class="calm">No tienes nada oculto.</div>';
+    return;
+  }
   const list = orders.filter((o) => (filter === 'all' || STATUS[o.status]?.who === filter) && (!q || `${o.label} ${o.buyerEmail} ${design(o.templateId).name}`.toLowerCase().includes(q)));
   $('allList').innerHTML = list.length ? list.map((o) => card(o)).join('') : `<div class="calm">${orders.length ? 'Ningún pedido coincide.' : 'Todavía no hay pedidos.'}</div>`;
 }
@@ -713,6 +729,7 @@ async function openOrder(id) {
         catch (e) { if (e.message === 'manager_required') return; $('fixMsg').textContent = ['invalid_invitation_config', 'invalid_invitation_media'].includes(e.message) ? 'Ese valor no encaja (revisa el formato: hora 18:30, enlaces con https://).' : 'No ha salido. Prueba otra vez.'; b.disabled = false; b.textContent = 'Guardar el cambio'; }
       };
     }
+    hideBox(id);
     const gift = (undo) => async () => {
       try { await flow({ action: 'grant_change', orderId: o.id, ...(undo ? { undo: true } : {}) }); toast(undo ? 'Quitada.' : 'Ronda regalada. Ya pueden pedir el cambio sin pagar.'); openOrder(o.id); }
       catch (e) { if (e.message === 'manager_required') return; $('giftMsg').textContent = e.message === 'too_many_changes' ? 'Ya tiene el máximo de rondas.' : 'No ha salido. Prueba otra vez.'; }
@@ -1193,7 +1210,7 @@ const SCOPE = {
   new: ['Diseño nuevo desde cero: portada, apertura, secciones y cierre.', 'Precio según lo que pidan: 250 € es el mínimo.', 'Cuenta 6–10 h o más: sube el precio si piden animaciones complejas, varias ilustraciones o bilingüe.'],
   unsure: ['Lee la idea y decide el nivel que encaja.', 'Si cabe en adaptar un diseño, presupuesta 120 €; si piden portada propia, 180 €; si es todo nuevo, 250 € o más.']
 };
-let customs = [], customsCfg = { rounds: 2, extraCents: 2000 };
+let customs = [], rawCustoms = [], customsCfg = { rounds: 2, extraCents: 2000 };
 // Algo que no estaba en el presupuesto: importe y concepto; les llega el enlace de pago con su factura.
 function chargeBox(r) {
   const ex = r.extras || [], pending = ex.some((x) => !x.paidAt && !x.cancelledAt);
@@ -1204,8 +1221,8 @@ function chargeBox(r) {
 }
 const custom = (b) => call(CUSTOM, b);
 async function loadCustom() {
-  try { const j = await custom({ action: 'list' }); customs = j.requests || []; customsCfg = { rounds: j.rounds, extraCents: j.extraCents }; }
-  catch { customs = customs || []; }
+  try { const j = await custom({ action: 'list' }); rawCustoms = j.requests || []; applyHidden(); customsCfg = { rounds: j.rounds, extraCents: j.extraCents }; }
+  catch { rawCustoms = rawCustoms || []; applyHidden(); }
   const n = customs.filter((r) => CSTATUS[r.status]?.who === 'you').length;
   $('cdot').hidden = !n; $('cdot').textContent = n;
   if (location.hash === '#/medida') renderCustom();
@@ -1330,6 +1347,7 @@ async function openCustom(id) {
     document.querySelectorAll('[data-xcancel]').forEach((b) => { b.onclick = () => run(b, () => custom({ action: 'charge', id, cancel: Number(b.dataset.xcancel) }), 'Extra anulado.'); });
     if ($('cRound')) $('cRound').onclick = () => run($('cRound'), () => custom({ action: 'round', id }), 'Apuntada la propuesta.');
     if ($('cRoundUndo')) $('cRoundUndo').onclick = () => run($('cRoundUndo'), () => custom({ action: 'round', id, undo: true }), 'Quitada.');
+    hideBox(id);
     let refundPart = '';
     $('order').querySelectorAll('[data-refund]').forEach((b) => b.onclick = () => { refundPart = b.dataset.refund; b.parentElement.hidden = true; b.closest('.box').querySelector('.refund-confirm').hidden = false; });
     if ($('cRefundNo')) $('cRefundNo').onclick = () => { const box = $('cRefundNo').closest('.box'); box.querySelector('.refund-go').hidden = false; box.querySelector('.refund-confirm').hidden = true; };
@@ -1675,8 +1693,9 @@ addEventListener('hashchange', route);
 async function refresh() {
   book = null;
   const r = $('refresh'); r.classList.add('spin');
+  try { await loadHidden(); } catch (e) { if (e.message === 'manager_required') throw e; }
   loadCustom(); loadUnread();
-  try { const j = await flow({ action: 'list' }); orders = j.orders || []; }
+  try { const j = await flow({ action: 'list' }); rawOrders = j.orders || []; applyHidden(); }
   catch (e) { if (e.message !== 'manager_required') toast('Sin conexión. Prueba otra vez.'); throw e; }
   finally { r.classList.remove('spin'); }
 }
