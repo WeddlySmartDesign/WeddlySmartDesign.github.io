@@ -3,6 +3,11 @@
 (() => {
   // Los scripts de cada página cuentan acciones con window.guestHit('free', 'clave'); sin efecto si no se mide.
   window.guestHit = window.guestHit || (() => {});
+  // Recuerda el enlace del colaborador (?c=slug) 60 días para atribuirle la compra, también si paga otro día.
+  try {
+    const c = (new URLSearchParams(location.search).get('c') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
+    if (c) localStorage.setItem('guest-colab', JSON.stringify({ c, t: Date.now() }));
+  } catch {}
   if (location.hostname !== 'guest.weddlysmartdesign.com') return;
   // La propietaria no cuenta: su móvil queda marcado al abrir su panel de pedidos (o con ?yo=1).
   try {

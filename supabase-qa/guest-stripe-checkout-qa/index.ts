@@ -79,7 +79,7 @@ async function stripeRequest(path:string,init:RequestInit={}){assertTestKeys();
  const r=await fetch('https://api.stripe.com/v1'+path,{...init,headers:{Authorization:'Bearer '+secret,...(init.headers||{})}});
  const x=await r.json().catch(()=>({}));if(r.ok&&x.livemode!==LIVE)throw new Error('stripe_not_configured');if(!r.ok){console.warn('stripe_error',r.status,x);if(r.status===404)throw new Error('session_not_found');if(r.status===401||r.status===403)throw new Error('stripe_not_configured');if(r.status===429)throw new Error('stripe_temporarily_unavailable');throw new Error('stripe_request_failed')}return x
 }
-async function createSession(edition:string,consent:boolean,attempt:any,requestedTemplateId:any){
+async function createSession(edition:string,consent:boolean,attempt:any,requestedTemplateId:any,partnerRef:any=''){
  if(!consent)throw new Error('consent_required');
  const key=String(attempt||'').trim();if(!/^[A-Za-z0-9-]{16,100}$/.test(key))throw new Error('invalid_checkout_attempt');
  const option=catalogSaleOption(requestedTemplateId,edition);
@@ -94,6 +94,9 @@ async function createSession(edition:string,consent:boolean,attempt:any,requeste
  p.set('line_items[0][price_data][product_data][name]','Invitación '+option.displayName+' by WeddlySmartDesign');
  p.set('line_items[0][price_data][product_data][description]','Invitación digital personalizada, RSVP y gestión de invitados GUEST incluidos.');
  p.set('metadata[product]','guest');p.set('metadata[edition]',edition);p.set('metadata[pricing]','individual-design');
+ // Enlace de colaborador (?c=slug) sin descuento: solo atribuye la venta, no cambia el precio.
+ const ref=String(partnerRef||'').toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);if(ref){p.set('metadata[guest_ref]',ref);p.set('payment_intent_data[metadata][guest_ref]',ref)}
+
  p.set('metadata[amount_cents]',String(amount));p.set('metadata[start_personalization_consent]','true');
  if(option){
   p.set('metadata[guest_catalog_template_id]',option.id);
@@ -259,7 +262,7 @@ async function provision(session:any){
  if((templateId||templateVersion)&&(!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(templateId)||
     !/^[a-zA-Z0-9][a-zA-Z0-9._-]{0,30}$/.test(templateVersion)))
   throw new Error('invalid_checkout_session');
- const metadata={product:'guest',edition,access_kind:'paid',payment_provider:'stripe',stripe_session_id:sessionId,stripe_payment_intent:typeof session.payment_intent==='string'?session.payment_intent:null,amount_total:Number(session.amount_total??amountFor(edition)),...(await promoOf(session)),currency:'eur',pricing:templateId?'individual-design':'launch',guest_personalization_status:'awaiting_details',purchased_at:created,
+ const metadata={product:'guest',edition,access_kind:'paid',payment_provider:'stripe',stripe_session_id:sessionId,stripe_payment_intent:typeof session.payment_intent==='string'?session.payment_intent:null,amount_total:Number(session.amount_total??amountFor(edition)),...(await promoOf(session)),...(/^[a-z0-9-]{1,40}$/.test(String(session.metadata?.guest_ref||''))?{guest_ref_partner:String(session.metadata.guest_ref)}:{}),currency:'eur',pricing:templateId?'individual-design':'launch',guest_personalization_status:'awaiting_details',purchased_at:created,
    ...(templateId?{guest_catalog_template_id:templateId,guest_catalog_template_version:templateVersion}:{})};
  const {data,error}=await db.rpc('provision_weddly_license',{p_source:'stripe',p_source_order_id:sessionId,p_buyer_email:buyer,p_product_ref:'guest_'+edition,p_metadata:metadata,p_activation_code:code,p_purchase_hash:hash});if(error)throw error;
  const row=data?.[0];if(!row?.license_id)throw new Error('license_provision_failed');
@@ -345,7 +348,7 @@ Deno.serve(async req=>{
    }
    return json({ok:true,publishableKey:pk,launch:true,catalog})
   }
-  if(action==='create'){const edition=editionOf(b.edition),session=await createSession(edition,b.startPersonalizationConsent===true,b.checkoutAttemptId,b.catalogTemplateId);return json({ok:true,clientSecret:session.client_secret,sessionId:session.id,edition})}
+  if(action==='create'){const edition=editionOf(b.edition),session=await createSession(edition,b.startPersonalizationConsent===true,b.checkoutAttemptId,b.catalogTemplateId,b.partnerRef);return json({ok:true,clientSecret:session.client_secret,sessionId:session.id,edition})}
   if(action==='status'){
    const session=await retrieveSession(String(b.sessionId||'')),paid=isPaid(session);let p=null;if(paid)p=await provision(session);
    return json({ok:true,status:session.status,paymentStatus:session.payment_status,paid,provisioned:!!p,edition:editionOf(session.metadata?.edition),amountTotal:session.amount_total||null,currency:session.currency||'eur',email:p?.buyerEmail||session.customer_details?.email||null,orderSubmittedAt:p?.metadata?.guest_order_submitted_at||null,catalogTemplateId:p?.metadata?.guest_catalog_template_id||null,catalogTemplateVersion:p?.metadata?.guest_catalog_template_version||null,catalogQuestionnaireUrl:p?.catalogQuestionnaireUrl||null})
