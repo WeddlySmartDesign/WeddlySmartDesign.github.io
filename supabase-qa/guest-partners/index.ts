@@ -67,6 +67,7 @@ async function salesOf(c: any, p: any) {
 }
 
 const terms = (p: any) => p.fixed_cents != null ? { kind: 'fixed', cents: p.fixed_cents } : { kind: 'pct', pct: Number(p.pct) };
+const giftState = (codes: any, used: number) => codes.gift.length ? { code: codes.gift[0], used: used >= codes.gift.length } : null;
 const portalUrl = (p: any) => `${LIVE_ORIGIN}/colaborador.html#k=${p.token}`;
 
 async function codesOf(c: any, slug: string) {
@@ -78,6 +79,18 @@ const slugify = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowe
 const codeBase = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 14) || 'COLAB';
 const newToken = () => { const b = crypto.getRandomValues(new Uint8Array(18)); return btoa(String.fromCharCode(...b)).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, ''); };
 
+
+/* Invitación de regalo (un solo uso, 100 %) que se les promete en el primer mensaje: REGALO + nombre + 3 cifras. */
+async function addGift(c: any, slug: string, name: string, free: (code: string) => Promise<boolean>) {
+  for (let i = 0; i < 6; i++) {
+    const code = 'REGALO' + codeBase(name).slice(0, 12) + String(100 + Math.floor(Math.random() * 900));
+    if (!(await free(code))) continue;
+    const ins = await c.from('guest_partner_codes').insert({ mode: 'live', kind: 'gift', code, max_redemptions: 1, partner_slug: slug, partner_name: name });
+    if (!ins.error) return true;
+    console.warn('gift_code', ins.error.message);
+  }
+  return false;
+}
 
 /* Alta de un colaborador (la usan el panel de la propietaria y el botón de la página de profesionales). */
 const norm = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -99,15 +112,20 @@ async function addPartner(c: any, o: { name: string; slug?: string; email?: stri
   const { error } = await c.from('guest_partners').insert(p);
   if (error) throw new Error('insert_failed: ' + error.message);
   let codes = await codesOf(c, slug);
-  if (!p.test && !o.noCodes && fixed == null && !codes.partner) {
-    const code = codeBase(name) + '10';
-    const taken = (await c.from('guest_partner_codes').select('code').eq('code', code).maybeSingle()).data;
-    const ins = await c.from('guest_partner_codes').insert({ mode: 'live', kind: 'partner', code: taken ? code.slice(0, 11) + String(10 + Math.floor(Math.random() * 90)) : code, partner_slug: slug, partner_name: name });
-    if (!ins.error) {
+  if (!p.test && !o.noCodes) {
+    const free = async (code: string) => !(await c.from('guest_partner_codes').select('code').eq('code', code).maybeSingle()).data;
+    let made = false;
+    if (fixed == null && !codes.partner) {
+      const code = codeBase(name) + '10';
+      const ins = await c.from('guest_partner_codes').insert({ mode: 'live', kind: 'partner', code: (await free(code)) ? code : code.slice(0, 11) + String(10 + Math.floor(Math.random() * 90)), partner_slug: slug, partner_name: name });
+      if (ins.error) console.warn('partner_code', ins.error.message); else made = true;
+    }
+    if (!codes.gift.length) made = (await addGift(c, slug, name, free)) || made;
+    if (made) {
       const r = await fetch(Deno.env.get('SUPABASE_URL') + '/functions/v1/guest-order-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'promo_sync' }) });
       if (!r.ok) console.warn('promo_sync', r.status, await r.text());
       codes = await codesOf(c, slug);
-    } else console.warn('partner_code', ins.error.message);
+    }
   }
   return { exists: false as const, p, codes };
 }
@@ -186,7 +204,7 @@ Deno.serve(async (req) => {
       const { data: p } = await c.from('guest_partners').select('*').eq('token', k).maybeSingle();
       if (!p || !p.active) return json({ ok: false, error: 'invalid_token' }, 403);
       const r = await salesOf(c, p), codes = await codesOf(c, p.slug);
-      return json({ ok: true, name: p.name, terms: terms(p), link: `${LIVE_ORIGIN}/?c=${p.slug}`, code: codes.partner, test: !!p.test,
+      return json({ ok: true, name: p.name, terms: terms(p), link: `${LIVE_ORIGIN}/?c=${p.slug}`, code: codes.partner, gift: giftState(codes, r.gifts.length), test: !!p.test,
         sales: r.sales.map(({ orderId, ...x }) => x), gifts: r.gifts, totals: r.totals });
     }
 

@@ -56,6 +56,11 @@
     .copy input { min-width: 0; min-height: 48px; padding: 0 .8rem; font: 400 .9375rem var(--mono); color: var(--ink); background: var(--white); border: 1.5px solid var(--line); border-radius: 6px; }
     .copy button { min-height: 48px; padding: 0 1rem; font: 700 .9375rem var(--text); color: var(--paper); background: var(--ink); border: 0; border-radius: 6px; cursor: pointer; transition: transform 160ms var(--ease-out); }
     .copy button:active { transform: scale(.97); }
+    .present { display: grid; gap: .8rem; }
+    .present .state { display: inline-block; justify-self: start; padding: .3rem .7rem; font: 700 .8125rem/1 var(--mono); border-radius: 999px; background: var(--white); border: 1.5px solid var(--line); color: var(--ink); }
+    .present .state.is-used { color: var(--ink-soft); }
+    .present .btn2 { min-height: 48px; padding: 0 1rem; font: 700 .9375rem var(--text); color: var(--ink); background: transparent; border: 1.5px solid var(--ink); border-radius: 6px; cursor: pointer; transition: transform 160ms var(--ease-out); }
+    .present .btn2:active { transform: scale(.97); }
     .hint { font-size: .9375rem; line-height: 1.5; color: var(--ink-soft); }
     .state-msg { font-size: 1.0625rem; line-height: 1.55; }
     .contact { font-size: .9688rem; line-height: 1.55; color: var(--ink-soft); }
@@ -115,11 +120,23 @@
         ? 'Las ventas se cuentan tanto si la pareja entra por el enlace como si escribe el código al pagar. Con el código, además, tiene un 10 % de descuento.'
         : 'Basta con que la pareja entre por este enlace: la venta queda anotada a vuestro nombre durante 60 días, aunque compre otro día.') + '</p>';
 
+    var present = '';
+    if (d.gift) {
+      present = '<section class="card present" aria-labelledby="h-g"><h2 id="h-g">Vuestra invitación de regalo</h2>' +
+        '<p class="hint">Una invitación completa, personalizada y con la app de GUEST, para una pareja que celebre con vosotros. Se canjea una sola vez, sin coste para ellos.</p>' +
+        (d.gift.used
+          ? '<span class="state is-used">Ya estrenada</span><p class="hint">Si tenéis otra pareja a la que le venga bien, escribidnos por WhatsApp y lo vemos.</p>'
+          : '<span class="state">Disponible</span>' + copyRow('gcod', 'Código de regalo', d.gift.code) +
+            '<button class="btn2" type="button" id="giftMsg">Copiar mensaje para la pareja</button>' +
+            '<p class="hint">La pareja entra en el enlace, elige su diseño y, en el pago, pulsa «Añadir código».</p>') +
+        '</section>';
+    }
     document.title = 'Panel de ' + d.name + ' · GUEST';
     main.innerHTML =
       (d.test ? '<span class="col-test">Panel de prueba</span>' : '') +
       '<div><h1>Hola, ' + esc(d.name) + '</h1><p class="col-lead">Este es vuestro panel privado. Aquí veis cada venta que llega por vuestra recomendación y lo que os corresponde, sin tener que fiaros de nadie: sale directamente de los pagos reales.</p></div>' +
       '<div class="tot"><div><b>' + eur(t.processing) + '</b><span>Por confirmar: la pareja aún está viendo su propuesta</span></div><div class="is-due"><b>' + eur(t.confirmed) + '</b><span>Pendiente de pago: ya confirmada, se abona a mes vencido</span></div><div><b>' + eur(t.paid) + '</b><span>Ya pagado</span></div></div>' +
+      present +
       '<section class="card" aria-labelledby="h-v"><h2 id="h-v">Vuestras ventas</h2>' + sales + gifts + '</section>' +
       '<section class="card" aria-labelledby="h-c"><h2 id="h-c">Cómo funciona</h2><ul class="rules">' +
         '<li><strong>Vuestra comisión: ' + esc(rule) + '.</strong>' + (fixed ? ' Sin descuento para la pareja.' : ' Se calcula sobre el importe pagado, IVA incluido.') + '</li>' +
@@ -130,6 +147,12 @@
       '<section class="card share" aria-labelledby="h-e"><h2 id="h-e">Para recomendarnos</h2>' + share + '</section>' +
       '<p class="contact">¿Alguna duda con una venta o con un pago? Escribidnos a <a href="mailto:info@weddlysmartdesign.com">info@weddlysmartdesign.com</a> o por <a href="https://wa.me/34620843264" target="_blank" rel="noopener">WhatsApp</a>. Guardad este enlace: es solo vuestro.</p>';
 
+    var gm = document.getElementById('giftMsg');
+    if (gm) gm.addEventListener('click', function () {
+      var t = 'Hola, nos gustaría regalaros una invitación digital de boda de GUEST, completa y personalizada, con su app para confirmaciones, menús y mesas. Entrad en ' + d.link + ', elegid vuestro diseño y, al pagar, pulsad «Añadir código» y escribid ' + d.gift.code + ': no pagáis nada. Es de un solo uso.';
+      var done = function () { gm.textContent = 'Mensaje copiado'; setTimeout(function () { gm.textContent = 'Copiar mensaje para la pareja'; }, 1800); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, done); else done();
+    });
     main.querySelectorAll('[data-copy]').forEach(function (b) {
       b.addEventListener('click', function () {
         var i = document.getElementById(b.getAttribute('data-copy'));
