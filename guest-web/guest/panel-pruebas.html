@@ -1616,7 +1616,7 @@ const termsText = (t) => (t.kind === 'fixed' ? `${eur2(t.cents)} por venta` : `$
 function colabMessage(p) {
   const code = p.codes && p.codes.partner;
   return [`Hola ${p.name}, ¡gracias por querer recomendar GUEST! Este es vuestro panel privado, donde veis cada venta que llega por vosotros y lo que os corresponde (${termsText(p.terms)}):`, p.panel, '',
-    ...(code ? [`Vuestro código para las parejas, con un 10 % de descuento: ${code}`] : []), `Vuestro enlace para compartir: ${p.link}`, '', 'Guardad el enlace del panel: es solo vuestro.'].join('\n');
+    ...(code ? [`Vuestro código para las parejas, con un 10 % de descuento: ${code}`] : []), ...(p.codes && p.codes.gift && p.codes.gift[0] ? [`Vuestra invitación de regalo para una pareja (un solo uso): ${p.codes.gift[0]}. También la tenéis en el panel, con un mensaje listo para copiar.`] : []), `Vuestro enlace para compartir: ${p.link}`, '', 'Guardad el enlace del panel: es solo vuestro.'].join('\n');
 }
 let cbMode = 'pct', cbPaying = null;
 async function renderColabs() {
