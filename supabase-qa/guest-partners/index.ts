@@ -78,6 +78,82 @@ const slugify = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowe
 const codeBase = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 14) || 'COLAB';
 const newToken = () => { const b = crypto.getRandomValues(new Uint8Array(18)); return btoa(String.fromCharCode(...b)).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, ''); };
 
+
+/* Alta de un colaborador (la usan el panel de la propietaria y el botón de la página de profesionales). */
+const norm = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+async function addPartner(c: any, o: { name: string; slug?: string; email?: string | null; pct?: number; fixed?: number | null; test?: boolean; note?: string | null; noCodes?: boolean }) {
+  const name = o.name.trim().slice(0, 80), fixed = o.fixed ?? null, pct = o.pct ?? 15;
+  let slug = slugify(o.slug || '');
+  if (!slug) {
+    // Si ya tiene códigos creados (p. ej. por la campaña de mensajes), se reutiliza su identificador para que sus ventas cuenten.
+    const { data: rows } = await c.from('guest_partner_codes').select('partner_slug,partner_name').eq('mode', 'live').limit(2000);
+    const hit = (rows || []).find((r: any) => r.partner_name && norm(r.partner_name) === norm(name) && !String(r.partner_slug).startsWith('etsy'));
+    slug = hit ? hit.partner_slug : slugify(name) || 'colaborador';
+  }
+  const base = slug;
+  if ((await c.from('guest_partners').select('slug').eq('slug', slug).maybeSingle()).data) {
+    if (o.slug) return { exists: true as const };
+    for (let i = 2; (await c.from('guest_partners').select('slug').eq('slug', slug).maybeSingle()).data; i++) slug = base + '-' + i;
+  }
+  const p = { slug, name, email: o.email || null, token: newToken(), pct, fixed_cents: fixed, test: !!o.test, note: o.note || null };
+  const { error } = await c.from('guest_partners').insert(p);
+  if (error) throw new Error('insert_failed: ' + error.message);
+  let codes = await codesOf(c, slug);
+  if (!p.test && !o.noCodes && fixed == null && !codes.partner) {
+    const code = codeBase(name) + '10';
+    const taken = (await c.from('guest_partner_codes').select('code').eq('code', code).maybeSingle()).data;
+    const ins = await c.from('guest_partner_codes').insert({ mode: 'live', kind: 'partner', code: taken ? code.slice(0, 11) + String(10 + Math.floor(Math.random() * 90)) : code, partner_slug: slug, partner_name: name });
+    if (!ins.error) {
+      const r = await fetch(Deno.env.get('SUPABASE_URL') + '/functions/v1/guest-order-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'promo_sync' }) });
+      if (!r.ok) console.warn('promo_sync', r.status, await r.text());
+      codes = await codesOf(c, slug);
+    } else console.warn('partner_code', ins.error.message);
+  }
+  return { exists: false as const, p, codes };
+}
+const outPartner = (p: any, codes: any) => ({ slug: p.slug, name: p.name, terms: terms(p), panel: portalUrl(p), link: `${LIVE_ORIGIN}/?c=${p.slug}`, codes });
+async function ping(c: any, title: string, body: string, dedupe: string) {
+  try { await c.from('guest_owner_events').insert({ title, body, url: '/guest/panel-pruebas.html#/colaboradores', test: false, dedupe }); } catch (e) { console.warn('ping', e); }
+}
+
+
+/* ---------- Resumen mensual (lo llama pg_cron el día 1) ---------- */
+const euros = (c: number) => (c / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' });
+const esc = (x: unknown) => String(x ?? '').replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]!));
+const mailHtml = (title: string, body: string) => `<div style="background:#f0c4bc;padding:24px 12px"><div style="max-width:520px;margin:0 auto;background:#fbf7f4;border-radius:8px;padding:28px 24px;font:400 16px/1.6 system-ui,-apple-system,Segoe UI,sans-serif;color:#1b2650"><p style="margin:0 0 6px;font:700 20px/1 Georgia,serif;letter-spacing:.02em">GUEST</p><h1 style="margin:14px 0 14px;font:400 24px/1.2 Georgia,serif">${esc(title)}</h1>${body}<p style="margin:22px 0 0;font-size:13px;color:#4a5480">GUEST by WeddlySmartDesign</p></div></div>`;
+async function sendMail(to: string[], subject: string, html: string, idem: string) {
+  const apiKey = String(Deno.env.get('RESEND_API_KEY') || '').trim(), raw = String(Deno.env.get('WEDDLY_RESEND_FROM') || '').trim();
+  const m = raw.match(/<([^>]+)>/), addr = (m?.[1] || (/^[^\s<>]+@[^\s<>]+$/.test(raw) ? raw : '')).trim();
+  if (!apiKey || !addr) return false;
+  const res = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + apiKey, 'Idempotency-Key': idem },
+    body: JSON.stringify({ from: 'GUEST by WeddlySmartDesign <' + addr + '>', to, subject, html }) });
+  if (!res.ok) console.warn('mail_failed', res.status, await res.text());
+  return res.ok;
+}
+async function monthly(c: any, now = new Date()) {
+  const madrid = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Madrid' }));
+  const prev = new Date(madrid.getFullYear(), madrid.getMonth() - 1, 1);
+  const key = `${prev.getFullYear()}-${String(prev.getMonth() + 1).padStart(2, '0')}`;
+  const monthName = prev.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+  const inMonth = (t: string) => { const d = new Date(new Date(t).toLocaleString('en-US', { timeZone: 'Europe/Madrid' })); return d.getFullYear() === prev.getFullYear() && d.getMonth() === prev.getMonth(); };
+  // Una sola vez por mes aunque alguien llame a la función de nuevo.
+  const flag = 'partner-monthly-' + key;
+  if ((await c.from('guest_owner_settings').select('key').eq('key', flag).maybeSingle()).data) return { month: key, skipped: true };
+  const { data: ps } = await c.from('guest_partners').select('*').eq('active', true).eq('test', false);
+  const due: string[] = []; let sent = 0, totalDue = 0;
+  for (const p of ps || []) {
+    const r = await salesOf(c, p), t = r.totals, mine = r.sales.filter((x) => inMonth(x.at));
+    if (t.confirmed > 0) { due.push(`<li>${esc(p.name)}: <b>${euros(t.confirmed)}</b></li>`); totalDue += t.confirmed; }
+    if (p.email && (mine.length || t.confirmed > 0)) {
+      const body = `<p style="margin:0 0 14px">Este es tu resumen de ${esc(monthName)}.</p><p style="margin:0 0 14px">Ventas del mes por tu recomendación: <b>${mine.length}</b>.<br>Pendiente de pago (ya confirmado): <b>${euros(t.confirmed)}</b>.<br>Por confirmar: <b>${euros(t.processing)}</b>.<br>Ya pagado: <b>${euros(t.paid)}</b>.</p>${t.confirmed > 0 ? '<p style="margin:0 0 14px">En los próximos días te hacemos el pago de lo pendiente.</p>' : ''}<p style="margin:0 0 6px"><a href="${portalUrl(p)}" style="display:inline-block;background:#1b2650;color:#fbf7f4;text-decoration:none;padding:13px 20px;border-radius:8px;font-weight:600">Ver mi panel</a></p>`;
+      if (await sendMail([p.email], 'Tu resumen de ' + monthName + ' · GUEST', mailHtml('Tu resumen de ' + monthName, body), `guest-partner-monthly/${p.slug}/${key}`)) sent++;
+    }
+  }
+  if (due.length) await sendMail(['weddlysmartdesign@gmail.com'], 'Colaboradores a pagar este mes · ' + euros(totalDue), mailHtml('A quién pagar este mes', `<p style="margin:0 0 10px">Lo confirmado y pendiente de pago, por colaborador:</p><ul style="margin:0 0 14px;padding-left:18px">${due.join('')}</ul><p style="margin:0">Haz la transferencia o el Bizum y, en tu panel de pedidos, pestaña Colaboradores, pulsa «Marcar pagado».</p>`), 'guest-partner-owner-monthly/' + key);
+  await c.from('guest_owner_settings').upsert({ key: flag, value: { at: now.toISOString(), sent, owed: totalDue } }, { onConflict: 'key', ignoreDuplicates: true });
+  return { month: key, partnersMailed: sent, owed: totalDue };
+}
+
 /* ---------- Entrada ---------- */
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
@@ -86,6 +162,24 @@ Deno.serve(async (req) => {
   let b: any = {}; try { b = JSON.parse((await req.text()) || '{}'); } catch { return json({ ok: false, error: 'invalid_json' }, 400); }
   const action = String(b.action || '');
   try {
+    if (action === 'claim') {
+      // Botón «Quiero recomendar GUEST»: quien entra desde un enlace de la campaña (?c=<identificador>) crea su panel con un toque.
+      const ref = slugify(String(b.ref || '')).slice(0, 60), name = String(b.name || '').trim().slice(0, 80);
+      if (!ref || name.length < 2) return json({ ok: false, error: 'invalid' }, 400);
+      if (/^(etsy|prueba)/.test(ref)) return json({ ok: false, error: 'invalid' }, 400);
+      // Solo enlaces de la campaña (identificador dm-… o con códigos creados) y con tope por hora, para que nadie reparta altas falsas.
+      const known = ref.startsWith('dm-') || (await c.from('guest_partner_codes').select('id').eq('partner_slug', ref).limit(1)).data?.length;
+      if (!known) return json({ ok: false, error: 'unknown_ref' }, 403);
+      const { count } = await c.from('guest_partners').select('slug', { count: 'exact', head: true }).gte('created_at', new Date(Date.now() - 3600_000).toISOString());
+      if ((count || 0) >= 15) return json({ ok: false, error: 'busy' }, 429);
+      const r = await addPartner(c, { name, slug: ref });
+      if (r.exists) return json({ ok: false, error: 'already_claimed' }, 409);
+      await ping(c, 'Nuevo colaborador: ' + name, 'Se ha apuntado desde la página de profesionales. Ya tiene su panel.', 'guest-partner-claim/' + ref);
+      return json({ ok: true, partner: outPartner(r.p, r.codes) });
+    }
+
+    if (action === 'monthly') return json({ ok: true, ...(await monthly(c)) });
+
     if (action === 'portal') {
       const k = String(b.token || '').trim();
       if (!/^[A-Za-z0-9_-]{20,40}$/.test(k)) return json({ ok: false, error: 'invalid_token' }, 403);
@@ -110,32 +204,15 @@ Deno.serve(async (req) => {
     }
 
     if (action === 'create') {
-      const name = String(b.name || '').trim().slice(0, 80);
+      const name = String(b.name || '').trim();
       if (name.length < 2) return json({ ok: false, error: 'name_required' }, 400);
       const fixed = b.fixed_cents != null && b.fixed_cents !== '' ? Math.round(Number(b.fixed_cents)) : null;
       if (fixed != null && !(fixed > 0 && fixed < 100000)) return json({ ok: false, error: 'invalid_fixed' }, 400);
       const pct = b.pct != null && b.pct !== '' ? Number(b.pct) : 15;
       if (!(pct > 0 && pct <= 50)) return json({ ok: false, error: 'invalid_pct' }, 400);
-      let slug = slugify(String(b.slug || name)) || 'colaborador';
-      for (let i = 2; (await c.from('guest_partners').select('slug').eq('slug', slug).maybeSingle()).data; i++) slug = slugify(name) + '-' + i;
-      const p = { slug, name, email: String(b.email || '').trim().toLowerCase() || null, token: newToken(), pct, fixed_cents: fixed, test: !!b.test, note: String(b.note || '').slice(0, 300) || null };
-      const { error } = await c.from('guest_partners').insert(p);
-      if (error) return json({ ok: false, error: 'insert_failed', detail: error.message }, 500);
-      let codes = await codesOf(c, slug);
-      if (!p.test && !b.no_codes) {
-        const base = codeBase(name), rows: any[] = [];
-        if (fixed == null && !codes.partner) rows.push({ mode: 'live', kind: 'partner', code: base + '10', partner_slug: slug, partner_name: name });
-        if (!codes.gift.length) rows.push({ mode: 'live', kind: 'gift', code: 'REGALO' + base + String(100 + Math.floor(Math.random() * 900)), partner_slug: slug, partner_name: name, max_redemptions: 1 });
-        if (rows.length) {
-          const ins = await c.from('guest_partner_codes').insert(rows);
-          if (ins.error) return json({ ok: true, partner: { slug, panel: portalUrl(p) }, warning: 'codes_failed', detail: ins.error.message });
-          // Crea los códigos en Stripe (mismo paso que se hacía a mano).
-          const r = await fetch(Deno.env.get('SUPABASE_URL') + '/functions/v1/guest-order-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'promo_sync' }) });
-          if (!r.ok) console.warn('promo_sync', r.status, await r.text());
-          codes = await codesOf(c, slug);
-        }
-      }
-      return json({ ok: true, partner: { slug, name, terms: terms(p), panel: portalUrl(p), link: `${LIVE_ORIGIN}/?c=${slug}`, codes } });
+      const r = await addPartner(c, { name, slug: b.slug ? String(b.slug) : '', email: String(b.email || '').trim().toLowerCase() || null, pct, fixed, test: !!b.test, note: String(b.note || '').slice(0, 300) || null, noCodes: !!b.no_codes });
+      if (r.exists) return json({ ok: false, error: 'already_exists' }, 409);
+      return json({ ok: true, partner: outPartner(r.p, r.codes) });
     }
 
     if (action === 'update') {
