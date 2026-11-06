@@ -10,6 +10,14 @@
   const design = catalog.find((item) => item.id === params.get('d')) || null;
   const newAttempt = () => (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`);
 
+  function partnerRef() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('guest-colab') || 'null');
+      if (saved && /^[a-z0-9-]{1,40}$/.test(saved.c) && Date.now() - saved.t < 60 * 864e5) return saved.c;
+    } catch (error) { /* sin almacenamiento */ }
+    return '';
+  }
+
   const consent = $('#consent');
   const state = $('#state');
   const mountEl = $('#mount');
@@ -73,7 +81,8 @@
             edition: 'signature',
             startPersonalizationConsent: true,
             checkoutAttemptId: attemptId,
-            catalogTemplateId: design.id
+            catalogTemplateId: design.id,
+            partnerRef: partnerRef()
           });
           return session.clientSecret;
         }
