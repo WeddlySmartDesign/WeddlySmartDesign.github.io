@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#f0c4bc">
+  <title>Panel de colaboradores · GUEST by WeddlySmartDesign</title>
+  <link rel="icon" href="assets/brand/favicon.ico" sizes="any">
+  <link rel="icon" href="assets/brand/icon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <link rel="preload" href="assets/fonts/abril-fatface-zOL64pLDlL-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css?v=44">
+  <link rel="stylesheet" href="css/styles.css?v=45">
+  <style>
+    body { background: var(--envelope); }
+    .col { min-height: 100dvh; padding-top: env(safe-area-inset-top, 0px); }
+    .col-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.25rem; }
+    .col-main { display: grid; gap: 2rem; padding-block: .5rem 4rem; max-width: 46rem; }
+    .col h1 { font: 400 clamp(2.25rem, 4vw + 1rem, 3.5rem)/1.02 var(--display); letter-spacing: -.01em; overflow-wrap: anywhere; }
+    .col h1 + .col-lead { margin-top: .9rem; }
+    .col-lead { font-size: 1.0625rem; line-height: 1.55; color: var(--ink-soft); max-width: 34rem; }
+    .col-test { display: inline-block; font: 700 .8125rem/1 var(--mono); color: var(--postmark); border: 1.5px solid currentColor; padding: .35rem .6rem; border-radius: 4px; }
+
+    .tot { display: grid; gap: .75rem; grid-template-columns: 1fr; }
+    @media (min-width: 560px) { .tot { grid-template-columns: repeat(3, 1fr); } }
+    .tot > div { background: var(--paper); border-radius: 6px; padding: 1rem 1.1rem; box-shadow: var(--shadow); }
+    .tot b { display: block; font: 400 2rem/1.05 var(--display); }
+    .tot span { display: block; margin-top: .3rem; font-size: .9375rem; line-height: 1.35; color: var(--ink-soft); }
+    .tot .is-due b { color: var(--postmark); }
+
+    .card { background: var(--paper); border-radius: 6px; padding: 1.3rem 1.25rem; box-shadow: var(--shadow); }
+    .card h2 { margin-bottom: .9rem; font: 400 1.5rem/1.1 var(--display); }
+    .empty { font-size: 1rem; line-height: 1.55; color: var(--ink-soft); }
+    .sales { list-style: none; margin: 0; padding: 0; }
+    .sales li { display: grid; grid-template-columns: 1fr auto; gap: .15rem 1rem; padding: .85rem 0; border-top: 1.5px dashed var(--line); align-items: baseline; }
+    .sales li:first-child { border-top: 0; padding-top: 0; }
+    .s-main { font-size: 1.0625rem; font-weight: 600; }
+    .s-sub { grid-column: 1; font: 400 .875rem/1.4 var(--mono); color: var(--ink-soft); }
+    .s-amt { grid-row: 1; grid-column: 2; font: 700 1.0625rem/1 var(--mono); text-align: right; }
+    .chip { grid-row: 2; grid-column: 2; justify-self: end; font: 700 .75rem/1 var(--mono); padding: .3rem .5rem; border-radius: 99px; background: var(--envelope-soft); color: var(--ink); white-space: nowrap; }
+    .chip.c-confirmada { background: var(--ink); color: var(--paper); }
+    .chip.c-pagada { background: #dff1e4; color: #1d5a31; }
+    .chip.c-devuelta { background: transparent; color: var(--postmark); box-shadow: inset 0 0 0 1.5px currentColor; }
+    .gift { margin-top: 1rem; padding-top: .9rem; border-top: 1.5px dashed var(--line); font-size: .9688rem; line-height: 1.5; color: var(--ink-soft); }
+
+    .rules { margin: 0; padding: 0; list-style: none; display: grid; gap: .8rem; }
+    .rules li { font-size: 1rem; line-height: 1.55; padding-left: 1.1rem; position: relative; }
+    .rules li::before { content: ''; position: absolute; left: 0; top: .6em; width: 6px; height: 6px; border-radius: 50%; background: var(--postmark); }
+    .rules strong { font-weight: 700; }
+
+    .share { display: grid; gap: .9rem; }
+    .copy { display: grid; grid-template-columns: 1fr auto; gap: .5rem; align-items: center; }
+    .copy label { grid-column: 1 / -1; font: 700 .8125rem/1 var(--mono); color: var(--ink-soft); }
+    .copy input { min-width: 0; min-height: 48px; padding: 0 .8rem; font: 400 .9375rem var(--mono); color: var(--ink); background: var(--white); border: 1.5px solid var(--line); border-radius: 6px; }
+    .copy button { min-height: 48px; padding: 0 1rem; font: 700 .9375rem var(--text); color: var(--paper); background: var(--ink); border: 0; border-radius: 6px; cursor: pointer; transition: transform 160ms var(--ease-out); }
+    .copy button:active { transform: scale(.97); }
+    .hint { font-size: .9375rem; line-height: 1.5; color: var(--ink-soft); }
+    .state-msg { font-size: 1.0625rem; line-height: 1.55; }
+    .contact { font-size: .9688rem; line-height: 1.55; color: var(--ink-soft); }
+    .contact a { color: var(--ink); font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="col">
+  <header class="wrap col-top">
+    <a class="logo" href="index.html" aria-label="GUEST by WeddlySmartDesign, inicio"><b>GUEST</b><span>by WeddlySmartDesign</span></a>
+  </header>
+  <main class="wrap col-main" id="main" aria-live="polite">
+    <p class="state-msg" id="loading">Cargando vuestro panel…</p>
+  </main>
+</div>
+<script>
+(function () {
+  var API = 'https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-partners';
+  var main = document.getElementById('main');
+  var eur = function (c) { return (c / 100).toLocaleString('es-ES', { style: 'currency', currency: 'EUR' }); };
+  var day = function (t) { return new Date(t).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Madrid' }); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var LABEL = { proceso: 'Por confirmar', confirmada: 'Pendiente de pago', pagada: 'Pagada', devuelta: 'Devuelta' };
+
+  var token = '';
+  try { token = (location.hash.match(/k=([A-Za-z0-9_-]+)/) || [])[1] || sessionStorage.getItem('guest-colab-k') || ''; } catch (e) { token = (location.hash.match(/k=([A-Za-z0-9_-]+)/) || [])[1] || ''; }
+  try { if (token) sessionStorage.setItem('guest-colab-k', token); } catch (e) {}
+
+  function fail(msg) { main.innerHTML = '<h1>Este enlace no funciona</h1><p class="col-lead">' + esc(msg) + ' Escribidnos y os mandamos el enlace correcto: <a href="mailto:info@weddlysmartdesign.com">info@weddlysmartdesign.com</a> o por WhatsApp al <a href="https://wa.me/34620843264">620 843 264</a>.</p>'; }
+  if (!token) return fail('Falta la clave de acceso.');
+
+  fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'portal', token: token }) })
+    .then(function (r) { return r.json().catch(function () { return {}; }); })
+    .then(function (d) { if (!d.ok) return fail('El enlace no es válido o ha dejado de estar activo.'); render(d); })
+    .catch(function () { main.innerHTML = '<p class="state-msg">No se ha podido cargar el panel. Probad de nuevo en un momento.</p>'; });
+
+  function copyRow(id, label, value) {
+    return '<div class="copy"><label for="' + id + '">' + label + '</label><input id="' + id + '" readonly value="' + esc(value) + '"><button type="button" data-copy="' + id + '">Copiar</button></div>';
+  }
+
+  function render(d) {
+    var fixed = d.terms.kind === 'fixed';
+    var rule = fixed ? eur(d.terms.cents) + ' por cada pareja que contrata' : d.terms.pct + ' % de lo que paga cada pareja';
+    var t = d.totals;
+    var sales = d.sales.length
+      ? '<ul class="sales">' + d.sales.slice().reverse().map(function (s) {
+          return '<li><span class="s-main">Venta ' + s.n + ' · ' + esc(s.design) + '</span><span class="s-amt">' + eur(s.commissionCents) + '</span>' +
+            '<span class="s-sub">' + day(s.at) + (s.state === 'pagada' && s.paidAt ? ' · abonada el ' + day(s.paidAt) : '') + '</span>' +
+            '<span class="chip c-' + s.state + '">' + LABEL[s.state] + '</span></li>';
+        }).join('') + '</ul>'
+      : '<p class="empty">Todavía no ha entrado ninguna venta por vuestra recomendación. Cuando llegue la primera, aparecerá aquí en el momento.</p>';
+    var gifts = d.gifts.length ? '<p class="gift">Invitaciones regaladas ya estrenadas por una pareja vuestra: <strong>' + d.gifts.length + '</strong>. Las regaladas no generan comisión.</p>' : '';
+
+    var share = copyRow('lnk', 'Vuestro enlace', d.link) +
+      (d.code ? copyRow('cod', 'Código de descuento para las parejas (10 %)', d.code) : '') +
+      '<p class="hint">' + (d.code
+        ? 'Las ventas se cuentan tanto si la pareja entra por el enlace como si escribe el código al pagar. Con el código, además, tiene un 10 % de descuento.'
+        : 'Basta con que la pareja entre por este enlace: la venta queda anotada a vuestro nombre durante 60 días, aunque compre otro día.') + '</p>';
+
+    document.title = 'Panel de ' + d.name + ' · GUEST';
+    main.innerHTML =
+      (d.test ? '<span class="col-test">Panel de prueba</span>' : '') +
+      '<div><h1>Hola, ' + esc(d.name) + '</h1><p class="col-lead">Este es vuestro panel privado. Aquí veis cada venta que llega por vuestra recomendación y lo que os corresponde, sin tener que fiaros de nadie: sale directamente de los pagos reales.</p></div>' +
+      '<div class="tot"><div><b>' + eur(t.processing) + '</b><span>Por confirmar: la pareja aún está viendo su propuesta</span></div><div class="is-due"><b>' + eur(t.confirmed) + '</b><span>Pendiente de pago: ya confirmada, se abona a mes vencido</span></div><div><b>' + eur(t.paid) + '</b><span>Ya pagado</span></div></div>' +
+      '<section class="card" aria-labelledby="h-v"><h2 id="h-v">Vuestras ventas</h2>' + sales + gifts + '</section>' +
+      '<section class="card" aria-labelledby="h-c"><h2 id="h-c">Cómo funciona</h2><ul class="rules">' +
+        '<li><strong>Vuestra comisión: ' + esc(rule) + '.</strong>' + (fixed ? ' Sin descuento para la pareja.' : ' Se calcula sobre el importe pagado, IVA incluido.') + '</li>' +
+        '<li><strong>Por confirmar → Pendiente de pago:</strong> la venta se confirma cuando la pareja aprueba su invitación. Hasta entonces pueden pedir la devolución completa, y en ese caso no hay comisión.</li>' +
+        '<li><strong>Pago:</strong> en los primeros días de cada mes os abonamos por transferencia o Bizum lo confirmado del mes anterior, y aquí aparece como «Pagada».</li>' +
+        '<li><strong>Privacidad:</strong> no vemos ni mostramos los datos de las parejas, solo fecha, diseño e importe.</li>' +
+      '</ul></section>' +
+      '<section class="card share" aria-labelledby="h-e"><h2 id="h-e">Para recomendarnos</h2>' + share + '</section>' +
+      '<p class="contact">¿Alguna duda con una venta o con un pago? Escribidnos a <a href="mailto:info@weddlysmartdesign.com">info@weddlysmartdesign.com</a> o por <a href="https://wa.me/34620843264" target="_blank" rel="noopener">WhatsApp</a>. Guardad este enlace: es solo vuestro.</p>';
+
+    main.querySelectorAll('[data-copy]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var i = document.getElementById(b.getAttribute('data-copy'));
+        var done = function () { b.textContent = 'Copiado'; setTimeout(function () { b.textContent = 'Copiar'; }, 1600); };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(i.value).then(done, function () { i.select(); document.execCommand('copy'); done(); });
+        else { i.select(); document.execCommand('copy'); done(); }
+      });
+    });
+  }
+})();
+</script>
+</body>
+</html>
