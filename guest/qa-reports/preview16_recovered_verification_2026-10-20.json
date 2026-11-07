@@ -1,0 +1,21 @@
+{
+  "status": "PREPRODUCTION_DO_NOT_SELL",
+  "integrity": "121/121 PASS",
+  "renderers": "16/16 PASS",
+  "physical_entries": 122,
+  "manifest_sha256": "4b8c39645af44a63577f5dfa0cafc4583c2036b8a12db8af14b5871684fccaad",
+  "max_file_bytes": 24178059,
+  "zip_bytes": 223405228,
+  "zip_sha256": "0fd69d40d5ee85862a71ba7eb34bba188563d79f9b2d0a0022524dbb6009a1bb",
+  "veil_derived_html_sha256": "2d5041e3722000a0d307b3392c82ad1cad42df8ef8e329b4989662b33578f899",
+  "source_artifact_id": 12256198854,
+  "source_artifact_sha256": "ae91e6f567902c1c254a312c4106d897a7182daa31806826ff985f04421fa37b",
+  "original_phase5_zip_available": false,
+  "explanation": "Regenerated from documented verified sources; ZIP metadata normalized; original phase5 ZIP hash is not asserted.",
+  "cloudflare": {
+    "login": "declined",
+    "previewPublished": false
+  },
+  "endToEndExecuted": false,
+  "sale": "NO_GO"
+}

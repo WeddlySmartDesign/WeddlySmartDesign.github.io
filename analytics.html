@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#2f2a28">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://dnjsxequwgtyyauuofxj.supabase.co; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'self'">
+<title>WeddlySmartDesign · Analytics</title>
+<style>
+:root{
+  --ink:#342f2d;--paper:#f6eee7;--paper2:#eee1d7;--white:#fffaf6;
+  --clay:#b97a5c;--sage:#77806c;--line:rgba(52,47,45,.13);
+  --muted:#776b65;--ok:#66725e;--shadow:0 18px 48px rgba(52,47,45,.08);
+  --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--paper)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer}
+[hidden]{display:none!important}
+.shell{width:min(100% - 28px,980px);margin:auto}
+.top{
+  position:sticky;top:0;z-index:20;background:rgba(246,238,231,.94);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--line)
+}
+.top-inner{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:baseline;gap:8px;min-width:0}
+.brand strong{font-family:var(--serif);font-size:22px;font-weight:400;letter-spacing:-.035em}
+.brand span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.top-actions{display:flex;gap:8px}
+.icon-btn{
+  border:1px solid var(--line);background:rgba(255,255,255,.55);color:var(--ink);
+  border-radius:999px;padding:9px 12px;font-size:11px;font-weight:700
+}
+main{padding:42px 0 64px}
+.eyebrow{font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--clay);font-weight:800}
+h1,h2{font-family:var(--serif);font-weight:400;letter-spacing:-.045em;margin:0}
+.hero h1{font-size:clamp(46px,11vw,76px);line-height:.91;max-width:10ch;margin-top:12px}
+.hero p{font-size:15px;line-height:1.65;color:var(--muted);max-width:48ch;margin:18px 0 0}
+.range-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:28px}
+.range{
+  border:1px solid var(--line);background:rgba(255,255,255,.5);color:var(--ink);
+  border-radius:999px;padding:10px 14px;font-size:11px;font-weight:750
+}
+.range.active{background:var(--ink);border-color:var(--ink);color:white}
+.status-row{
+  margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-size:10px;color:var(--muted)
+}
+.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--sage);margin-right:7px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:26px}
+.metric{
+  min-height:132px;background:var(--white);border:1px solid var(--line);border-radius:20px;
+  padding:17px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between
+}
+.metric small{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.metric strong{font-family:var(--serif);font-size:38px;line-height:1;font-weight:400;letter-spacing:-.045em}
+.metric span{font-size:10px;color:var(--muted);line-height:1.35}
+.metric.primary{background:var(--ink);color:#fff}
+.metric.primary small,.metric.primary span{color:rgba(255,255,255,.64)}
+.section{margin-top:38px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:14px}
+.section h2{font-size:31px;line-height:1}
+.section-note{font-size:10px;color:var(--muted);text-align:right}
+.card{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow)}
+.funnel{display:grid;gap:16px}
+.f-step{display:grid;grid-template-columns:108px minmax(0,1fr) 54px;gap:11px;align-items:center}
+.f-label strong{display:block;font-size:12px}
+.f-label span{display:block;font-size:9px;color:var(--muted);margin-top:3px}
+.track{height:13px;border-radius:999px;background:var(--paper2);overflow:hidden}
+.fill{height:100%;border-radius:999px;background:var(--clay);min-width:0}
+.f-value{text-align:right;font-family:var(--serif);font-size:21px}
+.split{display:grid;gap:14px}
+.table-wrap{overflow:auto;border-radius:16px}
+table{width:100%;border-collapse:collapse;min-width:500px}
+th,td{padding:12px 10px;border-bottom:1px solid var(--line);text-align:right;font-size:11px;white-space:nowrap}
+th{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+th:first-child,td:first-child{text-align:left}
+tr:last-child td{border-bottom:0}
+.empty{padding:26px 10px;text-align:center;color:var(--muted);font-size:12px;line-height:1.55}
+.list{display:grid;gap:10px}
+.list-row{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;
+  padding:13px 0;border-bottom:1px solid var(--line)
+}
+.list-row:last-child{border-bottom:0}
+.list-row strong{display:block;font-size:12px}
+.list-row span{display:block;font-size:10px;color:var(--muted);margin-top:3px}
+.list-row b{font-family:var(--serif);font-size:24px;font-weight:400}
+.foot{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:9px;line-height:1.55;color:var(--muted)}
+.lock{min-height:100vh;display:grid;place-items:center;padding:24px}
+.lock-card{
+  width:min(100%,440px);background:var(--white);border:1px solid var(--line);border-radius:26px;
+  padding:26px;box-shadow:0 30px 80px rgba(52,47,45,.12)
+}
+.lock-card .mark{font-family:var(--serif);font-size:38px;letter-spacing:-.05em}
+.lock-card h1{font-size:30px;margin-top:20px}
+.lock-card p{font-size:13px;line-height:1.6;color:var(--muted)}
+.field{display:grid;gap:7px;margin-top:20px}
+.field label{font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.field input{
+  width:100%;border:1px solid var(--line);background:#fff;border-radius:13px;padding:14px 13px;
+  color:var(--ink);outline:none
+}
+.field input:focus{border-color:var(--clay);box-shadow:0 0 0 3px rgba(185,122,92,.10)}
+.login-btn{
+  width:100%;margin-top:12px;border:0;background:var(--ink);color:#fff;border-radius:14px;
+  min-height:50px;font-weight:800
+}
+.login-error{min-height:18px;margin-top:10px;font-size:11px;color:#9a4e42}
+.loading{
+  position:fixed;inset:0;z-index:50;background:rgba(246,238,231,.72);backdrop-filter:blur(5px);
+  display:grid;place-items:center;font-size:12px;color:var(--muted)
+}
+.spinner{width:24px;height:24px;border:2px solid var(--line);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(min-width:720px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .metric{min-height:145px;padding:20px}
+  .metric strong{font-size:45px}
+  .split{grid-template-columns:1.15fr .85fr}
+  .card{padding:22px}
+}
+@media(max-width:520px){
+  .brand span{display:none}
+  .icon-btn{padding:8px 10px}
+  .f-step{grid-template-columns:84px minmax(0,1fr) 42px;gap:8px}
+  .f-label strong{font-size:11px}
+  .metric strong{font-size:34px}
+}
+</style>
+</head>
+<body>
+<section class="lock" id="lock" hidden>
+  <div class="lock-card">
+    <div class="mark">ONE</div>
+    <div class="eyebrow">WeddlySmartDesign · interno</div>
+    <h1>Analytics</h1>
+    <p>Acceso privado al panel de visitas y conversión. El código se guarda únicamente en este dispositivo.</p>
+    <form id="loginForm">
+      <div class="field">
+        <label for="accessCode">Código de acceso</label>
+        <input id="accessCode" type="password" autocomplete="off" spellcheck="false" placeholder="WSDAN-…">
+      </div>
+      <button class="login-btn" type="submit">Entrar</button>
+      <div class="login-error" id="loginError"></div>
+    </form>
+  </div>
+</section>
+
+<div id="app" hidden>
+  <header class="top">
+    <div class="shell top-inner">
+      <div class="brand"><strong>WeddlySmartDesign</strong><span>Analytics privado</span></div>
+      <div class="top-actions">
+        <button class="icon-btn" id="refreshBtn" type="button">Actualizar</button>
+        <button class="icon-btn" id="logoutBtn" type="button">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">ONE · rendimiento comercial</div>
+      <h1>Qué entra. Qué avanza. Qué compra.</h1>
+      <p>Un panel sencillo para ver el embudo real de ONE sin entrar en Supabase ni interpretar tablas técnicas.</p>
+      <div class="range-row" id="ranges">
+        <button class="range" data-range="today" type="button">Hoy</button>
+        <button class="range active" data-range="7d" type="button">7 días</button>
+        <button class="range" data-range="30d" type="button">30 días</button>
+        <button class="range" data-range="all" type="button">Desde el inicio</button>
+      </div>
+      <div class="status-row">
+        <span><i class="status-dot"></i><span id="trackingSince">Medición activa</span></span>
+        <span id="updatedAt">—</span>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="Resumen">
+      <article class="metric"><small>Visitas</small><strong id="mVisits">0</strong><span>Cargas de la web en este periodo</span></article>
+      <article class="metric"><small>Clics en comprar</small><strong id="mBuy">0</strong><span id="mBuyRate">—</span></article>
+      <article class="metric"><small>Pago iniciado</small><strong id="mCheckout">0</strong><span id="mCheckoutRate">—</span></article>
+      <article class="metric primary"><small>Compras</small><strong id="mPurchases">0</strong><span id="mPurchaseRate">—</span></article>
+      <article class="metric"><small>Conversión</small><strong id="mConversion">—</strong><span>Visita → compra</span></article>
+      <article class="metric"><small>Ingresos</small><strong id="mRevenue">0 €</strong><span>Compras registradas desde que mide Analytics</span></article>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Embudo</h2><div class="section-note">Una misma visita cuenta una vez por paso.</div></div>
+      <div class="card funnel">
+        <div class="f-step"><div class="f-label"><strong>Visitas</strong><span>web ONE</span></div><div class="track"><div class="fill" id="barVisits"></div></div><div class="f-value" id="fVisits">0</div></div>
+        <div class="f-step"><div class="f-label"><strong>Comprar</strong><span>clic</span></div><div class="track"><div class="fill" id="barBuy"></div></div><div class="f-value" id="fBuy">0</div></div>
+        <div class="f-step"><div class="f-label"><strong>Checkout</strong><span>pago iniciado</span></div><div class="track"><div class="fill" id="barCheckout"></div></div><div class="f-value" id="fCheckout">0</div></div>
+        <div class="f-step"><div class="f-label"><strong>Compra</strong><span>Stripe confirmado</span></div><div class="track"><div class="fill" id="barPurchase"></div></div><div class="f-value" id="fPurchase">0</div></div>
+      </div>
+    </section>
+
+    <section class="section split">
+      <div>
+        <div class="section-head"><h2>De dónde llegan</h2><div class="section-note">UTM cuando existe; si no, dominio de procedencia.</div></div>
+        <div class="card"><div class="table-wrap"><table>
+          <thead><tr><th>Origen</th><th>Visitas</th><th>Comprar</th><th>Checkout</th></tr></thead>
+          <tbody id="sourceRows"></tbody>
+        </table></div><div class="empty" id="sourceEmpty" hidden>Aún no hay procedencias registradas en este periodo.</div></div>
+      </div>
+      <div>
+        <div class="section-head"><h2>Dispositivo</h2><div class="section-note">Categoría general, sin identificar el dispositivo.</div></div>
+        <div class="card list" id="deviceList"></div>
+      </div>
+    </section>
+
+    <section class="section split">
+      <div>
+        <div class="section-head"><h2>Ediciones</h2><div class="section-note">Compras reales.</div></div>
+        <div class="card list" id="editionList"></div>
+      </div>
+      <div>
+        <div class="section-head"><h2>Checkout</h2><div class="section-note">Edición elegida al iniciar el pago.</div></div>
+        <div class="card list" id="checkoutEditionList"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><h2>Día a día</h2><div class="section-note">Para detectar si una publicación o colaboración mueve el embudo.</div></div>
+      <div class="card"><div class="table-wrap"><table>
+        <thead><tr><th>Fecha</th><th>Visitas</th><th>Comprar</th><th>Checkout</th><th>Compras</th><th>Ingresos</th></tr></thead>
+        <tbody id="dailyRows"></tbody>
+      </table></div><div class="empty" id="dailyEmpty" hidden>Aún no hay datos en este periodo.</div></div>
+    </section>
+
+    <div class="foot">
+      Panel privado de WeddlySmartDesign. La analítica no guarda nombres, emails, IP ni datos de la boda y no utiliza cookies para reconocer visitantes entre sesiones.
+    </div>
+  </main>
+</div>
+
+<div class="loading" id="loading" hidden><div><div class="spinner"></div>Actualizando datos…</div></div>
+
+<script>
+(()=>{
+'use strict';
+const ENDPOINT='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-site-analytics-admin';
+const STORAGE='wsd_internal_analytics_token_v1';
+const TRACKING_EARLIEST='2026-09-24T00:00:00+02:00';
+let token='';
+let currentRange='7d';
+
+const $=id=>document.getElementById(id);
+const lock=$('lock'),app=$('app'),loading=$('loading'),loginError=$('loginError');
+
+function importFragment(){
+  const raw=location.hash.startsWith('#')?location.hash.slice(1):'';
+  const p=new URLSearchParams(raw);
+  const fromHash=(p.get('token')||'').trim();
+  if(/^WSDAN-[A-Za-z0-9_-]{30,120}$/.test(fromHash)){
+    localStorage.setItem(STORAGE,fromHash);
+    history.replaceState(null,'',location.pathname+location.search);
+    return fromHash;
+  }
+  return '';
+}
+function storedToken(){return (localStorage.getItem(STORAGE)||'').trim()}
+function setScreen(authorized){
+  lock.hidden=authorized;
+  app.hidden=!authorized;
+}
+function money(cents){
+  return (Number(cents||0)/100).toLocaleString('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:2});
+}
+function pct(v){
+  if(v===null||v===undefined||Number.isNaN(Number(v)))return '—';
+  return Number(v).toLocaleString('es-ES',{maximumFractionDigits:2})+' %';
+}
+function dateLabel(v){
+  const d=new Date(v);
+  return Number.isFinite(d.getTime())?d.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'}):String(v||'');
+}
+function dateTime(v){
+  const d=new Date(v);
+  return Number.isFinite(d.getTime())?d.toLocaleString('es-ES',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'—';
+}
+function rangeDates(range){
+  const now=new Date();
+  const startOfToday=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  let since;
+  if(range==='today')since=startOfToday;
+  else if(range==='7d'){since=new Date(startOfToday);since.setDate(since.getDate()-6)}
+  else if(range==='30d'){since=new Date(startOfToday);since.setDate(since.getDate()-29)}
+  else since=new Date(TRACKING_EARLIEST);
+  return {since:since.toISOString(),until:new Date().toISOString()};
+}
+async function requestSummary(range){
+  const dates=rangeDates(range);
+  const r=await fetch(ENDPOINT,{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-weddly-analytics':token
+    },
+    body:JSON.stringify({action:'summary',...dates}),
+    cache:'no-store',
+    credentials:'omit'
+  });
+  const x=await r.json().catch(()=>({}));
+  if(r.status===403)throw new Error('unauthorized');
+  if(!r.ok||!x?.ok)throw new Error(x?.error||'server_error');
+  return x;
+}
+function clear(node){while(node.firstChild)node.removeChild(node.firstChild)}
+function textCell(value){const td=document.createElement('td');td.textContent=String(value);return td}
+function renderRows(tbody,rows,mapper,empty){
+  clear(tbody);
+  rows.forEach(row=>tbody.appendChild(mapper(row)));
+  empty.hidden=rows.length>0;
+  tbody.closest('table').hidden=rows.length===0;
+}
+function renderList(node,rows,kind){
+  clear(node);
+  if(!rows.length){
+    const e=document.createElement('div');e.className='empty';e.textContent='Aún no hay datos en este periodo.';node.appendChild(e);return;
+  }
+  rows.forEach(r=>{
+    const item=document.createElement('div');item.className='list-row';
+    const left=document.createElement('div');
+    const name=document.createElement('strong');
+    const sub=document.createElement('span');
+    const val=document.createElement('b');
+    if(kind==='device'){
+      const labels={mobile:'Móvil',tablet:'Tablet',desktop:'Ordenador',unknown:'Sin identificar'};
+      name.textContent=labels[r.device]||r.device;sub.textContent='visitas';val.textContent=r.visits;
+    }else if(kind==='purchaseEdition'){
+      name.textContent=r.edition==='signature'?'ONE Signature':'ONE Essential';
+      sub.textContent=money(r.revenue_cents);
+      val.textContent=r.purchases;
+    }else{
+      name.textContent=r.edition==='signature'?'ONE Signature':r.edition==='essential'?'ONE Essential':'Sin elegir';
+      sub.textContent='inicios de pago';val.textContent=r.starts;
+    }
+    left.append(name,sub);item.append(left,val);node.appendChild(item);
+  });
+}
+function render(data){
+  const s=data.summary||{},t=s.totals||{};
+  $('mVisits').textContent=t.visits??0;
+  $('mBuy').textContent=t.buy_clicks??0;
+  $('mCheckout').textContent=t.checkout_starts??0;
+  $('mPurchases').textContent=t.purchases??0;
+  $('mConversion').textContent=pct(t.conversion_pct);
+  $('mRevenue').textContent=money(t.revenue_cents);
+  $('mBuyRate').textContent=t.buy_rate_pct==null?'Sin base suficiente':pct(t.buy_rate_pct)+' de las visitas';
+  $('mCheckoutRate').textContent=t.checkout_start_rate_pct==null?'Sin base suficiente':pct(t.checkout_start_rate_pct)+' de quienes pulsan comprar';
+  $('mPurchaseRate').textContent=t.checkout_to_purchase_pct==null?'Sin base suficiente':pct(t.checkout_to_purchase_pct)+' de quienes inician el pago';
+
+  const visits=Math.max(0,Number(t.visits||0));
+  const vals=[
+    ['barVisits','fVisits',visits],
+    ['barBuy','fBuy',Number(t.buy_clicks||0)],
+    ['barCheckout','fCheckout',Number(t.checkout_starts||0)],
+    ['barPurchase','fPurchase',Number(t.purchases||0)]
+  ];
+  vals.forEach(([bar,val,n],i)=>{
+    $(val).textContent=n;
+    const width=i===0?(visits?100:0):(visits?Math.max(0,Math.min(100,n/visits*100)):0);
+    $(bar).style.width=width+'%';
+  });
+
+  const sources=Array.isArray(s.sources)?s.sources:[];
+  renderRows($('sourceRows'),sources,r=>{
+    const tr=document.createElement('tr');
+    tr.append(textCell(r.source),textCell(r.visits),textCell(r.buy_clicks),textCell(r.checkout_starts));
+    return tr;
+  },$('sourceEmpty'));
+
+  renderList($('deviceList'),Array.isArray(s.devices)?s.devices:[],'device');
+  renderList($('editionList'),Array.isArray(s.purchases_by_edition)?s.purchases_by_edition:[],'purchaseEdition');
+  renderList($('checkoutEditionList'),Array.isArray(s.checkout_by_edition)?s.checkout_by_edition:[],'checkoutEdition');
+
+  const daily=Array.isArray(s.daily)?[...s.daily].reverse():[];
+  renderRows($('dailyRows'),daily,r=>{
+    const tr=document.createElement('tr');
+    tr.append(
+      textCell(dateLabel(r.day)),
+      textCell(r.visits),
+      textCell(r.buy_clicks),
+      textCell(r.checkout_starts),
+      textCell(r.purchases),
+      textCell(money(r.revenue_cents))
+    );
+    return tr;
+  },$('dailyEmpty'));
+
+  $('trackingSince').textContent=s.tracking_started_at?'Midiendo desde '+dateTime(s.tracking_started_at):'La medición todavía no ha recibido visitas';
+  $('updatedAt').textContent='Actualizado '+dateTime(data.generatedAt);
+}
+async function load(range=currentRange,{quiet=false}={}){
+  currentRange=range;
+  document.querySelectorAll('.range').forEach(b=>b.classList.toggle('active',b.dataset.range===range));
+  if(!quiet)loading.hidden=false;
+  try{
+    const data=await requestSummary(range);
+    setScreen(true);render(data);loginError.textContent='';
+  }catch(e){
+    if(e?.message==='unauthorized'){
+      localStorage.removeItem(STORAGE);token='';setScreen(false);
+      loginError.textContent='El acceso no es válido o ha caducado.';
+    }else{
+      if(!app.hidden)alert('No he podido actualizar los datos. Inténtalo de nuevo.');
+      else {setScreen(false);loginError.textContent='No he podido conectar con Analytics.'}
+    }
+  }finally{loading.hidden=true}
+}
+
+$('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const v=$('accessCode').value.trim();
+  if(!/^WSDAN-[A-Za-z0-9_-]{30,120}$/.test(v)){loginError.textContent='Revisa el código de acceso.';return}
+  token=v;localStorage.setItem(STORAGE,token);loginError.textContent='';
+  await load(currentRange);
+});
+$('ranges').addEventListener('click',e=>{
+  const b=e.target.closest('[data-range]');if(b)load(b.dataset.range);
+});
+$('refreshBtn').addEventListener('click',()=>load(currentRange));
+$('logoutBtn').addEventListener('click',()=>{
+  localStorage.removeItem(STORAGE);token='';$('accessCode').value='';setScreen(false);
+});
+
+token=importFragment()||storedToken();
+if(token){load(currentRange)}else setScreen(false);
+})();
+</script>
+</body>
+</html>

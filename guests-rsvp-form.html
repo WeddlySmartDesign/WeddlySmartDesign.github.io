@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es" data-theme="nordic">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<title>WeddlySmartDesign · Formulario RSVP</title>
+<style>
+:root{--bg:#F2EFE9;--paper:#FBF8F3;--line:#E4DED2;--soft:#EEF0E9;--accent:#6E7A5C;--dark:#525C43;--ink:#2C2A26;--muted:#736F63;--ok:#61765F;--danger:#9a4537}
+:root[data-theme="blush"]{--bg:#F5EEEC;--paper:#FFF9F7;--line:#E9DAD6;--soft:#F5E9E7;--accent:#B48683;--dark:#825F5D}:root[data-theme="sand"]{--bg:#F1EAE1;--paper:#FCF8F2;--line:#DED3C5;--soft:#F2E9DE;--accent:#9B7F62;--dark:#725A45;--ink:#302B26}:root[data-theme="slate"]{--bg:#EEF1F3;--paper:#F8FAFB;--line:#D8DEE2;--soft:#E9EEF1;--accent:#73808A;--dark:#4C5963;--ink:#252A2E}:root[data-theme="editorial"]{--bg:#F0ECE8;--paper:#FBF8F5;--line:#DED6D0;--soft:#EFE8E4;--accent:#6B5B52;--dark:#443833;--ink:#2A2421}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{min-height:100vh}.app{max-width:700px;min-height:100vh;margin:auto;background:var(--paper);padding:calc(18px + env(safe-area-inset-top)) 18px calc(44px + env(safe-area-inset-bottom))}.top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:24px;flex-wrap:wrap}.brand{font-family:Georgia,serif;color:var(--dark);line-height:1.02}.brand b{display:block;font-size:19px;font-weight:500}.brand span{display:block;font-size:13px;margin-top:2px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:0;border-radius:12px;padding:12px 14px;background:var(--dark);color:#fff;font-weight:800;font-size:14px;cursor:pointer}.btn.soft{background:var(--soft);color:var(--ink)}.btn.line{background:#fff;color:var(--ink);border:1px solid var(--line)}.btn.full{width:100%;font-size:16px;padding:15px}.eyebrow{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:800}h1{font:500 39px/1.06 Georgia,serif;margin:6px 0 9px}.lead{font-size:14px;line-height:1.5;color:var(--muted);margin:0 0 18px}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;margin:13px 0}.summary{background:var(--soft)}.summary b{display:block;font-size:16px;margin-bottom:5px}.summary p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}.question{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.question:last-child{border-bottom:0}.question b{display:block;font-size:15px}.question span{display:block;color:var(--muted);font-size:12px;line-height:1.4;margin-top:3px}.question input{width:24px;height:24px;flex:0 0 auto}.fixed{display:inline-block;margin-top:6px;border-radius:999px;padding:5px 8px;background:var(--soft);font-size:11px;font-weight:750;color:var(--dark)}.feedback{display:none;margin:12px 0;padding:12px;border-radius:12px;background:var(--soft);font-size:13px;line-height:1.4}.feedback.on{display:block}.feedback.ok{background:#e7eee8;color:var(--ok)}.feedback.err{background:#f6e8e4;color:var(--danger)}.footerActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}@media(max-width:480px){h1{font-size:34px}.footerActions{grid-template-columns:1fr}.top{align-items:flex-start}.actions{width:100%}.actions .btn{flex:1}}
+</style>
+</head>
+<body>
+<main class="app">
+  <div class="top"><div class="brand"><b>Weddly</b><span>Smart Design</span></div><div class="actions"><button class="btn soft" id="back">← Invitados</button><button class="btn line" id="editInvitation">Editar invitación</button></div></div>
+  <div class="eyebrow">RSVP</div>
+  <h1>Formulario RSVP</h1>
+  <p class="lead">Los datos de vuestra boda se toman directamente de la invitación. Aquí solo decides qué información pedir a los invitados.</p>
+  <div id="summary" class="card summary"><b>Vuestra invitación</b><p>Cargando datos…</p></div>
+  <section class="card">
+    <div class="question"><div><b>Asistencia</b><span>Cada persona confirma si asistirá o no.</span><span class="fixed">Siempre incluida</span></div></div>
+    <label class="question"><div><b>Menú</b><span>Permite indicar el tipo de menú de cada asistente.</span></div><input id="mealQ" type="checkbox"></label>
+    <label class="question"><div><b>Alergias e intolerancias</b><span>Recoge la información necesaria para catering.</span></div><input id="allergyQ" type="checkbox"></label>
+    <label class="question"><div><b>Transporte</b><span>Pregunta si necesita transporte organizado por la pareja.</span></div><input id="transportQ" type="checkbox"></label>
+    <label class="question"><div><b>Acompañante / +1</b><span>Permite añadir acompañante cuando corresponda.</span></div><input id="plusQ" type="checkbox"></label>
+  </section>
+  <div id="feedback" class="feedback"></div>
+  <button class="btn full" id="save">Guardar formulario</button>
+  <div class="footerActions"><button class="btn line" id="openOps">Envíos y respuestas</button><button class="btn soft" id="editBottom">Volver a la invitación</button></div>
+</main>
+<script>
+(()=>{
+const API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-rsvp',PERS='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/weddly-personalization',TOKEN_KEY='weddly_shared_wedding_token',FALLBACK='sP3vW6aT-B_5-ctfsY06D3rHOkwM0gXUs5i0aGfiH-8';
+const $=id=>document.getElementById(id),member=()=>localStorage.getItem(TOKEN_KEY)||'',qs=new URLSearchParams(location.search),inSuite=qs.get('suite')==='1'||qs.get('_wsd_suite')==='1';let token=qs.get('t')||'',cfg={},pers={};
+function theme(){try{const x=localStorage.getItem('weddly_personal_theme_v51')||localStorage.getItem('weddly_personal_theme_v20')||'nordic';return['nordic','blush','sand','slate','editorial'].includes(x)?x:'nordic'}catch{return'nordic'}}document.documentElement.dataset.theme=theme();
+async function j(url,opt={}){const r=await fetch(url,opt),x=await r.json().catch(()=>({}));if(!r.ok||!x.ok)throw new Error(x.error||'request_failed');return x}
+function fmtDate(v){if(!/^\d{4}-\d{2}-\d{2}$/.test(String(v||'')))return String(v||'');const d=new Date(v+'T12:00:00');return d.toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'})}
+function weddingConfig(){const p1=String(pers.p1||'').trim(),p2=String(pers.p2||'').trim(),title=p1&&p2?`${p1} & ${p2}`:(cfg.title||'Nuestra boda'),date=pers.date||cfg.date||'',time=pers.time||cfg.time||'',venue=[pers.venue,pers.city].filter(Boolean).join(', ')||cfg.venue||'';return{...cfg,title,date,time,venue,intro:cfg.intro||'Nos encantará celebrar este día contigo.'}}
+function drawSummary(){const w=weddingConfig(),parts=[fmtDate(w.date),w.time,w.venue].filter(Boolean);$('summary').innerHTML=`<b>${String(w.title||'Vuestra boda').replace(/[&<>]/g,'')}</b><p>${parts.map(x=>String(x).replace(/[&<>]/g,'')).join(' · ')||'Los datos se toman de vuestra invitación Essential.'}</p>`}
+async function load(){if(!member())throw new Error('missing_access');let x=await j(API+'?manage=1',{headers:{'x-weddly-token':member()},cache:'no-store'});let f=x.forms?.[0];if(!f){await j(API,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':member()},body:JSON.stringify({action:'claim',token:FALLBACK})});x=await j(API+'?manage=1',{headers:{'x-weddly-token':member()},cache:'no-store'});f=x.forms?.[0]}if(!f)throw new Error('no_form');token=token||f.public_token||FALLBACK;cfg=f.config||{};try{const p=await j(PERS+'?token='+encodeURIComponent(token),{cache:'no-store'});pers=p.personalization||{}}catch{try{pers=JSON.parse(localStorage.getItem('weddly_guests_design')||'{}')||{}}catch{pers={}}}$('mealQ').checked=cfg.questions?.meal!==false;$('allergyQ').checked=cfg.questions?.allergy!==false;$('transportQ').checked=cfg.transportOffered!==false&&cfg.questions?.transport!==false;$('plusQ').checked=cfg.questions?.plusone!==false;drawSummary()}
+async function save(){const b=$('save'),fb=$('feedback');b.disabled=true;b.textContent='Guardando…';fb.className='feedback on';fb.textContent='Guardando formulario…';try{const base=weddingConfig(),next={...base,transportOffered:$('transportQ').checked,questions:{...(base.questions||{}),meal:$('mealQ').checked,allergy:$('allergyQ').checked,transport:$('transportQ').checked,plusone:$('plusQ').checked}};await j(API,{method:'POST',headers:{'content-type':'application/json','x-weddly-token':member()},body:JSON.stringify({action:'config',token,config:next})});cfg=next;fb.className='feedback on ok';fb.textContent='Formulario guardado y conectado a vuestra invitación.';drawSummary()}catch(e){fb.className='feedback on err';fb.textContent='No se ha podido guardar. Comprueba la conexión y vuelve a intentarlo.'}finally{b.disabled=false;b.textContent='Guardar formulario'}}
+function goGuests(){if(inSuite&&parent!==window){try{const b=parent.document.querySelector('[data-view="guests"]');if(b){b.click();return}}catch{}}location.assign('guests.html#invitados')}
+function goDesign(){if(inSuite&&parent!==window){parent.postMessage({type:'wsd-suite-open',view:'guests-design',url:'guests-rsvp-design-manage.html?v=134'},location.origin);return}location.assign('guests-rsvp-design-manage.html?v=134')}
+function goOps(){if(inSuite&&parent!==window){parent.postMessage({type:'wsd-suite-open',view:'guests-rsvp',url:'guests-rsvp-operations-v2.html?v=134'},location.origin);return}location.assign('guests-rsvp-operations-v2.html?v=134')}
+$('back').onclick=goGuests;$('editInvitation').onclick=goDesign;$('editBottom').onclick=goDesign;$('openOps').onclick=goOps;$('save').onclick=save;load().catch(()=>{$('feedback').className='feedback on err';$('feedback').textContent='No se ha podido cargar la configuración del RSVP.'})
+})();
+</script>
+</body>
+</html>

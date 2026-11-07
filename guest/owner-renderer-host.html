@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; frame-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>GUEST · Visor privado de plantilla</title>
+<style>html,body{height:100%;margin:0;background:#f8f3eb;color:#463b35;font:16px system-ui}#host{height:100%;width:100%}#wait,#fail{box-sizing:border-box;padding:24px;max-width:600px;margin:auto}#fail{color:#942e27;display:none}</style>
+</head><body><div id="wait" role="status">Preparando vista privada de GUEST…</div><div id="fail" role="alert"></div><div id="host" hidden></div>
+<script src="/guest/catalog/guest-catalog-owner-viewer-v2.js"></script>
+<script>
+(()=>{'use strict';
+const TYPE='GUEST_CENTER_RENDER_V1',REMOTE_ORIGIN=location.origin;
+const el=id=>document.getElementById(id);
+let current=null,seq=0;
+function report(e,op,error=''){try{e.source?.postMessage({type:TYPE,op,nonce:e.data?.nonce,error},e.origin==='null'?'*':e.origin)}catch{}}
+window.addEventListener('message',async e=>{
+ // In the downloaded Android shell the parent has a file:// opaque origin.
+ // Source must be the DIRECT parent and no external iframe may command this host.
+ if(window.parent===window||e.source!==window.parent||!(e.origin==='null'||e.origin===REMOTE_ORIGIN))return;
+ const b=e.data;
+ if(!b||b.type!==TYPE||b.op!=='render'||typeof b.nonce!=='string'||!/^[a-f0-9]{32}$/.test(b.nonce))return;
+ const generation=++seq;
+ try{
+  if(current){current.close();current=null}
+  el('fail').style.display='none';el('wait').style.display='block';el('host').hidden=true;
+  const order=b.order,config=b.config;
+  if(!order||!config||typeof order.template_id!=='string'||typeof order.template_version!=='string')throw Error('invalid_order');
+  if(config.template?.id!==order.template_id||String(config.template?.version)!==order.template_version)throw Error('config_version_mismatch');
+  const res=await fetch('/guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',{cache:'no-store',redirect:'error'});
+  if(!res.ok)throw Error('registry_unavailable');
+  const registry=await res.json();
+  const spec=registry?.templates?.[order.template_id];
+  if(!spec||spec.mode!=='iframe'||spec.version!==order.template_version||!spec.src)throw Error('registered_template_unavailable');
+  if(spec.status!=='commercially-frozen'&&order.mode!=='test')throw Error('pending_template_test_only');
+  if(spec.status!=='commercially-frozen'&&spec.status!=='certification-pending')throw Error('template_status_unapproved');
+  const asset=new URL(spec.src,location.href);
+  if(asset.origin!==location.origin||!asset.pathname.startsWith('/guest/catalog-assets/')||!asset.pathname.endsWith('/index.html'))
+    throw Error('untrusted_asset_origin');
+  el('host').hidden=false;
+  const result=await window.GUEST_CATALOG_OWNER_VIEWER_V2.show({order,config,host:el('host'),registry});
+  if(generation!==seq){result.close();return}
+  current=result;el('wait').style.display='none';
+  report(e,'ready');
+ }catch(ex){
+  if(generation!==seq)return;
+  el('host').hidden=true;el('wait').style.display='none';
+  el('fail').textContent='Vista no disponible: '+String(ex?.message||ex).slice(0,140);
+  el('fail').style.display='block';report(e,'error',String(ex?.message||ex).slice(0,100));
+ }
+});
+})();
+</script></body></html>

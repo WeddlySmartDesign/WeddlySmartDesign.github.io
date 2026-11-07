@@ -1,0 +1,13 @@
+'use strict';
+const fs=require('node:fs');
+const assert=require('node:assert/strict');
+const source=fs.readFileSync('guest/backend/guest-rsvp/index.ts','utf8');
+const start=source.indexOf("if(action==='config')");
+const end=source.indexOf("if(action!=='submit')",start);
+assert(start>0 && end>start,'configuration branch missing');
+const branch=source.slice(start,end);
+const required=["resolveWeddingByMember(db,memberToken)","from('wedding_members')","eq('member_hash',memberHash)","eq('wedding_id',weddingId)","from('guest_invitation_orders')","eq('license_id',who.license_id)","if(ce)throw ce","error:'catalog_rsvp_configuration_locked'","from('guest_rsvp_forms').update("];
+for(const token of required)assert(branch.includes(token),'missing authorization safeguard: '+token);
+assert(branch.indexOf('catalog_rsvp_configuration_locked')<branch.indexOf("from('guest_rsvp_forms').update("),'catalog lock must run before RSVP configuration mutation');
+for(const token of ["if(action==='manual_submit')","if(action==='contact'||action==='delivery')","return await handleSubmission(db,form,body,'guest')"])assert(source.includes(token),'RSVP guest operation lost: '+token);
+console.log('PASS staged GUEST-only catalog RSVP configuration guard; no live backend calls');

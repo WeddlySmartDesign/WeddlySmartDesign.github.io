@@ -1,0 +1,68 @@
+#!/usr/bin/env node
+'use strict';
+const assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path'),cp=require('node:child_process');
+const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'guest-plugin-test-'));
+const root=path.resolve(__dirname,'..','..');
+const add=(p,s)=>{const dest=path.join(tmp,p);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,s)};
+function run(args){return cp.spawnSync(process.execPath,[path.join(root,'guest/tools/register_visual_template.cjs'),...args],{encoding:'utf8'})}
+try{
+ add('guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json',JSON.stringify({schemaVersion:'guest-catalog-template-registry-v1',templates:[{id:'veil-light',version:'5.3.3',status:'commercially-frozen'}]}));
+ add('guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json',JSON.stringify({policy:{newTemplateRequirements:['common-questionnaire','backend-test-only','renderer','two-real-test-orders','recipient-rsvp','owner-android']},templates:{'veil-light':{basis:'pre-existing-commercial-seal',version:'5.3.3'}}}));
+ add('guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json',JSON.stringify({schemaVersion:'guest-catalog-owner-renderers-v2',templates:{'veil-light':{mode:'native',version:'5.3.3'}}}));
+ add('guest/GUEST_PROJECT_STATUS_V1.json',JSON.stringify({schemaVersion:'guest-project-status-v1',designs:{'veil-light':{version:'5.3.3',status:'commercially-frozen'},'design-03':{status:'not-started'}}}));
+ const original=fs.readFileSync(path.join(tmp,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'),'utf8');
+ const example=path.join(root,'guest/templates/_example');
+ let res=run(['--root',tmp,'--manifest',path.join(example,'visual-plugin.json')]);
+ assert.equal(res.status,0,res.stderr);assert.equal(JSON.parse(res.stdout).mode,'dry-run');
+ assert.equal(fs.readFileSync(path.join(tmp,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'),'utf8'),original,'Dry-run mutated files');
+ res=run(['--root',tmp,'--manifest',path.join(example,'visual-plugin.json'),'--apply']);
+ assert.equal(res.status,0,res.stderr);const report=JSON.parse(res.stdout);
+ assert.equal(report.template,'design-03');assert.equal(report.commerciallyCertified,false);assert.equal(report.backendDeployed,false);
+ const registry=JSON.parse(fs.readFileSync(path.join(tmp,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json')));
+ const evidence=JSON.parse(fs.readFileSync(path.join(tmp,'guest/GUEST_CATALOG_ADMISSION_EVIDENCE_V1.json')));
+ const owner=JSON.parse(fs.readFileSync(path.join(tmp,'guest/GUEST_CATALOG_OWNER_RENDERERS_V2.json')));
+ assert.equal(registry.templates.find(x=>x.id==='veil-light').status,'commercially-frozen');
+ assert.equal(registry.templates.find(x=>x.id==='design-03').status,'certification-pending');
+ assert.equal(evidence.templates['design-03'].gates['backend-test-only'].pass,false);
+ assert.equal(evidence.templates['design-03'].gates['two-real-test-orders'].pass,false);
+ const state=JSON.parse(fs.readFileSync(path.join(tmp,'guest/GUEST_PROJECT_STATUS_V1.json')));
+ assert.equal(state.designs['design-03'].version,'1.0.0');
+ assert.equal(state.designs['design-03'].status,'certification-pending');
+ assert.equal(state.designs['design-03'].commerciallyCertified,false);
+ assert.match(state.designs['design-03'].visualMasterSha256,/^[a-f0-9]{64}$/);
+ assert.equal(owner.templates['design-03'].mode,'iframe');
+ assert.equal(owner.templates['design-03'].applyApi,'GUEST_APPLY_CONFIG');
+ assert.equal(owner.templates['design-03'].src,null,'Pending visual asset must never look publicly published');
+ assert.equal(state.designs['design-03'].candidateSha256,state.designs['design-03'].visualMasterSha256,'Delivery and staging must use the same immutable candidate SHA');
+ assert(fs.readFileSync(path.join(tmp,'guest/guest-catalog-template-design-03-adapter-v1.js'),'utf8').includes('window.GUEST_APPLY_CONFIG'));
+ assert(fs.readFileSync(path.join(tmp,'guest/catalog-assets/design-03/1.0.0/index.html'),'utf8').includes('window.GUEST_APPLY_CONFIG'));
+ // Actual shared delivery packager, not a mock: no new per-design JS or backend.
+ const builderSrc=path.join(root,'guest/tools/build_catalog_delivery.js');
+ const builderDst=path.join(tmp,'guest/tools/build_catalog_delivery.js');
+ fs.mkdirSync(path.dirname(builderDst),{recursive:true});fs.copyFileSync(builderSrc,builderDst);
+ fs.copyFileSync(path.join(root,'guest/guest-catalog-delivery-runtime-v1.js'),path.join(tmp,'guest/guest-catalog-delivery-runtime-v1.js'));
+ const templateMaster=path.join(tmp,'guest/catalog-assets/design-03/1.0.0/index.html');
+ const target=path.join(tmp,'guest/design03-delivery-private.html');
+ const pack=cp.spawnSync(process.execPath,[builderDst,templateMaster,target,'FICTIONAL_PUBLIC_TOKEN','design-03','--test-only','--flow-url','https://isolated-catalog-qa.supabase.co/functions/v1/guest-invitation-flow'],{encoding:'utf8'});
+ assert.equal(pack.status,0,'New design must use existing generic delivery packager: '+pack.stderr);
+ const packed=fs.readFileSync(target,'utf8');
+ assert.match(packed,/FICTIONAL_PUBLIC_TOKEN/);
+ assert.match(packed,/SOLO PRUEBA · NO PUBLICAR/);
+ assert.match(packed,/noindex,nofollow,noarchive/);
+ assert.match(packed,/window.GUEST_APPLY_CONFIG/);
+ assert.match(packed,/isolated-catalog-qa.supabase.co/);
+ assert.doesNotMatch(packed,/dnjsxequwgtyyauuofxj|kijigxprredusnaaazow/,'No protected ONE/STUDIO backend');
+ assert.equal(JSON.parse(fs.readFileSync(path.join(tmp,'guest/GUEST_CATALOG_TEMPLATE_REGISTRY_V1.json'))).templates.find(x=>x.id==='design-03').status,'certification-pending','Packaging must not enable sales');
+ const modifiedMaster=path.join(tmp,'guest/tampered-master.html');
+ fs.writeFileSync(modifiedMaster,fs.readFileSync(templateMaster,'utf8')+'<!--tampered-->');
+ const tampered=cp.spawnSync(process.execPath,[builderDst,modifiedMaster,path.join(tmp,'bad-delivery.html'),'FICTIONAL_PUBLIC_TOKEN','design-03','--test-only','--flow-url','https://isolated-catalog-qa.supabase.co/functions/v1/guest-invitation-flow'],{encoding:'utf8'});
+ assert.notEqual(tampered.status,0,'Modifying frozen candidate must fail its SHA');
+ assert.match(tampered.stderr,/test_candidate_sha256_mismatch/);
+ res=run(['--root',tmp,'--manifest',path.join(example,'visual-plugin.json'),'--apply']);
+ assert.notEqual(res.status,0,'Must forbid duplicate id');
+ const malformed=path.join(tmp,'bad-plugin.json');fs.writeFileSync(malformed,JSON.stringify({...JSON.parse(fs.readFileSync(path.join(example,'visual-plugin.json'),'utf8')),id:'../bad',masterHtml:path.join(example,'master.html')}));
+ res=run(['--root',tmp,'--manifest',malformed,'--apply']);assert.notEqual(res.status,0,'Must refuse traversal');
+ const badApi=path.join(tmp,'bad-api.json');fs.writeFileSync(badApi,JSON.stringify({...JSON.parse(fs.readFileSync(path.join(example,'visual-plugin.json'),'utf8')),id:'design-04',masterHtml:path.join(example,'master.html'),rendererApi:'SPECIAL_PER_COUPLE'}));
+ res=run(['--root',tmp,'--manifest',badApi,'--apply']);assert.notEqual(res.status,0,'Must enforce shared visual API');
+ console.log('PASS visual plugin: dry-run immutable / onboard new design / no fake published asset / immutable SHA / genuine generic delivery packaging / protected-host rejection / pending gates / duplicates / traversal / bespoke API rejection');
+}finally{fs.rmSync(tmp,{recursive:true,force:true})}

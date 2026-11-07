@@ -1,0 +1,11 @@
+'use strict';
+const fs=require('node:fs'),assert=require('node:assert/strict');
+const s=fs.readFileSync('guest/backend/guest-personalization/index.ts','utf8');
+const start=s.indexOf("if(req.method==='POST')");
+const end=s.indexOf("return json({ok:false,error:'method_not_allowed'}",start);
+assert(start>=0&&end>start,'personalisation write branch missing');
+const part=s.slice(start,end);
+for(const t of ["resolveAccessByMember(db,memberToken,demo)","form.wedding_id!==weddingId","from('guest_invitation_orders')","eq('license_id',access.licenseId)","if(ceCatalog)throw ceCatalog","catalog_invitation_editing_locked","from('guest_rsvp_personalization').upsert("])assert(part.includes(t),'catalog authoring guard missing '+t);
+assert(part.indexOf("catalog_invitation_editing_locked")<part.indexOf("from('guest_rsvp_personalization').upsert("),'catalog order check must run before personalization update');
+assert(s.includes("if(req.method==='GET')"),'read-only invitation access must remain intact');
+console.log('PASS catalog invitation personalization API lock staged, GET preserved');

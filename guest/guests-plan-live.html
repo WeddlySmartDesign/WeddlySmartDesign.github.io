@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="only light">
+<title>WeddlySmartDesign · Plano de mesas</title>
+<style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f5f1ea}iframe{width:100%;height:100%;border:0;display:block;background:#f5f1ea}</style>
+</head>
+<body>
+<iframe id="plan" src="guests-v081-visual-seating.html?v=121-plan" title="Plano de mesas"></iframe>
+<script>
+(()=>{
+ const F=document.getElementById('plan');
+ const THEMES={
+  nordic:{bg:'#F2EFE9',paper:'#FBF8F3',line:'#E4DED2',soft:'#EEF0E9',accent:'#6E7A5C',dark:'#525C43',ink:'#2C2A26'},
+  blush:{bg:'#F5EEEC',paper:'#FFF9F7',line:'#E9DAD6',soft:'#F5E9E7',accent:'#B48683',dark:'#825F5D',ink:'#2C2A26'},
+  sand:{bg:'#F1EAE1',paper:'#FCF8F2',line:'#DED3C5',soft:'#F2E9DE',accent:'#9B7F62',dark:'#725A45',ink:'#302B26'},
+  slate:{bg:'#EEF1F3',paper:'#F8FAFB',line:'#D8DEE2',soft:'#E9EEF1',accent:'#73808A',dark:'#4C5963',ink:'#252A2E'},
+  editorial:{bg:'#F0ECE8',paper:'#FBF8F5',line:'#DED6D0',soft:'#EFE8E4',accent:'#6B5B52',dark:'#443833',ink:'#2A2421'}
+ };
+ function theme(){try{const x=localStorage.getItem('weddly_personal_theme_v51')||localStorage.getItem('weddly_personal_theme_v20')||'nordic';return THEMES[x]?x:'nordic'}catch{return'nordic'}}
+ function back(){if(history.length>1){history.back();return}try{window.top.location.href='guests.html#mesas'}catch{location.href='guests.html#mesas'}}
+ function patch(){
+  try{
+   const d=F.contentDocument;if(!d?.body)return;const p=THEMES[theme()];
+   let s=d.getElementById('wsdPlanTheme');if(!s){s=d.createElement('style');s.id='wsdPlanTheme';d.head.appendChild(s)}
+   s.textContent=`html,body{background:${p.bg}!important;color:${p.ink}!important}.wrap{background:${p.paper}!important;min-height:100vh}.btn:not(.soft):not(.line){background:${p.dark}!important}.soft,.feature{background:${p.soft}!important;color:${p.ink}!important}.line,.card,.summaryIntro,.tableSummary,.personPick,.guestChip,.choice,.typeBtn,.shapeChoice,.rotateRow button,.select,.field{border-color:${p.line}!important}.selectionBar{background:${p.dark}!important}.moveNote{color:${p.dark}!important}.tableSummary.target{outline-color:${p.accent}!important;background:${p.soft}!important}.brand{color:${p.dark}!important}`;
+   const brand=d.querySelector('.brand');if(brand)brand.textContent='WEDDLY SMART DESIGN · INVITADOS';
+   if(!d.getElementById('wsdPlanBack')){
+    const b=d.createElement('button');b.id='wsdPlanBack';b.type='button';b.textContent='← Volver a Mesas';b.onclick=back;
+    b.style.cssText=`border:1px solid ${p.line};background:#fff;color:${p.ink};border-radius:999px;padding:10px 13px;font:750 13px system-ui,-apple-system,Segoe UI,sans-serif;min-height:42px;margin:2px 0 10px`;
+    const main=d.querySelector('.wrap');main?.insertBefore(b,main.firstChild);
+   }
+  }catch(e){}
+ }
+ F.addEventListener('load',()=>{patch();setTimeout(patch,150)});setInterval(patch,900);
+})();
+</script>
+</body>
+</html>

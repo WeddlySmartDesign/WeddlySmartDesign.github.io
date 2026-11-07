@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>WeddlySmartDesign · Reparando acceso</title>
+<style>
+html,body{margin:0;min-height:100%;background:#FBF8F3;color:#2C2A26;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+main{min-height:100vh;display:grid;place-items:center;padding:28px;text-align:center}
+h1{font:500 30px Georgia,serif;color:#525C43;margin:0 0 12px}
+p{margin:0;color:#736F63;font-size:14px;line-height:1.5}
+</style>
+</head>
+<body>
+<main><div><h1>Preparando vuestro ONE</h1><p>Limpiando datos antiguos de este navegador…</p></div></main>
+<script src="/access-cookie-bridge-v1.js?v=1"></script>
+<script>
+(()=>{
+  const TOKEN='weddly_shared_wedding_token';
+  const keys=[
+    'weddly_owner_demo_mode',
+    'weddly_pro_v7',
+    'weddly_sync_base_v20',
+    'weddly_suite_last_module',
+    'weddly_guests_local_mode_v1',
+    'weddly_guests_qa_v67',
+    'weddly_guests_qa_v67_snapshot_real',
+    'weddly_guests_sync_meta_v2',
+    'weddly_guests_v81_visual_meta',
+    'weddly_guests_rsvp_v82',
+    'weddly_invitation_draft_v1_local',
+    'weddly_planning_v2'
+  ];
+  let token='';
+  try{token=window.__WSD_ACCESS_BRIDGE?.sync?.()||localStorage.getItem(TOKEN)||''}catch{}
+  for(const key of keys){try{localStorage.removeItem(key)}catch{}}
+  if(token&&token.length>=40){
+    try{window.__WSD_ACCESS_BRIDGE?.remember?.(token)}catch{}
+    try{localStorage.setItem(TOKEN,token)}catch{}
+  }
+  setTimeout(()=>location.replace('/app.html?recovered=1'),80);
+})();
+</script>
+</body>
+</html>

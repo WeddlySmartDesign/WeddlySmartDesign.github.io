@@ -1,0 +1,25 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Weddly Smart Design · RSVP Studio v8</title></head><body><script>
+(async()=>{
+ const r=await fetch('rsvp-design-studio-v6.html?src=v8',{cache:'no-store'}); let h=await r.text();
+ h=h.replace(/Studio v6/g,'Studio v8');
+ /* Botanical: use a complete stationery-style botanical frame, not isolated flowers floating in space. */
+ const oldFlower=/const flower=`[\s\S]*?<\/svg>`;/;
+ const art='https://upload.wikimedia.org/wikipedia/commons/1/14/A_rose%2C_anemone%2C_mignonette_and_daisies.jpg';
+ h=h.replace(oldFlower,`const flower=\`<img class="botanicalArt" src="${art}" alt="Ilustración botánica">\`;`);
+ /* Signature must be Spanish throughout. */
+ h=h.replace(/THE WEDDING/g,'LA BODA').replace(/TIMELINE/g,'ITINERARIO').replace(/Order of the day/g,'Así será el día').replace(/DRESS CODE/g,'CÓDIGO DE VESTIMENTA').replace(/RSVP/g,'CONFIRMACIÓN');
+ h=h.replace('</style>',`
+/* v8 QA — botanical stationery composition + signature legibility */
+.botanical .wash{display:none!important}.botanical .hero{min-height:720px!important;padding:44px 34px 38px!important;background:#fffdfa!important;isolation:isolate}.botanical .hero:before,.botanical .hero:after{display:none!important}
+.botanical .flower,.botanical .flower2{position:absolute!important;z-index:0!important;opacity:.74!important;overflow:hidden!important;mix-blend-mode:multiply!important;filter:saturate(.62) contrast(.88) brightness(1.12)}
+.botanical .flower{width:310px!important;height:390px!important;right:-116px!important;top:-86px!important;transform:rotate(18deg)!important;border-radius:0!important}.botanical .flower2{width:300px!important;height:390px!important;left:-118px!important;bottom:-96px!important;transform:rotate(198deg)!important;border-radius:0!important}.botanical .botanicalArt{width:100%;height:100%;object-fit:cover;object-position:center;background:transparent!important}
+.botanical .hero>div{position:relative;z-index:2}.botanical .mono{font-size:38px!important}.botanical .names{font-size:58px!important;max-width:350px!important;text-shadow:0 1px 0 #fff}.botanical .date{font-size:13px!important}.botanical .timeline{background:#e1e7dc!important}
+/* Make the botanical feel like a framed invitation rather than two floating stickers */
+.botanical .hero .ey:before{content:'';position:absolute;left:-34px;top:34px;width:1px;height:190px;background:#c8bcae}.botanical .hero .date:after{content:'';display:block;width:92px;border-top:1px solid #b9ad9e;margin-top:15px}
+/* Signature mobile QA */
+.modern .sigNames,.organic .sigNames{font-size:62px!important;line-height:.98!important;letter-spacing:-.025em!important}.modern .sigNames{max-width:100%!important}.modern .itin{grid-template-columns:54px minmax(0,1fr)!important;gap:18px!important}.modern .itin b,.modern .itin small{display:block!important}.modern .itin b{font-size:22px!important;line-height:1.08!important}.modern .itin small{font-size:12px!important;line-height:1.35!important;margin-top:5px!important}.editorial .line{grid-template-columns:78px minmax(0,1fr)!important}.editorial .line b,.editorial .line small{display:block!important}.editorial .line small{margin-top:5px!important}
+@media(max-width:420px){.botanical .hero{min-height:690px!important;padding:38px 28px 32px!important}.botanical .flower{width:265px!important;height:350px!important;right:-110px!important;top:-76px!important}.botanical .flower2{width:255px!important;height:340px!important;left:-110px!important;bottom:-82px!important}.botanical .names{font-size:53px!important}.modern .sigNames,.organic .sigNames{font-size:54px!important}.modern .itinerary{padding-left:24px!important;padding-right:24px!important}.modern .itin{grid-template-columns:50px minmax(0,1fr)!important;gap:14px!important}.modern .itin b{font-size:20px!important}.editorial .schedule{padding-left:24px!important;padding-right:24px!important}.editorial .line{grid-template-columns:72px minmax(0,1fr)!important;gap:14px!important}}
+</style>`);
+ document.open();document.write(h);document.close();
+})().catch(e=>{document.body.innerHTML='<p style="font-family:sans-serif;padding:24px">No se pudo cargar el estudio v8.</p>';console.error(e)});
+</script></body></html>
