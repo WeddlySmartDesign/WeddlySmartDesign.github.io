@@ -348,11 +348,11 @@
       shot: { src: 'envio.jpg', alt: 'Ficha de la familia en GUEST con el botón Enviar o compartir invitación.' }
     },
     {
-      scene: 'eventos', tab: 'Preboda',
-      title: 'La preboda, con su propia invitación',
-      text: 'Preboda, brunch o cena de bienvenida: cada evento tiene su invitación, su lista y sus respuestas. Elegís a los invitados de vuestra lista, sin volver a crearlos.',
-      points: ['Personas sueltas o grupos enteros', 'Sin mezclarse con la boda', 'Recordatorios y enlace al calendario'],
-      shot: { src: 'eventos.jpg', alt: 'Eventos extra en GUEST junto al paso Ajusta las mesas.' }
+      scene: 'eventos', tab: 'Save the date',
+      title: 'Avisad a vuestros invitados desde el primer día',
+      text: 'Con la app creáis una invitación con vuestra foto y la enviáis solo a quien elijáis: el save the date, la preboda o un brunch. Así la organización empieza al principio, no cuando la boda está encima.',
+      points: ['Foto vuestra y lista desde la agenda del móvil', 'Por WhatsApp, a grupos o subgrupos concretos', 'Respuestas y avisos en los dos móviles, y listados para imprimir'],
+      shot: { src: 'eventos.jpg', alt: 'Eventos extra en GUEST, como el save the date o la preboda, junto al paso Ajusta las mesas.' }
     },
     {
       scene: 'listados', tab: 'Listados con versión',
