@@ -349,9 +349,9 @@
     },
     {
       scene: 'eventos', tab: 'Save the date',
-      title: 'Avisad a vuestros invitados desde el primer día',
-      text: 'Con la app creáis una invitación con vuestra foto y la enviáis solo a quien elijáis: el save the date, la preboda o un brunch. Así la organización empieza al principio, no cuando la boda está encima.',
-      points: ['Foto vuestra y lista desde la agenda del móvil', 'Por WhatsApp, a grupos o subgrupos concretos', 'Respuestas y avisos en los dos móviles, y listados para imprimir'],
+      title: 'Que reserven la fecha desde el primer día',
+      text: 'Con la app creáis una invitación con vuestra foto que dice «reservad la fecha» y la enviáis solo a quien elijáis. Cada invitado puede guardarla en su calendario, y la invitación de verdad les llega después.',
+      points: ['Foto vuestra y lista desde la agenda del móvil', 'Por WhatsApp, a grupos o subgrupos concretos', 'Con botón para añadir la fecha al calendario'],
       shot: { src: 'eventos.jpg', alt: 'Eventos extra en GUEST, como el save the date o la preboda, junto al paso Ajusta las mesas.' }
     },
     {
