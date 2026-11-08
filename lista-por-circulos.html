@@ -27,6 +27,7 @@
   color-scheme:light;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--body);-webkit-text-size-adjust:100%}
 .wrap{max-width:1120px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
@@ -64,6 +65,12 @@ label.f{display:grid;gap:4px;font-size:.84rem;color:var(--muted);min-width:0}
 input[type=number],input[type=text],textarea,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px;width:100%;min-width:0}
 input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--c2);outline-offset:2px}
 .hint{font-size:.8rem;color:var(--muted);margin:8px 0 0}
+.how{margin:.4rem 0 0;padding-left:1.2rem;display:grid;gap:4px;max-width:60ch;color:var(--muted)}
+.how b{color:var(--ink);font-weight:500}
+.more{margin-top:12px;font-size:.88rem}
+.more summary{cursor:pointer;color:var(--muted);text-decoration:underline;text-underline-offset:3px;width:fit-content}
+.more .link{margin-top:8px;display:block}
+#copyBox{margin-top:10px;min-height:120px;font-size:.85rem}
 .circle{border-radius:14px;padding:14px;border:1px solid var(--line);background:var(--paper)}
 .circle + .circle{margin-top:10px}
 .circle-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
@@ -116,7 +123,12 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
   <header>
     <span class="eyebrow">Herramienta gratuita · sin registro</span>
     <h1>La lista por círculos</h1>
-    <p class="lede">Repartid a vuestros invitados en tres círculos, poned vuestro límite y mirad dónde cae el corte. Cada grupo que añadís se ve al momento en personas, mesas y euros.</p>
+    <p class="lede">¿Os pasáis de invitados? Ordenadlos de más cercanos a menos y mirad quién entra en vuestra boda.</p>
+    <ol class="how">
+      <li><b>Decid cuántos caben</b> en el sitio.</li>
+      <li><b>Apuntad a vuestra gente por grupos</b> en tres círculos, de más a menos cercana.</li>
+      <li><b>Mirad el dibujo:</b> cada punto es una persona. Los puntos vacíos no caben.</li>
+    </ol>
   </header>
 
   <div class="layout">
@@ -133,8 +145,8 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
         <span><i style="background:transparent;border:1.5px solid var(--out)"></i>No caben</span>
       </div>
       <div class="stats">
-        <div class="stat"><b id="sIn">0</b><span>invitados dentro</span></div>
-        <div class="stat"><b id="sOut">0</b><span>se quedan fuera</span></div>
+        <div class="stat"><b id="sIn">0</b><span>entran</span></div>
+        <div class="stat"><b id="sOut">0</b><span>no caben</span></div>
         <div class="stat"><b id="sTables">0</b><span id="sTablesL">mesas</span></div>
         <div class="stat"><b id="sCost">—</b><span>banquete</span></div>
       </div>
@@ -143,44 +155,53 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
 
     <div class="controls">
       <section class="card" aria-labelledby="h-limit">
-        <div class="section-head"><h2 id="h-limit">Vuestro límite</h2><span class="eyebrow">Paso 1</span></div>
+        <div class="section-head"><h2 id="h-limit">¿Cuántos caben?</h2><span class="eyebrow">Paso 1</span></div>
         <div class="fields">
-          <label class="f">Aforo del sitio<input type="number" id="cap" inputmode="numeric" min="0" placeholder="Sin límite"></label>
-          <label class="f">Personas por mesa<input type="number" id="perTable" inputmode="numeric" min="2" value="10"></label>
-          <label class="f">Presupuesto para el banquete (€)<input type="number" id="budget" inputmode="numeric" min="0" placeholder="Opcional"></label>
+          <label class="f">Invitados que caben en el sitio<input type="number" id="cap" inputmode="numeric" min="0" placeholder="Ej. 140"></label>
           <label class="f">Precio del menú por persona (€)<input type="number" id="price" inputmode="numeric" min="0" placeholder="Opcional"></label>
         </div>
-        <p class="hint">Usad vuestras cifras reales. Si ponéis aforo y presupuesto, manda el que antes se llene.</p>
+        <details class="more">
+          <summary>Más opciones</summary>
+          <div class="fields" style="margin-top:10px">
+            <label class="f">Presupuesto máximo del banquete (€)<input type="number" id="budget" inputmode="numeric" min="0" placeholder="Opcional"></label>
+            <label class="f">Personas por mesa<input type="number" id="perTable" inputmode="numeric" min="2" value="10"></label>
+          </div>
+          <p class="hint">Si ponéis también un presupuesto, el límite será lo que antes se llene: el sitio o el dinero.</p>
+        </details>
       </section>
 
       <section class="card" aria-labelledby="h-circles">
-        <div class="section-head"><h2 id="h-circles">Vuestros círculos</h2><span class="eyebrow">Paso 2</span></div>
-        <p class="hint" style="margin:0 0 12px">Añadid grupos («primos de mamá», «amigos del cole») con cuántas personas son. Si queréis la lista con nombres, pegadlos dentro de cada grupo, uno por línea.</p>
+        <div class="section-head"><h2 id="h-circles">¿A quién invitáis?</h2><span class="eyebrow">Paso 2</span></div>
+        <p class="hint" style="margin:0 0 12px">Apuntad grupos («primos de mamá», «amigos del cole») y cuántas personas son. Empezad por el círculo de arriba: lo que no quepa saldrá siempre del último.</p>
         <div id="circles"></div>
         <div style="margin-top:12px"><button class="link" id="reset" type="button">Empezar de cero</button> · <button class="link" id="loadSample" type="button">Ver el ejemplo</button></div>
       </section>
 
       <section class="card" aria-labelledby="h-domino">
-        <div class="section-head"><h2 id="h-domino">El efecto dominó</h2><span class="eyebrow">Qué arrastra cada círculo</span></div>
+        <div class="section-head"><h2 id="h-domino">¿Hasta dónde llegáis?</h2><span class="eyebrow">Círculo a círculo</span></div>
         <div class="tablebox"><table class="domino" id="domino"></table></div>
         <p class="hint" id="perTen"></p>
       </section>
 
       <section class="card" aria-labelledby="h-share">
-        <div class="section-head"><h2 id="h-share">Guardadla y compartidla</h2><span class="eyebrow">Paso 3</span></div>
+        <div class="section-head"><h2 id="h-share">Guardadla</h2><span class="eyebrow">Paso 3</span></div>
         <div class="btns">
-          <button class="btn" id="dlImg" type="button">Descargar imagen</button>
-          <button class="btn alt" id="dlCsv" type="button">Descargar lista (CSV)</button>
+          <button class="btn" id="dlImg" type="button">Guardar imagen</button>
+          <button class="btn alt" id="copyList" type="button">Copiar la lista</button>
         </div>
-        <label class="check"><input type="checkbox" id="showMoney"> Mostrar el presupuesto en la imagen</label>
-        <label class="check" style="margin-top:6px"><input type="checkbox" id="csvAll"> Incluir en el CSV a quienes no caben</label>
-        <p class="hint">La imagen está pensada para mandarla por WhatsApp a vuestros padres o subirla a stories. El CSV se abre en Excel o Google Sheets. Si un grupo no tiene nombres, cada persona sale como «Grupo 1», «Grupo 2»… para renombrarla después.</p>
+        <label class="check"><input type="checkbox" id="showMoney"> Mostrar el precio en la imagen</label>
+        <p class="hint">La imagen es para mandarla por WhatsApp o subirla a stories. «Copiar la lista» copia a quienes entran, uno por línea, para pegarlos en ONE, en Notas o en una hoja de cálculo.</p>
+        <details class="more">
+          <summary>Más opciones</summary>
+          <label class="check"><input type="checkbox" id="csvAll"> Incluir también a quienes no caben</label>
+          <button class="link" id="dlCsv" type="button">Descargar como archivo CSV</button>
+        </details>
       </section>
 
       <aside class="bridge">
         <span class="eyebrow" style="color:#CBA28F">¿Y ahora qué?</span>
         <h2>Esta lista ya sirve para todo lo demás</h2>
-        <p>El CSV se importa tal cual en <a href="https://weddlysmartdesign.github.io/one.html">ONE</a>, donde cada invitado recibe su invitación, confirma, elige menú y se sienta en su mesa sin volver a escribir nada.</p>
+        <p>En <a href="https://weddlysmartdesign.github.io/one.html">ONE</a>, entrad en Invitados › Importar lista › Pegar lista y pegadla. Cada invitado recibe su invitación, confirma, elige menú y se sienta en su mesa sin volver a escribir nada.</p>
       </aside>
     </div>
   </div>
@@ -193,9 +214,9 @@ input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-vis
 "use strict";
 var KEY="lista-circulos-v1";
 var RINGS=[
-  {k:1,name:"Imprescindibles",hint:"Sin ellos no hay boda",r0:0,r1:72,color:"#4A3A36"},
-  {k:2,name:"Deberíamos",hint:"Familia y amigos de verdad",r0:80,r1:136,color:"#B97A5C"},
-  {k:3,name:"Nos gustaría",hint:"Si cabe, genial",r0:144,r1:196,color:"#CBA28F"}
+  {k:1,name:"Imprescindibles",hint:"¿Sin quién no os casaríais?",r0:0,r1:72,color:"#4A3A36"},
+  {k:2,name:"Deberíamos",hint:"¿A quién os sabría mal no invitar?",r0:80,r1:136,color:"#B97A5C"},
+  {k:3,name:"Nos gustaría",hint:"¿A quién invitaríais si sobra sitio?",r0:144,r1:196,color:"#CBA28F"}
 ];
 var OUT="#B5A79C";
 var SAMPLE={sample:true,couple:"",cap:140,perTable:10,budget:14000,price:95,showMoney:false,groups:[
@@ -288,7 +309,7 @@ function render(){
   else if(R.out>0){
     var cut=R.rows.find(function(x){return x.over>0});
     v.className="verdict over";
-    v.textContent="Os pasáis por "+fmtN.format(R.out)+" personas. Manda "+R.limitBy+" ("+fmtN.format(R.cap)+") y el corte cae dentro de «"+cut.ring.name+"».";
+    v.textContent="Tenéis "+fmtN.format(R.total)+" personas y caben "+fmtN.format(R.cap)+". Se quedan fuera "+fmtN.format(R.out)+", empezando por «"+cut.ring.name+"».";
   } else {
     v.className="verdict fine";
     v.textContent="Cabéis todos. Aún quedan "+fmtN.format(R.cap-R.total)+" sitios según "+R.limitBy+".";
@@ -358,9 +379,12 @@ function groupRow(g){
   minus.addEventListener("click",function(){touch();g.n=Math.max(0,(g.n||0)-1);sync();updateCounts();render()});
   plus.addEventListener("click",function(){touch();g.n=(g.n||0)+1;sync();updateCounts();render()});
   st.appendChild(minus);st.appendChild(out);st.appendChild(plus);row.appendChild(st);
-  var tools=document.createElement("div");tools.className="group-tools";
+  var tools=document.createElement("div");tools.className="group-tools";tools.hidden=true;
+  var edit=document.createElement("button");edit.type="button";edit.className="link";edit.textContent="Mover, añadir nombres o quitar";edit.style.gridColumn="1 / -1";edit.style.justifySelf="start";
+  edit.addEventListener("click",function(){tools.hidden=!tools.hidden;edit.hidden=!tools.hidden?true:false});
+  row.appendChild(edit);
   var sel=document.createElement("select");sel.id="g-ring-"+g.id;sel.setAttribute("aria-label","Mover a otro círculo");
-  RINGS.forEach(function(r){var o=document.createElement("option");o.value=r.k;o.textContent=r.name;if(r.k===g.c)o.selected=true;sel.appendChild(o)});
+  RINGS.forEach(function(r){var o=document.createElement("option");o.value=r.k;o.textContent="Mover a: "+r.name;if(r.k===g.c)o.selected=true;sel.appendChild(o)});
   sel.addEventListener("change",function(){touch();g.c=+sel.value;renderCircles();render()});
   tools.appendChild(sel);
   var nb=document.createElement("button");nb.type="button";nb.className="link";nb.textContent=namesOf(g).length?"Nombres ("+namesOf(g).length+")":"Añadir nombres";
@@ -392,13 +416,16 @@ $("loadSample").addEventListener("click",function(){loadState(SAMPLE)});
 
 /* ---- descargas ---- */
 function toast(msg){var t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove("show")},2600)}
-function saveBlob(blob,filename){
+function saveBlob(blob,filename,allowShare){
   var file;
   try{file=new File([blob],filename,{type:blob.type})}catch(e){file=null}
-  if(file&&navigator.canShare&&navigator.canShare({files:[file]})&&/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
-    navigator.share({files:[file],title:"Nuestra lista por círculos"}).catch(function(){});
+  if(allowShare&&file&&navigator.canShare&&navigator.canShare({files:[file]})&&/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
+    navigator.share({files:[file],title:"Nuestra lista por círculos"}).catch(function(err){if(!err||err.name!=="AbortError")download(blob,filename)});
     return;
   }
+  download(blob,filename);
+}
+function download(blob,filename){
   var url=URL.createObjectURL(blob),a=document.createElement("a");
   a.href=url;a.download=filename;document.body.appendChild(a);a.click();
   setTimeout(function(){URL.revokeObjectURL(url);a.remove()},1500);
@@ -406,16 +433,34 @@ function saveBlob(blob,filename){
 }
 function slug(){return (S.couple||"nuestra-boda").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"nuestra-boda"}
 
-$("dlCsv").addEventListener("click",function(){
-  var R=compute(),all=$("csvAll").checked,rows=[["Nombre","Grupo","Círculo","Dentro del límite"]],idx=0;
+function listRows(all){
+  var R=compute(),rows=[],idx=0;
   RINGS.forEach(function(r){
     S.groups.filter(function(g){return g.c===r.k}).forEach(function(g){
       var ns=namesOf(g),n=sizeOf(g),gname=g.name||"Sin nombre";
       for(var i=0;i<n;i++){var inside=idx<R.cap;if(inside||all)rows.push([ns[i]||(gname+" "+(i+1)),gname,r.name,inside?"Sí":"No"]);idx++}
     });
   });
+  return rows;
+}
+$("dlCsv").addEventListener("click",function(){
+  var rows=[["Nombre","Grupo","Círculo","Dentro del límite"]].concat(listRows($("csvAll").checked));
   var csv="﻿"+rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"'}).join(";")}).join("\r\n");
-  saveBlob(new Blob([csv],{type:"text/csv;charset=utf-8"}),"lista-"+slug()+".csv");
+  saveBlob(new Blob([csv],{type:"text/csv;charset=utf-8"}),"lista-"+slug()+".csv",false);
+});
+$("copyList").addEventListener("click",function(){
+  var rows=listRows($("csvAll").checked);
+  if(!rows.length){toast("Todavía no hay nadie en la lista");return}
+  var text=["Nombre\tGrupo"].concat(rows.map(function(r){return r[0].replace(/\t/g," ")+"\t"+r[1].replace(/\t/g," ")})).join("\n");
+  var done=function(){toast("Copiadas "+fmtN.format(rows.length)+" personas. Ya podéis pegarlas.")};
+  var fallback=function(){
+    var box=$("copyBox");
+    if(!box){box=document.createElement("textarea");box.id="copyBox";box.readOnly=true;box.setAttribute("aria-label","Lista para copiar");$("copyList").closest("section").insertBefore(box,$("copyList").closest(".btns").nextSibling)}
+    box.value=text;box.hidden=false;box.focus();box.select();
+    var ok=false;try{ok=document.execCommand("copy")}catch(e){}
+    if(ok)done();else toast("Mantened pulsado el texto y elegid Copiar");
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,fallback)}else fallback();
 });
 
 $("dlImg").addEventListener("click",function(){
@@ -456,7 +501,7 @@ $("dlImg").addEventListener("click",function(){
     });
     x.textAlign="center";x.fillStyle="#8C7F77";x.font="400 22px "+BODY;
     x.fillText("Hecha gratis en weddlysmartdesign.github.io",W/2,1300);
-    c.toBlob(function(b){if(b)saveBlob(b,"lista-"+slug()+".png");else toast("No se ha podido crear la imagen")},"image/png");
+    c.toBlob(function(b){if(b)saveBlob(b,"lista-"+slug()+".png",true);else toast("No se ha podido crear la imagen")},"image/png");
   };
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go,go);else go();
 });
