@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La lista por círculos</title>
+<meta name="description" content="Herramienta gratuita para decidir a quién invitar a vuestra boda: reparte a los invitados en tres círculos, pon vuestro límite y mirad dónde cae el corte, cuántas mesas salen y cuánto cuesta.">
+<meta property="og:title" content="La lista por círculos · ¿A quién invitamos a la boda?">
+<meta property="og:description" content="Reparte a tus invitados en tres círculos y descubre dónde cae el corte, cuántas mesas salen y cuánto cuesta cada decisión. Gratis y sin registro.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23433d3b'/%3E%3Ccircle cx='32' cy='32' r='20' fill='none' stroke='%23cba28f' stroke-width='4'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23fff8f2'/%3E%3C/svg%3E">
+<style>
+/* Layout: en móvil, el dibujo de los círculos arriba y los controles debajo; en escritorio, dibujo fijo a la izquierda y controles a la derecha. */
+:root{
+  --bg:#F7EEE5;          /* crema ONE */
+  --paper:#FFFAF5;
+  --ink:#433D3B;         /* tinta ONE */
+  --muted:#625852;
+  --line:#E8DBCF;
+  --c1:#4A3A36;          /* círculo 1 */
+  --c2:#B97A5C;          /* círculo 2 */
+  --c3:#CBA28F;          /* círculo 3 */
+  --out:#B5A79C;         /* fuera de la lista */
+  --warn:#9B3B26;
+  --ok:#525C43;
+  --display:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+  --body:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--body);-webkit-text-size-adjust:100%}
+.wrap{max-width:1120px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0;letter-spacing:.005em}
+h1{font-size:clamp(2.1rem, 6vw, 3.4rem);line-height:1.02}
+h2{font-size:1.45rem;line-height:1.15}
+.eyebrow{font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.lede{color:var(--muted);max-width:56ch;margin:.6rem 0 0;font-size:1.04rem}
+header{display:grid;gap:.5rem;margin-bottom:22px}
+.layout{display:grid;gap:22px;grid-template-columns:minmax(0,1fr)}
+.layout>*{min-width:0}
+@media (min-width:900px){
+  .layout{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start}
+  .visual{position:sticky;top:16px}
+}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px}
+.visual{display:grid;gap:14px}
+.ringsbox{position:relative}
+#rings{width:100%;height:auto;display:block;max-width:520px;margin:0 auto}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:520px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stat{border-top:1px solid var(--line);padding-top:8px;min-width:0}
+.stat b{display:block;font-family:var(--display);font-weight:400;font-size:1.65rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:.8rem;color:var(--muted)}
+.verdict{font-size:.98rem;padding:10px 12px;border-radius:12px;background:var(--bg)}
+.verdict.over{background:#F6E3DC;color:var(--warn)}
+.verdict.fine{background:#EAEFE3;color:var(--ok)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.82rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.controls{display:grid;gap:18px;grid-template-columns:minmax(0,1fr)}
+.controls>*,.visual>*{min-width:0}
+.section-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+label.f{display:grid;gap:4px;font-size:.84rem;color:var(--muted);min-width:0}
+input[type=number],input[type=text],textarea,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px;width:100%;min-width:0}
+input:focus-visible,textarea:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--c2);outline-offset:2px}
+.hint{font-size:.8rem;color:var(--muted);margin:8px 0 0}
+.circle{border-radius:14px;padding:14px;border:1px solid var(--line);background:var(--paper)}
+.circle + .circle{margin-top:10px}
+.circle-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dot{width:14px;height:14px;border-radius:50%;flex:none}
+.circle-head h3{font-size:1.15rem}
+.circle-head small{color:var(--muted);display:block;font-size:.8rem}
+.circle-head .count{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:500}
+.group{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 8px;align-items:center;padding:8px 0;border-top:1px dashed var(--line)}
+.group input[type=text]{background:transparent;border-color:transparent;padding:6px 8px}
+.group input[type=text]:hover{border-color:var(--line)}
+.stepper{display:flex;align-items:center;gap:2px}
+.stepper button,.icon-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:500 1.1rem/1 var(--body);cursor:pointer}
+.stepper output{min-width:2.4ch;text-align:center;font-variant-numeric:tabular-nums;font-weight:500}
+.group-tools{grid-column:1 / -1;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.group-tools select{width:auto;max-width:100%;padding:5px 8px;font-size:.82rem}
+.link{background:none;border:0;padding:4px 2px;color:var(--muted);font:inherit;font-size:.82rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.link:hover{color:var(--ink)}
+.names{grid-column:1 / -1}
+.names textarea{min-height:90px;font-size:.9rem}
+.add{margin-top:8px;width:100%;border:1px dashed var(--line);background:transparent;border-radius:10px;padding:9px;font:inherit;color:var(--muted);cursor:pointer}
+.add:hover{color:var(--ink);border-color:var(--muted)}
+.domino{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.92rem}
+.domino th,.domino td{text-align:left;padding:9px 6px;border-top:1px solid var(--line);vertical-align:top}
+.domino th{font-weight:500;color:var(--muted);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;border-top:0}
+.domino td.n{text-align:right;white-space:nowrap}
+.pill{display:inline-block;font-size:.74rem;padding:1px 8px;border-radius:99px;margin-top:3px}
+.pill.over{background:#F6E3DC;color:var(--warn)}
+.pill.ok{background:#EAEFE3;color:var(--ok)}
+.tablebox{overflow-x:auto}
+.btns{display:grid;gap:10px;grid-template-columns:1fr}
+@media (min-width:520px){.btns{grid-template-columns:1fr 1fr}}
+.btn{border:0;border-radius:12px;padding:13px 16px;font:500 1rem var(--body);cursor:pointer;background:var(--ink);color:#fff}
+.btn.alt{background:var(--paper);color:var(--ink);border:1px solid var(--ink)}
+.check{display:flex;gap:8px;align-items:center;font-size:.88rem;color:var(--muted);margin-top:12px}
+.check input{width:18px;height:18px;accent-color:var(--c1)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.tag{font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;background:var(--bg);border:1px solid var(--line);padding:3px 9px;border-radius:99px;color:var(--muted)}
+.bridge{display:grid;gap:6px;padding:18px;border-radius:18px;background:var(--ink);color:#FFF8F2}
+.bridge p{margin:0;color:#E9DCD2;max-width:60ch}
+.bridge a{color:#fff;font-weight:500}
+.privacy{font-size:.8rem;color:var(--muted);text-align:center;margin-top:18px}
+.toast{position:fixed;left:16px;right:16px;margin:0 auto;width:fit-content;max-width:calc(100% - 32px);bottom:calc(18px + env(safe-area-inset-bottom, 0px));background:var(--ink);color:#fff;padding:10px 16px;border-radius:99px;font-size:.9rem;opacity:0;pointer-events:none;transition:opacity .25s}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+#rings circle.p{transition:fill .25s, stroke .25s}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Herramienta gratuita · sin registro</span>
+    <h1>La lista por círculos</h1>
+    <p class="lede">Repartid a vuestros invitados en tres círculos, poned vuestro límite y mirad dónde cae el corte. Cada grupo que añadís se ve al momento en personas, mesas y euros.</p>
+  </header>
+
+  <div class="layout">
+    <section class="card visual" aria-label="Vuestra lista dibujada">
+      <div class="toolbar">
+        <input type="text" id="couple" placeholder="Vuestros nombres (ej. Laura &amp; Dani)" aria-label="Vuestros nombres" style="flex:1;min-width:0">
+        <span class="tag" id="sampleTag">Ejemplo</span>
+      </div>
+      <div class="ringsbox"><svg id="rings" viewBox="0 0 400 400" role="img" aria-label="Círculos de invitados"></svg></div>
+      <div class="legend">
+        <span><i style="background:var(--c1)"></i>Imprescindibles</span>
+        <span><i style="background:var(--c2)"></i>Deberíamos</span>
+        <span><i style="background:var(--c3)"></i>Nos gustaría</span>
+        <span><i style="background:transparent;border:1.5px solid var(--out)"></i>No caben</span>
+      </div>
+      <div class="stats">
+        <div class="stat"><b id="sIn">0</b><span>invitados dentro</span></div>
+        <div class="stat"><b id="sOut">0</b><span>se quedan fuera</span></div>
+        <div class="stat"><b id="sTables">0</b><span id="sTablesL">mesas</span></div>
+        <div class="stat"><b id="sCost">—</b><span>banquete</span></div>
+      </div>
+      <div class="verdict" id="verdict"></div>
+    </section>
+
+    <div class="controls">
+      <section class="card" aria-labelledby="h-limit">
+        <div class="section-head"><h2 id="h-limit">Vuestro límite</h2><span class="eyebrow">Paso 1</span></div>
+        <div class="fields">
+          <label class="f">Aforo del sitio<input type="number" id="cap" inputmode="numeric" min="0" placeholder="Sin límite"></label>
+          <label class="f">Personas por mesa<input type="number" id="perTable" inputmode="numeric" min="2" value="10"></label>
+          <label class="f">Presupuesto para el banquete (€)<input type="number" id="budget" inputmode="numeric" min="0" placeholder="Opcional"></label>
+          <label class="f">Precio del menú por persona (€)<input type="number" id="price" inputmode="numeric" min="0" placeholder="Opcional"></label>
+        </div>
+        <p class="hint">Usad vuestras cifras reales. Si ponéis aforo y presupuesto, manda el que antes se llene.</p>
+      </section>
+
+      <section class="card" aria-labelledby="h-circles">
+        <div class="section-head"><h2 id="h-circles">Vuestros círculos</h2><span class="eyebrow">Paso 2</span></div>
+        <p class="hint" style="margin:0 0 12px">Añadid grupos («primos de mamá», «amigos del cole») con cuántas personas son. Si queréis la lista con nombres, pegadlos dentro de cada grupo, uno por línea.</p>
+        <div id="circles"></div>
+        <div style="margin-top:12px"><button class="link" id="reset" type="button">Empezar de cero</button> · <button class="link" id="loadSample" type="button">Ver el ejemplo</button></div>
+      </section>
+
+      <section class="card" aria-labelledby="h-domino">
+        <div class="section-head"><h2 id="h-domino">El efecto dominó</h2><span class="eyebrow">Qué arrastra cada círculo</span></div>
+        <div class="tablebox"><table class="domino" id="domino"></table></div>
+        <p class="hint" id="perTen"></p>
+      </section>
+
+      <section class="card" aria-labelledby="h-share">
+        <div class="section-head"><h2 id="h-share">Guardadla y compartidla</h2><span class="eyebrow">Paso 3</span></div>
+        <div class="btns">
+          <button class="btn" id="dlImg" type="button">Descargar imagen</button>
+          <button class="btn alt" id="dlCsv" type="button">Descargar lista (CSV)</button>
+        </div>
+        <label class="check"><input type="checkbox" id="showMoney"> Mostrar el presupuesto en la imagen</label>
+        <label class="check" style="margin-top:6px"><input type="checkbox" id="csvAll"> Incluir en el CSV a quienes no caben</label>
+        <p class="hint">La imagen está pensada para mandarla por WhatsApp a vuestros padres o subirla a stories. El CSV se abre en Excel o Google Sheets. Si un grupo no tiene nombres, cada persona sale como «Grupo 1», «Grupo 2»… para renombrarla después.</p>
+      </section>
+
+      <aside class="bridge">
+        <span class="eyebrow" style="color:#CBA28F">¿Y ahora qué?</span>
+        <h2>Esta lista ya sirve para todo lo demás</h2>
+        <p>El CSV se importa tal cual en <a href="https://weddlysmartdesign.github.io/one.html">ONE</a>, donde cada invitado recibe su invitación, confirma, elige menú y se sienta en su mesa sin volver a escribir nada.</p>
+      </aside>
+    </div>
+  </div>
+  <p class="privacy">Todo se queda en vuestro móvil. No guardamos ni vemos vuestros datos.</p>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+var KEY="lista-circulos-v1";
+var RINGS=[
+  {k:1,name:"Imprescindibles",hint:"Sin ellos no hay boda",r0:0,r1:72,color:"#4A3A36"},
+  {k:2,name:"Deberíamos",hint:"Familia y amigos de verdad",r0:80,r1:136,color:"#B97A5C"},
+  {k:3,name:"Nos gustaría",hint:"Si cabe, genial",r0:144,r1:196,color:"#CBA28F"}
+];
+var OUT="#B5A79C";
+var SAMPLE={sample:true,couple:"",cap:140,perTable:10,budget:14000,price:95,showMoney:false,groups:[
+  {id:1,c:1,name:"Padres y hermanos",n:8,names:""},
+  {id:2,c:1,name:"Abuelos",n:4,names:""},
+  {id:3,c:1,name:"Amigos de siempre",n:18,names:""},
+  {id:4,c:2,name:"Tíos y primos",n:34,names:""},
+  {id:5,c:2,name:"Amigos de la uni",n:22,names:""},
+  {id:6,c:2,name:"Cuadrilla del pueblo",n:16,names:""},
+  {id:7,c:3,name:"Compañeros de trabajo",n:14,names:""},
+  {id:8,c:3,name:"Primos segundos",n:20,names:""},
+  {id:9,c:3,name:"Amigos de los padres",n:12,names:""}
+]};
+var EMPTY={sample:false,couple:"",cap:"",perTable:10,budget:"",price:"",showMoney:false,groups:[]};
+
+function clone(o){return JSON.parse(JSON.stringify(o))}
+var S;
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
+if(!S||!Array.isArray(S.groups))S=clone(SAMPLE);
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+var $=function(id){return document.getElementById(id)};
+var fmtN=new Intl.NumberFormat("es-ES");
+var fmtE=new Intl.NumberFormat("es-ES",{style:"currency",currency:"EUR",maximumFractionDigits:0});
+function num(v){var n=parseFloat(v);return isFinite(n)&&n>0?n:0}
+function namesOf(g){return String(g.names||"").split(/\r?\n/).map(function(s){return s.trim()}).filter(Boolean)}
+function sizeOf(g){var l=namesOf(g).length;return l?l:Math.max(0,Math.round(g.n||0))}
+
+/* ---- cálculo ---- */
+function compute(){
+  var cap=Infinity,price=num(S.price),budget=num(S.budget),aforo=num(S.cap),per=Math.max(2,Math.round(num(S.perTable)||10));
+  var limitBy="";
+  if(aforo){cap=Math.floor(aforo);limitBy="el aforo"}
+  if(budget&&price){var b=Math.floor(budget/price);if(b<cap){cap=b;limitBy="el presupuesto"}}
+  var ringN=RINGS.map(function(r){return S.groups.filter(function(g){return g.c===r.k}).reduce(function(a,g){return a+sizeOf(g)},0)});
+  var total=ringN[0]+ringN[1]+ringN[2];
+  var inside=Math.min(total,cap);
+  var cum=0,rows=RINGS.map(function(r,i){cum+=ringN[i];return{ring:r,n:ringN[i],cum:cum,tables:Math.ceil(cum/per),cost:price?cum*price:null,over:cum>cap?cum-cap:0}});
+  return{cap:cap,price:price,per:per,limitBy:limitBy,ringN:ringN,total:total,inside:inside,out:total-inside,tables:Math.ceil(inside/per),cost:price?inside*price:null,rows:rows};
+}
+
+/* posiciones de los puntos: girasol dentro de cada anillo */
+function dots(R){
+  var list=[],idx=0,GA=Math.PI*(3-Math.sqrt(5));
+  var minS=Infinity;
+  RINGS.forEach(function(r,i){var n=R.ringN[i];if(!n)return;var A=Math.PI*(r.r1*r.r1-r.r0*r.r0);minS=Math.min(minS,Math.sqrt(A/n))});
+  var dr=isFinite(minS)?Math.max(1.4,Math.min(6,minS*0.36)):5;
+  RINGS.forEach(function(r,i){
+    var n=R.ringN[i],a=r.r0+dr+1,b=r.r1-dr-1;
+    if(r.r0===0)a=0;
+    for(var j=0;j<n;j++){
+      var t=(j+0.5)/n,rad=Math.sqrt(a*a+(b*b-a*a)*t),th=j*GA+i*0.9;
+      list.push({x:200+rad*Math.cos(th),y:200+rad*Math.sin(th),r:dr,ring:i,inside:idx<R.cap});
+      idx++;
+    }
+  });
+  return list;
+}
+
+/* ---- dibujo en pantalla ---- */
+var SVGNS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent){var e=document.createElementNS(SVGNS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+function drawSVG(R){
+  var svg=$("rings");while(svg.firstChild)svg.removeChild(svg.firstChild);
+  RINGS.slice().reverse().forEach(function(r){
+    el("circle",{cx:200,cy:200,r:r.r1+3,fill:"none",stroke:"#E8DBCF","stroke-width":1},svg);
+  });
+  if(!R.total){
+    var t=el("text",{x:200,y:205,"text-anchor":"middle",fill:"#625852","font-size":"13","font-family":"Inter, system-ui, sans-serif"},svg);
+    t.textContent="Añadid vuestro primer grupo";
+    return;
+  }
+  dots(R).forEach(function(d){
+    var col=RINGS[d.ring].color;
+    el("circle",{"class":"p",cx:d.x.toFixed(1),cy:d.y.toFixed(1),r:(d.inside?d.r:d.r*0.82).toFixed(2),fill:d.inside?col:"#FFFAF5",stroke:d.inside?"none":OUT,"stroke-width":d.inside?0:1.1},svg);
+  });
+}
+
+function render(){
+  var R=compute();
+  $("sampleTag").hidden=!S.sample;
+  $("sIn").textContent=fmtN.format(R.inside);
+  $("sOut").textContent=fmtN.format(R.out);
+  $("sTables").textContent=fmtN.format(R.tables);
+  $("sTablesL").textContent="mesas de "+R.per;
+  $("sCost").textContent=R.cost!=null?fmtE.format(R.cost):"—";
+  var v=$("verdict");
+  if(!R.total){v.className="verdict";v.textContent="Empezad por el círculo de dentro: las personas sin las que no os casaríais."}
+  else if(R.cap===Infinity){v.className="verdict";v.textContent="Poned el aforo o el presupuesto para ver dónde cae el corte."}
+  else if(R.out>0){
+    var cut=R.rows.find(function(x){return x.over>0});
+    v.className="verdict over";
+    v.textContent="Os pasáis por "+fmtN.format(R.out)+" personas. Manda "+R.limitBy+" ("+fmtN.format(R.cap)+") y el corte cae dentro de «"+cut.ring.name+"».";
+  } else {
+    v.className="verdict fine";
+    v.textContent="Cabéis todos. Aún quedan "+fmtN.format(R.cap-R.total)+" sitios según "+R.limitBy+".";
+  }
+  drawSVG(R);
+  renderDomino(R);
+  save();
+}
+
+function renderDomino(R){
+  var t=$("domino");t.textContent="";
+  var thead=t.createTHead().insertRow();
+  ["Si invitáis a…","Personas","Mesas","Banquete"].forEach(function(h){var th=document.createElement("th");th.textContent=h;thead.appendChild(th)});
+  var tb=t.createTBody();
+  var labels=["Solo imprescindibles","+ Deberíamos","+ Nos gustaría"];
+  R.rows.forEach(function(row,i){
+    var tr=tb.insertRow();
+    var c0=tr.insertCell();
+    var s=document.createElement("span");s.textContent=labels[i];c0.appendChild(s);
+    if(R.cap!==Infinity&&row.cum>0){
+      var p=document.createElement("div");p.className="pill "+(row.over?"over":"ok");
+      p.textContent=row.over?"Os pasáis por "+fmtN.format(row.over):"Cabe";c0.appendChild(p);
+    }
+    var c1=tr.insertCell();c1.className="n";c1.textContent=fmtN.format(row.cum);
+    var c2=tr.insertCell();c2.className="n";c2.textContent=fmtN.format(row.tables);
+    var c3=tr.insertCell();c3.className="n";c3.textContent=row.cost!=null?fmtE.format(row.cost):"—";
+  });
+  $("perTen").textContent=R.price?"Cada 10 invitados más son unos "+fmtE.format(R.price*10)+" en el banquete y "+(10>=R.per?"al menos una mesa":"casi una mesa")+" más, sin contar invitaciones, regalos o transporte.":"Poned el precio del menú para ver cuánto cuesta cada círculo.";
+}
+
+/* ---- grupos ---- */
+function nextId(){return S.groups.reduce(function(a,g){return Math.max(a,g.id)},0)+1}
+function touch(){if(S.sample){S.sample=false}}
+function renderCircles(){
+  var box=$("circles");box.textContent="";
+  RINGS.forEach(function(r){
+    var sec=document.createElement("div");sec.className="circle";
+    var head=document.createElement("div");head.className="circle-head";
+    var dot=document.createElement("span");dot.className="dot";dot.style.background=r.color;head.appendChild(dot);
+    var hd=document.createElement("div");var h3=document.createElement("h3");h3.textContent=r.name;var sm=document.createElement("small");sm.textContent=r.hint;hd.appendChild(h3);hd.appendChild(sm);head.appendChild(hd);
+    var cnt=document.createElement("span");cnt.className="count";cnt.dataset.ring=r.k;head.appendChild(cnt);
+    sec.appendChild(head);
+    S.groups.filter(function(g){return g.c===r.k}).forEach(function(g){sec.appendChild(groupRow(g))});
+    var add=document.createElement("button");add.type="button";add.className="add";add.textContent="+ Añadir grupo a «"+r.name+"»";
+    add.addEventListener("click",function(){touch();S.groups.push({id:nextId(),c:r.k,name:"",n:2,names:""});renderCircles();render();var ins=box.querySelectorAll('input[data-id]');var last=ins[ins.length-1];if(last)last.focus()});
+    sec.appendChild(add);
+    box.appendChild(sec);
+  });
+  updateCounts();
+}
+function updateCounts(){
+  document.querySelectorAll(".count[data-ring]").forEach(function(c){
+    var k=+c.dataset.ring;var n=S.groups.filter(function(g){return g.c===k}).reduce(function(a,g){return a+sizeOf(g)},0);
+    c.textContent=fmtN.format(n)+(n===1?" persona":" personas");
+  });
+}
+function groupRow(g){
+  var row=document.createElement("div");row.className="group";
+  var name=document.createElement("input");name.type="text";name.value=g.name;name.placeholder="Nombre del grupo";name.dataset.id=g.id;name.id="g-name-"+g.id;name.setAttribute("aria-label","Nombre del grupo");
+  name.addEventListener("input",function(){touch();g.name=name.value;save()});
+  row.appendChild(name);
+  var st=document.createElement("div");st.className="stepper";
+  var minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label","Una persona menos");
+  var out=document.createElement("output");
+  var plus=document.createElement("button");plus.type="button";plus.textContent="+";plus.setAttribute("aria-label","Una persona más");
+  function sync(){var hasNames=namesOf(g).length>0;out.textContent=sizeOf(g);minus.disabled=plus.disabled=hasNames;minus.style.opacity=plus.style.opacity=hasNames?.35:1}
+  minus.addEventListener("click",function(){touch();g.n=Math.max(0,(g.n||0)-1);sync();updateCounts();render()});
+  plus.addEventListener("click",function(){touch();g.n=(g.n||0)+1;sync();updateCounts();render()});
+  st.appendChild(minus);st.appendChild(out);st.appendChild(plus);row.appendChild(st);
+  var tools=document.createElement("div");tools.className="group-tools";
+  var sel=document.createElement("select");sel.id="g-ring-"+g.id;sel.setAttribute("aria-label","Mover a otro círculo");
+  RINGS.forEach(function(r){var o=document.createElement("option");o.value=r.k;o.textContent=r.name;if(r.k===g.c)o.selected=true;sel.appendChild(o)});
+  sel.addEventListener("change",function(){touch();g.c=+sel.value;renderCircles();render()});
+  tools.appendChild(sel);
+  var nb=document.createElement("button");nb.type="button";nb.className="link";nb.textContent=namesOf(g).length?"Nombres ("+namesOf(g).length+")":"Añadir nombres";
+  tools.appendChild(nb);
+  var del=document.createElement("button");del.type="button";del.className="link";del.textContent="Quitar";
+  del.addEventListener("click",function(){touch();S.groups=S.groups.filter(function(x){return x.id!==g.id});renderCircles();render()});
+  tools.appendChild(del);
+  row.appendChild(tools);
+  var nbox=document.createElement("div");nbox.className="names";nbox.hidden=true;
+  var ta=document.createElement("textarea");ta.id="g-names-"+g.id;ta.value=g.names||"";ta.placeholder="Un nombre por línea";ta.setAttribute("aria-label","Nombres del grupo, uno por línea");
+  ta.addEventListener("input",function(){touch();g.names=ta.value;sync();nb.textContent=namesOf(g).length?"Nombres ("+namesOf(g).length+")":"Añadir nombres";updateCounts();render()});
+  nbox.appendChild(ta);row.appendChild(nbox);
+  nb.addEventListener("click",function(){nbox.hidden=!nbox.hidden;if(!nbox.hidden)ta.focus()});
+  sync();
+  return row;
+}
+
+/* ---- ajustes ---- */
+function bindField(id,key){
+  var e=$(id);e.value=S[key]===undefined?"":S[key];
+  e.addEventListener("input",function(){touch();S[key]=e.value;render()});
+}
+bindField("cap","cap");bindField("perTable","perTable");bindField("budget","budget");bindField("price","price");
+var couple=$("couple");couple.value=S.couple||"";couple.addEventListener("input",function(){S.couple=couple.value;save()});
+var sm=$("showMoney");sm.checked=!!S.showMoney;sm.addEventListener("change",function(){S.showMoney=sm.checked;save()});
+function loadState(st){S=clone(st);["cap","perTable","budget","price"].forEach(function(k){$(k).value=S[k]===undefined?"":S[k]});couple.value=S.couple||"";sm.checked=!!S.showMoney;renderCircles();render()}
+$("reset").addEventListener("click",function(){loadState(EMPTY)});
+$("loadSample").addEventListener("click",function(){loadState(SAMPLE)});
+
+/* ---- descargas ---- */
+function toast(msg){var t=$("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove("show")},2600)}
+function saveBlob(blob,filename){
+  var file;
+  try{file=new File([blob],filename,{type:blob.type})}catch(e){file=null}
+  if(file&&navigator.canShare&&navigator.canShare({files:[file]})&&/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
+    navigator.share({files:[file],title:"Nuestra lista por círculos"}).catch(function(){});
+    return;
+  }
+  var url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download=filename;document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);a.remove()},1500);
+  toast("Descargado: "+filename);
+}
+function slug(){return (S.couple||"nuestra-boda").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"nuestra-boda"}
+
+$("dlCsv").addEventListener("click",function(){
+  var R=compute(),all=$("csvAll").checked,rows=[["Nombre","Grupo","Círculo","Dentro del límite"]],idx=0;
+  RINGS.forEach(function(r){
+    S.groups.filter(function(g){return g.c===r.k}).forEach(function(g){
+      var ns=namesOf(g),n=sizeOf(g),gname=g.name||"Sin nombre";
+      for(var i=0;i<n;i++){var inside=idx<R.cap;if(inside||all)rows.push([ns[i]||(gname+" "+(i+1)),gname,r.name,inside?"Sí":"No"]);idx++}
+    });
+  });
+  var csv="﻿"+rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"'}).join(";")}).join("\r\n");
+  saveBlob(new Blob([csv],{type:"text/csv;charset=utf-8"}),"lista-"+slug()+".csv");
+});
+
+$("dlImg").addEventListener("click",function(){
+  var go=function(){
+    var R=compute(),W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;
+    var x=c.getContext("2d");
+    var DISPLAY='"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif',BODY='Inter,system-ui,-apple-system,"Segoe UI",sans-serif';
+    x.fillStyle="#F7EEE5";x.fillRect(0,0,W,H);
+    x.fillStyle="#625852";x.font="500 26px "+BODY;x.textAlign="center";
+    x.fillText("NUESTRA LISTA POR CÍRCULOS".split("").join(String.fromCharCode(8202)),W/2,96);
+    x.fillStyle="#433D3B";x.font="400 76px "+DISPLAY;
+    x.fillText(S.couple||"Nuestra boda",W/2,180);
+    // anillos
+    var s=2.05,ox=W/2-200*s,oy=228;
+    RINGS.forEach(function(r){x.beginPath();x.arc(ox+200*s,oy+200*s,(r.r1+3)*s,0,Math.PI*2);x.strokeStyle="#E8DBCF";x.lineWidth=2;x.stroke()});
+    dots(R).forEach(function(d){
+      x.beginPath();x.arc(ox+d.x*s,oy+d.y*s,(d.inside?d.r:d.r*0.82)*s,0,Math.PI*2);
+      if(d.inside){x.fillStyle=RINGS[d.ring].color;x.fill()}else{x.fillStyle="#FFFAF5";x.fill();x.strokeStyle=OUT;x.lineWidth=2.2;x.stroke()}
+    });
+    // cifras
+    var y0=1090,cols=[[fmtN.format(R.inside),"invitados"],[fmtN.format(R.tables),"mesas"]];
+    if(R.out>0)cols.push([fmtN.format(R.out),"no caben"]);
+    if(S.showMoney&&R.cost!=null)cols.push([fmtE.format(R.cost),"banquete"]);
+    var cw=W/cols.length;
+    cols.forEach(function(col,i){
+      var cx=cw*i+cw/2;
+      x.fillStyle="#433D3B";x.font="400 64px "+DISPLAY;x.fillText(col[0],cx,y0);
+      x.fillStyle="#625852";x.font="400 26px "+BODY;x.fillText(col[1],cx,y0+42);
+    });
+    // leyenda
+    var items=RINGS.map(function(r,i){return[r.color,r.name+" · "+R.ringN[i]]});
+    x.font="400 24px "+BODY;
+    var widths=items.map(function(it){return x.measureText(it[1]).width+34}),tw=widths.reduce(function(a,b){return a+b},0)+(items.length-1)*28,lx=(W-tw)/2;
+    items.forEach(function(it,i){
+      x.beginPath();x.arc(lx+10,1206,10,0,Math.PI*2);x.fillStyle=it[0];x.fill();
+      x.fillStyle="#433D3B";x.textAlign="left";x.fillText(it[1],lx+30,1214);
+      lx+=widths[i]+28;
+    });
+    x.textAlign="center";x.fillStyle="#8C7F77";x.font="400 22px "+BODY;
+    x.fillText("Hecha gratis en weddlysmartdesign.github.io",W/2,1300);
+    c.toBlob(function(b){if(b)saveBlob(b,"lista-"+slug()+".png");else toast("No se ha podido crear la imagen")},"image/png");
+  };
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(go,go);else go();
+});
+
+renderCircles();render();
+})();
+</script>
+</body>
+</html>
