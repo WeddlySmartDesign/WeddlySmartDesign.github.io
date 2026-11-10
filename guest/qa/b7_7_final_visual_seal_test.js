@@ -78,7 +78,7 @@ async function eventsAt(browser,w,h){
  await noOverflow(page,'events '+w);
  const text=await page.locator('body').innerText();
  ok(text.includes('GUEST')&&text.includes('by WeddlySmartDesign'),'events brand missing '+w);
- ok(!text.includes('Presupuesto y pagos')&&!text.includes('Tareas específicas'),'events legacy scope visible '+w);
+ ok(text.includes('Presupuesto y pagos')&&text.includes('Tareas específicas'),'ONE event tasks, budget and payments must remain available in GUEST '+w);
  await context.close();
 }
 async function publicAt(browser,w,h){

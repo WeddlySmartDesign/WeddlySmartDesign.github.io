@@ -140,8 +140,9 @@ async function editGuestUi(page,id,{meal,transport}={}){
 
   // Settings must recognize that the second device is already connected.
   await b.goto(base+'/guest/guest-settings.html',{waitUntil:'domcontentloaded'});
-  await b.waitForFunction(()=>document.getElementById('syncText')?.textContent==='Dos dispositivos conectados',null,{timeout:6000});
-  ok(await b.locator('#share').evaluate(x=>x.classList.contains('hidden')),'partner device should not expose invite action');
+  await b.waitForFunction(()=>document.getElementById('syncText')?.textContent==='Ambos accesos conectados',null,{timeout:6000});
+  ok(await b.locator('#share').isVisible(),'partner access must be explained instead of hidden');
+   ok(await b.locator('#share').isDisabled(),'already joined pair must not generate a second invitation');
   await b.goto(base+'/guest/index.html',{waitUntil:'domcontentloaded'});await coreFrame(b);
 
   // A real UI edit propagates to B.

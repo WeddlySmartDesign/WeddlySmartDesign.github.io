@@ -103,7 +103,7 @@
     let local=mergeSharedIdentity(parse(read()));if(local)writeRaw(local);
     if(!G.token){G.msg.textContent='Este dispositivo todavía no tiene acceso a vuestro GUEST.';G.retry.style.display='inline-block';return}
     try{
-      const a=await api('GET');if(!a.r.ok||!a.x.ok)throw 0;const remote=a.x.state?mergeSharedIdentity(structuredClone(a.x.state)):null;G.ver=+a.x.version||0;let meta=readMeta();
+      const a=await api('GET');if(a.r.status===401||a.r.status===403){G.msg.textContent='Este acceso ya no está activo. Abre GUEST con un código válido.';G.retry.textContent='Abrir acceso';G.retry.href='access.html';G.retry.style.display='inline-block';return}if(!a.r.ok||!a.x.ok)throw 0;const remote=a.x.state?mergeSharedIdentity(structuredClone(a.x.state)):null;G.ver=+a.x.version||0;let meta=readMeta();
       if(!meta.dirty&&local&&meta.lastHash&&hash(JSON.stringify(local))!==meta.lastHash){meta={dirty:true,baseVersion:Number(meta.version||0),startedAt:new Date().toISOString(),pendingHash:hash(JSON.stringify(local))};writeMeta(meta)}
       if(meta.dirty&&local&&remote){if(!await reconcileDirty(local,remote,G.ver))throw 0;open();return}
       if(meta.dirty&&local&&!remote){const p=await api('PUT',{version:0,state:local});if(!p.r.ok||!p.x.ok)throw 0;G.ver=+p.x.version||1;G.last=JSON.stringify(local);G.identity=identityOf(local);cleanMeta(local);open();return}

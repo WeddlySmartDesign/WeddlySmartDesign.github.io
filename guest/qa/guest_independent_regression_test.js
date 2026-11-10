@@ -26,19 +26,19 @@ ok(form.includes('accommodationOffered===true'),'accommodation opt-in behavior m
 ok(form.includes('plusone'),'plus-one config missing');
 
 const home=read('guests-home-rsvp-status-v1.js');
-ok(home.includes('todaySeatChanges')&&home.includes('recentChanges'),'Today table-change behavior missing');
+ok(home.includes('todaySeatChanges')&&home.includes('activityEntries')&&home.includes('hoyReadNotificationIdsV1'),'Hoy must keep table activity separate from stable-ID RSVP notifications');
 const seating=read('guests-seating-v2.js');
 ok(/activity|table/i.test(seating),'seating change registration missing');
 const sync=read('guests-seating-sync-hotfix-v1.js');
 ok(sync.length>500,'seating sync hotfix unexpectedly empty');
 
 const settings=read('guest-settings.html');
-for(const s of ['GUEST para los dos','Invitar a mi pareja','Instalar GUEST','weddlysmartdesign@gmail.com'])ok(settings.includes(s),'settings flow missing: '+s);
+for(const s of ['Compartir GUEST con tu pareja','Compartir acceso con mi pareja','Instalar GUEST','weddlysmartdesign@gmail.com'])ok(settings.includes(s),'settings flow missing: '+s);
 ok(settings.includes("action:'invite'"),'partner invite API flow missing');
 
 const events=read('guests-events-v3.html'),eventProduct=read('guest-events-product-v1.js');
-ok(events.includes('guest-events-product-v1.js'),'GUEST event simplification layer not loaded');
-ok(eventProduct.includes('Presupuesto y pagos')&&eventProduct.includes('Tareas específicas'),'event non-GUEST sections are not actively removed');
+ok(events.includes('guest-events-product-v1.js'),'GUEST event branding layer not loaded');
+ok(eventProduct.includes('brand();')&&!eventProduct.includes('next.remove()'),'GUEST event styling must preserve ONE tasks and budget sections');
 const smart=read('guests-smart-actions-v1.js');
 ok(!smart.includes('Invitados, tareas, pagos y calendario'),'ONE event copy leaked into GUEST');
 
@@ -66,7 +66,7 @@ const endpointFiles=[
 'guests-rsvp-operations-v2.html','guests-rsvp-operations-live.html','guests-rsvp-operations-v3.html','guests-rsvp-design-manage.html',
 'guests-rsvp-form-flow.html','guests-rsvp-form-flex.html','guests-rsvp-public-clean.html','guests-rsvp-essential-live.html','guests-rsvp-signature-live.html','guests-personalizacion-essential.html','guests-personalizacion-signature-integrated.html',
 'guests-rsvp-services-hotfix-v1.js','guests-rsvp-services-hotfix-v1.js','guests-rsvp-v115-wedding-flex-live.html','guests-rsvp-v116-single-live.html','guests-rsvp-children-public-v1.js','guests-rsvp-plusone-public-v1.js','guests-rsvp-postsubmit-calendar-v1.js','guests-rsvp-calendar-action-v2.js','guests-rsvp-custom-answers-v1.js','guests-rsvp-children-answers-v1.js','guests-rsvp-v112-wedding-flex.html','guests-rsvp-v114-single-flex.html','guests-rsvp-v105-mobile.html','guests-rsvp-v115-wedding-flex-live.html','guests-rsvp-v116-single-live.html','guests-rsvp-operations-feedback-v1.js','guests-rsvp-share-primary-v1.js','guests-rsvp-share-composer-v2.js','guests-rsvp-plusone-ops-v1.js','guests-rsvp-manual-parity-v1.js',
-'guests-events-v3.html','guests-events-v3.js','guests-events-invite-addon-v2.js','guests-events-share-composer-v1.js','guests-events-group-select-v1.js','guests-events-ui-compact-photo-v1.js','event-invite.html','event-invite-v2.html',
+'guests-events-v3.html','guests-events-v3.js','guests-events-invite-addon-v2.js','guests-events-share-composer-v1.js','guests-events-group-select-v1.js','guests-events-ui-compact-photo-v1.js','guests-seating-v2.js','event-invite.html','event-invite-v2.html',
 'guest-settings.html','access.html'
 ];
 const legacyApis=['/weddly-guests-state','/weddly-rsvp-ensure','/weddly-rsvp-single-v2','/weddly-rsvp','/weddly-personalization','/weddly-event-state','/weddly-event-invite','/weddly-test-access','/weddly-access'];
@@ -81,7 +81,7 @@ const allowedModified=new Set([
   'guests-home-rsvp-status-v1.js','guests-production-ops.js','guests-production-sync.js','guests-production-ui.js','guests-rsvp-design-manage.html','guests-rsvp-essential-live.html',
   'guests-rsvp-form-flex.html','guests-rsvp-form.html','guests-rsvp-form-flow.html','guests-rsvp-operations-live.html','guests-rsvp-operations-v3.html','guests-rsvp-public-clean.html','guests-rsvp-signature-live.html',
   'guests-smart-actions-v1.js','guests-v114-integrated.html','guests-v116-production.html','guests-personalizacion-essential.html','guests-personalizacion-signature-integrated.html',
-  'guests-rsvp-children-public-v1.js','guests-rsvp-plusone-public-v1.js','guests-rsvp-postsubmit-calendar-v1.js','guests-rsvp-calendar-action-v2.js','guests-rsvp-custom-answers-v1.js','guests-rsvp-children-answers-v1.js','guests-rsvp-v112-wedding-flex.html','guests-rsvp-v114-single-flex.html','guests-rsvp-v105-mobile.html','guests-rsvp-v115-wedding-flex-live.html','guests-rsvp-v116-single-live.html','guests-rsvp-services-hotfix-v1.js','guests-rsvp-operations-feedback-v1.js','guests-rsvp-operations-flow-v1.js','guests-rsvp-share-primary-v1.js','guests-rsvp-share-composer-v2.js','guests-rsvp-plusone-ops-v1.js','guests-rsvp-manual-parity-v1.js','guests-invitation-editor-feedback-inner-v1.js','guests-v081-visual-seating.html','guests-custom-lists-v1.js','guests-service-visibility-v1.js','guests-copy-control-v1.js','guests-extra-event-lists-v1.js','guests-events-group-select-v1.js','guests-events-ui-compact-photo-v1.js'
+  'guests-rsvp-children-public-v1.js','guests-rsvp-plusone-public-v1.js','guests-rsvp-postsubmit-calendar-v1.js','guests-rsvp-calendar-action-v2.js','guests-rsvp-custom-answers-v1.js','guests-rsvp-children-answers-v1.js','guests-rsvp-v112-wedding-flex.html','guests-rsvp-v114-single-flex.html','guests-rsvp-v105-mobile.html','guests-rsvp-v115-wedding-flex-live.html','guests-rsvp-v116-single-live.html','guests-rsvp-services-hotfix-v1.js','guests-rsvp-operations-feedback-v1.js','guests-rsvp-operations-flow-v1.js','guests-rsvp-share-primary-v1.js','guests-rsvp-share-composer-v2.js','guests-rsvp-plusone-ops-v1.js','guests-rsvp-manual-parity-v1.js','guests-invitation-editor-feedback-inner-v1.js','guests-v081-visual-seating.html','guests-custom-lists-v1.js','guests-service-visibility-v1.js','guests-copy-control-v1.js','guests-extra-event-lists-v1.js','guests-events-group-select-v1.js','guests-events-ui-compact-photo-v1.js','guests-seating-v2.js','guests.html'
 ]);
 const namedFns=s=>[...new Set([...s.matchAll(/(?:async\s+)?function\s+([A-Za-z_$][\w$]*)\s*\(/g)].map(m=>m[1]))];
 for(const p of sourceFiles){
@@ -96,6 +96,17 @@ for(const p of sourceFiles){
     continue;
   }
   if(!allowedModified.has(p)){const privacyOnly=s=>s.replace(/<meta\s+name=["']robots["']\s+content=["']noindex,nofollow(?:,noarchive)?["']\s*\/?>/gi,'').replace(/>\s+</g,'><');ok(src===dst||privacyOnly(src)===privacyOnly(dst),'unexpected functional modification vs latest ONE source: '+p)}
+  // Public legacy /guest/guests.html must always route to canonical GUEST index, including complete Hoy and settings.
+  else if(p==='guests.html'){
+    ok(dst.includes("new URL('index.html',location.href)"),'legacy guest shortcut points to incomplete shell');
+    ok(!dst.includes("new URL('guests-v116-production.html',location.href)"),'retired shortcut still points to v116');
+  }
+  // GUEST extends ONE's identical seating engine only to record a pseudonymous local device identifier.
+  else if(p==='guests-seating-v2.js'){
+    for(const fn of namedFns(src))ok(namedFns(dst).includes(fn),'original ONE seating function lost: '+fn);
+    ok(dst.includes('weddly_guests_device_id_v1')&&dst.includes('byDevice'),'seat activity device metadata missing');
+    ok(dst.includes('originalSave()'),'core ONE seating save contract altered');
+  }
   // The old invitation -> RSVP -> send editor wizard is excluded from the delivered app.
   else if(p==='guests-rsvp-operations-flow-v1.js'){
     ok(dst.includes('wsdOpsFlow')&&!dst.includes('goDesign')&&!dst.includes('goRsvp'),'legacy editor wizard unexpectedly active');
@@ -103,6 +114,12 @@ for(const p of sourceFiles){
   // Two post-delivery couple routes are intentionally RETIRED, not ported. Their old editor functions must be absent.
   else if(['guests-rsvp-design-manage.html','guests-rsvp-form-flow.html'].includes(p)){
     ok(dst.includes('href="index.html"')&&!/<(?:input|textarea|select)\b/i.test(dst),'retired editor route unexpectedly active: '+p);
+  }
+  // Modern GUEST Hoy replaces the original flat seven-day feed with stable-ID grouped notifications and separate table activity.
+  else if(p==='guests-home-rsvp-status-v1.js'){
+    const names=namedFns(dst);
+    for(const fn of namedFns(src))if(fn!=='recentChanges')ok(names.includes(fn),'source Hoy function lost in '+p+': '+fn);
+    for(const fn of ['entries','activityEntries','groupEntries','readIds','renderAttention','renderRecent','markRecentRead'])ok(names.includes(fn),'smart Hoy functional module missing '+fn);
   }
   // Single final-invitation sender intentionally replaces THREE generic RSVP URL functions.
   else if(p==='guests-rsvp-operations-v3.html'){

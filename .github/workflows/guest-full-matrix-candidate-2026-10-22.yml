@@ -1,0 +1,634 @@
+name: GUEST Full Regression Candidate (33 jobs; isolated, no sale)
+on:
+  push:
+    branches: [guest-finalization-candidate-2026-10-22]
+    paths:
+      - 'guest/**'
+      - 'guest*.html'
+      - '.github/workflows/guest-full-matrix-candidate-2026-10-22.yml'
+  workflow_dispatch:
+concurrency:
+  group: guest-finalization-full-matrix-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: GUEST independence and parity gate
+        run: node guest/qa/guest_independent_regression_test.js
+      - name: Guard VEIL LIGHT common-stage adapter against missing or tampered masters (TEST only)
+        run: |
+          node --check guest/tools/merge_veil_stage.cjs
+          node guest/tests/veil_stage_fail_closed_2026_10_20.test.cjs
+      - name: Catalog commercial preflight (report only; sales remain off)
+        run: node guest/qa/catalog_commercial_go_no_go_2026_10_20.cjs
+      - name: Individual design release regression, archived D03 excluded (no sales)
+        run: node guest/tests/catalog_individual_design_release_gate.test.cjs
+      - name: GUEST Cloudflare preview verifier rejects unsafe redirects and releases (offline)
+        run: |
+          python3 -m py_compile guest/qa/verify_guest_preview_manifest_2026_10_20.py
+          python3 guest/tests/preview_verifier_offline_security_2026_10_20.py
+      - name: GUEST Library ZIP upload integrity gate (offline immutable manifest only)
+        run: |
+          python3 -m py_compile guest/qa/verify_guest_upload_zip.py
+          python3 guest/qa/verify_guest_upload_zip.py --fixture-only --manifest guest/qa-reports/preview16_recovered_manifest_2026-10-20.json
+          python3 guest/tests/upload_zip_verifier_security.test.py
+      - name: Verify original Claude candidate blobs (TEST only)
+        run: node guest/tests/claude_designs_import_integrity_2026_10_20.test.cjs
+      - name: Verify seven extra Claude D10–D16 designs without sales approval
+        run: node guest/tests/claude_d10_d16_integrity_2026_10_20.test.cjs
+      - name: 15 candidate catalog registry cannot sell or confuse two Limoneros
+        run: node guest/tests/catalog_15_candidate_consistency.test.cjs
+      - name: Stage all 13 Claude skin media under 25 MiB (private CI, NEVER deploy)
+        run: node guest/tests/claude_asset_stage_2026_10_20.test.cjs
+      - name: Catalog RSVP config lock (staged source; offline)
+        run: node guest/tests/guest_rsvp_config_lock_contract.test.cjs
+      - name: Catalog invitation authoring permission guard (offline)
+        run: node guest/tests/guest_personalization_config_lock_contract.test.cjs
+      - name: Catalogue questionnaire RSVP first-activation mapping (offline)
+        run: node guest/tests/catalog_questionnaire_rsvp_first_access.test.cjs
+      - name: Catalogue final-delivery-only activation (offline)
+        run: node guest/tests/catalog_license_delivery_gate_contract.test.cjs
+      - name: All 15 candidate design IDs gated TEST-ONLY in backend
+        run: node guest/tests/test_only_15_design_backend_gate.test.cjs
+      - name: Individual-design Stripe amount and tax contract
+        run: node guest/tests/individual_design_checkout_pricing_contract.test.cjs
+
+  catalog-invitation-bridge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Catalog invitation bridge contract
+        run: node guest/qa/catalog_invitation_bridge_test.js
+      - name: Limoneros secured REAL owner TEST E2E protocol (static only)
+        run: node guest/tests/owner_limoneros_full_e2e_contract.test.cjs
+
+  b6-shell-mobile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          echo $! > /tmp/guest-http.pid
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B6.1 shell mobile QA
+        run: node guest/qa/b6_1_shell_mobile_test.js
+
+  b6-today-guests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B6.2 Today and Guests QA
+        run: node guest/qa/b6_2_today_guests_test.js
+
+  b6-invitation-rsvp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B6.3 invitation and RSVP QA
+        run: node guest/qa/b6_3_invitation_rsvp_test.js
+      - name: B6.3a GUEST public RSVP route browser check (stubbed; no cloud)
+        run: node guest/qa/catalog_public_rsvp_browser_test.js
+
+  b6-tables-lists:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B6.4 tables and lists QA
+        run: node guest/qa/b6_4_tables_lists_test.js
+
+  b6-extra-events:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B6.5 extra events QA
+        run: node guest/qa/b6_5_extra_events_test.js
+
+  b6-two-device-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B6.6 two-device sync QA
+        run: node guest/qa/b6_6_two_device_sync_test.js
+
+  b7-mobile-hierarchy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B7.1 mobile hierarchy QA
+        run: node guest/qa/b7_1_mobile_hierarchy_test.js
+
+  b7-hoy-invitados:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B7.2 Hoy + Invitados visual QA
+        run: node guest/qa/b7_2_hoy_invitados_test.js
+
+  b7-invitation-rsvp-visual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B7.3 invitation + RSVP visual QA
+        run: node guest/qa/b7_3_invitation_rsvp_visual_test.js
+
+  b7-tables-lists-visual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B7.4 Mesas and Listados visual QA
+        run: node guest/qa/b7_4_tables_lists_visual_test.js
+
+  b7-extra-events-visual:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/guests-events-v3.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B7.5 Extra Events visual QA
+        run: node guest/qa/b7_5_extra_events_visual_test.js
+
+  b7-global-desktop-accessibility:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B7.6 global desktop/accessibility QA
+        run: node guest/qa/b7_6_global_desktop_accessibility_test.js
+
+  b7-final-visual-seal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B7.7 final visual seal
+        run: node guest/qa/b7_7_final_visual_seal_test.js
+
+  b8-commercial-entry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST commercial flow
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B8.1 commercial entry flow QA
+        run: node guest/qa/b8_1_commercial_entry_flow_test.js
+      - name: GUEST shared final and review mobile E2E (mocked, no Cloud)
+        run: node guest/qa/catalog_public_final_review_browser_test.js
+      - name: GUEST shared questionnaire mobile E2E (mocked, no Cloud)
+        run: node guest/qa/catalog_common_questionnaire_browser_test.cjs
+      - name: GUEST owner Center mobile real renderer and touch flow (mocked API)
+        run: node guest/qa/owner_botanica_closeout_browser_test.cjs
+      - name: GUEST V4.7 mobile Center real cross-origin bridge, TEST and production guard
+        run: node guest/qa/owner_center_bridge_browser_test.cjs
+      # External live-browser parity remains a separate unverified gate: the
+      # Cloudflare CI browser failed to load the nested frozen iframe.
+      # Never equate mock QA with live parity. See GUEST_CLOSEOUT status.
+
+  b8-checkout-return:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST commercial flow
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest-checkout.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B8.2 checkout and return contract QA
+        run: node guest/qa/b8_2_checkout_return_test.js
+
+  b8-order-personalization:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST commercial flow
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest-order.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B8.3 order personalization QA
+        run: node guest/qa/b8_3_order_personalization_test.js
+
+  b8-activation-delivery-access:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest/access.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B8.4 activation delivery access QA
+        run: node guest/qa/b8_4_activation_delivery_access_test.js
+
+  b8-fulfillment-admin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve GUEST fulfillment manager
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/guest-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:4173/guest-orders-admin.html >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/guest-http.log
+          exit 1
+      - name: B8.4 fulfillment admin QA
+        run: node guest/qa/b8_4_fulfillment_admin_test.js
+
+  b8-error-retry-duplicate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B8.5 error retry duplicate QA
+        run: node guest/qa/b8_5_error_retry_duplicate_test.js
+
+  b8-commercial-final-seal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B8.6 commercial final seal
+        run: node guest/qa/b8_6_commercial_final_seal_test.js
+
+  b9-deployment-pwa-isolation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.1 deployment PWA isolation QA
+        run: node guest/qa/b9_1_deployment_pwa_isolation_test.js
+
+  b9-public-release-routes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.2 public release routes QA
+        run: node guest/qa/b9_2_public_release_routes_test.js
+
+  b9-pre-release-hold:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.3 pre-release hold QA
+        run: node guest/qa/b9_3_pre_release_hold_test.js
+
+  b9-surface-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.4 public private surface security QA
+        run: node guest/qa/b9_4_surface_security_test.js
+
+  b9-commercial-identity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.5 independent commercial identity QA
+        run: node guest/qa/b9_5_commercial_identity_test.js
+
+  b9-supabase-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.6 Supabase security isolation QA
+        run: node guest/qa/b9_6_supabase_security_isolation_test.js
+
+  b9-privacy-indexing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.7 privacy indexing QA
+        run: node guest/qa/b9_7_privacy_indexing_test.js
+
+  b9-final-release-preparation-seal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.8 aggregate release preparation seal
+        run: node guest/qa/b9_8_final_release_preparation_seal_test.js
+
+  b9-safe-promotion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: B9.9 safe production promotion QA
+        run: node guest/qa/b9_9_safe_promotion_test.js
+
+  recovered-claude-visual-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runtime for LOCAL recovered skin QA
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Run 13 Claude skin candidates in Chromium without publishing or checkout
+        run: node guest/qa/claude_candidate_13_skins_browser_smoke.cjs
+  full-candidate-static-stage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify complete 15-candidate staging package, Git pins and Pages asset limits without deployment
+        run: node guest/tests/catalog_full_15_candidate_stage.test.cjs
