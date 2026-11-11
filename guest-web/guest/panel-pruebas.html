@@ -182,6 +182,10 @@
     .cb-acts { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .2rem; }
     .cb-acts .btn { flex: 1 1 9rem; }
     .cb-more { margin-top: .2rem; display: flex; gap: 1rem; }
+    .cb-form select, .cb-form textarea { width: 100%; padding: .8rem .9rem; border: 1.5px solid var(--line); border-radius: 10px; background: var(--white); color: var(--ink); font: 400 1.0625rem var(--text); }
+    .cb-form select { min-height: 52px; }
+    .cb-form textarea { min-height: 18rem; line-height: 1.5; resize: vertical; }
+    .cb-hint { margin-top: .5rem; padding: .7rem .8rem; border-radius: 10px; background: var(--envelope-soft); font-size: .9rem !important; line-height: 1.45; }
     .cb-new { margin-top: .75rem; border: 2px solid var(--ink); }
     .cb-msg { white-space: pre-wrap; margin: .6rem 0 .8rem; padding: .8rem; border-radius: 10px; background: var(--envelope-soft); color: var(--ink); font-size: .9375rem; line-height: 1.5; overflow-wrap: anywhere; }
     .box { padding: 1.1rem; border-radius: 12px; background: var(--white); box-shadow: 0 1px 2px rgba(27, 38, 80, .08), 0 14px 30px -24px rgba(27, 38, 80, .5); }
@@ -1637,6 +1641,7 @@ async function renderColabs() {
       <div class="cb-money"><span>Por confirmar ${eur2(p.totals.processing)}</span><span class="${p.totals.confirmed ? 'owed' : ''}">Pendiente ${eur2(p.totals.confirmed)}</span><span>Pagado ${eur2(p.totals.paid)}</span></div>
       <div class="cb-acts"><button class="btn small line" type="button" data-act="msg">Copiar mensaje</button>${p.totals.confirmed ? `<button class="btn small" type="button" data-act="pay">Marcar pagado · ${eur2(p.totals.confirmed)}</button>` : ''}</div>
       <div class="cb-more"><button class="link-btn" type="button" data-act="rotate">Enlace nuevo</button><button class="link-btn" type="button" data-act="toggle">${p.active ? 'Pausar' : 'Reactivar'}</button></div></div>`).join('') : '<div class="box"><p>Aún no hay colaboradores. Da de alta al primero arriba.</p></div>'}</div></section>`;
+  mountOutreach(host, list);
   host.querySelectorAll('[data-mode]').forEach((b) => b.onclick = () => { cbMode = b.dataset.mode; host.querySelectorAll('[data-mode]').forEach((x) => x.setAttribute('aria-pressed', x.dataset.mode === cbMode)); });
   $('cbForm').onsubmit = async (e) => {
     e.preventDefault(); const btn = $('cbSend'); btn.disabled = true; $('cbErr').textContent = '';
@@ -1664,6 +1669,70 @@ async function renderColabs() {
       if (b.dataset.act === 'toggle') { await call(PARTNERS, { action: 'update', slug, active: !p.active }); return renderColabs(); }
     } catch (err) { if (err.message !== 'manager_required') toast('No se ha podido. Prueba otra vez.'); }
   });
+}
+
+/* ---- Crear mensaje para un contacto nuevo (sin IA: plantillas con variables) ---- */
+const slugify = (t) => String(t).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
+const msgState = { type: 'finca', channel: 'email', plural: true, mode: 'pct' };
+function outreachText(f) {
+  const v = (tu, vos) => (f.plural ? vos : tu);
+  const who = f.business || f.name || '';
+  const link = `https://guest.weddlysmartdesign.com/profesionales.html?c=${f.slug}`;
+  const hello = f.plural ? `Hola, equipo de ${who || '…'}:` : `Hola, ${f.name || '…'}:`;
+  const ref = f.ref ? `${f.ref} me comentó que trabajáis con parejas y que podríamos colaborar. ` : '';
+  const refTu = f.ref ? `${f.ref} me comentó que trabajas con parejas y que podríamos colaborar. ` : '';
+  const intro = v(refTu, ref) + 'Soy Pilar, creadora de la marca WeddlySmartDesign.';
+  const product = 'Hacemos invitaciones de boda digitales personalizadas para cada pareja, que se entregan junto a una app para gestionar a los invitados: confirmaciones, plano de mesas, menús y alergias, y listados para catering y transporte. Los dos miembros de la pareja la usan desde su móvil.';
+  const offer = f.mode === 'fixed'
+    ? v('Si te encaja, puedes recomendarla a tus parejas: ellas tienen un 10 % de descuento con tu código y tú recibes 10 € por cada venta, cada mes.', 'Si os encaja, podéis recomendarla a vuestras parejas: ellas tienen un 10 % de descuento con vuestro código y vosotros recibís 10 € por cada venta, cada mes.')
+    : v('Si te encaja, puedes recomendarla a tus parejas: ellas tienen un 10 % de descuento con tu código y tú recibes el 15 % de cada venta, cada mes.', 'Si os encaja, podéis recomendarla a vuestras parejas: ellas tienen un 10 % de descuento con vuestro código y vosotros recibís el 15 % de cada venta, cada mes.');
+  const linkLine = v(`Aquí tienes un ejemplo de invitación y tu enlace personal para colaborar:`, `Aquí tenéis un ejemplo de invitación y vuestro enlace personal para colaborar:`);
+  const close = v('¿Te cuento más?', '¿Os cuento más?');
+  if (f.channel === 'email') {
+    return [`Asunto: Colaboración con ${who || '…'}`, '', hello, '', intro, '', product, '', offer, '', linkLine, link, '', close, '', 'Un saludo,', 'Pilar', 'WeddlySmartDesign'].join('\n');
+  }
+  if (f.channel === 'ig') {
+    return [`${f.plural ? 'Hola' : 'Hola ' + (f.name || '…')} 😊 ${intro}`, '', product, '', offer, '', `${linkLine} ${link}`, '', close].join('\n');
+  }
+  return [`${f.plural ? 'Hola' : 'Hola ' + (f.name || '…')}, ${intro}`, '', 'Hacemos invitaciones de boda digitales personalizadas, con una app para gestionar invitados, mesas, menús y alergias desde el móvil.', '', offer, '', `${linkLine} ${link}`, '', close].join('\n');
+}
+function mountOutreach(host, list) {
+  const box = document.createElement('div');
+  box.className = 'box';
+  box.style.marginTop = '1.25rem';
+  box.innerHTML = `<h3>Crear mensaje para un contacto</h3><p>Para cualquier persona nueva: primero presenta el producto y después ofrece la colaboración con su enlace. Puedes retocar el texto antes de copiarlo. No se envía nada: lo pegas tú.</p>
+    <div class="cb-form">
+      <label for="omName">Nombre de la persona</label><input id="omName" type="text" autocomplete="off">
+      <label for="omBiz">Negocio (opcional)</label><input id="omBiz" type="text" autocomplete="off">
+      <label for="omRef">Quién la recomienda (opcional)</label><input id="omRef" type="text" autocomplete="off">
+      ${list.length ? `<label for="omExisting">¿Ya es colaborador?</label><select id="omExisting"><option value="">No, es un contacto nuevo</option>${list.map((p) => `<option value="${esc(p.slug)}">${esc(p.name)}</option>`).join('')}</select>` : ''}
+      <label>Tipo</label><div class="chips" role="group" aria-label="Tipo">${[['finca', 'Finca'], ['planner', 'Wedding planner'], ['foto', 'Fotógrafo/a'], ['otro', 'Otro']].map(([k, l]) => `<button class="chip" type="button" data-om="type" data-v="${k}">${l}</button>`).join('')}</div>
+      <label>Canal</label><div class="chips" role="group" aria-label="Canal">${[['email', 'Email'], ['ig', 'Instagram'], ['wa', 'WhatsApp']].map(([k, l]) => `<button class="chip" type="button" data-om="channel" data-v="${k}">${l}</button>`).join('')}</div>
+      <label>Tratamiento</label><div class="chips" role="group" aria-label="Tratamiento">${[['1', 'Vosotros (equipo)'], ['0', 'Tú (una persona)']].map(([k, l]) => `<button class="chip" type="button" data-om="plural" data-v="${k}">${l}</button>`).join('')}</div>
+      <label>Comisión</label><div class="chips" role="group" aria-label="Comisión">${[['pct', '15 % de cada venta'], ['fixed', '10 € por venta']].map(([k, l]) => `<button class="chip" type="button" data-om="mode" data-v="${k}">${l}</button>`).join('')}</div>
+      <p class="cb-hint" id="omHint" hidden></p>
+      <label for="omText">Mensaje</label><textarea id="omText"></textarea>
+      <button class="btn wide" id="omCopy" type="button">Copiar mensaje</button>
+    </div>`;
+  const anchor = host.querySelector('#cbNew'); anchor ? anchor.after(box) : host.append(box);
+  const q = (id) => box.querySelector('#' + id);
+  let edited = false;
+  const refresh = () => {
+    box.querySelectorAll('[data-om]').forEach((b) => b.setAttribute('aria-pressed', String(String(b.dataset.om === 'plural' ? (msgState.plural ? '1' : '0') : msgState[b.dataset.om]) === b.dataset.v)));
+    const ex = q('omExisting') && q('omExisting').value;
+    const name = q('omName').value.trim(), biz = q('omBiz').value.trim();
+    const slug = ex || ('dm-' + (slugify(biz || name) || 'contacto'));
+    const hint = q('omHint');
+    hint.hidden = msgState.type !== 'planner';
+    hint.textContent = 'Ojo con las wedding planners: a ellas se les escribe primero con STUDIO. Usa este mensaje solo para recomendación bajo comisión, y revisa antes en Gmail que no les hayas escrito ya.';
+    if (!edited) q('omText').value = outreachText({ ...msgState, name, business: biz, ref: q('omRef').value.trim(), slug });
+  };
+  box.querySelectorAll('[data-om]').forEach((b) => b.onclick = () => { const k = b.dataset.om; msgState[k] = k === 'plural' ? b.dataset.v === '1' : b.dataset.v; edited = false; refresh(); });
+  ['omName', 'omBiz', 'omRef', 'omExisting'].forEach((id) => { const el = q(id); if (el) el.oninput = () => { edited = false; refresh(); }; });
+  q('omExisting') && (q('omExisting').onchange = () => { const p = list.find((x) => x.slug === q('omExisting').value); if (p) { q('omName').value = p.name; } edited = false; refresh(); });
+  q('omText').oninput = () => { edited = true; };
+  q('omCopy').onclick = () => copy(q('omText').value, 'Mensaje copiado');
+  refresh();
 }
 
 /* ---- Navegación ---- */
