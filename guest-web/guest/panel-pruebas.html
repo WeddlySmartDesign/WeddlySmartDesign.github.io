@@ -1673,7 +1673,7 @@ async function renderColabs() {
 
 /* ---- Crear mensaje para un contacto nuevo (sin IA: plantillas con variables) ---- */
 const slugify = (t) => String(t).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
-const msgState = { type: 'finca', channel: 'email', plural: true, mode: 'pct' };
+const msgState = { type: 'finca', channel: 'email', plural: true, mode: 'pct', gift: '1' };
 function outreachText(f) {
   const v = (tu, vos) => (f.plural ? vos : tu);
   const who = f.business || f.name || '';
@@ -1686,15 +1686,20 @@ function outreachText(f) {
   const offer = f.mode === 'fixed'
     ? v('Si te encaja, puedes recomendarla a tus parejas: ellas tienen un 10 % de descuento con tu código y tú recibes 10 € por cada venta, cada mes.', 'Si os encaja, podéis recomendarla a vuestras parejas: ellas tienen un 10 % de descuento con vuestro código y vosotros recibís 10 € por cada venta, cada mes.')
     : v('Si te encaja, puedes recomendarla a tus parejas: ellas tienen un 10 % de descuento con tu código y tú recibes el 15 % de cada venta, cada mes.', 'Si os encaja, podéis recomendarla a vuestras parejas: ellas tienen un 10 % de descuento con vuestro código y vosotros recibís el 15 % de cada venta, cada mes.');
+  const gift = f.gift !== '1' ? '' : (f.type === 'planner'
+    ? v('Me gustaría regalarte una invitación completa para una de tus parejas, para que veas cómo se organizan con ella las confirmaciones, las mesas y los listados.', 'Me gustaría regalaros una invitación completa para una de vuestras parejas, para que veáis cómo se organizan con ella las confirmaciones, las mesas y los listados.')
+    : f.type === 'foto'
+      ? v('Me gustaría regalarte una invitación completa para una de tus parejas. Lleva una galería con sus fotos, así que las de la preboda acaban en el móvil de cada invitado.', 'Me gustaría regalaros una invitación completa para una de vuestras parejas. Lleva una galería con sus fotos, así que las de la preboda acaban en el móvil de cada invitado.')
+      : v('Me gustaría regalarte una invitación completa para una pareja que celebre contigo, para que veas cómo te llegan después los listados de mesas, menús y alergias.', 'Me gustaría regalaros una invitación completa para una pareja que celebre con vosotros, para que veáis cómo os llegan después los listados de mesas, menús y alergias.'));
   const linkLine = v(`Aquí tienes un ejemplo de invitación y tu enlace personal para colaborar:`, `Aquí tenéis un ejemplo de invitación y vuestro enlace personal para colaborar:`);
   const close = v('¿Te cuento más?', '¿Os cuento más?');
   if (f.channel === 'email') {
-    return [`Asunto: Colaboración con ${who || '…'}`, '', hello, '', intro, '', product, '', offer, '', linkLine, link, '', close, '', 'Un saludo,', 'Pilar', 'WeddlySmartDesign'].join('\n');
+    return [`Asunto: Colaboración con ${who || '…'}`, '', hello, '', intro, '', product, '', ...(gift ? [gift, ''] : []), offer, '', linkLine, link, '', close, '', 'Un saludo,', 'Pilar', 'WeddlySmartDesign'].join('\n');
   }
   if (f.channel === 'ig') {
-    return [`${f.plural ? 'Hola' : 'Hola ' + (f.name || '…')} 😊 ${intro}`, '', product, '', offer, '', `${linkLine} ${link}`, '', close].join('\n');
+    return [`${f.plural ? 'Hola' : 'Hola ' + (f.name || '…')} 😊 ${intro}`, '', product, '', ...(gift ? [gift, ''] : []), offer, '', `${linkLine} ${link}`, '', close].join('\n');
   }
-  return [`${f.plural ? 'Hola' : 'Hola ' + (f.name || '…')}, ${intro}`, '', 'Hacemos invitaciones de boda digitales personalizadas, con una app para gestionar invitados, mesas, menús y alergias desde el móvil.', '', offer, '', `${linkLine} ${link}`, '', close].join('\n');
+  return [`${f.plural ? 'Hola' : 'Hola ' + (f.name || '…')}, ${intro}`, '', 'Hacemos invitaciones de boda digitales personalizadas, con una app para gestionar invitados, mesas, menús y alergias desde el móvil.', '', ...(gift ? [gift, ''] : []), offer, '', `${linkLine} ${link}`, '', close].join('\n');
 }
 function mountOutreach(host, list) {
   const box = document.createElement('div');
@@ -1710,6 +1715,7 @@ function mountOutreach(host, list) {
       <label>Canal</label><div class="chips" role="group" aria-label="Canal">${[['email', 'Email'], ['ig', 'Instagram'], ['wa', 'WhatsApp']].map(([k, l]) => `<button class="chip" type="button" data-om="channel" data-v="${k}">${l}</button>`).join('')}</div>
       <label>Tratamiento</label><div class="chips" role="group" aria-label="Tratamiento">${[['1', 'Vosotros (equipo)'], ['0', 'Tú (una persona)']].map(([k, l]) => `<button class="chip" type="button" data-om="plural" data-v="${k}">${l}</button>`).join('')}</div>
       <label>Comisión</label><div class="chips" role="group" aria-label="Comisión">${[['pct', '15 % de cada venta'], ['fixed', '10 € por venta']].map(([k, l]) => `<button class="chip" type="button" data-om="mode" data-v="${k}">${l}</button>`).join('')}</div>
+      <label>Regalo</label><div class="chips" role="group" aria-label="Regalo">${[['1', 'Regalar una invitación'], ['0', 'Sin regalo']].map(([k, l]) => `<button class="chip" type="button" data-om="gift" data-v="${k}">${l}</button>`).join('')}</div>
       <p class="cb-hint" id="omHint" hidden></p>
       <label for="omText">Mensaje</label><textarea id="omText"></textarea>
       <button class="btn wide" id="omCopy" type="button">Copiar mensaje</button>
