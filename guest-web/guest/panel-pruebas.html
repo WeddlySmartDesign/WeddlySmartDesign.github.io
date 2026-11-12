@@ -121,6 +121,13 @@
     .tab .dot { position: absolute; top: 4px; left: calc(50% + 8px); min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--postmark); color: var(--white); font: 700 .6875rem/18px var(--text); }
 
     /* A medida */
+    .lv { margin: 0 0 1rem; }
+    .lv summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
+    .lv h4 { margin: 1rem 0 .3rem; font-size: .9375rem; }
+    .lv .tier { padding: .75rem .85rem; border-radius: 10px; background: var(--wait-soft); margin-top: .5rem; }
+    .lv .tier b { font-size: 1.0625rem; }
+    .lv .tier p { margin: .25rem 0 0; }
+    .lv .no { color: var(--postmark); font-weight: 600; }
     .brief { display: grid; gap: .85rem; }
     .brief dl { margin: 0; display: grid; gap: .7rem; }
     .brief dt { font: 700 .75rem/1 var(--mono); color: var(--ink-soft); }
@@ -1215,6 +1222,36 @@ const SCOPE = {
   unsure: ['Lee la idea y decide el nivel que encaja.', 'Si cabe en adaptar un diseño, presupuesta 120 €; si piden portada propia, 180 €; si es todo nuevo, 250 € o más.']
 };
 let customs = [], rawCustoms = [], customsCfg = { rounds: 2, extraCents: 2000 };
+// Tarjeta fija de la pestaña A medida: qué incluye cada nivel y cuál aplicar.
+function levelsCard() {
+  const E = (c) => eur(c);
+  return `<details class="box lv"><summary>Qué incluye cada nivel y cuál aplicar</summary>
+    <div class="tier"><b>Adaptar un diseño · desde ${E(12000)}</b><p>Un diseño del catálogo con otros colores, tipografías y un detalle propio (monograma, icono, frase). Mismo estilo y mismas animaciones. Unas 2 h · primera propuesta en 4 días.</p><p class="no">No incluye: ilustración nueva, animación nueva ni secciones nuevas.</p></div>
+    <div class="tier"><b>Portada ilustrada · desde ${E(18000)}</b><p>Lo anterior + una portada ilustrada nueva sobre un diseño que ya existe (incluye adaptar los colores al resto). La apertura y el resto no cambian. Unas 4 h · primera propuesta en 7 días.</p><p class="no">No incluye: cambiar la apertura o el cierre, ni más de una ilustración.</p></div>
+    <div class="tier"><b>Diseño nuevo · desde ${E(25000)}</b><p>Portada, apertura, secciones y cierre nuevos. 6–10 h o más · primera propuesta en 14 días. Sube de 250 € si piden animaciones complejas, varias ilustraciones o otro idioma.</p></div>
+    <h4>Cómo decidir</h4>
+    <ul class="guide">
+      <li>Cambia solo el contenido o el aspecto (colores, letras, un nombre, un lugar) y el dibujo se queda: <b>120 €</b>.</li>
+      <li>Hay que dibujar algo nuevo en la portada: <b>180 €</b>.</li>
+      <li>Hay que cambiar la estructura, la apertura, el cierre o varias ilustraciones: <b>250 € o más</b>.</li>
+      <li>Si dudas entre dos niveles, presupuesta el de arriba: es más fácil regalar algo que cobrarlo después.</li>
+      <li><b>Ejemplo, el mapa:</b> poner su lugar real en el diseño «Mapa» con el mismo estilo (otro nombre, otro punto, otras calles ya dibujadas) = 120 €. Redibujar el mapa de su iglesia y su entorno = 180 €.</li>
+    </ul>
+    <h4>Lo que va en todos los niveles</h4>
+    <ul class="guide">
+      <li>${customsCfg.rounds} rondas de cambios incluidas. Cada ronda extra, ${E(customsCfg.extraCents)}, pagada con enlace antes de hacerla.</li>
+      <li>Pago: 50 % al aceptar y 50 % al aprobar el diseño. El trabajo empieza al cobrar la señal.</li>
+      <li>El presupuesto vale 30 días. Lo que no estaba presupuestado se cobra aparte antes de hacerlo.</li>
+      <li>Incluye la app GUEST. Tras aprobar y entregar, el diseño ya no se cambia.</li>
+    </ul>
+    <h4>Si ya tienen una invitación de catálogo</h4>
+    <ul class="guide">
+      <li>Pasar de catálogo a a medida: se descuenta lo ya pagado. Con el catálogo a ${E(5990)}, un nivel de 120 € les queda en <b>${E(12000 - 5990)}</b> más; uno de 180 €, en <b>${E(18000 - 5990)}</b>.</li>
+      <li>Si el catálogo fue un regalo o código (pagó 0 €), el precio es el del nivel completo; decide tú si les haces un descuento.</li>
+      <li>Se conservan sus datos, fotos y acceso a GUEST.</li>
+    </ul>
+  </details>`;
+}
 // Algo que no estaba en el presupuesto: importe y concepto; les llega el enlace de pago con su factura.
 function chargeBox(r) {
   const ex = r.extras || [], pending = ex.some((x) => !x.paidAt && !x.cancelledAt);
@@ -1245,9 +1282,9 @@ document.addEventListener('click', (e) => { const c = e.target.closest('.card[da
 function renderCustom() {
   const mine = customs.filter((r) => CSTATUS[r.status]?.who === 'you'), wait = customs.filter((r) => CSTATUS[r.status]?.who === 'them'), done = customs.filter((r) => CSTATUS[r.status]?.who === 'done');
   const sec = (t, l, flat) => l.length ? `<section class="sec"><h3><b>${l.length}</b> ${t}</h3><div class="cards">${l.map(ccard).join('')}</div></section>` : '';
-  $('custom').innerHTML = customs.length ? `<div class="hello"><strong>${mine.length ? (mine.length === 1 ? 'Tienes 1 a medida.' : `Tienes ${mine.length} a medida.`) : 'A medida, al día.'}</strong><span>Las parejas las piden desde la web. Tú solo pones el precio y le das al botón.</span></div>
+  $('custom').innerHTML = levelsCard() + (customs.length ? `<div class="hello"><strong>${mine.length ? (mine.length === 1 ? 'Tienes 1 a medida.' : `Tienes ${mine.length} a medida.`) : 'A medida, al día.'}</strong><span>Las parejas las piden desde la web. Tú solo pones el precio y le das al botón.</span></div>
     ${sec('te tocan', mine)}${sec('esperando a la pareja', wait)}${sec('terminadas', done)}`
-    : '<div class="calm"><b>Aún no hay solicitudes</b>Cuando una pareja pida un diseño a medida desde la web, te llega un email y aparece aquí ordenado.</div>';
+    : '<div class="calm"><b>Aún no hay solicitudes</b>Cuando una pareja pida un diseño a medida desde la web, te llega un email y aparece aquí ordenado.</div>');
 }
 async function openCustom(id) {
   showView('order'); $('back').hidden = false; $('dock').hidden = true;
