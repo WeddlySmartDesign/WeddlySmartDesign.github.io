@@ -31,7 +31,7 @@ function patch(){
     const safeLabel=String(label).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
     const meta=row.querySelector('.guestMeta');if(meta&&!meta.dataset.wsdPlus){meta.dataset.wsdPlus='1';meta.insertAdjacentHTML('afterbegin',`<span style="display:block;font-weight:750;color:var(--dark);margin-bottom:2px">${safeLabel}</span>`)}
     const assignment=row.querySelector('.assignment');
-    if(assignment&&assignment.dataset.wsdPlusLabel!==label){assignment.dataset.wsdPlusLabel=label;assignment.innerHTML=`<div class="guestMeta">${safeLabel}</div>`}
+    const seat=g.table?String(g.table).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])):'Sin mesa';if(assignment&&assignment.dataset.wsdPlusLabel!==label+'|'+seat){assignment.dataset.wsdPlusLabel=label+'|'+seat;assignment.innerHTML=`<div class="guestMeta">${seat}</div>`}
   }
 }
 let scheduled=false;

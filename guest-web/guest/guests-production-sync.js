@@ -4,7 +4,7 @@
   G.KEY='weddly_guests_qa_v67';
   G.META='weddly_guests_sync_meta_v2';
   G.API='https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/guest-state';
-  G.APP='guests-v114-integrated.html?v=123-sellos';
+  G.APP='guests-v114-integrated.html?v=125-unit';
   G.f=document.getElementById('app');G.boot=document.getElementById('boot');G.msg=document.getElementById('msg');G.retry=document.getElementById('retry');G.note=document.getElementById('notice');
   G.token='';G.ver=0;G.last='';G.pushing=false;G.remote=false;G.identity='';G.identitySyncing=false;
   const MISSING=Symbol('missing'),OUTER_SET=Storage.prototype.setItem;
@@ -64,7 +64,7 @@
   G.notice=t=>{if(!G.note)return;G.note.textContent=t;G.note.style.display='block'};G.clearNotice=()=>{if(G.note)G.note.style.display='none'};
   async function api(method,body){const r=await fetch(G.API,{method,headers:{'x-weddly-token':G.token,...(body?{'content-type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,cache:'no-store'}),x=await r.json().catch(()=>({}));return{r,x}}
   function reloadCore(reason='sync'){if(G.dormant)return;G.adopting=Date.now();G.f.src=G.APP+'&'+reason+'='+Date.now();G.f.style.display='block';G.boot.style.display='none';window.dispatchEvent(new Event('guests-prod-open'))}
-  function open(){if(G.dormant)return;G.adopting=Date.now();G.f.src=G.APP;G.f.style.display='block';G.boot.style.display='none';window.dispatchEvent(new Event('guests-prod-open'))}
+  function open(){if(G.dormant)return;G.booted=true;G.adopting=Date.now();G.f.src=G.APP;G.f.style.display='block';G.boot.style.display='none';window.dispatchEvent(new Event('guests-prod-open'))}
   function cleanMeta(state){const raw=JSON.stringify(state||{});writeMeta({dirty:false,version:G.ver,lastHash:hash(raw),syncedAt:new Date().toISOString()})}
   function markDirty(raw=read()){
     if(!raw||raw===G.last)return;
@@ -130,10 +130,11 @@
     const state=mergeSharedIdentity(parse(read()));if(!state)return false;G.identitySyncing=true;writeRaw(state);markDirty(JSON.stringify(state));G.identity=identityOf(state);reloadCore('identity');queue();setTimeout(()=>{G.identitySyncing=false},150);return true;
   }
   async function push(){
-    if(G.pushing||!G.token)return;let state=mergeSharedIdentity(parse(read()));if(!state)return;if(wipes(state,parse(G.last))){writeRaw(parse(G.last));cleanMeta(parse(G.last));reloadCore('restore');return}const raw=JSON.stringify(state);if(raw===G.last){cleanMeta(state);return}markDirty(raw);writeRaw(state);G.pushing=true;G.notice('Guardando…');
+    if(G.pushing||!G.token||!G.booted)return;let state=mergeSharedIdentity(parse(read()));if(!state)return;if(wipes(state,parse(G.last))){writeRaw(parse(G.last));cleanMeta(parse(G.last));reloadCore('restore');return}const raw=JSON.stringify(state);if(raw===G.last){cleanMeta(state);return}markDirty(raw);writeRaw(state);G.pushing=true;G.notice('Guardando…');
     try{
       let a=await api('PUT',{version:G.ver,state});
       if(a.r.status===409&&a.x.server?.state){
+        if(read()!==raw){G.pushing=false;queue();return}
         const server=mergeSharedIdentity(structuredClone(a.x.server.state)),m=readMeta(),conflicts=[],base=m.base&&typeof m.base==='object'?m.base:(parse(G.last)||server),merged=wipes(state,server)?structuredClone(server):merge3(base,state,server,'',conflicts);
         rememberConflict(server,conflicts);writeRaw(merged);G.ver=+a.x.server.version||G.ver;
         const p=await putMerged(merged,G.ver,server,conflicts);if(!p.r.ok||!p.x.ok)throw 0;
