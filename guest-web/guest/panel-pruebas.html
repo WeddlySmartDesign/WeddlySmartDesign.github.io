@@ -1216,26 +1216,28 @@ const CSTATUS = {
 };
 // Lo que entra en cada nivel, para presupuestar sin dudar.
 const SCOPE = {
-  adapt: ['Partes de un diseño del catálogo.', 'Cambias colores, tipografías y un detalle (un icono, un monograma, una frase).', 'No incluye ilustración nueva ni animaciones nuevas.', 'Unas 2 h de trabajo.'],
-  cover: ['Un diseño del catálogo con una portada ilustrada nueva.', 'Incluye la ilustración y adaptar los colores al resto.', 'El resto de la invitación y la apertura no cambian.', 'Unas 4 h de trabajo.'],
+  adapt: ['Portada nueva sobre un diseño que ya existe (ilustración o composición nueva).', 'La apertura y el cierre se quedan como están.', 'Colores, letras y textos no cuentan: eso va en los cambios del catálogo.', 'Unas 4 h de trabajo.'],
+  cover: ['Portada nueva y cierre nuevo a juego sobre un diseño que ya existe.', 'La apertura y el resto no cambian.', 'Unas 6 h de trabajo.'],
   new: ['Diseño nuevo desde cero: portada, apertura, secciones y cierre.', 'Precio según lo que pidan: 250 € es el mínimo.', 'Cuenta 6–10 h o más: sube el precio si piden animaciones complejas, varias ilustraciones o bilingüe.'],
-  unsure: ['Lee la idea y decide el nivel que encaja.', 'Si cabe en adaptar un diseño, presupuesta 120 €; si piden portada propia, 180 €; si es todo nuevo, 250 € o más.']
+  unsure: ['Lee la idea y decide el nivel que encaja.', 'Si es solo portada, presupuesta 120 €; si es portada y cierre, 180 €; si es todo nuevo, 250 € o más.']
 };
 let customs = [], rawCustoms = [], customsCfg = { rounds: 2, extraCents: 2000 };
 // Tarjeta fija de la pestaña A medida: qué incluye cada nivel y cuál aplicar.
 function levelsCard() {
   const E = (c) => eur(c);
   return `<details class="box lv"><summary>Qué incluye cada nivel y cuál aplicar</summary>
-    <div class="tier"><b>Adaptar un diseño · desde ${E(12000)}</b><p>Un diseño del catálogo con otros colores, tipografías y un detalle propio (monograma, icono, frase). Mismo estilo y mismas animaciones. Unas 2 h · primera propuesta en 4 días.</p><p class="no">No incluye: ilustración nueva, animación nueva ni secciones nuevas.</p></div>
-    <div class="tier"><b>Portada ilustrada · desde ${E(18000)}</b><p>Lo anterior + una portada ilustrada nueva sobre un diseño que ya existe (incluye adaptar los colores al resto). La apertura y el resto no cambian. Unas 4 h · primera propuesta en 7 días.</p><p class="no">No incluye: cambiar la apertura o el cierre, ni más de una ilustración.</p></div>
-    <div class="tier"><b>Diseño nuevo · desde ${E(25000)}</b><p>Portada, apertura, secciones y cierre nuevos. 6–10 h o más · primera propuesta en 14 días. Sube de 250 € si piden animaciones complejas, varias ilustraciones o otro idioma.</p></div>
+    <div class="tier"><b>Catálogo · incluido</b><p>Textos, fotos, colores y tipo de letra. Entra en las rondas de cambios del catálogo y no se cobra. Si no se lee bien en el móvil, también se ajusta gratis.</p></div>
+    <div class="tier"><b>Portada nueva · ${E(12000)}</b><p>Una ilustración o portada nueva sobre un diseño que ya existe. La apertura y el cierre se quedan como están. Unas 4 h · primera propuesta en 4 días.</p></div>
+    <div class="tier"><b>Portada y cierre nuevos · ${E(18000)}</b><p>Lo anterior más el cierre nuevo a juego. La apertura y el resto no cambian. Unas 6 h · primera propuesta en 7 días.</p></div>
+    <div class="tier"><b>Diseño nuevo · desde ${E(25000)}</b><p>Portada, apertura, secciones y cierre nuevos. 6–10 h o más · primera propuesta en 14 días. Sube de 250 € si piden animaciones complejas, varias ilustraciones u otro idioma.</p></div>
     <h4>Cómo decidir</h4>
     <ul class="guide">
-      <li>Cambia solo el contenido o el aspecto (colores, letras, un nombre, un lugar) y el dibujo se queda: <b>120 €</b>.</li>
-      <li>Hay que dibujar algo nuevo en la portada: <b>180 €</b>.</li>
-      <li>Hay que cambiar la estructura, la apertura, el cierre o varias ilustraciones: <b>250 € o más</b>.</li>
+      <li>Solo cambian textos, fotos, color o letra: es catálogo, sin cobrar.</li>
+      <li>Hay que dibujar una portada nueva: <b>120 €</b>.</li>
+      <li>Hay que cambiar también el cierre: <b>180 €</b>.</li>
+      <li>Hay que cambiar la apertura, las secciones o hacer varias ilustraciones: <b>250 € o más</b>.</li>
       <li>Si dudas entre dos niveles, presupuesta el de arriba: es más fácil regalar algo que cobrarlo después.</li>
-      <li><b>Ejemplo, el mapa:</b> poner su lugar real en el diseño «Mapa» con el mismo estilo (otro nombre, otro punto, otras calles ya dibujadas) = 120 €. Redibujar el mapa de su iglesia y su entorno = 180 €.</li>
+      <li><b>Ejemplo, Rumbo con el mapa de su iglesia:</b> el mapa es la portada y el cierre es una brújula sin mapa, así que es portada nueva = 120 €. Es una ilustración inspirada en su lugar, no un plano exacto: dilo en el presupuesto.</li>
     </ul>
     <h4>Lo que va en todos los niveles</h4>
     <ul class="guide">
@@ -1246,8 +1248,8 @@ function levelsCard() {
     </ul>
     <h4>Si ya tienen una invitación de catálogo</h4>
     <ul class="guide">
-      <li>Pasar de catálogo a a medida: se descuenta lo ya pagado. Con el catálogo a ${E(5990)}, un nivel de 120 € les queda en <b>${E(12000 - 5990)}</b> más; uno de 180 €, en <b>${E(18000 - 5990)}</b>.</li>
-      <li>Si el catálogo fue un regalo o código (pagó 0 €), el precio es el del nivel completo; decide tú si les haces un descuento.</li>
+      <li>Si la pagaron (${E(5990)}), se descuenta: portada nueva les queda en <b>${E(12000 - 5990)}</b> más; portada y cierre, en <b>${E(18000 - 5990)}</b>.</li>
+      <li>Si fue un regalo o un código (pagaron 0 €), el precio es el del nivel completo; decide tú si haces algún descuento.</li>
       <li>Se conservan sus datos, fotos y acceso a GUEST.</li>
     </ul>
   </details>`;
