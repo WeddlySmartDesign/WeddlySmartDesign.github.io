@@ -1,0 +1,42 @@
+name: GUEST Public Link Smoke — Read Only
+on:
+  push:
+    branches: [guest-finalization-candidate-2026-10-22]
+    paths:
+      - '.github/workflows/guest-public-link-smoke-2026-10-22.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check immutable and branch candidate routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          for prefix in \
+            'https://b9fa74ec.guest-weddlysmartdesign.pages.dev' \
+            'https://guest-finalization-candidate.guest-weddlysmartdesign.pages.dev'; do
+            echo "Checking GUEST candidate route: ${prefix}/guest/index.html"
+            curl --fail --location --silent --show-error --retry 2 --max-time 15 \
+              --output /tmp/guest-page.html --write-out 'HTTP %{http_code}; URL %{url_effective}; bytes %{size_download}\n' \
+              "${prefix}/guest/index.html"
+            if ! grep -q 'id="app"' /tmp/guest-page.html || ! grep -q 'guests-access-layer.js' /tmp/guest-page.html; then
+              echo 'ERROR candidate URL serves a branded placeholder instead of real app'; head -c 877 /tmp/guest-page.html; echo; exit 1
+            fi
+            grep -q 'guest' /tmp/guest-page.html
+            echo 'PASS GUEST candidate page HTML served'
+          done
+      - name: Check stable production URL without making changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 2 --max-time 15 \
+             --output /tmp/guest-production.html --write-out 'HTTP %{http_code}; URL %{url_effective}; bytes %{size_download}\n' \
+             'https://guest-weddlysmartdesign.pages.dev/guest/index.html'
+          if ! grep -q 'id="app"' /tmp/guest-production.html || ! grep -q 'guests-access-layer.js' /tmp/guest-production.html; then
+            echo 'ERROR stable URL serves a branded placeholder instead of real app'; head -c 877 /tmp/guest-production.html; echo; exit 1
+          fi
+          echo 'PASS stable GUEST URL serves an app shell; not proof of latest candidate or license'

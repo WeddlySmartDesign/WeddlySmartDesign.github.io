@@ -62,12 +62,12 @@ async function run(){
  const recent=await core.locator('#wsdRecentChanges').innerText();
  ok(recent.includes('Ana López')&&/Ahora asiste|Ha respondido/.test(recent),'recent RSVP attendance change missing');
  ok(recent.includes('Diana Sol')&&recent.includes('Canción'),'custom-question recent change missing');
- ok(recent.includes('Carlos Ruiz')&&recent.includes('Mesa 1')&&recent.includes('Mesa 2'),'recent table move missing');
+ ok(recent.includes('Carlos Ruiz')&&recent.includes('Mesa 1')&&recent.includes('Mesa 2'),'table activity missing');
  ok(await core.locator('#wsdMarkRecentRead').isVisible(),'mark recent changes read missing');
  await core.locator('#wsdMarkRecentRead').click();
- await core.waitForFunction(()=>!document.getElementById('wsdRecentChanges'));
- const readAt=await page.evaluate(()=>JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'{}').meta?.todayRecentChangesReadAt||0);
- ok(readAt>0,'recent changes read timestamp not persisted');
+ await core.waitForFunction(()=>!document.getElementById('wsdMarkRecentRead'));
+ const readIds=await page.evaluate(()=>JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'{}').meta?.hoyReadNotificationIdsV1||{});
+ ok(Object.keys(readIds).length>=2,'stable notification read IDs not persisted');
 
  // Invitados: create group/subgroup, people list, edit and decline behavior.
  await core.locator('#nav button[data-go="invitados"]').click();

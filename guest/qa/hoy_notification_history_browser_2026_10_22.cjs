@@ -1,0 +1,42 @@
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+const BASE=process.env.GUEST_QA_BASE||'http://127.0.0.1:4173',TOKEN='h'.repeat(64),now=Date.now(),ts=ms=>new Date(now-ms).toISOString();
+let state={meta:{couple:['Clara','Mateo'],weddingDate:'2027-06-12',todayRecentChangesReadAt:0,todaySeatChanges:[{name:'María Ruiz',from:'Mesa 1',to:'Mesa 2',ts:now-60000}]},guests:{g1:{name:'Ana Moreno',group:'Familia Clara',rsvp:'pending',meal:'',mealRequired:true,table:'Mesa 1',invitationRecipientId:'g1',invitationUnitId:'u1'},g2:{name:'María Ruiz',group:'Familia Clara',rsvp:'confirmed',meal:'Vegetariano',mealRequired:true,table:'Mesa 2'}},tables:{t1:{name:'Mesa 1',cap:6},t2:{name:'Mesa 2',cap:6}}};
+const subms=Array.from({length:7},(_,i)=>({id:'s'+i,form_id:'form1',guest_key:'g1',name:'Ana Moreno',attend:i%2===0,meal:i%2===0?'Vegetariano':'',client_submission_id:'c'+i,payload:{custom_answers:{song:'Canción '+i}},received_at:ts((i+2)*100000)}));
+const form={id:'form1',public_token:'r'.repeat(48),config:{customQuestions:[{id:'song',label:'Canción',type:'text'}],questions:{meal:true}}};
+async function run(){
+ const browser=await chromium.launch({headless:true});
+ const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+ const page=await ctx.newPage(),errs=[];page.on('pageerror',e=>errs.push(e.message));
+ await page.route('https://dnjsxequwgtyyauuofxj.supabase.co/functions/v1/**',async route=>{
+  const url=new URL(route.request().url()),slug=url.pathname.split('/').pop();let x={ok:true},body={};try{body=route.request().postDataJSON()||{}}catch{}
+  if(slug==='guest-state'){if(route.request().method()==='GET')x={ok:true,state,version:1};else{x={ok:true,state:body.state||state,version:2};if(body.state)state=body.state}}
+  else if(slug==='guest-rsvp'){x={ok:true,forms:[form],submissions:subms,contacts:[],delivery:[]}}
+  else if(slug==='guest-license-access')x={ok:true,role:'primary',partnerJoined:false};
+  else if(slug==='guest-access-check')x={ok:true,product:'guests'};
+  else if(slug==='guest-event-state')x={ok:true,state:{events:{e1:{id:'e1',enabled:true,name:'Preboda'}}},version:1};
+  else if(slug==='guest-event-invite')x={ok:true,recipients:[{recipient_key:'unit_2',members:[{id:'g2',name:'María Ruiz'}],response:{g2:'yes'},responded_at:ts(30000)}]};
+  await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(x)});
+ });
+ try{
+  await page.goto(BASE+'/guest/index.html?access='+TOKEN+'#hoy',{waitUntil:'domcontentloaded'});
+  let core;
+  for(let i=0;i<100;i++){core=page.frames().find(f=>/guests-v114-integrated\.html/.test(f.url()));if(core)break;await page.waitForTimeout(100)}
+  assert.ok(core,'full original guest core loaded');
+  await core.waitForSelector('#wsdRecentChanges',{timeout:15000});
+  const panel=core.locator('#wsdRecentChanges'),title=await panel.innerText();
+  assert.match(title,/Novedades/i);
+  const count=await panel.locator('.pill').first().innerText();
+  assert.match(count,/8 sin leer/,'seven RSVP changes and one preboda response are unread (seat move is activity)');
+  assert.equal(await panel.locator('.row').count(),4,'bulk RSVP is one summary card, with separate event and activity');
+  await panel.getByRole('button',{name:/Ver 7 respuestas/}).click();
+  assert.ok((await panel.locator('.row').count())>=10,'expanded bulk RSVP must reveal individual answers');
+  assert.match(await panel.innerText(),/Preboda/,'extra-event response missing from Hoy');
+  await panel.locator('#wsdMarkRecentRead').click();
+  await core.waitForFunction(()=>!document.getElementById('wsdMarkRecentRead'),{timeout:10000});
+  assert.ok(Object.keys(await page.evaluate(()=>JSON.parse(localStorage.getItem('weddly_guests_qa_v67')||'{}').meta.hoyReadNotificationIdsV1||{})).length===8,'all eight unread event IDs are marked read');
+  assert.deepEqual(errs,[],'runtime errors');
+  console.log('GUEST Hoy notification feed PASS: real RSVP + seating history, expand, read');
+ }finally{await ctx.close();await browser.close()}
+}
+run().catch(e=>{console.error('GUEST Hoy notification feed FAIL',e.stack||e);process.exit(1)});

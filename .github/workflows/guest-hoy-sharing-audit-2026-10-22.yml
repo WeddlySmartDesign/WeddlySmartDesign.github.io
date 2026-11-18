@@ -1,0 +1,50 @@
+name: GUEST Hoy + Sharing Audit (isolated)
+on:
+  push:
+    branches: [guest-hoy-sharing-audit-2026-10-22]
+    paths:
+      - 'guest/guests-home-rsvp-status-v1.js'
+      - 'guest/guest-settings.html'
+      - 'guest/guest-visual-premium-v1.js'
+      - 'guest/qa/theme_premium_browser_2026_10_22.cjs'
+      - 'guest/qa/hoy_notification_history_browser_2026_10_22.cjs'
+      - 'guest/qa/hoy_sharing_settings_browser_2026_10_22.cjs'
+      - '.github/workflows/guest-hoy-sharing-audit-2026-10-22.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test-hoy-and-sharing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check syntax for targeted source and browser tests
+        run: |
+          node --check guest/guests-home-rsvp-status-v1.js
+          node --check guest/guest-visual-premium-v1.js
+          node --check guest/qa/theme_premium_browser_2026_10_22.cjs
+          node --check guest/qa/hoy_notification_history_browser_2026_10_22.cjs
+          node --check guest/qa/hoy_sharing_settings_browser_2026_10_22.cjs
+      - name: Install isolated Chromium test tools
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Serve isolated source (no checkout, no payments)
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/guest-audit-http.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/guest/index.html >/dev/null && exit 0; sleep 1; done
+          exit 1
+      - name: Baseline Hoy and Invitados in Chromium
+        run: node guest/qa/b6_2_today_guests_test.js
+      - name: Visual Hoy in 320, 390 and 430 pixels
+        run: node guest/qa/b7_2_hoy_invitados_test.js
+      - name: Multi-submission notification inbox and read state
+        run: node guest/qa/hoy_notification_history_browser_2026_10_22.cjs
+      - name: Partner-share visibility and role-security states
+        run: node guest/qa/hoy_sharing_settings_browser_2026_10_22.cjs
+      - name: Premium theme change persists across Ajustes
+        run: node guest/qa/theme_premium_browser_2026_10_22.cjs

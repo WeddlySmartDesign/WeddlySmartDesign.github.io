@@ -1,0 +1,25 @@
+name: GUEST Precommercial Gate — Test Only
+on:
+  push:
+    branches: [guest-finalization-candidate-2026-10-22]
+    paths:
+      - 'guest/**'
+      - '.github/workflows/guest-finalization-commercial-readiness-2026-10-22.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  report-and-package-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify no GUEST access before paid invitation delivery
+        run: node guest/tests/catalog_license_delivery_gate_contract.test.cjs
+      - name: Report commercial blockers truthfully (NO GO is not a CI failure)
+        run: node guest/qa/catalog_commercial_go_no_go_2026_10_20.cjs | tee /tmp/guest-commercial-no-go.json
+      - name: Verify all 15 pinned design stage assets without upload
+        run: node guest/tests/catalog_full_15_candidate_stage.test.cjs
