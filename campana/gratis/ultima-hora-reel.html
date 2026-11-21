@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Reel ¡Última hora! gratis</title>
+<link rel="stylesheet" href="../../guest-web/css/fonts.css">
+<style>
+:root{--blush:#f0c4bc;--ink:#1b2650;--soft:#4a5480;--red:#b3263a;--paper:#fbf6ee}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--blush)}
+.stage{position:relative;width:1080px;height:1920px;background:radial-gradient(900px 700px at 50% 45%,#f6d3cc,var(--blush));overflow:hidden}
+.abs{position:absolute;left:0;right:0;text-align:center;will-change:transform,opacity}
+.eyebrow{top:104px;font:400 30px/1 "Courier Prime",monospace;letter-spacing:.2em;color:var(--red)}
+.title{top:158px;font:400 112px/1.02 "Abril Fatface",serif;color:var(--ink);padding:0 70px}
+.cover{left:150px;right:auto;width:780px;top:470px;height:975px;transform-origin:50% 60%}
+.cover img{position:absolute;inset:0;width:100%;height:100%;box-shadow:0 2px 4px rgba(27,38,80,.15),0 50px 70px -30px rgba(27,38,80,.6)}
+.stamp{left:auto;right:30px;top:1275px;width:290px;height:300px;transform-origin:50% 50%}
+.foot{top:1540px;font:400 66px/1.1 "Abril Fatface",serif;color:var(--ink)}
+.sub{top:1630px;font:400 30px/1 "Courier Prime",monospace;letter-spacing:.2em;color:var(--soft)}
+.brand{top:1760px;font:400 64px/1 "Abril Fatface",serif;color:var(--soft);opacity:.8}
+.by{top:1828px;font:400 42px/1 "Caveat",cursive;color:var(--soft)}
+.end{inset:0;opacity:0}
+.big{top:640px;font:400 190px/1 "Abril Fatface",serif;color:var(--ink)}
+.free{top:880px;font:400 34px/1 "Courier Prime",monospace;letter-spacing:.24em;color:var(--red)}
+.pill{left:230px;right:230px;top:1010px;height:130px;border-radius:65px;background:var(--ink);color:#fff;font:600 46px/130px "Hanken Grotesk",sans-serif}
+.url{top:1190px;font:400 36px/1 "Courier Prime",monospace;letter-spacing:.06em;color:var(--soft)}
+.mini{left:160px;width:760px;top:1240px;height:auto}
+</style></head><body>
+<div class="stage" id="stage">
+  <div class="abs eyebrow" id="eyebrow">GRATIS PARA VUESTRA BODA</div>
+  <div class="abs title" id="title">Vuestra boda,<br>en portada.</div>
+  <div class="abs cover" id="cover"><img id="img" src="_portadas/cover1.png" alt=""></div>
+  <svg class="abs stamp" id="stamp" viewBox="0 0 300 300">
+    <circle cx="150" cy="150" r="144" fill="#fbf6ee" stroke="#b3263a" stroke-width="7"/>
+    <circle cx="150" cy="150" r="126" fill="none" stroke="#b3263a" stroke-width="2.5"/>
+    <defs><path id="ring" d="M150,150 m-100,0 a100,100 0 1,1 200,0 a100,100 0 1,1 -200,0"/></defs>
+    <text font-family="Courier Prime" font-size="22" letter-spacing="5" fill="#b3263a"><textPath href="#ring" startOffset="0">SIN REGISTRARSE · 100% GRATIS · </textPath></text>
+    <text x="150" y="176" text-anchor="middle" font-family="Abril Fatface" font-size="68" fill="#b3263a">GRATIS</text>
+  </svg>
+  <div class="abs foot" id="foot">Gratis. Sin registrarte.</div>
+  <div class="abs sub" id="sub">EL TITULAR LO PONÉIS VOSOTROS</div>
+  <div class="abs end" id="end">
+    <div class="abs big">Y hay más.</div>
+    <div class="abs free">GRATIS · SIN REGISTRARSE</div>
+    <div class="abs pill">Enlace en la bio&nbsp;&nbsp;→</div>
+    <div class="abs url">guest.weddlysmartdesign.com</div>
+  </div>
+  <div class="abs brand" id="brand">GUEST</div>
+  <div class="abs by" id="by">by WeddlySmartDesign</div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const eo=x=>1-Math.pow(1-cl(x),3);
+const eb=x=>{x=cl(x);const c=1.5;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const seg=(t,a,d)=>cl((t-a)/d);
+const IMGS=['cover1','cover2','cover3'];
+window.DUR=7.2;
+window.render=function(t){
+  // Inicio: sello GRATIS y titular desde el fotograma 0
+  const st=eb(seg(t,0,.45)); $('stamp').style.transform=`rotate(${14-st*6}deg) scale(${.6+.4*st})`; $('stamp').style.opacity=1;
+  $('eyebrow').style.opacity=1; $('title').style.opacity=1;
+  const ci=.55+.45*eo(seg(t,0,.6)); 
+  // portada: entra, y cada cambio de titular da un pequeño salto
+  let idx=t<2.1?0:t<3.3?1:2; $('img').src='_portadas/'+IMGS[idx]+'.png';
+  const bump=[2.1,3.3].map(s=>{const k=seg(t,s,.35);return k>0&&k<1?Math.sin(k*Math.PI):0}).reduce((a,b)=>a+b,0);
+  const lastShift=t>=2.1&&t<3.3? -1:1;
+  const out=eo(seg(t,4.3,.5));
+  $('cover').style.opacity=ci*(1-out);
+  $('cover').style.transform=`translateY(${(1-ci)*140-out*120}px) rotate(${-1.2+(idx-1)*.9+ (1-ci)*3}deg) scale(${1+bump*.03-out*.08})`;
+  // pie y ocultar al llegar el cierre
+  const keep=1-out;
+  ['foot','sub','title','eyebrow','stamp'].forEach(i=>{ if(i!=='stamp'||true) $(i).style.opacity=1*keep; });
+  $('foot').style.transform=`translateY(${(1-eo(seg(t,.35,.5)))*40}px)`;
+  $('foot').style.opacity=eo(seg(t,.35,.5))*keep; $('sub').style.opacity=eo(seg(t,.5,.5))*keep;
+  // cierre
+  const e=eo(seg(t,4.5,.5)); $('end').style.opacity=e; $('end').style.transform=`translateY(${(1-e)*50}px)`;
+  const pill=eb(seg(t,5.0,.5)); $('end').querySelector('.pill').style.transform=`scale(${.6+.4*pill})`; $('end').querySelector('.pill').style.opacity=cl(pill*2);
+  $('brand').style.opacity=.8;
+};
+render(0);
+</script></body></html>
