@@ -1262,6 +1262,32 @@ Deno.serve(async req=>{
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
       const {error}=await c.from('guest_invitation_orders').update({owner_notes:txt(b.note,5000),updated_at:now()}).eq('id',order.id);if(error)throw error;return json({ok:true});
     }
+    if(action==='reopen_questionnaire'){
+      // Deja a la pareja completar o corregir su cuestionario con todo lo que ya escribió, con el mismo enlace
+      // y sin gastar ronda de cambios. Solo antes de aprobar. notify=true les manda un email corto.
+      // Aún sin propuesta enviada vuelve a borrador; con propuesta enviada abre una corrección (changes_requested) sin sumar ronda.
+      const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
+      if(!['draft','submitted','designing','review_ready','review_sent','changes_requested'].includes(order.status))return json({ok:false,error:'already_approved'},409);
+      const ts=now(),afterReview=!!order.review_sent_at||order.status==='review_sent';
+      let status=order.status;
+      if(!['draft','changes_requested'].includes(order.status)){
+        status=afterReview?'changes_requested':'draft';
+        const history=Array.isArray(order.revision_requests)?order.revision_requests:[];
+        const patch:any={status,updated_at:ts};
+        if(status==='changes_requested')patch.revision_requests=[...history,{at:ts,note:'Reabierto desde el panel (no gasta ronda)',before:order.questionnaire||{},reopened:true}];
+        const {error}=await c.from('guest_invitation_orders').update(patch).eq('id',order.id).eq('status',order.status);if(error)throw error;
+      }
+      const link=await changeLink(order,-1),to=emailOf(order.questionnaire,order.buyer_email);
+      let emailed=false;
+      if(b.notify&&to&&order.mode!=='test'){
+        emailed=await resend({to:[to],subject:'Podéis completar los datos de vuestra invitación',html:guestMail({kicker:'Vuestros datos',title:'Completad lo que os falte.',preheader:'Todo lo que ya pusisteis está guardado.',
+          body:mP('Hemos abierto otra vez vuestro cuestionario. <b>Todo lo que ya escribisteis está guardado</b>: solo tenéis que completar o corregir lo que falte o sobre, sin empezar de nuevo.')
+            +mBtn(link,'Completar mis datos')
+            +mNote('No gasta ninguna de vuestras rondas de cambios. Cuando terminéis, pulsad el botón de enviar del final.')
+            +mP('Si ya lo habéis hecho, podéis ignorar este email.',true)})},'guest-reopen/'+order.id+'/'+ts);
+      }
+      return json({ok:true,status,link,emailed});
+    }
     if(action==='reopen'){
       const order=await getOrder(c,String(b.orderId||''));if(!order)return json({ok:false,error:'order_not_found'},404);
       if(order.status==='delivered')return json({ok:false,error:'already_delivered'},409);
