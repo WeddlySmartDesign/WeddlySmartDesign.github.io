@@ -141,10 +141,22 @@ async function resend(body:any,idempotencyKey?:string){
     if(!to.every((x:string)=>QA_EMAILS.includes(x))){console.warn('qa_email_blocked');return true}
     body={...body,subject:'[PRUEBA] '+String(body?.subject||'')};
   }
-  const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key,...(idempotencyKey?{'Idempotency-Key':idempotencyKey}:{})},body:JSON.stringify({from,reply_to:'weddlysmartdesign@gmail.com',...body})});
+  const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key,...(idempotencyKey?{'Idempotency-Key':idempotencyKey}:{})},body:JSON.stringify({from,reply_to:'weddlysmartdesign@gmail.com',...copyForOwner(to,LIVE),...body})});
   if(!r.ok){console.warn('resend_failed',r.status,await r.text());return false}
   if(to.includes('weddlysmartdesign@gmail.com'))await ownerPing(String(body?.subject||'').replace(/^\[PRUEBA\] /,''),{dedupe:idempotencyKey||undefined,test:!LIVE,url:'/guest/panel-pruebas.html',html:String(body?.html||'')});
   return true
+}
+// Copia oculta a la propietaria de lo que GUEST manda a las parejas (para vigilar que todo sale bien).
+// Se apaga poniendo el secreto GUEST_COPY_TO_OWNER=0 en Supabase (Edge Functions > Secrets); no hace falta redesplegar.
+// Solo en envíos reales a clientes: nunca en pruebas ni cuando el destinatario ya es ella.
+function copyForOwner(to: string[], live: boolean): Record<string, string[]> {
+  try {
+    if (!live || String(Deno.env.get('GUEST_COPY_TO_OWNER') || '').trim() === '0') return {};
+    const me = String(Deno.env.get('GUEST_COPY_EMAIL') || 'info@weddlysmartdesign.com').trim().toLowerCase();
+    const mine = [me, 'weddlysmartdesign@gmail.com', 'info@weddlysmartdesign.com'];
+    if (!me.includes('@') || to.some((x) => mine.includes(String(x).toLowerCase()))) return {};
+    return { bcc: [me] };
+  } catch { return {}; }
 }
 function emailOf(q:any,fallback=''){return txt(q?.contact?.email||fallback,200).toLowerCase()}
 function coupleGreeting(q:any){
