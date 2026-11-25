@@ -239,6 +239,26 @@ async function startCatalogEmail(to:string,sessionId:string,edition:string,catal
     +mSteps([['Rellenáis el cuestionario','Desde el móvil, a vuestro ritmo.'],['La preparamos','En un máximo de 72 h os llega para revisar.'],['La revisáis','La aprobáis o cambiáis lo que queráis vosotros mismos.'],['Os la entregamos','Lista para enviar, con la app para organizar a vuestros invitados.']],'Cómo sigue')
     +mP('La factura os llega en otro email.',true)})}})
 }
+// Aviso a la propietaria de cada compra pagada (email + push: resend() llama a ownerPing cuando el destino es ella).
+// Antes solo avisaba si el comprador era ella misma, así que una compra de una pareja no generaba ningún aviso.
+async function notifySale(licenseId:string,metadata:any,buyer:string,session:any){
+ try{
+  if(metadata?.guest_owner_notified_at)return;
+  const created=(Number(session.created)||0)*1000;
+  if(created&&Date.now()-created>3*86400000)return; // no avisar de compras antiguas
+  const tpl=String(metadata?.guest_catalog_template_id||session.metadata?.guest_catalog_template_id||'');
+  const design=DESIGN_NAMES[tpl]||tpl||'sin diseño';
+  const amount=Number(session.amount_total??metadata?.amount_total??0)/100;
+  const euros=amount.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+  const sid=String(session.id||'');
+  const ok=await resend({idempotencyKey:'guest-sale/'+sid,body:{to:['weddlysmartdesign@gmail.com'],subject:'Nueva compra GUEST · '+design+' · '+euros,
+    html:guestMail({owner:true,kicker:'Nueva compra',title:'Han comprado GUEST.',preheader:design+' · '+euros,
+      body:mP('Diseño: <b>'+esc(design)+'</b> · Importe: <b>'+esc(euros)+'</b>.')+mP('Comprador: '+esc(buyer)+'.')+mP('Ya tienen su email con el cuestionario. Te avisaremos cuando lo envíen.')+mBtn('https://guest.weddlysmartdesign.com/guest/panel-pruebas.html','Abrir el panel')})}});
+  if(ok){const next={...(metadata||{}),guest_owner_notified_at:new Date().toISOString()};
+    await admin().from('licenses').update({metadata:next,updated_at:new Date().toISOString()}).eq('id',licenseId);
+    if(metadata)metadata.guest_owner_notified_at=next.guest_owner_notified_at}
+ }catch(e){console.warn('notify_sale_failed',e)}
+}
 async function provision(session:any){
  const edition=validatePaid(session),sessionId=String(session.id||''),buyer=String(session.customer_details?.email||session.customer_email||'').trim().toLowerCase();
  if(!buyer.includes('@'))throw new Error('missing_buyer_email');
@@ -251,6 +271,7 @@ async function provision(session:any){
      if(ok){const m={...(existing.metadata||{}),guest_order_email_sent_at:new Date().toISOString()};
        await db.from('licenses').update({metadata:m,updated_at:new Date().toISOString()}).eq('id',existing.id);existing.metadata=m}
    }
+   await notifySale(String(existing.id),existing.metadata,buyer,session);
    return {licenseId:String(existing.id),edition,buyerEmail:buyer,metadata:existing.metadata||{},
      catalogQuestionnaireUrl:catalog?.questionnaireUrl||null}
  }
@@ -269,6 +290,7 @@ async function provision(session:any){
  const catalog=await paidCatalogQuestionnaire(String(row.license_id),metadata);
  const sent=catalog?await startCatalogEmail(buyer,sessionId,edition,catalog):await startEmail(buyer,sessionId,edition);
  if(sent){const next={...metadata,guest_order_email_sent_at:new Date().toISOString()};await db.from('licenses').update({metadata:next,updated_at:new Date().toISOString()}).eq('id',row.license_id);metadata.guest_order_email_sent_at=next.guest_order_email_sent_at}
+ await notifySale(String(row.license_id),metadata,buyer,session);
  return {licenseId:String(row.license_id),edition,buyerEmail:buyer,metadata,
    catalogQuestionnaireUrl:catalog?.questionnaireUrl||null}
 }
