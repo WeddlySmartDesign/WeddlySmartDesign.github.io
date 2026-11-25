@@ -701,6 +701,10 @@ async function openOrder(id) {
           ${['submitted', 'designing', 'review_ready', 'review_sent', 'approved', 'delivered'].includes(o.status) && o.resolved_config && Object.keys(o.resolved_config).length ? `<div class="box" id="fixBox"><h3>Corregir un dato</h3><p>${o.status === 'delivered' ? 'Ya está entregada: el cambio sale al momento en el enlace que tienen sus invitados. Avísales tú si hace falta.' : ['review_sent', 'approved'].includes(o.status) ? 'Lo verán corregido la próxima vez que abran su enlace.' : 'Un cambio de hora, un lugar, una falta… La invitación se vuelve a montar sola.'}</p>
             <div class="q-form"><label>Qué quieres cambiar<select id="fixPath" class="fix-sel"></select></label><label>Texto nuevo<textarea id="fixVal" rows="2" spellcheck="true" lang="es"></textarea></label></div>
             <div class="st-open"><button class="btn line" type="button" id="fixGo">Guardar el cambio</button><p class="msg" role="alert" id="fixMsg"></p></div></div>` : ''}
+          ${['draft', 'submitted', 'designing', 'review_ready', 'review_sent', 'changes_requested'].includes(o.status) ? `<div class="box" id="reopenBox"><h3>Que completen o corrijan datos</h3><p>${['draft', 'changes_requested'].includes(o.status) ? 'Su cuestionario ya está abierto: lo que escribieron está guardado y lo retoman donde lo dejaron. Puedes mandarles el enlace por email o copiarlo.' : 'Si les falta algo (autobús, IBAN…), reabre su cuestionario con el mismo enlace: ven todo lo que ya pusieron y solo completan o corrigen. No gasta ronda de cambios.' + (o.status === 'review_sent' ? ' Como ya les enviaste la propuesta, tendrás que volver a enviársela cuando terminen.' : '')}</p>
+            <div class="st-open"><button class="btn line" type="button" id="reopenMail">${['draft', 'changes_requested'].includes(o.status) ? 'Enviarles el enlace por email' : 'Reabrir y avisarles por email'}</button><button class="link-btn" type="button" id="reopenSilent">${['draft', 'changes_requested'].includes(o.status) ? 'Solo copiar el enlace' : 'Reabrir sin avisar'}</button></div>
+            <div class="st-open" id="reopenLink" hidden><input id="reopenUrl" readonly style="flex:1;min-width:0"><button class="btn line" type="button" id="reopenCopy">Copiar enlace</button></div>
+            <p class="msg" role="alert" id="reopenMsg"></p></div>` : ''}
           ${!['approved', 'delivered', 'cancelled'].includes(o.status) ? `<div class="box"><h3>Cambiar de diseño</h3><p>Si te piden otro diseño antes de aprobarla, se monta el nuevo con los mismos datos y fotos.${o.status === 'review_sent' ? ' Después tendrás que volver a enviársela.' : ''}</p>
             <div class="q-form"><label>Nuevo diseño<select id="dsSel" class="fix-sel">${(window.GUEST_CATALOG || []).filter((x) => x.id !== o.template_id).map((x) => `<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('')}</select></label></div>
             <div class="st-open"><button class="btn line" type="button" id="dsGo">Cambiar a este diseño</button><p class="msg" role="alert" id="dsMsg"></p></div></div>` : ''}
@@ -756,6 +760,20 @@ async function openOrder(id) {
       $('revokeYes').onclick = revoke(false);
     }
     if ($('revokeUndo')) $('revokeUndo').onclick = revoke(true);
+    const reopen = (notify) => async () => {
+      const m = $('reopenMsg'); m.textContent = ''; $('reopenMail').disabled = $('reopenSilent').disabled = true;
+      try {
+        const j = await flow({ action: 'reopen_questionnaire', orderId: o.id, notify });
+        $('reopenUrl').value = j.link; $('reopenLink').hidden = false;
+        toast(notify ? (j.emailed ? 'Reabierto y email enviado.' : 'Reabierto. El email no ha salido: copia el enlace.') : 'Reabierto. Copia el enlace y mándaselo.');
+        $('reopenCopy').onclick = () => copy(j.link);
+        if (j.status !== o.status) { await refresh(); }
+      } catch (e) {
+        if (e.message === 'manager_required') return;
+        m.textContent = e.message === 'already_approved' ? 'Ya la aprobaron: después de aprobar no se reabre.' : 'No ha salido. Prueba otra vez.';
+      } finally { if ($('reopenMail')) $('reopenMail').disabled = $('reopenSilent').disabled = false; }
+    };
+    if ($('reopenMail')) { $('reopenMail').onclick = reopen(true); $('reopenSilent').onclick = reopen(false); }
     if ($('giftRound')) $('giftRound').onclick = gift(false);
     if ($('giftUndo')) $('giftUndo').onclick = gift(true);
     const dc = async (decline) => {

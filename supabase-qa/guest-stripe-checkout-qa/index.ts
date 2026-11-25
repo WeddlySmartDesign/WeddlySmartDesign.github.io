@@ -184,10 +184,22 @@ async function resend(payload:any){
  const to=(payload.body?.to||[]).map((x:string)=>String(x).toLowerCase());if(!to.length)return false;
  if(!LIVE){if(!to.every((x:string)=>QA_EMAILS.includes(x))){console.warn('qa_email_blocked');return false}
  payload.body.subject='[PRUEBA] '+payload.body.subject}
- const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key,...(payload.idempotencyKey?{'Idempotency-Key':payload.idempotencyKey}:{})},body:JSON.stringify({from,reply_to:'weddlysmartdesign@gmail.com',...payload.body})});
+ const r=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key,...(payload.idempotencyKey?{'Idempotency-Key':payload.idempotencyKey}:{})},body:JSON.stringify({from,reply_to:'weddlysmartdesign@gmail.com',...copyForOwner(to,LIVE),...payload.body})});
  if(!r.ok){console.warn('resend_failed',r.status,await r.text());return false}
  if(to.includes('weddlysmartdesign@gmail.com'))await ownerPing(String(payload.body?.subject||'').replace(/^\[PRUEBA\] /,''),{dedupe:payload.idempotencyKey||undefined,test:!LIVE,url:'/guest/panel-pruebas.html',html:String(payload.body?.html||'')});
  return true
+}
+// Copia oculta a la propietaria de lo que GUEST manda a las parejas (para vigilar que todo sale bien).
+// Se apaga poniendo el secreto GUEST_COPY_TO_OWNER=0 en Supabase (Edge Functions > Secrets); no hace falta redesplegar.
+// Solo en envíos reales a clientes: nunca en pruebas ni cuando el destinatario ya es ella.
+function copyForOwner(to: string[], live: boolean): Record<string, string[]> {
+  try {
+    if (!live || String(Deno.env.get('GUEST_COPY_TO_OWNER') || '').trim() === '0') return {};
+    const me = String(Deno.env.get('GUEST_COPY_EMAIL') || 'info@weddlysmartdesign.com').trim().toLowerCase();
+    const mine = [me, 'weddlysmartdesign@gmail.com', 'info@weddlysmartdesign.com'];
+    if (!me.includes('@') || to.some((x) => mine.includes(String(x).toLowerCase()))) return {};
+    return { bcc: [me] };
+  } catch { return {}; }
 }
 function esc(s:any){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]||c))}
 async function startEmail(to:string,sessionId:string,edition:string){

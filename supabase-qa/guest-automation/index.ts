@@ -53,6 +53,18 @@ const capability = async (id: string, purpose: string) => 'gif1_' + purpose + '_
 const invoiceToken = async (id: string) => id + '.' + (await hmacHex('guest-invoice-v1|' + id)).slice(0, 32);
 const invoiceUrl = async (id: string) => LIVE_ORIGIN + '/guest/factura.html?f=' + encodeURIComponent(await invoiceToken(id));
 
+// Copia oculta a la propietaria de lo que GUEST manda a las parejas (para vigilar que todo sale bien).
+// Se apaga poniendo el secreto GUEST_COPY_TO_OWNER=0 en Supabase (Edge Functions > Secrets); no hace falta redesplegar.
+// Solo en envíos reales a clientes: nunca en pruebas ni cuando el destinatario ya es ella.
+function copyForOwner(to: string[], live: boolean): Record<string, string[]> {
+  try {
+    if (!live || String(Deno.env.get('GUEST_COPY_TO_OWNER') || '').trim() === '0') return {};
+    const me = String(Deno.env.get('GUEST_COPY_EMAIL') || 'info@weddlysmartdesign.com').trim().toLowerCase();
+    const mine = [me, 'weddlysmartdesign@gmail.com', 'info@weddlysmartdesign.com'];
+    if (!me.includes('@') || to.some((x) => mine.includes(String(x).toLowerCase()))) return {};
+    return { bcc: [me] };
+  } catch { return {}; }
+}
 async function send(to: string[], subject: string, html: string, key: string, from = 'GUEST by WeddlySmartDesign') {
   const apiKey = String(Deno.env.get('RESEND_API_KEY') || '').trim(), raw = String(Deno.env.get('WEDDLY_RESEND_FROM') || '').trim();
   const m = raw.match(/<([^>]+)>/), addr = (m?.[1] || (/^[^\s<>]+@[^\s<>]+$/.test(raw) ? raw : '')).trim();
@@ -60,7 +72,7 @@ async function send(to: string[], subject: string, html: string, key: string, fr
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + apiKey, 'Idempotency-Key': key },
-    body: JSON.stringify({ from: from + ' <' + addr + '>', to, reply_to: ISSUER.email, subject, html })
+    body: JSON.stringify({ from: from + ' <' + addr + '>', to, reply_to: ISSUER.email, subject, html, ...copyForOwner(to, !/\(prueba\)/.test(subject)) })
   });
   if (!r.ok) console.warn('resend_failed', r.status, await r.text());
   else if (to.includes(OWNER[0]) && !/^Copia de seguridad/.test(subject)) await ownerPing(subject, { dedupe: key, test: /\(prueba\)/.test(subject), url: '/guest/panel-pruebas.html', html });
